@@ -1,8 +1,8 @@
 === Content Control ===
 Contributors: jungleplugins, danieliser
-Author URI:  http://jungleplugins.com/
+Author URI:  https://jungleplugins.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
-Donate link: http://jungleplugins.com/donate/
+Donate link: https://jungleplugins.com/donate/
 Tags:
 Requires at least: 3.5.0
 Tested up to: 4.6.0
@@ -86,7 +86,13 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 == Screenshots ==
 
-
+1. Create unlimited restriction sets.
+2. Choose who can see the restricted content.
+3. Display a message in place of restricted content.
+4. Redirect users to log in or to another page if they access restricted content.
+5. Choose any content you can think of to protect.
+6. Use shortcodes to protect content inline.
+7. Restrict widgets as well.
 
 == Changelog ==
 = v1.0.0 =
