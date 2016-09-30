@@ -287,11 +287,11 @@ class Footer_Templates {
 					<p>
 						<strong>
 							<?php _e( 'Apply this restriction if the user views content that is:', 'content-control' ); ?>
-							<?php printf( '%2$s<i class="dashicons dashicons-editor-help" title="%1$s"></i>%3$s',
+							<?php /* printf( '%2$s<i class="dashicons dashicons-editor-help" title="%1$s"></i>%3$s',
 								__( 'Learn more about restriction content conditions', 'content-control' ),
 								'<a href="http://docs.wppopupmaker.com/article/140-conditions" target="_blank">',
 								'</a>'
-							); ?>
+							); */ ?>
 						</strong>
 					</p>
 
