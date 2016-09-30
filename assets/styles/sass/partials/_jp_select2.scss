@@ -1,0 +1,185 @@
+/* jQuery select2 Styles for Popup Maker.
+The bulk of this is to style jquery select2 to better resemble the default WP dashboard inputs.
+*/
+
+.jpselect2 {
+
+//region Select2 Core Styles
+
+  // These are here for the namespaced jpselect2 and so that we can properly address issues when other plugins do things wrong.
+  .jpselect2-container {
+    box-sizing: border-box;
+
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+
+    @import "vendor/select2/single";
+    @import "vendor/select2/multiple";
+  }
+
+  @import "vendor/select2/dropdown";
+
+  .jpselect2-close-mask {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-height: 100%;
+    min-width: 100%;
+    height: auto;
+    width: auto;
+    opacity: 0;
+    z-index: 99;
+
+    // styles required for IE to work
+
+    background-color: #fff;
+    filter: alpha(opacity=0);
+  }
+
+  .jpselect2-hidden-accessible {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+  }
+
+  @import "vendor/select2/theme/default/layout";
+  @import "vendor/select2/theme/classic/layout";
+//endregion Select2 Core Styles
+
+  > .jpselect2-container--below.jpselect2-container--open + .jpselect2-container--open,
+  > .jpselect2-container--below.jpselect2-container--open + .jp-cc-desc + .jpselect2-container--open {
+    position: absolute !important;
+  }
+
+
+
+  position: relative;
+
+  // All Select2 Containers - Wraps Both Selectbox & Dropdown Elements
+  .jpselect2-container {
+
+    // Selectbox
+    .jpselect2-selection {
+      margin: 1px;
+      font-size: 14px;
+      border-radius: 0;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+      border-color: #ddd;
+      transition: 0.05s border-color ease-in-out;
+
+    }
+    &.jpselect2-container--focus {
+
+      .jpselect2-selection {
+        outline: none;
+        border-color: #5b9dd9;
+        box-shadow: 0 0 2px rgba(30, 140, 190, 0.8);
+      }
+    }
+    // Single Select
+    .jpselect2-selection--single {
+
+      // Rendered Option
+      .jpselect2-selection__rendered {
+        //padding-left: 0;
+      }
+
+    }
+
+    // Multiple Select
+    .jpselect2-selection--multiple {
+      overflow-y: auto;
+      max-height: 150px;
+      min-height: 28px;
+      line-height: 16px;
+      font-size: 12px;
+
+      .jpselect2-selection__clear {
+        margin-right: 3px;
+      }
+
+      .jpselect2-selection__rendered {
+
+      }
+
+      .jpselect2-search--inline {
+        margin: 0;
+        // Search Field
+        .jpselect2-search__field {
+          border-color: #ddd;
+          padding: 3px 5px 0;
+          min-width: 5em;
+        }
+      }
+
+      .jpselect2-selection__choice {
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+
+
+    }
+
+    // Dropdown
+    .jpselect2-dropdown {
+      margin: 0 1px;
+      border-color: #ddd;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+      // Compensate for the margin applied to the Selectbox.
+      max-width: calc(100% - 4px);
+      position: relative;
+
+      // Search Field
+      .jpselect2-search__field {
+        border-color: #ddd;
+        padding: 3px 5px;
+        min-width: 5em;
+      }
+
+      // Results
+      .jpselect2-results {
+
+        // Each result set. Can be nested.
+        .jpselect2-results__option {
+          padding: 3px 6px;
+          margin: 0;
+
+          &[aria-selected=true] {
+          }
+
+        }
+        .jpselect2-results__option[role=group] {
+          padding: 3px 0 0;
+
+          .jpselect2-results__group {
+            padding: 0 6px;
+          }
+        }
+
+        .jpselect2-results__options--nested {
+          padding: 3px 6px 0;
+        }
+
+        // Hover
+        .jpselect2-results__option--highlighted {
+          background: #3e86d0;
+        }
+
+      }
+
+    }
+
+  }
+
+}

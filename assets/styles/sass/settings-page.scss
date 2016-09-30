@@ -1,0 +1,47 @@
+@import 'partials/admin_modal';
+@import 'partials/facet_builder';
+@import 'partials/fields';
+@import 'partials/jp_select2';
+@import 'partials/tabs';
+
+.jp-cc-field-multicheck.roles-wrapper {
+  ul {
+    columns: 3;
+  }
+}
+
+button.no-button {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+
+  &.link-button {
+    color: #0073aa;
+    &:hover {
+      color: #00a0d2;
+    }
+  }
+
+  &.delete-button {
+    color: #a00;
+    &:hover {
+      color: #f00;
+    }
+  }
+}
+
+table#jp-cc-restrictions {
+
+  .dashicons-menu {
+    cursor: move;
+  }
+
+  .row-actions {
+    a {
+      text-decoration: none;
+      border: none;
+    }
+  }
+
+}

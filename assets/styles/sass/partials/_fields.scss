@@ -1,0 +1,58 @@
+.jp-cc-field-section {
+
+  .jp-cc-field {
+    margin-bottom: 1em;
+
+    > label {
+      display: block;
+      font-weight: bold;
+    }
+
+  }
+
+}
+
+.jp-cc-field-editor {
+  #insert-media-button {
+    display: none;
+  }
+}
+
+.jp-cc-field-link {
+  input {
+    margin-right: 24px;
+    display: block;
+  }
+
+  button.dashicons {
+    float: right;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1;
+    padding: 0;
+    font-size: 16px;
+    vertical-align: sub;
+    margin-top: 1px;
+    box-shadow: 0 0 0 #cccccc;
+  }
+}
+
+.jp-cc-field-checkbox {
+  position: relative;
+
+  label {
+    margin-left: 1.5em;
+
+    &.jp-cc-desc {
+      display: inline;
+      font-weight:inherit;
+      font-size:inherit;
+      margin: 0 0 1em;
+    }
+  }
+
+  input[type="checkbox"] {
+    position: absolute;
+    top: .25em;
+  }
+}

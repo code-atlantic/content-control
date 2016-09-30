@@ -1,0 +1,415 @@
+# Copyright (C) 2016 content-control
+# This file is distributed under the same license as the content-control package.
+msgid ""
+msgstr ""
+"Project-Id-Version: content-control\n"
+"Report-Msgid-Bugs-To: danieliser@wizardinternetsolutions.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Language-Team: Daniel Iser <danieliser@wizardinternetsolutions.com>\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n\n"
+
+#: classes/Admin.php:17
+msgid "Content Control Settings"
+msgstr ""
+
+#: classes/Admin.php:19
+msgid "Restrictions"
+msgstr ""
+
+#: classes/Admin.php:20, classes/Conditions.php:60, classes/Conditions.php:175
+msgid "General"
+msgstr ""
+
+#: classes/Admin/Assets.php:55
+msgid "Are you sure you want to delete this restriction?"
+msgstr ""
+
+#: classes/Admin/Assets.php:58
+msgid "Restriction Editor"
+msgstr ""
+
+#: classes/Admin/Assets.php:59
+msgid "Use this to modify a restrictions settings."
+msgstr ""
+
+#: classes/Admin/Assets.php:63, classes/Admin/Footer_Templates.php:316, classes/Admin/Footer_Templates.php:352
+msgid "Is"
+msgstr ""
+
+#: classes/Admin/Assets.php:64
+msgid "Not"
+msgstr ""
+
+#: classes/Admin/Assets.php:67
+msgid "Save"
+msgstr ""
+
+#: classes/Admin/Assets.php:68
+msgid "Cancel"
+msgstr ""
+
+#: classes/Admin/Assets.php:69
+msgid "Add"
+msgstr ""
+
+#: classes/Admin/Assets.php:70
+msgid "Update"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:149
+msgid "Close"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:226
+msgid "Select restriction"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:241
+msgctxt "Edit button label for restriction table"
+msgid "Edit “{{data.title}}”"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:241
+msgid "Edit"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:244
+msgctxt "Trash button label for restriction table"
+msgid "Delete “{{data.title}}!”"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:244
+msgid "Trash"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:250, classes/Admin/Settings/Restrictions.php:110, classes/Admin/Widget/Settings.php:39
+msgid "Everyone"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:252, classes/Admin/Settings/Restrictions.php:112, classes/Admin/Widget/Settings.php:40
+msgid "Logged Out Users"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:255, classes/Admin/Settings/Restrictions.php:111, classes/Admin/Widget/Settings.php:41
+msgid "Logged In Users"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:263
+msgid "All Users"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:289
+msgid "Apply this restriction if the user views content that is:"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:291
+msgid "Learn more about restriction content conditions"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:298
+msgid "When users visit your site, the plugin will check the viewed content against your selection below and permit or deny access."
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:313
+msgid "Choose a content type to get started."
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:315, classes/Admin/Footer_Templates.php:351
+msgid "Enable the Not Operand"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:317, classes/Admin/Footer_Templates.php:353
+msgid "Is Not"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:338
+msgctxt "aria-label for add new OR condition button"
+msgid "Add another OR condition"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:338, classes/Admin/Footer_Templates.php:349
+msgid "or"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:342
+msgctxt "aria-label for add new AND condition button"
+msgid "Add another AND condition group"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:342
+msgid "and"
+msgstr ""
+
+#: classes/Admin/Footer_Templates.php:366
+msgid "Remove Condition"
+msgstr ""
+
+#: classes/Admin/Pages.php:29, classes/Admin/Pages.php:29
+msgid "Content Control"
+msgstr ""
+
+#: classes/Admin/Setting_Callbacks.php:197
+msgid "The callback function used for the <strong>%s</strong> setting is missing."
+msgstr ""
+
+#: classes/Admin/Setting_Callbacks.php:265
+msgid "Choose Icon"
+msgstr ""
+
+#: classes/Admin/Setting_Callbacks.php:359
+msgid "Upload File"
+msgstr ""
+
+#: classes/Admin/Setting_Callbacks.php:421
+msgid "Deactivate License"
+msgstr ""
+
+#: classes/Admin/Settings.php:283
+msgid "Settings updated."
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:36
+msgid "Add a Restriction"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:39
+msgid "Select bulk action"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:41, classes/Admin/Settings/Restrictions.php:82
+msgid "Bulk Actions"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:42, classes/Admin/Settings/Restrictions.php:83
+msgid "Move to Trash"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:44, classes/Admin/Settings/Restrictions.php:85
+msgid "Apply"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:52, classes/Admin/Settings/Restrictions.php:63
+msgid "Select All"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:55, classes/Admin/Settings/Restrictions.php:66
+msgid "Priority"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:56, classes/Admin/Settings/Restrictions.php:67, classes/Admin/Settings/Restrictions.php:99
+msgid "Restriction Title"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:57, classes/Admin/Settings/Restrictions.php:68
+msgid "Overview"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:73
+msgid "No restrictions found."
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:100
+msgid "Pages restricted to logged in users"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:107
+msgid "Who can see this content?"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:119
+msgid "Choose which roles can see this content"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:128
+msgid "Choose how to protect your content"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:130
+msgid "Custom Message"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:131
+msgid "Redirect"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:140
+msgid "Show excerpts above access denied message?"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:147
+msgid "Override the default message?"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:157
+msgid "Enter a custom message to display to restricted users"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:163
+msgid "Where will they be taken?"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:166
+msgid "Login & Back"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:167
+msgid "Home Page"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:168
+msgid "Custom URL"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:177
+msgid "Redirect URL"
+msgstr ""
+
+#: classes/Admin/Settings/Restrictions.php:178
+msgid "http://example.com"
+msgstr ""
+
+#: classes/Admin/Widget/Settings.php:50
+msgid "Who can see this widget?"
+msgstr ""
+
+#: classes/Admin/Widget/Settings.php:66
+msgid "Choose which roles can see this widget"
+msgstr ""
+
+#: classes/Conditions.php:61
+msgid "Pages"
+msgstr ""
+
+#: classes/Conditions.php:62
+msgid "Posts"
+msgstr ""
+
+#: classes/Conditions.php:63
+msgid "Categories"
+msgstr ""
+
+#: classes/Conditions.php:64
+msgid "Tags"
+msgstr ""
+
+#: classes/Conditions.php:65
+msgid "Format"
+msgstr ""
+
+#: classes/Conditions.php:121
+msgid "Choose a content type"
+msgstr ""
+
+#: classes/Conditions.php:147
+msgid "Select a condition"
+msgstr ""
+
+#: classes/Conditions.php:176
+msgctxt "condition: post type plural label ie. Posts: All"
+msgid "%s Archive"
+msgstr ""
+
+#: classes/Conditions.php:184
+msgctxt "condition: post type singular label ie. Posts: All"
+msgid "A %s"
+msgstr ""
+
+#: classes/Conditions.php:190
+msgctxt "condition: post type singular label ie. Posts: Selected"
+msgid "A Selected %s"
+msgstr ""
+
+#: classes/Conditions.php:193
+msgctxt "condition: post type singular label ie. Select Posts"
+msgid "Select %s."
+msgstr ""
+
+#: classes/Conditions.php:206
+msgctxt "condition: post type singular label ie. Posts: ID"
+msgid "A %s with ID"
+msgstr ""
+
+#: classes/Conditions.php:209
+msgctxt "condition: post type singular label ie. Posts IDs"
+msgid "%s IDs: 128, 129"
+msgstr ""
+
+#: classes/Conditions.php:221
+msgctxt "condition: post type plural label ie. Pages: With Template"
+msgid "A %s: With Template"
+msgstr ""
+
+#: classes/Conditions.php:230
+msgid "Default"
+msgstr ""
+
+#: classes/Conditions.php:260
+msgctxt "condition: post type plural and taxonomy singular label ie. Posts: With Category"
+msgid "A %1$s with %2$s"
+msgstr ""
+
+#: classes/Conditions.php:263
+msgctxt "condition: post type plural label ie. Select categories"
+msgid "Select %s."
+msgstr ""
+
+#: classes/Conditions.php:292
+msgctxt "condition: taxonomy plural label ie. Categories: All"
+msgid "A %s"
+msgstr ""
+
+#: classes/Conditions.php:298
+msgctxt "condition: taxonomy plural label ie. Categories: Selected"
+msgid "%s: Selected"
+msgstr ""
+
+#: classes/Conditions.php:301
+msgctxt "condition: taxonomy plural label ie. Select Categories"
+msgid "Select %s."
+msgstr ""
+
+#: classes/Conditions.php:314
+msgctxt "condition: taxonomy plural label ie. Categories: Selected"
+msgid "A %s with IDs"
+msgstr ""
+
+#: classes/Conditions.php:317
+msgctxt "condition: taxonomy plural label ie. Category IDs"
+msgid "%s IDs: 128, 129"
+msgstr ""
+
+#: classes/Conditions.php:334
+msgid "The Home Page"
+msgstr ""
+
+#: classes/Conditions.php:341
+msgid "The Blog Index"
+msgstr ""
+
+#: classes/Conditions.php:348
+msgid "A Search Result Page"
+msgstr ""
+
+#: classes/Conditions.php:354
+msgid "A 404 Error Page"
+msgstr ""
+
+#: classes/Site/Feeds.php:45, classes/Site/Posts.php:40
+msgid "This content is restricted."
+msgstr ""
+
+#: content-control.php:256
+msgid "The %4$s %1$s %5$s plugin requires %2$s version %3$s or greater."
+msgstr ""
+
+#: content-control.php:258
+msgid "Plugin Activation Error"
+msgstr ""
