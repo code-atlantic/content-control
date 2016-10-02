@@ -3,14 +3,14 @@ Contributors: jungleplugins, danieliser
 Author URI:  https://jungleplugins.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://jungleplugins.com/donate/
-Tags:
+Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 4.6.0
 Stable tag: 1.0.0
 Minimum PHP: 5.3
 License: GNU Version 3 or Any Later Version
 
-Restrict pages and posts to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
+Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
 
 == Description ==
 
