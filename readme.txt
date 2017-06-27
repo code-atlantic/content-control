@@ -1,12 +1,12 @@
-=== Content Control ===
+=== Content Control - User Access Restriction Plugin ===
 Contributors: jungleplugins, danieliser
 Author URI:  https://jungleplugins.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://jungleplugins.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 4.6.0
-Stable tag: 1.0.0
+Tested up to: 4.8.0
+Stable tag: 1.0.1
 Minimum PHP: 5.3
 License: GNU Version 3 or Any Later Version
 
@@ -14,13 +14,14 @@ Restrict content to logged in/out users or specific user roles. Restrict access 
 
 == Description ==
 
-Content Control by Jungle Plugins is a lightweight and powerful plugin that allows you to take complete control of your website’s content by restricting access to pages/posts to logged in users, specific user roles or to logged out users.
+Content Control by [Jungle Plugins][jungleplugins] is a lightweight and powerful plugin that allows you to take complete control of your website’s content by restricting access to pages/posts to logged in users, specific user roles or to logged out users.
 
 The plugin also enables you to restrict access to certain parts of a page/post using shortcodes e.g [content_control]Logged in content[/content_control]
 
 Lastly, the plugin allows you to control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
 __Full Feature List__
+
 Content Control allows you to do the following:
 
 - Restrict access to pages/posts to logged in/out users or specific user roles
@@ -95,5 +96,9 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+= v1.0.1 =
+* Fix: Non static method called statically
+* Fix: Bug when using invalid variable type.
+
 = v1.0.0 =
 * Initial Release
