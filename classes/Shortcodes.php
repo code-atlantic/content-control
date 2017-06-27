@@ -42,7 +42,7 @@ class Shortcodes {
 		$roles = ! is_array( $atts['roles'] ) ? explode( ',', $atts['roles'] ) : $atts['roles'];
 		$roles = array_map( 'trim', $roles );
 
-		$classes   = ! empty( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
+		$classes   = ! is_array( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
 		$classes[] = 'jp-cc';
 
 		if ( Is::accessible( $who, $roles, 'shortcode' ) ) {
@@ -65,7 +65,7 @@ class Shortcodes {
 	 *
 	 * @return mixed
 	 */
-	function normalize_empty_atts( $atts ) {
+	public static function normalize_empty_atts( $atts ) {
 		foreach ( $atts as $attribute => $value ) {
 			if ( is_int( $attribute ) ) {
 				$atts[ strtolower( $value ) ] = true;
