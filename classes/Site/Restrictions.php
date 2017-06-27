@@ -47,7 +47,7 @@ class Restrictions {
 
 	public static function restricted_content() {
 
-		$restrictions = Options::get( 'restrictions' );
+		$restrictions = jpf_get_option( 'restrictions' );
 
 		$restriced_content = false;
 

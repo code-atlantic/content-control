@@ -19,7 +19,7 @@ class Restrictions {
 	}
 
 	public static function restrictions_editor() {
-			$restrictions = Options::get( 'restrictions', array() );
+			$restrictions = jpf_get_option( 'restrictions', array() );
 
 			$restrictions = Helpers::object_to_array( $restrictions );
 
