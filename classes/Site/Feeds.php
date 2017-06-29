@@ -38,7 +38,7 @@ class Feeds {
 		if ( isset( $restricted_content['override_default_message'] ) ) {
 			$message = $restricted_content['custom_message'];
 		} else {
-			$message = jpf_get_option( 'default_denial_message', '' );
+			$message = Options::get( 'default_denial_message', '' );
 		}
 
 		if ( empty( $message ) ) {
