@@ -3,7 +3,7 @@
  * Plugin Name: Content Control
  * Plugin URI: https://wordpress.org/plugins/content-control/
  * Description:
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Jungle Plugins
  * Author URI: https://jungleplugins.com/
  * Text Domain: content-control
@@ -73,7 +73,7 @@ class JP_Content_Control {
 	/**
 	 * @var string
 	 */
-	public static $VER = '1.0.2';
+	public static $VER = '1.0.3';
 
 	/**
 	 * @var string
@@ -265,6 +265,6 @@ function jp_content_control_activation_check() {
 register_activation_hook( __FILE__, 'jp_content_control_activation_check' );
 
 // Register activation, deactivation & uninstall hooks.
-register_activation_hook( __FILE__, array( '\\JP\CC\Activation', 'activate' ) );
-register_deactivation_hook( __FILE__, array( '\\JP\CC\Activation', 'deactivate' ) );
-register_uninstall_hook( __FILE__, array( '\\JP\CC\Activation', 'uninstall' ) );
+//register_activation_hook( __FILE__, array( '\\JP\CC\Activation', 'activate' ) );
+//register_deactivation_hook( __FILE__, array( '\\JP\CC\Activation', 'deactivate' ) );
+//register_uninstall_hook( __FILE__, array( '\\JP\CC\Activation', 'uninstall' ) );
