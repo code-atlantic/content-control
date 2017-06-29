@@ -6,7 +6,7 @@ Donate link: https://jungleplugins.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 4.8.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Minimum PHP: 5.3
 License: GNU Version 3 or Any Later Version
 
@@ -96,6 +96,9 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+= v1.0.2 =
+* Fix: Call to undefined function.
+
 = v1.0.1 =
 * Fix: Non static method called statically
 * Fix: Bug when using invalid variable type.
