@@ -33,6 +33,10 @@ class Is {
 			'context' => '',
 		) );
 
+		if ( is_string( key( $roles ) ) ) {
+			$roles = array_keys( $roles );
+		}
+
 		$logged_in = is_user_logged_in();
 
 		$exclude = false;
