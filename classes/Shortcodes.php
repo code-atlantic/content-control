@@ -34,7 +34,7 @@ class Shortcodes {
 			'logged_out' => null,
 			'roles'      => array(),
 			'class'      => '',
-			'message'    => '',
+			'message'    => Options::get( 'default_denial_message' , '' ),
 		), static::normalize_empty_atts( $atts ), 'content_control' );
 
 		$who = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
@@ -55,7 +55,7 @@ class Shortcodes {
 
 		$classes = implode( ' ', $classes );
 
-		return sprintf( $container, $classes, $content, $atts['message'] );
+		return sprintf( $container, $classes, do_shortcode( $content ), $atts['message'] );
 	}
 
 	/**
