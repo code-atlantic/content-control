@@ -6,7 +6,7 @@ Donate link: https://jungleplugins.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 4.8.0
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 Minimum PHP: 5.3
 License: GNU Version 3 or Any Later Version
 
@@ -64,8 +64,6 @@ If you need help getting started with Content Control please see [FAQs][faq page
 
 
 [faq page]: https://wordpress.org/plugins/content-control/faq/ "Content Control FAQ"
-
-
 
 
 == Frequently Asked Questions ==
