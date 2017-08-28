@@ -236,7 +236,7 @@ class Reviews {
 						'one_week'     => array(
 							'message'    => sprintf( $time_message, __( '1 week', 'content-control' ) ),
 							'conditions' => array(
-								strtotime( self::installed_on() . ' +1 second' ) < time(),
+								strtotime( self::installed_on() . ' +1 week' ) < time(),
 							),
 							'link'       => $link,
 							'pri'        => 10,
