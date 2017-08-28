@@ -25,6 +25,9 @@ class Admin {
 
 		// Admin Widget Editor
 		Admin\Widget\Settings::init();
+
+		// Admin Review Requests
+		Admin\Reviews::init();
 	}
 
 }
