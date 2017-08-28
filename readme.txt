@@ -96,6 +96,12 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.0 =
+* Improvement: Added default denial message to shortcode.
+* Improvement: Render nested shortcodes in the [content_control] shortcode.
+* Fix: Bug where multiple roles checked together in restriction editor.
+
 = v1.0.3 =
 * Fix: Minor notice on activation.
 
