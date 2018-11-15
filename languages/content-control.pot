@@ -156,6 +156,34 @@ msgstr ""
 msgid "Content Control"
 msgstr ""
 
+#: classes/Admin/Reviews.php:232
+msgid "Hi there! You've been using the Content Control plugin on your site for %s now - We hope it's been helpful. If you're enjoying the plugin, would you mind rating it 5-stars to help spread the word?"
+msgstr ""
+
+#: classes/Admin/Reviews.php:237
+msgid "1 week"
+msgstr ""
+
+#: classes/Admin/Reviews.php:245
+msgid "1 month"
+msgstr ""
+
+#: classes/Admin/Reviews.php:253
+msgid "3 months"
+msgstr ""
+
+#: classes/Admin/Reviews.php:406
+msgid "Ok, you deserve it"
+msgstr ""
+
+#: classes/Admin/Reviews.php:411
+msgid "Nope, maybe later"
+msgstr ""
+
+#: classes/Admin/Reviews.php:416
+msgid "I already did"
+msgstr ""
+
 #: classes/Admin/Setting_Callbacks.php:197
 msgid "The callback function used for the <strong>%s</strong> setting is missing."
 msgstr ""
