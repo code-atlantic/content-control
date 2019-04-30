@@ -10,6 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
+/**
+ * Class Posts
+ *
+ * @package JP\CC\Site
+ */
 class Posts {
 
 	public static function init() {
@@ -17,8 +22,17 @@ class Posts {
 		add_filter( 'jp_cc_restricted_message', array( __CLASS__, 'restricted_message_filter' ), 10, 1 );
 	}
 
+	/**
+	 * @param $content
+	 *
+	 * @return mixed|string
+	 */
 	public static function the_content( $content ) {
 		global $post;
+
+		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
+			return $content;
+		}
 
 		if ( ! isset( Restrictions::$protected_posts[ $post->ID ] ) ) {
 			Restrictions::$protected_posts[ $post->ID ] = Restrictions::restricted_content();

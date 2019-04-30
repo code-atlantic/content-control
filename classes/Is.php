@@ -29,6 +29,10 @@ class Is {
 			$args = array( 'context' => $args );
 		}
 
+		if ( ! is_array( $roles ) ) {
+			$roles = array();
+		}
+
 		$args = wp_parse_args( $args, array(
 			'context' => '',
 		) );

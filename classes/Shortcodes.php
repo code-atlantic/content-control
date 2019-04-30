@@ -61,12 +61,12 @@ class Shortcodes {
 	/**
 	 * Takes empty attributes and sets them to true.
 	 *
-	 * @param $atts
+	 * @param array $atts
 	 *
 	 * @return mixed
 	 */
-	public static function normalize_empty_atts( $atts ) {
-		foreach ( $atts as $attribute => $value ) {
+	public static function normalize_empty_atts( $atts = array() ) {
+		foreach ( (array) $atts as $attribute => $value ) {
 			if ( is_int( $attribute ) ) {
 				$atts[ strtolower( $value ) ] = true;
 				unset( $atts[ $attribute ] );
