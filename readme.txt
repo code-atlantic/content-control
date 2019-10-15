@@ -1,26 +1,26 @@
 === Content Control - User Access Restriction Plugin ===
-Contributors: jungleplugins, danieliser, codeatlantic
-Author URI:  https://jungleplugins.com/
+Contributors: codeatlantic, danieliser, jungleplugins
+Author URI:  https://code-atlantic.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
-Donate link: https://jungleplugins.com/donate/
+Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 5.2.4
 Stable tag: 1.1.0
-Minimum PHP: 5.3
-License: GNU Version 3 or Any Later Version
+Requires PHP: 5.3
+License: GPLv3 or Any Later Version
 
 Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
 
 == Description ==
 
-Content Control by [Jungle Plugins][jungleplugins] is a lightweight and powerful plugin that allows you to take complete control of your website’s content by restricting access to pages/posts to logged in users, specific user roles or to logged out users.
+Content Control is a lightweight and powerful plugin that allows you to take complete control of your website’s content by restricting access to pages/posts to logged in users, specific user roles or to logged out users.
 
 The plugin also enables you to restrict access to certain parts of a page/post using shortcodes e.g [content_control]Logged in content[/content_control]
 
 Lastly, the plugin allows you to control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
-__Full Feature List__
+= Full Feature List =
 
 Content Control allows you to do the following:
 
@@ -34,19 +34,25 @@ Content Control allows you to do the following:
 - Apply custom CSS classes to on page content restriction shortcodes
 - Control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
-__Created by Jungle Plugins__
+= Created by Code Atlantic =
 
-Content Control is built by the Jungle Plugins team. Our mission is to make building membership & community websites easy with WordPress.
+Content Control is built by the [Code Atlantic][codeatlantic] team. We create high-quality WordPress plugins that help you grow your WordPress sites.
 
-If you’d like to get updates on our plugin development work you can subscribe to our mailing list and/or follow us on Twitter.
+Check out some of our most popular plugins:
 
-**Requires WordPress 3.5 and PHP 5.3**
+* [Popup Maker][popupmaker] - #1 Popup & Marketing Plugin for WordPress
+* [Ahoy][ahoy] - Automated Marketing Messages for WordPress
+* [User Menus][usermenus] - Show Or Hide Menu Items For Different Users
 
-[jungleplugins]: https://jungleplugins.com/ "Jungle Plugins - WordPress User Communities Made Easy"
+**Requires WordPress 3.6 and PHP 5.3**
 
-[jungleplugins subscribe]: https://jungleplugins.com/subscribe/ "Jungle Plugins Newsletter"
+[codeatlantic]: https://code-atlantic.com "Code Atlantic - High Quality WordPress Plugins"
 
-[jungleplugins twitter]: https://twitter.com/jungleplugins/ "Jungle Plugins on Twitter"
+[popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
+
+[ahoy]: https://useahoy.com "Automated Marketing Messages for WordPress"
+
+[usermenus]: https://wordpress.org/plugins/user-menus/ "Show Or Hide Menu Items For Different Users"
 
 == Installation ==
 
@@ -93,7 +99,7 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 == Changelog ==
 
-= v1.1.1 =
+= v1.1.1 - 10/15/2019 =
 * Fix: Bugs where variables were not always the expected type.
 
 = v1.1.0 =
