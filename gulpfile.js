@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     runSequence = require('run-sequence').use(gulp),
-    $fn = require('gulp-load-plugins')({ camelize: true }),
+    $fn = require('gulp-load-plugins')({camelize: true}),
     plumberErrorHandler = {
         errorHandler: $fn.notify.onError({
             title: 'Gulp',
@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     pkg = require('./package.json');
 
 //region JavaScript
-gulp.task('js:settingspage', function() {
+gulp.task('js:settingspage', function () {
     return gulp.src(['assets/scripts/src/admin/plugins/serialize-object.js', 'assets/scripts/src/admin/plugins/select2.full.custom.js', 'assets/scripts/src/admin/settings-page.js'])
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.jshint())
@@ -18,20 +18,15 @@ gulp.task('js:settingspage', function() {
         .pipe($fn.order([
             "plugins/**/*.js",
             '*.js'
-        ], { base: 'assets/scripts/src/admin/' }))
+        ], {base: 'assets/scripts/src/admin/'}))
         .pipe($fn.concat('settings-page.js'))
         .pipe(gulp.dest('assets/scripts'))
         .pipe($fn.uglify())
         .pipe($fn.rename({extname: '.min.js'}))
-        .pipe(gulp.dest('assets/scripts'))
-        .pipe($fn.notify({
-            message: 'Admin JS task complete',
-            onLast: true
-        }))
-        .pipe($fn.livereload());
+        .pipe(gulp.dest('assets/scripts'));
 });
 
-gulp.task('js:widgets', function() {
+gulp.task('js:widgets', function () {
     return gulp.src(['assets/scripts/src/admin/widget-editor.js'])
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.jshint())
@@ -39,12 +34,11 @@ gulp.task('js:widgets', function() {
         .pipe(gulp.dest('assets/scripts'))
         .pipe($fn.uglify())
         .pipe($fn.rename({extname: '.min.js'}))
-        .pipe(gulp.dest('assets/scripts'))
-        .pipe($fn.livereload());
+        .pipe(gulp.dest('assets/scripts'));
 });
 
 //region JavaScript
-gulp.task('js:admin', function() {
+gulp.task('js:admin', function () {
     return gulp.src(['assets/scripts/src/admin/vendor/*.js', 'assets/scripts/src/admin/plugins/**/*.js', 'assets/scripts/src/admin/*.js'])
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.jshint())
@@ -53,16 +47,15 @@ gulp.task('js:admin', function() {
             "vendor/**/*.js",
             "plugins/**/*.js",
             '*.js'
-        ], { base: 'assets/scripts/src/admin/' }))
+        ], {base: 'assets/scripts/src/admin/'}))
         //.pipe($fn.concat('admin.js'))
         .pipe(gulp.dest('assets/scripts'))
         .pipe($fn.uglify())
         .pipe($fn.rename({extname: '.min.js'}))
-        .pipe(gulp.dest('assets/scripts'))
-        .pipe($fn.livereload());
+        .pipe(gulp.dest('assets/scripts'));
 });
 
-gulp.task('js:site', function() {
+gulp.task('js:site', function () {
     return gulp.src(['assets/scripts/src/site/plugins/**/*.js', 'assets/scripts/src/site/general.js'])
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.jshint())
@@ -72,20 +65,15 @@ gulp.task('js:site', function() {
             "plugins/pum.js",
             "plugins/**/*.js",
             'general.js'
-        ], { base: 'assets/scripts/src/site/' }))
+        ], {base: 'assets/scripts/src/site/'}))
         .pipe($fn.concat('site.js'))
         .pipe(gulp.dest('assets/scripts'))
         .pipe($fn.uglify())
         .pipe($fn.rename({extname: '.min.js'}))
-        .pipe(gulp.dest('assets/scripts'))
-        .pipe($fn.notify({
-            message: 'Site JS task complete',
-            onLast: true
-        }))
-        .pipe($fn.livereload());
+        .pipe(gulp.dest('assets/scripts'));
 });
 
-gulp.task('js:other', function() {
+gulp.task('js:other', function () {
     return gulp.src('assets/scripts/src/*.js')
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.jshint())
@@ -93,12 +81,7 @@ gulp.task('js:other', function() {
         .pipe(gulp.dest('assets/scripts'))
         .pipe($fn.uglify())
         .pipe($fn.rename({extname: '.min.js'}))
-        .pipe(gulp.dest('assets/scripts'))
-        .pipe($fn.notify({
-            message: 'Other JS task complete',
-            onLast: true
-        }))
-        .pipe($fn.livereload());
+        .pipe(gulp.dest('assets/scripts'));
 });
 
 gulp.task('js', ['js:widgets', 'js:settingspage', 'js:site', 'js:other']);
@@ -109,22 +92,18 @@ gulp.task('langpack', function () {
     return gulp.src(['**/*.php', '!build/**/*.*'])
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.sort())
-        .pipe($fn.wpPot( {
+        .pipe($fn.wpPot({
             domain: pkg.name,
-            bugReport: 'danieliser@wizardinternetsolutions.com',
-            team: 'Daniel Iser <danieliser@wizardinternetsolutions.com>'
-        } ))
+            bugReport: 'support@code-atlantic.com',
+            team: 'Code Atlantic Support <support@code-atlantic.com>'
+        }))
 
-        .pipe(gulp.dest('languages'))
-        .pipe($fn.notify({
-            message: 'Language files task complete',
-            onLast: true
-        }));
+        .pipe(gulp.dest('languages'));
 });
 //endregion Language Files
 
 //region SASS & CSS
-gulp.task('css', function() {
+gulp.task('css', function () {
     return gulp.src('assets/styles/sass/*.scss')
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.sourcemaps.init())
@@ -143,16 +122,9 @@ gulp.task('css', function() {
         .pipe(gulp.dest('assets/styles'))
         .pipe($fn.filter('**/*.css')) // Filtering stream to only css files
         .pipe($fn.combineMq()) // Combines Media Queries
-        .pipe($fn.livereload())
-        .pipe($fn.rename({ suffix: '.min' }))
+        .pipe($fn.rename({suffix: '.min'}))
         .pipe($fn.csso({
             //sourceMap: true,
-        }))
-        .pipe(gulp.dest('assets/styles'))
-        .pipe($fn.livereload())
-        .pipe($fn.notify({
-            message: 'Styles task complete',
-            onLast: true
         }))
         .pipe(gulp.dest('assets/styles'));
 });
@@ -185,7 +157,7 @@ gulp.task('clean-build', function () {
         .pipe($fn.clean());
 });
 gulp.task('clean-package', function () {
-    return gulp.src('release/'+pkg.name+'_v'+pkg.version+'.zip', {read: false})
+    return gulp.src('release/' + pkg.name + '_v' + pkg.version + '.zip', {read: false})
         .pipe($fn.plumber(plumberErrorHandler))
         .pipe($fn.clean({force: true}));
 });
@@ -208,7 +180,6 @@ gulp.task('clean-all', function (done) {
 
 //region Watch & Build
 gulp.task('watch', function () {
-    $fn.livereload.listen();
     gulp.watch('assets/styles/sass/**/*.scss', ['css']);
     //gulp.watch('assets/scripts/src/admin/**/*.js', ['js:admin']);
     gulp.watch('assets/scripts/src/site/**/*.js', ['js:site']);
@@ -231,14 +202,14 @@ gulp.task('prebuild', function (done) {
 gulp.task('build', ['prebuild'], function () {
     return gulp.src(['./**/*.*', '!./build/**', '!./release/**', '!./node_modules/**', '!./gulpfile.js', '!./package.json', '!./assets/scripts/src/**'])
         .pipe($fn.plumber(plumberErrorHandler))
-        .pipe(gulp.dest('build/'+pkg.name));
+        .pipe(gulp.dest('build/' + pkg.name));
 });
 
 // Generates a release package with the current version from package.json
 gulp.task('package', ['clean-package'], function () {
     return gulp.src('build/**/*.*')
         .pipe($fn.plumber(plumberErrorHandler))
-        .pipe($fn.zip(pkg.name+'_v'+pkg.version+'.zip'))
+        .pipe($fn.zip(pkg.name + '_v' + pkg.version + '.zip'))
         .pipe(gulp.dest('release'));
 });
 

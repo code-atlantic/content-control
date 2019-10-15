@@ -1,6 +1,6 @@
 {
   "name": "content-control",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -40,5 +40,8 @@
     "gulp-zip": "^3.2.0",
     "jshint": "^2.9.1",
     "run-sequence": "^1.1.5"
+  },
+  "dependencies": {
+    "notify-send": "^0.1.2"
   }
 }
