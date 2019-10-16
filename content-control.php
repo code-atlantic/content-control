@@ -4,19 +4,15 @@
  * Plugin URI: https://wordpress.org/plugins/content-control/
  * Description:
  * Version: 1.1.1
- * Author: Jungle Plugins
- * Author URI: https://jungleplugins.com/
+ * Author: Code Atlantic
+ * Author URI: https://code-atlantic.com/
  * Text Domain: content-control
  *
  * Minimum PHP: 5.3
  * Minimum WP: 3.5
  *
  * @author      Daniel Iser
- * @copyright   Copyright (c) 2016, Jungle Plugins
- * @since       1.0.0
- *
- * Prior Work Credits. Big thanks to the following:
- *
+ * @copyright   Copyright (c) 2019, Code Atlantic LLC.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
