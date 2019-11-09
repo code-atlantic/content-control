@@ -66,7 +66,13 @@ class Shortcodes {
 	 * @return mixed
 	 */
 	public static function normalize_empty_atts( $atts = array() ) {
-		foreach ( (array) $atts as $attribute => $value ) {
+		if ( ! is_array( $atts ) ) {
+			if ( empty( $atts ) ) {
+				$atts = array();
+			}
+		}
+
+		foreach ( $atts as $attribute => $value ) {
 			if ( is_int( $attribute ) ) {
 				$atts[ strtolower( $value ) ] = true;
 				unset( $atts[ $attribute ] );
