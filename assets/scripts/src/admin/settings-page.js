@@ -744,8 +744,6 @@ var wpActiveEditor = true;
         select2: {
             init: function () {
                 $('.jpselect2 select').filter(':not(.initialized)').each(function () {
-                    console.log(this);
-
                     var $this = $(this),
                         current = $this.data('current'),
                         object_type = $this.data('objecttype'),
@@ -868,8 +866,6 @@ var wpActiveEditor = true;
             add: function () {
                 var rows = $('table#jp-cc-restrictions tbody.has-items tr'),
                     index = rows.length ? rows.last().index() + 1 : 0;
-
-                console.log(index);
 
                 JPCC.restrictions._is_edit = false;
                 JPCC.restrictions.renderForm(index);
