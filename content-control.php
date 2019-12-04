@@ -158,7 +158,6 @@ class JP_Content_Control {
 	 */
 	private function init() {
 		\JP\CC\Options::init( 'jp_cc' );
-		\JP\CC\Conditions::init();
 		\JP\CC\Shortcodes::init();
 		\JP\CC\Admin::init();
 		\JP\CC\Site::init();

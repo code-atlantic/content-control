@@ -16,10 +16,6 @@ class Conditions {
 
 	public $condition_sort_order = array();
 
-	public static function init() {
-		Conditions::instance();
-	}
-
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new self;
