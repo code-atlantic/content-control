@@ -18,10 +18,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Posts {
 
 	public static function init() {
+		add_action( 'the_title', array( __CLASS__, 'my_title' ), 1000 );
+		add_action( 'get_permalink', array( __CLASS__, 'my_permalink' ), 1000 );
+		add_action( 'get_post_permalink', array( __CLASS__, 'my_permalink' ), 1000 );
+
 		add_action( 'the_content', array( __CLASS__, 'the_content' ), 1000 );
 		add_filter( 'jp_cc_restricted_message', array( __CLASS__, 'restricted_message_filter' ), 10, 1 );
 	}
 
+	public static function my_permalink( $permalink ) {
+		global $post;
+
+		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
+			return $permalink;
+		}
+
+		if ( ! isset( Restrictions::$protected_posts[ $post->ID ] ) ) {
+			Restrictions::$protected_posts[ $post->ID ] = Restrictions::restricted_content();
+		}
+
+		$restricted_content = Restrictions::$protected_posts[ $post->ID ];
+
+		return ($restricted_content ? '#' : $permalink);
+	}
+
+	public static function my_title( $title ) {
+		global $post;
+
+		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
+			return $title;
+		}
+
+		if ( ! isset( Restrictions::$protected_posts[ $post->ID ] ) ) {
+			Restrictions::$protected_posts[ $post->ID ] = Restrictions::restricted_content();
+		}
+
+		$restricted_content = Restrictions::$protected_posts[ $post->ID ];
+
+		$hidden_title = preg_replace('/\w/', '*', $title);
+
+		return ($restricted_content ? '******' : $title);
+	}
+	
 	/**
 	 * @param $content
 	 *
