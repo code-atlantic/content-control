@@ -24,7 +24,7 @@ msgstr ""
 msgid "Restrictions"
 msgstr ""
 
-#: classes/Admin.php:20, classes/Conditions.php:60, classes/Conditions.php:175
+#: classes/Admin.php:20, classes/Conditions.php:87, classes/Conditions.php:222
 msgid "General"
 msgstr ""
 
@@ -312,121 +312,121 @@ msgstr ""
 msgid "Choose which roles can see this widget"
 msgstr ""
 
-#: classes/Conditions.php:61
+#: classes/Conditions.php:88
 msgid "Pages"
 msgstr ""
 
-#: classes/Conditions.php:62
+#: classes/Conditions.php:89
 msgid "Posts"
 msgstr ""
 
-#: classes/Conditions.php:63
+#: classes/Conditions.php:90
 msgid "Categories"
 msgstr ""
 
-#: classes/Conditions.php:64
+#: classes/Conditions.php:91
 msgid "Tags"
 msgstr ""
 
-#: classes/Conditions.php:65
+#: classes/Conditions.php:92
 msgid "Format"
 msgstr ""
 
-#: classes/Conditions.php:121
+#: classes/Conditions.php:160
 msgid "Choose a content type"
 msgstr ""
 
-#: classes/Conditions.php:147
+#: classes/Conditions.php:189
 msgid "Select a condition"
 msgstr ""
 
-#: classes/Conditions.php:176
+#: classes/Conditions.php:223
 msgctxt "condition: post type plural label ie. Posts: All"
 msgid "%s Archive"
 msgstr ""
 
-#: classes/Conditions.php:184
+#: classes/Conditions.php:231
 msgctxt "condition: post type singular label ie. Posts: All"
 msgid "A %s"
 msgstr ""
 
-#: classes/Conditions.php:190
+#: classes/Conditions.php:237
 msgctxt "condition: post type singular label ie. Posts: Selected"
 msgid "A Selected %s"
 msgstr ""
 
-#: classes/Conditions.php:193
+#: classes/Conditions.php:240
 msgctxt "condition: post type singular label ie. Select Posts"
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:206
+#: classes/Conditions.php:253
 msgctxt "condition: post type singular label ie. Posts: ID"
 msgid "A %s with ID"
 msgstr ""
 
-#: classes/Conditions.php:209
+#: classes/Conditions.php:256
 msgctxt "condition: post type singular label ie. Posts IDs"
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: classes/Conditions.php:221
+#: classes/Conditions.php:268
 msgctxt "condition: post type plural label ie. Pages: With Template"
 msgid "A %s: With Template"
 msgstr ""
 
-#: classes/Conditions.php:230
+#: classes/Conditions.php:277
 msgid "Default"
 msgstr ""
 
-#: classes/Conditions.php:260
+#: classes/Conditions.php:307
 msgctxt "condition: post type plural and taxonomy singular label ie. Posts: With Category"
 msgid "A %1$s with %2$s"
 msgstr ""
 
-#: classes/Conditions.php:263
+#: classes/Conditions.php:310
 msgctxt "condition: post type plural label ie. Select categories"
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:292
+#: classes/Conditions.php:339
 msgctxt "condition: taxonomy plural label ie. Categories: All"
 msgid "A %s"
 msgstr ""
 
-#: classes/Conditions.php:298
+#: classes/Conditions.php:345
 msgctxt "condition: taxonomy plural label ie. Categories: Selected"
 msgid "%s: Selected"
 msgstr ""
 
-#: classes/Conditions.php:301
+#: classes/Conditions.php:348
 msgctxt "condition: taxonomy plural label ie. Select Categories"
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:314
+#: classes/Conditions.php:361
 msgctxt "condition: taxonomy plural label ie. Categories: Selected"
 msgid "A %s with IDs"
 msgstr ""
 
-#: classes/Conditions.php:317
+#: classes/Conditions.php:364
 msgctxt "condition: taxonomy plural label ie. Category IDs"
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: classes/Conditions.php:334
+#: classes/Conditions.php:384
 msgid "The Home Page"
 msgstr ""
 
-#: classes/Conditions.php:341
+#: classes/Conditions.php:391
 msgid "The Blog Index"
 msgstr ""
 
-#: classes/Conditions.php:348
+#: classes/Conditions.php:398
 msgid "A Search Result Page"
 msgstr ""
 
-#: classes/Conditions.php:354
+#: classes/Conditions.php:404
 msgid "A 404 Error Page"
 msgstr ""
 
@@ -434,10 +434,10 @@ msgstr ""
 msgid "This content is restricted."
 msgstr ""
 
-#: content-control.php:252
+#: content-control.php:251
 msgid "The %4$s %1$s %5$s plugin requires %2$s version %3$s or greater."
 msgstr ""
 
-#: content-control.php:254
+#: content-control.php:253
 msgid "Plugin Activation Error"
 msgstr ""

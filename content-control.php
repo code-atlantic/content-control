@@ -3,7 +3,7 @@
  * Plugin Name: Content Control
  * Plugin URI: https://wordpress.org/plugins/content-control/
  * Description:
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/
  * Text Domain: content-control
@@ -69,7 +69,7 @@ class JP_Content_Control {
 	/**
 	 * @var string
 	 */
-	public static $VER = '1.1.2';
+	public static $VER = '1.1.3';
 
 	/**
 	 * @var string
