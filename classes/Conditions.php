@@ -6,27 +6,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class Conditions
+ *
+ * @package JP\CC
+ */
 class Conditions {
 
+	/**
+	 * @var
+	 */
 	public static $instance;
 
+	/**
+	 * @var bool
+	 */
 	public $preload_posts = false;
 
+	/**
+	 * @var array
+	 */
 	public $conditions = array();
 
+	/**
+	 * @var array
+	 */
 	public $condition_sort_order = array();
 
+	/**
+	 * @return \JP\CC\Conditions
+	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new self;
 			self::$instance->add_conditions( self::$instance->register_conditions() );
 			self::$instance->preload_posts = isset( $_GET['page'] ) && $_GET['page'] == 'jp-cc-settings';
-
 		}
 
 		return self::$instance;
 	}
 
+	/**
+	 * @param array $conditions
+	 */
 	public function add_conditions( $conditions = array() ) {
 		foreach ( $conditions as $key => $condition ) {
 			if ( empty( $condition['id'] ) && ! is_numeric( $key ) ) {
@@ -37,6 +59,9 @@ class Conditions {
 		}
 	}
 
+	/**
+	 * @param null $condition
+	 */
 	public function add_condition( $condition = null ) {
 		if ( ! isset ( $this->conditions[ $condition['id'] ] ) ) {
 			$this->conditions[ $condition['id'] ] = $condition;
@@ -45,10 +70,16 @@ class Conditions {
 		return;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_conditions() {
 		return $this->conditions;
 	}
 
+	/**
+	 * @return array|mixed|void
+	 */
 	public function condition_sort_order() {
 		if ( ! $this->condition_sort_order ) {
 
@@ -78,6 +109,12 @@ class Conditions {
 		return $this->condition_sort_order;
 	}
 
+	/**
+	 * @param $a
+	 * @param $b
+	 *
+	 * @return int
+	 */
 	public function sort_condition_groups( $a, $b ) {
 
 		$order = $this->condition_sort_order();
@@ -93,6 +130,9 @@ class Conditions {
 		return $ai > $bi ? 1 : -1;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_conditions_by_group() {
 
 		static $groups;
@@ -112,6 +152,9 @@ class Conditions {
 		return $groups;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function conditions_dropdown_list() {
 		$groups = array(
 			__( 'Choose a content type', 'content-control' ) => '',
@@ -131,6 +174,9 @@ class Conditions {
 		return $groups;
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function conditions_selectbox( $args = array() ) {
 		$args = wp_parse_args( $args, array(
 			'id'      => '',
@@ -153,6 +199,11 @@ class Conditions {
 		</select><?php
 	}
 
+	/**
+	 * @param null $condition
+	 *
+	 * @return mixed|null
+	 */
 	public function get_condition( $condition = null ) {
 		return isset( $this->conditions[ $condition ] ) ? $this->conditions[ $condition ] : null;
 	}
@@ -321,7 +372,10 @@ class Conditions {
 
 		return $conditions;
 	}
-	
+
+	/**
+	 * @return mixed|void
+	 */
 	public function register_conditions() {
 		$conditions = array_merge( $this->generate_post_type_conditions(), $this->generate_taxonomy_conditions() );
 
