@@ -18,19 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Posts {
 
 	public static function init() {
+		add_action( 'post_class', array( __CLASS__, 'my_post_class' ), 1000 );
 		add_action( 'the_title', array( __CLASS__, 'my_title' ), 1000 );
-		add_action( 'get_permalink', array( __CLASS__, 'my_permalink' ), 1000 );
-		add_action( 'get_post_permalink', array( __CLASS__, 'my_permalink' ), 1000 );
 
 		add_action( 'the_content', array( __CLASS__, 'the_content' ), 1000 );
 		add_filter( 'jp_cc_restricted_message', array( __CLASS__, 'restricted_message_filter' ), 10, 1 );
 	}
 
-	public static function my_permalink( $permalink ) {
+	public static function my_post_class( $value ) {
 		global $post;
 
 		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
-			return $permalink;
+			return $value;
 		}
 
 		if ( ! isset( Restrictions::$protected_posts[ $post->ID ] ) ) {
@@ -39,7 +38,11 @@ class Posts {
 
 		$restricted_content = Restrictions::$protected_posts[ $post->ID ];
 
-		return ($restricted_content ? '#' : $permalink);
+		if($restricted_content) {
+			array_push($value, 'content-control-restricted');
+		}
+		
+		return $value;
 	}
 
 	public static function my_title( $title ) {
@@ -59,7 +62,7 @@ class Posts {
 
 		return ($restricted_content ? '******' : $title);
 	}
-	
+
 	/**
 	 * @param $content
 	 *
@@ -159,4 +162,4 @@ class Posts {
 		return wpautop( $the_excerpt );
 	}
 
-}
+} 
