@@ -407,7 +407,7 @@ class Footer_Templates {
 							<span class="not"><?php _e( 'Is Not', 'content-control' ); ?></span>
 							<input type="checkbox" id="jp-cc-first-facet-operand" value="1" />
 						</button>
-						<# print(JPCC.conditions.template.selectbox({id: 'jp-cc-first-condition', name: ""})); #>
+						<# print(JPCC.conditions.template.selectbox({id: 'jp-cc-first-condition', name: "", placeholder: "<?php _e( 'Choose a condition', 'content-control' ); ?>"})); #>
 					</div>
 				</div>
 			</div>
