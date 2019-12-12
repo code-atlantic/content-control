@@ -26,7 +26,7 @@ class Conditions {
 	/**
 	 * @var array
 	 */
-	public $conditions = array();
+	public $conditions;
 
 	/**
 	 * @var array
@@ -38,8 +38,7 @@ class Conditions {
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self;
-			self::$instance->add_conditions( self::$instance->register_conditions() );
+			self::$instance                = new self;
 			self::$instance->preload_posts = isset( $_GET['page'] ) && $_GET['page'] == 'jp-cc-settings';
 		}
 
@@ -62,8 +61,18 @@ class Conditions {
 	/**
 	 * @param null $condition
 	 */
-	public function add_condition( $condition = null ) {
-		if ( ! isset ( $this->conditions[ $condition['id'] ] ) ) {
+	public function add_condition( $condition = array() ) {
+		if ( ! empty( $condition['id'] ) && ! isset ( $this->conditions[ $condition['id'] ] ) ) {
+			$condition = wp_parse_args( $condition, array(
+				'id'       => '',
+				'callback' => null,
+				'group'    => '',
+				'name'     => '',
+				'priority' => 10,
+				'fields'   => array(),
+				'advanced' => false,
+			) );
+
 			$this->conditions[ $condition['id'] ] = $condition;
 		}
 
@@ -74,11 +83,16 @@ class Conditions {
 	 * @return array
 	 */
 	public function get_conditions() {
+		if ( ! isset( $this->conditions ) ) {
+			$this->register_conditions();
+		}
+
+
 		return $this->conditions;
 	}
 
 	/**
-	 * @return array|mixed|void
+	 * @return array|mixed
 	 */
 	public function condition_sort_order() {
 		if ( ! $this->condition_sort_order ) {
@@ -134,7 +148,6 @@ class Conditions {
 	 * @return array
 	 */
 	public function get_conditions_by_group() {
-
 		static $groups;
 
 		if ( ! isset( $groups ) ) {
@@ -205,7 +218,9 @@ class Conditions {
 	 * @return mixed|null
 	 */
 	public function get_condition( $condition = null ) {
-		return isset( $this->conditions[ $condition ] ) ? $this->conditions[ $condition ] : null;
+		$conditions = $this->get_conditions();
+
+		return isset( $conditions[ $condition ] ) ? $conditions[ $condition ] : null;
 	}
 
 	/**
