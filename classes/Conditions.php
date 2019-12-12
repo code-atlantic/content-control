@@ -321,9 +321,7 @@ class Conditions {
 							'select2'  => true,
 							'multiple' => true,
 							'as_array' => true,
-							// Uncomment after updating the JS form option rendering loops to invert key:value
-							// 'options'  => array_merge( array( 'default' => __( 'Default', 'popup-maker' ) ), $templates ),
-							'options'  => array_flip( array_merge( array( 'default' => __( 'Default', 'content-control' ) ), $templates ) ),
+							'options'  => array_merge( array( 'default' => __( 'Default', 'content-control' ) ), $templates ),
 						),
 					),
 					'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
