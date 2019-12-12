@@ -22,10 +22,10 @@ class Ajax {
 		// Make sure we have got the data we are expecting.
 		$nonce = isset( $_POST["nonce"] ) ? $_POST["nonce"] : "";
 
-		$option_key = isset( $_POST["key"] ) ? $_POST["key"] : false;
+		$option_key   = isset( $_POST["key"] ) ? $_POST["key"] : false;
 		$option_value = isset( $_POST["value"] ) ? $_POST["value"] : null;
 
-		if( wp_verify_nonce( $nonce, 'jp-cc-admin-nonce' ) && isset( $option_value ) ) {
+		if ( wp_verify_nonce( $nonce, 'jp-cc-admin-nonce' ) && isset( $option_value ) ) {
 
 			if ( $option_key && ! empty( $option_key ) ) {
 				Options::update( $option_key, $option_value );
@@ -38,7 +38,7 @@ class Ajax {
 			wp_send_json_error( "This came from the wrong place" );
 		}
 
-		wp_send_json_success($option_value);
+		wp_send_json_success( $option_value );
 	}
 
 	public static function object_search() {
@@ -46,40 +46,96 @@ class Ajax {
 			'items'       => array(),
 			'total_count' => 0,
 		);
-		switch ( $_REQUEST['object_type'] ) {
+
+		$object_type = sanitize_text_field( $_REQUEST['object_type'] );
+
+		switch ( $object_type ) {
 			case 'post_type':
-				$post_type = ! empty( $_REQUEST['object_key'] ) ? $_REQUEST['object_key'] : 'post';
-				$args      = array(
-					's'              => ! empty( $_REQUEST['s'] ) ? $_REQUEST['s'] : null,
-					'post__in'       => ! empty( $_REQUEST['include'] ) ? array_map( 'intval', $_REQUEST['include'] ) : null,
-					'page'           => ! empty( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : null,
+				$post_type = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( $_REQUEST['object_key'] ) : 'post';
+
+				$include = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( $_REQUEST['include'] ) : null;
+				$exclude = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( $_REQUEST['exclude'] ) : null;
+
+				if ( ! empty( $include ) && ! empty( $exclude ) ) {
+					$exclude = array_merge( $include, $exclude );
+				}
+
+				if ( $include ) {
+					$include_query = Helpers::post_type_selectlist_query( $post_type, array(
+						'post__in' => $include,
+					), true );
+
+					foreach ( $include_query['items'] as $id => $name ) {
+						$results['items'][ $id ] = array(
+							'id'   => $id,
+							'text' => $name,
+						);
+					}
+
+					$results['total_count'] += $include_query['total_count'];
+				}
+
+				$query = Helpers::post_type_selectlist_query( $post_type, array(
+					's'              => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
+					'paged'          => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+					'post__not_in'   => $exclude,
 					'posts_per_page' => 10,
-				);
-				$query = Helpers::post_type_selectlist( $post_type, $args, true );
-				foreach ( $query['items'] as $name => $id ) {
-					$results['items'][] = array(
+				), true );
+
+				foreach ( $query['items'] as $id => $name ) {
+					$results['items'][ $id ] = array(
 						'id'   => $id,
 						'text' => $name,
 					);
 				}
-				$results['total_count'] = $query['total_count'];
+
+				// Take out keys which were only used to deduplicate.
+				$results['items']       = array_values( $results['items'] );
+				$results['total_count'] += $query['total_count'];
+
 				break;
 			case 'taxonomy':
-				$taxonomy = ! empty( $_REQUEST['object_key'] ) ? $_REQUEST['object_key'] : 'category';
-				$args = array(
-					'search'  => ! empty( $_REQUEST['s'] ) ? $_REQUEST['s'] : '',
-					'include' => ! empty( $_REQUEST['include'] ) ? $_REQUEST['include'] : null,
-					'page'    => ! empty( $_REQUEST['page'] ) ? absint( $_REQUEST['page'] ) : null,
+				$taxonomy = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( $_REQUEST['object_key'] ) : 'category';
+
+				$include = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( $_REQUEST['include'] ) : null;
+				$exclude = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( $_REQUEST['exclude'] ) : null;
+
+				if ( ! empty( $include ) && ! empty( $exclude ) ) {
+					$exclude = array_merge( $include, $exclude );
+				}
+
+				if ( $include ) {
+					$include_query = Helpers::taxonomy_selectlist_query( $taxonomy, array(
+						'include' => $include,
+					), true );
+
+					foreach ( $include_query['items'] as $id => $name ) {
+						$results['items'][ $id ] = array(
+							'id'   => $id,
+							'text' => $name,
+						);
+					}
+
+					$results['total_count'] += $include_query['total_count'];
+				}
+
+				$query = Helpers::taxonomy_selectlist_query( $taxonomy, array(
+					'search'  => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
+					'paged'   => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+					'exclude' => $exclude,
 					'number'  => 10,
-				);
-				$query = Helpers::taxonomy_selectlist( $taxonomy, $args, true );
-				foreach ( $query['items'] as $name => $id ) {
-					$results['items'][] = array(
+				), true );
+
+				foreach ( $query['items'] as $id => $name ) {
+					$results['items'][ $id ] = array(
 						'id'   => $id,
 						'text' => $name,
 					);
 				}
-				$results['total_count'] = $query['total_count'];
+
+				// Take out keys which were only used to deduplicate.
+				$results['items']       = array_values( $results['items'] );
+				$results['total_count'] += $query['total_count'];
 				break;
 		}
 		echo json_encode( $results );
