@@ -19,38 +19,38 @@ class Restrictions {
 	}
 
 	public static function restrictions_editor() {
-			$restrictions = Options::get( 'restrictions', array() );
+		$restrictions = Options::get( 'restrictions', array() );
 
-			$restrictions = Helpers::object_to_array( $restrictions );
+		$restrictions = Helpers::object_to_array( $restrictions );
 
-			// Remove array keys.
-			$restrictions = array_values( $restrictions );
-			?>
-			<script type="text/javascript">
-				var jp_cc_restrictions = <?php echo json_encode( $restrictions ); ?>,
-					jp_cc_conditions = <?php echo json_encode( Conditions::instance()->get_conditions() ); ?>,
-					jp_cc_conditions_selectlist = <?php echo json_encode( Conditions::instance()->conditions_dropdown_list() ); ?>,
-					jp_cc_restriction_fields = <?php echo json_encode( static::fields() ); ?>;
-			</script>
+		// Remove array keys.
+		$restrictions = array_values( $restrictions );
+		?>
+		<script type="text/javascript">
+			var jp_cc_restrictions = <?php echo json_encode( $restrictions ); ?>,
+				jp_cc_conditions = <?php echo json_encode( Conditions::instance()->get_conditions() ); ?>,
+				jp_cc_conditions_selectlist = <?php echo json_encode( Conditions::instance()->conditions_dropdown_list() ); ?>,
+				jp_cc_restriction_fields = <?php echo json_encode( static::fields() ); ?>;
+		</script>
 
-			<button class="add_new_restriction button" type="button"><?php _e( 'Add a Restriction', 'content-control' ); ?></button>
-			<div class="tablenav top">
-				<div class="alignleft actions bulkactions">
-					<label for="bulk-action-selector-top" class="screen-reader-text"><?php _e( 'Select bulk action', 'content-control' ); ?></label>
-					<select id="bulk-action-selector-top">
-						<option value="-1"><?php _e( 'Bulk Actions', 'content-control' ); ?></option>
-						<option value="trash"><?php _e( 'Move to Trash', 'content-control' ); ?></option>
-					</select>
-					<input type="button" class="button action" value="<?php _e( 'Apply', 'content-control' ); ?>" />
-				</div>
-				<br class="clear">
+		<button class="add_new_restriction button" type="button"><?php _e( 'Add a Restriction', 'content-control' ); ?></button>
+		<div class="tablenav top">
+			<div class="alignleft actions bulkactions">
+				<label for="bulk-action-selector-top" class="screen-reader-text"><?php _e( 'Select bulk action', 'content-control' ); ?></label>
+				<select id="bulk-action-selector-top">
+					<option value="-1"><?php _e( 'Bulk Actions', 'content-control' ); ?></option>
+					<option value="trash"><?php _e( 'Move to Trash', 'content-control' ); ?></option>
+				</select>
+				<input type="button" class="button action" value="<?php _e( 'Apply', 'content-control' ); ?>" />
 			</div>
-			<table id="jp-cc-restrictions" class="wp-list-table widefat fixed striped posts">
-				<thead>
-				<tr>
-					<td id="cb" class="manage-column column-cb check-column">
-						<label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Select All', 'content-control' ); ?></label>
-						<input id="cb-select-all-1" type="checkbox" />
+			<br class="clear">
+		</div>
+		<table id="jp-cc-restrictions" class="wp-list-table widefat fixed striped posts">
+			<thead>
+			<tr>
+				<td id="cb" class="manage-column column-cb check-column">
+					<label class="screen-reader-text" for="cb-select-all-1"><?php _e( 'Select All', 'content-control' ); ?></label>
+					<input id="cb-select-all-1" type="checkbox" />
 				</td>
 				<th width="60" id="priority" class="manage-column column-priority" scope="col"><?php _e( 'Priority', 'content-control' ); ?></th>
 				<th id="title" class="manage-column column-title column-primary" scope="col"><?php _e( 'Restriction Title', 'content-control' ); ?></th>
@@ -68,13 +68,13 @@ class Restrictions {
 				<th id="overview" class="manage-column column-overview" scope="col"><?php _e( 'Overview', 'content-control' ); ?></th>
 			</tr>
 			</tfoot>
-				<tbody class="no-items">
-					<tr>
-						<td class="colspanchange" colspan="4"><?php _e( 'No restrictions found.', 'content-control' ); ?></td>
-					</tr>
-				</tbody>
-				<tbody class="has-items">
-				</tbody>
+			<tbody class="no-items">
+			<tr>
+				<td class="colspanchange" colspan="4"><?php _e( 'No restrictions found.', 'content-control' ); ?></td>
+			</tr>
+			</tbody>
+			<tbody class="has-items">
+			</tbody>
 		</table>
 		<div class="tablenav bottom">
 			<div class="alignleft actions bulkactions">
