@@ -169,7 +169,11 @@ class Reviews {
 
 		$trigger = self::triggers( $group, $code );
 
-		return empty( $key ) ? $trigger : ( isset( $trigger[ $key ] ) ? $trigger[ $key ] : false );
+		if ( empty( $key ) ) {
+		    return $trigger;
+        } else {
+            return isset($trigger[$key]) ? $trigger[$key] : false;
+        }
 	}
 
 	/**
@@ -279,7 +283,11 @@ class Reviews {
 				return false;
 			}
 
-			return ! isset( $code ) ? $triggers[ $group ] : isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
+			if ( ! isset( $code ) ) {
+			    return $triggers[ $group ];
+            } else {
+                return isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
+            }
 		}
 
 		return $triggers;
