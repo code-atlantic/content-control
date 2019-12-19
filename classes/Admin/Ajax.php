@@ -137,6 +137,8 @@ class Ajax {
 				$results['items']       = array_values( $results['items'] );
 				$results['total_count'] += $query['total_count'];
 				break;
+            default:
+                // Do nothing if object is not post_type or taxonomy.
 		}
 		echo json_encode( $results );
 		die();

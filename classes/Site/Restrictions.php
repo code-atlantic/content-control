@@ -38,11 +38,9 @@ class Restrictions {
 			static::$protected_posts[ $post->ID ] = $restriction;
 		}
 
-		switch ( $restriction['protection_method'] ) {
-			case 'redirect':
-				static::redirect( $restriction );
-				break;
-		}
+		if ( 'redirect' === $restriction['protection_method'] ) {
+            static::redirect( $restriction );
+        }
 	}
 
 	public static function restricted_content() {
@@ -89,6 +87,9 @@ class Restrictions {
 			case 'custom':
 				$redirect = $restriction['redirect_url'];
 				break;
+
+            default:
+                // Do not redirect if not one of our values.
 		}
 
 		if ( $redirect ) {

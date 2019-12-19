@@ -89,6 +89,8 @@ class Reviews {
 				case 'already_did':
 					self::already_did( true );
 					break;
+                default:
+                    // Do nothing if the reason value does not match one of ours.
 			}
 
 			wp_send_json_success();
