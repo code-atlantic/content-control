@@ -133,6 +133,8 @@ class Ajax {
 
 				$results['total_count'] += $query['total_count'];
 				break;
+            default:
+                // Do nothing if object is not post_type or taxonomy.
 		}
 
 		// Take out keys which were only used to deduplicate.
