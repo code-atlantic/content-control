@@ -100,7 +100,10 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 == Changelog ==
 
 = Unreleased Changes =
-* Added gettext handling for several strings that were not translatable.
+* Tweak: Process shortcodes default denial message contents.
+* Improvement: Added gettext handling for several strings that were not translatable.
+* Fix: Issues with ajax search fields not retaining their values after save.
+* Fix: PHP 7.4 compatibility fixes.
 
 = v1.1.3 - 12/03/2019 =
 * Fix: Custom post type conditions were not always registered.
