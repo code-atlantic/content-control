@@ -156,7 +156,7 @@ class Settings {
 				'general'      => apply_filters( static::$_prefix . 'settings_general', array(
 					'default_denial_message' => array(
 						'id'    => 'default_denial_message',
-						'label' => 'Default Denial Message',
+						'label' => __( 'Default Denial Message', 'content-control' ),
 						'type'  => 'rich_editor',
 					),
 				) ),

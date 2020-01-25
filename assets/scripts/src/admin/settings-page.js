@@ -1901,9 +1901,9 @@ var wpActiveEditor = true;
 							index: index
 						},
 						sections: {
-							general: "General",
-							protection: "Protection",
-							content: "Content"
+							general: I10n.tabs.general,
+							protection: I10n.tabs.protection,
+							content: I10n.tabs.content
 						},
 						fields: jp_cc_restriction_fields
 					});

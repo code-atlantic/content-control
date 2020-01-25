@@ -47,7 +47,12 @@ class Assets {
 			wp_localize_script( 'jpcc-settings-page', 'jp_cc_vars', array(
 				'nonce' => wp_create_nonce( 'jp-cc-admin-nonce' ),
 				'I10n' => array(
-					'restrictions' => array(
+					'tabs'              => array(
+						'general'    => __( 'General', 'content-control' ),
+						'protection' => __( 'Protection', 'content-control' ),
+						'content'    => __( 'Content', 'content-control' ),
+					),
+					'restrictions'      => array(
 						'confirm_remove' => __( 'Are you sure you want to delete this restriction?', 'content-control' ),
 					),
 					'restriction_modal' => array(

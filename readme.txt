@@ -98,6 +98,10 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= Unreleased Changes =
+* Added gettext handling for several strings that were not translatable.
+
 = v1.1.3 - 12/03/2019 =
 * Fix: Custom post type conditions were not always registered.
 
