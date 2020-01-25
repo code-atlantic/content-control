@@ -89,8 +89,6 @@ class Ajax {
 					);
 				}
 
-				// Take out keys which were only used to deduplicate.
-				$results['items']       = array_values( $results['items'] );
 				$results['total_count'] += $query['total_count'];
 
 				break;
@@ -133,11 +131,13 @@ class Ajax {
 					);
 				}
 
-				// Take out keys which were only used to deduplicate.
-				$results['items']       = array_values( $results['items'] );
 				$results['total_count'] += $query['total_count'];
 				break;
 		}
+
+		// Take out keys which were only used to deduplicate.
+		$results['items']       = array_values( $results['items'] );
+
 		echo json_encode( $results );
 		die();
 	}
