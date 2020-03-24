@@ -21,7 +21,7 @@ class Feeds {
 	public static function filter_feed_posts( $content ) {
 		global $post;
 
-		if( ! is_feed() ) {
+		if ( ! is_feed() ) {
 			return $content;
 		}
 
@@ -39,6 +39,7 @@ class Feeds {
 			$message = $restricted_content['custom_message'];
 		} else {
 			$message = Options::get( 'default_denial_message', '' );
+			// custom messages could include shortcodes.
 		}
 
 		if ( empty( $message ) ) {
@@ -46,13 +47,14 @@ class Feeds {
 		}
 
 		//return Posts::format_message( $message );
-		return Posts::format_message( $message );
+		return Posts::format_message( do_shortcode( $message ) );
 	}
 
 	public static function restricted_message_filter( $message ) {
 		if ( ! is_feed() ) {
 			return $message;
 		}
+
 		return do_shortcode( $message );
 	}
 

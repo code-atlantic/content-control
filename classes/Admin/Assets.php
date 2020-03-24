@@ -33,11 +33,7 @@ class Assets {
 				add_action( 'admin_footer', array( __CLASS__, 'js_wp_editor' ) );
 			}
 
-			add_action( 'admin_footer', array( '\\JP\CC\Admin\Footer_Templates', 'fields' ) );
-			add_action( 'admin_footer', array( '\\JP\CC\Admin\Footer_Templates', 'helpers' ) );
-			add_action( 'admin_footer', array( '\\JP\CC\Admin\Footer_Templates', 'restrictions' ) );
-			add_action( 'admin_footer', array( '\\JP\CC\Admin\Footer_Templates', 'conditions_editor' ) );
-
+			Footer_Templates::init();
 
 			wp_enqueue_style( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/styles/settings-page' . $suffix . '.css', array( 'editor-buttons' ), JP_Content_Control::$VER, false );
 			wp_enqueue_script( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/scripts/settings-page' . $suffix . '.js', array(
@@ -51,7 +47,12 @@ class Assets {
 			wp_localize_script( 'jpcc-settings-page', 'jp_cc_vars', array(
 				'nonce' => wp_create_nonce( 'jp-cc-admin-nonce' ),
 				'I10n' => array(
-					'restrictions' => array(
+					'tabs'              => array(
+						'general'    => __( 'General', 'content-control' ),
+						'protection' => __( 'Protection', 'content-control' ),
+						'content'    => __( 'Content', 'content-control' ),
+					),
+					'restrictions'      => array(
 						'confirm_remove' => __( 'Are you sure you want to delete this restriction?', 'content-control' ),
 					),
 					'restriction_modal' => array(

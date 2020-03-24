@@ -50,12 +50,12 @@ class Shortcodes {
 			$container = '<div class="%1$s">%2$s</div>';
 		} else {
 			$classes[] = 'jp-cc-not-accessible';
-			$container = '<p class="%1$s">%3$s</p>';
+			$container = '<div class="%1$s">%3$s</div>';
 		}
 
 		$classes = implode( ' ', $classes );
 
-		return sprintf( $container, $classes, do_shortcode( $content ), $atts['message'] );
+		return sprintf( $container, $classes, do_shortcode( $content ), do_shortcode( $atts['message'] ) );
 	}
 
 	/**

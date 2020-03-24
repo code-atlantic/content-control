@@ -5,8 +5,8 @@ Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 5.3
-Stable tag: 1.1.3
+Tested up to: 5.4
+Stable tag: 1.1.4
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -98,6 +98,15 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.4 - 03/24/2020 =
+* Improvement: Added gettext handling for several strings that were not translatable.
+* Tweak: Process shortcodes in default denial message contents.
+* Tweak: Various improvements in form reliability & user experience.
+* Fix: Issues with ajax search fields not retaining their values after save.
+* Fix: Issue where only would show 10 pages.
+* Fix: PHP 7.4 compatibility fixes.
+
 = v1.1.3 - 12/03/2019 =
 * Fix: Custom post type conditions were not always registered.
 
