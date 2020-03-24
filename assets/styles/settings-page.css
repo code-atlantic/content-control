@@ -491,9 +491,8 @@ The bulk of this is to style jquery select2 to better resemble the default WP da
   cursor: pointer;
   display: block;
   height: 28px;
-  -moz-user-select: none;
-   -ms-user-select: none;
-       user-select: none;
+  -ms-user-select: none;
+      user-select: none;
   -webkit-user-select: none;
 }
 
@@ -520,9 +519,8 @@ The bulk of this is to style jquery select2 to better resemble the default WP da
   cursor: pointer;
   display: block;
   min-height: 32px;
-  -moz-user-select: none;
-   -ms-user-select: none;
-       user-select: none;
+  -ms-user-select: none;
+      user-select: none;
   -webkit-user-select: none;
 }
 
@@ -574,9 +572,8 @@ The bulk of this is to style jquery select2 to better resemble the default WP da
 
 .jpselect2 .jpselect2-results__option {
   padding: 6px;
-  -moz-user-select: none;
-   -ms-user-select: none;
-       user-select: none;
+  -ms-user-select: none;
+      user-select: none;
   -webkit-user-select: none;
 }
 
