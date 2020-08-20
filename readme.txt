@@ -5,7 +5,7 @@ Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 5.4
+Tested up to: 5.5
 Stable tag: 1.1.4
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
