@@ -1,5 +1,5 @@
 === Content Control - User Access Restriction Plugin ===
-Contributors: codeatlantic, danieliser, jungleplugins
+Contributors: codeatlantic, danieliser
 Author URI:  https://code-atlantic.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
