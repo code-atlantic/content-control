@@ -41,7 +41,6 @@ Content Control is built by the [Code Atlantic][codeatlantic] team. We create hi
 Check out some of our most popular plugins:
 
 * [Popup Maker][popupmaker] - #1 Popup & Marketing Plugin for WordPress
-* [Ahoy][ahoy] - Automated Marketing Messages for WordPress
 * [User Menus][usermenus] - Show Or Hide Menu Items For Different Users
 
 **Requires WordPress 3.6 and PHP 5.3**
