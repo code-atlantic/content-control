@@ -54,7 +54,7 @@ class Posts {
 			$message = __( 'This content is restricted.', 'content-control' );
 		}
 
-		return static::format_message( $message );
+		return static::format_message( do_shortcode( $message ) );
 	}
 
 	public static function restricted_message_filter( $message ) {

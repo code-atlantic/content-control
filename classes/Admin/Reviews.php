@@ -89,6 +89,8 @@ class Reviews {
 				case 'already_did':
 					self::already_did( true );
 					break;
+                default:
+                    // Do nothing if the reason value does not match one of ours.
 			}
 
 			wp_send_json_success();
@@ -169,7 +171,11 @@ class Reviews {
 
 		$trigger = self::triggers( $group, $code );
 
-		return empty( $key ) ? $trigger : ( isset( $trigger[ $key ] ) ? $trigger[ $key ] : false );
+		if ( empty( $key ) ) {
+		    return $trigger;
+        } else {
+            return isset($trigger[$key]) ? $trigger[$key] : false;
+        }
 	}
 
 	/**
@@ -279,7 +285,11 @@ class Reviews {
 				return false;
 			}
 
-			return ! isset( $code ) ? $triggers[ $group ] : isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
+			if ( ! isset( $code ) ) {
+			    return $triggers[ $group ];
+            } else {
+                return isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
+            }
 		}
 
 		return $triggers;
