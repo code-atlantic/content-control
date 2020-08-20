@@ -49,8 +49,6 @@ Check out some of our most popular plugins:
 
 [popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
 
-[ahoy]: https://useahoy.com "Automated Marketing Messages for WordPress"
-
 [usermenus]: https://wordpress.org/plugins/user-menus/ "Show Or Hide Menu Items For Different Users"
 
 == Installation ==
@@ -75,16 +73,12 @@ If you need help getting started with Content Control please see [FAQs][faq page
 
 = Where can I get support? =
 
-If you get stuck, you can ask for help in the [Content Control Plugin Forum][support forum].
+If you get stuck, you can ask for help in the [Content Control Plugin Forum](http://wordpress.org/support/plugin/content-control).
 
 = Where can I report bugs or contribute to the project? =
 
-Bugs can be reported either in our support forum or preferably on the [Content Control GitHub][github issues] repository (link to GitHub repo).
+Bugs can be reported either in our support forum or preferably on the [Content Control GitHub repo](https://github.com/jungleplugins/content-control/issues).
 
-
-[github issues]: https://github.com/jungleplugins/content-control/issues "GitHub Issue tracker for Content Control by Jungle Plugins"
-
-[support forum]: http://wordpress.org/support/plugin/content-control "Content Control Plugin Forum"
 
 == Screenshots ==
 
