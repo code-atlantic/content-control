@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Content Control
  * Plugin URI: https://wordpress.org/plugins/content-control/
- * Description:
+ * Description: Restrict content to logged in/out users or specific user roles.
  * Version: 1.1.4
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/
@@ -12,7 +12,7 @@
  * Minimum WP: 3.5
  *
  * @author      Daniel Iser
- * @copyright   Copyright (c) 2019, Code Atlantic LLC.
+ * @copyright   Copyright (c) 2020, Code Atlantic LLC.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
