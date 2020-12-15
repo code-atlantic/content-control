@@ -34,6 +34,17 @@ Content Control allows you to do the following:
 - Apply custom CSS classes to on page content restriction shortcodes
 - Control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
+= Shortcode =
+
+[content_control roles=”subscriber,editor” logged_out=”0″ class=”custom-css-class” message=”You don’t have access to this.”]Logged in content[/content_control]
+
+All parameters are optional:
+
+- **roles** -  comma list of user roles that can see this content.
+- **logged_out** (default:0) - 0 or 1 for false/true. Checks whether the user should be logged out, as opposed to logged in.
+- **class** - custom CSS class to add to the controlled content for additional styling.
+- **message** - custom denial message.
+
 = Created by Code Atlantic =
 
 Content Control is built by the [Code Atlantic][codeatlantic] team. We create high-quality WordPress plugins that help you grow your WordPress sites.
