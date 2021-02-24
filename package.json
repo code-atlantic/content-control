@@ -15,6 +15,10 @@
     "url": "https://github.com/Jungle-Plugins/Content-Control/issues"
   },
   "homepage": "https://github.com/Jungle-Plugins/Content-Control#readme",
+  "engines": {
+    "node": "^7.10.0",
+    "npm": ">=4.2.0"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
