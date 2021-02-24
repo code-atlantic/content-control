@@ -5,8 +5,8 @@ Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 5.5
-Stable tag: 1.1.4
+Tested up to: 5.7
+Stable tag: 1.1.5
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -102,6 +102,9 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.5 - 02/22/2021 =
+* Fix: Issue where roles with `-` would not save when checked.
 
 = v1.1.4 - 03/24/2020 =
 * Improvement: Added gettext handling for several strings that were not translatable.
