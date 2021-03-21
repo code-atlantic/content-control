@@ -42,7 +42,7 @@ class Widget {
 
 		}
 
-		return $options[ $widget_id ];
+		return isset( $options[ $widget_id ] ) ? $options[ $widget_id ] : array();
 	}
 
 	/**

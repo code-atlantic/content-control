@@ -103,6 +103,9 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 == Changelog ==
 
+= Unreleased =
+* Fix: Prevent warning if widget settings don't exist in options table.
+
 = v1.1.6 - 03/21/2021 =
 * Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
 * Fix: Prevent corrupted options from preventing saving of settings.
