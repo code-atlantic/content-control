@@ -105,6 +105,7 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 = v1.1.6 - 03/21/2021 =
 * Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
+* Fix: Prevent corrupted options from preventing saving of settings.
 
 = v1.1.5 - 02/22/2021 =
 * Fix: Issue where roles with `-` would not save when checked.
