@@ -116,7 +116,7 @@ class Restrictions {
 					'type'         => 'multicheck',
 					'id'           => 'roles',
 					'name'         => 'roles',
-					'label'        => __( 'Choose which roles can see this content', 'content-control' ),
+					'label'        => __( 'Choose which roles can see this content, leave blank to apply to every role', 'content-control' ),
 					'options'      => \JP\CC\Roles::allowed_user_roles(),
 					'dependencies' => array(
 						'who' => 'logged_in',
