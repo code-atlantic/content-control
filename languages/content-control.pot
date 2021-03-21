@@ -269,7 +269,7 @@ msgid "Who can see this content?"
 msgstr ""
 
 #: classes/Admin/Settings/Restrictions.php:119
-msgid "Choose which roles can see this content"
+msgid "Choose which roles can see this content, leave blank to apply to every role"
 msgstr ""
 
 #: classes/Admin/Settings/Restrictions.php:131
