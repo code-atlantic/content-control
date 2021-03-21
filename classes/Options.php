@@ -97,8 +97,8 @@ class Options {
 		}
 
 		// First let's grab the current settings
-		$options = get_option( static:: $_prefix . 'settings', array() );
-		
+		$options = (array) get_option( static:: $_prefix . 'settings', array() );
+
 		// Let's let devs alter that value coming in
 		$value = apply_filters( static::$_prefix . 'update_option', $value, $key );
 

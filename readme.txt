@@ -1,12 +1,12 @@
 === Content Control - User Access Restriction Plugin ===
-Contributors: codeatlantic, danieliser, jungleplugins
+Contributors: codeatlantic, danieliser
 Author URI:  https://code-atlantic.com/
 Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 5.7
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -34,6 +34,17 @@ Content Control allows you to do the following:
 - Apply custom CSS classes to on page content restriction shortcodes
 - Control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
+= Shortcode =
+
+[content_control roles=”subscriber,editor” logged_out=”0″ class=”custom-css-class” message=”You don’t have access to this.”]Logged in content[/content_control]
+
+All parameters are optional:
+
+- **roles** -  comma list of user roles that can see this content.
+- **logged_out** (default:0) - 0 or 1 for false/true. Checks whether the user should be logged out, as opposed to logged in.
+- **class** - custom CSS class to add to the controlled content for additional styling.
+- **message** - custom denial message.
+
 = Created by Code Atlantic =
 
 Content Control is built by the [Code Atlantic][codeatlantic] team. We create high-quality WordPress plugins that help you grow your WordPress sites.
@@ -41,7 +52,6 @@ Content Control is built by the [Code Atlantic][codeatlantic] team. We create hi
 Check out some of our most popular plugins:
 
 * [Popup Maker][popupmaker] - #1 Popup & Marketing Plugin for WordPress
-* [Ahoy][ahoy] - Automated Marketing Messages for WordPress
 * [User Menus][usermenus] - Show Or Hide Menu Items For Different Users
 
 **Requires WordPress 3.6 and PHP 5.3**
@@ -49,8 +59,6 @@ Check out some of our most popular plugins:
 [codeatlantic]: https://code-atlantic.com "Code Atlantic - High Quality WordPress Plugins"
 
 [popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
-
-[ahoy]: https://useahoy.com "Automated Marketing Messages for WordPress"
 
 [usermenus]: https://wordpress.org/plugins/user-menus/ "Show Or Hide Menu Items For Different Users"
 
@@ -76,16 +84,12 @@ If you need help getting started with Content Control please see [FAQs][faq page
 
 = Where can I get support? =
 
-If you get stuck, you can ask for help in the [Content Control Plugin Forum][support forum].
+If you get stuck, you can ask for help in the [Content Control Plugin Forum](http://wordpress.org/support/plugin/content-control).
 
 = Where can I report bugs or contribute to the project? =
 
-Bugs can be reported either in our support forum or preferably on the [Content Control GitHub][github issues] repository (link to GitHub repo).
+Bugs can be reported either in our support forum or preferably on the [Content Control GitHub repo](https://github.com/jungleplugins/content-control/issues).
 
-
-[github issues]: https://github.com/jungleplugins/content-control/issues "GitHub Issue tracker for Content Control by Jungle Plugins"
-
-[support forum]: http://wordpress.org/support/plugin/content-control "Content Control Plugin Forum"
 
 == Screenshots ==
 
@@ -98,6 +102,10 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.6 - 03/21/2021 =
+* Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
+* Fix: Prevent corrupted options from preventing saving of settings.
 
 = v1.1.5 - 02/22/2021 =
 * Fix: Issue where roles with `-` would not save when checked.

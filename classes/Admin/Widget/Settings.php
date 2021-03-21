@@ -85,30 +85,39 @@ class Settings {
 	 *
 	 * @return array|bool
 	 */
-	public static function save( $instance, $new_instance ) {
+	public static function save( $instance, $new_instance, $old_instance ) {
 
-		if ( ! isset( $_POST['jpcc-menu-editor-nonce'] ) || ! wp_verify_nonce( $_POST['jpcc-menu-editor-nonce'], 'jpcc-menu-editor-nonce' ) ) {
-			return false;
-		}
+		if (isset( $_POST['jpcc-menu-editor-nonce'] ) && wp_verify_nonce( $_POST['jpcc-menu-editor-nonce'], 'jpcc-menu-editor-nonce' ) ) {
+			$new_instance = Widget::parse_options( $new_instance );
+			$instance['which_users'] = $new_instance['which_users'];
+			$instance['roles'] = $new_instance['roles'];
 
-		$new_instance = Widget::parse_options( $new_instance );
+			if ( $instance['which_users'] == 'logged_in' ) {
 
-		if ( $new_instance['which_users'] == 'logged_in' ) {
+				$allowed_roles = Roles::allowed_user_roles();
 
-			$allowed_roles = Roles::allowed_user_roles();
-
-			// Validate chosen roles and remove non-allowed roles.
-			foreach ( (array) $new_instance['roles'] as $key => $role ) {
-				if ( ! array_key_exists( $role, $allowed_roles ) ) {
-					unset( $new_instance['roles'][ $key ] );
+				// Validate chosen roles and remove non-allowed roles.
+				foreach ( (array) $instance['roles'] as $key => $role ) {
+					if ( ! array_key_exists( $role, $allowed_roles ) ) {
+						unset( $instance['roles'][ $key ] );
+					}
 				}
-			}
 
+			} else {
+				unset( $instance['roles'] );
+			}
 		} else {
-			unset( $new_instance['roles'] );
+			$old_instance = Widget::parse_options( $old_instance );
+			$instance['which_users'] = $old_instance['which_users'];
+
+			if ( empty( $old_instance['roles'] ) ) {
+				unset( $instance['roles'] );
+			} else {
+				$instance['roles'] = $old_instance['roles'];
+			}
 		}
 
-		return $new_instance;
+		return $instance;
 	}
 
 }
