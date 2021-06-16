@@ -33,6 +33,7 @@ class Shortcodes {
 		$atts = shortcode_atts( array(
 			'logged_out' => null,
 			'roles'      => array(),
+			'userids'	 => array(),
 			'class'      => '',
 			'message'    => Options::get( 'default_denial_message' , '' ),
 		), static::normalize_empty_atts( $atts ), 'content_control' );
@@ -41,11 +42,14 @@ class Shortcodes {
 
 		$roles = ! is_array( $atts['roles'] ) ? explode( ',', $atts['roles'] ) : $atts['roles'];
 		$roles = array_map( 'trim', $roles );
+		
+		$userids = ! is_array( $atts['userids'] ) ? explode( ',', $atts['userids'] ) : $atts['userids'];
+		$userids = array_map( 'trim', $userids );
 
 		$classes   = ! is_array( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
 		$classes[] = 'jp-cc';
 
-		if ( Is::accessible( $who, $roles, 'shortcode' ) ) {
+		if ( Is::accessible( $who, $roles, $userids, 'shortcode' ) ) {
 			$classes[] = 'jp-cc-accessible';
 			$container = '<div class="%1$s">%2$s</div>';
 		} else {

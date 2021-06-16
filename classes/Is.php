@@ -23,7 +23,7 @@ class Is {
 	 *
 	 * @return bool
 	 */
-	public static function accessible( $who = '', $roles = array(), $args = array() ) {
+	public static function accessible( $who = '', $roles = array(), $userids = array(), $args = array() ) {
 
 		if ( is_string( $args ) ) {
 			$args = array( 'context' => $args );
@@ -31,6 +31,10 @@ class Is {
 
 		if ( ! is_array( $roles ) ) {
 			$roles = array();
+		}
+		
+		if ( ! is_array( $userids ) ) {
+			$userids = array();
 		}
 
 		$args = wp_parse_args( $args, array(
@@ -49,24 +53,41 @@ class Is {
 
 			case 'logged_in':
 				if ( ! $logged_in ) {
-					$exclude = true;
-				} elseif ( ! empty( $roles ) ) {
+									$exclude = true;
+								} elseif ( ! empty( $roles ) || ! empty ($userids) ) {
+					
+								  if(empty ($userids)){
+					
+									// Checks all roles, should not exclude if any are active.
+									$valid_role = false;
 
-					// Checks all roles, should not exclude if any are active.
-					$valid_role = false;
+									foreach ( $roles as $role ) {
+										if ( current_user_can( $role ) ) {
+											$valid_role = true;
+											break;
+										}
+									}
+					
+								  }else{
+					  
+				  					// Checks all roles, should not exclude if any are active.
+				  					$valid_role = false;
+									$cuid = get_current_user_id();
+										
+				  					foreach ( $userids as $userid ) {
+				  						if ( $userid == $cuid ) {
+				  							$valid_role = true;
+				  							break;
+				  						}
+				  					}
+					  
+								  }
 
-					foreach ( $roles as $role ) {
-						if ( current_user_can( $role ) ) {
-							$valid_role = true;
-							break;
-						}
-					}
-
-					if ( ! $valid_role ) {
-						$exclude = true;
-					}
-				}
-				break;
+									if ( ! $valid_role ) {
+										$exclude = true;
+									}
+								}
+								break;
 
 			case 'logged_out':
 				$exclude = $logged_in;
