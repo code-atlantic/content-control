@@ -5,7 +5,7 @@ Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 5.7
+Tested up to: 5.8
 Stable tag: 1.1.6
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
@@ -106,6 +106,7 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 = Unreleased =
 * Fix: Prevent warning if widget settings don't exist in options table.
 * Fix: Arbitrary limit of 10 on current items listed in Restriction Editor due to WP query default args.
+* Fix: Prevent restrictions from activating when using the Elementor page builder.
 
 = v1.1.6 - 03/21/2021 =
 * Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
