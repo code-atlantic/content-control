@@ -48,90 +48,100 @@ class Ajax {
 		);
 
 		$object_type = sanitize_text_field( $_REQUEST['object_type'] );
+		$include     = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( $_REQUEST['include'] ) : [];
+		$exclude     = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( $_REQUEST['exclude'] ) : [];
 
+		if ( ! empty( $include ) ) {
+			$exclude = array_merge( $include, $exclude );
+		}
+		
 		switch ( $object_type ) {
 			case 'post_type':
 				$post_type = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( $_REQUEST['object_key'] ) : 'post';
 
-				$include = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( $_REQUEST['include'] ) : null;
-				$exclude = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( $_REQUEST['exclude'] ) : null;
-
-				if ( ! empty( $include ) && ! empty( $exclude ) ) {
-					$exclude = array_merge( $include, $exclude );
-				}
-
-				if ( $include ) {
-					$include_query = Helpers::post_type_selectlist_query( $post_type, array(
-						'post__in' => $include,
-					), true );
+				if ( ! empty( $include ) ) {
+					$include_query = Helpers::post_type_selectlist_query(
+						$post_type,
+						array(
+							'post__in'       => $include,
+							'posts_per_page' => - 1,
+						),
+						true
+					);
 
 					foreach ( $include_query['items'] as $id => $name ) {
-						$results['items'][ $id ] = array(
+						$results['items'][] = array(
 							'id'   => $id,
-							'text' => $name,
+							'text' => "$name (ID: $id)",
 						);
 					}
 
-					$results['total_count'] += $include_query['total_count'];
+					$results['total_count'] += (int) $include_query['total_count'];
 				}
 
-				$query = Helpers::post_type_selectlist_query( $post_type, array(
-					's'              => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
-					'paged'          => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
-					'post__not_in'   => $exclude,
-					'posts_per_page' => 10,
-				), true );
+				$query = Helpers::post_type_selectlist_query(
+					$post_type,
+					array(
+						's'              => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
+						'paged'          => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+						'post__not_in'   => $exclude,
+						'posts_per_page' => 10,
+					),
+					true
+				);
 
 				foreach ( $query['items'] as $id => $name ) {
-					$results['items'][ $id ] = array(
+					$results['items'][] = array(
 						'id'   => $id,
-						'text' => $name,
+						'text' => "$name (ID: $id)",
 					);
 				}
 
-				$results['total_count'] += $query['total_count'];
-
+				$results['total_count'] += (int) $query['total_count'];
 				break;
+
 			case 'taxonomy':
 				$taxonomy = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( $_REQUEST['object_key'] ) : 'category';
 
-				$include = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( $_REQUEST['include'] ) : null;
-				$exclude = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( $_REQUEST['exclude'] ) : null;
-
-				if ( ! empty( $include ) && ! empty( $exclude ) ) {
-					$exclude = array_merge( $include, $exclude );
-				}
-
-				if ( $include ) {
-					$include_query = Helpers::taxonomy_selectlist_query( $taxonomy, array(
-						'include' => $include,
-					), true );
+				if ( ! empty( $include ) ) {
+					$include_query = Helpers::taxonomy_selectlist_query(
+						$taxonomy,
+						array(
+							'include' => $include,
+							'number'  => 0,
+						),
+						true
+					);
 
 					foreach ( $include_query['items'] as $id => $name ) {
-						$results['items'][ $id ] = array(
+						$results['items'][] = array(
 							'id'   => $id,
-							'text' => $name,
+							'text' => "$name (ID: $id)",
 						);
 					}
 
-					$results['total_count'] += $include_query['total_count'];
+					$results['total_count'] += (int) $include_query['total_count'];
 				}
 
-				$query = Helpers::taxonomy_selectlist_query( $taxonomy, array(
-					'search'  => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
-					'paged'   => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
-					'exclude' => $exclude,
-					'number'  => 10,
-				), true );
+				$query = Helpers::taxonomy_selectlist_query(
+					$taxonomy,
+					array(
+						'search'  => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : null,
+						'paged'   => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+						'exclude' => $exclude,
+						'number'  => 10,
+					),
+					true
+				);
 
 				foreach ( $query['items'] as $id => $name ) {
-					$results['items'][ $id ] = array(
+					$results['items'][] = array(
 						'id'   => $id,
-						'text' => $name,
+						'text' => "$name (ID: $id)",
 					);
 				}
 
-				$results['total_count'] += $query['total_count'];
+				$results['total_count'] += (int) $query['total_count'];
 				break;
             default:
                 // Do nothing if object is not post_type or taxonomy.
