@@ -105,6 +105,7 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 = Unreleased =
 * Fix: Prevent warning if widget settings don't exist in options table.
+* Fix: Arbitrary limit of 10 on current items listed in Restriction Editor due to WP query default args.
 
 = v1.1.6 - 03/21/2021 =
 * Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
