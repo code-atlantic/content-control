@@ -457,7 +457,7 @@ msgstr ""
 msgid "A 404 Error Page"
 msgstr ""
 
-#: classes/Site/Feeds.php:46, classes/Site/Posts.php:54
+#: classes/Site/Feeds.php:46, classes/Site/Posts.php:67
 msgid "This content is restricted."
 msgstr ""
 

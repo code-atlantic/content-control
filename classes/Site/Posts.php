@@ -22,12 +22,25 @@ class Posts {
 		add_filter( 'jp_cc_restricted_message', array( __CLASS__, 'restricted_message_filter' ), 10, 1 );
 	}
 
+	public static function protection_disabled() {
+		$checks = array(
+			is_preview() && current_user_can( 'edit_post' ),
+			did_action( 'elementor/loaded' ) && class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance ) && isset( \Elementor\Plugin::$instance->preview ) && method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode') && \Elementor\Plugin::$instance->preview->is_preview_mode(),
+		);
+		
+		return in_array( true, $checks, true );
+	}
+
 	/**
 	 * @param $content
 	 *
 	 * @return mixed|string
 	 */
 	public static function the_content( $content ) {
+		if ( self::protection_disabled() ) {
+			return $content;
+		}
+
 		global $post;
 
 		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
