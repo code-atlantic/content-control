@@ -461,10 +461,10 @@ msgstr ""
 msgid "This content is restricted."
 msgstr ""
 
-#: content-control.php:251
+#: content-control.php:253
 msgid "The %4$s %1$s %5$s plugin requires %2$s version %3$s or greater."
 msgstr ""
 
-#: content-control.php:253
+#: content-control.php:255
 msgid "Plugin Activation Error"
 msgstr ""

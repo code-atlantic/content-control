@@ -34,7 +34,7 @@ class Reviews {
 	 * Hook into relevant WP actions.
 	 */
 	public static function hooks() {
-		if ( is_admin() && current_user_can( 'edit_posts' ) ) {
+		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 			self::installed_on();
 			add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
 			add_action( 'network_admin_notices', array( __CLASS__, 'admin_notices' ) );
