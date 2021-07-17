@@ -7194,13 +7194,11 @@ var wpActiveEditor = true;
 
             },
             parseValues: function (values, fields) {
-                fields = fields || false
+                fields = fields || false;
 
                 if (!fields) {
                     return values;
                 }
-
-                debugger;
 
                 for (var key in fields) {
                     if (!fields.hasOwnProperty(key)) {
@@ -8945,7 +8943,11 @@ var wpActiveEditor = true;
 			JPCC.selectors('#jp-cc-restriction-editor').show();
 
 			//trap any other events
-			event.preventDefault ? event.preventDefault() : event.returnValue = false;
+			if ( event.preventDefault ) {
+				event.preventDefault();
+			} else {
+				event.returnValue = false;
+			}
 			event.stopPropagation();
 			return false;
 		})
