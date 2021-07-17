@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 5.8
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -103,19 +103,23 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 == Changelog ==
 
-= Unreleased =
+= v1.1.7 - 07/17/2021 =
+
 * Fix: Prevent warning if widget settings don't exist in options table.
 * Fix: Arbitrary limit of 10 on current items listed in Restriction Editor due to WP query default args.
 * Fix: Prevent restrictions from activating when using the Elementor page builder.
 
 = v1.1.6 - 03/21/2021 =
+
 * Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
 * Fix: Prevent corrupted options from preventing saving of settings.
 
 = v1.1.5 - 02/22/2021 =
+
 * Fix: Issue where roles with `-` would not save when checked.
 
 = v1.1.4 - 03/24/2020 =
+
 * Improvement: Added gettext handling for several strings that were not translatable.
 * Tweak: Process shortcodes in default denial message contents.
 * Tweak: Various improvements in form reliability & user experience.
@@ -124,29 +128,37 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 * Fix: PHP 7.4 compatibility fixes.
 
 = v1.1.3 - 12/03/2019 =
+
 * Fix: Custom post type conditions were not always registered.
 
 = v1.1.2 - 11/10/2019 =
+
 * Tweak: Remove erroneous console.log messages in admin.
 * Fix: Fatal error when empty shortcode used.
 
 = v1.1.1 - 10/15/2019 =
+
 * Fix: Bugs where variables were not always the expected type.
 
 = v1.1.0 =
+
 * Improvement: Added default denial message to shortcode.
 * Improvement: Render nested shortcodes in the [content_control] shortcode.
 * Fix: Bug where multiple roles checked together in restriction editor.
 
 = v1.0.3 =
+
 * Fix: Minor notice on activation.
 
 = v1.0.2 =
+
 * Fix: Call to undefined function.
 
 = v1.0.1 =
+
 * Fix: Non static method called statically
 * Fix: Bug when using invalid variable type.
 
 = v1.0.0 =
+
 * Initial Release
