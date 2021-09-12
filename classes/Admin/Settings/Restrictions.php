@@ -13,8 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 class Restrictions {
+	private static $_prefix;
 
 	public static function init() {
+		static::$_prefix = trim( Options::$_prefix, '_' ) . '_';
 		add_action( 'jp_cc_restriction_editor', array( __CLASS__, 'restrictions_editor' ) );
 	}
 
@@ -90,7 +92,7 @@ class Restrictions {
 	}
 
 	public static function fields() {
-		return array(
+		return apply_filters(static::$_prefix .'restriction_fields',array(
 			'general'    => array(
 				array(
 					'type'        => 'text',
@@ -200,6 +202,7 @@ class Restrictions {
 					'name' => 'conditions',
 				),
 			),
+		)
 		);
 	}
 
