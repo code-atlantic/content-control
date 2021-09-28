@@ -59,8 +59,20 @@ class Restrictions {
 
 				if ( Is::access_blocked( $restriction['who'], $roles, array( 'context' => 'content_restrictions' ) ) ) {
 					$restriced_content = $restriction;
+				} else { 
+					// Override the restriction short-circuit if the filter is true.
+					// Meaning we keep looping to check if there's at least one allowed 
+					// restriction condition further down the chain.
+					if ( apply_filters( 'content_control_override_short_circuit', '' ) ) { 
+						$restricted_content = false;
+						break;
+					}
 				}
-				break;
+				// If there's no short-circuit override, break the loop when the first
+				// blocked restriction condition is met.
+				if ( !apply_filters( 'content_control_override_short_circuit', '' ) ) {
+					break;
+				}
 			}
 		}
 
