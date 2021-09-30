@@ -24,10 +24,10 @@ class Posts {
 
 	public static function protection_disabled() {
 		$checks = array(
-			is_preview() && current_user_can( 'edit_post' ),
+			is_preview() && current_user_can( 'edit_post', get_the_ID() ),
 			did_action( 'elementor/loaded' ) && class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance ) && isset( \Elementor\Plugin::$instance->preview ) && method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode') && \Elementor\Plugin::$instance->preview->is_preview_mode(),
 		);
-		
+
 		return in_array( true, $checks, true );
 	}
 
