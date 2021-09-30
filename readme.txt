@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 5.8
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -102,6 +102,10 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.9 - 09/30/2021 =
+
+* Fix: Error when using Gutenberg Preview.
 
 = v1.1.8 - 07/17/2021 =
 
