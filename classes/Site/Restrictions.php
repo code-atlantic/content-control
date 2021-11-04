@@ -47,10 +47,10 @@ class Restrictions {
 
 		$restrictions = Options::get( 'restrictions' );
 
-		$restriced_content = false;
+		$restricted_content = false;
 
 		if ( ! $restrictions || empty( $restrictions ) ) {
-			return $restriced_content;
+			return $restricted_content;
 		}
 
 		foreach ( $restrictions as $restriction ) {
@@ -58,7 +58,7 @@ class Restrictions {
 				$roles = ! empty( $restriction['roles'] ) ? $restriction['roles'] : array();
 
 				if ( Is::access_blocked( $restriction['who'], $roles, array( 'context' => 'content_restrictions' ) ) ) {
-					$restriced_content = $restriction;
+					$restricted_content = $restriction;
 				} else { 
 					// Override the restriction short-circuit if the filter is true.
 					// Meaning we keep looping to check if there's at least one allowed 
@@ -76,7 +76,7 @@ class Restrictions {
 			}
 		}
 
-		return $restriced_content;
+		return $restricted_content;
 	}
 
 	public static function redirect( $restriction ) {
