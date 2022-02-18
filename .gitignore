@@ -1,4 +1,31 @@
-node_modules
-release
-build
-package-lock.json
+# Composer Dependencies
+/classes/Dependencies/
+
+# Editors
+project.xml
+project.properties
+/nbproject/private/
+.buildpath
+.project
+.settings*
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+.sublimelinterrc
+
+# Built code
+/build/
+/node_modules/
+/release/
+/dist/
+
+# Logs
+/logs
+
+# Composer
+/vendor/
+
+/yarn-error.log
+
+.php_cs.cache
