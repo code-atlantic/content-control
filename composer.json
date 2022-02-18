@@ -1,5 +1,42 @@
 {
     "name": "code-atlantic/content-control",
     "version": "1.1.9",
-    "type": "wordpress-plugin"
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+        "pimple/pimple": "~3.2"
+    },
+    "require-dev": {
+        "php": ">=7.3",
+        "code-atlantic/coding-standards": "*",
+        "coenjacobs/mozart": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "ContentControl\\": "classes/"
+        }
+    },
+    "extra": {
+        "mozart": {
+            "dep_namespace": "ContentControl\\Dependencies\\",
+            "dep_directory": "/classes/Dependencies/",
+            "classmap_directory": "/packages/",
+            "classmap_prefix": "PUM_Scheduling_",
+            "packages": [
+                "pimple/pimple"
+            ],
+            "delete_vendor_directories": false
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload"
+        ]
+    }
 }
