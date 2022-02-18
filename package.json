@@ -2,50 +2,57 @@
   "name": "content-control",
   "version": "1.1.9",
   "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
+  "author": "Code Atlantic",
+    "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jungle-Plugins/Content-Control.git"
+    "url": "git+https://github.com/code-atlantic/content-control.git"
   },
-  "author": "Daniel Iser",
-  "license": "GPL-3.0",
+  "license": "GPL-v3",
   "bugs": {
-    "url": "https://github.com/Jungle-Plugins/Content-Control/issues"
+    "url": "https://github.com/code-atlantic/content-control/issues"
   },
-  "homepage": "https://github.com/Jungle-Plugins/Content-Control#readme",
+  "homepage": "https://github.com/code-atlantic/content-control#readme",
   "engines": {
-    "node": "^7.10.0",
-    "npm": ">=4.2.0"
+    "node": "^16.4.2",
+    "npm": "^7.18.1"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-combine-mq": "^0.4.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-csso": "^1.1.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-ignore": "^2.0.1",
-    "gulp-jshint": "^2.0.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-load-plugins": "^1.2.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-order": "^1.1.1",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.2.0",
-    "gulp-sort": "^2.0.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
-    "gulp-watch": "^4.3.5",
-    "gulp-wp-pot": "^1.1.1",
-    "gulp-zip": "^3.2.0",
-    "jshint": "^2.9.1",
-    "run-sequence": "^1.1.5"
+    "@code-atlantic/browserslist-config": "^1.0.1",
+    "@code-atlantic/eslint-plugin": "^0.0.17",
+    "@code-atlantic/stylelint-config": "^1.0.1",
+    "@wordpress/scripts": "^21.0.2",
+    "del": "^6.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "gulp": "^4.0.2",
+    "gulp-load-plugins": "^2.0.7",
+    "gulp-notify": "^4.0.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-zip": "^5.1.0",
+    "path": "^0.12.7",
+    "require-dir": "^1.2.0",
+    "wp-pot-cli": "^1.5.0"
   },
-  "dependencies": {
-    "notify-send": "^0.1.2"
-  }
+  "scripts": {
+    "build": "wp-scripts build",
+    "check-engines": "wp-scripts check-engines",
+    "check-licenses": "wp-scripts check-licenses",
+    "format": "wp-scripts format",
+    "format:src": "wp-scripts format ./src",
+		"lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "lint:js:src": "wp-scripts lint-js ./src",
+    "lint:md:docs": "wp-scripts lint-md-docs",
+    "lint:md:js": "wp-scripts lint-md-js",
+    "lint:pkg-json": "wp-scripts lint-pkg-json",
+    "packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+    "start": "wp-scripts start",
+    "start:hot": "wp-scripts start --hot",
+    "test:e2e": "wp-scripts test-e2e",
+    "test:unit": "wp-scripts test-unit-js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/popup-maker-extension-template.pot' --package 'Extension Template' --domain 'popup-maker-extension-template' --last-translator 'WP Popup Maker <support@wppopupmaker.com>' --team 'WP Popup Maker <support@wppopupmaker.com>' --bug-report 'https://wppopupmaker.com/support/'",
+    "release": "npm run build && npm run translate && gulp release"
+  },
+  "babel": {}
 }
