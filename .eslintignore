@@ -1,0 +1,6 @@
+/build/*
+/node_modules/*
+/vendor/*
+/.vscode/*
+/assets/*
+/packages/*
