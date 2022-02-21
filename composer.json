@@ -38,5 +38,10 @@
             "\"vendor/bin/mozart\" compose",
             "composer dump-autoload"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
