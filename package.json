@@ -58,7 +58,7 @@
     "test:e2e": "wp-scripts test-e2e",
     "test:unit": "wp-scripts test-unit-js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/popup-maker-extension-template.pot' --package 'Extension Template' --domain 'popup-maker-extension-template' --last-translator 'WP Popup Maker <support@wppopupmaker.com>' --team 'WP Popup Maker <support@wppopupmaker.com>' --bug-report 'https://wppopupmaker.com/support/'",
+    "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
     "release": "npm run build && npm run translate && gulp release"
   },
   "babel": {}
