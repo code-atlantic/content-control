@@ -8,11 +8,31 @@
 namespace ContentControl;
 
 /**
+ * Get a plugin setting
+ *
+ * @param string $key Option key to get.
+ * @param mixed  $default Default value if not found.
+ * @return mixed
+ */
+function get_plugin_option( $key, $default = false ) {
+	return Options::get( $key, $default );
+}
+
+/**
  * Placeholder for future asset management.
  *
  * @return void
  */
 function reset_assets() {
+}
+
+/**
+ * Placeholder for future asset management.
+ *
+ * @return bool
+ */
+function asset_cache_enabled() {
+	return false;
 }
 
 /**

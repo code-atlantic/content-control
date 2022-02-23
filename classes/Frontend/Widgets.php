@@ -1,25 +1,32 @@
 <?php
+/**
+ * Frontend feed setup.
+ *
+ * @copyright (c) 2021, Code Atlantic LLC.
+ * @package ContentControl
+ */
 
-namespace JP\CC\Site;
+namespace ContentControl\Frontend;
 
-use JP\CC\Helpers;
-use JP\CC\Widget;
-use JP\CC\Is;
+use function ContentControl\get_plugin_option;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
+
+use ContentControl\Helpers;
+use ContentControl\Widget;
+use ContentControl\Is;
+
 
 /**
- * Class JP\CC\Site\Widgets
+ * Class ContentControl\Frontend\Widgets
  */
 class Widgets {
 
 	/**
 	 * Initialize Widgets
 	 */
-	public static function init() {
-		add_action( 'sidebars_widgets', array( __CLASS__, 'exclude_widgets' ) );
+	public function __construct() {
+		add_action( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
 	}
 
 	/**
@@ -29,30 +36,25 @@ class Widgets {
 	 *
 	 * @return array The modified $widget_area array.
 	 */
-	public static function exclude_widgets( $widget_areas ) {
-
+	public function exclude_widgets( $widget_areas ) {
 		if ( is_admin() || Helpers::is_customize_preview() ) {
 			return $widget_areas;
 		}
 
 		foreach ( $widget_areas as $widget_area => $widgets ) {
-
 			if ( ! empty( $widgets ) && 'wp_inactive_widgets' != $widget_area ) {
-
 				foreach ( $widgets as $position => $widget_id ) {
-
 					$options = Widget::get_options( $widget_id );
 
 					// If not accessible then exclude this item.
 					$exclude = ! Is::accessible( $options['which_users'], $options['roles'], 'widget' );
 
-					$exclude = apply_filters( 'jp_cc_should_exclude_widget', $exclude, $options, $widget_id );
+					$exclude = apply_filters( 'content_control_should_exclude_widget', $exclude, $options, $widget_id );
 
-					// unset non-visible item
+					// unset non-visible item.
 					if ( $exclude ) {
 						unset( $widget_areas[ $widget_area ][ $position ] );
 					}
-
 				}
 			}
 		}
