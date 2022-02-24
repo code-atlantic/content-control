@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Shortcode registration.
+ *
+ * @copyright (c) 2021, Code Atlantic LLC.
+ *
+ * @package ContentControl
+ */
 
 namespace ContentControl;
 
@@ -7,6 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Shortcodes
+ *
  * @package ContentControl
  */
 class Shortcodes {
@@ -14,26 +21,25 @@ class Shortcodes {
 	/**
 	 * Initialize Widgets
 	 */
-	public static function init() {
-		add_shortcode( 'content_control', array( __CLASS__, 'content_control' ) );
+	public function __construct() {
+		add_shortcode( 'content_control', [ $this, 'content_control' ] );
 	}
 
 	/**
 	 * Process the [content_control] shortcode.
 	 *
-	 * @param $atts
-	 * @param string $content
+	 * @param array  $atts Array or shortcode attributes.
+	 * @param string $content Content inside shortcode.
 	 *
 	 * @return string
 	 */
-	public static function content_control( $atts, $content = '' ) {
-
-		$atts = shortcode_atts( array(
+	public function content_control( $atts, $content = '' ) {
+		$atts = shortcode_atts( [
 			'logged_out' => null,
-			'roles'      => array(),
+			'roles'      => [],
 			'class'      => '',
-			'message'    => Options::get( 'default_denial_message' , '' ),
-		), static::normalize_empty_atts( $atts ), 'content_control' );
+			'message'    => Options::get( 'default_denial_message', '' ),
+		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
 		$who = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
 
@@ -63,10 +69,10 @@ class Shortcodes {
 	 *
 	 * @return mixed
 	 */
-	public static function normalize_empty_atts( $atts = array() ) {
+	public function normalize_empty_atts( $atts = [] ) {
 		if ( ! is_array( $atts ) ) {
 			if ( empty( $atts ) ) {
-				$atts = array();
+				$atts = [];
 			}
 		}
 
