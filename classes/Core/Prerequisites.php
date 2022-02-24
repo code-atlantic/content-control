@@ -5,7 +5,7 @@
  * @package ContentControl\Utils
  */
 
-namespace ContentControl\Utils;
+namespace ContentControl\Core;
 
 defined( 'ABSPATH' ) || exit;
 

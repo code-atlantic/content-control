@@ -4,10 +4,12 @@
  *
  * @copyright (c) 2021, Code Atlantic LLC.
  *
- * @package ContentControls
+ * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\Core;
+
+use ContentControl\Base\Container;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -149,13 +151,10 @@ class Plugin {
 	 */
 	public function register_plugin_services() {
 		// Initiate various controllers.
-
-		// Remove slowly.
-		\ContentControl\Options::init( 'jp_cc' );
-
-		$this->container['controller.frontend']   = new Frontend();
-		$this->container['controller.admin']      = new Admin();
-		$this->container['controller.shortcodes'] = new Shortcodes();
+		$this->container['options']               = new \ContentControl\Core\Options( 'content_control' );
+		$this->container['controller.frontend']   = new \ContentControl\Frontend();
+		$this->container['controller.admin']      = new \ContentControl\Admin();
+		$this->container['controller.shortcodes'] = new \ContentControl\Shortcodes();
 	}
 
 	/**

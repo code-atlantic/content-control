@@ -4,10 +4,10 @@
  *
  * @copyright (c) 2021, Code Atlantic LLC.
  *
- * @package ContentControls
+ * @package ContentControl\Core
  */
 
-namespace ContentControl;
+namespace ContentControl\Core;
 
 defined( 'ABSPATH' ) || exit;
 
