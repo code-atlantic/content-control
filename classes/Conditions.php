@@ -1,15 +1,13 @@
 <?php
 
-namespace JP\CC;
+namespace ContentControl;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Conditions
  *
- * @package JP\CC
+ * @package ContentControl
  */
 class Conditions {
 
@@ -34,7 +32,7 @@ class Conditions {
 	public $condition_sort_order = array();
 
 	/**
-	 * @return \JP\CC\Conditions
+	 * @return \ContentControl\Conditions
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -236,7 +234,7 @@ class Conditions {
 				$conditions[ $name . '_index' ] = array(
 					'group'    => $post_type->labels->name,
 					'name'     => sprintf( _x( '%s Archive', 'condition: post type plural label ie. Posts: All', 'content-control' ), $post_type->labels->name ),
-					'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 					'priority' => 5,
 				);
 			}
@@ -244,7 +242,7 @@ class Conditions {
 			$conditions[ $name . '_all' ] = array(
 				'group'    => $post_type->labels->name,
 				'name'     => sprintf( _x( 'A %s', 'condition: post type singular label ie. Posts: All', 'content-control' ), $post_type->labels->singular_name ),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 			);
 
 			$conditions[ $name . '_selected' ] = array(
@@ -260,7 +258,7 @@ class Conditions {
 						'std'         => array(),
 					),
 				),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 			);
 
 			$conditions[ $name . '_ID' ] = array(
@@ -272,7 +270,7 @@ class Conditions {
 						'type'        => 'text',
 					),
 				),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 			);
 
 			if ( is_post_type_hierarchical( $name ) ) {
@@ -288,7 +286,7 @@ class Conditions {
 							'as_array'    => true,
 						),
 					),
-					'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 				);
 
 				$conditions[ $name . '_ancestors' ] = array(
@@ -303,7 +301,7 @@ class Conditions {
 							'as_array'    => true,
 						),
 					),
-					'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 				);
 
 			}
@@ -324,7 +322,7 @@ class Conditions {
 							'options'  => array_merge( array( 'default' => __( 'Default', 'content-control' ) ), $templates ),
 						),
 					),
-					'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type' ),
+					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
 				);
 			}
 
@@ -359,7 +357,7 @@ class Conditions {
 						'options'     => $this->preload_posts ? Helpers::taxonomy_selectlist( $tax_name ) : array(),
 					),
 				),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'post_type_tax' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type_tax' ),
 			);
 		}
 
@@ -381,7 +379,7 @@ class Conditions {
 			$conditions[ 'tax_' . $tax_name . '_all' ] = array(
 				'group'    => $taxonomy->labels->name,
 				'name'     => sprintf( _x( 'A %s', 'condition: taxonomy plural label ie. Categories: All', 'content-control' ), $taxonomy->labels->name ),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'taxonomy' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
 			);
 
 			$conditions[ 'tax_' . $tax_name . '_selected' ] = array(
@@ -396,7 +394,7 @@ class Conditions {
 						'as_array'    => true,
 					),
 				),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'taxonomy' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
 			);
 
 			$conditions[ 'tax_' . $tax_name . '_ID' ] = array(
@@ -408,7 +406,7 @@ class Conditions {
 						'type'        => 'text',
 					),
 				),
-				'callback' => array( '\\JP\CC\Condition_Callbacks', 'taxonomy' ),
+				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
 			);
 
 		}

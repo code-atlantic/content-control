@@ -1,14 +1,12 @@
 <?php
 
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-use JP\CC\Helpers;
-use JP\CC\Options;
+use ContentControl\Helpers;
+use ContentControl\Options;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 
 class Ajax {
@@ -54,7 +52,7 @@ class Ajax {
 		if ( ! empty( $include ) ) {
 			$exclude = array_merge( $include, $exclude );
 		}
-		
+
 		switch ( $object_type ) {
 			case 'post_type':
 				$post_type = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( $_REQUEST['object_key'] ) : 'post';

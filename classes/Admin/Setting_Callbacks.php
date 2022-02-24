@@ -1,10 +1,8 @@
 <?php
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Setting_Callbacks {
 

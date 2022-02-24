@@ -1,15 +1,13 @@
 <?php
 
 
-namespace JP\CC;
+namespace ContentControl;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Shortcodes
- * @package JP\CC
+ * @package ContentControl
  */
 class Shortcodes {
 

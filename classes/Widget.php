@@ -1,13 +1,11 @@
 <?php
 
-namespace JP\CC;
+namespace ContentControl;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Class JP\CC\Widgets
+ * Class ContentControl\Widgets
  */
 class Widget {
 

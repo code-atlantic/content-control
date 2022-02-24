@@ -1,11 +1,9 @@
 <?php
 
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 
 class Footer_Templates {
@@ -174,11 +172,11 @@ class Footer_Templates {
 			<# if (data.value.key !== '') { #>
 			<?php wp_nonce_field( 'pum_license_activation', 'pum_license_activation_nonce' ); ?>
 			<# if (data.value.status === 'valid') { #>
-			<span class="jp-cc-license-status"><?php _e( 'Active', 'popup-maker' ); ?></span>
-			<input type="submit" class="button-secondary jp-cc-license-deactivate" id="{{data.id}}_deactivate" name="pum_license_deactivate[{{data.id}}]" value="<?php _e( 'Deactivate License', 'popup-maker' ); ?>"/>
+			<span class="jp-cc-license-status"><?php _e( 'Active', 'content-control' ); ?></span>
+			<input type="submit" class="button-secondary jp-cc-license-deactivate" id="{{data.id}}_deactivate" name="pum_license_deactivate[{{data.id}}]" value="<?php _e( 'Deactivate License', 'content-control' ); ?>"/>
 			<# } else { #>
-			<span class="jp-cc-license-status"><?php _e( 'Inactive', 'popup-maker' ); ?></span>
-			<input type="submit" class="button-secondary jp-cc-license-activate" id="{{data.id}}_activate" name="pum_license_activate[{{data.id}}]" value="<?php _e( 'Activate License', 'popup-maker' ); ?>"/>
+			<span class="jp-cc-license-status"><?php _e( 'Inactive', 'content-control' ); ?></span>
+			<input type="submit" class="button-secondary jp-cc-license-activate" id="{{data.id}}_activate" name="pum_license_activate[{{data.id}}]" value="<?php _e( 'Activate License', 'content-control' ); ?>"/>
 			<# } #>
 			<# } #>
 
@@ -217,19 +215,19 @@ class Footer_Templates {
 				<tbody>
 				<tr>
 					<td>
-						<label for="{{data.id}}_category" style="padding-left: 3px;"><?php _e( 'Category', 'popup-maker' ); ?></label>
+						<label for="{{data.id}}_category" style="padding-left: 3px;"><?php _e( 'Category', 'content-control' ); ?></label>
 						<input type="text" style="width:100%;" id="{{data.id}}_category" name="{{data.name}}[category]" value="{{data.value.category}}"/>
 					</td>
 					<td>
-						<label for="{{data.id}}_action" style="padding-left: 3px;"><?php _e( 'Action', 'popup-maker' ); ?></label>
+						<label for="{{data.id}}_action" style="padding-left: 3px;"><?php _e( 'Action', 'content-control' ); ?></label>
 						<input type="text" style="width:100%;" id="{{data.id}}_action" name="{{data.name}}[action]" value="{{data.value.action}}"/>
 					</td>
 					<td>
-						<label for="{{data.id}}_label" style="padding-left: 3px;"><?php _e( 'Label', 'popup-maker' ); ?></label>
+						<label for="{{data.id}}_label" style="padding-left: 3px;"><?php _e( 'Label', 'content-control' ); ?></label>
 						<input type="text" style="width:100%;" id="{{data.id}}_label" name="{{data.name}}[label]" value="{{data.value.label}}"/>
 					</td>
 					<td>
-						<label for="{{data.id}}_value" style="padding-left: 3px;"><?php _e( 'Value', 'popup-maker' ); ?></label>
+						<label for="{{data.id}}_value" style="padding-left: 3px;"><?php _e( 'Value', 'content-control' ); ?></label>
 						<input type="number" style="width:100%;height: auto;" id="{{data.id}}_value" name="{{data.name}}[value]" value="{{data.value.value}}" step="0.01" max="999999" min="0"/>
 					</td>
 				</tr>
@@ -260,12 +258,12 @@ class Footer_Templates {
 					<label for="{{data.id}}">
 						{{{data.label}}}
 						<# if (typeof data.doclink === 'string' && data.doclink !== '') { #>
-							<a href="{{data.doclink}}" title="<?php _e( 'Documentation', 'popup-maker' ); ?>: {{data.label}}" target="_blank" class="jp-cc-doclink dashicons dashicons-editor-help"></a>
+							<a href="{{data.doclink}}" title="<?php _e( 'Documentation', 'content-control' ); ?>: {{data.label}}" target="_blank" class="jp-cc-doclink dashicons dashicons-editor-help"></a>
 						<# } #>
 					</label>
 				<# } else { #>
 					<# if (typeof data.doclink === 'string' && data.doclink !== '') { #>
-						<a href="{{data.doclink}}" title="<?php _e( 'Documentation', 'popup-maker' ); ?>: {{data.label}}" target="_blank" class="jp-cc-doclink dashicons dashicons-editor-help"></a>
+						<a href="{{data.doclink}}" title="<?php _e( 'Documentation', 'content-control' ); ?>: {{data.label}}" target="_blank" class="jp-cc-doclink dashicons dashicons-editor-help"></a>
 					<# } #>
 				<# } #>
 				{{{data.field}}}

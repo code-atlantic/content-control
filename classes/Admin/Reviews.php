@@ -1,13 +1,11 @@
 <?php
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Class JP\CC\Admin\Reviews
+ * Class ContentControl\Admin\Reviews
  *
  * This class adds a review request system for your plugin or theme to the WP dashboard.
  *

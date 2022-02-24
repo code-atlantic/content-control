@@ -9,6 +9,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 use \ContentControl\Dependencies\Pimple\Container as Base;
 
 /**

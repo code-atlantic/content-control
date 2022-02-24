@@ -1,15 +1,13 @@
 <?php
 
 // Exit if accessed directly
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Pages
- * @package JP\CC\Admin
+ * @package ContentControl\Admin
  */
 class Pages {
 
@@ -27,7 +25,7 @@ class Pages {
 		global $jp_cc_settings_page;
 
 		$jp_cc_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'jp-cc-settings', array(
-			'\\JP\CC\Admin\Settings',
+			'\\ContentControl\Admin\Settings',
 			'page',
 		) );
 

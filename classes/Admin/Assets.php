@@ -1,13 +1,11 @@
 <?php
 
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
 use JP_Content_Control;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 
 class Assets {

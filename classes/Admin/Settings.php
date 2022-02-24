@@ -1,14 +1,12 @@
 <?php
 
 
-namespace JP\CC\Admin;
+namespace ContentControl\Admin;
 
-use JP\CC\Helpers;
-use JP\CC\Options;
+use ContentControl\Helpers;
+use ContentControl\Options;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 class Settings {
 
@@ -189,12 +187,12 @@ class Settings {
 
 				$name = isset( $option['label'] ) ? $option['label'] : '';
 
-				if ( method_exists( '\\JP\CC\Admin\Setting_Callbacks', $option['type'] ) ) {
-					$callback = array( '\\JP\CC\Admin\Setting_Callbacks', $option['type'] );
+				if ( method_exists( '\\ContentControl\Admin\Setting_Callbacks', $option['type'] ) ) {
+					$callback = array( '\\ContentControl\Admin\Setting_Callbacks', $option['type'] );
 				} elseif ( function_exists( static::$_prefix . $option['type'] . '_callback' ) ) {
 					$callback = static::$_prefix . $option['type'] . '_callback';
 				} else {
-					$callback = array( '\\JP\CC\Setting_Callbacks', 'missing_callback' );
+					$callback = array( '\\ContentControl\Setting_Callbacks', 'missing_callback' );
 				}
 
 				add_settings_field( static::$_prefix . 'settings_' . $option['id'], $name, $callback, $page, $page, array(

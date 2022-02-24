@@ -1,15 +1,13 @@
 <?php
 
 
-namespace JP\CC\Admin\Settings;
+namespace ContentControl\Admin\Settings;
 
-use JP\CC\Helpers;
-use JP\CC\Options;
-use JP\CC\Conditions;
+use ContentControl\Helpers;
+use ContentControl\Options;
+use ContentControl\Conditions;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 
 class Restrictions {
@@ -117,7 +115,7 @@ class Restrictions {
 					'id'           => 'roles',
 					'name'         => 'roles',
 					'label'        => __( 'Choose which roles can see this content, leave blank to apply to every role', 'content-control' ),
-					'options'      => \JP\CC\Roles::allowed_user_roles(),
+					'options'      => \ContentControl\Roles::allowed_user_roles(),
 					'dependencies' => array(
 						'who' => 'logged_in',
 					),

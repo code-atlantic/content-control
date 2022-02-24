@@ -5,7 +5,9 @@
  * @package ContentControl\Utils
  */
 
- namespace ContentControl\Utils;
+namespace ContentControl\Utils;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Prerequisite handler.

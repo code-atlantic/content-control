@@ -1,6 +1,8 @@
 <?php
 
-namespace JP\CC;
+namespace ContentControl;
+
+defined( 'ABSPATH' ) || exit;
 
 
 /**

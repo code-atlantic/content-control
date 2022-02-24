@@ -1,13 +1,19 @@
 <?php
+/**
+ * Admin controller.
+ *
+ * @copyright (c) 2022, Code Atlantic LLC.
+ *
+ * @package ContentControls
+ */
 
+namespace ContentControl;
 
-namespace JP\CC;
+defined( 'ABSPATH' ) || exit;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-
+/**
+ * Admin controller  class.
+ */
 class Admin {
 
 	public static function init() {
@@ -15,10 +21,10 @@ class Admin {
 		Admin\Pages::init();
 		Admin\Settings::init(
 			__( 'Content Control Settings', 'content-control' ),
-			array(
+			[
 				'restrictions' => __( 'Restrictions', 'content-control' ),
-				'general' => __( 'General', 'content-control' ),
-			)
+				'general'      => __( 'General', 'content-control' ),
+			]
 		);
 		Admin\Assets::init();
 		Admin\Settings\Restrictions::init();

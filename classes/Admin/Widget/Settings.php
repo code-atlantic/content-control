@@ -1,16 +1,14 @@
 <?php
 
-namespace JP\CC\Admin\Widget;
+namespace ContentControl\Admin\Widget;
 
-use JP\CC\Widget;
-use JP\CC\Roles;
+use ContentControl\Widget;
+use ContentControl\Roles;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Class JP\CC\Admin\Widget_Settings
+ * Class ContentControl\Admin\Widget_Settings
  */
 class Settings {
 

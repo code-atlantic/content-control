@@ -1,12 +1,9 @@
 <?php
 
 
-namespace JP\CC;
+namespace ContentControl;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
+defined( 'ABSPATH' ) || exit;
 
 class Roles {
 	/**

@@ -9,6 +9,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class Plugin
  *
@@ -147,6 +149,13 @@ class Plugin {
 	 */
 	public function register_plugin_services() {
 		// Initiate various controllers.
+
+		// Remove slowly.
+		\ContentControl\Options::init( 'jp_cc' );
+
+		$this->container['controller.frontend']   = new Frontend();
+		$this->container['controller.admin']      = new Admin();
+		$this->container['controller.shortcodes'] = new Shortcodes();
 	}
 
 	/**
