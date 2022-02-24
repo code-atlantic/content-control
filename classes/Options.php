@@ -1,4 +1,11 @@
 <?php
+/**
+ * Plugin options manager..
+ *
+ * @copyright (c) 2021, Code Atlantic LLC.
+ *
+ * @package ContentControl
+ */
 
 namespace ContentControl;
 
@@ -6,7 +13,6 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Options
- * @package ContentControl
  */
 class Options {
 
@@ -32,7 +38,7 @@ class Options {
 	public static function init( $prefix = 'jp_cc' ) {
 		// Set the prefix on init.
 		static::$_prefix = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
-		static::$_data = static::get_all();
+		static::$_data   = static::get_all();
 	}
 
 	/**
@@ -43,12 +49,12 @@ class Options {
 	 * @return array settings
 	 */
 	public static function get_all() {
-		$settings = get_option( static:: $_prefix . 'settings' );
+		$settings = get_option( static::$_prefix . 'settings' );
 		if ( ! is_array( $settings ) ) {
-			$settings = array();
+			$settings = [];
 		}
 
-		return apply_filters( static:: $_prefix . 'get_options', $settings );
+		return apply_filters( static::$_prefix . 'get_options', $settings );
 	}
 
 	/**
@@ -57,7 +63,7 @@ class Options {
 	 * Looks to see if the specified setting exists, returns default if not
 	 *
 	 * @param string $key
-	 * @param bool $default
+	 * @param bool   $default
 	 *
 	 * @return mixed|void
 	 */
@@ -76,7 +82,7 @@ class Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The Key to update
+	 * @param string          $key The Key to update
 	 * @param string|bool|int $value The value to set the key to
 	 *
 	 * @return boolean True if updated, false if not.
@@ -95,19 +101,18 @@ class Options {
 		}
 
 		// First let's grab the current settings
-		$options = (array) get_option( static:: $_prefix . 'settings', array() );
+		$options = (array) get_option( static::$_prefix . 'settings', [] );
 
 		// Let's let devs alter that value coming in
 		$value = apply_filters( static::$_prefix . 'update_option', $value, $key );
 
 		// Next let's try to update the value
 		$options[ $key ] = $value;
-		$did_update      = update_option( static:: $_prefix . 'settings', $options );
+		$did_update      = update_option( static::$_prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable
 		if ( $did_update ) {
 			static::$_data[ $key ] = $value;
-
 		}
 
 		return $did_update;
@@ -132,14 +137,14 @@ class Options {
 		}
 
 		// First let's grab the current settings
-		$options = get_option( static:: $_prefix . 'settings' );
+		$options = get_option( static::$_prefix . 'settings' );
 
 		// Next let's try to update the value
 		if ( isset( $options[ $key ] ) ) {
 			unset( $options[ $key ] );
 		}
 
-		$did_update = update_option( static:: $_prefix . 'settings', $options );
+		$did_update = update_option( static::$_prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable
 		if ( $did_update ) {

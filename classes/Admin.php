@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2022, Code Atlantic LLC.
  *
- * @package ContentControls
+ * @package ContentControl
  */
 
 namespace ContentControl;
