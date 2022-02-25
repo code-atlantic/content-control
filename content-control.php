@@ -6,262 +6,141 @@
  * Version: 1.1.9
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/
+ * Donate link: https://code-atlantic.com/donate
  * Text Domain: content-control
  *
- * Minimum PHP: 5.3
- * Minimum WP: 3.5
+ * Minimum PHP: 5.6
+ * Minimum WP: 5.6
  *
- * @author      Daniel Iser
- * @copyright   Copyright (c) 2021, Code Atlantic LLC.
+ * @package     Content Control
+ * @author       Code Atlantic
+ * @copyright  Copyright (c) 2022, Code Atlantic LLC.
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
 
 /**
- * @param $class
+ * Define plugin's global configuration.
  */
-function jp_content_control_autoloader( $class ) {
-
-	// project-specific namespace prefix
-	$prefix = 'JP\\CC\\';
-
-	// base directory for the namespace prefix
-	$base_dir = __DIR__ . '/classes/';
-
-	// does the class use the namespace prefix?
-	$len = strlen( $prefix );
-	if ( strncmp( $prefix, $class, $len ) !== 0 ) {
-		// no, move to the next registered autoloader
-		return;
-	}
-
-	// get the relative class name
-	$relative_class = substr( $class, $len );
-
-	// replace the namespace prefix with the base directory, replace namespace
-	// separators with directory separators in the relative class name, append
-	// with .php
-	$file = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
-
-	// if the file exists, require it
-	if ( file_exists( $file ) ) {
-		require_once $file;
-	}
-
-}
-
-spl_autoload_register( 'jp_content_control_autoloader' ); // Register autoloader
-
-
-/**
- * Class JP_Content_Control
- */
-class JP_Content_Control {
-
-	/**
-	 * @var string
-	 */
-	public static $NAME = 'Content Control';
-
-	/**
-	 * @var string
-	 */
-	public static $VER = '1.1.9';
-
-	/**
-	 * @var string
-	 */
-	public static $MIN_PHP_VER = '5.3';
-
-	/**
-	 * @var string
-	 */
-	public static $MIN_WP_VER = '3.5';
-
-	/**
-	 * @var string
-	 */
-	public static $URL = '';
-
-	/**
-	 * @var string
-	 */
-	public static $DIR = '';
-
-	/**
-	 * @var string
-	 */
-	public static $FILE = '';
-
-	/**
-	 * @var string
-	 */
-	public static $TEMPLATE_PATH = 'jp/content-control/';
-
-
-	/**
-	 * @var         JP_Content_Control $instance The one true JP_Content_Control
-	 * @since       1.0.0
-	 */
-	private static $instance;
-
-	/**
-	 * Get active instance
-	 *
-	 * @access      public
-	 * @since       1.0.0
-	 * @return      object self::$instance The one true JP_Content_Control
-	 */
-	public static function instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new static;
-			self::$instance->setup_constants();
-
-			self::$instance->load_textdomain();
-
-			self::$instance->includes();
-			self::$instance->init();
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * Setup plugin constants
-	 *
-	 * @access      private
-	 * @since       1.0.0
-	 * @return      void
-	 */
-	private function setup_constants() {
-		static::$DIR  = self::$instance->plugin_path();
-		static::$URL  = self::$instance->plugin_url();
-		static::$FILE = __FILE__;
-	}
-
-	/**
-	 * Include necessary files
-	 *
-	 * @access      private
-	 * @since       1.0.0
-	 * @return      void
-	 */
-	private function includes() {}
-
-	/**
-	 * Initialize everything
-	 *
-	 * @access      private
-	 * @since       1.0.0
-	 * @return      void
-	 */
-	private function init() {
-		\JP\CC\Options::init( 'jp_cc' );
-		\JP\CC\Shortcodes::init();
-		\JP\CC\Admin::init();
-		\JP\CC\Site::init();
-	}
-
-	/**
-	 * Get the plugin path.
-	 * @return string
-	 */
-	public function plugin_path() {
-		return plugin_dir_path( __FILE__ );
-	}
-
-	/**
-	 * Get the plugin url.
-	 * @return string
-	 */
-	public function plugin_url() {
-		return plugins_url( '/', __FILE__ );
-	}
-
-	/**
-	 * Internationalization
-	 *
-	 * @access      public
-	 * @since       1.0.0
-	 * @return      void
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'content-control' );
-	}
-
-	/**
-	 * Get the template path.
-	 * @return string
-	 */
-	public function template_path() {
-		return apply_filters( 'jp_cc_template_path', static::$TEMPLATE_PATH );
-	}
-
-	/**
-	 * Get Ajax URL.
-	 * @return string
-	 */
-	public function ajax_url() {
-		return admin_url( 'admin-ajax.php', 'relative' );
-	}
-
+function get_plugin_config() {
+	return [
+		'name'          => \__( 'Content Control', 'content-control' ),
+		'slug'          => 'content-control',
+		'version'       => '1.1.9',
+		'option_prefix' => 'content_control',
+		// EDD Product ID for Software Licensing.
+		'edd_id'        => null,
+		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
+		'text_domain'   => 'content - control',
+		'fullname'      => \__( 'Content Control', 'content - control' ),
+		'shortname'     => 'content - control',
+		'min_php_ver'   => '5.6.0',
+		'min_wp_ver'    => '5.6.0',
+		'file'          => __FILE__,
+		'url'           => \plugin_dir_url( __FILE__ ),
+		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
+	];
 }
 
 /**
- * The main function responsible for returning the one true JP_Content_Control
- * Instance to functions everywhere.
+ * Get config or config property.
  *
- * Use this function like you would a global variable, except without needing
- * to declare the global.
+ * @param string|null $key Key of config item to return.
  *
- * Example: <?php $jp_content_control = JP_Content_Control(); ?>
- *
- * @since 1.0.0
- * @return object The one true JP_Content_Control Instance
+ * @return mixed
  */
-function jp_content_control() {
-	return JP_Content_Control::instance();
-}
+function config( $key = null ) {
+	$config = get_plugin_config();
 
-// Get Recipe Manager Running
-add_action( 'plugins_loaded', 'jp_content_control', 9 );
-
-/**
- * Plugin Activation hook function to check for Minimum PHP and WordPress versions
- *
- * Cannot use static:: in case php 5.2 is used.
- */
-function jp_content_control_activation_check() {
-	global $wp_version;
-
-	if ( version_compare( PHP_VERSION, JP_Content_Control::$MIN_PHP_VER, '<' ) ) {
-		$flag = 'PHP';
-	} elseif ( version_compare( $wp_version, JP_Content_Control::$MIN_WP_VER, '<' ) ) {
-		$flag = 'WordPress';
-	} else {
-		return;
+	if ( ! isset( $key ) ) {
+		return $config;
 	}
 
-	$version = 'PHP' == $flag ? JP_Content_Control::$MIN_PHP_VER : JP_Content_Control::$MIN_WP_VER;
-
-	// Deactivate automatically due to insufficient PHP or WP Version.
-	deactivate_plugins( basename( __FILE__ ) );
-
-	$notice = sprintf( __( 'The %4$s %1$s %5$s plugin requires %2$s version %3$s or greater.', 'content-control' ), JP_Content_Control::$NAME, $flag, $version, "<strong>", "</strong>" );
-
-	wp_die( "<p>$notice</p>", __( 'Plugin Activation Error', 'content-control' ), array(
-		'response'  => 200,
-		'back_link' => true,
-	) );
+	return isset( $config[ $key ] ) ? $config[ $key ] : false;
 }
 
-// Ensure plugin & environment compatibility.
-register_activation_hook( __FILE__, 'jp_content_control_activation_check' );
+/**
+ * Register autoloader.
+ */
+require_once __DIR__ . ' / classes / Core/Autoloader . php';
 
-// Register activation, deactivation & uninstall hooks.
-//register_activation_hook( __FILE__, array( '\\JP\CC\Activation', 'activate' ) );
-//register_deactivation_hook( __FILE__, array( '\\JP\CC\Activation', 'deactivate' ) );
-//register_uninstall_hook( __FILE__, array( '\\JP\CC\Activation', 'uninstall' ) );
+if ( ! Core\Autoloader::init( config( 'name' ) ) ) {
+	return;
+}
+
+/**
+ * Check plugin prerequisites.
+ */
+function check_prerequisites() {
+
+	// 1.a Check Prerequisites.
+	$prerequisites = new \ContentControl\Core\Prerequisites( [
+		[
+			// a. PHP Min Version.
+			'type'    => 'php',
+			'version' => config( 'min_php_ver' ),
+		],
+		// a. PHP Min Version.
+		[
+			'type'    => 'wp',
+			'version' => config( 'min_wp_ver' ),
+		],
+	]  );
+
+	/**
+	 * 1.b If there are missing requirements, render error messaging and return.
+	 */
+	if ( $prerequisites->check() === false ) {
+		$prerequisites->setup_notices();
+
+		return false;
+	}
+
+	return true;
+}
+
+add_action( 'plugins_loaded', function () {
+	if ( check_prerequisites() ) {
+		plugin_instance();
+	}
+}, 11 );
+
+/**
+ * Initiates and/or retrieves an encapsulated container for the plugin.
+ *
+ * This kicks it all off, loads functions and initiates the plugins main class.
+ *
+ * @return \ContentControl\Core\Plugin
+ */
+function plugin_instance() {
+	static $plugin;
+
+	if ( ! $plugin instanceof \ContentControl\Core\Plugin ) {
+		require_once __DIR__ . ' / includes / functions . php';
+		$plugin = new Core\Plugin( get_plugin_config() );
+	}
+
+	return $plugin;
+}
+
+/**
+ * Easy access to all plugin services from the container.
+ *
+ * @see \ContentControl\plugin_instance
+ *
+ * @param string|null $service_or_config Key of service or config to fetch.
+ * @return \ContentControl\Core\Plugin|mixed
+ */
+function plugin( $service_or_config = null ) {
+	if ( ! isset( $service_or_config ) ) {
+		return plugin_instance();
+	}
+
+	return plugin_instance()->get( $service_or_config );
+}
+
+\register_activation_hook( __FILE__, '\ContentControl\Core\Install::activate_plugin' );
+\register_deactivation_hook( __FILE__, '\ContentControl\Core\Install::deactivate_plugin' );
+\register_uninstall_hook( __FILE__, '\ContentControl\Core\Install::uninstall_plugin' );
