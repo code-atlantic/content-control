@@ -64,9 +64,9 @@ function config( $key = null ) {
 /**
  * Register autoloader.
  */
-require_once __DIR__ . ' / classes / Core/Autoloader . php';
+require_once __DIR__ . '/classes/Core/Autoloader.php';
 
-if ( ! Core\Autoloader::init( config( 'name' ) ) ) {
+if ( ! Core\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
 	return;
 }
 
@@ -118,7 +118,7 @@ function plugin_instance() {
 	static $plugin;
 
 	if ( ! $plugin instanceof \ContentControl\Core\Plugin ) {
-		require_once __DIR__ . ' / includes / functions . php';
+		require_once __DIR__ . '/inc/functions.php';
 		$plugin = new Core\Plugin( get_plugin_config() );
 	}
 
