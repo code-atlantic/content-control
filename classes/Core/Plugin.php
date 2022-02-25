@@ -10,6 +10,7 @@
 namespace ContentControl\Core;
 
 use ContentControl\Base\Container;
+use ContentControl\Core\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -17,6 +18,8 @@ defined( 'ABSPATH' ) || exit;
  * Class Plugin
  *
  * @package ContentControl
+ *
+ * @property  \ContentControl\Core\Options $options
  */
 class Plugin {
 
@@ -151,10 +154,9 @@ class Plugin {
 	 */
 	public function register_plugin_services() {
 		// Initiate various controllers.
-		$this->container['options']               = new \ContentControl\Core\Options( 'content_control' );
-		$this->container['controller.frontend']   = new \ContentControl\Frontend();
-		$this->container['controller.admin']      = new \ContentControl\Admin();
-		$this->container['controller.shortcodes'] = new \ContentControl\Shortcodes();
+		$this->container['options'] = function ( $c ) {
+			new Options( $c['option_prefix'] );
+		};
 	}
 
 	/**
@@ -162,6 +164,10 @@ class Plugin {
 	 */
 	private function initiate_components() {
 		$this->define_paths();
+
+		new \ContentControl\Frontend();
+		new \ContentControl\Admin();
+		new \ContentControl\Shortcodes();
 	}
 
 	/**

@@ -37,8 +37,8 @@ class Options {
 	 */
 	public function __construct( $prefix = 'content_control' ) {
 		// Set the prefix on init.
-		static::$prefix = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
-		static::$data   = static::get_all();
+		$this->prefix = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
+		$this->data   = $this->get_all();
 	}
 
 	/**
@@ -49,12 +49,13 @@ class Options {
 	 * @return array settings
 	 */
 	public function get_all() {
-		$settings = get_option( static::$prefix . 'settings' );
+		$settings = get_option( $this->prefix . 'settings' );
+
 		if ( ! is_array( $settings ) ) {
 			$settings = [];
 		}
 
-		return apply_filters( static::$prefix . 'get_options', $settings );
+		return apply_filters( $this->prefix . 'get_options', $settings );
 	}
 
 	/**
@@ -62,15 +63,15 @@ class Options {
 	 *
 	 * Looks to see if the specified setting exists, returns default if not
 	 *
-	 * @param string $key
-	 * @param bool   $default
+	 * @param string $key Option key.
+	 * @param bool   $default Default value.
 	 *
 	 * @return mixed|void
 	 */
-	public static function get( $key = '', $default = false ) {
-		$value = isset( static::$data[ $key ] ) ? static::$data[ $key ] : $default;
+	public function get( $key = '', $default = false ) {
+		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default;
 
-		return apply_filters( static::$prefix . 'get_option', $value, $key, $default );
+		return apply_filters( $this->prefix . 'get_option', $value, $key, $default );
 	}
 
 	/**
@@ -82,37 +83,37 @@ class Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string          $key The Key to update
-	 * @param string|bool|int $value The value to set the key to
+	 * @param string          $key The Key to update.
+	 * @param string|bool|int $value The value to set the key to.
 	 *
 	 * @return boolean True if updated, false if not.
 	 */
-	public static function update( $key = '', $value = false ) {
+	public function update( $key = '', $value = false ) {
 
-		// If no key, exit
+		// If no key, exit.
 		if ( empty( $key ) ) {
 			return false;
 		}
 
 		if ( empty( $value ) ) {
-			$remove_option = static::delete( $key );
+			$remove_option = $this->delete( $key );
 
 			return $remove_option;
 		}
 
-		// First let's grab the current settings
-		$options = (array) get_option( static::$prefix . 'settings', [] );
+		// First let's grab the current settings.
+		$options = (array) get_option( $this->prefix . 'settings', [] );
 
-		// Let's let devs alter that value coming in
-		$value = apply_filters( static::$prefix . 'update_option', $value, $key );
+		// Let's let devs alter that value coming in.
+		$value = apply_filters( $this->prefix . 'update_option', $value, $key );
 
-		// Next let's try to update the value
+		// Next let's try to update the value.
 		$options[ $key ] = $value;
-		$did_update      = update_option( static::$prefix . 'settings', $options );
+		$did_update      = update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable
+		// If it updated, let's update the global variable.
 		if ( $did_update ) {
-			static::$data[ $key ] = $value;
+			$this->data[ $key ] = $value;
 		}
 
 		return $did_update;
@@ -125,30 +126,30 @@ class Options {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key The Key to delete
+	 * @param string $key The Key to delete.
 	 *
 	 * @return boolean True if updated, false if not.
 	 */
-	public static function delete( $key = '' ) {
+	public function delete( $key = '' ) {
 
-		// If no key, exit
+		// If no key, exit.
 		if ( empty( $key ) ) {
 			return false;
 		}
 
-		// First let's grab the current settings
-		$options = get_option( static::$prefix . 'settings' );
+		// First let's grab the current settings.
+		$options = get_option( $this->prefix . 'settings' );
 
-		// Next let's try to update the value
+		// Next let's try to update the value.
 		if ( isset( $options[ $key ] ) ) {
 			unset( $options[ $key ] );
 		}
 
-		$did_update = update_option( static::$prefix . 'settings', $options );
+		$did_update = update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable
+		// If it updated, let's update the global variable.
 		if ( $did_update ) {
-			static::$data = $options;
+			$this->data = $options;
 		}
 
 		return $did_update;
