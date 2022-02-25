@@ -29,6 +29,19 @@ class BlockEditor implements Controller {
 	}
 
 	/**
+	 * Get asset meta from generated files.
+	 *
+	 * @return array
+	 */
+	public function get_asset_meta() {
+		$meta_path = 'dist/block-editor.asset.php';
+		return file_exists( plugin( 'path' ) . $meta_path ) ? require plugin( 'path' ) . $meta_path : [
+			'dependencies' => [],
+			'version'      => plugin( 'version' ),
+		];
+	}
+
+	/**
 	 * Registers all block assets so that they can be enqueued through Gutenberg in
 	 * the corresponding context.
 	 *
@@ -37,35 +50,21 @@ class BlockEditor implements Controller {
 	 * This uses the generated php file from @wordpress/scripts webpack builds.
 	 */
 	public function register_editor_assets() {
-		$script_path       = 'build/block-editor.js';
-		$script_asset_path = 'build/block-editor.asset.php';
-		$script_asset      = file_exists( plugin( 'path' ) . $script_asset_path ) ? require plugin( 'path' ) . $script_asset_path : [
-			'dependencies' => [],
-			'version'      => filemtime( plugin( 'path' ) . $script_path ),
-		];
-		$script_url        = plugins_url( $script_path, plugin( 'file' ) );
-		wp_enqueue_script( 'content-control-block-editor', $script_url, array_merge( $script_asset['dependencies'], [ 'wp-edit-post' ] ), $script_asset['version'] );
+		$handle = 'content-control-block-editor';
+		$meta   = $this->get_asset_meta();
 
-		wp_localize_script( 'content-control-block-editor', 'content_control_block_editor_vars', [] );
+		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), array_merge( $meta['dependencies'], [ 'wp-edit-post' ] ), $meta['version'] );
+		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
 
-		$editor_styles_path       = 'build/block-editor-styles.css';
-		$editor_styles_asset_path = 'build/block-editor-styles.asset.php';
-		$editor_styles_asset      = file_exists( plugin( 'path' ) . $editor_styles_asset_path ) ? require plugin( 'path' ) . $editor_styles_asset_path : [
-			'dependencies' => [],
-			'version'      => filemtime( plugin( 'path' ) . $editor_styles_path ),
-		];
-		wp_enqueue_style( 'content-control-editor-styles', plugins_url( $editor_styles_path, plugin( 'file' ) ), [], $editor_styles_asset['version'] );
+		wp_localize_script( $handle, 'content_control_block_editor_vars', [] );
 
-		if ( function_exists( 'wp_set_script_translations' ) ) {
-			/**
-			 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
-			 * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
-			 * https://make.wordpress.org/core/2018/11/09/new-javascript-i18n-support-in-wordpress/
-			 */
-			wp_set_script_translations( 'content-control', 'content-control' );
-		}
+		/**
+		 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
+		 * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
+		 * https://make.wordpress.org/core/2018/11/09/new-javascript-i18n-support-in-wordpress/
+		 */
+		wp_set_script_translations( $handle, 'content-control' );
 	}
-
 
 	/**
 	 * Register block assets.
@@ -73,13 +72,9 @@ class BlockEditor implements Controller {
 	 * This uses the generated php file from @wordpress/scripts webpack builds.
 	 */
 	public function register_block_assets() {
-		$block_styles_path       = 'build/block-styles.css';
-		$block_styles_asset_path = 'build/block-styles.asset.php';
-		$block_styles_asset      = file_exists( plugin( 'path' ) . $block_styles_asset_path ) ? require plugin( 'path' ) . $block_styles_asset_path : [
-			'dependencies' => [],
-			'version'      => filemtime( plugin( 'path' ) . $block_styles_path ),
-		];
-		wp_enqueue_style( 'content-control-block-styles', plugins_url( $block_styles_path, plugin( 'file' ) ), [], $block_styles_asset['version'] );
+		$meta = $this->get_asset_meta();
+
+		wp_enqueue_style( 'content-control-block-styles', plugin()->get_url( 'dist/style-block-editor.css' ), [], $meta['version'] );
 	}
 
 }
