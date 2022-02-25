@@ -11,8 +11,6 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Autoloader class.
- *
- * @since 1.0.0
  */
 class Autoloader {
 
