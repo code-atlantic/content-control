@@ -29,11 +29,11 @@ class Autoloader {
 	 *
 	 * @return boolean
 	 */
-	public static function init( $plugin_name = '' ) {
-		$autoloader = dirname( __DIR__ ) . '/vendor/autoload.php';
+	public static function init( $name = '', $path = '' ) {
+		$autoloader = $path . '/vendor/autoload.php';
 
 		if ( ! \is_readable( $autoloader ) ) {
-			self::missing_autoloader( $plugin_name );
+			self::missing_autoloader( $name );
 
 			return false;
 		}
