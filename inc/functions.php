@@ -9,6 +9,8 @@ namespace ContentControl;
 
 use function \ContentControl\plugin;
 
+require_once 'deprecated.php';
+
 /**
  * Get an option
  *
