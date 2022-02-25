@@ -168,12 +168,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/code-atlantic/coding-standards.git",
-                "reference": "ecd38a7e1c199ddecd7131f4df3921c69ef3c59b"
+                "reference": "e56f92f263395c425f2fd7ea6ad5e2d6ce546df1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/code-atlantic/coding-standards/zipball/ecd38a7e1c199ddecd7131f4df3921c69ef3c59b",
-                "reference": "ecd38a7e1c199ddecd7131f4df3921c69ef3c59b",
+                "url": "https://api.github.com/repos/code-atlantic/coding-standards/zipball/e56f92f263395c425f2fd7ea6ad5e2d6ce546df1",
+                "reference": "e56f92f263395c425f2fd7ea6ad5e2d6ce546df1",
                 "shasum": ""
             },
             "require": {
@@ -193,7 +193,7 @@
                 "issues": "https://github.com/code-atlantic/coding-standards/issues",
                 "source": "https://github.com/code-atlantic/coding-standards/tree/master"
             },
-            "time": "2021-12-09T03:55:35+00:00"
+            "time": "2022-02-21T10:57:53+00:00"
         },
         {
             "name": "coenjacobs/mozart",
@@ -657,12 +657,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "dd8a7096b04427daf6ed91acbdde90cd7d4d2315"
+                "reference": "154a68891806abc963404e26a01a816bbe43cf28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dd8a7096b04427daf6ed91acbdde90cd7d4d2315",
-                "reference": "dd8a7096b04427daf6ed91acbdde90cd7d4d2315",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/154a68891806abc963404e26a01a816bbe43cf28",
+                "reference": "154a68891806abc963404e26a01a816bbe43cf28",
                 "shasum": ""
             },
             "require": {
@@ -706,7 +706,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2022-02-14T22:05:31+00:00"
+            "time": "2022-02-22T22:18:48+00:00"
         },
         {
             "name": "symfony/console",
@@ -714,12 +714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "5caf5d80363b2a46d2cd1b24d08c5ab259b53487"
+                "reference": "d8111acc99876953f52fe16d4c50eb60940d49ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/5caf5d80363b2a46d2cd1b24d08c5ab259b53487",
-                "reference": "5caf5d80363b2a46d2cd1b24d08c5ab259b53487",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d8111acc99876953f52fe16d4c50eb60940d49ad",
+                "reference": "d8111acc99876953f52fe16d4c50eb60940d49ad",
                 "shasum": ""
             },
             "require": {
@@ -806,7 +806,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-09T15:52:21+00:00"
+            "time": "2022-02-24T12:45:35+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -973,12 +973,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
