@@ -5,6 +5,7 @@ const config = {
 	...defaultConfig,
 	// Maps our buildList into a new object of { key: build.entry }.
 	entry: {
+		'block-editor': path.resolve( process.cwd(), 'src', 'block-editor' ),
 		'settings-page': path.resolve( process.cwd(), 'src', 'settings-page' ),
 		'widget-editor': path.resolve( process.cwd(), 'src', 'widget-editor' ),
 	},
