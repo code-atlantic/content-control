@@ -11,6 +11,8 @@ namespace ContentControl\Core;
 
 use ContentControl\Base\Container;
 use ContentControl\Core\Options;
+use ContentControl\Interfaces\Controller;
+use ContentControl\Modules\BlockEditor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -138,15 +140,6 @@ class Plugin {
 		 */
 		$this->container['get_path'] = [ $this, 'get_path' ];
 		$this->container['get_url']  = [ $this, 'get_url' ];
-
-		/**
-		 * Attach instance of WPDB.
-		 */
-		$this->container['wpdb'] = function ( Container $c ) {
-			global $wpdb;
-
-			return $wpdb;
-		};
 	}
 
 	/**
@@ -165,9 +158,20 @@ class Plugin {
 	private function initiate_components() {
 		$this->define_paths();
 
+		// Old.
 		new \ContentControl\Frontend();
 		new \ContentControl\Admin();
 		new \ContentControl\Shortcodes();
+
+		$controllers = [
+			'BlockEditor' => new BlockEditor( $this ),
+		];
+
+		foreach ( $controllers as $controller ) {
+			if ( $controller instanceof Controller ) {
+				$controller->init();
+			}
+		}
 	}
 
 	/**
