@@ -49,7 +49,7 @@ class Options {
 	 * @return array settings
 	 */
 	public function get_all() {
-		$settings = get_option( $this->prefix . 'settings' );
+		$settings = get_option( $this->prefix . 'settings', [] );
 
 		if ( ! is_array( $settings ) ) {
 			$settings = [];
@@ -102,7 +102,7 @@ class Options {
 		}
 
 		// First let's grab the current settings.
-		$options = (array) get_option( $this->prefix . 'settings', [] );
+		$options = $this->get_all();
 
 		// Let's let devs alter that value coming in.
 		$value = apply_filters( $this->prefix . 'update_option', $value, $key );
@@ -120,28 +120,97 @@ class Options {
 	}
 
 	/**
+	 * Update many values at once.
+	 *
+	 * @param array $new_options Array of new replacement options.
+	 *
+	 * @return bool
+	 */
+	public function update_many( $new_options = [] ) {
+		$options = $this->get_all();
+
+		// Lets merge options that may exist previously that are not existing now.
+		foreach ( $new_options as $key => $value ) {
+			// If no key, exit.
+			if ( empty( $key ) ) {
+				continue;
+			}
+
+			if ( empty( $value ) && isset( $options[ $key ] ) ) {
+				unset( $options[ $key ] );
+			}
+
+			$value = apply_filters( $this->prefix . 'update_option', $value, $key );
+
+			// Next let's try to update the value.
+			$options[ $key ] = $value;
+		}
+
+		$did_update = update_option( $this->prefix . 'settings', $options );
+
+		// If it updated, let's update the global variable.
+		if ( $did_update ) {
+			$this->data = $options;
+		}
+
+		return $did_update;
+	}
+
+	/**
 	 * Remove an option
 	 *
-	 * Removes a setting value in both the db and the global variable.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $key The Key to delete.
+	 * @param string|string[] $keys Can be a single string  or array of option keys.
 	 *
 	 * @return boolean True if updated, false if not.
 	 */
-	public function delete( $key = '' ) {
+	public function delete( $keys ) {
 
 		// If no key, exit.
-		if ( empty( $key ) ) {
+		if ( empty( $keys ) ) {
 			return false;
+		} elseif ( is_string( $keys ) ) {
+			$keys = [ $keys ];
 		}
 
 		// First let's grab the current settings.
-		$options = get_option( $this->prefix . 'settings' );
+		$options = $this->get_all();
 
-		// Next let's try to update the value.
-		if ( isset( $options[ $key ] ) ) {
+		// Remove each key/value pair.
+		foreach ( $keys as $key ) {
+			if ( isset( $options[ $key ] ) ) {
+				unset( $options[ $key ] );
+			}
+		}
+
+		$did_update = update_option( $this->prefix . 'settings', $options );
+
+		// If it updated, let's update the global variable.
+		if ( $did_update ) {
+			$this->data = $options;
+		}
+
+		return $did_update;
+	}
+
+	/**
+	 * Remaps option keys.
+	 *
+	 * @param array $remap_array an array of $old_key => $new_key values.
+	 *
+	 * @return bool
+	 */
+	public function remap_keys( $remap_array = [] ) {
+		$options = $this->get_all();
+
+		/**
+		 * Remap array keys by first getting current value,
+		 * moving it to new key, finally deleting old key.
+		 */
+		foreach ( $remap_array as $key => $new_key ) {
+			$value = $this->get( $key, false );
+			if ( ! empty( $value ) ) {
+				$options[ $new_key ] = $value;
+			}
 			unset( $options[ $key ] );
 		}
 
