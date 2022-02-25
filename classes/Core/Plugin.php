@@ -147,8 +147,8 @@ class Plugin {
 	 */
 	public function register_plugin_services() {
 		// Initiate various controllers.
-		$this->container['options'] = function ( $c ) {
-			new Options( $c['option_prefix'] );
+		$this->container['options'] = function( $c ) {
+			return new Options( $c->get( 'option_prefix' ) );
 		};
 	}
 
