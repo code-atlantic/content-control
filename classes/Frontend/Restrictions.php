@@ -8,9 +8,6 @@
 
 namespace ContentControl\Frontend;
 
-use function ContentControl\get_plugin_option;
-
-
 use ContentControl\Options;
 use ContentControl\Conditions;
 use ContentControl\Is;
@@ -30,9 +27,26 @@ class Restrictions {
 	public $protected_posts = [];
 
 	/**
+	 *  Temporary til this gets rewritten.
+	 *
+	 * @var \ContentControl\Frontend\Restrictions
+	 */
+	public static $instance;
+
+	/** Fetch a static instance. */
+	public static function instance() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new self();
+			self::$instance->init();
+		}
+
+		return self::$instance;
+	}
+
+	/**
 	 * Initiate functionality.
 	 */
-	public function __construct() {
+	public function init() {
 		add_action( 'template_redirect', [ $this, 'template_redirect' ] );
 	}
 
@@ -74,7 +88,7 @@ class Restrictions {
 	 * @return array|false
 	 */
 	public function restricted_content() {
-		$restrictions = get_plugin_option( 'restrictions' );
+		$restrictions = \ContentControl\get_option( 'restrictions' );
 
 		$restriced_content = false;
 

@@ -23,7 +23,9 @@ class Posts {
 	 * Initiate functionality.
 	 */
 	public function __construct() {
-		add_action( 'the_content', [ $this, 'the_content' ], 1000 );
+		if ( ! is_admin() ) {
+			add_action( 'the_content', [ $this, 'the_content' ], 1000 );
+		}
 		add_filter( 'content_control_restricted_message', [ $this, 'restricted_message_filter' ], 10, 1 );
 	}
 
@@ -60,10 +62,10 @@ class Posts {
 		}
 
 		if ( ! isset( Restrictions::$protected_posts[ $post->ID ] ) ) {
-			Restrictions::$protected_posts[ $post->ID ] = Restrictions::restricted_content();
+			Restrictions::instance()->protected_posts[ $post->ID ] = Restrictions::instance()->restricted_content();
 		}
 
-		$restricted_content = Restrictions::$protected_posts[ $post->ID ];
+		$restricted_content = Restrictions::instance()->protected_posts[ $post->ID ];
 
 		if ( ! $restricted_content ) {
 			return $content;
@@ -72,7 +74,7 @@ class Posts {
 		if ( isset( $restricted_content['override_default_message'] ) ) {
 			$message = $restricted_content['custom_message'];
 		} else {
-			$message = get_plugin_option( 'default_denial_message', '' );
+			$message = \ContentControl\get_option( 'default_denial_message', '' );
 		}
 
 		if ( empty( $message ) ) {
@@ -104,7 +106,7 @@ class Posts {
 	public function format_message( $message ) {
 		global $post;
 
-		$restriction = Restrictions::get_rules( $post->ID );
+		$restriction = Restrictions::instance()->get_rules( $post->ID );
 
 		if ( ! empty( $restriction['show_excerpts'] ) ) {
 			$excerpt_length = apply_filters( 'content_control_excerpt_length', 50 );

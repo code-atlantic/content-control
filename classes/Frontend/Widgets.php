@@ -44,10 +44,10 @@ class Widgets {
 		foreach ( $widget_areas as $widget_area => $widgets ) {
 			if ( ! empty( $widgets ) && 'wp_inactive_widgets' != $widget_area ) {
 				foreach ( $widgets as $position => $widget_id ) {
-					$options = Widget::get_options( $widget_id );
+					$options = \ContentControl\Widget::get_options( $widget_id );
 
 					// If not accessible then exclude this item.
-					$exclude = ! Is::accessible( $options['which_users'], $options['roles'], 'widget' );
+					$exclude = ! \ContentControl\Is::accessible( $options['which_users'], $options['roles'], 'widget' );
 
 					$exclude = apply_filters( 'content_control_should_exclude_widget', $exclude, $options, $widget_id );
 
