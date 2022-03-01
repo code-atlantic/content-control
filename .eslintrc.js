@@ -13,6 +13,11 @@ const eslintConfig = {
 		jsdoc: {
 			mode: 'typescript',
 		},
+		'import/resolver': {
+			node: {
+				moduleDirectory: [ 'node_modules', 'src/' ],
+			},
+		},
 	},
 	rules: {},
 };
