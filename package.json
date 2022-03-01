@@ -21,6 +21,14 @@
     "node": ">=12.13",
     "npm": ">=6.9"
   },
+  "dependencies": {
+    "@wordpress/block-editor": "^8.2.0",
+    "@wordpress/components": "^19.5.0",
+    "@wordpress/compose": "^5.1.2",
+    "@wordpress/hooks": "^3.3.1",
+    "@wordpress/i18n": "^4.3.1",
+    "classnames": "^2.3.1"
+  },
   "devDependencies": {
     "@code-atlantic/browserslist-config": "^1.0.1",
     "@code-atlantic/eslint-plugin": "^0.1.2",
@@ -34,6 +42,7 @@
     "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-zip": "^5.1.0",
+    "lodash": "^4.17.21",
     "path": "^0.12.7",
     "prettier": "npm:wp-prettier@^2.2.1-beta-1",
     "require-dir": "^1.2.0",
