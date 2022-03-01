@@ -19,6 +19,12 @@ const eslintConfig = {
 			},
 		},
 	},
+	parserOptions = {
+		requireConfigFile: false,
+		babelOptions: {
+			presets: [ require.resolve( '@wordpress/babel-preset-default' ) ],
+		},
+	},
 	rules: {},
 };
 
