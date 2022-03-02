@@ -56,7 +56,12 @@ class BlockEditor implements Controller {
 		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), array_merge( $meta['dependencies'], [ 'wp-edit-post' ] ), $meta['version'] );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
 
-		wp_localize_script( $handle, 'content_control_block_editor_vars', [] );
+		wp_localize_script( $handle, 'contentControlBlockEditorVars',
+			[
+				'allowedBlocks'  => [],
+				'excludedBlocks' => [ 'core/nextpage', 'core/freeform' ],
+			]
+		);
 
 		/**
 		 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
