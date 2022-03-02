@@ -1,0 +1,1 @@
+import controlsExtension from './controls';
