@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class BlockEditor
+ *
+ * @version 2.0.0
  */
 class BlockEditor implements Controller {
 
@@ -53,13 +55,16 @@ class BlockEditor implements Controller {
 		$handle = 'content-control-block-editor';
 		$meta   = $this->get_asset_meta();
 
-		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), array_merge( $meta['dependencies'], [ 'wp-edit-post' ] ), $meta['version'] );
+		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), array_merge( $meta['dependencies'], [ 'wp-edit-post' ] ), $meta['version'], true );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
 
 		wp_localize_script( $handle, 'contentControlBlockEditorVars',
 			[
 				'allowedBlocks'  => [],
-				'excludedBlocks' => [ 'core/nextpage', 'core/freeform' ],
+				'excludedBlocks' => [
+					// 'core/nextpage',
+					// 'core/freeform',
+				],
 			]
 		);
 
