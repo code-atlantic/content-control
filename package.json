@@ -18,8 +18,8 @@
     "url": "https://github.com/code-atlantic/content-control/issues"
   },
   "engines": {
-    "node": ">=12.13",
-    "npm": ">=6.9"
+    "node": "~16",
+    "npm": "~8.3"
   },
   "dependencies": {
     "@wordpress/block-editor": "^8.2.0",
