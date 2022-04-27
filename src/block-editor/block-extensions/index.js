@@ -1,1 +1,1 @@
-import controlsExtension from './controls';
+import './block-controls';
