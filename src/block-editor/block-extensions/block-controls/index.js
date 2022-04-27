@@ -5,14 +5,14 @@ import { addFilter } from '@wordpress/hooks';
 
 import { addAttributes } from './attributes';
 import editControls from './edit';
-import { extraProps } from './save';
+import { addWrapperClasses } from './save';
 
 /**
  * Register the extra block attributes and contentControl support.
  */
 addFilter(
 	'blocks.registerBlockType',
-	'content-control/block-control/block-attributes',
+	'content-control/block-controls/block-attributes',
 	addAttributes
 );
 
@@ -21,7 +21,7 @@ addFilter(
  */
 addFilter(
 	'editor.BlockEdit',
-	'content-control/block-control/block-edit-controls',
+	'content-control/block-controls/block-edit-controls',
 	editControls
 );
 
@@ -30,6 +30,6 @@ addFilter(
  */
 addFilter(
 	'blocks.getSaveContent.extraProps',
-	'content-control/block-control/block-props',
-	extraProps
+	'content-control/block-controls/block-props',
+	addWrapperClasses
 );

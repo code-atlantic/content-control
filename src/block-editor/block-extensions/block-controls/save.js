@@ -2,35 +2,40 @@ import classnames from 'classnames';
 import { blockControlsEnabled } from './utils';
 
 /**
- * Add class to elements to handle visibility on the front-end.
+ * Add css classes to block element wrapper.
  *
- * @param {Object} extraProps     Block element.
- * @param {Object} blockType      Blocks object.
- * @param {Object} attributes     Blocks attributes.
+ * @param {Object}         props                      Element props.
+ * @param {Object}         blockType                  Blocks object.
+ * @param {Object}         attributes                 Blocks attributes.
+ * @param {Object|boolean} attributes.contentControls Block control settings.
  *
- * @return {Object} extraProps Modified block element.
+ * @return {Object} Block element props..
  */
-const extraProps = ( extraProps, blockType, attributes ) => {
-	const { contentControls: { controlsEnabled = false }= {} } = attributes;
+const addWrapperClasses = (
+	props,
+	blockType,
+	{ contentControls = {}, ...attributes }
+) => {
+	const { enabled: controlsEnabled = false } = contentControls;
 
 	/**
-	 * Bail early  if block controls disabled and  this block didn't previously have them configured.
+	 * Bail early if block controls disabled and this block didn't previously have them configured.
 	 *
-	 * The use of && here is important. It prevents users from using "Advanced" mode to save
-	 * controls for a block, disabling Advanced and losing block control setups.
+	 * The use of && here is important. It prevents users from losing block settings if toggling
+	 * advanced mode turned off.
 	 */
 	if ( ! blockControlsEnabled( blockType ) && ! controlsEnabled ) {
-		return extraProps;
+		return props;
 	}
 
-	if ( contentControls.enabled ) {
-		extraProps.className = classnames(
-			extraProps.className,
+	if ( controlsEnabled ) {
+		props.className = classnames(
+			props.className,
 			'cc-block-control-enabled'
 		);
 	}
 
-	return extraProps;
+	return props;
 };
 
-export { extraProps };
+export { addWrapperClasses };
