@@ -1,0 +1,26 @@
+@import '~@wordpress/base-styles/variables';
+@import '~@wordpress/base-styles/mixins';
+@import '~@wordpress/base-styles/colors';
+
+.cc__block-controls {
+	border-bottom: $border-width solid $gray-200;
+
+	&.cc__block-controls--enabled {
+		// Compensate for extra padding at the bottom when rules-panel is open.
+		.components-panel__body {
+			padding-bottom: 0;
+		}
+	}
+}
+
+.cc__block-controls__toggle-enabled {
+	.components-panel__row:last-child & {
+		margin-bottom: 0;
+	}
+}
+
+/* Add negative margins to make them appear as normal panels. */
+.cc__block-controls__rules-panels {
+	margin-left: -$grid-unit-20;
+	margin-right: -$grid-unit-20;
+}
