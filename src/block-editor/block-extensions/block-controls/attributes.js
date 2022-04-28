@@ -32,7 +32,7 @@ const addAttributes = ( settings ) => {
  *
  * @param {Object} settings Settings for the block.
  *
- * @return {Object} settings Modified settings.
+ * @return {Object} attributes Modified settings.
  */
 const controlAttributes = ( settings ) => {
 	return {
@@ -48,7 +48,7 @@ const controlAttributes = ( settings ) => {
 				},
 				controls: {
 					type: 'array',
-				}
+				},
 			},
 		},
 	};
