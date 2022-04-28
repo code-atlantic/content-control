@@ -3,8 +3,10 @@ import { __ } from '@wordpress/i18n';
 import { SlotFillProvider, Slot, Fill } from '@wordpress/components';
 
 import RuleGroup from '../rule-group';
-import ConditionalRules from '../conditional-rules';
-import DeviceRules from '../device-rules';
+import ConditionalRules from './conditional-rules';
+import DeviceRules from './device-rules';
+
+import { blockMeta, tablet } from '@wordpress/icons';
 
 const panelId = 'contctrl-rules-panel';
 
@@ -52,7 +54,7 @@ const RuleGroups = ( { rules = {}, setRules = () => {}, ...props } ) => {
 			<Fill name="ContentControlBlockRules">
 				<RuleGroup
 					label={ __( 'Device Rules', 'content-control' ) }
-					icon="tablet"
+					icon={ tablet }
 					isOpened={ ruleGroupEnabled( 'device' ) }
 					groupId="device"
 					rules={ rules }
@@ -66,7 +68,7 @@ const RuleGroups = ( { rules = {}, setRules = () => {}, ...props } ) => {
 			<Fill name="ContentControlBlockRules">
 				<RuleGroup
 					label={ __( 'Conditional Rules', 'content-controls' ) }
-					icon="share"
+					icon={ blockMeta }
 					isOpened={ ruleGroupEnabled( 'conditional' ) }
 					groupId="conditional"
 					rules={ rules }
