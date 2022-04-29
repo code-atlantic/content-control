@@ -1,13 +1,10 @@
-@import '~@wordpress/base-styles/variables';
-@import '~@wordpress/base-styles/mixins';
-@import '~@wordpress/base-styles/colors';
+@import "~@wordpress/base-styles/variables";
+@import "~@wordpress/base-styles/mixins";
+@import "~@wordpress/base-styles/colors";
 
 .cc__rules-group {
-	display: grid;
 	padding: $grid-unit-20;
 	border-top: $border-width solid $gray-200;
-	grid-template-columns: repeat( 2, 1fr );
-	gap: $grid-unit-30 $grid-unit-20;
 
 	// Compensate for padding that was there when rules-panel is hidden.
 	&:first-child {
@@ -16,22 +13,20 @@
 }
 
 .cc__rules-group__header {
-	grid-column: 1 / -1;
-	gap: $grid-unit-10;
-
 	h2 {
 		margin: 0;
 		line-height: normal;
+		font-weight: 500;
 	}
 
 	.cc__rules-group__icon {
 		color: $gray-700;
-		margin: -2px 0 -2px 6px;
+		margin: calc(-5px) 0 calc(-5px) 6px;
 		vertical-align: middle;
 	}
 
 	.cc__rules-group__options-menu {
-		margin: calc( -4px ) 0px;
+		margin: calc(-5px) 0px;
 		line-height: 0;
 
 		.cc__rules-group__options-toggle.components-button.is-small {
@@ -44,5 +39,9 @@
 .cc__rules-group__body {
 	> :last-child {
 		margin-bottom: 0;
+	}
+
+	.cc__rules-group__header + & {
+		margin-top: $grid-unit-20;
 	}
 }
