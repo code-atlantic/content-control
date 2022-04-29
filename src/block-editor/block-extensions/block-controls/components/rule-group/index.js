@@ -49,16 +49,34 @@ const RuleGroup = forwardRef(
 
 		const isOpened = null !== groupRules;
 
-		/**
-		 * Update single rule group's settings by ID.
-		 *
-		 * @param {Object|Array|null} newRules New rules to save for group.
-		 *
-		 * @return {void}
-		 */
-		const setGroupRules = ( newRules ) => {
-			setRules( { ...rules, [ groupId ]: newRules } );
-		};
+	/**
+	 * Set single rule group's settings by ID.
+	 *
+	 * This will replace the entire group object with the newRules.
+	 *
+	 * @param {Object|Array|null} newRules New rules to save for group.
+	 *
+	 * @return {void}
+	 */
+	const setGroupRules = ( newRules ) => {
+		setRules( {
+			...rules,
+			[ groupId ]: newRules,
+		} );
+	};
+
+	/**
+	 * Append/update rules for the group.
+	 *
+	 * @param {Object} newRules Rules to append to the group settings.
+	 * @return {void}
+	 */
+	const updateGroupRules = ( newRules ) => {
+		setGroupRules( {
+			...groupRules,
+			...newRules,
+		} );
+	};
 
 		/**
 		 * Render children with additional props.
@@ -71,6 +89,7 @@ const RuleGroup = forwardRef(
 					...extraChildProps,
 					groupRules,
 					setGroupRules,
+				updateGroupRules,
 				} );
 			}
 			return child;
@@ -92,6 +111,7 @@ const RuleGroup = forwardRef(
 					isOpened={ isOpened }
 					icon={ icon }
 					setGroupRules={ setGroupRules }
+				updateGroupRules={ updateGroupRules }
 				groupRules={ groupRules }
 					ref={ ref }
 				/>
