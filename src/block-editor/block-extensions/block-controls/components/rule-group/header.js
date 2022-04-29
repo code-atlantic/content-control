@@ -192,6 +192,7 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 							__( 'Enable %1$s', 'content-control' ),
 							labelText
 						) }
+						showTooltip={ true }
 						className="cc__rules-group__options-toggle"
 						onClick={ () => setGroupRules( groupDefaults ) }
 						ref={ forwardRef }
