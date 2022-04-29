@@ -4,7 +4,6 @@ import {
 	DropdownMenu,
 	Icon,
 	__experimentalHStack as HStack,
-	__experimentalSpacer as Spacer,
 	__experimentalText as Text,
 	__experimentalHeading as Heading,
 	MenuGroup,
@@ -13,11 +12,9 @@ import {
 import {
 	moreVertical,
 	plus,
-	reset,
 	check,
 	trash,
 	rotateLeft,
-	download,
 	copy,
 } from '@wordpress/icons';
 import { sprintf, _x, __ } from '@wordpress/i18n';
@@ -125,7 +122,6 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 	const {
 		isOpened,
 		icon,
-		title,
 		groupRules,
 		setGroupRules,
 		groupDefaults,
@@ -168,7 +164,6 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 							isSmall: true,
 							iconSize: toggleIconSize,
 							className: 'cc__rules-group__options-toggle',
-							ref: forwardRef,
 						} }
 						menuProps={ { className: dropdownMenuClassName } }
 					>
