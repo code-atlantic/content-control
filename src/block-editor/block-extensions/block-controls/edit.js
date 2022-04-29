@@ -40,7 +40,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 		/**
 		 * Update block control attributes.
 		 *
-		 * @param  newControls
+		 * @param {Object} newControls New settings to save.
 		 */
 		const setControls = ( newControls ) =>
 			setAttributes( {

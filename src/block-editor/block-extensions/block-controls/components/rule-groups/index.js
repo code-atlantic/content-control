@@ -43,8 +43,6 @@ const RuleGroups = ( { rules = {}, setRules = () => {}, ...props } ) => {
 	/**
 	 * Reset all panels to defaults.
 	 *
-	 * @uses setRules
-	 *
 	 * @return {void}
 	 */
 	const resetAll = () => {
