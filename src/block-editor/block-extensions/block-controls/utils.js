@@ -7,7 +7,7 @@ import { hasBlockSupport } from '@wordpress/blocks';
  * @type {Array}
  */
 const allowedBlocks = applyFilters(
-	'content_control_allowed_blocks',
+	'contCtrl.allowedBlocks',
 	contentControlBlockEditorVars.allowedBlocks || []
 );
 
@@ -17,7 +17,7 @@ const allowedBlocks = applyFilters(
  * @type {Array}
  */
 const excludedBlocks = applyFilters(
-	'content_control_excluded_blocks',
+	'contCtrl.excludedBlocks',
 	contentControlBlockEditorVars.excludedBlocks || [
 		'core/freeform',
 		'core/nextpage',
