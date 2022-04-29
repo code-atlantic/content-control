@@ -31,7 +31,7 @@ const DefaultGroupOptions = ( {
 	labelText,
 } ) => {
 	if ( ! labelText ) {
-		return null;
+		return <></>;
 	}
 
 	return (
@@ -83,7 +83,7 @@ const DefaultGroupOptions = ( {
 
 const OptionalGroupOptions = ( { items, onClose, toggleItem } ) => {
 	if ( ! items.length ) {
-		return null;
+		return <></>;
 	}
 
 	return (
@@ -137,7 +137,7 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 	} = props;
 
 	if ( ! labelText ) {
-		return null;
+		return <></>;
 	}
 
 	const toggleIconSize = 24;
