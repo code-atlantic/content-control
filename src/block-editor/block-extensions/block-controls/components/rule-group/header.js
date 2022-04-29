@@ -1,4 +1,3 @@
-import { forwardRef } from '@wordpress/element';
 import {
 	Button,
 	DropdownMenu,
@@ -119,7 +118,7 @@ const OptionalGroupOptions = ( { items, onClose, toggleItem } ) => {
 	);
 };
 
-const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
+const RuleGroupHeader = ( props ) => {
 	const {
 		isOpened,
 		icon,
@@ -140,11 +139,7 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 	const toggleIconSize = 24;
 
 	return (
-		<HStack
-			{ ...headerProps }
-			className="cc__rules-group__header"
-			ref={ forwardedRef }
-		>
+		<HStack { ...headerProps } className="cc__rules-group__header">
 			<Heading level={ 2 } className={ headingClassName }>
 				{ labelText }
 				{ icon && (
@@ -197,7 +192,6 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 						showTooltip={ true }
 						className="cc__rules-group__options-toggle"
 						onClick={ () => setGroupRules( groupDefaults ) }
-						ref={ forwardRef }
 						isSmall={ true }
 					>
 						<Icon
@@ -210,6 +204,6 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 			</div>
 		</HStack>
 	);
-} );
+};
 
 export default RuleGroupHeader;
