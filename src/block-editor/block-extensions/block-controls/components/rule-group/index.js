@@ -92,8 +92,7 @@ const RuleGroup = forwardRef(
 					isOpened={ isOpened }
 					icon={ icon }
 					setGroupRules={ setGroupRules }
-					groupRules={ groupRules }
-					groupDefaults={ groupDefaults }
+				groupRules={ groupRules }
 					ref={ ref }
 				/>
 				{ isOpened && (

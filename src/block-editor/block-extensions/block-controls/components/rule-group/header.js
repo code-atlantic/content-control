@@ -23,6 +23,7 @@ const noop = () => {};
 
 const DefaultGroupOptions = ( {
 	groupDefaults,
+	groupRules,
 	setGroupRules,
 	onClose,
 	labelText,
@@ -38,7 +39,7 @@ const DefaultGroupOptions = ( {
 					icon={ copy }
 					variant={ 'tertiary' }
 					onClick={ () => {
-						setGroupRules( groupDefaults );
+						alert( JSON.stringify( groupRules ) );
 						onClose();
 					} }
 				>
@@ -178,6 +179,7 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 								/>
 								<DefaultGroupOptions
 									labelText={ labelText }
+									groupRules={ groupRules }
 									setGroupRules={ setGroupRules }
 									groupDefaults={ groupDefaults }
 									onClose={ onClose }
