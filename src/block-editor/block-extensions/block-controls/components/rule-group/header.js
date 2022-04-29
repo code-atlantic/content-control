@@ -190,7 +190,7 @@ const RuleGroupHeader = forwardRef( ( props, forwardedRef ) => {
 						label={ sprintf(
 							/* translators: 1. rule group title. */
 							__( 'Enable %1$s', 'content-control' ),
-							title
+							labelText
 						) }
 						className="cc__rules-group__options-toggle"
 						onClick={ () => setGroupRules( groupDefaults ) }
