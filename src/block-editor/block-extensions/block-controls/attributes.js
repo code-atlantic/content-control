@@ -1,3 +1,4 @@
+import { applyFilters } from '@wordpress/hooks';
 import { blockControlsEnabled } from './utils';
 
 /**
@@ -35,23 +36,27 @@ const addAttributes = ( settings ) => {
  * @return {Object} attributes Modified settings.
  */
 const controlAttributes = ( settings ) => {
-	return {
-		contentControls: {
-			type: 'object',
-			default: {
-				enabled: false,
-				controls: [],
-			},
-			properties: {
-				enabled: {
-					type: 'boolean',
+	return applyFilters(
+		'contCtrl.blockControls.controlAttributes',
+		{
+			contentControls: {
+				type: 'object',
+				default: {
+					enabled: false,
+					controls: [],
 				},
-				controls: {
-					type: 'array',
+				properties: {
+					enabled: {
+						type: 'boolean',
+					},
+					controls: {
+						type: 'array',
+					},
 				},
 			},
 		},
-	};
+		settings
+	);
 };
 
 export { addAttributes, controlAttributes };
