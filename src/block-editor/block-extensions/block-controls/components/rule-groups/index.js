@@ -22,12 +22,15 @@ const blockMeta = (
 
 const defaults = {
 	device: {
-		hide_on: true,
-		on_mobile: false,
-		on_tablet: false,
-		on_desktop: false,
+		hideOn: {
+			mobile: false,
+			tablet: false,
+			desktop: false,
+		},
 	},
-	conditional: {},
+	conditional: {
+		anyAll: 'all',
+	},
 };
 
 const RuleGroups = ( { rules = {}, setRules = () => {}, ...props } ) => {
