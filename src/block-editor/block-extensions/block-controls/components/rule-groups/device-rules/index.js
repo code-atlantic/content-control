@@ -7,15 +7,17 @@ import {
 import { applyFilters } from '@wordpress/hooks';
 import { _x, __ } from '@wordpress/i18n';
 
+import { mobile, tablet, desktop } from '@wordpress/icons';
+
 import DeviceToggle from '../../device-toggle';
 
 const DeviceRules = ( props ) => {
 	const { groupRules, setGroupRules } = props;
 
 	const screenSizes = applyFilters( 'contCtrl.blockControls.screenSizes', {
-		mobile: { label: __( 'Mobile', 'content-control' ) },
-		tablet: { label: __( 'Tablet', 'content-control' ) },
-		desktop: { label: __( 'Desktop', 'content-control' ) },
+		mobile: { label: __( 'Mobile', 'content-control' ), icon: mobile },
+		tablet: { label: __( 'Tablet', 'content-control' ), icon: tablet },
+		desktop: { label: __( 'Desktop', 'content-control' ), icon: desktop },
 	} );
 
 	const { hideOn = {} } = groupRules;
