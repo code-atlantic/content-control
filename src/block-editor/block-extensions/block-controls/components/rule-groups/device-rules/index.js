@@ -28,6 +28,12 @@ const DeviceRules = ( props ) => {
 
 	return (
 		<>
+			<p>
+				{ __(
+					'Use these options to control which devices this block will appear on.',
+					'content-control'
+				) }
+			</p>
 			{ Object.entries( screenSizes ).map(
 				( [ deviceKey, { label, icon } ] ) => (
 					<DeviceToggle
