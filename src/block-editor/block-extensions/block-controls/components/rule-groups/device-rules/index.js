@@ -1,11 +1,5 @@
-import {
-	PanelRow,
-	ToggleControl,
-	__experimentalHStack as HStack,
-	__experimentalHeading as Heading,
-} from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
-import { _x, __ } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 import { mobile, tablet, desktop } from '@wordpress/icons';
 
