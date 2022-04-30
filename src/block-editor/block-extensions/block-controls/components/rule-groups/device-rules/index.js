@@ -35,20 +35,16 @@ const DeviceRules = ( props ) => {
 	return (
 		<>
 			{ Object.entries( screenSizes ).map(
-				( [ deviceKey, { label } ] ) => (
-					<HStack
+				( [ deviceKey, { label, icon } ] ) => (
+					<DeviceToggle
 						key={ deviceKey }
-						className="cc__component-device-toggle"
-					>
-						<Heading level={ 3 }>{ label }</Heading>
-						<DeviceToggle
-							label={ label }
-							value={ hideOn[ deviceKey ] ?? false }
-							onChange={ ( hide ) =>
-								setDeviceRule( deviceKey, hide )
-							}
-						/>
-					</HStack>
+						label={ label }
+						icon={ icon }
+						checked={ hideOn[ deviceKey ] ?? false }
+						onChange={ ( hide ) =>
+							setDeviceRule( deviceKey, hide )
+						}
+					/>
 				)
 			) }
 		</>
