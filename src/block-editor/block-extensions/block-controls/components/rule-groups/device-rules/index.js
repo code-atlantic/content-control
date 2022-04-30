@@ -16,7 +16,7 @@ const DeviceRules = ( props ) => {
 
 	const { hideOn = {} } = groupRules;
 
-	const setDeviceRule = ( device, hide ) => {
+	const toggleDeviceRule = ( device, hide ) => {
 		setGroupRules( {
 			...groupRules,
 			hideOn: {
@@ -42,7 +42,7 @@ const DeviceRules = ( props ) => {
 						icon={ icon }
 						checked={ hideOn[ deviceKey ] ?? false }
 						onChange={ ( hide ) =>
-							setDeviceRule( deviceKey, hide )
+							toggleDeviceRule( deviceKey, hide )
 						}
 					/>
 				)
