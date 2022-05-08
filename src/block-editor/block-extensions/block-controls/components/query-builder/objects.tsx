@@ -18,11 +18,18 @@ const BuilderObjects = ( {
 		onChange( newQuery );
 	};
 
+	const hasNestedGroups = query.reduce(
+		( hasGroups, obj ) => hasGroups || 'group' === obj.type,
+		false
+	);
+
 	return (
 		<div
 			className={ classNames( [
 				'cc__condition-editor__object-list',
 				`cc__condition-editor__object-list--${ type }`,
+				hasNestedGroups &&
+					'cc__condition-editor__group--has-nested-groups',
 			] ) }
 		>
 			{ query &&
