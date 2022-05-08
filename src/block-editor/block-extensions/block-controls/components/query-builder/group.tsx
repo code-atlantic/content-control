@@ -1,5 +1,7 @@
+/** Internal Imports */
 import BuilderObjects from './objects';
 
+/** Type Imports */
 import { Query, BuilderGroupProps } from './types';
 
 const BuilderGroup = ( {
