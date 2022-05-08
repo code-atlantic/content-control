@@ -1,8 +1,15 @@
 import { Query, QueryRule, QueryGroup, QueryObject } from './query';
 
+type BuilderRuleProps = QueryRule & {
+	onChange: ( value: QueryRule ) => void;
+};
+
+export type BuilderGroupProps = QueryGroup & {
+	onChange: ( value: QueryGroup ) => void;
+};
 
 export type BuilderObjectBaseProps = {
-	onChange?: ( value: QueryObject ) => void;
+	onChange: ( value: QueryObject ) => void;
 };
 
 export type BuilderObjectProps =
