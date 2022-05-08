@@ -33,7 +33,7 @@ const BuilderObjects = ( {
 			] ) }
 		>
 			{ query &&
-				query.map( ( obj: BuilderObjectProps, key: number ) => (
+				query.map( ( obj: QueryObject, key: number ) => (
 					<BuilderObject
 						key={ key }
 						onChange={ ( values ) => updateByIndex( key, values ) }
