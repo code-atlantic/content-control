@@ -1,0 +1,18 @@
+.cc__condition-editor__rule {
+    background: lightblue;
+    padding: 1em;
+    margin-top: 1em;
+
+    .cc__condition-editor__object-list &:first-child {
+        .cc__condition-editor__logical-operator {
+            display:none;
+        }
+    }
+}
+
+.cc__condition-editor__group {
+    border: 1px solid;
+    padding: 1em;
+    margin-top: 1em;
+
+}
