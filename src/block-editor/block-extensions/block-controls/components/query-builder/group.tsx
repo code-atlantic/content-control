@@ -1,5 +1,9 @@
+/** External Imports */
+import classNames from 'classnames';
+
 /** Internal Imports */
 import BuilderObjects from './objects';
+import BuilderObjectHeader from './object-header';
 
 /** Type Imports */
 import { Query, BuilderGroupProps } from './types';
@@ -11,16 +15,25 @@ const BuilderGroup = ( {
 	const { children } = groupProps;
 
 	return (
-		<BuilderObjects
-			type="group"
-			query={ children }
-			onChange={ ( query: Query ) =>
-				onChange( {
-					...groupProps,
-					children: query,
-				} )
-			}
-		/>
+		<div
+			className={ classNames( [
+				'cc__condition-editor__group',
+				children.length <= 0 && 'cc__condition-editor__group--empty',
+			] ) }
+		>
+			<BuilderObjectHeader onChange={ onChange } { ...groupProps } />
+
+			<BuilderObjects
+				type="group"
+				query={ children }
+				onChange={ ( query: Query ) =>
+					onChange( {
+						...groupProps,
+						children: query,
+					} )
+				}
+			/>
+		</div>
 	);
 };
 export default BuilderGroup;
