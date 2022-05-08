@@ -1,53 +1,25 @@
-/** External Imports */
-import { noop } from 'lodash';
-
 /** Internal Imports */
-import Rule from './rule';
-import Group from './group';
-import LogicalOperator from './logical-operator';
-import NotOperandToggle from './not-operand-toggle';
+import BuilderRule from './rule';
+import BuilderGroup from './group';
+import BuilderObjectHeader from './object-header';
 
 /** Type Imports */
 import { BuilderObjectProps } from './types';
 
-const BuilderObject = ( {
-	onChange = noop,
-	...objectProps
-}: BuilderObjectProps ): JSX.Element => {
-	const { logicalOperator, notOperand, type } = objectProps;
+const BuilderObjectComponent = ( objectProps: BuilderObjectProps ) => {
+	switch ( objectProps.type ) {
+		case 'rule':
+			return <BuilderRule { ...objectProps } />;
+		case 'group':
+			return <BuilderGroup { ...objectProps } />;
+	}
+};
 
-	const ObjectComponent = () => {
-		switch ( type ) {
-			case 'rule':
-				return <Rule onChange={ onChange } { ...objectProps } />;
-			case 'group':
-				return <Group onChange={ onChange } { ...objectProps } />;
-		}
-	};
-
+const BuilderObject = ( objectProps: BuilderObjectProps ): JSX.Element => {
 	return (
 		<>
-			<LogicalOperator
-				value={ logicalOperator }
-				onChange={ ( newValue ) =>
-					onChange( {
-						...objectProps,
-						logicalOperator: newValue,
-					} )
-				}
-			/>
-
-			<NotOperandToggle
-				checked={ notOperand }
-				onToggle={ ( newValue ) =>
-					onChange( {
-						...objectProps,
-						notOperand: newValue,
-					} )
-				}
-			/>
-
-			<ObjectComponent />
+			<BuilderObjectHeader { ...objectProps } />
+			<BuilderObjectComponent { ...objectProps } />
 		</>
 	);
 };
