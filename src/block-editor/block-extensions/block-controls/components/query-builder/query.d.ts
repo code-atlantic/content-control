@@ -2,24 +2,24 @@ export type QueryLocigalOperator = 'and' | 'or';
 
 export type QueryNotOperand = boolean;
 
-export type QueryObjectBase = {
+export interface QueryObjectBase {
 	type: 'rule' | 'group';
 	notOperand: QueryNotOperand;
 	logicalOperator: QueryLocigalOperator;
-};
+}
 
-export type QueryRule = {
+export interface QueryRule extends QueryObjectBase {
 	type: 'rule';
 	name: string;
 	options?: {
 		[ key: string ]: any;
 	};
-} & QueryObjectBase;
+}
 
-export type QueryGroup = {
+export interface QueryGroup extends QueryObjectBase {
 	type: 'group';
 	children: Query;
-} & QueryObjectBase;
+}
 
 export type QueryObject = QueryRule | QueryGroup;
 
