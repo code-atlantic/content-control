@@ -23,4 +23,6 @@ export interface QueryGroup extends QueryObjectBase {
 
 export type QueryObject = QueryRule | QueryGroup;
 
+export type QueryObjectTypes = QueryObject['type'];
+
 export type Query = QueryObject[];
