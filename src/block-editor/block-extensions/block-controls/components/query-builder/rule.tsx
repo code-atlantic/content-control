@@ -12,7 +12,7 @@ import BuilderObjectHeader from './object-header';
 import { getCategoryOptions, getRuleOptions } from './utils';
 
 /** Type Imports */
-import { BuilderRuleProps, BuilderOptions } from './types';
+import { BuilderRuleProps, BuilderOptions, QueryObject } from './types';
 
 const BuilderRule = ( {
 	onChange,
@@ -112,7 +112,10 @@ const BuilderRule = ( {
 				fields?.length && 'cc__condition-editor__rule--has-options',
 			] ) }
 		>
-			<BuilderObjectHeader onChange={ onChange } { ...ruleProps } />
+			<BuilderObjectHeader
+				onChange={ onChange as ( value: QueryObject ) => void }
+				{ ...ruleProps }
+			/>
 			{ ruleDef ? (
 				<>
 					<SelectControl

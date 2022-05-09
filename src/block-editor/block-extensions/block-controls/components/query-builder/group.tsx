@@ -6,7 +6,7 @@ import BuilderObjects from './objects';
 import BuilderObjectHeader from './object-header';
 
 /** Type Imports */
-import { Query, BuilderGroupProps } from './types';
+import { BuilderGroupProps, Query, QueryObject } from './types';
 
 const BuilderGroup = ( {
 	onChange,
@@ -21,8 +21,10 @@ const BuilderGroup = ( {
 				children.length <= 0 && 'cc__condition-editor__group--empty',
 			] ) }
 		>
-			<BuilderObjectHeader onChange={ onChange } { ...groupProps } />
-
+			<BuilderObjectHeader
+				onChange={ onChange as ( value: QueryObject ) => void }
+				{ ...groupProps }
+			/>
 			<BuilderObjects
 				type="group"
 				query={ children }
