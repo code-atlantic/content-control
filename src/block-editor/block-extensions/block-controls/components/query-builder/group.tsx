@@ -12,7 +12,7 @@ const BuilderGroup = ( {
 	onChange,
 	...groupProps
 }: BuilderGroupProps ): JSX.Element => {
-	const { children } = groupProps;
+	const { query } = groupProps;
 
 	return (
 		<div
@@ -27,11 +27,11 @@ const BuilderGroup = ( {
 			/>
 			<BuilderObjects
 				type="group"
-				query={ children }
-				onChange={ ( query: Query ) =>
+				query={ query }
+				onChange={ ( newQuery: Query ) =>
 					onChange( {
 						...groupProps,
-						children: query,
+						query: newQuery,
 					} )
 				}
 			/>
