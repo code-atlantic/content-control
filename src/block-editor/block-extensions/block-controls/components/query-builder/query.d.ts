@@ -3,7 +3,7 @@ export type QueryLocigalOperator = 'and' | 'or';
 export type QueryNotOperand = boolean;
 
 export interface QueryObjectBase {
-	type: 'rule' | 'group';
+	type: string;
 	notOperand: QueryNotOperand;
 	logicalOperator: QueryLocigalOperator;
 }
