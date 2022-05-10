@@ -131,7 +131,16 @@ const BuilderRule = ( {
 					<SelectControl
 						onChange={ ( value ) => {} }
 						value={ name }
-						options={ getRuleOptions( builderOptions ) }
+						options={ [
+							{
+								label: __(
+									'Select rule type',
+									'content-control'
+								),
+								value: '',
+							},
+							...getRuleOptions( builderOptions ),
+						] }
 					/>
 				</>
 			) : (
@@ -139,7 +148,16 @@ const BuilderRule = ( {
 					<SelectControl
 						onChange={ ( value ) => {} }
 						value={ name }
-						options={ getRuleOptions( builderOptions ) }
+						options={ [
+							{
+								label: __(
+									'Select rule type',
+									'content-control'
+								),
+								value: '',
+							},
+							...getRuleOptions( builderOptions ),
+						] }
 					/>
 				</>
 			) }
