@@ -8,16 +8,12 @@ import { sprintf, __ } from '@wordpress/i18n';
 
 /** Internal Imports */
 import { BuilderOptionsContext } from './contexts';
-import BuilderObjectHeader from './object-header';
 import { getCategoryOptions, getRuleOptions } from './utils';
 
 /** Type Imports */
-import { BuilderRuleProps, BuilderOptions, QueryObject } from './types';
+import { BuilderRuleProps, BuilderOptions } from './types';
 
-const BuilderRule = ( {
-	onChange,
-	...ruleProps
-}: BuilderRuleProps ): JSX.Element => {
+const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 	const { notOperand, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );

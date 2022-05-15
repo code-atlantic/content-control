@@ -3,15 +3,11 @@ import classNames from 'classnames';
 
 /** Internal Imports */
 import BuilderObjects from './objects';
-import BuilderObjectHeader from './object-header';
 
 /** Type Imports */
-import { BuilderGroupProps, Query, QueryObject } from './types';
+import { BuilderGroupProps, Query } from './types';
 
-const BuilderGroup = ( {
-	onChange,
-	...groupProps
-}: BuilderGroupProps ): JSX.Element => {
+const BuilderGroup = ( { onChange, value: groupProps }: BuilderGroupProps ) => {
 	const { query } = groupProps;
 
 	return (

@@ -4,14 +4,18 @@ import BuilderGroup from './group';
 
 /** Type Imports */
 import { BuilderObjectProps } from './types';
+import { QueryObject } from './query';
 
-const BuilderObject = ( objectProps: BuilderObjectProps ): JSX.Element => {
+function BuilderObject( {
+	onChange,
+	value: objectProps,
+}: BuilderObjectProps< QueryObject > ) {
 	switch ( objectProps.type ) {
 		case 'rule':
-			return <BuilderRule { ...objectProps } />;
+			return <BuilderRule onChange={ onChange } value={ objectProps } />;
 		case 'group':
-			return <BuilderGroup { ...objectProps } />;
+			return <BuilderGroup onChange={ onChange } value={ objectProps } />;
 	}
-};
+}
 
 export default BuilderObject;

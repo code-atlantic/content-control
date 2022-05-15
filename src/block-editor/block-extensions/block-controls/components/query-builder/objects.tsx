@@ -11,7 +11,7 @@ const BuilderObjects = ( {
 	type = 'group',
 	query,
 	onChange,
-}: BuilderObjectsProps ): JSX.Element => {
+}: BuilderObjectsProps< QueryObject > ) => {
 	const updateByIndex = ( key: number, values: QueryObject ) => {
 		const newQuery = [ ...query ];
 		newQuery[ key ] = values;
@@ -26,11 +26,11 @@ const BuilderObjects = ( {
 			] ) }
 		>
 			{ query &&
-				query.map( ( obj: QueryObject, key: number ) => (
+				query.map( ( value, key ) => (
 					<BuilderObject
 						key={ key }
 						onChange={ ( values ) => updateByIndex( key, values ) }
-						{ ...obj }
+						value={ value }
 					/>
 				) ) }
 		</div>

@@ -3,13 +3,13 @@ import LogicalOperator from './logical-operator';
 import NotOperandToggle from './not-operand-toggle';
 
 /** Type Imports */
-import { BuilderObjectProps } from './types';
+import { BuilderObjectProps, QueryObjectBase } from './types';
 
-const BuilderObjectHeader = ( {
+function BuilderObjectHeader< T extends QueryObjectBase >( {
 	onChange,
-	...objectProps
-}: BuilderObjectProps ) => {
-	const { logicalOperator, notOperand } = objectProps;
+	value,
+}: BuilderObjectProps< T > ) {
+	const { logicalOperator, notOperand } = value;
 
 	return (
 		<>
@@ -17,7 +17,7 @@ const BuilderObjectHeader = ( {
 				value={ logicalOperator }
 				onChange={ ( newValue ) =>
 					onChange( {
-						...objectProps,
+						...value,
 						logicalOperator: newValue,
 					} )
 				}
@@ -26,13 +26,13 @@ const BuilderObjectHeader = ( {
 				checked={ notOperand }
 				onToggle={ ( newValue ) =>
 					onChange( {
-						...objectProps,
+						...value,
 						notOperand: newValue,
 					} )
 				}
 			/>
 		</>
 	);
-};
+}
 
 export default BuilderObjectHeader;
