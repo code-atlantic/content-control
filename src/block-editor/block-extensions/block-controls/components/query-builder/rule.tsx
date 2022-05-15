@@ -7,6 +7,7 @@ import { SelectControl } from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
 
 /** Internal Imports */
+import BuilderObjectHeader from './object-header';
 import { BuilderOptionsContext } from './contexts';
 import { getCategoryOptions, getRuleOptions } from './utils';
 
@@ -108,10 +109,7 @@ const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 				fields?.length && 'cc__condition-editor__rule--has-options',
 			] ) }
 		>
-			<BuilderObjectHeader
-				onChange={ onChange as ( value: QueryObject ) => void }
-				{ ...ruleProps }
-			/>
+			<BuilderObjectHeader onChange={ onChange } value={ ruleProps } />
 			{ ruleDef ? (
 				<>
 					<SelectControl
