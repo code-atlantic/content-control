@@ -13,9 +13,17 @@ const BuilderObjects = ( {
 	onChange,
 }: BuilderObjectsProps< QueryObject > ) => {
 	const updateByIndex = ( key: number, values: QueryObject ) => {
+		if ( null === values ) {
+			deleteByIndex( key );
+		}
+
 		const newQuery = [ ...query ];
 		newQuery[ key ] = values;
 		onChange( newQuery );
+	};
+
+	const deleteByIndex = ( key: number ) => {
+		onChange( query.filter( ( object, index ) => key !== index ) );
 	};
 
 	return (

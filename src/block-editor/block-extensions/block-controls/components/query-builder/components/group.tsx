@@ -10,7 +10,7 @@ import { _x } from '@wordpress/i18n';
 
 /** Internal Imports */
 import BuilderObjects from './objects';
-import BuilderObjectHeader from './object/header';
+import BuilderObjectHeader from './header';
 import { newRule, newGroup } from '../templates';
 
 /** Type Imports */
@@ -22,8 +22,8 @@ const BuilderGroup = ( { onChange, value: groupProps }: BuilderGroupProps ) => {
 	return (
 		<div
 			className={ classNames( [
-				'cc__condition-editor__group',
-				query.length <= 0 && 'cc__condition-editor__group--empty',
+				'cc-condition-editor__group',
+				query.length <= 0 && 'cc-condition-editor__group--empty',
 			] ) }
 		>
 			<BuilderObjectHeader onChange={ onChange } value={ groupProps } />

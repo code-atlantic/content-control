@@ -3,11 +3,19 @@ import classNames from 'classnames';
 
 /** WordPress Imports */
 import { useContext } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
+import {
+	Button,
+	SelectControl,
+	Flex,
+	FlexItem,
+	FlexBlock,
+	Icon,
+} from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
+import { trash } from '@wordpress/icons';
 
 /** Internal Imports */
-import BuilderObjectHeader from './object/header';
+import LogicalOperator from './logical-operator';
 import NotOperandToggle from './not-operand-toggle';
 import { BuilderOptionsContext } from '../contexts';
 import { getCategoryOptions, getRuleOptions } from '../utils';
@@ -17,16 +25,13 @@ import { BuilderRuleProps, BuilderOptions } from '../types';
 import { emptyRuleType } from '../templates';
 
 const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
-	const { notOperand, name, options = {} } = ruleProps;
+	const { logicalOperator, notOperand, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
-	const ruleDef = builderOptions.rules[ name ] ?? emptyRuleType;
+	const ruleDef = builderOptions.rules[ name ] ?? false;
 
-	if (
-		name !== '' &&
-		( typeof ruleDef === undefined || ruleDef.name !== name )
-	) {
+	if ( name !== '' && ! ruleDef ) {
 		return (
 			<>
 				<p>
@@ -109,42 +114,88 @@ const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 	return (
 		<div
 			className={ classNames( [
-				'cc__condition-editor__rule',
-				`cc__condition-editor__rule--${ name }`,
-				fields?.length && 'cc__condition-editor__rule--has-options',
+				'cc-condition-editor__rule',
+				`cc-condition-editor__rule--${ name }`,
+				fields?.length && 'cc-condition-editor__rule--has-options',
 			] ) }
 		>
-			<BuilderObjectHeader onChange={ onChange } value={ ruleProps } />
 			{ ruleDef ? (
 				<>
-					<NotOperandToggle
-						checked={ notOperand }
-						onToggle={ ( newValue ) =>
-							onChange( {
-								...ruleProps,
-								notOperand: newValue,
-							} )
-						}
-					/>
+					<Flex className="cc__condition-editor-logical-operator">
+						<FlexItem>
+							<LogicalOperator
+								value={ logicalOperator }
+								onChange={ ( newValue ) =>
+									onChange( {
+										...ruleProps,
+										logicalOperator: newValue,
+									} )
+								}
+							/>
+						</FlexItem>
+						<FlexItem>
+							<hr className="components-divider" />
+						</FlexItem>
+					</Flex>
 
-					<span className="cc_condition-editor-rule__verb">
-						{ verbs[ ! notOperand ? 0 : 1 ] }
-					</span>
+					<Flex>
+						<FlexItem
+							className={ classNames( [
+								'cc-condition-editor__rule-flex-column',
+								'cc-condition-editor__rule-flex-column--not-operand',
+							] ) }
+						>
+							<NotOperandToggle
+								checked={ notOperand }
+								onToggle={ ( newValue ) =>
+									onChange( {
+										...ruleProps,
+										notOperand: newValue,
+									} )
+								}
+							/>
+						</FlexItem>
 
-					<SelectControl
-						onChange={ ( value ) => {} }
-						value={ name }
-						options={ [
-							{
-								label: __(
-									'Select rule type',
-									'content-control'
-								),
-								value: '',
-							},
-							...getRuleOptions( builderOptions ),
-						] }
-					/>
+						<FlexItem
+							className={ classNames( [
+								'cc-condition-editor__rule-flex-column',
+								'cc-condition-editor__rule-flex-column--controls',
+							] ) }
+						>
+							<span className="cc_condition-editor-rule__verb">
+								{ verbs[ ! notOperand ? 0 : 1 ] }
+							</span>
+
+							<SelectControl
+								onChange={ ( value ) => {} }
+								value={ name }
+								options={ [
+									{
+										label: __(
+											'Select rule type',
+											'content-control'
+										),
+										value: '',
+									},
+									...getRuleOptions( builderOptions ),
+								] }
+							/>
+						</FlexItem>
+
+						<FlexItem
+							className={ classNames( [
+								'cc-condition-editor__rule-flex-column',
+								'cc-condition-editor__rule-flex-column--actions',
+							] ) }
+						>
+							<Button
+								onClick={ () => onChange( null ) }
+								isSmall={ true }
+							>
+								<Icon icon={ trash } />
+							</Button>
+						</FlexItem>
+					</Flex>
 				</>
 			) : (
 				<>

@@ -2,10 +2,10 @@
 import { Flex, FlexItem } from '@wordpress/components';
 
 /** Internal Imports */
-import LogicalOperator from '../logical-operator';
+import LogicalOperator from './logical-operator';
 
 /** Type Imports */
-import { BuilderObjectProps, QueryObjectBase } from '../../types';
+import { BuilderObjectProps, QueryObjectBase } from '../types';
 
 function BuilderObjectHeader< T extends QueryObjectBase >( {
 	onChange,

@@ -3,26 +3,47 @@
 	vertical-align: middle;
 }
 
-.cc__condition-editor__rule {
+.cc-condition-editor__rule {
 	background: lightblue;
 	padding: 1em;
 	margin-top: 1em;
 
-	.cc__condition-editor__object-list &:first-child {
-		.cc__condition-editor__logical-operator {
+	.cc-condition-editor__object-list &:first-child {
+		.cc-condition-editor__logical-operator {
 			display: none;
 		}
 	}
 }
 
-.cc__condition-editor__group {
+.cc-condition-editor__group {
 	border: 1px solid;
 	padding: 1em;
 	margin-top: 1em;
 }
 
+
+.cc-condition-editor__rule {
+
+	.cc-condition-editor__rule-flex-column {
+		flex-grow: 1;
+	}
+
+	.cc-condition-editor__rule-flex-column--not-operand {
+		max-width: 60px;
+	}
+
+	.cc-condition-editor__rule-flex-column--controls {
+		flex-basis: auto;
+		flex-grow: 3;
+	}
+
+	.cc-condition-editor__rule-flex-column--actions {
+		max-width: 60px;
+	}
+}
+
 /* Logical Operator Styling */
-.cc-component-builder-object__logical-operator {
+.cc__condition-editor-logical-operator {
 	.components-flex-item {
 		&:first-child {
 			flex-grow: 1;
