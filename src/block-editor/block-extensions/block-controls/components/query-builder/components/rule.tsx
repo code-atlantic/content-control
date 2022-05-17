@@ -7,21 +7,26 @@ import { SelectControl } from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
 
 /** Internal Imports */
-import BuilderObjectHeader from './object-header';
-import { BuilderOptionsContext } from './contexts';
-import { getCategoryOptions, getRuleOptions } from './utils';
+import BuilderObjectHeader from './object/header';
+import NotOperandToggle from './not-operand-toggle';
+import { BuilderOptionsContext } from '../contexts';
+import { getCategoryOptions, getRuleOptions } from '../utils';
 
 /** Type Imports */
-import { BuilderRuleProps, BuilderOptions } from './types';
+import { BuilderRuleProps, BuilderOptions } from '../types';
+import { emptyRuleType } from '../templates';
 
 const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 	const { notOperand, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
-	const ruleDef = builderOptions.rules[ name ] ?? undefined;
+	const ruleDef = builderOptions.rules[ name ] ?? emptyRuleType;
 
-	if ( typeof ruleDef === undefined && name !== '' ) {
+	if (
+		name !== '' &&
+		( typeof ruleDef === undefined || ruleDef.name !== name )
+	) {
 		return (
 			<>
 				<p>
@@ -112,10 +117,14 @@ const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 			<BuilderObjectHeader onChange={ onChange } value={ ruleProps } />
 			{ ruleDef ? (
 				<>
-					<SelectControl
-						onChange={ ( value: string ) => {} }
-						value={ category }
-						options={ getCategoryOptions( builderOptions ) }
+					<NotOperandToggle
+						checked={ notOperand }
+						onToggle={ ( newValue ) =>
+							onChange( {
+								...ruleProps,
+								notOperand: newValue,
+							} )
+						}
 					/>
 
 					<span className="cc_condition-editor-rule__verb">

@@ -1,4 +1,7 @@
-export type QueryLocigalOperator = 'and' | 'or';
+export type QueryAnd = 'and';
+export type QueryOr = 'or';
+
+export type QueryLocigalOperator = QueryAnd | QueryOr;
 
 export type QueryNotOperand = boolean;
 

@@ -1,10 +1,10 @@
 import { Button, Icon, Modal, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { _x, __ } from '@wordpress/i18n';
 import { cond } from 'lodash';
 
 import Builder from '../../query-builder';
-import { Query } from '../../query-builder/query';
+import { Query } from '../../query-builder/types';
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
@@ -142,10 +142,10 @@ const ConditionalRules = ( props: ConditionalRulesProps ): JSX.Element => {
 								},
 								user__has_role: {
 									name: 'user__has_role',
-									label: __( 'Role', 'content-control' ),
+									label: __( 'Role(s)', 'content-control' ),
 									category: __( 'User', 'content-control' ),
-									verbs: [ verbs.has, verbs.doesnothave ],
 									format: '{category} {verb} {ruleName}',
+									verbs: [ verbs.has, verbs.doesnothave ],
 								},
 								user__has_commented: {
 									name: 'user__has_commented',

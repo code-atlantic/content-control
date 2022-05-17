@@ -1,3 +1,3 @@
-export * from './builder';
-export * from './props';
-export * from './query';
+export * from './types//builder';
+export * from './types/props';
+export * from './types/query';

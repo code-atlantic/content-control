@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import BuilderObject from './object';
 
 /** Type Imports */
-import { BuilderObjectsProps, QueryObject } from './types';
+import { BuilderObjectsProps, QueryObject } from '../types';
 
 const BuilderObjects = ( {
 	type = 'group',

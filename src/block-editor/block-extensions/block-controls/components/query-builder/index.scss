@@ -1,18 +1,37 @@
-.cc__condition-editor__rule {
-    background: lightblue;
-    padding: 1em;
-    margin-top: 1em;
+.components-flex-item > .components-divider {
+	width: 100%;
+	vertical-align: middle;
+}
 
-    .cc__condition-editor__object-list &:first-child {
-        .cc__condition-editor__logical-operator {
-            display:none;
-        }
-    }
+.cc__condition-editor__rule {
+	background: lightblue;
+	padding: 1em;
+	margin-top: 1em;
+
+	.cc__condition-editor__object-list &:first-child {
+		.cc__condition-editor__logical-operator {
+			display: none;
+		}
+	}
 }
 
 .cc__condition-editor__group {
-    border: 1px solid;
-    padding: 1em;
-    margin-top: 1em;
+	border: 1px solid;
+	padding: 1em;
+	margin-top: 1em;
+}
 
+/* Logical Operator Styling */
+.cc-component-builder-object__logical-operator {
+	.components-flex-item {
+		&:first-child {
+			flex-grow: 1;
+			max-width: 60px;
+		}
+
+		&:last-child {
+			flex-basis: auto;
+			flex-grow: 3;
+		}
+	}
 }

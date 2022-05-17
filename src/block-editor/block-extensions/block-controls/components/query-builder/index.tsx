@@ -8,7 +8,7 @@ import { plus } from '@wordpress/icons';
 
 /** Internal Imports */
 import { BuilderOptionsContext, BuilderQueryContext } from './contexts';
-import QueryBuilderObjects from './objects';
+import QueryBuilderObjects from './components/objects';
 
 /** Type Imports */
 import { BuilderProps, QueryRule, QueryGroup } from './types';
@@ -16,20 +16,7 @@ import { BuilderProps, QueryRule, QueryGroup } from './types';
 /** Style Imports */
 import './index.scss';
 
-const newRule: QueryRule = {
-	type: 'rule',
-	name: '',
-	options: {},
-	notOperand: false,
-	logicalOperator: 'and',
-};
-
-const newGroup: QueryGroup = {
-	type: 'group',
-	children: [ { ...newRule } ],
-	notOperand: false,
-	logicalOperator: 'and',
-};
+import { newRule, newGroup, newSet } from './templates';
 
 const QueryBuilder = ( { query, onChange, onSave, options }: BuilderProps ) => {
 	return (

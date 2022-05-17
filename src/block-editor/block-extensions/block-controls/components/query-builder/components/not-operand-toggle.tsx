@@ -7,7 +7,7 @@ import { Button, Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /** Type Imports */
-import { QueryNotOperand } from './query';
+import { QueryNotOperand } from '../types';
 
 type NotOperandToggleProps = {
 	checked: QueryNotOperand;
@@ -18,7 +18,7 @@ const NotOperandToggle = ( {
 	checked = false,
 	onToggle = noop,
 	...buttonProps
-}: NotOperandToggleProps ): JSX.Element => {
+}: NotOperandToggleProps ) => {
 	return (
 		<Button
 			variant={ checked ? 'primary' : 'tertiary' }
