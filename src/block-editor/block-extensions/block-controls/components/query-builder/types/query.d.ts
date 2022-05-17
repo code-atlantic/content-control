@@ -6,6 +6,7 @@ export type QueryLocigalOperator = QueryAnd | QueryOr;
 export type QueryNotOperand = boolean;
 
 export interface QueryObjectBase {
+	key: string;
 	type: string;
 	notOperand: QueryNotOperand;
 	logicalOperator: QueryLocigalOperator;

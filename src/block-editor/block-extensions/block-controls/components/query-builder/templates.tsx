@@ -1,17 +1,12 @@
-/** Type Imports */
-import { QueryRuleType } from './builder';
-import { Query, QueryRule, QueryGroup } from './types';
+import { nanoid } from 'nanoid';
 
-export const emptyRuleType: QueryRuleType = {
-	name: '',
-	label: '',
-	category: '',
-	format: '',
-	fields: [],
-	verbs: [ '', '' ],
-};
+/** Type Imports */
+import { Query, QueryRule, QueryGroup, QueryRuleType } from './types';
+
+const newUUID = () => nanoid( 8 );
 
 export const newRule: QueryRule = {
+	key: newUUID(),
 	type: 'rule',
 	name: '',
 	options: {},
@@ -20,6 +15,7 @@ export const newRule: QueryRule = {
 };
 
 export const newGroup: QueryGroup = {
+	key: newUUID(),
 	type: 'group',
 	query: [ { ...newRule } ],
 	notOperand: false,
