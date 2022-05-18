@@ -34,7 +34,7 @@ const BuilderRule = ( {
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
-	const ruleDef = builderOptions.rules[ name ] ?? false;
+	const ruleDef = builderOptions.rules[ name ] ?? null;
 
 	if ( name !== '' && ! ruleDef ) {
 		return (
@@ -59,7 +59,13 @@ const BuilderRule = ( {
 		);
 	}
 
-	const { label, category, format, verbs, fields = [] } = ruleDef;
+	const {
+		label = '',
+		category = '',
+		format = '',
+		verbs = [ '', '' ],
+		fields = [],
+	} = ruleDef ?? {};
 
 	/**
 	 * Get defalts for a specific rule.
