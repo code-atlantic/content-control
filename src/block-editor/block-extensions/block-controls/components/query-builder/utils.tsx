@@ -18,10 +18,29 @@ const getCategoryOptions = ( builderOptions: BuilderOptions ) =>
 			label: option,
 		} ) );
 
-const getRuleOptions = ( builderOptions: BuilderOptions ) =>
-	Object.entries( builderOptions.rules ).map( ( [ key, rule ] ) => ( {
-		label: rule.label,
-		value: key,
-	} ) );
+const getRuleOptions = ( builderOptions: BuilderOptions ) => {
+	const rules = Object.values( builderOptions.rules );
+
+	const categories = rules.reduce( ( cats, rule ) => {
+		if ( cats.indexOf( rule.category ) === -1 ) {
+			cats.push( rule.category );
+		}
+
+		return cats;
+	}, [] );
+
+	return categories.reduce( ( options, category ) => {
+		const catOptions = rules
+			.filter( ( rule ) => rule.category === category )
+			.map( ( rule, i ) => ( {
+				label: rule.label,
+				value: rule.name,
+			} ) );
+
+		rules.forEach( ( rule ) => rule.category === category );
+
+		return [ ...options, { category, options: catOptions } ];
+	}, [] );
+};
 
 export { getCategoryOptions, getRuleOptions };

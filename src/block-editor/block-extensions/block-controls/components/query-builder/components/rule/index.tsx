@@ -122,21 +122,56 @@ const BuilderRule = ( {
 			[ key ]: value,
 		} );
 
+	const RuleNameSelectOptions = () => (
+		<>
+			<option value="">
+				{ __( 'Select rule type', 'content-control' ) }
+			</option>
+			{ getRuleOptions( builderOptions ).map(
+				( { category: cat, options: catOptions } ) => (
+					<optgroup key={ cat } label={ cat.toUpperCase() }>
+						{ catOptions.map( ( option ) => (
+							<option key={ option.value } value={ option.value }>
+								{ option.label }
+							</option>
+						) ) }
+					</optgroup>
+				)
+			) }
+		</>
+	);
+
 	const FormattedField = format.split( ' ' ).map( ( str ) => {
 		switch ( str ) {
 			case '{category}':
-				return <>{ category }</>;
+				return (
+					<FlexItem
+						style={ {
+							flexGrow: 0.5,
+						} }
+					>
+						{ category }
+					</FlexItem>
+				);
 			case '{verb}':
 				return (
-					<>
+					<FlexItem
+						style={ {
+							flexGrow: 0.5,
+						} }
+					>
 						<span className="cc_condition-editor-rule__verb">
 							{ verbs[ ! notOperand ? 0 : 1 ] }
 						</span>
-					</>
+					</FlexItem>
 				);
 			case '{ruleName}':
 				return (
-					<>
+					<FlexItem
+						style={ {
+							flexGrow: 6,
+						} }
+					>
 						<SelectControl
 							onChange={ ( value ) =>
 								onChange( {
@@ -145,21 +180,21 @@ const BuilderRule = ( {
 								} )
 							}
 							value={ name }
-							options={ [
-								{
-									label: __(
-										'Select rule type',
-										'content-control'
-									),
-									value: '',
-								},
-								...getRuleOptions( builderOptions ),
-							] }
-						/>
-					</>
+						>
+							<RuleNameSelectOptions />
+						</SelectControl>
+					</FlexItem>
 				);
 			default:
-				return <>{ str }</>;
+				return (
+					<FlexItem
+						style={ {
+							flexGrow: 1,
+						} }
+					>
+						{ str }
+					</FlexItem>
+				);
 		}
 	} );
 
@@ -216,9 +251,7 @@ const BuilderRule = ( {
 				>
 					{ ruleDef ? (
 						<Flex>
-							{ FormattedField.map( ( item, i ) => (
-								<FlexItem key={ i }>{ item }</FlexItem>
-							) ) }
+							{ FormattedField.map( ( item, i ) => item ) }
 						</Flex>
 					) : (
 						<>
@@ -230,17 +263,9 @@ const BuilderRule = ( {
 									} )
 								}
 								value={ name }
-								options={ [
-									{
-										label: __(
-											'Select rule type',
-											'content-control'
-										),
-										value: '',
-									},
-									...getRuleOptions( builderOptions ),
-								] }
-							/>
+							>
+								<RuleNameSelectOptions />
+							</SelectControl>
 						</>
 					) }
 				</FlexItem>
