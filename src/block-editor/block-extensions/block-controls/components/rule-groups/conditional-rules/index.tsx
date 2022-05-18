@@ -73,10 +73,14 @@ const anyAllOptions = [
 		value: 'any',
 		label: __( 'Any conditions are met', 'content-control' ),
 	},
+	{
+		value: 'none',
+		label: __( 'No conditions are met', 'content-control' ),
+	},
 ];
 
 type ConditionalGroupRules = {
-	anyAll: 'all' | 'any';
+	anyAll: 'all' | 'any' | 'none';
 	conditionSets: QuerySet[];
 };
 
