@@ -116,6 +116,47 @@ const BuilderRule = ( {
 			[ key ]: value,
 		} );
 
+	const FormattedField = format.split( ' ' ).map( ( str ) => {
+		switch ( str ) {
+			case '{category}':
+				return <>{ category }</>;
+			case '{verb}':
+				return (
+					<>
+						<span className="cc_condition-editor-rule__verb">
+							{ verbs[ ! notOperand ? 0 : 1 ] }
+						</span>
+					</>
+				);
+			case '{ruleName}':
+				return (
+					<>
+						<SelectControl
+							onChange={ ( value ) =>
+								onChange( {
+									...ruleProps,
+									name: value,
+								} )
+							}
+							value={ name }
+							options={ [
+								{
+									label: __(
+										'Select rule type',
+										'content-control'
+									),
+									value: '',
+								},
+								...getRuleOptions( builderOptions ),
+							] }
+						/>
+					</>
+				);
+			default:
+				return <>{ str }</>;
+		}
+	} );
+
 	return (
 		<div
 			className={ classNames( [
@@ -168,26 +209,11 @@ const BuilderRule = ( {
 					] ) }
 				>
 					{ ruleDef ? (
-						<>
-							<span className="cc_condition-editor-rule__verb">
-								{ verbs[ ! notOperand ? 0 : 1 ] }
-							</span>
-
-							<SelectControl
-								onChange={ ( value ) => {} }
-								value={ name }
-								options={ [
-									{
-										label: __(
-											'Select rule type',
-											'content-control'
-										),
-										value: '',
-									},
-									...getRuleOptions( builderOptions ),
-								] }
-							/>
-						</>
+						<Flex>
+							{ FormattedField.map( ( item, i ) => (
+								<FlexItem key={ i }>{ item }</FlexItem>
+							) ) }
+						</Flex>
 					) : (
 						<>
 							<SelectControl
