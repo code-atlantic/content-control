@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 /** Type Imports */
 import { QuerySet, QueryRule, QueryGroup } from './types';
 
-const newUUID = () => nanoid( 8 );
+export const newUUID = () => nanoid( 8 );
 
 export const newRule = (): QueryRule => ( {
 	key: newUUID(),

@@ -9,6 +9,8 @@ import DeviceRules from './device-rules';
 import { tablet /* , blockMeta */ } from '@wordpress/icons';
 
 import { SVG, Path } from '@wordpress/primitives';
+import { QuerySet } from '../query-builder/types';
+import { newUUID } from '../query-builder/templates';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -20,7 +22,23 @@ const blockMeta = (
 	</SVG>
 );
 
-const defaults = {
+type BlockAttributes = {
+	device: {
+		hideOn: {
+			[ key: string ]: Boolean;
+		};
+	};
+	conditional: {
+		anyAll: 'any' | 'all';
+		conditionSets: QuerySet[];
+	};
+};
+
+/**
+ * Move this to a set of generator functions exported as utilitiles.
+ * Each location using this should then just use the needed generators.
+ */
+const defaults = (): BlockAttributes => ( {
 	device: {
 		hideOn: {
 			mobile: false,
@@ -30,10 +48,30 @@ const defaults = {
 	},
 	conditional: {
 		anyAll: 'all',
+		conditionSets: [
+			{
+				key: newUUID(),
+				label: __( 'User Logged In', 'content-control' ),
+				query: [
+					{
+						key: newUUID(),
+						logicalOperator: 'and',
+						notOperand: true,
+						type: 'rule',
+						name: 'user__is_logged_in',
+						options: {},
+					},
+				],
+			},
+		],
 	},
-};
+} );
 
-const RuleGroups = ( { rules = {}, setRules = () => {}, ...props } ) => {
+const RuleGroups = ( {
+	rules = {},
+	setRules = ( newRules ) => {},
+	...props
+} ) => {
 	/**
 	 * Check if given rule group is active.
 	 *
