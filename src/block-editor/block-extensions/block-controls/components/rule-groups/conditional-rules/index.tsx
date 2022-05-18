@@ -1,10 +1,23 @@
-import { Button, Icon, Modal, SelectControl } from '@wordpress/components';
+import {
+	Button,
+	ButtonGroup,
+	Flex,
+	FlexItem,
+	Icon,
+	Modal,
+	Notice,
+	SelectControl,
+	Snackbar,
+	TextControl,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { _x, __ } from '@wordpress/i18n';
-import { cond } from 'lodash';
+import { trash } from '@wordpress/icons';
 
 import Builder from '../../query-builder';
-import { Query } from '../../query-builder/types';
+import { newSet } from '../../query-builder/templates';
+import { Query, QuerySet } from '../../query-builder/types';
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
@@ -23,9 +36,20 @@ const verbs = {
 	],
 };
 
+const anyAllOptions = [
+	{
+		value: 'all',
+		label: __( 'All condition are met', 'content-control' ),
+	},
+	{
+		value: 'any',
+		label: __( 'Any conditions are met', 'content-control' ),
+	},
+];
+
 type ConditionalGroupRules = {
 	anyAll: 'all' | 'any';
-	conditionSets: Query[];
+	conditionSets: QuerySet[];
 };
 
 type ConditionalRulesProps = {
@@ -33,98 +57,173 @@ type ConditionalRulesProps = {
 	setGroupRules: ( groupRules: ConditionalGroupRules ) => void;
 };
 
-const ConditionalRules = ( props: ConditionalRulesProps ): JSX.Element => {
+type nullString = string | null;
+type nullStringState = [ nullString, ( value: nullString ) => void ];
+type QuerySetState = [ QuerySet, ( value: QuerySet ) => void ];
+
+const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	const { groupRules, setGroupRules } = props;
 	const { anyAll = 'all', conditionSets = [] } = groupRules;
 
-	const updateConditionSet = ( setIndex: number, newSet: Query ) => {
+	const [ currentSet, updateCurrentSet ]: QuerySetState = useState( null );
+	const [ setToDelete, confirmDeleteSet ]: QuerySetState = useState( null );
+
+	/** Add new set. */
+	const addSet = () => {
+		updateCurrentSet( newSet() );
+	};
+
+	/**
+	 * Update set.
+	 *
+	 * @param {string}   key
+	 * @param {QuerySet} values
+	 * @param            set
+	 * @param            updatedSset
+	 * @param            updatedSet
+	 */
+	const updateSet = ( updatedSet: QuerySet ) => {
+		let updated = false;
+		const newSets = conditionSets.map( ( set ) => {
+			if ( set.key === updatedSet.key ) {
+				updated = true;
+				return updatedSet;
+			}
+
+			return set;
+		} );
+
+		if ( ! updated ) {
+			newSets.push( updatedSet );
+		}
+
 		setGroupRules( {
 			...groupRules,
-			conditionSets: conditionSets.map( ( set, i ) =>
-				i === setIndex ? newSet : set
-			),
+			conditionSets: newSets,
 		} );
 	};
 
-	const [ currentSet, changeCurrentSet ]: [
-		number,
-		( setIndex: number ) => void
-	] = useState( -1 );
+	/**
+	 * Remove set.
+	 *
+	 * @param {string} key
+	 */
+	const removeSet = ( key: string ) =>
+		setGroupRules( {
+			...groupRules,
+			conditionSets: conditionSets.filter( ( set ) => set.key !== key ),
+		} );
 
-	const [ isModalFullscreen, toggleModalFullscreen ]: [
-		boolean,
-		( isFullscreen: boolean ) => void
-	] = useState( !! false );
+	/** Confirmation dialogue component. */
+	const confirmAndDelete = setToDelete && (
+		<ConfirmDialog
+			onCancel={ () => confirmDeleteSet( null ) }
+			onConfirm={ () => {
+				removeSet( setToDelete.key );
+				confirmDeleteSet( null );
+			} }
+		>
+			<p>
+				{ __(
+					'Are you sure you want to delete this set?',
+					'content-control'
+				) }
+			</p>
+			<p>{ setToDelete.label }</p>
+		</ConfirmDialog>
+	);
+
+	const validSet = () => {
+		return [ currentSet.label.length > 0 ].indexOf( false ) === -1;
+	};
 
 	return (
 		<>
+			{ confirmAndDelete }
+
 			<SelectControl
 				label={ __(
 					'Conditionally render this block if…',
 					'content-control'
 				) }
-				help={
-					<Button
-						variant="link"
-						text={ __( 'Add conditions', 'content-control' ) }
-						onClick={ () => {
-							setGroupRules( {
-								...groupRules,
-								conditionSets: [ ...conditionSets, [] ],
-							} );
-							changeCurrentSet( conditionSets.length );
-						} }
-					/>
-				}
-				onChange={ ( value: 'any' | 'all' ) => {
+				options={ anyAllOptions }
+				value={ anyAll }
+				onChange={ ( value ) => {
 					setGroupRules( {
 						...groupRules,
 						anyAll: value,
 					} );
 				} }
-				value={ anyAll }
-				options={ [
-					{
-						value: 'all',
-						label: __( 'All condition are met', 'content-control' ),
-					},
-					{
-						value: 'any',
-						label: __(
-							'Any conditions are met',
-							'content-control'
-						),
-					},
-				] }
-			/>
-
-			{ conditionSets.map( ( conditionSet, i ) => (
-				<div key={ i }>
+				help={
 					<Button
 						variant="link"
-						onClick={ () => changeCurrentSet( i ) }
-						text={ `Set ${ i + 1 }` }
+						text={ __( 'Add conditions', 'content-control' ) }
+						onClick={ addSet }
 					/>
-				</div>
+				}
+			/>
+
+			{ conditionSets.map( ( set ) => (
+				<Flex key={ set.key }>
+					<FlexItem>
+						<Button
+							variant="link"
+							onClick={ () => updateCurrentSet( set ) }
+							text={ set.label }
+						/>
+					</FlexItem>
+					<FlexItem>
+						<Button
+							isSmall={ true }
+							isDestructive={ true }
+							variant="tertiary"
+							onClick={ () => confirmDeleteSet( set ) }
+							icon={ trash }
+						/>
+					</FlexItem>
+				</Flex>
 			) ) }
 
-			{ currentSet >= 0 && (
+			{ currentSet && (
 				<Modal
 					title={ __( 'Block Conditional Rules', 'content-control' ) }
-					onRequestClose={ () => changeCurrentSet( -1 ) }
+					onRequestClose={ () => updateCurrentSet( null ) }
 					shouldCloseOnClickOutside={ false }
-					isFullScreen={ isModalFullscreen }
+					style={ { width: '760px' } }
 				>
-					<Button
-						icon={ <Icon icon="editor-expand" /> }
-						onClick={ () =>
-							toggleModalFullscreen( ! isModalFullscreen )
+					<TextControl
+						label={ __( 'Condition set label', 'content-control' ) }
+						hideLabelFromVision={ true }
+						placeholder={ __(
+							'Condition set label',
+							'content-control'
+						) }
+						value={ currentSet.label }
+						onChange={ ( label ) =>
+							updateCurrentSet( {
+								...currentSet,
+								label,
+							} )
+						}
+						help={
+							currentSet.label.length <= 0 && (
+								<Notice
+									status="warning"
+									isDismissible={ false }
+								>
+									Enter a label for this set.
+								</Notice>
+							)
 						}
 					/>
+
 					<Builder
-						query={ conditionSets[ currentSet ] ?? [] }
+						query={ currentSet.query }
 						onChange={ ( query: Query ) => {
-							updateConditionSet( currentSet, query );
+							updateCurrentSet( {
+								...currentSet,
+								query,
+							} );
 						} }
 						options={ {
 							features: {
@@ -157,6 +256,29 @@ const ConditionalRules = ( props: ConditionalRulesProps ): JSX.Element => {
 							},
 						} }
 					/>
+
+					<Flex justify="right">
+						<FlexItem>
+							<Button onClick={ () => updateCurrentSet( null ) }>
+								{ __( 'Cancel', 'content-control' ) }
+							</Button>
+						</FlexItem>
+						<FlexItem>
+							<Button
+								disabled={ ! validSet() }
+								variant="primary"
+								onClick={ () => {
+									if ( ! validSet() ) {
+										return;
+									}
+									updateSet( currentSet );
+									updateCurrentSet( null );
+								} }
+							>
+								{ __( 'Save', 'content-control' ) }
+							</Button>
+						</FlexItem>
+					</Flex>
 				</Modal>
 			) }
 		</>
