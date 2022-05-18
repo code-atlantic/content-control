@@ -17,7 +17,7 @@ import { trash } from '@wordpress/icons';
 
 import Builder from '../../query-builder';
 import { newSet } from '../../query-builder/templates';
-import { Query, QuerySet } from '../../query-builder/types';
+import { Query, QueryRuleType, QuerySet } from '../../query-builder/types';
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
@@ -34,6 +34,34 @@ const verbs = {
 		__( 'Were', 'content-control' ),
 		__( 'Were Not', 'content-control' ),
 	],
+};
+
+type BuilderRules = {
+	[ key: string ]: QueryRuleType;
+};
+
+const builderRules: BuilderRules = {
+	user__is_logged_in: {
+		name: 'user__is_logged_in',
+		label: __( 'Logged In', 'content-control' ),
+		category: __( 'User', 'content-control' ),
+		format: '{category} {verb} {ruleName}',
+		verbs: [ verbs.is, verbs.isnot ],
+	},
+	user__has_role: {
+		name: 'user__has_role',
+		label: __( 'Role(s)', 'content-control' ),
+		category: __( 'User', 'content-control' ),
+		format: '{category} {verb} {ruleName}',
+		verbs: [ verbs.has, verbs.doesnothave ],
+	},
+	user__has_commented: {
+		name: 'user__has_commented',
+		label: __( 'Commented', 'content-control' ),
+		category: __( 'User', 'content-control' ),
+		format: '{category} {verb} {ruleName}',
+		verbs: [ verbs.has, verbs.hasnot ],
+	},
 };
 
 const anyAllOptions = [
@@ -231,29 +259,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 								groups: true,
 								nesting: true,
 							},
-							rules: {
-								user__is_logged_in: {
-									name: 'user__is_logged_in',
-									label: __( 'Logged In', 'content-control' ),
-									category: __( 'User', 'content-control' ),
-									format: '{category} {verb} {ruleName}',
-									verbs: [ verbs.is, verbs.isnot ],
-								},
-								user__has_role: {
-									name: 'user__has_role',
-									label: __( 'Role(s)', 'content-control' ),
-									category: __( 'User', 'content-control' ),
-									format: '{category} {verb} {ruleName}',
-									verbs: [ verbs.has, verbs.doesnothave ],
-								},
-								user__has_commented: {
-									name: 'user__has_commented',
-									label: __( 'Commented', 'content-control' ),
-									category: __( 'User', 'content-control' ),
-									format: '{category} {verb} {ruleName}',
-									verbs: [ verbs.has, verbs.hasnot ],
-								},
-							},
+							rules: builderRules,
 						} }
 					/>
 
