@@ -169,7 +169,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 						<Button
 							variant="link"
 							onClick={ () => updateCurrentSet( set ) }
-							text={ set.label }
+							text={ set.label || 'Unlabeled Set' }
 						/>
 					</FlexItem>
 					<FlexItem>
