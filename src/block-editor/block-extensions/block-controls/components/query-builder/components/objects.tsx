@@ -30,8 +30,9 @@ const BuilderObjects = ( {
 			] ) }
 		>
 			{ query &&
-				query.map( ( object ) => (
+				query.map( ( object, i ) => (
 					<BuilderObject
+						objectIndex={ i }
 						key={ object.key }
 						onChange={ ( values ) => updateObject( values ) }
 						onDelete={ () => deleteObject( object.key ) }

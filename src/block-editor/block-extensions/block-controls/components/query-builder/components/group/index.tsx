@@ -4,8 +4,15 @@ import classNames from 'classnames';
 /**
  * WordPress Imports
  */
-import { Button, ButtonGroup } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import {
+	Button,
+	ButtonGroup,
+	Flex,
+	FlexBlock,
+	FlexItem,
+	Icon,
+} from '@wordpress/components';
+import { plus, trash, dragHandle } from '@wordpress/icons';
 import { _x } from '@wordpress/i18n';
 
 /** Internal Imports */
@@ -15,13 +22,15 @@ import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
 import { BuilderGroupProps, Query } from '../../types';
+import LogicalOperator from '../logical-operator';
 
 const BuilderGroup = ( {
+	objectIndex,
 	onChange,
 	onDelete,
 	value: groupProps,
 }: BuilderGroupProps ) => {
-	const { query = [] } = groupProps;
+	const { logicalOperator, query = [] } = groupProps;
 
 	return (
 		<div
@@ -30,7 +39,52 @@ const BuilderGroup = ( {
 				query.length <= 0 && 'cc-condition-editor__group--empty',
 			] ) }
 		>
-			<BuilderObjectHeader onChange={ onChange } value={ groupProps } />
+			<Flex>
+				{ objectIndex !== 0 && (
+					<FlexBlock>
+						<Flex className="cc__condition-editor-logical-operator">
+							<FlexItem>
+								<LogicalOperator
+									value={ logicalOperator }
+									onChange={ ( newValue ) =>
+										onChange( {
+											...groupProps,
+											logicalOperator: newValue,
+										} )
+									}
+								/>
+							</FlexItem>
+							<FlexItem>
+								<hr className="components-divider" />
+							</FlexItem>
+						</Flex>
+					</FlexBlock>
+				) }
+
+				<FlexItem
+					className={ classNames( [
+						'cc-condition-editor__rule-flex-column',
+						'cc-condition-editor__rule-flex-column--actions',
+					] ) }
+				>
+					<Flex>
+						<FlexItem>
+							<Button
+								icon={ trash }
+								onClick={ () => onDelete() }
+								isSmall={ true }
+							/>
+						</FlexItem>
+						<FlexItem>
+							<Button
+								icon={ dragHandle }
+								onClick={ () => {} }
+								isSmall={ true }
+							/>
+						</FlexItem>
+					</Flex>
+				</FlexItem>
+			</Flex>
 			<BuilderObjects
 				type="group"
 				query={ query }
@@ -50,7 +104,7 @@ const BuilderGroup = ( {
 							...groupProps,
 							query: [
 								...query,
-								{ ...newRule, logicalOperator: 'or' },
+								{ ...newRule(), logicalOperator: 'or' },
 							],
 						} );
 					} }
@@ -70,7 +124,7 @@ const BuilderGroup = ( {
 							...groupProps,
 							query: [
 								...query,
-								{ ...newRule, logicalOperator: 'and' },
+								{ ...newRule(), logicalOperator: 'and' },
 							],
 						} );
 					} }
@@ -81,7 +135,7 @@ const BuilderGroup = ( {
 						'content-control'
 					) }
 				</Button>
-			</ButtonGroup>{ ' ' }
+			</ButtonGroup>
 		</div>
 	);
 };

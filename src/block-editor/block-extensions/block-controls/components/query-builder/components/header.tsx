@@ -9,6 +9,7 @@ import { BuilderObjectProps, QueryObjectBase } from '../types';
 
 function BuilderObjectHeader< T extends QueryObjectBase >( {
 	onChange,
+	onDelete,
 	value,
 }: BuilderObjectProps< T > ) {
 	const { logicalOperator } = value;

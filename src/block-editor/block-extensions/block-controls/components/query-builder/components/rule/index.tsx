@@ -10,9 +10,10 @@ import {
 	FlexItem,
 	FlexBlock,
 	Icon,
+	ButtonGroup,
 } from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
-import { trash } from '@wordpress/icons';
+import { dragHandle, trash } from '@wordpress/icons';
 
 /** Internal Imports */
 import LogicalOperator from '../logical-operator';
@@ -24,6 +25,7 @@ import { getCategoryOptions, getRuleOptions } from '../../utils';
 import { BuilderRuleProps, BuilderOptions } from '../../types';
 
 const BuilderRule = ( {
+	objectIndex: index,
 	onChange,
 	onDelete,
 	value: ruleProps,
@@ -122,22 +124,24 @@ const BuilderRule = ( {
 				fields?.length && 'cc-condition-editor__rule--has-options',
 			] ) }
 		>
-			<Flex className="cc__condition-editor-logical-operator">
-				<FlexItem>
-					<LogicalOperator
-						value={ logicalOperator }
-						onChange={ ( newValue ) =>
-							onChange( {
-								...ruleProps,
-								logicalOperator: newValue,
-							} )
-						}
-					/>
-				</FlexItem>
-				<FlexItem>
-					<hr className="components-divider" />
-				</FlexItem>
-			</Flex>
+			{ index !== 0 && (
+				<Flex className="cc__condition-editor-logical-operator">
+					<FlexItem>
+						<LogicalOperator
+							value={ logicalOperator }
+							onChange={ ( newValue ) =>
+								onChange( {
+									...ruleProps,
+									logicalOperator: newValue,
+								} )
+							}
+						/>
+					</FlexItem>
+					<FlexItem>
+						<hr className="components-divider" />
+					</FlexItem>
+				</Flex>
+			) }
 
 			<Flex>
 				<FlexItem
@@ -163,7 +167,6 @@ const BuilderRule = ( {
 						'cc-condition-editor__rule-flex-column--controls',
 					] ) }
 				>
-					{ ' ' }
 					{ ruleDef ? (
 						<>
 							<span className="cc_condition-editor-rule__verb">
@@ -216,9 +219,22 @@ const BuilderRule = ( {
 						'cc-condition-editor__rule-flex-column--actions',
 					] ) }
 				>
-					<Button onClick={ () => onDelete() } isSmall={ true }>
-						<Icon icon={ trash } />
-					</Button>
+					<Flex>
+						<FlexItem>
+							<Button
+								icon={ trash }
+								onClick={ () => onDelete() }
+								isSmall={ true }
+							/>
+						</FlexItem>
+						<FlexItem>
+							<Button
+								icon={ dragHandle }
+								onClick={ () => {} }
+								isSmall={ true }
+							/>
+						</FlexItem>
+					</Flex>
 				</FlexItem>
 			</Flex>
 		</div>

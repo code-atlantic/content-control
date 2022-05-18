@@ -6,6 +6,7 @@ import BuilderGroup from './group';
 import { BuilderObjectProps, QueryObject } from '../types';
 
 function BuilderObject( {
+	objectIndex,
 	onChange,
 	onDelete,
 	value: objectProps,
@@ -14,6 +15,7 @@ function BuilderObject( {
 		case 'rule':
 			return (
 				<BuilderRule
+					objectIndex={ objectIndex }
 					onChange={ onChange }
 					onDelete={ onDelete }
 					value={ objectProps }
@@ -22,6 +24,7 @@ function BuilderObject( {
 		case 'group':
 			return (
 				<BuilderGroup
+					objectIndex={ objectIndex }
 					onChange={ onChange }
 					onDelete={ onDelete }
 					value={ objectProps }
