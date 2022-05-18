@@ -9,6 +9,7 @@ export type BuilderObjectsProps< T extends QueryObjectBase > = {
 export type BuilderObjectProps< T extends QueryObjectBase > = {
 	value: T;
 	onChange: ( value: T ) => void;
+	onDelete: () => void;
 };
 
 export type BuilderObjectHeaderProps<

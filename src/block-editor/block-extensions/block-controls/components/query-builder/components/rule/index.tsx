@@ -15,7 +15,7 @@ import { sprintf, __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 
 /** Internal Imports */
-import LogicalOperator from '../group';
+import LogicalOperator from '../logical-operator';
 import NotOperandToggle from '../not-operand-toggle';
 import { BuilderOptionsContext } from '../../contexts';
 import { getCategoryOptions, getRuleOptions } from '../../utils';
@@ -23,7 +23,11 @@ import { getCategoryOptions, getRuleOptions } from '../../utils';
 /** Type Imports */
 import { BuilderRuleProps, BuilderOptions } from '../../types';
 
-const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
+const BuilderRule = ( {
+	onChange,
+	onDelete,
+	value: ruleProps,
+}: BuilderRuleProps ) => {
 	const { logicalOperator, notOperand, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
@@ -118,49 +122,50 @@ const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 				fields?.length && 'cc-condition-editor__rule--has-options',
 			] ) }
 		>
-			{ ruleDef ? (
-				<>
-					<Flex className="cc__condition-editor-logical-operator">
-						<FlexItem>
-							<LogicalOperator
-								value={ logicalOperator }
-								onChange={ ( newValue ) =>
-									onChange( {
-										...ruleProps,
-										logicalOperator: newValue,
-									} )
-								}
-							/>
-						</FlexItem>
-						<FlexItem>
-							<hr className="components-divider" />
-						</FlexItem>
-					</Flex>
+			<Flex className="cc__condition-editor-logical-operator">
+				<FlexItem>
+					<LogicalOperator
+						value={ logicalOperator }
+						onChange={ ( newValue ) =>
+							onChange( {
+								...ruleProps,
+								logicalOperator: newValue,
+							} )
+						}
+					/>
+				</FlexItem>
+				<FlexItem>
+					<hr className="components-divider" />
+				</FlexItem>
+			</Flex>
 
-					<Flex>
-						<FlexItem
-							className={ classNames( [
-								'cc-condition-editor__rule-flex-column',
-								'cc-condition-editor__rule-flex-column--not-operand',
-							] ) }
-						>
-							<NotOperandToggle
-								checked={ notOperand }
-								onToggle={ ( newValue ) =>
-									onChange( {
-										...ruleProps,
-										notOperand: newValue,
-									} )
-								}
-							/>
-						</FlexItem>
+			<Flex>
+				<FlexItem
+					className={ classNames( [
+						'cc-condition-editor__rule-flex-column',
+						'cc-condition-editor__rule-flex-column--not-operand',
+					] ) }
+				>
+					<NotOperandToggle
+						checked={ notOperand }
+						onToggle={ ( newValue ) =>
+							onChange( {
+								...ruleProps,
+								notOperand: newValue,
+							} )
+						}
+					/>
+				</FlexItem>
 
-						<FlexItem
-							className={ classNames( [
-								'cc-condition-editor__rule-flex-column',
-								'cc-condition-editor__rule-flex-column--controls',
-							] ) }
-						>
+				<FlexItem
+					className={ classNames( [
+						'cc-condition-editor__rule-flex-column',
+						'cc-condition-editor__rule-flex-column--controls',
+					] ) }
+				>
+					{ ' ' }
+					{ ruleDef ? (
+						<>
 							<span className="cc_condition-editor-rule__verb">
 								{ verbs[ ! notOperand ? 0 : 1 ] }
 							</span>
@@ -179,41 +184,43 @@ const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 									...getRuleOptions( builderOptions ),
 								] }
 							/>
-						</FlexItem>
+						</>
+					) : (
+						<>
+							<SelectControl
+								onChange={ ( value ) =>
+									onChange( {
+										...ruleProps,
+										name: value,
+									} )
+								}
+								value={ name }
+								options={ [
+									{
+										label: __(
+											'Select rule type',
+											'content-control'
+										),
+										value: '',
+									},
+									...getRuleOptions( builderOptions ),
+								] }
+							/>
+						</>
+					) }
+				</FlexItem>
 
-						<FlexItem
-							className={ classNames( [
-								'cc-condition-editor__rule-flex-column',
-								'cc-condition-editor__rule-flex-column--actions',
-							] ) }
-						>
-							<Button
-								onClick={ () => onChange( null ) }
-								isSmall={ true }
-							>
-								<Icon icon={ trash } />
-							</Button>
-						</FlexItem>
-					</Flex>
-				</>
-			) : (
-				<>
-					<SelectControl
-						onChange={ ( value ) => {} }
-						value={ name }
-						options={ [
-							{
-								label: __(
-									'Select rule type',
-									'content-control'
-								),
-								value: '',
-							},
-							...getRuleOptions( builderOptions ),
-						] }
-					/>
-				</>
-			) }
+				<FlexItem
+					className={ classNames( [
+						'cc-condition-editor__rule-flex-column',
+						'cc-condition-editor__rule-flex-column--actions',
+					] ) }
+				>
+					<Button onClick={ () => onDelete() } isSmall={ true }>
+						<Icon icon={ trash } />
+					</Button>
+				</FlexItem>
+			</Flex>
 		</div>
 	);
 };

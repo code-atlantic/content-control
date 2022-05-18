@@ -12,19 +12,15 @@ const BuilderObjects = ( {
 	query,
 	onChange,
 }: BuilderObjectsProps< QueryObject > ) => {
-	const updateByIndex = ( key: number, values: QueryObject ) => {
-		if ( null === values ) {
-			deleteByIndex( key );
-		}
+	const updateObject = ( updatedObject: QueryObject ) =>
+		onChange(
+			query.map( ( object ) =>
+				object.key === updatedObject.key ? updatedObject : object
+			)
+		);
 
-		const newQuery = [ ...query ];
-		newQuery[ key ] = values;
-		onChange( newQuery );
-	};
-
-	const deleteByIndex = ( key: number ) => {
-		onChange( query.filter( ( object, index ) => key !== index ) );
-	};
+	const deleteObject = ( key: string ) =>
+		onChange( query.filter( ( object ) => key !== object.key ) );
 
 	return (
 		<div
@@ -34,11 +30,12 @@ const BuilderObjects = ( {
 			] ) }
 		>
 			{ query &&
-				query.map( ( value, key ) => (
+				query.map( ( object ) => (
 					<BuilderObject
-						key={ key }
-						onChange={ ( values ) => updateByIndex( key, values ) }
-						value={ value }
+						key={ object.key }
+						onChange={ ( values ) => updateObject( values ) }
+						onDelete={ () => deleteObject( object.key ) }
+						value={ object }
 					/>
 				) ) }
 		</div>

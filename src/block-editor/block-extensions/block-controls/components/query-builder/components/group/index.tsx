@@ -16,7 +16,11 @@ import { newRule, newGroup } from '../../templates';
 /** Type Imports */
 import { BuilderGroupProps, Query } from '../../types';
 
-const BuilderGroup = ( { onChange, value: groupProps }: BuilderGroupProps ) => {
+const BuilderGroup = ( {
+	onChange,
+	onDelete,
+	value: groupProps,
+}: BuilderGroupProps ) => {
 	const { query = [] } = groupProps;
 
 	return (
