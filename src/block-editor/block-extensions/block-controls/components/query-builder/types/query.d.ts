@@ -30,3 +30,9 @@ export type QueryObject = QueryRule | QueryGroup;
 export type QueryObjectTypes = QueryObject['type'];
 
 export type Query = QueryObject[];
+
+export type QuerySet = {
+	key: string;
+	label: string;
+	query: Query;
+}
