@@ -13,7 +13,7 @@ import {
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { _x, __ } from '@wordpress/i18n';
-import { trash } from '@wordpress/icons';
+import { blockMeta, trash } from '@wordpress/icons';
 
 import Builder from '../../query-builder';
 import { newSet } from '../../query-builder/templates';
@@ -214,11 +214,72 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 
 			{ currentSet && (
 				<Modal
-					title={ __( 'Block Conditional Rules', 'content-control' ) }
+					title={ __(
+						'Content Control -- Conditional Logic',
+						'content-control'
+					) }
 					onRequestClose={ () => updateCurrentSet( null ) }
 					shouldCloseOnClickOutside={ false }
 					style={ { width: '760px' } }
 				>
+					<Flex
+						style={ {
+							marginBottom: 20,
+						} }
+					>
+						<FlexItem
+							style={ {
+								flexGrow: 1,
+								maxWidth: 60,
+							} }
+						>
+							<div
+								style={ {
+									backgroundColor: '#e6f2f9',
+									borderRadius: 100,
+									width: 50,
+									height: 50,
+									padding: 10,
+									paddingLeft: 7,
+									paddingTop: 11,
+									verticalAlign: 'middle',
+									textAlign: 'center',
+								} }
+							>
+								<Icon icon={ blockMeta } size={ 30 } />
+							</div>
+						</FlexItem>
+
+						<FlexItem
+							style={ {
+								flexBasis: 'auto',
+								flexGrow: 3,
+							} }
+						>
+							<h3
+								style={ {
+									margin: 0,
+									marginBottom: 5,
+								} }
+							>
+								{ __(
+									'Conditional Logic',
+									'content-control '
+								) }
+							</h3>
+							<p
+								style={ {
+									margin: 0,
+								} }
+							>
+								{ __(
+									'Use the power of conditional logic to control when a block is visible.',
+									'content-control'
+								) }
+							</p>
+						</FlexItem>
+					</Flex>
+
 					<TextControl
 						label={ __( 'Condition set label', 'content-control' ) }
 						hideLabelFromVision={ true }
@@ -239,7 +300,10 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 									status="warning"
 									isDismissible={ false }
 								>
-									Enter a label for this set.
+									{ __(
+										'Enter a label for this set.',
+										'content-control'
+									) }
 								</Notice>
 							)
 						}
