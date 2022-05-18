@@ -39,7 +39,7 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
-								onChange( [ ...query, { ...newRule } ] );
+								onChange( [ ...query, newRule() ] );
 							} }
 						>
 							{ _x(
@@ -53,7 +53,7 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
-								onChange( [ ...query, newGroup ] );
+								onChange( [ ...query, newGroup() ] );
 							} }
 						>
 							{ _x(
