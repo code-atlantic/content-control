@@ -21,6 +21,7 @@ const NotOperandToggle = ( {
 }: NotOperandToggleProps ) => {
 	return (
 		<Button
+			isDestructive={ checked }
 			variant={ checked ? 'primary' : 'tertiary' }
 			icon={ <Icon icon="warning" /> }
 			className={ classNames( [
