@@ -15,14 +15,13 @@ import { sprintf, __ } from '@wordpress/i18n';
 import { trash } from '@wordpress/icons';
 
 /** Internal Imports */
-import LogicalOperator from './logical-operator';
-import NotOperandToggle from './not-operand-toggle';
-import { BuilderOptionsContext } from '../contexts';
-import { getCategoryOptions, getRuleOptions } from '../utils';
+import LogicalOperator from '../group';
+import NotOperandToggle from '../not-operand-toggle';
+import { BuilderOptionsContext } from '../../contexts';
+import { getCategoryOptions, getRuleOptions } from '../../utils';
 
 /** Type Imports */
-import { BuilderRuleProps, BuilderOptions } from '../types';
-import { emptyRuleType } from '../templates';
+import { BuilderRuleProps, BuilderOptions } from '../../types';
 
 const BuilderRule = ( { onChange, value: ruleProps }: BuilderRuleProps ) => {
 	const { logicalOperator, notOperand, name, options = {} } = ruleProps;

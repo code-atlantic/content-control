@@ -1,9 +1,9 @@
 /** Internal Imports */
-import BuilderRule from '../rule';
-import BuilderGroup from '../group';
+import BuilderRule from './rule';
+import BuilderGroup from './group';
 
 /** Type Imports */
-import { BuilderObjectProps, QueryObject } from '../../types';
+import { BuilderObjectProps, QueryObject } from '../types';
 
 function BuilderObject( {
 	onChange,

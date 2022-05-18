@@ -9,12 +9,12 @@ import { plus } from '@wordpress/icons';
 import { _x } from '@wordpress/i18n';
 
 /** Internal Imports */
-import BuilderObjects from './objects';
-import BuilderObjectHeader from './header';
-import { newRule, newGroup } from '../templates';
+import BuilderObjects from '../objects';
+import BuilderObjectHeader from '../header';
+import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
-import { BuilderGroupProps, Query } from '../types';
+import { BuilderGroupProps, Query } from '../../types';
 
 const BuilderGroup = ( { onChange, value: groupProps }: BuilderGroupProps ) => {
 	const { query = [] } = groupProps;
