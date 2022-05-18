@@ -34,6 +34,5 @@ export type BuilderOptions = {
 export type BuilderProps = {
 	query: Query;
 	onChange: ( query: Query ) => void;
-	onSave: ( query: Query ) => void;
 	options: BuilderOptions;
 };
