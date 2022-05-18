@@ -89,8 +89,6 @@ type ConditionalRulesProps = {
 	setGroupRules: ( groupRules: ConditionalGroupRules ) => void;
 };
 
-type nullString = string | null;
-type nullStringState = [ nullString, ( value: nullString ) => void ];
 type QuerySetState = [ QuerySet, ( value: QuerySet ) => void ];
 
 const ConditionalRules = ( props: ConditionalRulesProps ) => {
@@ -108,11 +106,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	/**
 	 * Update set.
 	 *
-	 * @param {string}   key
-	 * @param {QuerySet} values
-	 * @param            set
-	 * @param            updatedSset
-	 * @param            updatedSet
+	 * @param {QuerySet} updatedSet
 	 */
 	const updateSet = ( updatedSet: QuerySet ) => {
 		let updated = false;
@@ -165,7 +159,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 		</ConfirmDialog>
 	);
 
-	const validSet = () => {
+	const isSetValid = () => {
 		return [ currentSet.label.length > 0 ].indexOf( false ) === -1;
 	};
 
@@ -339,10 +333,10 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 						</FlexItem>
 						<FlexItem>
 							<Button
-								disabled={ ! validSet() }
+								disabled={ ! isSetValid() }
 								variant="primary"
 								onClick={ () => {
-									if ( ! validSet() ) {
+									if ( ! isSetValid() ) {
 										return;
 									}
 									updateSet( currentSet );
