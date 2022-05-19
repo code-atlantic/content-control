@@ -1,5 +1,4 @@
 const gulp = require( 'gulp' ),
-	runSequence = require( 'run-sequence' ).use( gulp ),
 	$fn = require( 'gulp-load-plugins' )( { camelize: true } ),
 	plumberErrorHandler = {
 		errorHandler: $fn.notify.onError( {
@@ -15,6 +14,7 @@ gulp.task( 'clean-build', function () {
 		.pipe( $fn.plumber( plumberErrorHandler ) )
 		.pipe( $fn.clean() );
 } );
+
 gulp.task( 'clean-package', function () {
 	return gulp
 		.src( 'release/' + pkg.name + '_v' + pkg.version + '.zip', {
@@ -24,11 +24,10 @@ gulp.task( 'clean-package', function () {
 		.pipe( $fn.clean( { force: true } ) );
 } );
 
-gulp.task( 'clean-all', function ( done ) {
-	runSequence(
-		[ 'clean-js', 'clean-css' ],
-		[ 'clean-build', 'clean-package' ],
-		done
+gulp.task( 'clean-all', function () {
+	gulp.series(
+		gulp.parallel( 'clean-js', 'clean-css' ),
+		gulp.parallel( 'clean-build', 'clean-package' )
 	);
 } );
 //endregion Cleaners
@@ -60,12 +59,8 @@ gulp.task( 'package', function () {
 } );
 
 // Runs all build routines and generates a release.
-gulp.task( 'release', function ( done ) {
-	runSequence( 'build', 'package', done );
-} );
+gulp.task( 'release', gulp.series( 'build', 'package' ) );
 
 // Runs a releaes and cleans up afterwards.
-gulp.task( 'release:clean', [ 'release' ], function ( done ) {
-	runSequence( 'clean-build', done );
-} );
+gulp.task( 'release:clean', gulp.series( 'release', 'clean-build' ) );
 //endregion Watch & Build
