@@ -20,443 +20,507 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../classes/Admin.php:17
+#: ../classes/Admin.php:23
 msgid "Content Control Settings"
 msgstr ""
 
-#: ../classes/Admin.php:19
+#: ../classes/Admin.php:25
 msgid "Restrictions"
 msgstr ""
 
-#: ../classes/Admin.php:20, ../classes/Conditions.php:101, ../classes/Admin/Assets.php:51
+#: ../classes/Admin.php:26, ../classes/Conditions.php:99, ../classes/Admin/Assets.php:49
 msgid "General"
 msgstr ""
 
-#: ../classes/Conditions.php:102
+#: ../classes/Conditions.php:100
 msgid "Pages"
 msgstr ""
 
-#: ../classes/Conditions.php:103
+#: ../classes/Conditions.php:101
 msgid "Posts"
 msgstr ""
 
-#: ../classes/Conditions.php:104
+#: ../classes/Conditions.php:102
 msgid "Categories"
 msgstr ""
 
-#: ../classes/Conditions.php:105
+#: ../classes/Conditions.php:103
 msgid "Tags"
 msgstr ""
 
-#: ../classes/Conditions.php:106
+#: ../classes/Conditions.php:104
 msgid "Format"
 msgstr ""
 
-#: ../classes/Conditions.php:202
+#: ../classes/Conditions.php:200
 msgid "Select a condition"
 msgstr ""
 
-#: ../classes/Conditions.php:238
+#: ../classes/Conditions.php:236
 msgctxt "condition: post type plural label ie. Posts: All"
 msgid "%s Archive"
 msgstr ""
 
-#: ../classes/Conditions.php:246
+#: ../classes/Conditions.php:244
 msgctxt "condition: post type singular label ie. Posts: All"
 msgid "A %s"
 msgstr ""
 
-#: ../classes/Conditions.php:252
+#: ../classes/Conditions.php:250
 msgctxt "condition: post type singular label ie. Posts: Selected"
 msgid "A Selected %s"
 msgstr ""
 
-#: ../classes/Conditions.php:255
+#: ../classes/Conditions.php:253
 msgctxt "condition: post type singular label ie. Select Posts"
 msgid "Select %s."
 msgstr ""
 
-#: ../classes/Conditions.php:268
+#: ../classes/Conditions.php:266
 msgctxt "condition: post type singular label ie. Posts: ID"
 msgid "A %s with ID"
 msgstr ""
 
-#: ../classes/Conditions.php:271
+#: ../classes/Conditions.php:269
 msgctxt "condition: post type singular label ie. Posts IDs"
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: ../classes/Conditions.php:281
+#: ../classes/Conditions.php:279
 msgctxt "condition: post type plural label ie. Posts: ID"
 msgid "%s: Child Of"
 msgstr ""
 
-#: ../classes/Conditions.php:284, ../classes/Conditions.php:299
+#: ../classes/Conditions.php:282, ../classes/Conditions.php:297
 msgctxt "condition: post type plural label ie. Select Posts"
 msgid "Select %s."
 msgstr ""
 
-#: ../classes/Conditions.php:296
+#: ../classes/Conditions.php:294
 msgctxt "condition: post type plural label ie. Posts: ID"
 msgid "%s: Ancestor Of"
 msgstr ""
 
-#: ../classes/Conditions.php:317
+#: ../classes/Conditions.php:315
 msgctxt "condition: post type plural label ie. Pages: With Template"
 msgid "A %s: With Template"
 msgstr ""
 
-#: ../classes/Conditions.php:324
+#: ../classes/Conditions.php:322
 msgid "Default"
 msgstr ""
 
-#: ../classes/Conditions.php:351
+#: ../classes/Conditions.php:349
 msgctxt "condition: post type plural and taxonomy singular label ie. Posts: With Category"
 msgid "A %1$s with %2$s"
 msgstr ""
 
-#: ../classes/Conditions.php:354
+#: ../classes/Conditions.php:352
 msgctxt "condition: post type plural label ie. Select categories"
 msgid "Select %s."
 msgstr ""
 
-#: ../classes/Conditions.php:383
+#: ../classes/Conditions.php:381
 msgctxt "condition: taxonomy plural label ie. Categories: All"
 msgid "A %s"
 msgstr ""
 
-#: ../classes/Conditions.php:389
+#: ../classes/Conditions.php:387
 msgctxt "condition: taxonomy plural label ie. Categories: Selected"
 msgid "%s: Selected"
 msgstr ""
 
-#: ../classes/Conditions.php:392
+#: ../classes/Conditions.php:390
 msgctxt "condition: taxonomy plural label ie. Select Categories"
 msgid "Select %s."
 msgstr ""
 
-#: ../classes/Conditions.php:404
+#: ../classes/Conditions.php:402
 msgctxt "condition: taxonomy plural label ie. Categories: Selected"
 msgid "A %s with IDs"
 msgstr ""
 
-#: ../classes/Conditions.php:407
+#: ../classes/Conditions.php:405
 msgctxt "condition: taxonomy plural label ie. Category IDs"
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: ../classes/Conditions.php:427
+#: ../classes/Conditions.php:425
 msgid "The Home Page"
 msgstr ""
 
-#: ../classes/Conditions.php:434
+#: ../classes/Conditions.php:432
 msgid "The Blog Index"
 msgstr ""
 
-#: ../classes/Conditions.php:441
+#: ../classes/Conditions.php:439
 msgid "A Search Result Page"
 msgstr ""
 
-#: ../classes/Conditions.php:447
+#: ../classes/Conditions.php:445
 msgid "A 404 Error Page"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:52
+#: ../classes/Admin/Assets.php:50
 msgid "Protection"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:53
+#: ../classes/Admin/Assets.php:51
 msgid "Content"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:56
+#: ../classes/Admin/Assets.php:54
 msgid "Are you sure you want to delete this restriction?"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:59
+#: ../classes/Admin/Assets.php:57
 msgid "Restriction Editor"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:60
+#: ../classes/Admin/Assets.php:58
 msgid "Use this to modify a restrictions settings."
 msgstr ""
 
-#: ../classes/Admin/Assets.php:64, ../classes/Admin/Footer_Templates.php:406, ../classes/Admin/Footer_Templates.php:440
+#: ../classes/Admin/Assets.php:62, ../classes/Admin/Footer_Templates.php:404, ../classes/Admin/Footer_Templates.php:438
 msgid "Is"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:65
+#: ../classes/Admin/Assets.php:63
 msgid "Not"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:68
+#: ../classes/Admin/Assets.php:66
 msgid "Save"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:69
+#: ../classes/Admin/Assets.php:67
 msgid "Cancel"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:70
+#: ../classes/Admin/Assets.php:68
 msgid "Add"
 msgstr ""
 
-#: ../classes/Admin/Assets.php:71
+#: ../classes/Admin/Assets.php:69
 msgid "Update"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:311
+#: ../classes/Admin/Footer_Templates.php:175
+msgid "Active"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:176, ../classes/Admin/Setting_Callbacks.php:419
+msgid "Deactivate License"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:178
+msgid "Inactive"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:179
+msgid "Activate License"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:218
+msgid "Category"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:222
+msgid "Action"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:226
+msgid "Label"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:230
+msgid "Value"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:261, ../classes/Admin/Footer_Templates.php:266
+msgid "Documentation"
+msgstr ""
+
+#: ../classes/Admin/Footer_Templates.php:309
 msgid "Close"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:379
+#: ../classes/Admin/Footer_Templates.php:377
 msgid "Apply this restriction if the user views content that is:"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:388
+#: ../classes/Admin/Footer_Templates.php:386
 msgid "When users visit your site, the plugin will check the viewed content against your selection below and permit or deny access."
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:403
+#: ../classes/Admin/Footer_Templates.php:401
 msgid "Choose a content type to get started."
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:405, ../classes/Admin/Footer_Templates.php:439
+#: ../classes/Admin/Footer_Templates.php:403, ../classes/Admin/Footer_Templates.php:437
 msgid "Enable the Not Operand"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:407, ../classes/Admin/Footer_Templates.php:441
+#: ../classes/Admin/Footer_Templates.php:405, ../classes/Admin/Footer_Templates.php:439
 msgid "Is Not"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:410, ../classes/Admin/Footer_Templates.php:444
+#: ../classes/Admin/Footer_Templates.php:408, ../classes/Admin/Footer_Templates.php:442
 msgid "Choose a condition"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:426
+#: ../classes/Admin/Footer_Templates.php:424
 msgctxt "aria-label for add new OR condition button"
 msgid "Add another OR condition"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:426, ../classes/Admin/Footer_Templates.php:437
+#: ../classes/Admin/Footer_Templates.php:424, ../classes/Admin/Footer_Templates.php:435
 msgid "or"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:430
+#: ../classes/Admin/Footer_Templates.php:428
 msgctxt "aria-label for add new AND condition button"
 msgid "Add another AND condition group"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:430
+#: ../classes/Admin/Footer_Templates.php:428
 msgid "and"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:452
+#: ../classes/Admin/Footer_Templates.php:450
 msgid "Remove Condition"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:466
+#: ../classes/Admin/Footer_Templates.php:464
 msgid "Select restriction"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:481
+#: ../classes/Admin/Footer_Templates.php:479
 msgctxt "Edit button label for restriction table"
 msgid "Edit “{{data.title}}”"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:481
+#: ../classes/Admin/Footer_Templates.php:479
 msgid "Edit"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:484
+#: ../classes/Admin/Footer_Templates.php:482
 msgctxt "Trash button label for restriction table"
 msgid "Delete “{{data.title}}!”"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:484
+#: ../classes/Admin/Footer_Templates.php:482
 msgid "Trash"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:490, ../classes/Admin/Widget/Settings.php:39
+#: ../classes/Admin/Footer_Templates.php:488, ../classes/Admin/Widget/Settings.php:37
 msgid "Everyone"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:492, ../classes/Admin/Settings/Restrictions.php:112, ../classes/Admin/Widget/Settings.php:40
+#: ../classes/Admin/Footer_Templates.php:490, ../classes/Admin/Settings/Restrictions.php:110, ../classes/Admin/Widget/Settings.php:38
 msgid "Logged Out Users"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:495, ../classes/Admin/Settings/Restrictions.php:111, ../classes/Admin/Widget/Settings.php:41
+#: ../classes/Admin/Footer_Templates.php:493, ../classes/Admin/Settings/Restrictions.php:109, ../classes/Admin/Widget/Settings.php:39
 msgid "Logged In Users"
 msgstr ""
 
-#: ../classes/Admin/Footer_Templates.php:503
+#: ../classes/Admin/Footer_Templates.php:501
 msgid "All Users"
 msgstr ""
 
-#: ../classes/Admin/Pages.php:29, ../classes/Admin/Pages.php:29
+#: ../classes/Admin/Pages.php:27, ../classes/Admin/Pages.php:27
 msgid "Content Control"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:238
+#: ../classes/Admin/Reviews.php:236
 msgid "Hi there! You've been using the Content Control plugin on your site for %s now - We hope it's been helpful. If you're enjoying the plugin, would you mind rating it 5-stars to help spread the word?"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:243
+#: ../classes/Admin/Reviews.php:241
 msgid "1 week"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:251
+#: ../classes/Admin/Reviews.php:249
 msgid "1 month"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:259
+#: ../classes/Admin/Reviews.php:257
 msgid "3 months"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:416
+#: ../classes/Admin/Reviews.php:414
 msgid "Ok, you deserve it"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:421
+#: ../classes/Admin/Reviews.php:419
 msgid "Nope, maybe later"
 msgstr ""
 
-#: ../classes/Admin/Reviews.php:426
+#: ../classes/Admin/Reviews.php:424
 msgid "I already did"
 msgstr ""
 
-#: ../classes/Admin/Settings.php:159
+#: ../classes/Admin/Settings.php:157
 msgid "Default Denial Message"
 msgstr ""
 
-#: ../classes/Admin/Settings.php:283
+#: ../classes/Admin/Settings.php:281
 msgid "Settings updated."
 msgstr ""
 
-#: ../classes/Admin/Setting_Callbacks.php:197
+#: ../classes/Admin/Setting_Callbacks.php:195
 msgid "The callback function used for the <strong>%s</strong> setting is missing."
 msgstr ""
 
-#: ../classes/Admin/Setting_Callbacks.php:265
+#: ../classes/Admin/Setting_Callbacks.php:263
 msgid "Choose Icon"
 msgstr ""
 
-#: ../classes/Admin/Setting_Callbacks.php:359
+#: ../classes/Admin/Setting_Callbacks.php:357
 msgid "Upload File"
 msgstr ""
 
-#: ../classes/Admin/Setting_Callbacks.php:421
-msgid "Deactivate License"
+#. translators: 1. Plugin name
+#: ../classes/Core/Autoloader.php:51
+msgid "Your installation of %1$s is incomplete. If you installed %1$s from GitHub, please refer to this document to set up your development environment."
 msgstr ""
 
-#: ../classes/Site/Feeds.php:46, ../classes/Site/Posts.php:67
+#. translators: 1. Requirement name (WordPress|PHP)., 2. Version Number.
+#. translators: 1. Requirement name (WordPress|PHP)., 2. Version Number.
+#: ../classes/Core/Prerequisites.php:307, ../classes/Core/Prerequisites.php:323
+msgid "This plugin requires <b>%1$s %2$s</b> or higher in order to run."
+msgstr ""
+
+#: ../classes/Core/Prerequisites.php:371
+msgid "install it"
+msgstr ""
+
+#. translators: 1. Plugin Name, 2. Required Plugin Name, 3. `install it` link.
+#: ../classes/Core/Prerequisites.php:375, ../classes/Core/Prerequisites.php:352
+msgid "The plugin \"%1$s\" requires %2$s! Please %3$s to continue!"
+msgstr ""
+
+#: ../classes/Core/Prerequisites.php:359
+msgid "update it"
+msgstr ""
+
+#: ../classes/Core/Prerequisites.php:363
+msgid "The plugin \"%1$s\" requires %2$s v%3$s or higher! Please %4$s to continue!"
+msgstr ""
+
+#: ../classes/Core/Prerequisites.php:348
+msgid "activate it"
+msgstr ""
+
+#: ../classes/Frontend/Feeds.php:61, ../classes/Frontend/Posts.php:81
 msgid "This content is restricted."
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:36
+#: ../classes/Admin/Settings/Restrictions.php:34
 msgid "Add a Restriction"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:39
+#: ../classes/Admin/Settings/Restrictions.php:37
 msgid "Select bulk action"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:41, ../classes/Admin/Settings/Restrictions.php:82
+#: ../classes/Admin/Settings/Restrictions.php:39, ../classes/Admin/Settings/Restrictions.php:80
 msgid "Bulk Actions"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:42, ../classes/Admin/Settings/Restrictions.php:83
+#: ../classes/Admin/Settings/Restrictions.php:40, ../classes/Admin/Settings/Restrictions.php:81
 msgid "Move to Trash"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:44, ../classes/Admin/Settings/Restrictions.php:85
+#: ../classes/Admin/Settings/Restrictions.php:42, ../classes/Admin/Settings/Restrictions.php:83
 msgid "Apply"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:52, ../classes/Admin/Settings/Restrictions.php:63
+#: ../classes/Admin/Settings/Restrictions.php:50, ../classes/Admin/Settings/Restrictions.php:61
 msgid "Select All"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:55, ../classes/Admin/Settings/Restrictions.php:66
+#: ../classes/Admin/Settings/Restrictions.php:53, ../classes/Admin/Settings/Restrictions.php:64
 msgid "Priority"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:56, ../classes/Admin/Settings/Restrictions.php:67, ../classes/Admin/Settings/Restrictions.php:99
+#: ../classes/Admin/Settings/Restrictions.php:54, ../classes/Admin/Settings/Restrictions.php:65, ../classes/Admin/Settings/Restrictions.php:97
 msgid "Restriction Title"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:57, ../classes/Admin/Settings/Restrictions.php:68
+#: ../classes/Admin/Settings/Restrictions.php:55, ../classes/Admin/Settings/Restrictions.php:66
 msgid "Overview"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:73
+#: ../classes/Admin/Settings/Restrictions.php:71
 msgid "No restrictions found."
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:100
+#: ../classes/Admin/Settings/Restrictions.php:98
 msgid "Pages restricted to logged in users"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:107
+#: ../classes/Admin/Settings/Restrictions.php:105
 msgid "Who can see this content?"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:119
+#: ../classes/Admin/Settings/Restrictions.php:117
 msgid "Choose which roles can see this content, leave blank to apply to every role"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:131
+#: ../classes/Admin/Settings/Restrictions.php:129
 msgid "Choose how to protect your content"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:133
+#: ../classes/Admin/Settings/Restrictions.php:131
 msgid "Custom Message"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:134
+#: ../classes/Admin/Settings/Restrictions.php:132
 msgid "Redirect"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:145
+#: ../classes/Admin/Settings/Restrictions.php:143
 msgid "Show excerpts above access denied message?"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:151
+#: ../classes/Admin/Settings/Restrictions.php:149
 msgid "Override the default message?"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:160
+#: ../classes/Admin/Settings/Restrictions.php:158
 msgid "Enter a custom message to display to restricted users"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:170
+#: ../classes/Admin/Settings/Restrictions.php:168
 msgid "Where will they be taken?"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:173
+#: ../classes/Admin/Settings/Restrictions.php:171
 msgid "Login & Back"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:174
+#: ../classes/Admin/Settings/Restrictions.php:172
 msgid "Home Page"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:175
+#: ../classes/Admin/Settings/Restrictions.php:173
 msgid "Custom URL"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:187
+#: ../classes/Admin/Settings/Restrictions.php:185
 msgid "Redirect URL"
 msgstr ""
 
-#: ../classes/Admin/Settings/Restrictions.php:188
+#: ../classes/Admin/Settings/Restrictions.php:186
 msgid "http://example.com"
 msgstr ""
 
-#: ../classes/Admin/Widget/Settings.php:50
+#: ../classes/Admin/Widget/Settings.php:48
 msgid "Who can see this widget?"
 msgstr ""
 
-#: ../classes/Admin/Widget/Settings.php:66
+#: ../classes/Admin/Widget/Settings.php:64
 msgid "Choose which roles can see this widget"
 msgstr ""
