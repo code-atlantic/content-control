@@ -28,9 +28,11 @@ const BuilderRule = ( {
 	objectIndex: index,
 	onChange,
 	onDelete,
+	logicalOperator,
+	updateOperator,
 	value: ruleProps,
 }: BuilderRuleProps ) => {
-	const { logicalOperator, notOperand, name, options = {} } = ruleProps;
+	const { notOperand, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
@@ -212,10 +214,7 @@ const BuilderRule = ( {
 						<LogicalOperator
 							value={ logicalOperator }
 							onChange={ ( newValue ) =>
-								onChange( {
-									...ruleProps,
-									logicalOperator: newValue,
-								} )
+								updateOperator( newValue )
 							}
 						/>
 					</FlexItem>

@@ -9,6 +9,8 @@ function BuilderObject( {
 	objectIndex,
 	onChange,
 	onDelete,
+	logicalOperator,
+	updateOperator,
 	value: objectProps,
 }: BuilderObjectProps< QueryObject > ) {
 	switch ( objectProps.type ) {
@@ -19,6 +21,8 @@ function BuilderObject( {
 					onChange={ onChange }
 					onDelete={ onDelete }
 					value={ objectProps }
+					logicalOperator={ logicalOperator }
+					updateOperator={ updateOperator }
 				/>
 			);
 		case 'group':
@@ -28,6 +32,8 @@ function BuilderObject( {
 					onChange={ onChange }
 					onDelete={ onDelete }
 					value={ objectProps }
+					logicalOperator={ logicalOperator }
+					updateOperator={ updateOperator }
 				/>
 			);
 	}

@@ -21,22 +21,26 @@ import BuilderObjectHeader from '../header';
 import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
-import { BuilderGroupProps, Query } from '../../types';
+import { BuilderGroupProps, Query, QueryRule } from '../../types';
 import LogicalOperator from '../logical-operator';
 
 const BuilderGroup = ( {
 	objectIndex,
 	onChange,
 	onDelete,
+	logicalOperator,
+	updateOperator,
 	value: groupProps,
 }: BuilderGroupProps ) => {
-	const { logicalOperator, query = [] } = groupProps;
+	const { query } = groupProps;
+
+	const { objects = [] } = query;
 
 	return (
 		<div
 			className={ classNames( [
 				'cc-condition-editor__group',
-				query.length <= 0 && 'cc-condition-editor__group--empty',
+				objects.length <= 0 && 'cc-condition-editor__group--empty',
 			] ) }
 		>
 			<Flex>
@@ -47,10 +51,7 @@ const BuilderGroup = ( {
 								<LogicalOperator
 									value={ logicalOperator }
 									onChange={ ( newValue ) =>
-										onChange( {
-											...groupProps,
-											logicalOperator: newValue,
-										} )
+										updateOperator( newValue )
 									}
 								/>
 							</FlexItem>
@@ -102,10 +103,11 @@ const BuilderGroup = ( {
 					onClick={ () => {
 						onChange( {
 							...groupProps,
-							query: [
+							query: {
 								...query,
-								{ ...newRule(), logicalOperator: 'or' },
-							],
+								logicalOperator: 'or',
+								objects: [ ...objects, { ...newRule() } ],
+							},
 						} );
 					} }
 				>
@@ -122,10 +124,11 @@ const BuilderGroup = ( {
 					onClick={ () => {
 						onChange( {
 							...groupProps,
-							query: [
+							query: {
 								...query,
-								{ ...newRule(), logicalOperator: 'and' },
-							],
+								logicalOperator: 'and',
+								objects: [ ...objects, { ...newRule() } ],
+							},
 						} );
 					} }
 				>

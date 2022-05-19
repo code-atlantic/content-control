@@ -12,19 +12,22 @@ export const newRule = (): QueryRule => ( {
 	name: '',
 	options: {},
 	notOperand: false,
-	logicalOperator: 'and',
 } );
 
 export const newGroup = (): QueryGroup => ( {
 	key: newUUID(),
 	type: 'group',
-	query: [ { ...newRule() } ],
-	notOperand: false,
-	logicalOperator: 'and',
+	query: {
+		logicalOperator: 'and',
+		objects: [ { ...newRule() } ],
+	},
 } );
 
 export const newSet = (): QuerySet => ( {
 	key: newUUID(),
 	label: '',
-	query: [ newRule() ],
+	query: {
+		logicalOperator: 'and',
+		objects: [ newRule() ],
+	},
 } );

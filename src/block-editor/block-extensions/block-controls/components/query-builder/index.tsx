@@ -19,7 +19,7 @@ import './index.scss';
 import { newRule, newGroup } from './templates';
 
 const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
-	const { objects } = query;
+	const { objects = [] } = query;
 
 	return (
 		<BuilderOptionsContext.Provider value={ options }>

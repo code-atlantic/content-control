@@ -1,5 +1,5 @@
 import { QueryLocigalOperator } from '../types';
-import { Query, QueryObject, QueryRule, QueryGroup, QueryObjectBase } from './query';
+import { Query, QueryRule, QueryGroup, QueryObjectBase } from './query';
 
 export type BuilderObjectsProps< T extends Query > = {
 	type?: 'group' | 'builder';
@@ -12,6 +12,7 @@ export type BuilderObjectProps< T extends QueryObjectBase > = {
 	value: T;
 	onChange: ( value: T ) => void;
 	onDelete: () => void;
+	logicalOperator: QueryLocigalOperator;
 	updateOperator: ( value: QueryLocigalOperator ) => void;
 };
 
