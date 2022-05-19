@@ -1,15 +1,11 @@
-export type QueryAnd = 'and';
-export type QueryOr = 'or';
+import LogicalOperator from "../components/logical-operator";
 
-export type QueryLocigalOperator = QueryAnd | QueryOr;
-
+export type QueryLocigalOperator = 'and' | 'or';
 export type QueryNotOperand = boolean;
 
 export interface QueryObjectBase {
 	key: string;
 	type: string;
-	notOperand: QueryNotOperand;
-	logicalOperator: QueryLocigalOperator;
 }
 
 export interface QueryRule extends QueryObjectBase {
@@ -18,6 +14,7 @@ export interface QueryRule extends QueryObjectBase {
 	options?: {
 		[ key: string ]: any;
 	};
+	notOperand: QueryNotOperand;
 }
 
 export interface QueryGroup extends QueryObjectBase {
@@ -27,9 +24,10 @@ export interface QueryGroup extends QueryObjectBase {
 
 export type QueryObject = QueryRule | QueryGroup;
 
-export type QueryObjectTypes = QueryObject['type'];
-
-export type Query = QueryObject[];
+export interface Query {
+	logicalOperator: QueryLocigalOperator;
+	objects: QueryObject[];
+}
 
 export type QuerySet = {
 	key: string;
