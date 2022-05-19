@@ -11,14 +11,16 @@ import { BuilderOptionsContext, BuilderQueryContext } from './contexts';
 import QueryBuilderObjects from './components/objects';
 
 /** Type Imports */
-import { BuilderProps, QueryRule, QueryGroup } from './types';
+import { BuilderProps } from './types';
 
 /** Style Imports */
 import './index.scss';
 
-import { newRule, newGroup, newSet } from './templates';
+import { newRule, newGroup } from './templates';
 
 const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
+	const { objects } = query;
+
 	return (
 		<BuilderOptionsContext.Provider value={ options }>
 			<BuilderQueryContext.Provider value={ query }>
@@ -39,7 +41,10 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
-								onChange( [ ...query, newRule() ] );
+								onChange( {
+									...query,
+									objects: [ ...objects, newRule() ],
+								} );
 							} }
 						>
 							{ _x(
@@ -53,7 +58,10 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
-								onChange( [ ...query, newGroup() ] );
+								onChange( {
+									...query,
+									objects: [ ...objects, newGroup() ],
+								} );
 							} }
 						>
 							{ _x(

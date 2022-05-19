@@ -1,9 +1,10 @@
-import { QueryRule, QueryGroup, QueryObjectBase } from './query';
+import { QueryLocigalOperator } from '../types';
+import { Query, QueryObject, QueryRule, QueryGroup, QueryObjectBase } from './query';
 
-export type BuilderObjectsProps< T extends QueryObjectBase > = {
+export type BuilderObjectsProps< T extends Query > = {
 	type?: 'group' | 'builder';
-	query: T[];
-	onChange: ( query: T[] ) => void;
+	query: T;
+	onChange: ( query: T ) => void;
 };
 
 export type BuilderObjectProps< T extends QueryObjectBase > = {
@@ -11,6 +12,7 @@ export type BuilderObjectProps< T extends QueryObjectBase > = {
 	value: T;
 	onChange: ( value: T ) => void;
 	onDelete: () => void;
+	updateOperator: ( value: QueryLocigalOperator ) => void;
 };
 
 export type BuilderObjectHeaderProps<
