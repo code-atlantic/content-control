@@ -25,7 +25,7 @@ import { getCategoryOptions, getRuleOptions } from '../../utils';
 import { BuilderRuleProps, BuilderOptions } from '../../types';
 
 const BuilderRule = ( {
-	objectIndex: index,
+	objectIndex,
 	onChange,
 	onDelete,
 	logicalOperator,
@@ -201,14 +201,8 @@ const BuilderRule = ( {
 	} );
 
 	return (
-		<div
-			className={ classNames( [
-				'cc-condition-editor__rule',
-				`cc-condition-editor__rule--${ name }`,
-				fields?.length && 'cc-condition-editor__rule--has-options',
-			] ) }
-		>
-			{ index !== 0 && (
+		<>
+			{ objectIndex !== 0 && (
 				<Flex className="cc__condition-editor-logical-operator">
 					<FlexItem>
 						<LogicalOperator
@@ -223,79 +217,86 @@ const BuilderRule = ( {
 					</FlexItem>
 				</Flex>
 			) }
+			<div
+				className={ classNames( [
+					'cc-condition-editor__rule',
+					`cc-condition-editor__rule--${ name }`,
+					fields?.length && 'cc-condition-editor__rule--has-options',
+				] ) }
+			>
+				<Flex>
+					{ builderOptions.features.notOperand && (
+						<FlexItem
+							className={ classNames( [
+								'cc-condition-editor__rule-flex-column',
+								'cc-condition-editor__rule-flex-column--not-operand',
+							] ) }
+						>
+							<NotOperandToggle
+								checked={ notOperand }
+								onToggle={ ( newValue ) =>
+									onChange( {
+										...ruleProps,
+										notOperand: newValue,
+									} )
+								}
+							/>
+						</FlexItem>
+					) }
 
-			<Flex>
-				{ builderOptions.features.notOperand && (
 					<FlexItem
 						className={ classNames( [
 							'cc-condition-editor__rule-flex-column',
-							'cc-condition-editor__rule-flex-column--not-operand',
+							'cc-condition-editor__rule-flex-column--controls',
 						] ) }
 					>
-						<NotOperandToggle
-							checked={ notOperand }
-							onToggle={ ( newValue ) =>
-								onChange( {
-									...ruleProps,
-									notOperand: newValue,
-								} )
-							}
-						/>
+						{ ruleDef ? (
+							<Flex>
+								{ FormattedField.map( ( item, i ) => item ) }
+							</Flex>
+						) : (
+							<>
+								<SelectControl
+									onChange={ ( value ) =>
+										onChange( {
+											...ruleProps,
+											name: value,
+										} )
+									}
+									value={ name }
+								>
+									<RuleNameSelectOptions />
+								</SelectControl>
+							</>
+						) }
 					</FlexItem>
-				) }
 
-				<FlexItem
-					className={ classNames( [
-						'cc-condition-editor__rule-flex-column',
-						'cc-condition-editor__rule-flex-column--controls',
-					] ) }
-				>
-					{ ruleDef ? (
+					<FlexItem
+						className={ classNames( [
+							'cc-condition-editor__rule-flex-column',
+							'cc-condition-editor__rule-flex-column--actions',
+						] ) }
+					>
 						<Flex>
-							{ FormattedField.map( ( item, i ) => item ) }
+							<FlexItem>
+								<Button
+									icon={ trash }
+									onClick={ () => onDelete() }
+									isSmall={ true }
+								/>
+							</FlexItem>
+							<FlexItem>
+								<Button
+									icon={ dragHandle }
+									onClick={ () => {} }
+									isSmall={ true }
+								/>
+							</FlexItem>
 						</Flex>
-					) : (
-						<>
-							<SelectControl
-								onChange={ ( value ) =>
-									onChange( {
-										...ruleProps,
-										name: value,
-									} )
-								}
-								value={ name }
-							>
-								<RuleNameSelectOptions />
-							</SelectControl>
-						</>
-					) }
-				</FlexItem>
-
-				<FlexItem
-					className={ classNames( [
-						'cc-condition-editor__rule-flex-column',
-						'cc-condition-editor__rule-flex-column--actions',
-					] ) }
-				>
-					<Flex>
-						<FlexItem>
-							<Button
-								icon={ trash }
-								onClick={ () => onDelete() }
-								isSmall={ true }
-							/>
-						</FlexItem>
-						<FlexItem>
-							<Button
-								icon={ dragHandle }
-								onClick={ () => {} }
-								isSmall={ true }
-							/>
-						</FlexItem>
-					</Flex>
-				</FlexItem>
-			</Flex>
-		</div>
+					</FlexItem>
+				</Flex>
+			</div>
+		</>
 	);
 };
 
