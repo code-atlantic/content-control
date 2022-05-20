@@ -17,6 +17,7 @@ export const newRule = (): QueryRule => ( {
 export const newGroup = (): QueryGroup => ( {
 	key: newUUID(),
 	type: 'group',
+	label: '',
 	query: {
 		logicalOperator: 'and',
 		objects: [ { ...newRule() } ],

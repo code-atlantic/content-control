@@ -19,6 +19,7 @@ export interface QueryRule extends QueryObjectBase {
 
 export interface QueryGroup extends QueryObjectBase {
 	type: 'group';
+	label: string;
 	query: Query;
 }
 
