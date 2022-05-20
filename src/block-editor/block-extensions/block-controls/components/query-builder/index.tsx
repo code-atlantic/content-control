@@ -54,22 +54,24 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							) }
 						</Button>
 
-						<Button
-							icon={ plus }
-							variant="link"
-							onClick={ () => {
-								onChange( {
-									...query,
-									objects: [ ...objects, newGroup() ],
-								} );
-							} }
-						>
-							{ _x(
-								'Add condition group',
-								'Conditional editor main add buttons',
-								'content-control'
-							) }
-						</Button>
+						{ options.features.groups && (
+							<Button
+								icon={ plus }
+								variant="link"
+								onClick={ () => {
+									onChange( {
+										...query,
+										objects: [ ...objects, newGroup() ],
+									} );
+								} }
+							>
+								{ _x(
+									'Add condition group',
+									'Conditional editor main add buttons',
+									'content-control'
+								) }
+							</Button>
+						) }
 					</ButtonGroup>
 				</div>
 			</BuilderQueryContext.Provider>

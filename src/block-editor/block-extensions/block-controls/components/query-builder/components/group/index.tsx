@@ -4,6 +4,7 @@ import classNames from 'classnames';
 /**
  * WordPress Imports
  */
+import { useContext } from '@wordpress/element';
 import {
 	Button,
 	ButtonGroup,
@@ -17,12 +18,12 @@ import { _x } from '@wordpress/i18n';
 
 /** Internal Imports */
 import BuilderObjects from '../objects';
-import BuilderObjectHeader from '../header';
 import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
-import { BuilderGroupProps, Query, QueryRule } from '../../types';
+import { BuilderGroupProps, Query, BuilderOptions } from '../../types';
 import LogicalOperator from '../logical-operator';
+import { BuilderOptionsContext } from '../../contexts';
 
 const BuilderGroup = ( {
 	objectIndex,
@@ -32,6 +33,8 @@ const BuilderGroup = ( {
 	updateOperator,
 	value: groupProps,
 }: BuilderGroupProps ) => {
+	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
+
 	const { query } = groupProps;
 
 	const { objects = [] } = query;
@@ -96,6 +99,7 @@ const BuilderGroup = ( {
 					} )
 				}
 			/>
+
 			<ButtonGroup className="cc__component-condition-editor__add-buttons">
 				<Button
 					icon={ plus }
@@ -138,6 +142,29 @@ const BuilderGroup = ( {
 						'content-control'
 					) }
 				</Button>
+
+				{ builderOptions.features.nesting && (
+					<Button
+						icon={ plus }
+						variant="link"
+						onClick={ () => {
+							onChange( {
+								...groupProps,
+								query: {
+									...query,
+									logicalOperator,
+									objects: [ ...objects, { ...newGroup() } ],
+								},
+							} );
+						} }
+					>
+						{ _x(
+							'Group',
+							'Conditional editor add OR condition buttons',
+							'content-control'
+						) }
+					</Button>
+				) }
 			</ButtonGroup>
 		</div>
 	);

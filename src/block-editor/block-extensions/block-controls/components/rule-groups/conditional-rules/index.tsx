@@ -319,7 +319,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 							features: {
 								notOperand: true,
 								groups: true,
-								nesting: true,
+								nesting: false,
 							},
 							rules: builderRules,
 						} }

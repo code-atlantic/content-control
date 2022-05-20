@@ -225,22 +225,24 @@ const BuilderRule = ( {
 			) }
 
 			<Flex>
-				<FlexItem
-					className={ classNames( [
-						'cc-condition-editor__rule-flex-column',
-						'cc-condition-editor__rule-flex-column--not-operand',
-					] ) }
-				>
-					<NotOperandToggle
-						checked={ notOperand }
-						onToggle={ ( newValue ) =>
-							onChange( {
-								...ruleProps,
-								notOperand: newValue,
-							} )
-						}
-					/>
-				</FlexItem>
+				{ builderOptions.features.notOperand && (
+					<FlexItem
+						className={ classNames( [
+							'cc-condition-editor__rule-flex-column',
+							'cc-condition-editor__rule-flex-column--not-operand',
+						] ) }
+					>
+						<NotOperandToggle
+							checked={ notOperand }
+							onToggle={ ( newValue ) =>
+								onChange( {
+									...ruleProps,
+									notOperand: newValue,
+								} )
+							}
+						/>
+					</FlexItem>
+				) }
 
 				<FlexItem
 					className={ classNames( [
