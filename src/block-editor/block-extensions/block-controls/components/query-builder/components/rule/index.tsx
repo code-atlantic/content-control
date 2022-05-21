@@ -25,6 +25,7 @@ import { getCategoryOptions, getRuleOptions } from '../../utils';
 import { BuilderRuleProps, BuilderOptions } from '../../types';
 
 const BuilderRule = ( {
+	objectWrapper: Wrapper,
 	objectIndex,
 	onChange,
 	onDelete,
@@ -217,10 +218,12 @@ const BuilderRule = ( {
 					</FlexItem>
 				</Flex>
 			) }
-			<div
+			<Wrapper
 				className={ classNames( [
 					'cc-condition-editor__rule',
-					`cc-condition-editor__rule--${ name }`,
+					`cc-condition-editor__rule--${
+						name !== '' ? name : 'not-chosen'
+					}`,
 					fields?.length && 'cc-condition-editor__rule--has-options',
 				] ) }
 			>
@@ -295,7 +298,7 @@ const BuilderRule = ( {
 						</Flex>
 					</FlexItem>
 				</Flex>
-			</div>
+			</Wrapper>
 		</>
 	);
 };

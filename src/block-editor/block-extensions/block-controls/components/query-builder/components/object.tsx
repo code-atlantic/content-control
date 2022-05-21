@@ -2,6 +2,8 @@
 import BuilderRule from './rule';
 import BuilderGroup from './group';
 
+import classNames from 'classnames';
+
 /** Type Imports */
 import { BuilderObjectProps, QueryObject } from '../types';
 
@@ -13,10 +15,28 @@ function BuilderObject( {
 	updateOperator,
 	value: objectProps,
 }: BuilderObjectProps< QueryObject > ) {
+	const elementId = `query-builder-${ objectProps.type }--${ objectProps.key }`;
+
+	const Wrapper = ( { children, className, ...wrapperProps } ) => {
+		return (
+			<div
+				{ ...wrapperProps }
+				id={ elementId }
+				className={ classNames( [
+					'cc-condition-editor__object',
+					className,
+				] ) }
+			>
+				{ children }
+			</div>
+		);
+	};
+
 	switch ( objectProps.type ) {
 		case 'rule':
 			return (
 				<BuilderRule
+					objectWrapper={ Wrapper }
 					objectIndex={ objectIndex }
 					onChange={ onChange }
 					onDelete={ onDelete }
@@ -28,6 +48,7 @@ function BuilderObject( {
 		case 'group':
 			return (
 				<BuilderGroup
+					objectWrapper={ Wrapper }
 					objectIndex={ objectIndex }
 					onChange={ onChange }
 					onDelete={ onDelete }

@@ -35,6 +35,7 @@ import LogicalOperator from '../logical-operator';
 import { BuilderOptionsContext } from '../../contexts';
 
 const BuilderGroup = ( {
+	objectWrapper: Wrapper,
 	objectIndex,
 	onChange,
 	onDelete,
@@ -42,11 +43,13 @@ const BuilderGroup = ( {
 	updateOperator,
 	value: groupProps,
 }: BuilderGroupProps ) => {
-	const { label = '', query } = groupProps;
+	const { label = '', query, key: groupId } = groupProps;
 	const { objects = [] } = query;
 
 	const [ editLabelText, setEditLabelText ] = useState( null );
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
+
+	const elementId = `query-builder-group--${ groupId }`;
 
 	return (
 		<>
@@ -65,7 +68,8 @@ const BuilderGroup = ( {
 					</FlexItem>
 				</Flex>
 			) }
-			<div
+			<Wrapper
+				id={ elementId }
 				className={ classNames( [
 					'cc-condition-editor__group',
 					objects.length <= 0 && 'cc-condition-editor__group--empty',
@@ -271,7 +275,7 @@ const BuilderGroup = ( {
 						</Button>
 					) }
 				</ButtonGroup>
-			</div>
+			</Wrapper>
 		</>
 	);
 };
