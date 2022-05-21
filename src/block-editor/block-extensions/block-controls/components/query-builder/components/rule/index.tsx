@@ -32,7 +32,7 @@ const BuilderRule = ( {
 	updateOperator,
 	value: ruleProps,
 }: BuilderRuleProps ) => {
-	const { notOperand, name, options = {} } = ruleProps;
+	const { notOperand = false, name, options = {} } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
