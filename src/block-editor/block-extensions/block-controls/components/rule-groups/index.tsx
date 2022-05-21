@@ -52,16 +52,16 @@ const defaults = (): BlockAttributes => ( {
 			{
 				key: newUUID(),
 				label: __( 'User Logged In', 'content-control' ),
-				query: [
-					{
-						key: newUUID(),
-						logicalOperator: 'and',
-						notOperand: true,
-						type: 'rule',
-						name: 'user__is_logged_in',
-						options: {},
-					},
-				],
+				query: {
+					logicalOperator: 'and',
+					objects: [
+						{
+							key: newUUID(),
+							type: 'rule',
+							name: 'user__is_logged_in',
+						},
+					],
+				},
 			},
 		],
 	},
