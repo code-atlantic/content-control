@@ -20,5 +20,9 @@ export type BuilderObjectHeaderProps<
 	T extends QueryObjectBase
 > = BuilderObjectProps< T >;
 
-export type BuilderGroupProps = BuilderObjectProps< QueryGroup >;
-export type BuilderRuleProps = BuilderObjectProps< QueryRule >;
+type WrapperProps = {
+	objectWrapper: ( props: any ) => JSX.Element;
+};
+
+export type BuilderGroupProps = BuilderObjectProps< QueryGroup > & WrapperProps;
+export type BuilderRuleProps = BuilderObjectProps< QueryRule > & WrapperProps;
