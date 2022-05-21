@@ -14,7 +14,7 @@ export interface QueryRule extends QueryObjectBase {
 	options?: {
 		[ key: string ]: any;
 	};
-	notOperand: QueryNotOperand;
+	notOperand?: QueryNotOperand;
 }
 
 export interface QueryGroup extends QueryObjectBase {
