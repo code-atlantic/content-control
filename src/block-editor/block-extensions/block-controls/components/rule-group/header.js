@@ -8,6 +8,8 @@ import {
 	MenuGroup,
 	MenuItem,
 } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+
 import {
 	moreVertical,
 	plus,
@@ -20,6 +22,9 @@ import { sprintf, _x, __ } from '@wordpress/i18n';
 
 const noop = () => {};
 
+import CopyMenuItem from './copy-menu-item';
+import PasteMenuItem from './paste-menu-item';
+
 const DefaultGroupOptions = ( {
 	groupDefaults,
 	groupRules,
@@ -27,6 +32,8 @@ const DefaultGroupOptions = ( {
 	onClose,
 	labelText,
 } ) => {
+	const [ status, setStatus ] = useState( null );
+
 	if ( ! labelText ) {
 		return <></>;
 	}
@@ -34,16 +41,37 @@ const DefaultGroupOptions = ( {
 	return (
 		<>
 			<MenuGroup>
-				<MenuItem
-					icon={ copy }
-					variant={ 'tertiary' }
-					onClick={ () => {
-						alert( JSON.stringify( groupRules ) );
+				<CopyMenuItem
+					text={ JSON.stringify( groupRules ) }
+					onCopy={ () => {
+						setStatus( 'copied' );
+					} }
+					onFinish={ () => {
+						setStatus( null );
+					} }
+					icon={ status === 'copied' ? check : copy }
+				>
+					{ <Text>{ __( 'Copy', 'content-control' ) }</Text> }
+				</CopyMenuItem>
+				<PasteMenuItem
+					onSave={ ( newValues, merge = false ) => {
+						setGroupRules(
+							merge
+								? {
+										...groupRules,
+										...JSON.parse( newValues ),
+								  }
+								: JSON.parse( newValues )
+						);
+					} }
+					onFinish={ () => {
+						setStatus( null );
 						onClose();
 					} }
+					icon={ status === 'copied' ? check : copy }
 				>
-					<Text>{ __( 'Copy/Paste', 'content-control' ) }</Text>
-				</MenuItem>
+					{ <Text>{ __( 'Paste', 'content-control' ) }</Text> }
+				</PasteMenuItem>
 				<MenuItem
 					icon={ rotateLeft }
 					variant={ 'tertiary' }
