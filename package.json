@@ -30,6 +30,7 @@
     "@wordpress/i18n": "^4.7.0",
     "@wordpress/icons": "^8.3.0",
     "classnames": "^2.3.1",
+    "immutability-helper": "^3.1.1",
     "nanoid": "^3.3.4"
   },
   "devDependencies": {
