@@ -116,13 +116,13 @@ const BuilderRule = ( {
 	/**
 	 * Update a single option.
 	 *
-	 * @param {string} key   Option key.
-	 * @param {any}    value Option value
+	 * @param {string} optionKey Option key.
+	 * @param {any}    value     Option value
 	 */
-	const updateOption = ( key: string, value: any ): void =>
+	const updateOption = ( optionKey: string, value: any ): void =>
 		updateOptions( {
 			...options,
-			[ key ]: value,
+			[ optionKey ]: value,
 		} );
 
 	const RuleNameSelectOptions = () => (
