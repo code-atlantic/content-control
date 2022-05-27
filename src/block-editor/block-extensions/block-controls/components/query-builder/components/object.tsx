@@ -21,7 +21,10 @@ function BuilderObject( {
 		return (
 			<div
 				{ ...wrapperProps }
-				id={ elementId }
+				// id={ elementId }
+				onDrop={ ( event ) => {
+					return false;
+				} }
 				className={ classNames( [
 					'cc-condition-editor__object',
 					className,
