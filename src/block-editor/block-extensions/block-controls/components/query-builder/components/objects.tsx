@@ -1,5 +1,6 @@
 /** External Imports */
 import classNames from 'classnames';
+import update from 'immutability-helper';
 
 /** Internal Imports */
 import BuilderObject from './object';
@@ -60,6 +61,36 @@ const BuilderObjects = ( {
 				'cc__condition-editor__object-list',
 				`cc__condition-editor__object-list--${ type }`,
 			] ) }
+			onDragOver={ ( event ) => {
+				// Allow drop by adding this event.
+				event.preventDefault();
+				event.stopPropagation();
+				event.dataTransfer.dropEffect = 'move';
+			} }
+			onDrop={ ( event ) => {
+				event.preventDefault();
+				event.stopPropagation();
+				try {
+					const currentTarget = event.currentTarget;
+					const data = JSON.parse(
+						event.dataTransfer.getData( 'text' )
+					);
+
+					onChange( {
+						...query,
+						objects: objects.filter(
+							( object ) => key !== object.key
+						),
+					} );
+					console.log( { ...event } );
+				} catch ( $e ) {}
+			} }
+			onDragEnter={ ( event ) => {
+				// event.preventDefault();
+			} }
+			onDragLeave={ ( event ) => {
+				// event.preventDefault();
+			} }
 		>
 			{ objects &&
 				objects.map( ( object, i ) => (
@@ -69,8 +100,9 @@ const BuilderObjects = ( {
 						logicalOperator={ logicalOperator }
 						updateOperator={ updateOperator }
 						onChange={ ( values ) => updateObject( values ) }
-						onDelete={ () => deleteObject( object.key ) }
+						onDelete={ () => removeObject( object.key ) }
 						value={ object }
+						// onMove={ moveObject }
 					/>
 				) ) }
 		</div>
