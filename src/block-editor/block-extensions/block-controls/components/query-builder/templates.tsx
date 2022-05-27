@@ -1,10 +1,13 @@
 import { __ } from '@wordpress/i18n';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 
 /** Type Imports */
 import { QuerySet, QueryRule, QueryGroup } from './types';
 
-export const newUUID = () => nanoid( 8 );
+export const newUUID = customAlphabet(
+	'abcdefghijklmnopqrstuvwxyz0123456789',
+	8
+);
 
 export const newRule = (): QueryRule => ( {
 	key: newUUID(),
