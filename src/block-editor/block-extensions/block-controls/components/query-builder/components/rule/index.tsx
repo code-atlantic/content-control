@@ -11,6 +11,7 @@ import {
 	FlexBlock,
 	Icon,
 	ButtonGroup,
+	Draggable,
 } from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
 import { dragHandle, trash } from '@wordpress/icons';
@@ -33,7 +34,7 @@ const BuilderRule = ( {
 	updateOperator,
 	value: ruleProps,
 }: BuilderRuleProps ) => {
-	const { notOperand = false, name, options = {} } = ruleProps;
+	const { notOperand = false, name, options = {}, key } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
@@ -186,6 +187,8 @@ const BuilderRule = ( {
 		}
 	} );
 
+	const elementId = `query-builder-rule--${ key }`;
+
 	return (
 		<>
 			{ objectIndex !== 0 && (
@@ -204,6 +207,7 @@ const BuilderRule = ( {
 				</Flex>
 			) }
 			<Wrapper
+				id={ elementId }
 				className={ classNames( [
 					'cc-condition-editor__rule',
 					`cc-condition-editor__rule--${
@@ -287,11 +291,59 @@ const BuilderRule = ( {
 								/>
 							</FlexItem>
 							<FlexItem>
-								<Button
-									icon={ dragHandle }
-									onClick={ () => {} }
-									isSmall={ true }
-								/>
+								<Draggable
+									elementId={ elementId }
+									transferData={ ruleProps }
+								>
+									{ ( {
+										onDraggableStart,
+										onDraggableEnd,
+									} ) => (
+										<div
+											className="drag-handle"
+											draggable
+											onDragStart={ ( event ) => {
+												onDraggableStart( event );
+												// event.preventDefault();
+												event.stopPropagation();
+
+												event.dataTransfer.setData(
+													'text',
+													JSON.stringify( ruleProps )
+												);
+
+												event.dataTransfer.effectAllowed =
+													'move';
+											} }
+											onDragEnd={ ( event ) => {
+												onDraggableEnd( event );
+												// event.preventDefault();
+												event.stopPropagation();
+
+												try {
+													const currentTarget =
+														event.currentTarget;
+													const data = event.dataTransfer.getData(
+														'text'
+													);
+													console.log(
+														'onDragEnd',
+														currentTarget,
+														data
+													);
+													console.log( { ...event } );
+												} catch ( $e ) {
+													console.log( 'error' );
+												}
+											} }
+										>
+											<Button
+												icon={ dragHandle }
+												isSmall={ true }
+											/>
+										</div>
+									) }
+								</Draggable>
 							</FlexItem>
 						</Flex>
 					</FlexItem>
