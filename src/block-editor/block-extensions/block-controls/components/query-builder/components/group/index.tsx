@@ -8,6 +8,7 @@ import { useContext, useState } from '@wordpress/element';
 import {
 	Button,
 	ButtonGroup,
+	Draggable,
 	Flex,
 	FlexBlock,
 	FlexItem,
@@ -43,13 +44,13 @@ const BuilderGroup = ( {
 	updateOperator,
 	value: groupProps,
 }: BuilderGroupProps ) => {
-	const { label = '', query, key: groupId } = groupProps;
+	const { label = '', query, key } = groupProps;
 	const { objects = [] } = query;
 
 	const [ editLabelText, setEditLabelText ] = useState( null );
 	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
 
-	const elementId = `query-builder-group--${ groupId }`;
+	const elementId = `query-builder-group--${ key }`;
 
 	return (
 		<>
@@ -184,11 +185,53 @@ const BuilderGroup = ( {
 										/>
 									</FlexItem>
 									<FlexItem>
-										<Button
-											icon={ dragHandle }
-											onClick={ () => {} }
-											isSmall={ true }
-										/>
+										<Draggable
+											elementId={ elementId }
+											transferData={ groupProps }
+										>
+											{ ( {
+												onDraggableStart,
+												onDraggableEnd,
+											} ) => (
+												<div
+													className="drag-handle"
+													draggable
+													onDrag={ ( event ) => {
+														event.preventDefault();
+														console.log(
+															'onDrag',
+															event.target,
+															event
+														);
+													} }
+													onDragStart={ ( event ) => {
+														onDraggableStart(
+															event
+														);
+
+														console.log(
+															'onDragStart',
+															event.target,
+															event
+														);
+													} }
+													onDragEnd={ ( event ) => {
+														onDraggableEnd( event );
+
+														console.log(
+															'onDragEnd',
+															event.target,
+															event
+														);
+													} }
+												>
+													<Button
+														icon={ dragHandle }
+														isSmall={ true }
+													/>
+												</div>
+											) }
+										</Draggable>
 									</FlexItem>
 								</Flex>
 							</FlexItem>
