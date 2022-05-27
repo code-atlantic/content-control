@@ -33,11 +33,26 @@ const BuilderObjects = ( {
 			),
 		} );
 
-	const deleteObject = ( key: string ) =>
+	const removeObject = ( key: string ) =>
 		onChange( {
 			...query,
 			objects: objects.filter( ( object ) => key !== object.key ),
 		} );
+
+	const moveObject = ( dragIndex: number, hoverIndex: number ) => {
+		const draggedObject = objects[ dragIndex ];
+
+		onChange(
+			update( query, {
+				objects: {
+					$splice: [
+						[ dragIndex, 1 ],
+						[ hoverIndex, 0, draggedObject ],
+					],
+				},
+			} )
+		);
+	};
 
 	return (
 		<div
