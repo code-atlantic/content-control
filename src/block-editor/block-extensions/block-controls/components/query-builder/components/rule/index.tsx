@@ -144,37 +144,27 @@ const BuilderRule = ( {
 		</>
 	);
 
-	const FormattedField = format.split( ' ' ).map( ( str ) => {
+	const formattedFields = format.split( ' ' ).map( ( str ) => {
 		switch ( str ) {
 			case '{category}':
-				return (
-					<FlexItem
-						style={ {
-							flexGrow: 0.5,
-						} }
-					>
-						{ category }
-					</FlexItem>
-				);
+				return {
+					type: 'category',
+					content: category,
+				};
 			case '{verb}':
-				return (
-					<FlexItem
-						style={ {
-							flexGrow: 0.5,
-						} }
-					>
+				return {
+					type: 'verb',
+					content: (
 						<span className="cc_condition-editor-rule__verb">
 							{ verbs[ ! notOperand ? 0 : 1 ] }
 						</span>
-					</FlexItem>
-				);
+					),
+				};
 			case '{ruleName}':
-				return (
-					<FlexItem
-						style={ {
-							flexGrow: 6,
-						} }
-					>
+				return {
+					type: 'field',
+					classes: [ 'field-type-select', 'field--ruleName' ],
+					content: (
 						<SelectControl
 							onChange={ ( value ) =>
 								onChange( {
@@ -186,18 +176,13 @@ const BuilderRule = ( {
 						>
 							<RuleNameSelectOptions />
 						</SelectControl>
-					</FlexItem>
-				);
+					),
+				};
 			default:
-				return (
-					<FlexItem
-						style={ {
-							flexGrow: 1,
-						} }
-					>
-						{ str }
-					</FlexItem>
-				);
+				return {
+					type: 'text',
+					content: str,
+				};
 		}
 	} );
 
@@ -255,7 +240,20 @@ const BuilderRule = ( {
 					>
 						{ ruleDef ? (
 							<Flex>
-								{ FormattedField.map( ( item, i ) => item ) }
+								{ formattedFields.map(
+									( { content, classes, type }, i ) => (
+										<FlexItem
+											key={ i }
+											className={ classNames( [
+												'formatted-field-item',
+												`formatted-field-item--${ type }`,
+												classes,
+											] ) }
+										>
+											{ content }
+										</FlexItem>
+									)
+								) }
 							</Flex>
 						) : (
 							<>
