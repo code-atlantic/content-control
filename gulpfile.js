@@ -300,5 +300,5 @@ gulp.task('release:clean', ['release'], function (done) {
 //endregion Watch & Build
 
 gulp.task('default', function (done) {
-	runSequence('prebuild', 'watch');
+	runSequence('prebuild', 'watch', done);
 });
