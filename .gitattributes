@@ -41,10 +41,11 @@ package.json export-ignore
 phpci.yml export-ignore
 phpunit.xml export-ignore
 postcss.config.js export-ignore
-readme.txt export-ignore
 
 /bin/ export-ignore
 /tests/ export-ignore
 /tasks/ export-ignore
 /assets/scripts/src/ export-ignore
 /assets/styles/sass/ export-ignore
+
+/assets/styles/*.css.map export-ignore

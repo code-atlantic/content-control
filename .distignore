@@ -40,3 +40,4 @@ phpunit.xml.dist
 postcss.config.js
 readme.md
 yarn-lock.json
+*.css.map

@@ -1,83 +1,83 @@
-const gulp = require( 'gulp' ),
-	runSequence = require( 'run-sequence' ).use( gulp ),
-	$fn = require( 'gulp-load-plugins' )( { camelize: true } ),
+const gulp = require('gulp'),
+	runSequence = require('run-sequence').use(gulp),
+	$fn = require('gulp-load-plugins')({ camelize: true }),
 	plumberErrorHandler = {
-		errorHandler: $fn.notify.onError( {
+		errorHandler: $fn.notify.onError({
 			title: 'Gulp',
 			message: 'Error: <%= error.message %>',
-		} ),
+		}),
 	},
-	pkg = require( './package.json' );
+	pkg = require('./package.json');
 
 //region JavaScript
-gulp.task( 'js:settingspage', function () {
+gulp.task('js:settingspage', function () {
 	return gulp
-		.src( [
+		.src([
 			'assets/scripts/src/admin/plugins/serialize-object.js',
 			'assets/scripts/src/admin/plugins/select2.full.custom.js',
 			'assets/scripts/src/admin/settings-page.js',
-		] )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.jshint() )
-		.pipe( $fn.jshint.reporter( 'default' ) )
+		])
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.jshint())
+		.pipe($fn.jshint.reporter('default'))
 		.pipe(
-			$fn.order( [ 'plugins/**/*.js', '*.js' ], {
+			$fn.order(['plugins/**/*.js', '*.js'], {
 				base: 'assets/scripts/src/admin/',
-			} )
+			})
 		)
-		.pipe( $fn.concat( 'settings-page.js' ) )
-		.pipe( gulp.dest( 'assets/scripts' ) )
-		.pipe( $fn.uglify() )
-		.pipe( $fn.rename( { extname: '.min.js' } ) )
-		.pipe( gulp.dest( 'assets/scripts' ) );
-} );
+		.pipe($fn.concat('settings-page.js'))
+		.pipe(gulp.dest('assets/scripts'))
+		.pipe($fn.uglify())
+		.pipe($fn.rename({ extname: '.min.js' }))
+		.pipe(gulp.dest('assets/scripts'));
+});
 
-gulp.task( 'js:widgets', function () {
+gulp.task('js:widgets', function () {
 	return gulp
-		.src( [ 'assets/scripts/src/admin/widget-editor.js' ] )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.jshint() )
-		.pipe( $fn.jshint.reporter( 'default' ) )
-		.pipe( gulp.dest( 'assets/scripts' ) )
-		.pipe( $fn.uglify() )
-		.pipe( $fn.rename( { extname: '.min.js' } ) )
-		.pipe( gulp.dest( 'assets/scripts' ) );
-} );
+		.src(['assets/scripts/src/admin/widget-editor.js'])
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.jshint())
+		.pipe($fn.jshint.reporter('default'))
+		.pipe(gulp.dest('assets/scripts'))
+		.pipe($fn.uglify())
+		.pipe($fn.rename({ extname: '.min.js' }))
+		.pipe(gulp.dest('assets/scripts'));
+});
 
 //region JavaScript
-gulp.task( 'js:admin', function () {
+gulp.task('js:admin', function () {
 	return (
 		gulp
-			.src( [
+			.src([
 				'assets/scripts/src/admin/vendor/*.js',
 				'assets/scripts/src/admin/plugins/**/*.js',
 				'assets/scripts/src/admin/*.js',
-			] )
-			.pipe( $fn.plumber( plumberErrorHandler ) )
-			.pipe( $fn.jshint() )
-			.pipe( $fn.jshint.reporter( 'default' ) )
+			])
+			.pipe($fn.plumber(plumberErrorHandler))
+			.pipe($fn.jshint())
+			.pipe($fn.jshint.reporter('default'))
 			.pipe(
-				$fn.order( [ 'vendor/**/*.js', 'plugins/**/*.js', '*.js' ], {
+				$fn.order(['vendor/**/*.js', 'plugins/**/*.js', '*.js'], {
 					base: 'assets/scripts/src/admin/',
-				} )
+				})
 			)
 			//.pipe($fn.concat('admin.js'))
-			.pipe( gulp.dest( 'assets/scripts' ) )
-			.pipe( $fn.uglify() )
-			.pipe( $fn.rename( { extname: '.min.js' } ) )
-			.pipe( gulp.dest( 'assets/scripts' ) )
+			.pipe(gulp.dest('assets/scripts'))
+			.pipe($fn.uglify())
+			.pipe($fn.rename({ extname: '.min.js' }))
+			.pipe(gulp.dest('assets/scripts'))
 	);
-} );
+});
 
-gulp.task( 'js:site', function () {
+gulp.task('js:site', function () {
 	return gulp
-		.src( [
+		.src([
 			'assets/scripts/src/site/plugins/**/*.js',
 			'assets/scripts/src/site/general.js',
-		] )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.jshint() )
-		.pipe( $fn.jshint.reporter( 'default' ) )
+		])
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.jshint())
+		.pipe($fn.jshint.reporter('default'))
 		.pipe(
 			$fn.order(
 				[
@@ -89,64 +89,64 @@ gulp.task( 'js:site', function () {
 				{ base: 'assets/scripts/src/site/' }
 			)
 		)
-		.pipe( $fn.concat( 'site.js' ) )
-		.pipe( gulp.dest( 'assets/scripts' ) )
-		.pipe( $fn.uglify() )
-		.pipe( $fn.rename( { extname: '.min.js' } ) )
-		.pipe( gulp.dest( 'assets/scripts' ) );
-} );
+		.pipe($fn.concat('site.js'))
+		.pipe(gulp.dest('assets/scripts'))
+		.pipe($fn.uglify())
+		.pipe($fn.rename({ extname: '.min.js' }))
+		.pipe(gulp.dest('assets/scripts'));
+});
 
-gulp.task( 'js:other', function () {
+gulp.task('js:other', function () {
 	return gulp
-		.src( 'assets/scripts/src/*.js' )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.jshint() )
-		.pipe( $fn.jshint.reporter( 'default' ) )
-		.pipe( gulp.dest( 'assets/scripts' ) )
-		.pipe( $fn.uglify() )
-		.pipe( $fn.rename( { extname: '.min.js' } ) )
-		.pipe( gulp.dest( 'assets/scripts' ) );
-} );
+		.src('assets/scripts/src/*.js')
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.jshint())
+		.pipe($fn.jshint.reporter('default'))
+		.pipe(gulp.dest('assets/scripts'))
+		.pipe($fn.uglify())
+		.pipe($fn.rename({ extname: '.min.js' }))
+		.pipe(gulp.dest('assets/scripts'));
+});
 
-gulp.task( 'js', [ 'js:widgets', 'js:settingspage', 'js:site', 'js:other' ] );
+gulp.task('js', ['js:widgets', 'js:settingspage', 'js:site', 'js:other']);
 //endregion JavaScript
 
 //region Language Files
-gulp.task( 'langpack', function () {
+gulp.task('langpack', function () {
 	return gulp
-		.src( [ '**/*.php', '!build/**/*.*' ] )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.sort() )
+		.src(['**/*.php', '!build/**/*.*'])
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.sort())
 		.pipe(
-			$fn.wpPot( {
+			$fn.wpPot({
 				domain: pkg.name,
 				bugReport: 'support@code-atlantic.com',
 				team: 'Code Atlantic Support <support@code-atlantic.com>',
-			} )
+			})
 		)
 
-		.pipe( gulp.dest( 'languages' ) );
-} );
+		.pipe(gulp.dest('languages'));
+});
 //endregion Language Files
 
 //region SASS & CSS
-gulp.task( 'css', function () {
+gulp.task('css', function () {
 	return gulp
-		.src( 'assets/styles/sass/*.scss' )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.sourcemaps.init() )
+		.src('assets/styles/sass/*.scss')
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.sourcemaps.init())
 		.pipe(
-			$fn.sass( {
+			$fn.sass({
 				errLogToConsole: true,
 				outputStyle: 'expanded',
 				precision: 10,
-			} )
+			})
 		)
-		.pipe( $fn.sourcemaps.write() )
+		.pipe($fn.sourcemaps.write())
 		.pipe(
-			$fn.sourcemaps.init( {
+			$fn.sourcemaps.init({
 				loadMaps: true,
-			} )
+			})
 		)
 		.pipe(
 			$fn.autoprefixer(
@@ -160,35 +160,35 @@ gulp.task( 'css', function () {
 				'android 4'
 			)
 		)
-		.pipe( $fn.sourcemaps.write( '.' ) )
-		.pipe( $fn.plumber.stop() )
-		.pipe( gulp.dest( 'assets/styles' ) )
-		.pipe( $fn.filter( '**/*.css' ) ) // Filtering stream to only css files
-		.pipe( $fn.combineMq() ) // Combines Media Queries
-		.pipe( $fn.rename( { suffix: '.min' } ) )
+		.pipe($fn.sourcemaps.write('.'))
+		.pipe($fn.plumber.stop())
+		.pipe(gulp.dest('assets/styles'))
+		.pipe($fn.filter('**/*.css')) // Filtering stream to only css files
+		.pipe($fn.combineMq()) // Combines Media Queries
+		.pipe($fn.rename({ suffix: '.min' }))
 		.pipe(
-			$fn.csso( {
+			$fn.csso({
 				//sourceMap: true,
-			} )
+			})
 		)
-		.pipe( gulp.dest( 'assets/styles' ) );
-} );
+		.pipe(gulp.dest('assets/styles'));
+});
 //endregion SASS & CSS
 
 //region Cleaners
-gulp.task( 'clean-js:site', function () {
+gulp.task('clean-js:site', function () {
 	return gulp
-		.src( 'assets/scripts/site*.js', { read: false } )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean() );
-} );
-gulp.task( 'clean-js:admin', function () {
+		.src('assets/scripts/site*.js', { read: false })
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean());
+});
+gulp.task('clean-js:admin', function () {
 	return gulp
-		.src( 'assets/scripts/admin*.js', { read: false } )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean() );
-} );
-gulp.task( 'clean-js:other', function () {
+		.src('assets/scripts/admin*.js', { read: false })
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean());
+});
+gulp.task('clean-js:other', function () {
 	return gulp
 		.src(
 			[
@@ -198,75 +198,72 @@ gulp.task( 'clean-js:other', function () {
 			],
 			{ read: false }
 		)
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean() );
-} );
-gulp.task( 'clean-css', function () {
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean());
+});
+gulp.task('clean-css', function () {
 	return gulp
-		.src( [ 'assets/styles/*.css', 'assets/styles/*.css.map' ], {
+		.src(['assets/styles/*.css', 'assets/styles/*.css.map'], {
 			read: false,
-		} )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean() );
-} );
-gulp.task( 'clean-build', function () {
+		})
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean());
+});
+gulp.task('clean-build', function () {
 	return gulp
-		.src( 'build/*', { read: false } )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean() );
-} );
-gulp.task( 'clean-package', function () {
+		.src('build/*', { read: false })
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean());
+});
+gulp.task('clean-package', function () {
 	return gulp
-		.src( 'release/' + pkg.name + '_v' + pkg.version + '.zip', {
+		.src('release/' + pkg.name + '_v' + pkg.version + '.zip', {
 			read: false,
-		} )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.clean( { force: true } ) );
-} );
+		})
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.clean({ force: true }));
+});
 
 // Cleaning Routines
-gulp.task( 'clean-js', function ( done ) {
+gulp.task('clean-js', function (done) {
+	runSequence(['clean-js:site', 'clean-js:admin', 'clean-js:other'], done);
+});
+gulp.task('clean-all', function (done) {
 	runSequence(
-		[ 'clean-js:site', 'clean-js:admin', 'clean-js:other' ],
+		['clean-js', 'clean-css'],
+		['clean-build', 'clean-package'],
 		done
 	);
-} );
-gulp.task( 'clean-all', function ( done ) {
-	runSequence(
-		[ 'clean-js', 'clean-css' ],
-		[ 'clean-build', 'clean-package' ],
-		done
-	);
-} );
+});
 //endregion Cleaners
 
 //region Watch & Build
-gulp.task( 'watch', function () {
-	gulp.watch( 'assets/styles/sass/**/*.scss', [ 'css' ] );
+gulp.task('watch', function () {
+	gulp.watch('assets/styles/sass/**/*.scss', ['css']);
 	//gulp.watch('assets/scripts/src/admin/**/*.js', ['js:admin']);
-	gulp.watch( 'assets/scripts/src/site/**/*.js', [ 'js:site' ] );
-	gulp.watch( 'assets/scripts/src/admin/**/*.js', [ 'js:settingspage' ] );
-	gulp.watch( 'assets/scripts/src/admin/**/*.js', [ 'js:widgets' ] );
+	gulp.watch('assets/scripts/src/site/**/*.js', ['js:site']);
+	gulp.watch('assets/scripts/src/admin/**/*.js', ['js:settingspage']);
+	gulp.watch('assets/scripts/src/admin/**/*.js', ['js:widgets']);
 	gulp.watch(
 		[
 			'assets/scripts/src/**/*.js',
 			'!assets/scripts/src/site/**/*.js',
 			'!assets/scripts/src/admin/**/*.js',
 		],
-		[ 'js:other' ]
+		['js:other']
 	);
-	gulp.watch( '**/*.php', [ 'langpack' ] );
-} );
+	gulp.watch('**/*.php', ['langpack']);
+});
 
 // Cleans & Rebuilds Assets Prior to Builds
-gulp.task( 'prebuild', function ( done ) {
-	runSequence( 'clean-all', [ 'css', 'js', 'langpack' ], done );
-} );
+gulp.task('prebuild', function (done) {
+	runSequence('clean-all', ['css', 'js', 'langpack'], done);
+});
 
 // Copies a clean set of build files into the build folder
-gulp.task( 'build', [ 'prebuild' ], function () {
+gulp.task('build', ['prebuild'], function () {
 	return gulp
-		.src( [
+		.src([
 			'./**/*.*',
 			'!./build/**',
 			'!./release/**',
@@ -274,32 +271,34 @@ gulp.task( 'build', [ 'prebuild' ], function () {
 			'!./gulpfile.js',
 			'!./composer.json',
 			'!./package.json',
+			'!./readme.md',
 			'!./assets/scripts/src/**',
-		] )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( gulp.dest( 'build/' + pkg.name ) );
-} );
+			'!./assets/styles/sass/**',
+		])
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe(gulp.dest('build/' + pkg.name));
+});
 
 // Generates a release package with the current version from package.json
-gulp.task( 'package', [ 'clean-package' ], function () {
+gulp.task('package', ['clean-package'], function () {
 	return gulp
-		.src( 'build/**/*.*' )
-		.pipe( $fn.plumber( plumberErrorHandler ) )
-		.pipe( $fn.zip( pkg.name + '_v' + pkg.version + '.zip' ) )
-		.pipe( gulp.dest( 'release' ) );
-} );
+		.src('build/**/*.*')
+		.pipe($fn.plumber(plumberErrorHandler))
+		.pipe($fn.zip(pkg.name + '_v' + pkg.version + '.zip'))
+		.pipe(gulp.dest('release'));
+});
 
 // Runs all build routines and generates a release.
-gulp.task( 'release', function ( done ) {
-	runSequence( 'build', 'package', done );
-} );
+gulp.task('release', function (done) {
+	runSequence('build', 'package', done);
+});
 
 // Runs a releaes and cleans up afterwards.
-gulp.task( 'release:clean', [ 'release' ], function ( done ) {
-	runSequence( 'clean-build', done );
-} );
+gulp.task('release:clean', ['release'], function (done) {
+	runSequence('clean-build', done);
+});
 //endregion Watch & Build
 
-gulp.task( 'default', function ( done ) {
-	runSequence( 'prebuild', 'watch' );
-} );
+gulp.task('default', function (done) {
+	runSequence('prebuild', 'watch');
+});
