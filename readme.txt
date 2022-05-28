@@ -103,7 +103,6 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 
 == Changelog ==
 
-
 = v1.1.9 - 09/30/2021 =
 
 * Fix: Error when using Gutenberg Preview.
