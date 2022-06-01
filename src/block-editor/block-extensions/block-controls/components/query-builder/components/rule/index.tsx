@@ -19,7 +19,7 @@ import { dragHandle, trash } from '@wordpress/icons';
 /** Internal Imports */
 import LogicalOperator from '../logical-operator';
 import NotOperandToggle from '../not-operand-toggle';
-import { BuilderOptionsContext } from '../../contexts';
+import { OptionsContext } from '../../contexts';
 import { getCategoryOptions, getRuleOptions } from '../../utils';
 
 /** Type Imports */
@@ -36,7 +36,7 @@ const BuilderRule = ( {
 }: BuilderRuleProps ) => {
 	const { notOperand = false, name, options = {}, key } = ruleProps;
 
-	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
+	const builderOptions: BuilderOptions = useContext( OptionsContext );
 
 	const ruleDef = builderOptions.rules[ name ] ?? null;
 

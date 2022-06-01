@@ -1,10 +1,11 @@
 import LogicalOperator from "../components/logical-operator";
 
+export type QueryObjectKey = string;
 export type QueryLocigalOperator = 'and' | 'or';
 export type QueryNotOperand = boolean;
 
 export interface QueryObjectBase {
-	key: string;
+	key: QueryObjectKey;
 	type: string;
 }
 
@@ -31,7 +32,7 @@ export interface Query {
 }
 
 export type QuerySet = {
-	key: string;
+	key: QueryObjectKey;
 	label: string;
 	query: Query;
 }

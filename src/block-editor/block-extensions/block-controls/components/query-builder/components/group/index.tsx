@@ -33,7 +33,7 @@ import { newRule, newGroup } from '../../templates';
 /** Type Imports */
 import { BuilderGroupProps, Query, BuilderOptions } from '../../types';
 import LogicalOperator from '../logical-operator';
-import { BuilderOptionsContext } from '../../contexts';
+import { OptionsContext } from '../../contexts';
 
 const BuilderGroup = ( {
 	objectWrapper: Wrapper,
@@ -48,7 +48,7 @@ const BuilderGroup = ( {
 	const { objects = [] } = query;
 
 	const [ editLabelText, setEditLabelText ] = useState( null );
-	const builderOptions: BuilderOptions = useContext( BuilderOptionsContext );
+	const builderOptions: BuilderOptions = useContext( OptionsContext );
 
 	const elementId = `query-builder-group--${ key }`;
 

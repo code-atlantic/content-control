@@ -7,7 +7,7 @@ import { _x } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
 /** Internal Imports */
-import { BuilderOptionsContext, BuilderQueryContext } from './contexts';
+import { OptionsProvider, QueryProvider } from './contexts';
 import QueryBuilderObjects from './components/objects';
 
 /** Type Imports */
@@ -22,8 +22,8 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 	const { objects = [] } = query;
 
 	return (
-		<BuilderOptionsContext.Provider value={ options }>
-			<BuilderQueryContext.Provider value={ query }>
+		<OptionsProvider options={ options }>
+			<QueryProvider query={ query }>
 				<div
 					className={ classNames( [
 						'cc__component-condition-editor',
@@ -74,8 +74,8 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 						) }
 					</ButtonGroup>
 				</div>
-			</BuilderQueryContext.Provider>
-		</BuilderOptionsContext.Provider>
+			</QueryProvider>
+		</OptionsProvider>
 	);
 };
 
