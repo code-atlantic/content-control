@@ -30,30 +30,15 @@ const BuilderObjects = ( {
 		onChange( {
 			...query,
 			objects: objects.map( ( object ) =>
-				object.key === updatedObject.key ? updatedObject : object
+				object.id === updatedObject.id ? updatedObject : object
 			),
 		} );
 
-	const removeObject = ( key: string ) =>
+	const removeObject = ( id: string ) =>
 		onChange( {
 			...query,
-			objects: objects.filter( ( object ) => key !== object.key ),
+			objects: objects.filter( ( object ) => id !== object.id ),
 		} );
-
-	const moveObject = ( dragIndex: number, hoverIndex: number ) => {
-		const draggedObject = objects[ dragIndex ];
-
-		onChange(
-			update( query, {
-				objects: {
-					$splice: [
-						[ dragIndex, 1 ],
-						[ hoverIndex, 0, draggedObject ],
-					],
-				},
-			} )
-		);
-	};
 
 	return (
 		<div
@@ -96,11 +81,11 @@ const BuilderObjects = ( {
 				objects.map( ( object, i ) => (
 					<BuilderObject
 						objectIndex={ i }
-						key={ object.key }
+						key={ object.id }
 						logicalOperator={ logicalOperator }
 						updateOperator={ updateOperator }
 						onChange={ ( values ) => updateObject( values ) }
-						onDelete={ () => removeObject( object.key ) }
+						onDelete={ () => removeObject( object.id ) }
 						value={ object }
 						// onMove={ moveObject }
 					/>

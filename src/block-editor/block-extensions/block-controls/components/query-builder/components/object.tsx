@@ -15,7 +15,7 @@ function BuilderObject( {
 	updateOperator,
 	value: objectProps,
 }: BuilderObjectProps< QueryObject > ) {
-	const elementId = `query-builder-${ objectProps.type }--${ objectProps.key }`;
+	const elementId = `query-builder-${ objectProps.type }--${ objectProps.id }`;
 
 	const Wrapper = ( { children, className, ...wrapperProps } ) => {
 		return (

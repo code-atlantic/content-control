@@ -34,7 +34,7 @@ const BuilderRule = ( {
 	updateOperator,
 	value: ruleProps,
 }: BuilderRuleProps ) => {
-	const { notOperand = false, name, options = {}, key } = ruleProps;
+	const { notOperand = false, name, options = {}, id } = ruleProps;
 
 	const builderOptions: BuilderOptions = useContext( OptionsContext );
 
@@ -118,9 +118,10 @@ const BuilderRule = ( {
 	 * Update a single option.
 	 *
 	 * @param {string} optionKey Option key.
+	 * @param          optionid
 	 * @param {any}    value     Option value
 	 */
-	const updateOption = ( optionKey: string, value: any ): void =>
+	const updateOption = ( optionid: string, value: any ): void =>
 		updateOptions( {
 			...options,
 			[ optionKey ]: value,
@@ -187,7 +188,7 @@ const BuilderRule = ( {
 		}
 	} );
 
-	const elementId = `query-builder-rule--${ key }`;
+	const elementId = `query-builder-rule--${ id }`;
 
 	return (
 		<>

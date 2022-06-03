@@ -44,13 +44,13 @@ const BuilderGroup = ( {
 	updateOperator,
 	value: groupProps,
 }: BuilderGroupProps ) => {
-	const { label = '', query, key } = groupProps;
+	const { label = '', query, id } = groupProps;
 	const { objects = [] } = query;
 
 	const [ editLabelText, setEditLabelText ] = useState( null );
 	const builderOptions: BuilderOptions = useContext( OptionsContext );
 
-	const elementId = `query-builder-group--${ key }`;
+	const elementId = `query-builder-group--${ id }`;
 
 	return (
 		<>

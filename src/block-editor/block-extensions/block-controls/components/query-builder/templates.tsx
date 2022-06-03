@@ -10,7 +10,7 @@ export const newUUID = customAlphabet(
 );
 
 export const newRule = (): QueryRule => ( {
-	key: newUUID(),
+	id: newUUID(),
 	type: 'rule',
 	name: '',
 	options: {},
@@ -18,7 +18,7 @@ export const newRule = (): QueryRule => ( {
 } );
 
 export const newGroup = (): QueryGroup => ( {
-	key: newUUID(),
+	id: newUUID(),
 	type: 'group',
 	label: '',
 	query: {
@@ -28,7 +28,7 @@ export const newGroup = (): QueryGroup => ( {
 } );
 
 export const newSet = (): QuerySet => ( {
-	key: newUUID(),
+	id: newUUID(),
 	label: '',
 	query: {
 		logicalOperator: 'and',

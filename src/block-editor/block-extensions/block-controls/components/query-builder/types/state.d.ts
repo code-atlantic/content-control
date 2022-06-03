@@ -1,9 +1,9 @@
-import { QueryObject, QueryObjectKey, Query } from './query';
+import { QueryObject, QueryObjectId, Query } from './query';
 
 export type AddObjectToGroup = {
 	type: 'ADD_OBJECT_TO_GROUP';
 	payload: {
-		groupId: QueryObjectKey;
+		groupId: QueryObjectId;
 		object: QueryObject;
 	};
 };
@@ -11,16 +11,16 @@ export type AddObjectToGroup = {
 export type RemoveObjectFromGroupAction = {
 	type: 'REMOVE_OBJECT_FROM_GROUP';
 	payload: {
-		groupId: QueryObjectKey;
-		objectId: QueryObjectKey;
+		groupId: QueryObjectId;
+		objectId: QueryObjectId;
 	};
 };
 
 export type SortGroupObjectsAction = {
 	type: 'SORT_GROUP_OBJECTS';
 	payload: {
-		groupId: QueryObjectKey;
-		objectId: QueryObjectKey;
+		groupId: QueryObjectId;
+		objectId: QueryObjectId;
 		newIndex: number;
 	};
 };
@@ -28,8 +28,8 @@ export type SortGroupObjectsAction = {
 export type MoveItemToGroupAction = {
 	type: 'MOVE_OBJECT_TO_GROUP';
 	payload: {
-		groupId: QueryObjectKey;
-		objectId: QueryObjectKey;
+		groupId: QueryObjectId;
+		objectId: QueryObjectId;
 		newIndex: number;
 	};
 };
@@ -44,8 +44,8 @@ export type QueryBuilderAction =
 export type QueryContextState = {
 	items: QueryObject[];
 	relations: {
-		key: QueryObjectKey;
-		itemsKeys: QueryObjectKey[];
+		id: QueryObjectId;
+		itemsIds: QueryObjectId[];
 	}[];
 	query: Query;
 };

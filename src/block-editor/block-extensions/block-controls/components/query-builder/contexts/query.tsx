@@ -11,20 +11,14 @@ import {
 } from '../reducers';
 
 /* Type Imports */
-import {
-	Query,
-	QueryObjectKey as Key,
-	QueryContextState,
-	QueryObject,
-	QueryObjectKey,
-} from '../types';
+import { Query, QueryContextState, QueryObject, QueryObjectId } from '../types';
 
 export const QueryContext: React.Context< QueryContextState > = createContext(
 	initialQueryState
 );
 
 const objectInList = ( find: QueryObject, objects: QueryObject[] ) =>
-	objects.find( ( object ) => find.key === object.key );
+	objects.find( ( object ) => find.id === object.id );
 
 const flattenObjects = ( objects: QueryObject[] ) =>
 	objects.flatMap( ( o ) => [
@@ -34,11 +28,11 @@ const flattenObjects = ( objects: QueryObject[] ) =>
 
 const flattenRelations = (
 	objects: QueryObject[],
-	parentId: QueryObjectKey
+	parentId: QueryObjectId
 ) => {
 	return objects.reduce( ( list, object, i ) => {
 		if ( object.type === 'group' ) {
-			list.push( flattenRelations( object.query.objects, object.key ) );
+			list.push( flattenRelations( object.query.objects, object.id ) );
 		}
 
 		return list;
@@ -68,7 +62,7 @@ export const QueryProvider = ( {
 
 	const addObject = < QO extends QueryObject >(
 		object: QO,
-		groupId: Key = null
+		groupId: QueryObjectId = null
 	) => {
 		dispatch( {
 			type: AddObjectToGroup,
@@ -79,7 +73,10 @@ export const QueryProvider = ( {
 		} );
 	};
 
-	const removeObject = ( objectId: Key, groupId: Key ) => {
+	const removeObject = (
+		objectId: QueryObjectId,
+		groupId: QueryObjectId
+	) => {
 		dispatch( {
 			type: RemoveObjectFromGroup,
 			payload: {
@@ -89,7 +86,11 @@ export const QueryProvider = ( {
 		} );
 	};
 
-	const moveObject = ( objectId: Key, groupId: Key, newIndex: number ) => {
+	const moveObject = (
+		objectId: QueryObjectId,
+		groupId: QueryObjectId,
+		newIndex: number
+	) => {
 		dispatch( {
 			type: MoveObjectToGroup,
 			payload: {
