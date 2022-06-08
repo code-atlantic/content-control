@@ -96,25 +96,28 @@ const SubQuery = ( {
 						 *
 						 * Return reference to child list for each parent index.
 						 */
-						const closestListReference: QueryGroupItem[ 'query' ][ 'items' ] = parentIndexs.reduce(
+						const closestParentList: QueryGroupItem[ 'query' ][ 'items' ] = parentIndexs.reduce(
 							( arr, i ) => {
 								const nextParentGroup = arr[ i ];
 
-								if ( 'query' in nextParentGroup ) {
+								if ( ! ( 'query' in nextParentGroup ) ) {
 									// Reference to child list for each parent index.
-									return nextParentGroup.query.items;
+									throw "Item's parent is not a group!";
 								}
-								throw "Item's parent is not a group!";
+								return nextParentGroup.query.items;
 							},
 							rootListCopy
 						);
 
-						debugger;
+						const closestParentGroup =
+							closestParentList[ currentListIndex ];
 
-						// Replaced referenced items list with updated list.
-						closestListReference[
-							currentListIndex
-						].query.items = currentList;
+						if ( 'query' in closestParentGroup ) {
+							// Replaced referenced items list with updated list.
+							closestParentGroup.query.items = currentList;
+						} else {
+							throw "Item's parent is not a group!";
+						}
 
 						return rootListCopy;
 					} );
