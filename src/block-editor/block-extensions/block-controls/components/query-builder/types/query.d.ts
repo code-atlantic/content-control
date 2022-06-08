@@ -1,12 +1,13 @@
+export type Identifier = string;
 export type QueryLogicalOperator = 'and' | 'or';
 export type QueryNotOperand = boolean;
 
-export interface QueryObjectBase {
-	id: QueryObjectId;
+export interface QueryItemBase {
+	id: Identifier;
 	type: string;
 }
 
-export interface QueryRule extends QueryObjectBase {
+export interface QueryRuleItem extends QueryItemBase {
 	type: 'rule';
 	name: string;
 	options?: {
@@ -15,21 +16,22 @@ export interface QueryRule extends QueryObjectBase {
 	notOperand?: QueryNotOperand;
 }
 
-export interface QueryGroup extends QueryObjectBase {
+export interface QueryGroupItem extends QueryItemBase {
 	type: 'group';
 	label: string;
 	query: Query;
 }
 
-export type QueryObject = QueryRule | QueryGroup;
+export type QueryItem = QueryRuleItem | QueryGroupItem;
 
 export interface Query {
 	logicalOperator: QueryLogicalOperator;
-	objects: QueryObject[];
+	items: QueryItem[];
 }
 
+// TODO Review, this seems identical to QueryGroup.
 export type QuerySet = {
-	id: QueryObjectId;
+	id: Identifier;
 	label: string;
 	query: Query;
 }

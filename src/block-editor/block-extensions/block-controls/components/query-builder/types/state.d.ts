@@ -1,26 +1,26 @@
-import { QueryObject, QueryObjectId, Query } from './query';
+import { QueryItem, Identifier, Query } from './query';
 
 export type AddObjectToGroup = {
 	type: 'ADD_OBJECT_TO_GROUP';
 	payload: {
-		groupId: QueryObjectId;
-		object: QueryObject;
+		groupId: Identifier;
+		object: QueryItem;
 	};
 };
 
 export type RemoveObjectFromGroupAction = {
 	type: 'REMOVE_OBJECT_FROM_GROUP';
 	payload: {
-		groupId: QueryObjectId;
-		objectId: QueryObjectId;
+		groupId: Identifier;
+		objectId: Identifier;
 	};
 };
 
 export type SortGroupObjectsAction = {
 	type: 'SORT_GROUP_OBJECTS';
 	payload: {
-		groupId: QueryObjectId;
-		objectId: QueryObjectId;
+		groupId: Identifier;
+		objectId: Identifier;
 		newIndex: number;
 	};
 };
@@ -28,8 +28,8 @@ export type SortGroupObjectsAction = {
 export type MoveItemToGroupAction = {
 	type: 'MOVE_OBJECT_TO_GROUP';
 	payload: {
-		groupId: QueryObjectId;
-		objectId: QueryObjectId;
+		groupId: Identifier;
+		objectId: Identifier;
 		newIndex: number;
 	};
 };
@@ -42,10 +42,10 @@ export type QueryBuilderAction =
 	| { type: 'failure'; payload: { error: string } };
 
 export type QueryContextState = {
-	items: QueryObject[];
+	items: QueryItem[];
 	relations: {
-		id: QueryObjectId;
-		itemsIds: QueryObjectId[];
+		id: Identifier;
+		itemsIds: Identifier[];
 	}[];
 	query: Query;
 };

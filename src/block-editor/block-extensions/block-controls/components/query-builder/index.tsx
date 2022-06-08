@@ -7,8 +7,9 @@ import { _x } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
 /** Internal Imports */
-import { OptionsProvider, QueryProvider } from './contexts';
-import QueryBuilderObjects from './components/objects';
+import { OptionsProvider } from './contexts';
+import { newRule, newGroup } from './templates';
+import RootQuery from './components/root-query';
 
 /** Type Imports */
 import { BuilderProps } from './types';
@@ -16,65 +17,59 @@ import { BuilderProps } from './types';
 /** Style Imports */
 import './index.scss';
 
-import { newRule, newGroup } from './templates';
-
 const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
-	const { objects = [] } = query;
+	const { items = [] } = query;
 
 	return (
 		<OptionsProvider options={ options }>
-			<QueryProvider query={ query }>
-				<div
-					className={ classNames( [
-						'cc__component-condition-editor',
-						'cc__condition-editor',
-					] ) }
-				>
-					<QueryBuilderObjects
-						type="builder"
-						query={ query }
-						onChange={ onChange }
-					/>
+			<div
+				className={ classNames( [
+					'cc__component-condition-editor',
+					'cc__condition-editor',
+				] ) }
+			>
+				<RootQuery query={ query } onChange={ onChange } />
 
-					<ButtonGroup className="cc__component-condition-editor__add-buttons">
+				<ButtonGroup className="cc__component-condition-editor__add-buttons">
+					<Button
+						icon={ plus }
+						variant="link"
+						onClick={ () => {
+							onChange( {
+								...query,
+								items: [ ...items, newRule() ],
+							} );
+						} }
+					>
+						{ _x(
+							'Add condition',
+							'Conditional editor main add buttons',
+							'content-control'
+						) }
+					</Button>
+
+					{ options.features.groups && (
 						<Button
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
+								// TODO LEFT OFF HERE.
+								// TODO this is broken, seems new group is added as an array not an objecct.
 								onChange( {
 									...query,
-									objects: [ ...objects, newRule() ],
+									items: [ ...items, newGroup() ],
 								} );
 							} }
 						>
 							{ _x(
-								'Add condition',
+								'Add condition group',
 								'Conditional editor main add buttons',
 								'content-control'
 							) }
 						</Button>
-
-						{ options.features.groups && (
-							<Button
-								icon={ plus }
-								variant="link"
-								onClick={ () => {
-									onChange( {
-										...query,
-										objects: [ ...objects, newGroup() ],
-									} );
-								} }
-							>
-								{ _x(
-									'Add condition group',
-									'Conditional editor main add buttons',
-									'content-control'
-								) }
-							</Button>
-						) }
-					</ButtonGroup>
-				</div>
-			</QueryProvider>
+					) }
+				</ButtonGroup>
+			</div>
 		</OptionsProvider>
 	);
 };

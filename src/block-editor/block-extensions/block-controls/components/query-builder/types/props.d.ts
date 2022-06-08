@@ -1,28 +1,19 @@
-import { QueryLocigalOperator } from '../types';
-import { Query, QueryRule, QueryGroup, QueryObjectBase } from './query';
+import { Query, QueryRuleItem, QueryGroupItem, QueryItemBase } from './query';
 
-export type BuilderObjectsProps< T extends Query > = {
-	type?: 'group' | 'builder';
+export type BuilderQueryProps< T extends Query > = {
 	query: T;
 	onChange: ( query: T ) => void;
+	indexs?: number[];
 };
 
-export type BuilderObjectProps< T extends QueryObjectBase > = {
-	objectIndex: number;
+export type BuilderItemProps< T extends QueryItemBase > = {
 	value: T;
 	onChange: ( value: T ) => void;
-	onDelete: () => void;
-	logicalOperator: QueryLocigalOperator;
-	updateOperator: ( value: QueryLocigalOperator ) => void;
+	[key: string]: any,
 };
 
-export type BuilderObjectHeaderProps<
-	T extends QueryObjectBase
-> = BuilderObjectProps< T >;
-
-type WrapperProps = {
-	objectWrapper: ( props: any ) => JSX.Element;
+export type BuilderGroupItemProps = BuilderItemProps< QueryGroupItem > & {
+	indexs: number[],
 };
 
-export type BuilderGroupProps = BuilderObjectProps< QueryGroup > & WrapperProps;
-export type BuilderRuleProps = BuilderObjectProps< QueryRule > & WrapperProps;
+export type BuilderRuleItemProps = BuilderItemProps< QueryRuleItem >;

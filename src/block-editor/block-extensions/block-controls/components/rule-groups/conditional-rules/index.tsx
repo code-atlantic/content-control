@@ -111,7 +111,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	const updateSet = ( updatedSet: QuerySet ) => {
 		let updated = false;
 		const newSets = conditionSets.map( ( set ) => {
-			if ( set.key === updatedSet.key ) {
+			if ( set.id === updatedSet.id ) {
 				updated = true;
 				return updatedSet;
 			}
@@ -132,12 +132,12 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	/**
 	 * Remove set.
 	 *
-	 * @param {string} key
+	 * @param {string} id
 	 */
-	const removeSet = ( key: string ) =>
+	const removeSet = ( id: string ) =>
 		setGroupRules( {
 			...groupRules,
-			conditionSets: conditionSets.filter( ( set ) => set.key !== key ),
+			conditionSets: conditionSets.filter( ( set ) => set.id !== id ),
 		} );
 
 	/** Confirmation dialogue component. */
@@ -145,7 +145,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 		<ConfirmDialog
 			onCancel={ () => confirmDeleteSet( null ) }
 			onConfirm={ () => {
-				removeSet( setToDelete.key );
+				removeSet( setToDelete.id );
 				confirmDeleteSet( null );
 			} }
 		>
@@ -190,7 +190,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 			/>
 
 			{ conditionSets.map( ( set ) => (
-				<Flex key={ set.key }>
+				<Flex key={ set.id }>
 					<FlexItem>
 						<Button
 							variant="link"

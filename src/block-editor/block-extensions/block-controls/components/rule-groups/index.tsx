@@ -50,13 +50,13 @@ const defaults = (): BlockAttributes => ( {
 		anyAll: 'all',
 		conditionSets: [
 			{
-				key: newUUID(),
+				id: newUUID(),
 				label: __( 'User Logged In', 'content-control' ),
 				query: {
 					logicalOperator: 'and',
-					objects: [
+					items: [
 						{
-							key: newUUID(),
+							id: newUUID(),
 							type: 'rule',
 							name: 'user__is_logged_in',
 						},

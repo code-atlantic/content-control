@@ -2,14 +2,6 @@ import { deburr } from 'lodash';
 
 import { BuilderOptions } from './types';
 
-export const sortableOptions = {
-	animation: 150,
-	fallbackOnBody: true,
-	swapThreshold: 0.65,
-	ghostClass: 'ghost',
-	group: 'shared',
-};
-
 const getCategoryOptions = ( builderOptions: BuilderOptions ) =>
 	Object.values( builderOptions.rules )
 		// Reduce to array of unique categories.
