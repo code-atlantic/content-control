@@ -6,7 +6,7 @@ import { SelectControl } from '@wordpress/components';
 import { _x, __ } from '@wordpress/i18n';
 
 /** Type Imports */
-import { QueryLocigalOperator as QueryLogicalOperator } from '../types';
+import { QueryLogicalOperator } from '../types';
 
 type LogicalOperatorProps< T extends QueryLogicalOperator > = {
 	value: T;

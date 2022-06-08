@@ -1,7 +1,4 @@
-import LogicalOperator from "../components/logical-operator";
-
-export type QueryObjectId = string;
-export type QueryLocigalOperator = 'and' | 'or';
+export type QueryLogicalOperator = 'and' | 'or';
 export type QueryNotOperand = boolean;
 
 export interface QueryObjectBase {
@@ -27,7 +24,7 @@ export interface QueryGroup extends QueryObjectBase {
 export type QueryObject = QueryRule | QueryGroup;
 
 export interface Query {
-	logicalOperator: QueryLocigalOperator;
+	logicalOperator: QueryLogicalOperator;
 	objects: QueryObject[];
 }
 
