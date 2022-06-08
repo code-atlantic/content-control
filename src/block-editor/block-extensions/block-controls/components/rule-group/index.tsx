@@ -38,6 +38,7 @@ const RuleGroup = ( {
 	setRules,
 	defaults = () => {},
 	children,
+	// isOpened = false,
 	...extraChildProps
 } ) => {
 	const { [ groupId ]: groupRules = null } = rules;
