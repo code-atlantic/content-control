@@ -292,20 +292,16 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 								label,
 							} )
 						}
-						help={
-							currentSet.label.length <= 0 && (
-								<Notice
-									status="warning"
-									isDismissible={ false }
-								>
-									{ __(
-										'Enter a label for this set.',
-										'content-control'
-									) }
-								</Notice>
-							)
-						}
 					/>
+
+					{ currentSet.label.length <= 0 && (
+						<Notice status="warning" isDismissible={ false }>
+							{ __(
+								'Enter a label for this set.',
+								'content-control'
+							) }
+						</Notice>
+					) }
 
 					<Builder
 						query={ currentSet.query }
