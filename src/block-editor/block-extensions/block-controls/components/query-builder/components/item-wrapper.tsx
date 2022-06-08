@@ -2,13 +2,12 @@ import classNames from 'classnames';
 
 /** Type Imports */
 import { Flex, FlexItem } from '@wordpress/components';
-import { useContext } from '@wordpress/element';
 import LogicalOperator from './logical-operator';
 
-import { queryContext } from '../contexts';
+import { useQueryContext } from '../contexts';
 
 const ItemWrapper = ( { children, ...wrapperProps } ) => {
-	const { logicalOperator, updateOperator } = useContext( queryContext );
+	const { logicalOperator, updateOperator } = useQueryContext();
 
 	return (
 		<div

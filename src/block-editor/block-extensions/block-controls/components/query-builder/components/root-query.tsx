@@ -3,7 +3,11 @@ import classNames from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
 
 /** Internal Imports */
-import { QueryContext, QueryProvider, SetListFunctional } from '../contexts';
+import {
+	QueryContextProvider,
+	QueryContextProps,
+	SetListFunctional,
+} from '../contexts';
 
 /** Type Imports */
 import {
@@ -37,7 +41,7 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
-	const rootQueryContext: QueryContext = {
+	const rootQueryContext: QueryContextProps = {
 		onChange, // TODO REVIEW usage of this one later.
 		logicalOperator,
 		setList,
@@ -68,7 +72,7 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 	const { updateItem } = rootQueryContext;
 
 	return (
-		<QueryProvider value={ rootQueryContext }>
+		<QueryContextProvider value={ rootQueryContext }>
 			<ReactSortable
 				className={ classNames( [
 					'cc__condition-editor__item-list',
@@ -76,11 +80,8 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 				] ) }
 				list={ items }
 				setList={ setList }
-				onSpill={ ( evt, sortable, store ) => {
-					console.log( evt );
-				} }
 				animation={ 150 }
-				// fallbackOnBody={ false }
+				fallbackOnBody={ true }
 				swapThreshold={ 0.65 }
 				ghostClass="ghost"
 				group={ {
@@ -114,7 +115,7 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 					);
 				} ) }
 			</ReactSortable>
-		</QueryProvider>
+		</QueryContextProvider>
 	);
 };
 

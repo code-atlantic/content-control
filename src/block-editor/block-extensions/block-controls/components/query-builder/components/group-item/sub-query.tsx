@@ -1,10 +1,13 @@
 /** External Imports */
 import classNames from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
-import { useContext } from '@wordpress/element';
 
 /** Internal Imports */
-import { QueryProvider, queryContext, QueryContext } from '../../contexts';
+import {
+	QueryContextProvider,
+	QueryContextProps,
+	useQueryContext,
+} from '../../contexts';
 
 /** Type Imports */
 import {
@@ -24,15 +27,13 @@ const SubQuery = ( {
 	onChange,
 	indexs,
 }: BuilderQueryProps< Query > ) => {
-	const { setList: setRootList, ...parentQueryContext } = useContext(
-		queryContext
-	);
+	const { setList: setRootList, ...parentQueryContext } = useQueryContext();
 	const { items = [], logicalOperator } = query;
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
-	const subQueryContext: QueryContext = {
+	const subQueryContext: QueryContextProps = {
 		...parentQueryContext,
 		setList: setRootList,
 		indexs,
@@ -65,7 +66,7 @@ const SubQuery = ( {
 	const { updateItem } = subQueryContext;
 
 	return (
-		<QueryProvider value={ subQueryContext }>
+		<QueryContextProvider value={ subQueryContext }>
 			<ReactSortable
 				key={ groupId }
 				className={ classNames( [
@@ -151,7 +152,7 @@ const SubQuery = ( {
 					);
 				} ) }
 			</ReactSortable>
-		</QueryProvider>
+		</QueryContextProvider>
 	);
 };
 

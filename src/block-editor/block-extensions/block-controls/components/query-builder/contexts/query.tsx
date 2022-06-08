@@ -5,34 +5,42 @@ import { createContext, useReducer, useContext } from '@wordpress/element';
 import {
 	queryReducer,
 	initialQueryState,
-	AddObjectToGroup,
-	RemoveObjectFromGroup,
-	MoveObjectToGroup,
+	AddItemToGroup,
+	RemoveItemFromGroup,
+	MoveItemToGroup,
 } from '../reducers';
+import { Identifier, Query, QueryItem, QueryLogicalOperator } from '../types';
 
-/* Type Imports */
-import { Query, QueryContextState, QueryObject, QueryObjectId } from '../types';
+export type SetListFunctional = ( sourceList: QueryItem[] ) => QueryItem[];
 
-export const QueryContext: React.Context< QueryContextState > = createContext(
-	initialQueryState
+export type QueryContextProps = {
+	logicalOperator: QueryLogicalOperator;
+	updateOperator: ( updatedOperator: QueryLogicalOperator ) => void;
+	addItem: ( newItem: QueryItem ) => void;
+	updateItem: ( id: string, updatedItem: QueryItem ) => void;
+	removeItem: ( id: string ) => void;
+	indexs?: number[];
+	setList?: ( currentList: SetListFunctional | QueryItem[] ) => void;
+	[ key: string ]: any;
+};
+
+export const QueryContext: React.Context< QueryContextProps > = createContext(
+	null
 );
 
-const objectInList = ( find: QueryObject, objects: QueryObject[] ) =>
-	objects.find( ( object ) => find.id === object.id );
+const itemInList = ( find: QueryItem, items: QueryItem[] ) =>
+	items.find( ( item ) => find.id === item.id );
 
-const flattenObjects = ( objects: QueryObject[] ) =>
-	objects.flatMap( ( o ) => [
+const flattenItems = ( items: QueryItem[] ) =>
+	items.flatMap( ( o ) => [
 		o,
-		...( o.type === 'group' ? flattenObjects( o.query.objects ) : [] ),
+		...( o.type === 'group' ? flattenItems( o.query.items ) : [] ),
 	] );
 
-const flattenRelations = (
-	objects: QueryObject[],
-	parentId: QueryObjectId
-) => {
-	return objects.reduce( ( list, object, i ) => {
-		if ( object.type === 'group' ) {
-			list.push( flattenRelations( object.query.objects, object.id ) );
+const flattenRelations = ( items: QueryItem[], parentId: Identifier ) => {
+	return items.reduce( ( list, item, i ) => {
+		if ( item.type === 'group' ) {
+			list.push( flattenRelations( item.query.items, item.id ) );
 		}
 
 		return list;
@@ -41,72 +49,75 @@ const flattenRelations = (
 
 const parseQueryState = ( query: Query ) => {
 	const queryState = {
-		items: flattenObjects( query.objects ),
-		relations: flattenRelations( query.objects, 'main' ),
+		items: flattenItems( query.items ),
+		relations: flattenRelations( query.items, 'main' ),
 		query,
 	};
 
 	return {};
 };
 
-export const QueryProvider = ( {
+export const QueryContextProvider = ( {
+	value,
 	query,
 	children,
-}: React.PropsWithChildren< { query: Query } > ) => {
+}: React.PropsWithChildren< { value: QueryContextProps; query?: Query } > ) => {
 	const initialState = {
 		...initialQueryState,
 		query,
 	};
 
+	// Currently this reducer is not in use.
+
+	// The following series of functions will be rewritten to manage nested trees
+	// Currently this is done with passed indexs and traversal.
+
 	const [ state, dispatch ] = useReducer( queryReducer, initialState );
 
-	const addObject = < QO extends QueryObject >(
-		object: QO,
-		groupId: QueryObjectId = null
+	const addItem = < QO extends QueryItem >(
+		item: QO,
+		groupId: Identifier = null
 	) => {
 		dispatch( {
-			type: AddObjectToGroup,
+			type: AddItemToGroup,
 			payload: {
 				groupId,
-				object,
+				item,
 			},
 		} );
 	};
 
-	const removeObject = (
-		objectId: QueryObjectId,
-		groupId: QueryObjectId
-	) => {
+	const removeItem = ( itemId: Identifier, groupId: Identifier ) => {
 		dispatch( {
-			type: RemoveObjectFromGroup,
+			type: RemoveItemFromGroup,
 			payload: {
 				groupId,
-				objectId,
+				itemId,
 			},
 		} );
 	};
 
-	const moveObject = (
-		objectId: QueryObjectId,
-		groupId: QueryObjectId,
+	const moveItem = (
+		itemId: Identifier,
+		groupId: Identifier,
 		newIndex: number
 	) => {
 		dispatch( {
-			type: MoveObjectToGroup,
+			type: MoveItemToGroup,
 			payload: {
 				groupId,
-				objectId,
+				itemId,
 				newIndex,
 			},
 		} );
 	};
 
-	const value = {
-		...state,
-		addObject,
-		removeObject,
-		moveObject,
-	};
+	// const value = {
+	// 	...state,
+	// 	addItem,
+	// 	removeItem,
+	// 	moveItem,
+	// };
 
 	return (
 		<QueryContext.Provider value={ value }>
@@ -115,7 +126,7 @@ export const QueryProvider = ( {
 	);
 };
 
-const useQuery = () => {
+const useQueryContext = () => {
 	const context = useContext( QueryContext );
 
 	if ( context === undefined ) {
@@ -125,4 +136,4 @@ const useQuery = () => {
 	return context;
 };
 
-export default useQuery;
+export default useQueryContext;
