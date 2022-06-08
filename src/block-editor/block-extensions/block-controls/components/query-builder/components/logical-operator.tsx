@@ -42,18 +42,16 @@ function LogicalOperator( {
 	];
 
 	return (
-		<>
-			<SelectControl
-				className={ classNames( [
-					'cc__condition-editor__logical-operator',
-				] ) }
-				label={ __( 'Choose logical operator', 'content-control' ) }
-				hideLabelFromVision={ true }
-				options={ options }
-				value={ value }
-				onChange={ ( newValue ) => onChange( newValue ) }
-			/>
-		</>
+		<SelectControl
+			className={ classNames( [
+				'cc__condition-editor__logical-operator',
+			] ) }
+			label={ __( 'Choose logical operator', 'content-control' ) }
+			hideLabelFromVision={ true }
+			options={ options }
+			value={ value }
+			onChange={ onChange }
+		/>
 	);
 }
 
