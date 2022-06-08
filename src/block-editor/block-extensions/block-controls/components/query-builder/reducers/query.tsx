@@ -15,26 +15,26 @@ const queryReducer = (
 	const { type, payload } = action;
 
 	switch ( type ) {
-		case actions.AddObjectToGroup:
-			console.log( actions.AddObjectToGroup, payload );
+		case actions.AddItemToGroup:
+			console.log( actions.AddItemToGroup, payload );
 
 			return {
 				...state,
 			};
-		case actions.RemoveObjectFromGroup:
-			console.log( actions.RemoveObjectFromGroup, payload );
+		case actions.RemoveItemFromGroup:
+			console.log( actions.RemoveItemFromGroup, payload );
 
 			return {
 				...state,
 			};
-		case actions.SortGroupObjects:
-			console.log( actions.SortGroupObjects, payload );
+		case actions.SortGroupItems:
+			console.log( actions.SortGroupItems, payload );
 
 			return {
 				...state,
 			};
-		case actions.MoveObjectToGroup:
-			console.log( actions.MoveObjectToGroup, payload );
+		case actions.MoveItemToGroup:
+			console.log( actions.MoveItemToGroup, payload );
 
 			return {
 				...state,

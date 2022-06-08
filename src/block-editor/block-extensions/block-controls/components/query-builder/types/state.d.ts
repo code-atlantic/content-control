@@ -1,43 +1,43 @@
 import { QueryItem, Identifier, Query } from './query';
 
-export type AddObjectToGroup = {
-	type: 'ADD_OBJECT_TO_GROUP';
+export type AddItemToGroup = {
+	type: 'ADD_ITEM_TO_GROUP';
 	payload: {
 		groupId: Identifier;
-		object: QueryItem;
+		item: QueryItem;
 	};
 };
 
-export type RemoveObjectFromGroupAction = {
-	type: 'REMOVE_OBJECT_FROM_GROUP';
+export type RemoveItemFromGroupAction = {
+	type: 'REMOVE_ITEM_FROM_GROUP';
 	payload: {
 		groupId: Identifier;
-		objectId: Identifier;
+		itemId: Identifier;
 	};
 };
 
-export type SortGroupObjectsAction = {
-	type: 'SORT_GROUP_OBJECTS';
+export type SortGroupItemsAction = {
+	type: 'SORT_GROUP_ITEMS';
 	payload: {
 		groupId: Identifier;
-		objectId: Identifier;
+		itemId: Identifier;
 		newIndex: number;
 	};
 };
 
 export type MoveItemToGroupAction = {
-	type: 'MOVE_OBJECT_TO_GROUP';
+	type: 'MOVE_ITEM_TO_GROUP';
 	payload: {
 		groupId: Identifier;
-		objectId: Identifier;
+		itemId: Identifier;
 		newIndex: number;
 	};
 };
 
 export type QueryBuilderAction =
-	| AddObjectToGroup
-	| RemoveObjectFromGroupAction
-	| SortGroupObjectsAction
+	| AddItemToGroup
+	| RemoveItemFromGroupAction
+	| SortGroupItemsAction
 	| MoveItemToGroupAction
 	| { type: 'failure'; payload: { error: string } };
 
