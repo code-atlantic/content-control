@@ -9,14 +9,19 @@ import {
 } from '@wordpress/components';
 import { cancelCircleFilled, check, edit } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
+import classNames from 'classnames';
 
 const LabelControl = ( { value, onChange } ) => {
 	const [ editLabelText, setEditLabelText ] = useState( null );
 
 	return (
-		<>
+		<div className="cc-query-builder-group-label">
 			{ null === editLabelText ? (
-				<Flex justify="left" align="center">
+				<Flex
+					className="cc-query-builder-group-label__text"
+					justify="left"
+					align="center"
+				>
 					<FlexItem>
 						<h4>
 							{ value || __( 'Rule Group', 'content-control' ) }
@@ -38,13 +43,19 @@ const LabelControl = ( { value, onChange } ) => {
 					</FlexItem>
 				</Flex>
 			) : (
-				<div style={ { margin: '0.875em 0' } }>
+				<div
+					className="cc-query-builder-label-editor"
+					style={ { margin: '0.875em 0' } }
+				>
 					<InputControl
 						value={ editLabelText }
 						onChange={ setEditLabelText }
 						placeholder={ __( 'Group label', 'content-control' ) }
 						suffix={
-							<Flex gap={ 0 }>
+							<Flex
+								className="cc-query-builder-label-editor__buttons"
+								gap={ 0 }
+							>
 								<FlexItem>
 									<Button
 										disabled={ value === editLabelText }
@@ -83,7 +94,7 @@ const LabelControl = ( { value, onChange } ) => {
 					/>
 				</div>
 			) }
-		</>
+		</div>
 	);
 };
 

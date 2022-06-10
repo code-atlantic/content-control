@@ -1,6 +1,3 @@
-/** External Imports */
-import classNames from 'classnames';
-
 /** WordPress Imports */
 import { SelectControl } from '@wordpress/components';
 import { _x, __ } from '@wordpress/i18n';
@@ -42,16 +39,15 @@ function LogicalOperator( {
 	];
 
 	return (
-		<SelectControl
-			className={ classNames( [
-				'cc__condition-editor__logical-operator',
-			] ) }
-			label={ __( 'Choose logical operator', 'content-control' ) }
-			hideLabelFromVision={ true }
-			options={ options }
-			value={ value }
-			onChange={ onChange }
-		/>
+		<div className="cc-query-builder-logical-operator">
+			<SelectControl
+				label={ __( 'Choose logical operator', 'content-control' ) }
+				hideLabelFromVision={ true }
+				options={ options }
+				value={ value }
+				onChange={ onChange }
+			/>
+		</div>
 	);
 }
 

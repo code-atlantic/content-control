@@ -6,15 +6,18 @@ import LogicalOperator from './logical-operator';
 
 import { useQueryContext } from '../contexts';
 
-const ItemWrapper = ( { children, ...wrapperProps } ) => {
+const ItemWrapper = ( { className, children, ...wrapperProps } ) => {
 	const { logicalOperator, updateOperator } = useQueryContext();
 
 	return (
 		<div
 			{ ...wrapperProps }
-			className={ classNames( [ 'cc-condition-editor__item' ] ) }
+			className={ classNames( [
+				'cc-query-builder-item-wrapper',
+				className,
+			] ) }
 		>
-			<Flex className="cc__condition-editor-logical-operator">
+			<Flex className="cc-query-builder-item-wrapper__header">
 				<FlexItem>
 					<LogicalOperator
 						value={ logicalOperator }

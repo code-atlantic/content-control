@@ -11,31 +11,19 @@ const ItemActions = ( { id }: { id: Identifier } ) => {
 	const { removeItem } = useQueryContext();
 
 	return (
-		<Flex>
-			<FlexItem
-				className={ classNames( [
-					'cc-condition-editor__rule-flex-column',
-					'cc-condition-editor__rule-flex-column--actions',
-				] ) }
-			>
-				<Flex>
-					<FlexItem>
-						<Button
-							icon={ trash }
-							onClick={ () => removeItem( id ) }
-							isSmall={ true }
-						/>
-					</FlexItem>
-					<FlexItem>
-						<Button
-							className={ 'drag-handle' }
-							icon={ dragHandle }
-							isSmall={ true }
-						/>
-					</FlexItem>
-				</Flex>
-			</FlexItem>
-		</Flex>
+		<div className="cc-condition-editor-item-actions">
+			<Button
+				className="delete-item"
+				icon={ trash }
+				onClick={ () => removeItem( id ) }
+				isSmall={ true }
+			/>
+			<Button
+				className="move-item"
+				icon={ dragHandle }
+				isSmall={ true }
+			/>
+		</div>
 	);
 };
 

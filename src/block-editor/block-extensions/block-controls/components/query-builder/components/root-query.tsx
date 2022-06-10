@@ -21,7 +21,11 @@ import GroupItem from './group-item';
 import RuleItem from './rule-item';
 import { isEqual } from 'lodash';
 
-const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
+const RootQuery = ( {
+	className,
+	query,
+	onChange,
+}: BuilderQueryProps< Query > ) => {
 	const { items = [], logicalOperator } = query;
 
 	const setList = ( currentList: SetListFunctional | QueryItem[] ) => {
@@ -75,21 +79,24 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 		<QueryContextProvider value={ rootQueryContext }>
 			<ReactSortable
 				className={ classNames( [
-					'cc__condition-editor__item-list',
-					'cc__condition-editor__item-list--root',
+					className,
+					'cc-query-builder-item-list',
+					'cc-query-builder-item-list--root',
 				] ) }
 				list={ items }
 				setList={ setList }
 				animation={ 150 }
-				fallbackOnBody={ true }
+				fallbackOnBody={ false }
 				swapThreshold={ 0.65 }
-				ghostClass="ghost"
 				group={ {
 					name: 'queryItems',
-					revertClone: true,
+					revertClone: false,
 				} }
-				handle=".drag-handle" // Drag handle selector within list items,
-				draggable=".cc-condition-editor__item"
+				handle=".move-item" // Drag handle selector within list items,
+				draggable=".cc-query-builder-item-wrapper"
+				dragClass="is-dragging" // Dragged item class. This is the one shown with cursor.
+				chosenClass="is-chosen" // On mousedown of handle.
+				ghostClass="is-placeholder" // Ghost item that appears in list as you sort.
 			>
 				{ items.map( ( item, i ) => {
 					const sharedProps = {
@@ -97,12 +104,20 @@ const RootQuery = ( { query, onChange }: BuilderQueryProps< Query > ) => {
 							updateItem( item.id, updatedItem ),
 					};
 
+					const isGroup = 'group' === item.type;
+
 					return (
 						<ItemWrapper
-							id={ `query-builder-${ item.type }--${ item.id }` }
+							id={ `query-builder-${ item.type }-${ item.id }` }
 							key={ item.id }
+							className={ [
+								`cc-query-builder-item-wrapper--${ item.type }`,
+								isGroup &&
+									item.query.items.length &&
+									'has-children',
+							] }
 						>
-							{ 'group' === item.type ? (
+							{ isGroup ? (
 								<GroupItem
 									{ ...sharedProps }
 									value={ item }

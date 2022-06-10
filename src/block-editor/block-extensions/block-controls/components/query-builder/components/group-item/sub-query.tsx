@@ -22,7 +22,7 @@ import GroupItem from '.';
 import RuleItem from '../rule-item';
 
 const SubQuery = ( {
-	id: groupId,
+	className,
 	query,
 	onChange,
 	indexs,
@@ -68,10 +68,10 @@ const SubQuery = ( {
 	return (
 		<QueryContextProvider value={ subQueryContext }>
 			<ReactSortable
-				key={ groupId }
 				className={ classNames( [
-					'cc__condition-editor__item-list',
-					'cc__condition-editor__item-list--sub-query',
+					className,
+					'cc-query-builder-item-list',
+					'cc-query-builder-item-list--sub-query',
 				] ) }
 				list={ items }
 				setList={ ( currentList ) => {
@@ -134,12 +134,20 @@ const SubQuery = ( {
 							updateItem( item.id, updatedItem ),
 					};
 
+					const isGroup = 'group' === item.type;
+
 					return (
 						<ItemWrapper
-							id={ `query-builder-${ item.type }--${ item.id }` }
+							id={ `query-builder-${ item.type }-${ item.id }` }
 							key={ item.id }
+							classNames={ [
+								`cc-query-builder-item-wrapper--${ item.type }`,
+								isGroup &&
+									item.query.items.length &&
+									'has-children',
+							] }
 						>
-							{ 'group' === item.type ? (
+							{ isGroup ? (
 								<GroupItem
 									{ ...sharedProps }
 									value={ item }

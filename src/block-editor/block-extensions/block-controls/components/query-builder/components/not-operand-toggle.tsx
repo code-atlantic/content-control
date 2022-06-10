@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { noop } from 'lodash';
 
 /** WordPress Imports */
-import { Button, Icon } from '@wordpress/components';
+import { Button } from '@wordpress/components';
+import { warning } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 /** Type Imports */
@@ -21,11 +22,9 @@ const NotOperandToggle = ( {
 }: NotOperandToggleProps ) => {
 	return (
 		<Button
-			isDestructive={ checked }
-			variant={ checked ? 'primary' : 'tertiary' }
-			icon={ <Icon icon="warning" /> }
+			icon={ warning }
 			className={ classNames( [
-				'cc__not-operand-toggle',
+				'cc-query-builder-not-operand-toggle',
 				checked && 'is-checked',
 			] ) }
 			label={ __( 'Not Operand', 'content-control' ) }

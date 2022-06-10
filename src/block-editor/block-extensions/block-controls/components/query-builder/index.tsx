@@ -22,15 +22,14 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 
 	return (
 		<OptionsProvider options={ options }>
-			<div
-				className={ classNames( [
-					'cc__component-condition-editor',
-					'cc__condition-editor',
-				] ) }
-			>
-				<RootQuery query={ query } onChange={ onChange } />
+			<div className="cc-query-builder">
+				<RootQuery
+					className="cc-query-builder__item-list"
+					query={ query }
+					onChange={ onChange }
+				/>
 
-				<ButtonGroup className="cc__component-condition-editor__add-buttons">
+				<ButtonGroup className="cc-query-builder__list-controls">
 					<Button
 						icon={ plus }
 						variant="link"
@@ -53,8 +52,6 @@ const QueryBuilder = ( { query, onChange, options }: BuilderProps ) => {
 							icon={ plus }
 							variant="link"
 							onClick={ () => {
-								// TODO LEFT OFF HERE.
-								// TODO this is broken, seems new group is added as an array not an objecct.
 								onChange( {
 									...query,
 									items: [ ...items, newGroup() ],
