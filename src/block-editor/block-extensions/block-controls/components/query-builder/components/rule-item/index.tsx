@@ -2,10 +2,8 @@
 import classNames from 'classnames';
 
 /** WordPress Imports */
-import { useContext } from '@wordpress/element';
-import { Button, SelectControl, Flex, FlexItem } from '@wordpress/components';
+import { Flex, FlexItem } from '@wordpress/components';
 import { sprintf, __ } from '@wordpress/i18n';
-import { dragHandle, trash } from '@wordpress/icons';
 
 /** Internal Imports */
 import NotOperandToggle from '../not-operand-toggle';
@@ -74,25 +72,6 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 			},
 		} );
 
-	const RuleNameSelectOptions = () => (
-		<>
-			<option value="">
-				{ __( 'Select rule type', 'content-control' ) }
-			</option>
-			{ getRuleOptions( builderOptions ).map(
-				( { category: cat, options: catOptions } ) => (
-					<optgroup key={ cat } label={ cat.toUpperCase() }>
-						{ catOptions.map( ( option ) => (
-							<option key={ option.value } value={ option.value }>
-								{ option.label }
-							</option>
-						) ) }
-					</optgroup>
-				)
-			) }
-		</>
-	);
-
 	const formattedFields = format.split( ' ' ).map( ( str ) => {
 		switch ( str ) {
 			case '{category}':
@@ -113,19 +92,7 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 				return {
 					type: 'field',
 					classes: [ 'field-type-select', 'field--ruleName' ],
-					content: (
-						<SelectControl
-							onChange={ ( value ) =>
-								onChange( {
-									...ruleProps,
-									name: value,
-								} )
-							}
-							value={ name }
-						>
-							<RuleNameSelectOptions />
-						</SelectControl>
-					),
+					content: label,
 				};
 			default:
 				return {
@@ -159,38 +126,22 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 				) }
 
 				<FlexItem className="controls-column">
-					{ ruleDef ? (
-						<Flex>
-							{ formattedFields.map(
-								( { content, classes, type }, i ) => (
-									<FlexItem
-										key={ i }
-										className={ classNames( [
-											'formatted-field-item',
-											`formatted-field-item--${ type }`,
-											classes,
-										] ) }
-									>
-										{ content }
-									</FlexItem>
-								)
-							) }
-						</Flex>
-					) : (
-						<>
-							<SelectControl
-								onChange={ ( value ) =>
-									onChange( {
-										...ruleProps,
-										name: value,
-									} )
-								}
-								value={ name }
-							>
-								<RuleNameSelectOptions />
-							</SelectControl>
-						</>
-					) }
+					<Flex gap={ 1 }>
+						{ formattedFields.map(
+							( { content, classes, type }, i ) => (
+								<FlexItem
+									key={ i }
+									className={ classNames( [
+										'formatted-field-item',
+										`formatted-field-item--${ type }`,
+										classes,
+									] ) }
+								>
+									{ content }
+								</FlexItem>
+							)
+						) }
+					</Flex>
 				</FlexItem>
 
 				<FlexItem className="actions-column">
