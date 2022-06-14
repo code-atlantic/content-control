@@ -27,15 +27,12 @@ const LabelControl = ( { value, onChange } ) => {
 							{ value || __( 'Rule Group', 'content-control' ) }
 						</h4>
 					</FlexItem>
-					<FlexItem
-						style={ {
-							paddingTop: 10,
-						} }
-					>
+					<FlexItem>
 						<Button
 							variant="link"
 							label={ __( 'Edit label', 'content-control' ) }
-							icon={ <Icon icon={ edit } size={ 18 } /> }
+							icon={ edit }
+							iconSize={ 16 }
 							onClick={ () => setEditLabelText( value ?? '' ) }
 							isSmall={ true }
 							style={ { color: '#1d2327' } }
@@ -43,10 +40,7 @@ const LabelControl = ( { value, onChange } ) => {
 					</FlexItem>
 				</Flex>
 			) : (
-				<div
-					className="cc-query-builder-label-editor"
-					style={ { margin: '0.875em 0' } }
-				>
+				<div className="cc-query-builder-group-label__editor">
 					<InputControl
 						value={ editLabelText }
 						onChange={ setEditLabelText }
@@ -64,6 +58,7 @@ const LabelControl = ( { value, onChange } ) => {
 											'content-control'
 										) }
 										icon={ check }
+										iconSize={ 20 }
 										onClick={ () => {
 											onChange( editLabelText );
 											setEditLabelText( null );
@@ -80,6 +75,7 @@ const LabelControl = ( { value, onChange } ) => {
 											'content-control'
 										) }
 										icon={ cancelCircleFilled }
+										iconSize={ 20 }
 										onClick={ () =>
 											setEditLabelText( null )
 										}

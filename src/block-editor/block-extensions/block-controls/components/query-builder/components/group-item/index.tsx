@@ -19,6 +19,8 @@ import { OptionsContext } from '../../contexts';
 import ItemActions from '../item/actions';
 import LabelControl from './label-control';
 
+import './index.scss';
+
 const GroupItem = ( {
 	indexs = [],
 	onChange,
@@ -30,7 +32,13 @@ const GroupItem = ( {
 	const builderOptions: BuilderOptions = useContext( OptionsContext );
 
 	return (
-		<>
+		<div
+			className={ classNames( [
+				'cc-query-builder-item',
+				'cc-query-builder-item--group',
+				'cc-query-builder-group',
+			] ) }
+		>
 			<Flex>
 				<FlexItem>
 					<LabelControl
@@ -49,7 +57,7 @@ const GroupItem = ( {
 				</FlexItem>
 			</Flex>
 
-			<SubQuery
+			<NestedQuery
 				query={ query }
 				onChange={ ( newQuery: Query ) =>
 					onChange( {
@@ -125,7 +133,7 @@ const GroupItem = ( {
 					</Button>
 				) }
 			</ButtonGroup>
-		</>
+		</div>
 	);
 };
 export default GroupItem;

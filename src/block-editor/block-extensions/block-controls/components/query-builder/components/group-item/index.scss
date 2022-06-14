@@ -1,0 +1,35 @@
+@import "../../styles/variables";
+
+.cc-query-builder-group {
+	border: 1px solid #e0e0e0;
+	padding: 0 $spacing;
+	margin-top: $spacing * 1.5;
+
+	.is-dragging &  {}
+}
+
+.cc-query-builder-group-label {
+	padding: 10px 0;
+
+	&__text {
+		h4 {
+			line-height: 30px;
+			margin: 0 8px;
+		}
+
+		.components-button.is-small.has-icon {
+			width: auto;
+			min-width: auto;
+			height: auto;
+			padding: 0;
+			margin: 7px 0 0;
+		}
+	}
+
+	&__editor {
+		.components-button.is-small.has-icon {
+			min-width: auto;
+			padding: 0;
+		}
+	}
+}
