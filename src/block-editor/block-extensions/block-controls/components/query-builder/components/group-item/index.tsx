@@ -4,7 +4,7 @@ import classNames from 'classnames';
 /**
  * WordPress Imports
  */
-import { useContext } from '@wordpress/element';
+import { useContext, useState, useRef } from '@wordpress/element';
 import { Button, ButtonGroup, Flex, FlexItem } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { _x, __ } from '@wordpress/i18n';
@@ -18,6 +18,7 @@ import { BuilderGroupItemProps, Query, BuilderOptions } from '../../types';
 import { OptionsContext } from '../../contexts';
 import ItemActions from '../item/actions';
 import LabelControl from './label-control';
+import AddRulePopover from '../add-rule-popover';
 
 import './index.scss';
 
@@ -30,6 +31,13 @@ const GroupItem = ( {
 	const { items = [] } = query;
 
 	const builderOptions: BuilderOptions = useContext( OptionsContext );
+
+	const [ addRulePopoverOpen, setAddRulePopoverOpen ] = useState( false );
+
+	const toggleAddRulePopover = () =>
+		setAddRulePopoverOpen( ! addRulePopoverOpen );
+
+	const buttonRef = useRef();
 
 	return (
 		<div
@@ -68,44 +76,32 @@ const GroupItem = ( {
 				indexs={ indexs }
 			/>
 
+			{ addRulePopoverOpen && (
+				<AddRulePopover
+					buttonRef={ buttonRef }
+					onSelect={ ( ruleName ) => {
+						onChange( {
+							...groupProps,
+							query: {
+								...query,
+								items: [ ...items, { ...newRule( ruleName ) } ],
+							},
+						} );
+						toggleAddRulePopover();
+					} }
+					onCancel={ toggleAddRulePopover }
+				/>
+			) }
+
 			<ButtonGroup className="cc__component-condition-editor__add-buttons">
 				<Button
+					ref={ buttonRef }
 					icon={ plus }
 					variant="link"
-					onClick={ () => {
-						onChange( {
-							...groupProps,
-							query: {
-								...query,
-								logicalOperator: 'or',
-								items: [ ...items, { ...newRule() } ],
-							},
-						} );
-					} }
+					onClick={ toggleAddRulePopover }
 				>
 					{ _x(
-						'Or',
-						'Conditional editor add OR condition buttons',
-						'content-control'
-					) }
-				</Button>
-
-				<Button
-					icon={ plus }
-					variant="link"
-					onClick={ () => {
-						onChange( {
-							...groupProps,
-							query: {
-								...query,
-								logicalOperator: 'and',
-								items: [ ...items, { ...newRule() } ],
-							},
-						} );
-					} }
-				>
-					{ _x(
-						'And',
+						'Rule',
 						'Conditional editor add OR condition buttons',
 						'content-control'
 					) }
