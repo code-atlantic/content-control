@@ -3,9 +3,11 @@ import classNames from 'classnames';
 /** Type Imports */
 import { Button, Flex, FlexItem } from '@wordpress/components';
 
-import { useQueryContext } from '../contexts';
+import { useQueryContext } from '../../contexts';
 import { dragHandle, trash } from '@wordpress/icons';
-import { Identifier } from '../types';
+import { Identifier } from '../../types';
+
+import './index.scss';
 
 const ItemActions = ( { id }: { id: Identifier } ) => {
 	const { removeItem } = useQueryContext();

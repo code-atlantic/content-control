@@ -2,9 +2,11 @@ import classNames from 'classnames';
 
 /** Type Imports */
 import { Flex, FlexItem } from '@wordpress/components';
-import LogicalOperator from './logical-operator';
+import LogicalOperator from '../logical-operator';
 
-import { useQueryContext } from '../contexts';
+import { useQueryContext } from '../../contexts';
+
+import './index.scss';
 
 const ItemWrapper = ( { className, children, ...wrapperProps } ) => {
 	const { logicalOperator, updateOperator } = useQueryContext();
