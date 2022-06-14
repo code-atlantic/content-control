@@ -9,10 +9,10 @@ export const newUUID = customAlphabet(
 	8
 );
 
-export const newRule = (): QueryRuleItem => ( {
+export const newRule = ( name = '' ): QueryRuleItem => ( {
 	id: newUUID(),
 	type: 'rule',
-	name: '',
+	name,
 	options: {},
 	notOperand: false,
 } );
