@@ -6,7 +6,7 @@ export type BuilderQueryProps< T extends Query > = {
 	query: T;
 	onChange: ( query: T ) => void;
 	indexs?: number[];
-	className: ClassName | ClassName[];
+	className?: ClassName | ClassName[];
 };
 
 export type BuilderItemProps< T extends QueryItemBase > = {
