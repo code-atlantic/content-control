@@ -17,23 +17,31 @@ import {
 	QueryItem,
 	QueryGroupItem,
 } from '../../types';
-import ItemWrapper from '../item-wrapper';
-import GroupItem from '.';
+import ItemWrapper from '../item/wrapper';
+import GroupItem from '../group-item';
 import RuleItem from '../rule-item';
 
-const SubQuery = ( {
+import './index.scss';
+
+import { sortableConfig } from './sortable';
+
+const NestedQuery = ( {
 	className,
 	query,
 	onChange,
 	indexs,
 }: BuilderQueryProps< Query > ) => {
-	const { setList: setRootList, ...parentQueryContext } = useQueryContext();
+	const {
+		setList: setRootList,
+		setIsDragging,
+		...parentQueryContext
+	} = useQueryContext();
 	const { items = [], logicalOperator } = query;
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
-	const subQueryContext: QueryContextProps = {
+	const nestedQueryContext: QueryContextProps = {
 		...parentQueryContext,
 		setList: setRootList,
 		indexs,
@@ -63,15 +71,15 @@ const SubQuery = ( {
 			} ),
 	};
 
-	const { updateItem } = subQueryContext;
+	const { updateItem } = nestedQueryContext;
 
 	return (
-		<QueryContextProvider value={ subQueryContext }>
+		<QueryContextProvider value={ nestedQueryContext }>
 			<ReactSortable
 				className={ classNames( [
 					className,
 					'cc-query-builder-item-list',
-					'cc-query-builder-item-list--sub-query',
+					'cc-query-builder-item-list--nested',
 				] ) }
 				list={ items }
 				setList={ ( currentList ) => {
@@ -123,10 +131,13 @@ const SubQuery = ( {
 						return rootListCopy;
 					} );
 				} }
-				group={ {
-					name: 'queryItems',
-					revertClone: false,
+				onChoose={ () => {
+					setIsDragging( true );
 				} }
+				onUnchoose={ () => {
+					setIsDragging( false );
+				} }
+				{ ...sortableConfig }
 			>
 				{ items.map( ( item, i ) => {
 					const sharedProps = {
@@ -140,7 +151,7 @@ const SubQuery = ( {
 						<ItemWrapper
 							id={ `query-builder-${ item.type }-${ item.id }` }
 							key={ item.id }
-							classNames={ [
+							className={ [
 								`cc-query-builder-item-wrapper--${ item.type }`,
 								isGroup &&
 									item.query.items.length &&
@@ -164,4 +175,4 @@ const SubQuery = ( {
 	);
 };
 
-export default SubQuery;
+export default NestedQuery;

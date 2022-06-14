@@ -9,7 +9,7 @@ import { plus } from '@wordpress/icons';
 /** Internal Imports */
 import { OptionsProvider } from './contexts';
 import { newRule, newGroup } from './templates';
-import RootQuery from './components/root-query';
+import { RootQuery } from './components/query-item-list';
 
 /** Type Imports */
 import { BuilderProps } from './types';

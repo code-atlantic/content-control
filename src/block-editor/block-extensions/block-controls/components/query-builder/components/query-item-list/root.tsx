@@ -1,13 +1,15 @@
 /** External Imports */
 import classNames from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
+import { isEqual } from 'lodash';
+import { useState } from '@wordpress/element';
 
 /** Internal Imports */
 import {
 	QueryContextProvider,
 	QueryContextProps,
 	SetListFunctional,
-} from '../contexts';
+} from '../../contexts';
 
 /** Type Imports */
 import {
@@ -15,11 +17,14 @@ import {
 	Query,
 	QueryLogicalOperator,
 	QueryItem,
-} from '../types';
-import ItemWrapper from './item-wrapper';
-import GroupItem from './group-item';
-import RuleItem from './rule-item';
-import { isEqual } from 'lodash';
+} from '../../types';
+import ItemWrapper from '../item/wrapper';
+import GroupItem from '../group-item';
+import RuleItem from '../rule-item';
+
+import { sortableConfig } from './sortable';
+
+import './index.scss';
 
 const RootQuery = ( {
 	className,
@@ -28,7 +33,10 @@ const RootQuery = ( {
 }: BuilderQueryProps< Query > ) => {
 	const { items = [], logicalOperator } = query;
 
+	const [ isDragging, setIsDragging ] = useState( false );
+
 	const setList = ( currentList: SetListFunctional | QueryItem[] ) => {
+		// Prevent saving state if items are equal.
 		if ( isEqual( query.items, currentList ) ) {
 			return;
 		}
@@ -49,6 +57,8 @@ const RootQuery = ( {
 		onChange, // TODO REVIEW usage of this one later.
 		logicalOperator,
 		setList,
+		isDragging,
+		setIsDragging,
 		updateOperator: ( updatedOperator: QueryLogicalOperator ) =>
 			onChange( {
 				...query,
@@ -82,21 +92,17 @@ const RootQuery = ( {
 					className,
 					'cc-query-builder-item-list',
 					'cc-query-builder-item-list--root',
+					isDragging && 'is-dragging',
 				] ) }
 				list={ items }
 				setList={ setList }
-				animation={ 150 }
-				fallbackOnBody={ false }
-				swapThreshold={ 0.65 }
-				group={ {
-					name: 'queryItems',
-					revertClone: false,
+				onChoose={ () => {
+					setIsDragging( true );
 				} }
-				handle=".move-item" // Drag handle selector within list items,
-				draggable=".cc-query-builder-item-wrapper"
-				dragClass="is-dragging" // Dragged item class. This is the one shown with cursor.
-				chosenClass="is-chosen" // On mousedown of handle.
-				ghostClass="is-placeholder" // Ghost item that appears in list as you sort.
+				onUnchoose={ () => {
+					setIsDragging( false );
+				} }
+				{ ...sortableConfig }
 			>
 				{ items.map( ( item, i ) => {
 					const sharedProps = {
@@ -110,12 +116,12 @@ const RootQuery = ( {
 						<ItemWrapper
 							id={ `query-builder-${ item.type }-${ item.id }` }
 							key={ item.id }
-							className={ [
+							className={ classNames( [
 								`cc-query-builder-item-wrapper--${ item.type }`,
 								isGroup &&
 									item.query.items.length &&
 									'has-children',
-							] }
+							] ) }
 						>
 							{ isGroup ? (
 								<GroupItem

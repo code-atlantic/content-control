@@ -1,0 +1,21 @@
+@import "../../styles/variables";
+@import "../../styles/animations";
+
+.cc-query-builder-item-list {
+	border: $dropzoneBorderStyle transparent;
+	padding: $spacing;
+
+	&.cc-query-builder-item-list--root {
+	}
+
+	&.cc-query-builder-item-list--sub-query {
+	}
+
+	&.is-dragging,
+	.is-dragging & {
+		animation-name: blinkingBorder;
+		animation-duration: 1.5s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+}

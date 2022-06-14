@@ -10,13 +10,13 @@ import { plus } from '@wordpress/icons';
 import { _x, __ } from '@wordpress/i18n';
 
 /** Internal Imports */
-import SubQuery from './sub-query';
+import { NestedQuery } from '../query-item-list';
 import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
 import { BuilderGroupItemProps, Query, BuilderOptions } from '../../types';
 import { OptionsContext } from '../../contexts';
-import ItemActions from '../item-actions';
+import ItemActions from '../item/actions';
 import LabelControl from './label-control';
 
 const GroupItem = ( {
