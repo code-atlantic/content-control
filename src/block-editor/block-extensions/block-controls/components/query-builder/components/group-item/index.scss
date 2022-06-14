@@ -5,7 +5,10 @@
 	padding: 0 $spacing;
 	margin-top: $spacing * 1.5;
 
-	.is-dragging &  {}
+	.is-chosen & .cc-query-builder-item-list {
+		// border-color: transparent!important;
+		animation-name: none;
+	}
 }
 
 .cc-query-builder-group-label {
