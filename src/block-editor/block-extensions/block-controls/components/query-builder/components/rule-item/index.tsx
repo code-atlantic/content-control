@@ -9,12 +9,14 @@ import { dragHandle, trash } from '@wordpress/icons';
 
 /** Internal Imports */
 import NotOperandToggle from '../not-operand-toggle';
-import ItemActions from '../item-actions';
+import ItemActions from '../item/actions';
 import { OptionsContext } from '../../contexts';
 import { getCategoryOptions, getRuleOptions } from '../../utils';
 
 /** Type Imports */
 import { BuilderRuleItemProps, BuilderOptions } from '../../types';
+
+import './index.scss';
 
 const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 	const { notOperand = false, name, options = {}, id } = ruleProps;
@@ -171,15 +173,16 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 	} );
 
 	return (
-		<>
-			<Flex>
+		<div
+			className={ classNames( [
+				'cc-query-builder-item',
+				'cc-query-builder-item--rule',
+				'cc-query-builder-rule',
+			] ) }
+		>
+			<Flex className="rule-">
 				{ builderOptions.features.notOperand && (
-					<FlexItem
-						className={ classNames( [
-							'cc-condition-editor__rule-flex-column',
-							'cc-condition-editor__rule-flex-column--not-operand',
-						] ) }
-					>
+					<FlexItem className="not-operand-column">
 						<NotOperandToggle
 							checked={ notOperand }
 							onToggle={ ( newValue ) =>
@@ -192,12 +195,7 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 					</FlexItem>
 				) }
 
-				<FlexItem
-					className={ classNames( [
-						'cc-condition-editor__rule-flex-column',
-						'cc-condition-editor__rule-flex-column--controls',
-					] ) }
-				>
+				<FlexItem className="controls-column">
 					{ ruleDef ? (
 						<Flex>
 							{ formattedFields.map(
@@ -232,11 +230,11 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 					) }
 				</FlexItem>
 
-				<FlexItem>
+				<FlexItem className="actions-column">
 					<ItemActions id={ id } />
 				</FlexItem>
 			</Flex>
-		</>
+		</div>
 	);
 };
 
