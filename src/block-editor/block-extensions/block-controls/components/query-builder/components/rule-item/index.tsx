@@ -10,20 +10,23 @@ import { dragHandle, trash } from '@wordpress/icons';
 /** Internal Imports */
 import NotOperandToggle from '../not-operand-toggle';
 import ItemActions from '../item/actions';
-import { OptionsContext } from '../../contexts';
-import { getCategoryOptions, getRuleOptions } from '../../utils';
+import { useOptions, useRules } from '../../contexts';
 
 /** Type Imports */
-import { BuilderRuleItemProps, BuilderOptions } from '../../types';
+import { BuilderRuleItemProps } from '../../types';
 
 import './index.scss';
 
 const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 	const { notOperand = false, name, options = {}, id } = ruleProps;
 
-	const builderOptions: BuilderOptions = useContext( OptionsContext );
+	const { getRule } = useRules();
 
-	const ruleDef = builderOptions.rules[ name ] ?? null;
+	const {
+		features: { notOperand: notOperandEnabled },
+	} = useOptions();
+
+	const ruleDef = getRule( name );
 
 	if ( name !== '' && ! ruleDef ) {
 		return (
@@ -141,7 +144,7 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 			] ) }
 		>
 			<Flex className="rule-">
-				{ builderOptions.features.notOperand && (
+				{ notOperandEnabled && (
 					<FlexItem className="not-operand-column">
 						<NotOperandToggle
 							checked={ notOperand }
