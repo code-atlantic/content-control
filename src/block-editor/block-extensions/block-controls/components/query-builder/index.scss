@@ -1,158 +1,17 @@
-$padding: 20px;
-
-@mixin elevation($value) {
-	box-shadow: 0 #{$value}px calc(#{$value}px * 2) 0
-		rgba(0, 0, 0, calc($value / 20));
-}
-
-@mixin list {
-	border: 1px solid #e0e0e0;
-	padding: $padding;
-}
+@import "./styles/variables.scss";
+@import "./styles/animations.scss";
+@import "./styles/mixins.scss";
 
 .cc-query-builder {
-	@include list;
 }
 
 .cc-query-builder__controls {
 }
 
-.cc-query-builder-item-list {
-	@include list;
-
-	&.cc-query-builder-item-list--root {
-	}
-
-	&.cc-query-builder-item-list--sub-query {
-		@include elevation(1);
-	}
-}
-
-.cc-query-builder-item-wrapper {
-	margin: 0;
-	padding: 0;
-	position: relative;
-
-	&:hover {
-		//background: #eeeeee;
-	}
-
-	/**
-	 * These are status classes added by react sortablejs.
-	 * @see components/root-query.txs @ <ReactSortable> for declarations.
-	 */
-
-	// On mousedown of handle. First as its on during drag as well.
-	&.is-chosen {
-		// background: gold
-	}
-
-	// Ghost item that appears in list as you sort.
-	&.is-placeholder {
-		background: lightblue !important;
-	}
-
-	// Dragged item class. This is the one shown with cursor.
-	&.is-dragging {
-		// background: green
-	}
-}
-
-.cc-query-builder-item-wrapper__header {
-	.components-flex-item {
-		&:first-child {
-			flex-grow: 1;
-			max-width: 60px;
-		}
-
-		&:last-child {
-			flex-basis: auto;
-			flex-grow: 3;
-		}
-	}
-}
-
-.cc-condition-editor-item-actions {
-	.components-button.is-small.has-icon:not(.has-text) {
-		padding: 0;
-		min-width: 16px;
-		width: 20px;
-		margin-left: 5px;
-	}
-}
-
+/* Component Overrides */
 .cc-query-builder-item-list > .cc-query-builder-item-wrapper:first-child {
 	> .cc-query-builder-item-wrapper__header {
 		padding: 10;
 		display: none;
 	}
-}
-
-.cc-query-builder-logical-operator {
-	.components-base-control__field {
-		margin: 0;
-	}
-}
-
-.cc-query-builder-not-operand-toggle {
-	svg {
-		fill: #e0e0e0;
-	}
-
-	&:hover {
-		svg {
-			fill: #e0e0e0;
-		}
-	}
-
-	&.is-checked {
-		svg {
-			fill: #cc1818;
-		}
-	}
-}
-
-.cc-query-builder-label-editor__buttons {
-	.components-button {
-		min-width: 16px;
-		padding: 0;
-		margin: 0 ;
-		vertical-align: middle;;
-	}
-}
-
-.cc-_rule {
-	background: lightblue;
-	padding: 1em;
-	margin-top: 1em;
-}
-
-.cc-condition-editor__group {
-	border: 1px solid;
-	padding: 1em;
-	margin: 1em 0;
-}
-
-.cc-condition-editor__rule {
-	margin: 1em 0;
-
-	.cc-condition-editor__rule-flex-column {
-		flex-grow: 1;
-	}
-
-	.cc-condition-editor__rule-flex-column--not-operand {
-		max-width: 60px;
-	}
-
-	.cc-condition-editor__rule-flex-column--controls {
-		flex-basis: auto;
-		flex-grow: 3;
-	}
-
-	.cc-condition-editor__rule-flex-column--actions {
-		max-width: 60px;
-	}
-}
-
-.ghost {
 }
