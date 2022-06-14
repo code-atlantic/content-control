@@ -57,58 +57,18 @@ const RuleItem = ( { onChange, value: ruleProps }: BuilderRuleItemProps ) => {
 	} = ruleDef ?? {};
 
 	/**
-	 * Get defalts for a specific rule.
-	 *
-	 * @param {string} ruleName Rule name to get the default values for.
-	 */
-	const ruleOptionDefaults = ( ruleName ) =>
-		builderOptions?.rules[ ruleName ]?.fields?.reduce(
-			( defaults, field ) => {
-				if ( typeof field.default !== undefined ) {
-					defaults[ field.id ] = field.default;
-				}
-				return defaults;
-			},
-			{}
-		);
-
-	/**
-	 * Efficiently change the rule type.
-	 *
-	 * @param {string} newRuleName String identifier for the new chosen rule.
-	 */
-	const changeRuleType = ( newRuleName: string ): void => {
-		onChange( {
-			...ruleProps,
-			name: newRuleName,
-			options: ruleOptionDefaults( newRuleName ),
-		} );
-	};
-
-	/**
-	 * Update multiple options.
-	 *
-	 * @param {Object} newOptions Option values to add or update.
-	 */
-	const updateOptions = ( newOptions: Object ): void =>
-		onChange( {
-			...ruleProps,
-			options: {
-				...options,
-				...newOptions,
-			},
-		} );
-
-	/**
 	 * Update a single option.
 	 *
 	 * @param {string} optionKey Option key.
 	 * @param {any}    value     Option value
 	 */
 	const updateOption = ( optionKey: string, value: any ): void =>
-		updateOptions( {
-			...options,
-			[ optionKey ]: value,
+		onChange( {
+			...ruleProps,
+			options: {
+				...options,
+				[ optionKey ]: value,
+			},
 		} );
 
 	const RuleNameSelectOptions = () => (
