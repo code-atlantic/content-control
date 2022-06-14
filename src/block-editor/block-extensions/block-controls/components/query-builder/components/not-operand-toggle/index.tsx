@@ -8,7 +8,9 @@ import { warning } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 /** Type Imports */
-import { QueryNotOperand } from '../types';
+import { QueryNotOperand } from '../../types';
+
+import './index.scss';
 
 type NotOperandToggleProps = {
 	checked: QueryNotOperand;
