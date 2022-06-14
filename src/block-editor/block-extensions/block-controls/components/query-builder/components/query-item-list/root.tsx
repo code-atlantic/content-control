@@ -30,7 +30,7 @@ const RootQuery = ( {
 	className,
 	query,
 	onChange,
-}: BuilderQueryProps< Query > ) => {
+}: Omit< BuilderQueryProps< Query >, 'indexs' > ) => {
 	const { items = [], logicalOperator } = query;
 
 	const [ isDragging, setIsDragging ] = useState( false );

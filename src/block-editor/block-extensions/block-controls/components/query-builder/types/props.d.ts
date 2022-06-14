@@ -12,11 +12,11 @@ export type BuilderQueryProps< T extends Query > = {
 export type BuilderItemProps< T extends QueryItemBase > = {
 	value: T;
 	onChange: ( value: T ) => void;
-	[key: string]: any,
+	[ key: string ]: any;
 };
 
 export type BuilderGroupItemProps = BuilderItemProps< QueryGroupItem > & {
-	indexs: number[],
+	indexs: number[];
 };
 
 export type BuilderRuleItemProps = BuilderItemProps< QueryRuleItem >;
