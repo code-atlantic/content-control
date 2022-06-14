@@ -13,19 +13,20 @@ import { Identifier, Query, QueryItem, QueryLogicalOperator } from '../types';
 
 export type SetListFunctional = ( sourceList: QueryItem[] ) => QueryItem[];
 
-export type QueryContextProps = {
+export interface QueryContextProps {
 	logicalOperator: QueryLogicalOperator;
 	updateOperator: ( updatedOperator: QueryLogicalOperator ) => void;
 	addItem: ( newItem: QueryItem ) => void;
 	updateItem: ( id: string, updatedItem: QueryItem ) => void;
 	removeItem: ( id: string ) => void;
-	indexs?: number[];
-	setList?: ( currentList: SetListFunctional | QueryItem[] ) => void;
+	indexs: number[];
+	setIsDragging: ( isDragging: boolean ) => void;
+	setList: ( currentList: SetListFunctional | QueryItem[] ) => void;
 	[ key: string ]: any;
-};
+}
 
-export const QueryContext: React.Context< QueryContextProps > = createContext(
-	null
+export const QueryContext = createContext< QueryContextProps >(
+	{} as QueryContextProps
 );
 
 const itemInList = ( find: QueryItem, items: QueryItem[] ) =>

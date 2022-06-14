@@ -5,7 +5,7 @@ import { Query, QueryRuleItem, QueryGroupItem, QueryItemBase } from './query';
 export type BuilderQueryProps< T extends Query > = {
 	query: T;
 	onChange: ( query: T ) => void;
-	indexs?: number[];
+	indexs: number[];
 	className?: ClassName | ClassName[];
 };
 

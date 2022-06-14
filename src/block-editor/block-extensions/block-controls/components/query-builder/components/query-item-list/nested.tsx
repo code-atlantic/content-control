@@ -31,11 +31,10 @@ const NestedQuery = ( {
 	onChange,
 	indexs,
 }: BuilderQueryProps< Query > ) => {
-	const {
-		setList: setRootList,
-		setIsDragging,
-		...parentQueryContext
-	} = useQueryContext();
+	const parentQueryContext = useQueryContext();
+
+	const { setList: setRootList, setIsDragging } = parentQueryContext;
+
 	const { items = [], logicalOperator } = query;
 
 	/**
@@ -43,7 +42,6 @@ const NestedQuery = ( {
 	 */
 	const nestedQueryContext: QueryContextProps = {
 		...parentQueryContext,
-		setList: setRootList,
 		indexs,
 		logicalOperator,
 		onChange, // TODO REVIEW usage of this one later.
@@ -91,6 +89,10 @@ const NestedQuery = ( {
 
 						// Remove this lists index from dex from cloned indexs.
 						const currentListIndex = parentIndexs.pop();
+
+						if ( ! currentListIndex ) {
+							return rootListCopy;
+						}
 
 						/**
 						 * Get reference to latest array in nested structure.

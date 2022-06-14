@@ -89,14 +89,17 @@ type ConditionalRulesProps = {
 	setGroupRules: ( groupRules: ConditionalGroupRules ) => void;
 };
 
-type QuerySetState = [ QuerySet, ( value: QuerySet ) => void ];
-
 const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	const { groupRules, setGroupRules } = props;
 	const { anyAll = 'all', conditionSets = [] } = groupRules;
 
-	const [ currentSet, updateCurrentSet ]: QuerySetState = useState( null );
-	const [ setToDelete, confirmDeleteSet ]: QuerySetState = useState( null );
+	const [ currentSet, updateCurrentSet ] = useState< QuerySet | null >(
+		null
+	);
+
+	const [ setToDelete, confirmDeleteSet ] = useState< QuerySet | null >(
+		null
+	);
 
 	/** Add new set. */
 	const addSet = () => {
@@ -160,7 +163,10 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	);
 
 	const isSetValid = () => {
-		return [ currentSet.label.length > 0 ].indexOf( false ) === -1;
+		return (
+			currentSet &&
+			[ currentSet.label.length > 0 ].indexOf( false ) === -1
+		);
 	};
 
 	return (
@@ -315,7 +321,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 							features: {
 								notOperand: true,
 								groups: true,
-								nesting: false,
+								nesting: true,
 							},
 							rules: builderRules,
 						} }
