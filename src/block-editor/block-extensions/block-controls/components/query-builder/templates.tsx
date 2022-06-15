@@ -17,13 +17,13 @@ export const newRule = ( name = '' ): QueryRuleItem => ( {
 	notOperand: false,
 } );
 
-export const newGroup = (): QueryGroupItem => ( {
+export const newGroup = ( ruleName = '' ): QueryGroupItem => ( {
 	id: newUUID(),
 	type: 'group',
 	label: '',
 	query: {
 		logicalOperator: 'and',
-		items: [ { ...newRule() } ],
+		items: [ { ...newRule( ruleName ) } ],
 	},
 } );
 
