@@ -7,15 +7,15 @@ import classNames from 'classnames';
 import { useContext, useState, useRef } from '@wordpress/element';
 import { Button, ButtonGroup, Flex, FlexItem } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
-import { _x, __ } from '@wordpress/i18n';
+import { sprintf, _x, __ } from '@wordpress/i18n';
 
 /** Internal Imports */
 import { NestedQuery } from '../query-item-list';
 import { newRule, newGroup } from '../../templates';
 
 /** Type Imports */
-import { BuilderGroupItemProps, Query, BuilderOptions } from '../../types';
-import { OptionsContext } from '../../contexts';
+import { BuilderGroupItemProps, Query } from '../../types';
+import { useOptions } from '../../contexts';
 import ItemActions from '../item/actions';
 import LabelControl from './label-control';
 import AddRulePopover from '../add-rule-popover';
@@ -28,16 +28,19 @@ const GroupItem = ( {
 	value: groupProps,
 }: BuilderGroupItemProps ) => {
 	const { label = '', query, id } = groupProps;
-	const { items = [] } = query;
+	const { logicalOperator, items = [] } = query;
 
-	const builderOptions: BuilderOptions = useContext( OptionsContext );
+	const {
+		features: { nesting: nestingEnabled },
+	} = useOptions();
 
-	const [ addRulePopoverOpen, setAddRulePopoverOpen ] = useState( false );
+	const [ openPopoverAtButton, setPopoverAtButton ] = useState<
+		string | null
+	>( null );
 
-	const toggleAddRulePopover = () =>
-		setAddRulePopoverOpen( ! addRulePopoverOpen );
-
-	const buttonRef = useRef();
+	const buttonRefs = useRef< {
+		[ key: string ]: HTMLAnchorElement;
+	} >( {} );
 
 	return (
 		<div
@@ -76,54 +79,58 @@ const GroupItem = ( {
 				indexs={ indexs }
 			/>
 
-			{ addRulePopoverOpen && (
+			{ openPopoverAtButton && (
 				<AddRulePopover
-					buttonRef={ buttonRef }
-					onSelect={ ( ruleName ) => {
+					buttonRef={ buttonRefs.current[ openPopoverAtButton ] }
+					onSelect={ ( ruleName: string | undefined ) => {
+						const newItem =
+							'addGroup' === openPopoverAtButton
+								? newGroup( ruleName )
+								: newRule( ruleName );
+
 						onChange( {
 							...groupProps,
 							query: {
 								...query,
-								items: [ ...items, { ...newRule( ruleName ) } ],
+								items: [ ...items, newItem ],
 							},
 						} );
-						toggleAddRulePopover();
+						setPopoverAtButton( null );
 					} }
-					onCancel={ toggleAddRulePopover }
+					onCancel={ () => setPopoverAtButton( null ) }
 				/>
 			) }
 
 			<ButtonGroup className="cc__component-condition-editor__add-buttons">
 				<Button
-					ref={ buttonRef }
+					ref={ ( ref: HTMLAnchorElement ) => {
+						buttonRefs.current.addRule = ref;
+					} }
 					icon={ plus }
 					variant="link"
-					onClick={ toggleAddRulePopover }
+					onClick={ () => {
+						setPopoverAtButton( 'addRule' );
+					} }
 				>
 					{ _x(
-						'Rule',
-						'Conditional editor add OR condition buttons',
+						'Add Rule',
+						'Query editor add rule button',
 						'content-control'
 					) }
 				</Button>
 
-				{ builderOptions.features.nesting && (
+				{ nestingEnabled && (
 					<Button
+						ref={ ( ref: HTMLAnchorElement ) => {
+							buttonRefs.current.addGroup = ref;
+						} }
 						icon={ plus }
 						variant="link"
-						onClick={ () => {
-							onChange( {
-								...groupProps,
-								query: {
-									...query,
-									items: [ ...items, { ...newGroup() } ],
-								},
-							} );
-						} }
+						onClick={ () => setPopoverAtButton( 'addGroup' ) }
 					>
 						{ _x(
-							'Group',
-							'Conditional editor add OR condition buttons',
+							'Add Group',
+							'Query editor add group button',
 							'content-control'
 						) }
 					</Button>
