@@ -5,12 +5,11 @@ import {
 	SelectControl,
 	Flex,
 	FlexItem,
-	ButtonGroup,
 	Icon,
 } from '@wordpress/components';
 import { useRules } from '../../contexts';
 import { __ } from '@wordpress/i18n';
-import { check, cancelCircleFilled } from '@wordpress/icons';
+import { check } from '@wordpress/icons';
 
 import './index.scss';
 
@@ -19,11 +18,11 @@ const AddRulePopover = ( { buttonRef, onSelect, onCancel } ) => {
 
 	const [ value, setValue ] = useState( '' );
 
+	const headingText = __( 'Choose a rule', 'content-control' );
+
 	const RuleNameSelectOptions = () => (
 		<>
-			<option value="">
-				{ __( 'Select new rule type', 'content-control' ) }
-			</option>
+			<option value="">{ headingText }</option>
 			{ getRuleCategories().map( ( category ) => (
 				<optgroup key={ category } label={ category.toUpperCase() }>
 					{ getRulesByCategory( category ).map( ( rule ) => (
@@ -38,25 +37,18 @@ const AddRulePopover = ( { buttonRef, onSelect, onCancel } ) => {
 
 	return (
 		<Popover
-			headerTitle={ __( 'Choose a new rule', 'content-control' ) }
+			headerTitle={ headingText }
 			onClose={ onCancel }
 			expandOnMobile={ true }
 			className="cc-query-builder-add-rule-popover"
 			position="middle left"
 			noArrow={ false }
-			getAnchorRect={ () => buttonRef.current.getBoundingClientRect() }
+			getAnchorRect={ () => buttonRef.getBoundingClientRect() }
 		>
-			<h4 className="cc-query-builder-add-rule-popover__heading">
-				{ __( 'Choose a new rule', 'content-control' ) }
-			</h4>
-
 			<Flex gap={ 0 }>
 				<FlexItem>
 					<SelectControl
-						aria-label={ __(
-							'Choose a new rule',
-							'content-control'
-						) }
+						aria-label={ headingText }
 						onChange={ ( chosenValue ) => setValue( chosenValue ) }
 						value={ value }
 					>
@@ -68,7 +60,7 @@ const AddRulePopover = ( { buttonRef, onSelect, onCancel } ) => {
 						variant="tertiary"
 						className="add-button"
 						disabled={ value === '' }
-						aria-label={ __( 'Add Rule', 'content-control' ) }
+						aria-label={ __( 'Add', 'content-control' ) }
 						onClick={ () => onSelect( value ) }
 					>
 						<Icon icon={ check } size={ 20 } />
