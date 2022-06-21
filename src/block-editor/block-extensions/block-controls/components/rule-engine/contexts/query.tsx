@@ -4,17 +4,20 @@ import { createContext, useReducer, useContext } from '@wordpress/element';
 /* Internal Imports */
 import { queryReducer, initialQueryState } from '../reducers';
 
-export const QueryContext = createContext< ContextPropsUnion >(
+export const QueryContext = createContext< QueryContextPropsUnion >(
 	{} as QueryContextProps
 );
+
+type QueryContextProviderProps = {
+	value: QueryContextPropsUnion;
+	children: React.ReactNode;
+};
 
 export const QueryContextProvider = ( {
 	value,
 	children,
-}: {
-	value: ContextPropsUnion;
-	children: React.ReactNode;
-} ) => {
+}: QueryContextProviderProps ) => {
+	// Initial reducer state.
 	const initialState = {
 		...initialQueryState,
 		query: value.query,
@@ -34,7 +37,7 @@ export const QueryContextProvider = ( {
 	);
 };
 
-const useQueryContext = () => {
+const useQuery = () => {
 	const context = useContext( QueryContext );
 
 	if ( context === undefined ) {
@@ -44,4 +47,4 @@ const useQueryContext = () => {
 	return context;
 };
 
-export default useQueryContext;
+export default useQuery;

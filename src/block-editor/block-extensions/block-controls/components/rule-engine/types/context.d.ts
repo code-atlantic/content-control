@@ -1,4 +1,4 @@
-interface BaseContextProps< I extends BaseItem > {
+interface BaseQueryContextProps< I extends BaseItem > {
 	logicalOperator: LogicalOperator;
 	updateOperator: ( updatedOperator: LogicalOperator ) => void;
 	addItem: ( newItem: I ) => void;
@@ -10,14 +10,14 @@ interface BaseContextProps< I extends BaseItem > {
 	setList: I[] | ( ( currentList: I[] ) => I[] );
 }
 
-interface RootContextProps extends BaseContextProps< GroupItem > {
+interface RootQueryContextProps extends BaseQueryContextProps< GroupItem > {
 	isRoot: true;
 	query: RootQuery;
 }
 
-interface QueryContextProps extends BaseContextProps< Item > {
+interface QueryContextProps extends BaseQueryContextProps< Item > {
 	isRoot: false;
 	query: Query;
 }
 
-type ContextPropsUnion = RootContextProps | QueryContextProps;
+type QueryContextPropsUnion = RootQueryContextProps | QueryContextProps;
