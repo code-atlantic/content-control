@@ -25,7 +25,7 @@ Lastly, the plugin allows you to control the visibility of each sidebar/footer w
 Content Control allows you to do the following:
 
 - Restrict access to pages/posts to logged in/out users or specific user roles
-- Restrict access to media, tags, categories, format to logged in/out users or specific user roles
+- Restrict access to [media attachment pages](https://www.hongkiat.com/blog/wordpress-attachment-pages/), tags, categories, format to logged in/out users or specific user roles
 - Display a custom message to users who do not have permission to view the content
 - Redirect users who do not have permission to view the content to login page (redirects back to page/post after login), website homepage or custom URL
 - Display certain content on a page/post to logged in users only
@@ -34,16 +34,22 @@ Content Control allows you to do the following:
 - Apply custom CSS classes to on page content restriction shortcodes
 - Control the visibility of each sidebar/footer widget by selecting who can view each widget (everyone, logged out users, logged in users, specific user roles).
 
+**Note**: Content Control restricts access to media at the content level via the media attachment pages. Content Control does not restrict access at the server level to actual media files (e.g.: .jpg, .gif, .pdf, and .webp files).
+
 = Shortcode =
 
-[content_control roles=”subscriber,editor” logged_out=”0″ class=”custom-css-class” message=”You don’t have access to this.”]Logged in content[/content_control]
+This example allows only logged-in subscribers and editors to see the text "Logged in content".
+
+[content_control roles="subscriber,editor" class="custom-css-class" message="You don’t have access to this."]Logged in content[/content_control]
+
+If you are logged out or aren't logged in as a subscriber or editor, you'll see the "You don’t have access to this." denial message.
 
 All parameters are optional:
 
-- **roles** -  comma list of user roles that can see this content.
-- **logged_out** (default:0) - 0 or 1 for false/true. Checks whether the user should be logged out, as opposed to logged in.
-- **class** - custom CSS class to add to the controlled content for additional styling.
-- **message** - custom denial message.
+- **roles** - A comma-separated list of user roles that can see this content. If you leave this out, all roles can see the content.
+- **logged_out="1"** Restricts content to logged out visitors. Leave this out if you restrict content to logged in visitors.
+- **class** - A custom CSS class to add to the controlled content for additional styling.
+- **message** - Your custom denial message if you want to override the default message from the plugin settings.
 
 = Created by Code Atlantic =
 
