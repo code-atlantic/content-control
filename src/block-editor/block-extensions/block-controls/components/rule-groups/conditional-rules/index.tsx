@@ -1,13 +1,12 @@
+/** WordPress Imports */
 import {
 	Button,
-	ButtonGroup,
 	Flex,
 	FlexItem,
 	Icon,
 	Modal,
 	Notice,
 	SelectControl,
-	Snackbar,
 	TextControl,
 	__experimentalConfirmDialog as ConfirmDialog,
 } from '@wordpress/components';
@@ -15,9 +14,9 @@ import { useState } from '@wordpress/element';
 import { _x, __ } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
-import Builder from '../../query-builder';
-import { newSet } from '../../query-builder/templates';
-import { Query, QueryRuleType, QuerySet } from '../../query-builder/types';
+/** Internal Imports */
+import { newSet } from '../../rule-engine/templates';
+import RuleEngine from '../../rule-engine';
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
@@ -36,33 +35,29 @@ const verbs = {
 	],
 };
 
-type BuilderRules = {
-	[ key: string ]: QueryRuleType;
-};
-
-const builderRules: BuilderRules = {
-	user__is_logged_in: {
+const builderRules: EngineRuleType[] = [
+	{
 		name: 'user__is_logged_in',
 		label: __( 'Logged In', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {ruleName}',
 		verbs: [ verbs.is, verbs.isnot ],
 	},
-	user__has_role: {
+	{
 		name: 'user__has_role',
 		label: __( 'Role(s)', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {ruleName}',
 		verbs: [ verbs.has, verbs.doesnothave ],
 	},
-	user__has_commented: {
+	{
 		name: 'user__has_commented',
 		label: __( 'Commented', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {ruleName}',
 		verbs: [ verbs.has, verbs.hasnot ],
 	},
-};
+];
 
 const anyAllOptions = [
 	{
@@ -309,6 +304,25 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 						</Notice>
 					) }
 
+					<RuleEngine
+						value={ currentSet.query }
+						onChange={ ( query ) => {
+							updateCurrentSet( {
+								...currentSet,
+								query,
+							} );
+						} }
+						options={ {
+							features: {
+								notOperand: true,
+								groups: true,
+								nesting: false,
+							},
+							rules: builderRules,
+						} }
+					/>
+
+					{ /*
 					<Builder
 						query={ currentSet.query }
 						onChange={ ( query: Query ) => {
@@ -325,7 +339,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 							},
 							rules: builderRules,
 						} }
-					/>
+					/> */ }
 
 					<Flex justify="right">
 						<FlexItem>
