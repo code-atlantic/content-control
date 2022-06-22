@@ -26,7 +26,6 @@ const NestedQueryList = ( { query, onChange, indexs }: Props ) => {
 	 */
 	const nestedQueryContext: QueryContextProps = {
 		...parentQueryContext,
-		isRoot: false,
 		indexs,
 		logicalOperator,
 		setList: ( currentList ) =>

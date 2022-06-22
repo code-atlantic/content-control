@@ -22,7 +22,6 @@ const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
 	const rootQueryContext: RootQueryContextProps = {
-		isRoot: true,
 		query,
 		setList: ( currentList ) => {
 			const newList =

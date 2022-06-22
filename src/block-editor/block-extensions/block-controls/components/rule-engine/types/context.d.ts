@@ -7,16 +7,14 @@ interface BaseQueryContextProps< I extends BaseItem > {
 	indexs: number[];
 	isDragging: boolean;
 	setIsDragging: ( isDragging: boolean ) => void;
-	setList: I[] | ( ( currentList: I[] ) => I[] );
+	setList: ( currentList: SetListFunctional< I > ) => void;
 }
 
 interface RootQueryContextProps extends BaseQueryContextProps< GroupItem > {
-	isRoot: true;
 	query: RootQuery;
 }
 
 interface QueryContextProps extends BaseQueryContextProps< Item > {
-	isRoot: false;
 	query: Query;
 }
 
