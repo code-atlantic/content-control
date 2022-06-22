@@ -24,7 +24,9 @@ export const newGroup = ( ruleName: string = '' ): GroupItem => ( {
 	},
 } );
 
-export const newSet = ( ruleName: string = '' ): QuerySet => ( {
+export const newSet = (
+	ruleName: string = 'user__is_logged_in'
+): QuerySet => ( {
 	id: newUUID(),
 	label: '',
 	query: {
