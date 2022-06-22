@@ -17,10 +17,10 @@ const Item = ( { index, value: item, ...itemProps }: Props ) => {
 	return (
 		<>
 			<div
-				id={ `query-builder-${ item.type }-${ item.id }` }
+				id={ `rule-engine-${ item.type }-${ item.id }` }
 				className={ classNames( [
-					'cc-query-builder-item-wrapper',
-					`cc-query-builder-item-wrapper--${ item.type }`,
+					'cc-rule-engine-item-wrapper',
+					`cc-rule-engine-item-wrapper--${ item.type }`,
 					isGroup && item.query.items.length && 'has-child-items',
 				] ) }
 			>
