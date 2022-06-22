@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "lib": [
+            "esnext"
+        ],
+        "esModuleInterop": true,
+        "typeRoots": [
+            // "./src/block-editor/components/rule-engine/**/*.d.ts"
+        ]
+    },
+}
