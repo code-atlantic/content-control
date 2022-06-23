@@ -1,5 +1,5 @@
 /** WordPress Imports */
-import { useState } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { cancelCircleFilled, check, edit } from '@wordpress/icons';
 import { Button, TextControl } from '@wordpress/components';
@@ -9,6 +9,14 @@ const LabelControl = ( {
 	onChange,
 }: ControlledInputProps< string > ) => {
 	const [ inputText, setInputText ] = useState< string | null >( null );
+
+	const inputRef = useRef( null );
+
+	useEffect( () => {
+		if ( inputText !== null ) {
+			inputRef.current.focus();
+		}
+	}, [ inputText ] );
 
 	return (
 		<div className="cc-rule-engine-group-label">
@@ -29,6 +37,7 @@ const LabelControl = ( {
 						value={ inputText }
 						onChange={ setInputText }
 						placeholder={ __( 'Group label', 'content-control' ) }
+						ref={ inputRef }
 					/>
 					<div className="buttons">
 						<Button
