@@ -1,11 +1,11 @@
 /** Internal Imports  */
 import { OptionsProvider } from './contexts';
-import { RootQueryList } from './components';
+import { QueryList } from './components';
 
 /** Styles */
 import './index.scss';
 
-type RuleEngineProps = ControlledInputProps< RootQuery > & {
+type RuleEngineProps = ControlledInputProps< Query > & {
 	/** Options to customize the rule engine */
 	options: EngineOptions;
 };
@@ -14,7 +14,7 @@ const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 	return (
 		<OptionsProvider options={ options }>
 			<div className="cc-rule-engine">
-				<RootQueryList query={ value } onChange={ onChange } />
+				<QueryList query={ value } onChange={ onChange } />
 			</div>
 		</OptionsProvider>
 	);

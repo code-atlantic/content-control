@@ -12,10 +12,6 @@ interface Query {
 	items: Item[];
 }
 
-interface RootQuery extends Omit< Query, 'items' > {
-	items: GroupItem[];
-}
-
 interface RuleItem extends BaseItem {
 	type: 'rule';
 	name: string;
@@ -33,8 +29,6 @@ interface GroupItem extends BaseItem {
 
 type Item = RuleItem | GroupItem;
 
-interface QuerySet extends Omit< GroupItem, 'type' | 'query' > {
-	id: Identifier;
-	label: string;
-	query: RootQuery;
+interface QuerySet extends Omit< GroupItem, 'type' > {
+	query: Query;
 }

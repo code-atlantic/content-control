@@ -1,21 +1,13 @@
-interface BaseQueryContextProps< I extends BaseItem > {
+interface QueryContextProps {
+	isRoot: boolean;
+	query: Query;
 	logicalOperator: LogicalOperator;
 	updateOperator: ( updatedOperator: LogicalOperator ) => void;
-	addItem: ( newItem: I, after?: Identifier ) => void;
-	updateItem: ( id: string, updatedItem: I ) => void;
+	addItem: ( newItem: Item, after?: Identifier ) => void;
+	updateItem: ( id: string, updatedItem: Item ) => void;
 	removeItem: ( id: string ) => void;
 	indexs: number[];
 	isDragging: boolean;
 	setIsDragging: ( isDragging: boolean ) => void;
-	setList: ( currentList: SetListFunctional< I > ) => void;
+	setList: ( currentList: SetListFunctional< Item > ) => void;
 }
-
-interface RootQueryContextProps extends BaseQueryContextProps< GroupItem > {
-	query: RootQuery;
-}
-
-interface QueryContextProps extends BaseQueryContextProps< Item > {
-	query: Query;
-}
-
-type QueryContextPropsUnion = RootQueryContextProps | QueryContextProps;

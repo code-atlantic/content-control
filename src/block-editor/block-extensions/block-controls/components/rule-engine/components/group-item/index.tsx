@@ -5,13 +5,11 @@ import classNames from 'classnames';
 import { forwardRef } from '@wordpress/element';
 
 /** Internal Imports */
-import { NestedQueryList, ItemActions } from '../../components';
+import { QueryList, ItemActions } from '../../components';
 import LabelControl from './label-control';
 
 /** Styles */
 import './index.scss';
-import { useQuery } from '../../contexts';
-import { newRule } from '../../templates';
 
 type Props = ItemProps< GroupItem > & {
 	indexs: number[];
@@ -48,7 +46,7 @@ const GroupItem = (
 				onChange={ ( label: string ) => updateGroup( { label } ) }
 			/>
 
-			<NestedQueryList
+			<QueryList
 				query={ groupProps.query }
 				onChange={ ( query ) => updateGroup( { query } ) }
 				indexs={ indexs }

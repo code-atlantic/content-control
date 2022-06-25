@@ -4,12 +4,12 @@ import { createContext, useReducer, useContext } from '@wordpress/element';
 /* Internal Imports */
 import { queryReducer, initialQueryState } from '../reducers';
 
-export const QueryContext = createContext< QueryContextPropsUnion >(
+export const QueryContext = createContext< QueryContextProps >(
 	{} as QueryContextProps
 );
 
 type QueryContextProviderProps = {
-	value: QueryContextPropsUnion;
+	value: QueryContextProps;
 	children: React.ReactNode;
 };
 

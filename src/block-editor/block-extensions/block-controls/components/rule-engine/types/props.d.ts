@@ -12,9 +12,9 @@ interface ControlledInputProps< T > {
 /**
  * Props for Query Lists
  */
-interface QueryProps< T extends Query > {
-	query: T;
-	onChange: ( value: T ) => void;
+interface QueryProps {
+	query: Query;
+	onChange: ( value: Query ) => void;
 }
 
 /**
