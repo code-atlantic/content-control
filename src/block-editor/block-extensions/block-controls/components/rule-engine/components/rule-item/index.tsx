@@ -1,53 +1,23 @@
-/** External Imports */
-import classNames from 'classnames';
-
 /** WordPress Imports */
-import { sprintf, __ } from '@wordpress/i18n';
+import { forwardRef } from '@wordpress/element';
 
 /** Internal Imports */
-import ItemActions from '../item/actions';
 import { useRules } from '../../contexts';
+import MissingNotice from './missing-notice';
+import Editor from './editor';
+import Finder from './finder';
+import Wrapper from './wrapper';
 
 /** Styles */
 import './index.scss';
 
-const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
-	const { notOperand = false, name, options = {}, id } = ruleProps;
+const RuleItem = (
+	{ onChange, value: ruleProps }: ItemProps< RuleItem >,
+	ref: React.Ref< HTMLDivElement >
+) => {
+	const { name, options = {}, id } = ruleProps;
 
 	const { getRule } = useRules();
-
-	const ruleDef = getRule( name );
-
-	if ( name !== '' && ! ruleDef ) {
-		return (
-			<>
-				<p>
-					{ sprintf(
-						/** translators: 1. name of the missing rule. */
-						__(
-							'Rule %s not found. Likely an error has occurred or extra rules may have been disabled.',
-							'content-control'
-						),
-						name
-					) }
-				</p>
-				<p>
-					{ __(
-						'Saving these block conditions now may result in loss of rule settings.',
-						'content-control'
-					) }
-				</p>
-			</>
-		);
-	}
-
-	const {
-		label = '',
-		category = '',
-		format = '',
-		verbs = [ '', '' ],
-		fields = [],
-	} = ruleDef ?? {};
 
 	const updateRule = ( newValues: Partial< RuleItem > ) =>
 		onChange( {
@@ -70,67 +40,30 @@ const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
 			},
 		} );
 
-	const formattedFields = format.split( ' ' ).map( ( str ) => {
-		switch ( str ) {
-			case '{category}':
-				return {
-					type: 'category',
-					content: category,
-				};
-			case '{verb}':
-				return {
-					type: 'verb',
-					content: (
-						<span className="cc_condition-editor-rule__verb">
-							{ verbs[ ! notOperand ? 0 : 1 ] }
-						</span>
-					),
-				};
-			case '{ruleName}':
-				return {
-					type: 'field',
-					classes: [ 'field-type-select', 'field--ruleName' ],
-					content: label,
-				};
-			default:
-				return {
-					type: 'text',
-					content: str,
-				};
-		}
-	} );
+	const ruleChosen = '' !== name;
+	const ruleDef = getRule( name );
+
+	if ( ruleChosen && ! ruleDef ) {
+		return (
+			<Wrapper id={ id }>
+				<MissingNotice name={ name } />
+			</Wrapper>
+		);
+	}
 
 	return (
-		<div
-			className={ classNames( [
-				'cc-rule-engine-item',
-				'cc-rule-engine-rule',
-			] ) }
-		>
-			<div className="controls-column">
-				<div className="editable-area">
-					{ formattedFields.map(
-						( { content, classes, type }, i ) => (
-							<div
-								key={ i }
-								className={ classNames( [
-									'formatted-field-item',
-									`formatted-field-item--${ type }`,
-									classes,
-								] ) }
-							>
-								{ content }
-							</div>
-						)
-					) }
-				</div>
-			</div>
-
-			<div className="actions-column">
-				<ItemActions id={ id } />
-			</div>
-		</div>
+		<Wrapper id={ id } ref={ ref }>
+			{ ruleChosen ? (
+				<Editor
+					ruleDef={ ruleDef }
+					value={ ruleProps }
+					onChange={ onChange }
+				/>
+			) : (
+				<Finder />
+			) }
+		</Wrapper>
 	);
 };
 
-export default RuleItem;
+export default forwardRef( RuleItem );
