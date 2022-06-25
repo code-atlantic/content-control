@@ -18,12 +18,9 @@ import './index.scss';
 import { newGroup } from '../../templates';
 
 const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
-	const { items = [], logicalOperator } = query;
-
 	const [ isDragging, setIsDragging ] = useState( false );
-
+	const { items = [], logicalOperator } = query;
 	const newItemRef = useRef< HTMLElement >();
-
 	const [ newItemAdded, setNewItemIndex ] = useState< number >( null );
 
 	useEffect( () => {

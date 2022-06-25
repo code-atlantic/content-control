@@ -20,14 +20,10 @@ type Props = QueryProps< Query > & {
 };
 
 const NestedQueryList = ( { query, onChange, indexs }: Props ) => {
-	const parentQueryContext = useQuery();
-
-	const { setList: setParentList } = parentQueryContext;
-
 	const { items = [], logicalOperator } = query;
-
-	const newItemRef = useRef< HTMLDivElement >();
-
+	const parentQueryContext = useQuery();
+	const { setList: setParentList } = parentQueryContext;
+	const newItemRef = useRef< HTMLElement >();
 	const [ newItemAdded, setNewItemIndex ] = useState< number >( null );
 
 	useEffect( () => {
