@@ -1,18 +1,26 @@
 /** External Imports */
 import classNames from 'classnames';
 
+/** WordPress Imports */
+import { forwardRef } from '@wordpress/element';
+
 /** Internal Imports */
 import { NestedQueryList, ItemActions } from '../../components';
 import LabelControl from './label-control';
 
 /** Styles */
 import './index.scss';
+import { useQuery } from '../../contexts';
+import { newRule } from '../../templates';
 
 type Props = ItemProps< GroupItem > & {
 	indexs: number[];
 };
 
-const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
+const GroupItem = (
+	{ onChange, value: groupProps, indexs = [] }: Props,
+	ref: React.Ref< HTMLDivElement >
+) => {
 	const {
 		query: { items },
 	} = groupProps;
@@ -31,6 +39,7 @@ const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
 				items.length &&
 					( items.length === 1 ? 'has-item' : 'has-items' ),
 			] ) }
+			ref={ ref }
 		>
 			<ItemActions { ...groupProps } />
 
@@ -47,4 +56,4 @@ const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
 		</div>
 	);
 };
-export default GroupItem;
+export default forwardRef( GroupItem );

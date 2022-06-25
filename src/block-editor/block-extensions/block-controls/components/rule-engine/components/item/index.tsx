@@ -1,6 +1,9 @@
 /** External Imports */
 import classNames from 'classnames';
 
+/** WordPress Imports */
+import { forwardRef } from '@wordpress/element';
+
 /** Internal Imports */
 import { useQuery } from '../../contexts';
 import { GroupItem, RuleItem, LogicalOperator } from '../../components';
@@ -10,7 +13,7 @@ interface Props extends ItemProps< GroupItem | RuleItem > {
 	index: number;
 }
 
-const Item = ( { index, value: item, ...itemProps }: Props ) => {
+const Item = ( { index, value: item, ...itemProps }: Props, ref ) => {
 	const { logicalOperator, updateOperator, indexs } = useQuery();
 	const isGroup = 'group' === item.type;
 
@@ -34,9 +37,10 @@ const Item = ( { index, value: item, ...itemProps }: Props ) => {
 						{ ...itemProps }
 						value={ item }
 						indexs={ [ ...indexs, index ] }
+						ref={ ref }
 					/>
 				) : (
-					<RuleItem { ...itemProps } value={ item } />
+					<RuleItem { ...itemProps } value={ item } ref={ ref } />
 				) }
 			</div>
 		</>
@@ -45,4 +49,4 @@ const Item = ( { index, value: item, ...itemProps }: Props ) => {
 
 export { ItemActions, Item };
 
-export default Item;
+export default forwardRef( Item );
