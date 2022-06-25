@@ -1,6 +1,12 @@
 /** External Imports */
 import classNames from 'classnames';
 
+/** WordPress Imports */
+import { useState, useEffect, useRef } from '@wordpress/element';
+import { Button } from '@wordpress/components';
+import { plus } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
+
 /** Internal Imports */
 import { QueryContextProvider, useQuery } from '../../contexts';
 import Item from '../item';
@@ -8,7 +14,6 @@ import Sortablelist from './sortable-list';
 
 /** Styles */
 import './index.scss';
-import { noop } from 'lodash';
 
 type Props = QueryProps< Query > & {
 	indexs: number[];
@@ -20,6 +25,23 @@ const NestedQueryList = ( { query, onChange, indexs }: Props ) => {
 	const { setList: setParentList } = parentQueryContext;
 
 	const { items = [], logicalOperator } = query;
+
+	const newItemRef = useRef< HTMLDivElement >();
+
+	const [ newItemAdded, setNewItemIndex ] = useState< number >( null );
+
+	useEffect( () => {
+		if ( newItemRef.current ) {
+			const firstEl = newItemRef.current.querySelector(
+				'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+			) as HTMLElement;
+
+			if ( null !== firstEl ) {
+				firstEl.focus();
+				setNewItemIndex( null );
+			}
+		}
+	}, [ newItemAdded ] );
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
@@ -85,11 +107,22 @@ const NestedQueryList = ( { query, onChange, indexs }: Props ) => {
 				...query,
 				logicalOperator: updatedOperator,
 			} ),
-		addItem: ( newItem ) =>
+		addItem: ( newItem, after = null ) => {
+			const newItems = [ ...items ];
+			const afterIndex = after
+				? items.findIndex( ( item ) => item.id === after )
+				: -1;
+			const index = afterIndex >= 0 ? afterIndex + 1 : items.length;
+
+			newItems.splice( index, 0, newItem );
+
+			setNewItemIndex( index );
+
 			onChange( {
 				...query,
-				items: [ ...items, newItem ],
-			} ),
+				items: newItems,
+			} );
+		},
 		updateItem: ( id, updatedItem ) =>
 			onChange( {
 				...query,
@@ -122,12 +155,20 @@ const NestedQueryList = ( { query, onChange, indexs }: Props ) => {
 						key={ item.id }
 						index={ i }
 						value={ item }
+						ref={ newItemAdded === i ? newItemRef : null }
 						onChange={ ( updatedItem ) =>
 							updateItem( item.id, updatedItem )
 						}
 					/>
 				) ) }
 			</Sortablelist>
+
+			<Button
+				icon={ plus }
+				iconSize={ 18 }
+				onClick={ () => addItem( newRule() ) }
+				label={ __( 'Add Rule', 'content-control' ) }
+			/>
 		</QueryContextProvider>
 	);
 };

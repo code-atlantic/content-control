@@ -3,7 +3,10 @@ import classNames from 'classnames';
 import { isEqual } from 'lodash';
 
 /** WordPress Imports */
-import { useState } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
+import { Button } from '@wordpress/components';
+import { plus } from '@wordpress/icons';
+import { __ } from '@wordpress/i18n';
 
 /** Internal Imports */
 import { QueryContextProvider } from '../../contexts';
@@ -12,11 +15,29 @@ import Sortablelist from './sortable-list';
 
 /** Styles */
 import './index.scss';
+import { newGroup } from '../../templates';
 
 const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 	const { items = [], logicalOperator } = query;
 
 	const [ isDragging, setIsDragging ] = useState( false );
+
+	const newItemRef = useRef< HTMLElement >();
+
+	const [ newItemAdded, setNewItemIndex ] = useState< number >( null );
+
+	useEffect( () => {
+		if ( newItemRef.current ) {
+			const firstEl = newItemRef.current.querySelector(
+				'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
+			) as HTMLElement;
+
+			if ( null !== firstEl ) {
+				firstEl.focus();
+				setNewItemIndex( null );
+			}
+		}
+	}, [ newItemAdded ] );
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
@@ -48,11 +69,22 @@ const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 				...query,
 				logicalOperator: updatedOperator,
 			} ),
-		addItem: ( newItem ) =>
+		addItem: ( newItem, after = null ) => {
+			const newItems = [ ...items ];
+			const afterIndex = after
+				? items.findIndex( ( item ) => item.id === after )
+				: -1;
+			const index = afterIndex >= 0 ? afterIndex + 1 : items.length;
+
+			newItems.splice( index, 0, newItem );
+
+			setNewItemIndex( index );
+
 			onChange( {
 				...query,
-				items: [ ...items, newItem ],
-			} ),
+				items: newItems,
+			} );
+		},
 		updateItem: ( id, updatedItem ) =>
 			onChange( {
 				...query,
@@ -67,7 +99,7 @@ const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 			} ),
 	};
 
-	const { setList, updateItem } = rootQueryContext;
+	const { addItem, setList, updateItem } = rootQueryContext;
 
 	return (
 		<QueryContextProvider value={ rootQueryContext }>
@@ -86,6 +118,7 @@ const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 						key={ item.id }
 						index={ i }
 						value={ item }
+						ref={ newItemAdded === i ? newItemRef : null }
 						onChange={ ( updatedItem ) =>
 							updatedItem.type === 'group' &&
 							updateItem( item.id, updatedItem )
@@ -93,6 +126,13 @@ const RootQueryList = ( { query, onChange }: QueryProps< RootQuery > ) => {
 					/>
 				) ) }
 			</Sortablelist>
+
+			<Button
+				icon={ plus }
+				iconSize={ 18 }
+				onClick={ () => addItem( newGroup() ) }
+				label={ __( 'Add Rule', 'content-control' ) }
+			/>
 		</QueryContextProvider>
 	);
 };
