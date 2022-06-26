@@ -40,7 +40,9 @@ const useRules = () => {
 	 * @return {EngineRuleType[]} A list of found rules.
 	 */
 	const getRulesByCategory = ( category: string ): EngineRuleType[] =>
-		rules.filter( ( rule ) => rule.category === category );
+		rules.filter(
+			( rule ) => rule.category.toLowerCase() === category.toLowerCase()
+		);
 
 	/**
 	 * Get defalts for a specific rule.
@@ -56,12 +58,31 @@ const useRules = () => {
 			return defaults;
 		}, {} );
 
+	type findRulesProps = {
+		category: string;
+		verb: string;
+		label: string;
+	};
+
+	const findRules = ( { category, verb, label }: findRulesProps ) =>
+		rules.filter(
+			( rule ) =>
+				( ! category ||
+					rule.category.toLowerCase() === category.toLowerCase() ) &&
+				( ! verb ||
+					rule.verbs
+						.map( ( v ) => v.toLowerCase() )
+						.indexOf( verb.toLowerCase() ) !== -1 ) &&
+				( ! label || rule.label.toLowerCase() === label.toLowerCase() )
+		);
+
 	return {
 		getRules,
 		getRule,
 		getRuleCategories,
 		getRulesByCategory,
 		getRuleOptionDefaults,
+		findRules,
 	};
 };
 
