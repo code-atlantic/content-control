@@ -60,7 +60,13 @@ const RuleItem = (
 					onChange={ onChange }
 				/>
 			) : (
-				<Finder />
+				<Finder
+					onSelect={ ( ruleName ) => {
+						updateRule( {
+							name: ruleName,
+						} );
+					} }
+				/>
 			) }
 		</Wrapper>
 	);
