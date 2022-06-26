@@ -24,8 +24,6 @@ type Props = QueryProps & {
 const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 	const [ isDragging, setIsDragging ] = useState( false );
 	const { items = [], logicalOperator } = query;
-	const newItemRef = useRef< HTMLElement >();
-	const [ newItemAdded, setNewItemIndex ] = useState< number >( null );
 
 	const parentQueryContext = useQuery();
 
@@ -33,19 +31,6 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 
 	// Determine if this is the root query.
 	const isRootList = false === setRootList;
-
-	useEffect( () => {
-		if ( newItemRef.current ) {
-			const firstEl = newItemRef.current.querySelector(
-				'a[href], button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])'
-			) as HTMLElement;
-
-			if ( null !== firstEl ) {
-				firstEl.focus();
-				setNewItemIndex( null );
-			}
-		}
-	}, [ newItemAdded ] );
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
@@ -159,8 +144,6 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 
 			newItems.splice( index, 0, newItem );
 
-			setNewItemIndex( index );
-
 			onChange( {
 				...query,
 				items: newItems,
@@ -199,9 +182,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 						key={ item.id }
 						index={ i }
 						value={ item }
-						ref={ newItemAdded === i ? newItemRef : null }
-						onChange={ ( updatedItem ) =>
-							updatedItem.type === 'group' &&
+						onChange={ ( updatedItem: Item ) =>
 							updateItem( item.id, updatedItem )
 						}
 					/>
