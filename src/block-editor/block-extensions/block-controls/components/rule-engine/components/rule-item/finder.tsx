@@ -1,6 +1,5 @@
 /** External Imports */
 import { noop } from 'lodash';
-import { titleCase } from 'title-case';
 
 /** WordPress Imports */
 import { __ } from '@wordpress/i18n';
