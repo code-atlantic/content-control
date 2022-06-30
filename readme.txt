@@ -44,11 +44,13 @@ This example allows only logged-in subscribers and editors to see the text "Logg
 
 If you are logged out or aren't logged in as a subscriber or editor, you'll see the "You don’t have access to this." denial message.
 
-All parameters are optional:
+All parameters are **optional**. If you add a parameter, make sure it's followed by an equals (=) sign and the values of your parameters are inside double quotes ("").
 
-- **roles** - A comma-separated list of user roles that can see this content. If you leave this out, all roles can see the content.
-- **logged_out="1"** Restricts content to logged out visitors. Leave this out if you restrict content to logged in visitors.
-- **class** - A custom CSS class to add to the controlled content for additional styling.
+**List of parameters**:
+
+- **roles** - By default, all roles will have access to restricted content. If you want to give access only to specific roles, add this parameter with a comma-separated list of valid WordPress user roles wrapped by double quotes (""). See the example above.
+- **logged_out="1"** - Only logged out visitors can see this content. If you want the opposite (only logged-in people can see the content), leave this parameter out. I.e., By default, Content Control restricts content so only logged-in visitors can view it.
+- **class** - Add the name of your custom CSS class if you want to add custom styles to your restricted content.
 - **message** - Your custom denial message if you want to override the default message from the plugin settings.
 
 = Created by Code Atlantic =
