@@ -322,25 +322,6 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 						} }
 					/>
 
-					{ /*
-					<Builder
-						query={ currentSet.query }
-						onChange={ ( query: Query ) => {
-							updateCurrentSet( {
-								...currentSet,
-								query,
-							} );
-						} }
-						options={ {
-							features: {
-								notOperand: true,
-								groups: true,
-								nesting: false,
-							},
-							rules: builderRules,
-						} }
-					/> */ }
-
 					<Flex justify="right">
 						<FlexItem>
 							<Button onClick={ () => updateCurrentSet( null ) }>
