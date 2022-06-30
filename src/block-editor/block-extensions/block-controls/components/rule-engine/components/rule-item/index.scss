@@ -41,10 +41,17 @@
 			border: 1px solid #ddd;
 			padding: ($spacing / 2) $spacing;
 
+
 			.editable-area {
-				@include flexRow();
+				@include flexRow(4px);
+
+				.components-button {
+					padding: 0;
+				}
 			}
 		}
+
+		.add-rule-column {}
 
 		.actions-column {
 		}
