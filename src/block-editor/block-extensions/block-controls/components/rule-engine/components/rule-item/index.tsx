@@ -1,6 +1,3 @@
-/** WordPress Imports */
-import { forwardRef } from '@wordpress/element';
-
 /** Internal Imports */
 import { useRules } from '../../contexts';
 import MissingNotice from './missing-notice';
@@ -11,10 +8,7 @@ import Wrapper from './wrapper';
 /** Styles */
 import './index.scss';
 
-const RuleItem = (
-	{ onChange, value: ruleProps }: ItemProps< RuleItem >,
-	ref: React.Ref< HTMLDivElement >
-) => {
+const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
 	const { name, options = {}, id } = ruleProps;
 
 	const { getRule } = useRules();
@@ -52,7 +46,7 @@ const RuleItem = (
 	}
 
 	return (
-		<Wrapper id={ id } ref={ ref }>
+		<Wrapper id={ id }>
 			{ ruleChosen ? (
 				<Editor
 					ruleDef={ ruleDef }
@@ -72,4 +66,4 @@ const RuleItem = (
 	);
 };
 
-export default forwardRef( RuleItem );
+export default RuleItem;

@@ -2,7 +2,7 @@
 import classNames from 'classnames';
 
 /** WordPress Imports */
-import { forwardRef } from '@wordpress/element';
+
 
 /** Internal Imports */
 import ItemActions from '../item/actions';
@@ -12,17 +12,13 @@ type Props = {
 	children: React.ReactNode;
 };
 
-const Wrapper = (
-	{ id, children }: Props,
-	ref: React.Ref< HTMLDivElement >
-) => {
+const Wrapper = ( { id, children }: Props ) => {
 	return (
 		<div
 			className={ classNames( [
 				'cc-rule-engine-item',
 				'cc-rule-engine-rule',
 			] ) }
-			ref={ ref }
 		>
 			<div className="controls-column">
 				<div className="editable-area">{ children }</div>
@@ -35,4 +31,4 @@ const Wrapper = (
 	);
 };
 
-export default forwardRef( Wrapper );
+export default Wrapper;

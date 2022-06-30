@@ -1,9 +1,6 @@
 /** External Imports */
 import classNames from 'classnames';
 
-/** WordPress Imports */
-import { forwardRef } from '@wordpress/element';
-
 /** Internal Imports */
 import { QueryList, ItemActions } from '../../components';
 import LabelControl from './label-control';
@@ -15,10 +12,7 @@ type Props = ItemProps< GroupItem > & {
 	indexs: number[];
 };
 
-const GroupItem = (
-	{ onChange, value: groupProps, indexs = [] }: Props,
-	ref: React.Ref< HTMLDivElement >
-) => {
+const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
 	const {
 		query: { items },
 	} = groupProps;
@@ -37,7 +31,6 @@ const GroupItem = (
 				items.length &&
 					( items.length === 1 ? 'has-item' : 'has-items' ),
 			] ) }
-			ref={ ref }
 		>
 			<ItemActions { ...groupProps } />
 
@@ -54,4 +47,4 @@ const GroupItem = (
 		</div>
 	);
 };
-export default forwardRef( GroupItem );
+export default GroupItem;
