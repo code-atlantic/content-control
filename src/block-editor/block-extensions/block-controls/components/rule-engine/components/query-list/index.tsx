@@ -9,13 +9,13 @@ import { plus } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 /** Internal Imports */
-import { QueryContextProvider, useQuery } from '../../contexts';
+import { QueryContextProvider, useOptions, useQuery } from '../../contexts';
 import Item from '../item';
 import Sortablelist from './sortable-list';
 
 /** Styles */
 import './index.scss';
-import { newGroup } from '../../templates';
+import { newGroup, newRule } from '../../templates';
 
 type Props = QueryProps & {
 	indexs?: number[];
@@ -26,6 +26,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 	const { items = [], logicalOperator } = query;
 
 	const parentQueryContext = useQuery();
+	const { features } = useOptions();
 
 	const { setList: setRootList = false } = parentQueryContext;
 
@@ -190,6 +191,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 		<QueryContextProvider value={ queryContext }>
 			<Sortablelist
 				className={ classNames( [
+					'cc-rule-engine-query-list',
 					isRootList ? 'is-root' : 'is-nested',
 					items.length &&
 						( items.length > 1 ? 'has-items' : 'has-item' ),
@@ -210,12 +212,27 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 				) ) }
 			</Sortablelist>
 
-			<Button
-				icon={ plus }
-				iconSize={ 18 }
-				onClick={ () => addItem( newGroup() ) }
-				label={ __( 'Add Rule', 'content-control' ) }
-			/>
+			<div className="cc-rule-engine-query-list__buttons">
+				<Button
+					icon={ plus }
+					iconSize={ 18 }
+					onClick={ () => addItem( newRule() ) }
+					label={ __( 'Add Rule', 'content-control' ) }
+				>
+					{ __( 'Add Rule', 'content-control' ) }
+				</Button>
+
+				{ ( isRootList || ( ! isRootList && features.nesting ) ) && (
+					<Button
+						icon={ plus }
+						iconSize={ 18 }
+						onClick={ () => addItem( newGroup() ) }
+						label={ __( 'Add Group', 'content-control' ) }
+					>
+						{ __( 'Add Group', 'content-control' ) }
+					</Button>
+				) }
+			</div>
 		</QueryContextProvider>
 	);
 };
