@@ -48,8 +48,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 		 * Nested lists will then call setRootList and pass a SetStateFunctional
 		 * that modifies the rootList based on the current list indexs list.
 		 *
-		 * @param {Item[]} currentList Array of current lists items.
-		 * @param          newList
+		 * @param {Item[]} newList Array of current lists items.
 		 */
 		setList: isRootList
 			? ( newList ) => {
@@ -61,10 +60,21 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 					const _newList =
 						typeof newList !== 'function'
 							? newList
-							: newList( items );
+							: // Root list passes in current state to updaters.
+							  newList( items );
 
-					// Prevent saving state if items are equal.
-					if ( isEqual( items, _newList ) ) {
+					// !! The list is managed by parent state, returning
+					// !! here breaks things such as items not being removed
+					// !! from lists on drag to another list.
+					// !! Leaving this here as a reminder.
+					//if ( isEqual( items, _newList ) ) {
+					// return; // !! Don't Do This !!
+					//}
+
+					// ** This is a suitable replacement, it prevents saving
+					// **  state during drag operations which can trigger several
+					// ** state changes.
+					if ( isDragging ) {
 						return;
 					}
 
@@ -118,11 +128,22 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 							closestParentList[ currentListIndex ];
 
 						if ( 'query' in closestParentGroup ) {
-							// Replaced referenced items list with updated list.
-							closestParentGroup.query.items =
+							const _newList =
 								typeof newList === 'function'
 									? newList( rootList )
 									: newList;
+							// Prevent saving state if items are equal.
+							if (
+								isEqual(
+									closestParentGroup.query.items,
+									_newList
+								)
+							) {
+								return rootList;
+							}
+
+							// Replaced referenced items list with updated list.
+							closestParentGroup.query.items = _newList;
 						} else {
 							throw "Item's parent is not a group!";
 						}
