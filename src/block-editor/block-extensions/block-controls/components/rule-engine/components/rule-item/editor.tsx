@@ -1,12 +1,15 @@
 /** External Imports */
 import classNames from 'classnames';
 
+/** Internal Imports */
+import Field from '../../../fields';
+
 const Editor = ( {
 	ruleDef,
 	value: ruleProps,
 	onChange,
 }: ItemProps< RuleItem > ) => {
-	const { notOperand = false, name, options = {}, id } = ruleProps;
+	const { notOperand = false, options: ruleOptions = {} } = ruleProps;
 
 	const {
 		label = '',
@@ -42,6 +45,24 @@ const Editor = ( {
 		}
 	} );
 
+	/**
+	 * Update a single option.
+	 *
+	 * @param {string} optionKey Option key.
+	 * @param {any}    value     Option value
+	 */
+	const updateOption = (
+		optionKey: string,
+		value: EngineField[ 'value' ]
+	): void =>
+		onChange( {
+			...ruleProps,
+			options: {
+				...ruleOptions,
+				[ optionKey ]: value,
+			},
+		} );
+
 	return (
 		<>
 			{ formattedFields.map(
@@ -68,6 +89,27 @@ const Editor = ( {
 						{ content }
 					</div>
 				)
+			) }
+
+			{ fields.length && (
+				<div className="column-fields">
+					{ fields.map( ( field: EngineField ) => {
+						const { id } = field;
+
+						return (
+							<Field
+								key={ id }
+								value={
+									ruleOptions[ id ] as EngineField[ 'value' ]
+								}
+								onChange={ (
+									newValue: EngineField[ 'value' ]
+								) => updateOption( id, newValue ) }
+								{ ...field }
+							/>
+						);
+					} ) }
+				</div>
 			) }
 		</>
 	);
