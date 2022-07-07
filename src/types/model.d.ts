@@ -1,3 +1,6 @@
+/// <reference path="./engine.d.ts" />
+
+
 type Identifier = string;
 type LogicalOperator = 'and' | 'or';
 type NotOperand = boolean;
@@ -16,7 +19,7 @@ interface RuleItem extends BaseItem {
 	type: 'rule';
 	name: string;
 	options?: {
-		[ key: string ]: any;
+		[ key: string ]: EngineField['value'];
 	};
 	notOperand?: NotOperand;
 }

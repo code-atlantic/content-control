@@ -1,6 +1,6 @@
 import { Item, Identifier, Query } from './model';
 
-declare type AddItemToGroup = {
+type AddItemToGroup = {
 	type: 'ADD_ITEM_TO_GROUP';
 	payload: {
 		groupId: Identifier;
@@ -8,7 +8,7 @@ declare type AddItemToGroup = {
 	};
 };
 
-declare type RemoveItemFromGroupAction = {
+type RemoveItemFromGroupAction = {
 	type: 'REMOVE_ITEM_FROM_GROUP';
 	payload: {
 		groupId: Identifier;
@@ -16,7 +16,7 @@ declare type RemoveItemFromGroupAction = {
 	};
 };
 
-declare type SortGroupItemsAction = {
+type SortGroupItemsAction = {
 	type: 'SORT_GROUP_ITEMS';
 	payload: {
 		groupId: Identifier;
@@ -25,7 +25,7 @@ declare type SortGroupItemsAction = {
 	};
 };
 
-declare type MoveItemToGroupAction = {
+type MoveItemToGroupAction = {
 	type: 'MOVE_ITEM_TO_GROUP';
 	payload: {
 		groupId: Identifier;
@@ -34,14 +34,14 @@ declare type MoveItemToGroupAction = {
 	};
 };
 
-declare type QueryBuilderAction =
+type QueryBuilderAction =
 	| AddItemToGroup
 	| RemoveItemFromGroupAction
 	| SortGroupItemsAction
 	| MoveItemToGroupAction
 	| { type: 'failure'; payload: { error: string } };
 
-declare type QueryContextState = {
+type QueryContextState = {
 	items: Item[];
 	relations: {
 		id: Identifier;
