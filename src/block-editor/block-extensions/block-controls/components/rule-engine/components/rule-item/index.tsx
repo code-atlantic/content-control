@@ -19,21 +19,6 @@ const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
 			...newValues,
 		} );
 
-	/**
-	 * Update a single option.
-	 *
-	 * @param {string} optionKey Option key.
-	 * @param {any}    value     Option value
-	 */
-	const updateOption = ( optionKey: string, value: any ): void =>
-		onChange( {
-			...ruleProps,
-			options: {
-				...options,
-				[ optionKey ]: value,
-			},
-		} );
-
 	const ruleChosen = '' !== name;
 	const ruleDef = getRule( name );
 
@@ -51,7 +36,7 @@ const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
 				<Editor
 					ruleDef={ ruleDef }
 					value={ ruleProps }
-					onChange={ onChange }
+					onChange={ updateRule }
 				/>
 			) : (
 				<Finder onSelect={ updateRule } />
