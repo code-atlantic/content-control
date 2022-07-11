@@ -39,7 +39,7 @@
 		.controls-column {
 			background-color: #fff;
 			border: 1px solid #ddd;
-			padding: ($spacing / 2) $spacing;
+			padding: $spacing / 2;
 
 
 			.editable-area {
@@ -48,6 +48,10 @@
 				.components-button {
 					padding: 0;
 				}
+			}
+
+			.rule-fields {
+				@include flexRow(4px);
 			}
 		}
 
