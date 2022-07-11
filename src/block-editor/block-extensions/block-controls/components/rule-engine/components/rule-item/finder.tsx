@@ -1,147 +1,388 @@
 /** External Imports */
-import { noop } from 'lodash';
-import ReactTags from 'react-tag-autocomplete';
+import { clamp, noop } from 'lodash';
+import classNames from 'classnames';
 
 /** WordPress Imports */
-import { __ } from '@wordpress/i18n';
-import { useState, useRef, useEffect, useMemo } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
+import {
+	useId,
+	useState,
+	useRef,
+	useEffect,
+	useMemo,
+	forwardRef,
+} from '@wordpress/element';
+import { useInstanceId } from '@wordpress/compose';
+import {
+	TextControl,
+	Popover,
+	KeyboardShortcuts,
+	Button,
+} from '@wordpress/components';
+/** Temporary WP Imports */
+import TextHighlight from './highlight';
 
 /** Internal Imports */
 import { useRules } from '../../contexts';
+import { formatToSprintf } from './utils';
 
 /** Styles */
 import './finder.scss';
+import { arrowUp, arrowDown } from '@wordpress/icons';
+
+const { adminUrl } = window.contentControlBlockEditorVars;
 
 type Props = { onSelect: ( ruleItem: Partial< RuleItem > ) => void };
+type Suggestion = {
+	id: string;
+	label: string;
+	notOperand: boolean;
+};
 type State = {
-	chosen: {
-		category: string;
-		verb: string;
-		label: string;
-	};
-	tags: ReactTags;
+	queryText: string;
+	isFocused: boolean;
+	selectedSuggestion: number;
+	popoverOpen: boolean;
 };
 
-const Finder = ( { onSelect = noop }: Props ) => {
-	const inputRef = useRef( null );
-	const { getRuleCategories, getRulesByCategory, findRules } = useRules();
-	const [ currentSearch, setCurrentSearch ] = useState< State >( {
-		// Keeps record of chosen tags in RuleItem object format.
-		chosen: {
-			category: null,
-			verb: null,
-			label: null,
-		},
-		// Current list of selected tags for react-tags fields.
-		tags: [],
+const rulesToOptions = ( rules: EngineRuleType[] ) =>
+	rules.reduce< Suggestion[] >( ( options, rule ) => {
+		const {
+			name,
+			format = '{category} {label}',
+			verbs = [ '', '' ],
+			label,
+			category,
+		} = rule;
+
+		const sprintfFormat = formatToSprintf( format );
+
+		[ 0, 1 ].forEach( ( i ) => {
+			options.push( {
+				id: name,
+				label: sprintf( sprintfFormat, category, verbs[ i ], label ),
+				notOperand: !! i,
+			} );
+		} );
+
+		return options;
+	}, [] );
+
+const Finder = (
+	{ onSelect = noop }: Props,
+	ref: React.MutableRefObject< Element | null >
+) => {
+	const minQueryLength = 1;
+	const maxSuggestions = 10;
+	const wrapperRef = useRef< Element | null >( null );
+	const inputRef = useRef< HTMLInputElement >( null );
+	const id = useInstanceId( Finder );
+	const selectedRef = useRef< HTMLDivElement | null >( null );
+	const { getRules } = useRules();
+
+	const [ state, setState ] = useState< State >( {
+		queryText: '',
+		isFocused: false,
+		selectedSuggestion: -1,
+		popoverOpen: false,
 	} );
 
-	/**
-	 * Change options based on number of tags.
-	 *
-	 * 0: Nothing chosen, provide categories.
-	 * 1: Category chosen, show verbs.
-	 * 2: Only thing left to choose is a name from category/verb list.
-	 */
-	const searchOptions = useMemo( () => {
-		switch ( currentSearch.tags.length ) {
-			default:
-			case 0:
-				return getRuleCategories();
+	const { queryText, isFocused, selectedSuggestion, popoverOpen } = state;
 
-			case 1:
-				return getRulesByCategory(
-					currentSearch.chosen.category
-				).reduce< string[] >( ( _verbs, rule ) => {
-					if ( typeof rule.verbs !== 'undefined' ) {
-						rule.verbs.forEach( ( _verb ) => {
-							if ( _verbs.indexOf( _verb ) === -1 ) {
-								_verbs.push( _verb );
-							}
-						} );
-					}
+	const setSelectedSuggestion = ( i: number ) =>
+		setState( {
+			...state,
+			selectedSuggestion: i,
+		} );
 
-					return _verbs;
-				}, [] );
+	const selectRule = ( i: number ) => {
+		const { id, notOperand } = suggestions[ i ];
+		onSelect( {
+			name: id,
+			notOperand,
+		} );
+	};
 
-			case 2:
-				return findRules( currentSearch.chosen ).map(
-					( rule ) => rule.label
+	const queryTerms = queryText.split( ' ' );
+
+	const ruleOptions = rulesToOptions( getRules() );
+	const suggestions = useMemo(
+		() =>
+			ruleOptions.filter( ( suggestion ) => {
+				return (
+					[
+						...queryTerms.map(
+							( term ) =>
+								suggestion.label
+									.trim()
+									.toLowerCase()
+									.indexOf( term.trim().toLowerCase() ) >= 0
+						),
+					].indexOf( false ) === -1
 				);
-		}
-	}, [ currentSearch.tags ] );
+			} ),
+		[ queryText ]
+	).slice( 0, maxSuggestions );
+
+	const upsellIndex = suggestions.length;
+	const maxSelectionIndex = upsellIndex;
+
+	// Check if selectedSuggestion is higher than list length.
+	// If it is higher, set it to 0 as they have new query results.
+	// This prevents an extra state change.
+	const currentIndex =
+		selectedSuggestion > upsellIndex ? 0 : selectedSuggestion;
+
+	const viewUpsell = () =>
+		window.open(
+			`${ adminUrl }/options-general.php?page=cc-settings&tab=upgrade`,
+			'_blank'
+		);
 
 	/**
 	 * Focus the input when this component is rendered.
 	 */
 	useEffect( () => {
-		const firstEl = inputRef.current;
-
-		if ( null !== firstEl ) {
-			firstEl.focusInput();
+		if ( inputRef.current ) {
+			inputRef.current.focus();
 		}
 	}, [] );
 
-	const onDelete = ( tagIndex ) => {
-		setCurrentSearch( {
-			...currentSearch,
-			tags: currentSearch.tags.filter( ( _, i ) => i !== tagIndex ),
-		} );
-	};
+	/**
+	 * Ensure selected suggestion is visible in a scrollable list.
+	 */
+	useEffect( () => {
+		setTimeout( () => {
+			if ( selectedRef.current ) {
+				selectedRef.current.scrollIntoView();
+			}
+		}, 25 );
+	}, [ selectedSuggestion, popoverOpen ] );
 
-	const onAddition = ( { name: newTag } ) => {
-		const tags = [ ...currentSearch.tags, newTag ];
-		const [ category, verb, label ] = tags;
-		const chosen = {
-			category,
-			verb,
-			label,
-		};
-
-		if ( tags.length === 3 ) {
-			const chosenRule = findRules( chosen );
-
-			if ( chosenRule.length ) {
-				const { name, verbs } = chosenRule[ 0 ];
-				// Generate new rule item object.
-				onSelect( {
-					name,
-					notOperand: verbs.indexOf( verb ) === 1,
+	const keyboardShortcuts = {
+		up: () =>
+			setState( {
+				...state,
+				// W3 Aria says to open the popover if query text is empty on up keypress.
+				popoverOpen:
+					queryText.length === 0 && ! popoverOpen
+						? true
+						: popoverOpen,
+				// When at the top, skip to the last rule that isn't the upsell.
+				selectedSuggestion: clamp(
+					currentIndex - 1 >= 0 ? currentIndex - 1 : upsellIndex,
+					0,
+					maxSelectionIndex
+				),
+			} ),
+		down: () => {
+			setState( {
+				...state,
+				// W3 Aria says to open the popover if query text is empty on up keypress.
+				popoverOpen:
+					queryText.length === 0 && ! popoverOpen
+						? true
+						: popoverOpen,
+				// When at the top, skip to the last rule that isn't the upsell.
+				selectedSuggestion: clamp(
+					currentIndex + 1 <= maxSelectionIndex
+						? currentIndex + 1
+						: 0,
+					0,
+					maxSelectionIndex
+				),
+			} );
+		},
+		// Show popover.
+		'alt+down': () =>
+			setState( {
+				...state,
+				popoverOpen: true,
+			} ),
+		// If selected suggestion, choose it, otherwise close popover.
+		enter: () => {
+			if ( selectedSuggestion === -1 ) {
+				return setState( {
+					...state,
+					popoverOpen: false,
 				} );
 			}
-
-			return;
-		}
-
-		setCurrentSearch( {
-			...currentSearch,
-			chosen,
-			tags,
-		} );
+			if ( currentIndex !== upsellIndex ) {
+				selectRule( currentIndex );
+			} else {
+				viewUpsell();
+			}
+		},
+		// Close the popover.
+		escape: ( event: KeyboardEvent ) => {
+			event.preventDefault();
+			event.stopPropagation();
+			setState( {
+				...state,
+				selectedSuggestion: -1,
+				popoverOpen: false,
+			} );
+		},
 	};
 
 	return (
-		<div className="cc-rule-engine-search-box">
-			<ReactTags
-				placeholderText={ __( 'Select a rule', 'content-control' ) }
-				ref={ inputRef }
-				tags={ currentSearch.tags.map( ( tag, i ) => ( {
-					id: i,
-					name: tag,
-				} ) ) }
-				suggestions={ searchOptions.map( ( option, i ) => ( {
-					id: i,
-					name: option,
-				} ) ) }
-				onInput={ ( value ) => {} }
-				onAddition={ onAddition }
-				onDelete={ onDelete }
-				allowNew={ false }
-				allowBackspace={ true }
-				minQueryLength={ 0 }
-			/>
-		</div>
+		<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
+			<div
+				id={ `cc-rule-engine-search-${ id }` }
+				className={ classNames( [
+					'cc-rule-engine-search',
+					isFocused && 'is-focused',
+				] ) }
+				ref={ ( _ref ) => {
+					wrapperRef.current = _ref;
+					if ( ref ) {
+						ref.current = _ref;
+					}
+				} }
+				onFocus={ () =>
+					setState( {
+						...state,
+						isFocused: true,
+						popoverOpen: queryText.length >= minQueryLength,
+					} )
+				}
+				onBlur={ () =>
+					setState( {
+						...state,
+						isFocused: false,
+						popoverOpen: false,
+					} )
+				}
+			>
+				<div className="cc-rule-engine-search__input">
+					<TextControl
+						value={ queryText ?? '' }
+						onChange={ ( text ) =>
+							setState( {
+								...state,
+								queryText: text,
+								popoverOpen: text.length >= minQueryLength,
+							} )
+						}
+						placeholder={ __(
+							'Search for a rule',
+							'content-control'
+						) }
+						ref={ inputRef }
+						onClick={ () =>
+							setState( {
+								...state,
+								popoverOpen: ! popoverOpen,
+							} )
+						}
+						autoComplete="off"
+						aria-autocomplete="list"
+						aria-expanded={ popoverOpen }
+						aria-controls={ `${ id }-listbox` }
+						aria-activedescendant={ `sug-${ currentIndex }` }
+					/>
+
+					<Button
+						icon={ popoverOpen ? arrowUp : arrowDown }
+						tabIndex={ -1 }
+						aria-controls={ `${ id }-listbox` }
+						aria-expanded={ popoverOpen }
+						onClick={ () =>
+							setState( {
+								...state,
+								popoverOpen: ! popoverOpen,
+							} )
+						}
+						label={ __( 'Rules', 'content-control' ) }
+					/>
+				</div>
+
+				{ popoverOpen && (
+					<div className="cc-rule-engine-search__suggestions">
+						<Popover
+							focusOnMount={ false }
+							onClose={ () => setSelectedSuggestion( -1 ) }
+							position="bottom right"
+							getAnchorRect={ () =>
+								wrapperRef.current?.getBoundingClientRect()
+							}
+							className="cc-rule-engine-search__suggestions-popover"
+						>
+							{ suggestions.length ? (
+								suggestions.map( ( suggestion, i ) => (
+									<div
+										key={ i }
+										id={ `sug-${ i }` }
+										className={ classNames( [
+											'cc-rule-engine-search__suggestion',
+											i === currentIndex && 'is-selected',
+										] ) }
+										ref={
+											i === currentIndex
+												? selectedRef
+												: undefined
+										}
+										onFocus={ () => {
+											setSelectedSuggestion( i );
+										} }
+										onMouseDown={ () => {
+											selectRule( i );
+										} }
+										role="option"
+										tabIndex={ i }
+										aria-selected={ i === currentIndex }
+									>
+										<TextHighlight
+											text={ suggestion.label }
+											highlight={ queryTerms }
+										/>
+									</div>
+								) )
+							) : (
+								<div>
+									{ __(
+										'No results found',
+										'content-control'
+									) }
+								</div>
+							) }
+
+							<div
+								id={ `sug-${ upsellIndex }` }
+								className={ classNames( [
+									'cc-rule-engine-search__suggestion',
+									'is-upsell',
+									upsellIndex === currentIndex &&
+										'is-selected',
+								] ) }
+								ref={
+									upsellIndex === currentIndex
+										? selectedRef
+										: undefined
+								}
+								onFocus={ () => {
+									setSelectedSuggestion( upsellIndex );
+								} }
+								onMouseDown={ () => {
+									viewUpsell();
+								} }
+								role="option"
+								tabIndex={ upsellIndex }
+								aria-selected={ upsellIndex === currentIndex }
+							>
+								<strong>
+									{ __(
+										'Need more rules types?',
+										'content-control'
+									) }
+								</strong>
+							</div>
+						</Popover>
+					</div>
+				) }
+			</div>
+		</KeyboardShortcuts>
 	);
 };
 
-export default Finder;
+export default forwardRef( Finder );
