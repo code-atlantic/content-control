@@ -63,7 +63,7 @@ const getFieldTypePropList = ( type ) => {
 		'label',
 		'help',
 		'className',
-		'std',
+		'default',
 		'required',
 		'disabled',
 	];
@@ -94,6 +94,9 @@ const getFieldTypePropList = ( type ) => {
 				'step',
 				'unit',
 			];
+
+		case 'multicheck':
+			return [ ...baseProps, 'multiple', 'asArray', 'options' ];
 	}
 };
 
@@ -102,6 +105,7 @@ const parseOldArgsToProps = ( args, value ) => {
 
 	const fieldProps = {
 		className: [],
+		default: args?.std,
 	};
 
 	// Deprecated Class Handling.
@@ -305,9 +309,14 @@ const FieldComponent = ( props ) => {
 	);
 };
 
-const Field = ( { value, onChange, className = [], ...props } ) => {
+const Field = ( {
+	value: unparseValue,
+	onChange,
+	className = [],
+	...props
+} ) => {
 	const fieldProps = parseFieldProps( props );
-
+	const value = parseFieldValue( unparseValue );
 	const { type, ...otherProps } = fieldProps;
 
 	return (
