@@ -15,10 +15,10 @@ project.properties
 .sublimelinterrc
 
 # Built code
-/build/
-/node_modules/
-/release/
-/dist/
+/build
+/node_modules
+/release
+/dist
 
 # Logs
 /logs
