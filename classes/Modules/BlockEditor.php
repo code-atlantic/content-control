@@ -60,11 +60,13 @@ class BlockEditor implements Controller {
 
 		wp_localize_script( $handle, 'contentControlBlockEditorVars',
 			[
-				'allowedBlocks'  => [],
-				'excludedBlocks' => [
+				'allowedBlocks'   => [],
+				'excludedBlocks'  => [
 					// 'core/nextpage',
 					// 'core/freeform',
 				],
+				'adminUrl'        => admin_url(),
+				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
 			]
 		);
 
