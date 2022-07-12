@@ -28,17 +28,7 @@ interface EngineFieldBase {
 	disabled?: boolean;
 }
 
-interface EngineSelectField extends EngineFieldBase {
-	type: 'select' | 'multiselect' | 'select2';
-	options: Options | OptGroups;
-}
-
-interface EngineTextField extends EngineFieldBase {
-	type: 'text' | 'number' | 'email' | 'phone';
-	value: string | number;
-}
-
-type EngineField = EngineTextField | EngineSelectField;
+interface EngineField extends EngineFieldBase {}
 
 
 interface OldFieldArgs {
