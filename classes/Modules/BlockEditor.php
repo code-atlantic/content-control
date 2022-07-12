@@ -67,6 +67,7 @@ class BlockEditor implements Controller {
 				],
 				'adminUrl'        => admin_url(),
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
+				'userRoles'       => \ContentControl\Roles::allowed_user_roles(),
 			]
 		);
 
