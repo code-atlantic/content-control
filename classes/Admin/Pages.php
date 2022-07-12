@@ -24,7 +24,7 @@ class Pages {
 	public static function register_pages() {
 		global $jp_cc_settings_page;
 
-		$jp_cc_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'jp-cc-settings', array(
+		$jp_cc_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'cc-settings', array(
 			'\\ContentControl\Admin\Settings',
 			'page',
 		) );
