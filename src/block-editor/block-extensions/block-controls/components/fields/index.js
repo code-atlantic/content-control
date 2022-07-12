@@ -179,7 +179,7 @@ const parseOldArgsToProps = ( args, value ) => {
 const parseFieldValue = ( value, fieldProps ) => {
 	let parsedValue = value;
 
-	const { type, std } = fieldProps;
+	const { type, default: std } = fieldProps;
 
 	if (
 		std !== undefined &&
@@ -316,7 +316,7 @@ const Field = ( {
 	...props
 } ) => {
 	const fieldProps = parseFieldProps( props );
-	const value = parseFieldValue( unparseValue );
+	const value = parseFieldValue( unparseValue, fieldProps );
 	const { type, ...otherProps } = fieldProps;
 
 	return (
