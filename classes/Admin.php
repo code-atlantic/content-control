@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Admin {
 
-	public static function init() {
+	public function __construct() {
 		Admin\Ajax::init();
 		Admin\Pages::init();
 		Admin\Settings::init(
