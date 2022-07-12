@@ -2,8 +2,6 @@
 
 namespace ContentControl;
 
-use function \__;
-
 class Rules {
 
 	public $data;
@@ -15,7 +13,7 @@ class Rules {
 	public function init() {
 		$rules = $this->get_built_in_rules();
 
-		$old_rules = apply_filters( 'jp_cc_registered_conditions',  );
+		$old_rules = apply_filters( 'jp_cc_registered_conditions', [] );
 	}
 
 	public function get_verbs() {
@@ -77,7 +75,7 @@ class Rules {
 	}
 
 	public function rule_defaults() {
-		$verbs = $this->verbs();
+		$verbs = $this->get_verbs();
 		return [
 			'name'     => '',
 			'label'    => '',
