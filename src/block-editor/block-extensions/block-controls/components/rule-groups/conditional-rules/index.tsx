@@ -18,6 +18,8 @@ import { blockMeta, trash } from '@wordpress/icons';
 import { newSet } from '../../rule-engine/templates';
 import RuleEngine from '../../rule-engine';
 
+const { userRoles } = window.contentControlBlockEditorVars;
+
 const verbs = {
 	are: __( 'Are', 'content-control' ),
 	arenot: __( 'Are Not', 'content-control' ),
@@ -40,22 +42,46 @@ const builderRules: EngineRuleType[] = [
 		name: 'user__is_logged_in',
 		label: __( 'Logged In', 'content-control' ),
 		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {ruleName}',
+		format: '{category} {verb} {label}',
 		verbs: [ verbs.is, verbs.isnot ],
 	},
 	{
 		name: 'user__has_role',
 		label: __( 'Role(s)', 'content-control' ),
 		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {ruleName}',
+		format: '{category} {verb} {label}',
 		verbs: [ verbs.has, verbs.doesnothave ],
+		fields: [
+			{
+				type: 'multicheck',
+				id: 'roles',
+				label: __( 'Role(s)', 'content-control' ),
+				default: [ 'administrator' ],
+				multiple: true,
+				options: userRoles,
+			},
+		],
 	},
 	{
 		name: 'user__has_commented',
 		label: __( 'Commented', 'content-control' ),
 		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {ruleName}',
+		format: '{category} {verb} {label}',
 		verbs: [ verbs.has, verbs.hasnot ],
+		fields: [
+			{
+				id: 'comparison',
+				type: 'select',
+				options: [ '>=', '<=', '>', '<', '=' ],
+				label: __( 'Comparison', 'content-control' ),
+				default: '>=',
+			},
+			{
+				type: 'number',
+				id: 'number',
+				label: __( 'More than', 'content-control' ),
+			},
+		],
 	},
 ];
 
