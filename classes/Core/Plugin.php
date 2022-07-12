@@ -150,6 +150,10 @@ class Plugin {
 		$this->container['options'] = function( $c ) {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
+
+		$this->container['rules'] = function ( $c ) {
+			return new \ContentControl\Rules();
+		};
 	}
 
 	/**
