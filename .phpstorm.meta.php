@@ -23,6 +23,7 @@ namespace PHPSTORM_META;
 override( \ContentControl\Core\Plugin::get(), map( [
   // Controllers.
   'options'    => \ContentControl\Core\Options::class,
+  'rules'    => \ContentControl\Rules::class,
 ] ) );
 
  /**
@@ -32,4 +33,5 @@ override( \ContentControl\Core\Plugin::get(), map( [
 override ( \ContentControl\plugin(0), map( [
   // Controllers.
   'options'    => \ContentControl\Core\Options::class,
+  'rules'    => \ContentControl\Rules::class,
 ] ) );
