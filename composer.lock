@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963"
+                "reference": "90db7b9ac2a2c5b849fcb69dde58f3ae182c68f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/c71ecc56dfe541dbd90c5360474fbc405f8d5963",
-                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/90db7b9ac2a2c5b849fcb69dde58f3ae182c68f5",
+                "reference": "90db7b9ac2a2c5b849fcb69dde58f3ae182c68f5",
                 "shasum": ""
             },
             "require": {
@@ -109,9 +109,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/2.0.2"
+                "source": "https://github.com/php-fig/container/tree/master"
             },
-            "time": "2021-11-05T16:47:00+00:00"
+            "time": "2022-07-19T17:36:59+00:00"
         }
     ],
     "packages-dev": [
@@ -714,12 +714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "f29023ceb92d7e8e700499943d37f3624814c9ab"
+                "reference": "d81a3988cc2c8c32569596247830a717268dcefb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/f29023ceb92d7e8e700499943d37f3624814c9ab",
-                "reference": "f29023ceb92d7e8e700499943d37f3624814c9ab",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d81a3988cc2c8c32569596247830a717268dcefb",
+                "reference": "d81a3988cc2c8c32569596247830a717268dcefb",
                 "shasum": ""
             },
             "require": {
@@ -805,7 +805,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-07T07:35:58+00:00"
+            "time": "2022-07-20T13:00:38+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1528,12 +1528,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "9c4a9a2eacc3edb31ec95c4fb6b189d28406537e"
+                "reference": "1b867d35f5ec406afcc42061eb2aadd78af60d59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/9c4a9a2eacc3edb31ec95c4fb6b189d28406537e",
-                "reference": "9c4a9a2eacc3edb31ec95c4fb6b189d28406537e",
+                "url": "https://api.github.com/repos/symfony/string/zipball/1b867d35f5ec406afcc42061eb2aadd78af60d59",
+                "reference": "1b867d35f5ec406afcc42061eb2aadd78af60d59",
                 "shasum": ""
             },
             "require": {
@@ -1605,7 +1605,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-26T16:35:21+00:00"
+            "time": "2022-07-20T14:45:30+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
