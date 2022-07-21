@@ -207,7 +207,7 @@ class Rules {
 		$old_rule = wp_parse_args( $old_rule, $this->get_old_rule_defaults() );
 
 		$new_rule = [
-			'format' => '{category} {label}',
+			'format' => '{label}',
 		];
 
 		$remaped_keys = [
