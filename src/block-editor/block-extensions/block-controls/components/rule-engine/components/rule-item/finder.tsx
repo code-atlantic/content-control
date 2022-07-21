@@ -57,13 +57,31 @@ const rulesToOptions = ( rules: EngineRuleType[] ) =>
 
 		const sprintfFormat = formatToSprintf( format );
 
-		[ 0, 1 ].forEach( ( i ) => {
+		if ( Array.isArray( verbs ) && verbs.length ) {
+			[ 0, 1 ].forEach( ( i ) => {
+				options.push( {
+					id: name,
+					label: sprintf(
+						sprintfFormat,
+						category,
+						verbs[ i ],
+						label
+					),
+					notOperand: !! i,
+				} );
+			} );
+		} else {
 			options.push( {
 				id: name,
-				label: sprintf( sprintfFormat, category, verbs[ i ], label ),
-				notOperand: !! i,
+				label: `${ category } ${ label }`,
+				notOperand: false,
 			} );
-		} );
+			options.push( {
+				id: name,
+				label: `(!) ${ category } ${ label }`,
+				notOperand: true,
+			} );
+		}
 
 		return options;
 	}, [] );
