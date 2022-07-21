@@ -1,10 +1,10 @@
-import { __ } from '@wordpress/i18n';
+import { value __ } from '@wordpress/i18n';
 
 declare global {
 	interface Window {
 		contentControlBlockEditorVars: {
 			userRoles: { [ key: string ]: string };
-			rules: { [ key: string ]: OldFieldArgs };
+			registeredRules: Record< EngineRuleType[ 'name' ], EngineRuleType >;
 			adminUrl: string;
 		};
 	}
@@ -29,6 +29,7 @@ const verbs = {
 };
 
 const builderRules: EngineRuleType[] | OldFieldArgs[] = [
+	...Object.values( registeredRules ),
 	{
 		name: 'user__is_logged_in',
 		label: __( 'Logged In', 'content-control' ),

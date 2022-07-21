@@ -18,7 +18,7 @@ import { blockMeta, trash } from '@wordpress/icons';
 import { newSet } from '../../rule-engine/templates';
 import RuleEngine from '../../rule-engine';
 
-const { userRoles } = window.contentControlBlockEditorVars;
+const { userRoles, registeredRules } = window.contentControlBlockEditorVars;
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
@@ -37,16 +37,17 @@ const verbs = {
 	],
 };
 
-const builderRules: EngineRuleType[] = [
+const builderRules = [
+	...Object.values( registeredRules ),
 	{
-		name: 'user__is_logged_in',
+		name: 'user_is_logged_in',
 		label: __( 'Logged In', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {label}',
 		verbs: [ verbs.is, verbs.isnot ],
 	},
 	{
-		name: 'user__has_role',
+		name: 'user_has_role',
 		label: __( 'Role(s)', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {label}',
@@ -63,7 +64,7 @@ const builderRules: EngineRuleType[] = [
 		],
 	},
 	{
-		name: 'user__has_commented',
+		name: 'user_has_commented',
 		label: __( 'Commented', 'content-control' ),
 		category: __( 'User', 'content-control' ),
 		format: '{category} {verb} {label}',
