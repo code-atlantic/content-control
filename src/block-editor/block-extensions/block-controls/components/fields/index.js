@@ -1,9 +1,7 @@
 import classNames from 'classnames';
 import { pick, omit } from 'lodash';
 
-import { useCallback } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { SelectControl, TextControl } from '@wordpress/components';
 
 import SelectField from './select';
 import CheckboxField from './checkbox';
