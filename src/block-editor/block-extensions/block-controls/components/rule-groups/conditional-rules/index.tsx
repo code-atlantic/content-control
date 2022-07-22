@@ -38,7 +38,6 @@ const verbs = {
 };
 
 const builderRules = [
-	...Object.values( registeredRules ),
 	{
 		name: 'user_is_logged_in',
 		label: __( 'Logged In', 'content-control' ),
@@ -84,6 +83,7 @@ const builderRules = [
 			},
 		],
 	},
+	...Object.values( registeredRules ),
 ];
 
 const anyAllOptions = [
