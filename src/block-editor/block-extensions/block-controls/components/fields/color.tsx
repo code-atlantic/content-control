@@ -23,14 +23,12 @@ const ColorField = ( {
 				onChange={ onChange }
 				defaultColor={ value }
 				{ ...fieldProps }
-				__nextHasNoMarginBottom={ true }
 			/>
 			<ColorPalette
 				value={ value }
 				onChange={ onChange }
 				colors={ colors }
 				clearable={ true }
-				__nextHasNoMarginBottom={ true }
 			/>
 		</>
 	);

@@ -12,7 +12,6 @@ const CheckboxField = ( {
 			<CheckboxControl
 				checked={ value }
 				onChange={ onChange }
-				__nextHasNoMarginBottom={ true }
 				{ ...fieldProps }
 			/>
 		);
@@ -21,7 +20,6 @@ const CheckboxField = ( {
 		<FormToggle
 			checked={ value }
 			onChange={ () => onChange( ! value ) }
-			__nextHasNoMarginBottom={ true }
 			{ ...fieldProps }
 		/>
 	);

@@ -65,7 +65,6 @@ const MulticheckField = ( {
 
 								onChange( newValue );
 							} }
-							__nextHasNoMarginBottom={ true }
 						/>
 					);
 				}
@@ -75,7 +74,6 @@ const MulticheckField = ( {
 						label={ optLabel }
 						checked={ checked }
 						onChange={ () => onChange( ! value ) }
-						__nextHasNoMarginBottom={ true }
 					/>
 				);
 			} ) }
