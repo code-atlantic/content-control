@@ -24,7 +24,7 @@ import TextHighlight from './highlight';
 
 /** Internal Imports */
 import { useRules } from '../../contexts';
-import { formatToSprintf } from './utils';
+import { makeRuleText } from './utils';
 
 /** Styles */
 import './finder.scss';
@@ -47,38 +47,25 @@ type State = {
 
 const rulesToOptions = ( rules: EngineRuleType[] ) =>
 	rules.reduce< Suggestion[] >( ( options, rule ) => {
-		const {
-			name,
-			format = '{category} {label}',
-			verbs = [ '', '' ],
-			label,
-			category,
-		} = rule;
-
-		const sprintfFormat = formatToSprintf( format );
+		const { name, verbs = [ '', '' ] } = rule;
 
 		if ( Array.isArray( verbs ) && verbs.length ) {
 			[ 0, 1 ].forEach( ( i ) => {
 				options.push( {
 					id: name,
-					label: sprintf(
-						sprintfFormat,
-						category,
-						verbs[ i ],
-						label
-					),
+					label: makeRuleText( rule, !! i ),
 					notOperand: !! i,
 				} );
 			} );
 		} else {
 			options.push( {
 				id: name,
-				label: `${ category } ${ label }`,
+				label: makeRuleText( rule, false ),
 				notOperand: false,
 			} );
 			options.push( {
 				id: name,
-				label: `(!) ${ category } ${ label }`,
+				label: makeRuleText( rule, true ),
 				notOperand: true,
 			} );
 		}
