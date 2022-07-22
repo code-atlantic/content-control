@@ -72,14 +72,36 @@ const builderRules = [
 			{
 				id: 'comparison',
 				type: 'select',
-				options: [ '>=', '<=', '>', '<', '=' ],
+				options: [ '>=', '<=', '>', '<', '==' ],
+				// options: [
+				// 	{
+				// 		value: '>=',
+				// 		label: __( 'More Than or Equal To', 'content-control' ),
+				// 	},
+				// 	{
+				// 		value: '<=',
+				// 		label: __( 'Less Than or Equal To', 'content-control' ),
+				// 	},
+				// 	{
+				// 		value: '>',
+				// 		label: __( 'More Than', 'content-control' ),
+				// 	},
+				// 	{
+				// 		value: '<',
+				// 		label: __( 'Less Than', 'content-control' ),
+				// 	},
+				// 	{
+				// 		value: '==',
+				// 		label: __( 'Exactly', 'content-control' ),
+				// 	},
+				// ],
 				label: __( 'Comparison', 'content-control' ),
 				default: '>=',
 			},
 			{
 				type: 'number',
 				id: 'number',
-				label: __( 'More than', 'content-control' ),
+				label: __( 'Times', 'content-control' ),
 			},
 		],
 	},

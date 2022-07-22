@@ -15,6 +15,15 @@ export const formatToSprintf = ( format: string ) =>
 					return str;
 			}
 		} )
+		.map( ( str: string ) => {
+			// This will be used to search for [field] placeholders using regex pattern matches.
+
+			// Possible formats
+			// [field:fieldName]
+			// [field:fieldName.label] // For a select options label vs value.
+
+			return str;
+		} )
 		.join( ' ' );
 
 export const makeRuleText = (
