@@ -77,7 +77,6 @@ const Finder = (
 	ref: React.MutableRefObject< Element | null >
 ) => {
 	const minQueryLength = 1;
-	const maxSuggestions = 10;
 	const wrapperRef = useRef< Element | null >( null );
 	const inputRef = useRef< HTMLInputElement >( null );
 	const id = useInstanceId( Finder );
@@ -92,6 +91,7 @@ const Finder = (
 	} );
 
 	const { queryText, isFocused, selectedSuggestion, popoverOpen } = state;
+	const maxSuggestions = queryText.length ? 10 : undefined;
 
 	const setSelectedSuggestion = ( i: number ) =>
 		setState( {
@@ -100,10 +100,9 @@ const Finder = (
 		} );
 
 	const selectRule = ( i: number ) => {
-		const { id, notOperand } = suggestions[ i ];
 		onSelect( {
-			name: id,
-			notOperand,
+			name: suggestions[ i ].id,
+			notOperand: suggestions[ i ].notOperand,
 		} );
 	};
 
