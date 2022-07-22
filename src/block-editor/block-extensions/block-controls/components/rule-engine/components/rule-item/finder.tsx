@@ -3,9 +3,8 @@ import { clamp, noop } from 'lodash';
 import classNames from 'classnames';
 
 /** WordPress Imports */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import {
-	useId,
 	useState,
 	useRef,
 	useEffect,
