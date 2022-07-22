@@ -51,7 +51,7 @@ const SelectField = ( {
 	onChange,
 	...fieldProps
 }: ControlledInputProps< string | string[] > ) => {
-	const { multiple = false, asArray = false } = fieldProps;
+	const { multiple = false } = fieldProps;
 
 	const options = fieldProps.options ?? {};
 
@@ -69,18 +69,12 @@ const SelectField = ( {
 	return (
 		<SelectControl
 			value={
-				! asArray && typeof value === 'string'
+				// Correct older string typ values (here for sanity).
+				multiple && typeof value === 'string'
 					? value.split( ',' )
 					: value
 			}
-			onChange={ ( newValue ) => {
-				const _newValue =
-					! asArray && Array.isArray( newValue )
-						? newValue.join( ',' )
-						: newValue;
-
-				onChange( _newValue );
-			} }
+			onChange={ onChange }
 			__nextHasNoMarginBottom={ true }
 			{ ...fieldProps }
 		>
