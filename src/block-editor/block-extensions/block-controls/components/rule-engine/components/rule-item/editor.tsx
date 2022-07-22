@@ -1,13 +1,7 @@
-/** External Imports */
-import classNames from 'classnames';
-
-/** WordPress Imports */
-import { sprintf } from '@wordpress/i18n';
-
 /** Internal Imports */
 import Field from '../../../fields';
 
-import { formatToSprintf } from './utils';
+import { makeRuleText } from './utils';
 
 const Editor = ( {
 	ruleDef,
@@ -16,15 +10,7 @@ const Editor = ( {
 }: ItemProps< RuleItem > ) => {
 	const { notOperand = false, options: ruleOptions = {} } = ruleProps;
 
-	const {
-		label = '',
-		category = '',
-		format = '',
-		verbs = [ '', '' ],
-		fields = [],
-	} = ruleDef ?? {};
-
-	const sprintfFormat = formatToSprintf( format );
+	const { fields = [] } = ruleDef ?? {};
 
 	/**
 	 * Update a single option.
@@ -44,12 +30,7 @@ const Editor = ( {
 			},
 		} );
 
-	const ruleText = sprintf(
-		sprintfFormat,
-		category,
-		verbs[ ! notOperand ? 0 : 1 ],
-		label
-	);
+	const ruleText = makeRuleText( ruleDef, notOperand );
 
 	return (
 		<>
