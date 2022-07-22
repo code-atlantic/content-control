@@ -50,13 +50,15 @@ const useRules = () => {
 	 * @param {string} ruleName Rule name to get the default values for.
 	 * @return {Object} Object containing default values for a given rule.
 	 */
-	const getRuleOptionDefaults = ( ruleName: string ): object =>
+	const getRuleOptionDefaults = (
+		ruleName: string
+	): Record< string, any | undefined > =>
 		getRule( ruleName )?.fields?.reduce( ( defaults, field ) => {
-			if ( typeof field.default !== undefined ) {
-				defaults[ field.id ] = field.default;
-			}
-			return defaults;
-		}, {} );
+			return {
+				...defaults,
+				[ field.id ]: field.default ?? undefined,
+			};
+		}, {} ) ?? {};
 
 	type findRulesProps = {
 		category: string;
