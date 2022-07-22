@@ -56,12 +56,16 @@ const SelectField = ( {
 	const options = fieldProps.options ?? {};
 
 	const hasOptGroups = Object.entries( options ).reduce(
-		( hasGroups, [ , _value ] ) => {
+		( hasGroups, [ _key, _value ] ) => {
 			if ( true === hasGroups ) {
 				return hasGroups;
 			}
 
-			return typeof _value === 'object';
+			return (
+				typeof _key === 'string' &&
+				! ( parseInt( _key ) >= 0 ) &&
+				typeof _value === 'object'
+			);
 		},
 		false
 	);
