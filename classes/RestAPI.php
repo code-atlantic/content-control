@@ -1,0 +1,32 @@
+<?php
+/**
+ * RestAPI blocks setup.
+ *
+ * @copyright (c) 2021, Code Atlantic LLC.
+ * @package ContentControl
+ */
+
+namespace ContentControl;
+
+defined( 'ABSPATH' ) || exit;
+
+use ContentControl\Interfaces\Controller;
+
+/**
+ * RestAPI function initialization.
+ */
+class RestAPI implements Controller {
+	/**
+	 * Initiate rest api integrations.
+	 */
+	public function init() {
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+	}
+
+	/**
+	 * Register Rest API routes.
+	 */
+	public function register_routes() {
+		( new RestAPI\Settings() )->register_routes;
+	}
+}
