@@ -16,7 +16,9 @@ const addWrapperClasses = (
 	blockType,
 	{ contentControls = {}, ...attributes }
 ) => {
-	const { enabled: controlsEnabled = false } = contentControls;
+	const { enabled: controlsEnabled = false, rules = {} } = contentControls;
+
+	const { device: deviceRules = null } = rules;
 
 	/**
 	 * Bail early if block controls disabled and this block didn't previously have them configured.
@@ -29,10 +31,21 @@ const addWrapperClasses = (
 	}
 
 	if ( controlsEnabled ) {
-		props.className = classnames(
-			props.className,
-			'cc-block-control-enabled'
-		);
+		const classes = [ 'cc-block-control-enabled' ];
+
+		if ( deviceRules ) {
+			const { hideOn = {} } = deviceRules;
+
+			Object.entries( hideOn ).map( ( [ device, hide = false ], i ) => {
+				if ( hide ) {
+					classes.push( `cc-block-hide-on--${device}` );
+				}
+			}
+
+			// TODO Set up classes based on device controls.
+		}
+
+		props.className = classnames( props.className, ...classes );
 	}
 
 	return props;
