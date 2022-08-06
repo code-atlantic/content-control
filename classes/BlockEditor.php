@@ -6,7 +6,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Modules;
+namespace ContentControl;
 
 use ContentControl\Interfaces\Controller;
 use function ContentControl\plugin;
