@@ -8,16 +8,19 @@
 
 namespace ContentControl;
 
+use ContentControl\Interfaces\Controller;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Frontend
  */
-class Frontend {
+class Frontend extends Controller {
 
 	/**
 	 * Initialize Hooks & Filters
 	 */
+	public function init() {
 		add_filter( 'pre_render_block', [ $this, 'pre_render_block' ], 10, 3 );
 
 		new Frontend\Posts();

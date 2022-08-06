@@ -163,12 +163,11 @@ class Plugin {
 		$this->define_paths();
 
 		// Old.
-		new \ContentControl\Frontend();
 		new \ContentControl\Admin();
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
-			'BlockEditor' => new BlockEditor( $this ),
+			'Frontend'    => new \ContentControl\Frontend( $this ),
 		];
 
 		foreach ( $controllers as $controller ) {
