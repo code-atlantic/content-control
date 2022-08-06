@@ -8,6 +8,15 @@
 namespace ContentControl;
 
 /**
+ * Get all options
+ *
+ * @return array
+ */
+function get_plugin_options() {
+	return plugin( 'options' );
+}
+
+/**
  * Get an option
  *
  * Looks to see if the specified setting exists, returns default if not
