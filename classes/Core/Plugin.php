@@ -12,7 +12,8 @@ namespace ContentControl\Core;
 use ContentControl\Base\Container;
 use ContentControl\Core\Options;
 use ContentControl\Interfaces\Controller;
-use ContentControl\Modules\BlockEditor;
+use ContentControl\RestAPI;
+use ContentControl\BlockEditor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -167,6 +168,8 @@ class Plugin {
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
+			'RestAPI'     => new \ContentControl\RestAPI( $this ),
+			'BlockEditor' => new \ContentControl\BlockEditor( $this ),
 			'Frontend'    => new \ContentControl\Frontend( $this ),
 		];
 
