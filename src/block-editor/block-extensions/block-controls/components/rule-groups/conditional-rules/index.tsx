@@ -37,76 +37,7 @@ const verbs = {
 	],
 };
 
-const builderRules = [
-	{
-		name: 'user_is_logged_in',
-		label: __( 'Logged In', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.is, verbs.isnot ],
-	},
-	{
-		name: 'user_has_role',
-		label: __( 'Role(s)', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.has, verbs.doesnothave ],
-		fields: [
-			{
-				type: 'multicheck',
-				id: 'roles',
-				label: __( 'Role(s)', 'content-control' ),
-				default: [ 'administrator' ],
-				multiple: true,
-				options: userRoles,
-			},
-		],
-	},
-	{
-		name: 'user_has_commented',
-		label: __( 'Commented', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.has, verbs.hasnot ],
-		fields: [
-			{
-				id: 'comparison',
-				type: 'select',
-				options: [ '>=', '<=', '>', '<', '==' ],
-				// options: [
-				// 	{
-				// 		value: '>=',
-				// 		label: __( 'More Than or Equal To', 'content-control' ),
-				// 	},
-				// 	{
-				// 		value: '<=',
-				// 		label: __( 'Less Than or Equal To', 'content-control' ),
-				// 	},
-				// 	{
-				// 		value: '>',
-				// 		label: __( 'More Than', 'content-control' ),
-				// 	},
-				// 	{
-				// 		value: '<',
-				// 		label: __( 'Less Than', 'content-control' ),
-				// 	},
-				// 	{
-				// 		value: '==',
-				// 		label: __( 'Exactly', 'content-control' ),
-				// 	},
-				// ],
-				label: __( 'Comparison', 'content-control' ),
-				default: '>=',
-			},
-			{
-				type: 'number',
-				id: 'number',
-				label: __( 'Times', 'content-control' ),
-			},
-		],
-	},
-	...Object.values( registeredRules ),
-];
+const builderRules = [ ...Object.values( registeredRules ) ];
 
 const anyAllOptions = [
 	{
