@@ -8,6 +8,10 @@ type NotOperand = boolean;
 interface BaseItem {
 	id: Identifier;
 	type: string;
+	// These are for React SortableJS.
+	selected?: boolean;
+	chosen?: boolean;
+	filtered?: boolean;
 }
 
 interface Query {
