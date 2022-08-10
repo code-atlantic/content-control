@@ -151,23 +151,63 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	};
 
 	/**
+	 * Clean a query of temporary properties.
+	 *
+	 * @param {Query} query Query to be cleaned.
+	 * @return {Query} Cleaned query.
+	 */
+	const cleanQuery = ( query: Query ): Query => {
+		return {
+			...query,
+			items: query.items.map( ( item ): Item => {
+				const { selected, chosen, filtered, ...cleanItem } = item;
+
+				if ( 'group' === cleanItem.type ) {
+					return {
+						...cleanItem,
+						query: cleanQuery( cleanItem.query ),
+					};
+				}
+
+				return cleanItem;
+			} ),
+		};
+	};
+
+	/**
+	 * Clean a query set of temporary properties.
+	 *
+	 * @param {QuerySet} set Query set to be cleaned.
+	 * @return {QuerySet} Cleaned set.
+	 */
+	const cleanSet = ( set: QuerySet ): QuerySet => {
+		return {
+			...set,
+			query: cleanQuery( set.query ),
+		};
+	};
+
+	/**
 	 * Update set.
 	 *
 	 * @param {QuerySet} updatedSet
 	 */
 	const updateSet = ( updatedSet: QuerySet ) => {
 		let updated = false;
+
+		const cleanedSet = cleanSet( updatedSet );
+
 		const newSets = conditionSets.map( ( set ) => {
-			if ( set.id === updatedSet.id ) {
+			if ( set.id === cleanedSet.id ) {
 				updated = true;
-				return updatedSet;
+				return cleanedSet;
 			}
 
 			return set;
 		} );
 
 		if ( ! updated ) {
-			newSets.push( updatedSet );
+			newSets.push( cleanedSet );
 		}
 
 		setGroupRules( {
