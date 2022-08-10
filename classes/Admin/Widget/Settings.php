@@ -3,7 +3,6 @@
 namespace ContentControl\Admin\Widget;
 
 use ContentControl\Widget;
-use ContentControl\Roles;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,8 +27,7 @@ class Settings {
 	 * @param $instance
 	 */
 	public static function fields( $widget, $return, $instance ) {
-
-		$allowed_user_roles = Roles::allowed_user_roles();
+		$allowed_user_roles = \ContentControl\Rules\allowed_user_roles();
 
 		wp_nonce_field( 'jpcc-menu-editor-nonce', 'jpcc-menu-editor-nonce' );
 
@@ -91,8 +89,7 @@ class Settings {
 			$instance['roles'] = $new_instance['roles'];
 
 			if ( $instance['which_users'] == 'logged_in' ) {
-
-				$allowed_roles = Roles::allowed_user_roles();
+				$allowed_roles = \ContentControl\Rules\allowed_user_roles();
 
 				// Validate chosen roles and remove non-allowed roles.
 				foreach ( (array) $instance['roles'] as $key => $role ) {
