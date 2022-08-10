@@ -38,7 +38,7 @@ type BlockAttributes = {
  * Move this to a set of generator functions exported as utilitiles.
  * Each location using this should then just use the needed generators.
  */
-const defaults = (): BlockAttributes => ( {
+const defaults: BlockAttributes = {
 	device: {
 		hideOn: {
 			mobile: false,
@@ -58,14 +58,14 @@ const defaults = (): BlockAttributes => ( {
 						{
 							id: newUUID(),
 							type: 'rule',
-							name: 'user__is_logged_in',
+							name: 'user_is_logged_in',
 						},
 					],
 				},
 			},
 		],
 	},
-} );
+};
 
 const RuleGroups = ( {
 	rules = {},

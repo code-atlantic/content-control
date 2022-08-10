@@ -76,7 +76,7 @@ const DefaultGroupOptions = ( {
 					icon={ rotateLeft }
 					variant={ 'tertiary' }
 					onClick={ () => {
-						setGroupRules( groupDefaults() );
+						setGroupRules( groupDefaults );
 						onClose();
 					} }
 				>
@@ -219,7 +219,7 @@ const RuleGroupHeader = ( props ) => {
 						) }
 						showTooltip={ true }
 						className="cc__rules-group__options-toggle"
-						onClick={ () => setGroupRules( groupDefaults() ) }
+						onClick={ () => setGroupRules( groupDefaults ) }
 						isSmall={ true }
 					>
 						<Icon

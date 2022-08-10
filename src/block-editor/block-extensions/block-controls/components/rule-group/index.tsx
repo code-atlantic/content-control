@@ -36,7 +36,7 @@ const RuleGroup = ( {
 	icon,
 	rules,
 	setRules,
-	defaults = () => {},
+	defaults,
 	children,
 	// isOpened = false,
 	...extraChildProps
@@ -109,7 +109,7 @@ const RuleGroup = ( {
 				setGroupRules={ setGroupRules }
 				updateGroupRules={ updateGroupRules }
 				groupRules={ groupRules }
-				groupDefaults={ () => defaults()[ groupId ] }
+				groupDefaults={ defaults[ groupId ] }
 			/>
 			{ isOpened && (
 				<div className="cc__rules-group__body">
