@@ -31,18 +31,16 @@ const addWrapperClasses = (
 	}
 
 	if ( controlsEnabled ) {
-		const classes = [ 'cc-block-control-enabled' ];
+		const classes = [ 'cc-block-controls' ];
 
 		if ( deviceRules ) {
 			const { hideOn = {} } = deviceRules;
 
-			Object.entries( hideOn ).map( ( [ device, hide = false ], i ) => {
+			Object.entries( hideOn ).forEach( ( [ device, hide = false ] ) => {
 				if ( hide ) {
-					classes.push( `cc-block-hide-on--${device}` );
+					classes.push( `cc-block-hide-on--${ device }` );
 				}
-			}
-
-			// TODO Set up classes based on device controls.
+			} );
 		}
 
 		props.className = classnames( props.className, ...classes );
