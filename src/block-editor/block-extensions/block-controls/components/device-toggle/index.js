@@ -34,11 +34,13 @@ const DeviceToggle = ( { label, icon, checked, onChange = noop } ) => {
 				</h3>
 				<div className="cc__component-device-toggle__control">
 					<Tooltip text={ sprintf( iconText, label ) }>
-						<Icon
-							className="cc__component-device-toggle__control-icon"
-							onClick={ () => onChange( ! checked ) }
-							icon={ checked ? 'hidden' : 'visibility' }
-						/>
+						<span>
+							<Icon
+								className="cc__component-device-toggle__control-icon"
+								onClick={ () => onChange( ! checked ) }
+								icon={ checked ? 'hidden' : 'visibility' }
+							/>
+						</span>
 					</Tooltip>
 					<ToggleControl
 						className="cc__component-device-toggle__control-input"
