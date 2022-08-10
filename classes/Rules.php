@@ -100,6 +100,16 @@ class Rules {
 	}
 
 	/**
+	 * Get a rule definition by name.
+	 *
+	 * @param string $rule_name Rule definition or null.
+	 * @return array|null
+	 */
+	public function get_rule( $rule_name ) {
+		return isset( $this->data[ $rule_name ] ) ? $this->data[ $rule_name ] : null;
+	}
+
+	/**
 	 * Get array of registered rules filtered for the block-editor.
 	 *
 	 * @return array
@@ -141,7 +151,16 @@ class Rules {
 	private function get_built_in_rules() {
 		$verbs = $this->get_verbs();
 		return [
-			'user_has_role' => [
+			'user_is_logged_in' => [
+				'name'     => 'user_is_logged_in',
+				'label'    => __( 'Logged In', 'content-control' ),
+				'category' => __( 'User', 'content-control' ),
+				'format'   => '{category} {verb} {label}',
+				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+				'callback' => 'is_user_logged_in',
+			],
+
+			'user_has_role'     => [
 				'name'     => 'user_has_role',
 				'label'    => __( 'Role(s)', 'content-control' ),
 				'category' => __( 'User', 'content-control' ),
@@ -157,6 +176,7 @@ class Rules {
 						'options'  => wp_roles()->get_names(),
 					],
 				],
+				'callback' => '\\ContentControl\\Rules\\user_has_role',
 			],
 		];
 	}
