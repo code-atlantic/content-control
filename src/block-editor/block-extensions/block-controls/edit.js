@@ -17,6 +17,8 @@ import { RuleGroups } from './components';
 /**
  * Add block controls on block inspector sidebar.
  *
+ * NOTE: The HOC is neccessary because we are extending all blocks existing edit component `BlockEdit`.
+ *
  * @param {Function} BlockEdit Block edit component.
  *
  * @return {Function} BlockEdit Modified block edit component.
