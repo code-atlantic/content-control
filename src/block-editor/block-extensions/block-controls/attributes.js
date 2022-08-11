@@ -40,10 +40,6 @@ const controlAttributes = ( settings ) => {
 		{
 			contentControls: {
 				type: 'object',
-				default: {
-					enabled: false,
-					controls: {},
-				},
 				properties: {
 					enabled: {
 						type: 'boolean',
