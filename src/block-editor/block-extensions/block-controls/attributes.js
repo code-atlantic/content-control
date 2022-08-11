@@ -47,11 +47,46 @@ const controlAttributes = ( settings ) => {
 					},
 					rules: {
 						type: 'object',
-						items: {
-							type: 'object',
-							properties: {
-								id: { type: 'string' },
-								type: { enum: [ 'rule', 'group' ] },
+						properties: {
+							device: {
+								type: 'array',
+								items: {
+									type: 'object',
+									properties: {
+										mobile: {
+											type: 'string',
+										},
+										tablet: {
+											type: 'string',
+										},
+										device: {
+											type: 'string',
+										},
+									},
+								},
+							},
+							conditional: {
+								type: 'object',
+								properties: {
+									anyAll: {
+										type: {
+											enum: [ 'any', 'all', 'none' ],
+										},
+										default: 'all',
+									},
+									conditionSets: {
+										type: 'array',
+										items: {
+											type: 'object',
+											properties: {
+												id: { type: 'string' },
+												type: {
+													enum: [ 'rule', 'group' ],
+												},
+											},
+										},
+									},
+								},
 							},
 						},
 					},
