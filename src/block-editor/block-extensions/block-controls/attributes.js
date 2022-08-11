@@ -32,39 +32,38 @@ const addAttributes = ( settings ) => {
  * Get list of control attributes.
  *
  * @param {Object} settings Settings for the block.
- * @param {string} name     Block type name.
- *
  * @return {Object} attributes Modified settings.
  */
-const controlAttributes = ( settings, name ) => {
-	if ( false ) {
-		return settings;
-	}
-
-	const contentControls = applyFilters(
+const controlAttributes = ( settings ) => {
+	return applyFilters(
 		'contCtrl.blockControls.controlAttributes',
 		{
-			type: 'object',
-			properties: {
-				enabled: {
-					type: 'boolean',
-					default: false,
+			contentControls: {
+				type: 'object',
+				default: {
+					enabled: false,
+					controls: {},
 				},
-				controls: {
-					type: 'array',
+				properties: {
+					enabled: {
+						type: 'boolean',
+						default: false,
+					},
+					controls: {
+						type: 'object',
+						items: {
+							type: 'object',
+							properties: {
+								id: { type: 'string' },
+								type: { enum: [ 'rule', 'group' ] },
+							},
+						},
+					},
 				},
 			},
 		},
-		name
+		settings
 	);
-
-	return {
-		...settings,
-		attributes: {
-			...settings.attributes,
-			contentControls,
-		},
-	};
 };
 
 export { addAttributes, controlAttributes };
