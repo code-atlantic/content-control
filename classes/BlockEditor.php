@@ -55,7 +55,7 @@ class BlockEditor implements Controller {
 		$handle = 'content-control-block-editor';
 		$meta   = $this->get_asset_meta();
 
-		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), array_merge( $meta['dependencies'], [ 'wp-edit-post' ] ), $meta['version'], true );
+		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), $meta['dependencies'], $meta['version'], true );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
 
 		wp_localize_script( $handle, 'contentControlBlockEditorVars',
