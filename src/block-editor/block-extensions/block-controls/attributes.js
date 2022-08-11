@@ -49,7 +49,7 @@ const controlAttributes = ( settings ) => {
 						type: 'boolean',
 						default: false,
 					},
-					controls: {
+					rules: {
 						type: 'object',
 						items: {
 							type: 'object',
