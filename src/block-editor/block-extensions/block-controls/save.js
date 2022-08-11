@@ -31,14 +31,14 @@ const addWrapperClasses = (
 	}
 
 	if ( controlsEnabled ) {
-		const classes = [ 'cc-block-controls' ];
+		const classes = [];
 
 		if ( deviceRules ) {
 			const { hideOn = {} } = deviceRules;
 
 			Object.entries( hideOn ).forEach( ( [ device, hide = false ] ) => {
 				if ( hide ) {
-					classes.push( `cc-block-hide-on--${ device }` );
+					classes.push( `cc-hide-on--${ device }` );
 				}
 			} );
 		}
