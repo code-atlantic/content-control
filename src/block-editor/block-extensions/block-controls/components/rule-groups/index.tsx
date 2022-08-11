@@ -25,7 +25,7 @@ const blockMeta = (
 type BlockAttributes = {
 	device: {
 		hideOn: {
-			[ key: string ]: Boolean;
+			[ key: string ]: boolean;
 		};
 	};
 	conditional: {
@@ -78,8 +78,7 @@ const RuleGroups = ( {
 	 * @param {string} groupId Group ID.
 	 * @return {boolean} Whether the group is enabled for this block or not.
 	 */
-	const ruleGroupEnabled = ( groupId ) =>
-		typeof rules[ groupId ] === 'object';
+	const ruleGroupEnabled = ( groupId ) => typeof rules[ groupId ] !== null;
 
 	/**
 	 * Reset all panels to defaults.
