@@ -1,11 +1,10 @@
 <?php
 
-class RulesTest extends \WP_UnitTestCase  {
+class RulesTest extends \WP_UnitTestCase {
 	public function testOldRuleConversion() {
-
 		$rules = new \ContentControl\Rules();
 
-		$old_rule = [
+		$old_rule = $rules->remap_old_rule( [
 			'id'       => 'user_has_commented',
 			'group'    => 'User',
 			'name'     => 'Has Commented',
@@ -24,13 +23,13 @@ class RulesTest extends \WP_UnitTestCase  {
 			'callback' => [ 'ConditionCallbacks', 'user_has_commented' ],
 			'priority' => 10,
 			'advanced' => false,
-		];
+		] );
 
 		$new_rule = [
 			'name'     => 'user_has_commented',
 			'label'    => 'Has Commented',
 			'category' => 'User',
-			'format'   => '{category} {label}',
+			'format'   => '{label}',
 			'verbs'    => null,
 			'fields'   => [
 				'morethan' => [
@@ -45,9 +44,12 @@ class RulesTest extends \WP_UnitTestCase  {
 				],
 			],
 			'callback' => [ 'ConditionCallbacks', 'user_has_commented' ],
+			'priority' => 10,
 			'frontend' => false,
 		];
 
-		$this->assertEqualsCanonicalizing( $rules->remap_old_rule( $old_rule ), $new_rule );
+		foreach ( $old_rule as $key => $value ) {
+			$this->assertEquals( $value, $new_rule[ $key ] );
+		}
 	}
 }

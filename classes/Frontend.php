@@ -32,6 +32,42 @@ class Frontend implements Controller {
 		}
 
 		add_filter( 'pre_render_block', [ $this, 'pre_render_block' ], 10, 3 );
+		add_filter( 'render_block', [ $this, 'render_block' ], 10, 2 );
+	}
+
+	/**
+	 * Check if block has controls enabled.
+	 *
+	 * @param array $block Block to be checked.
+	 * @return boolean Whether the block has Controls enabled.
+	 */
+	public function has_block_controls( $block ) {
+		if ( ! isset( $block['attrs']['contentControls'] ) ) {
+			return false;
+		}
+
+		$controls = wp_parse_args( $block['attrs']['contentControls'], [
+			'enabled' => false,
+		] );
+
+		return ! ! $controls['enabled'];
+	}
+
+	/**
+	 * Get blocks controls if enabled.
+	 *
+	 * @param array $block Block to get controls from.
+	 * @return array|null Controls if enabled.
+	 */
+	public function get_block_controls( $block) {
+		if ( ! $this->has_block_controls( $block ) ) {
+			return null;
+		}
+
+		return wp_parse_args( $block['attrs']['contentControls'], [
+			'enabled' => false,
+			'rules'   => [],
+		] );
 	}
 
 	/**
@@ -72,5 +108,12 @@ class Frontend implements Controller {
 		}
 
 		return $pre_render;
+	}
+
+
+	public function get_block_control_classes() {
+	}
+
+	public function render_block() {
 	}
 }
