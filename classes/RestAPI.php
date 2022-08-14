@@ -27,6 +27,6 @@ class RestAPI implements Controller {
 	 * Register Rest API routes.
 	 */
 	public function register_routes() {
-		( new RestAPI\Settings() )->register_routes;
+		( new RestAPI\Settings() )->register_routes();
 	}
 }
