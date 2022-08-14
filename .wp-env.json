@@ -1,5 +1,4 @@
 {
-    "phpVersion": "8.0",
     "plugins": [
         ".",
         "https://downloads.wordpress.org/plugin/gutenberg.zip"
