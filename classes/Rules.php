@@ -223,7 +223,7 @@ class Rules {
 	 * @param array $old_rule Old rule definition.
 	 * @return array New rule definition.
 	 */
-	private function remap_old_rule( $old_rule ) {
+	public function remap_old_rule( $old_rule ) {
 		$old_rule = wp_parse_args( $old_rule, $this->get_old_rule_defaults() );
 
 		$new_rule = [
@@ -248,7 +248,7 @@ class Rules {
 		}
 
 		// Merge any leftover 'unknonw' keys, with new stuff second.
-		return array_merge( $old_rule, $new_rule );
+		return array_merge( $new_rule, $old_rule );
 	}
 
 	/**
@@ -257,7 +257,7 @@ class Rules {
 	 * @param array $old_rules Array of old rules to manipulate.
 	 * @return array
 	 */
-	private function parse_old_rules( $old_rules ) {
+	public function parse_old_rules( $old_rules ) {
 		$new_rules = [];
 
 		foreach ( $old_rules as $key => $old_rule ) {
