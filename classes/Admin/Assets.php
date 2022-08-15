@@ -3,7 +3,7 @@
 
 namespace ContentControl\Admin;
 
-use JP_Content_Control;
+use function \ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,25 +21,25 @@ class Assets {
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		if ( $hook == 'widgets.php' ) {
-			wp_enqueue_style( 'jpcc-widget-editor', JP_Content_Control::$URL . 'assets/styles/widget-editor' . $suffix . '.css', null, JP_Content_Control::$VER, false );
-			wp_enqueue_script( 'jpcc-widget-editor', JP_Content_Control::$URL . 'assets/scripts/widget-editor' . $suffix . '.js', [ 'jquery' ], JP_Content_Control::$VER, true );
+			wp_enqueue_style( 'jpcc-widget-editor', plugin()->get_url( 'assets/styles/widget-editor' . $suffix . '.css' ), null, plugin( 'version' ), false );
+			wp_enqueue_script( 'jpcc-widget-editor', plugin()->get_url( 'assets/scripts/widget-editor' . $suffix . '.js' ), [ 'jquery' ], plugin( 'version' ), true );
 		}
 
-		if ( $hook == 'settings_page_jp-cc-settings' ) {
+		if ( $hook == 'settings_page_cc-settings' ) {
 			if ( Settings::active_tab() == 'restrictions' ) {
 				add_action( 'admin_footer', [ __CLASS__, 'js_wp_editor' ] );
 			}
 
 			Footer_Templates::init();
 
-			wp_enqueue_style( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/styles/settings-page' . $suffix . '.css', [ 'editor-buttons' ], JP_Content_Control::$VER, false );
-			wp_enqueue_script( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/scripts/settings-page' . $suffix . '.js', [
+			wp_enqueue_style( 'jpcc-settings-page', plugin()->get_url( 'assets/styles/settings-page' . $suffix . '.css' ), [ 'editor-buttons' ], plugin( 'version' ), false );
+			wp_enqueue_script( 'jpcc-settings-page', plugin()->get_url( 'assets/scripts/settings-page' . $suffix . '.js' ), [
 				'jquery',
 				'underscore',
 				'wp-util',
 				'wplink',
 				'jquery-ui-sortable',
-			], JP_Content_Control::$VER, true );
+			], plugin( 'version' ), true );
 
 			wp_localize_script( 'jpcc-settings-page', 'jp_cc_vars', [
 				'nonce' => wp_create_nonce( 'jp-cc-admin-nonce' ),

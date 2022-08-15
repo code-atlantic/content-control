@@ -115,7 +115,7 @@ class Restrictions {
 					'id'           => 'roles',
 					'name'         => 'roles',
 					'label'        => __( 'Choose which roles can see this content, leave blank to apply to every role', 'content-control' ),
-					'options'      => \ContentControl\Roles::allowed_user_roles(),
+					'options'      => \ContentControl\Rules\allowed_user_roles(),
 					'dependencies' => [
 						'who' => 'logged_in',
 					],
