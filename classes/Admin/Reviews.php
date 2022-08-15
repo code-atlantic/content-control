@@ -2,6 +2,8 @@
 
 namespace ContentControl\Admin;
 
+use function ContentControl\plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -386,7 +388,7 @@ class Reviews {
 		<div class="notice notice-success is-dismissible jp-cc-notice">
 
 			<p>
-				<img class="logo" src="<?php echo \JP_Content_Control::$URL; ?>assets/images/icon-128x128.png" />
+				<img class="logo" src="<?php echo esc_attr( plugin()->get_url( 'assets/images/icon-128x128.png' ) ); ?>" />
 				<strong>
 					<?php echo $trigger['message']; ?>
 					<br />
