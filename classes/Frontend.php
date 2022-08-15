@@ -59,7 +59,7 @@ class Frontend implements Controller {
 	 * @param array $block Block to get controls from.
 	 * @return array|null Controls if enabled.
 	 */
-	public function get_block_controls( $block) {
+	public function get_block_controls( $block ) {
 		if ( ! $this->has_block_controls( $block ) ) {
 			return null;
 		}
@@ -111,9 +111,91 @@ class Frontend implements Controller {
 	}
 
 
-	public function get_block_control_classes() {
+	/**
+	 * Get any classes to be added to the outer block element.
+	 *
+	 * @param array $block Block to get classes for.
+	 * @return null|array
+	 */
+	public function get_block_control_classes( $block ) {
+		if ( ! $this->has_block_controls( $block ) ) {
+			return null;
+		}
+
+		$classes = [];
+
+		$controls = $this->get_block_controls( $block );
+
+		if ( isset( $controls['rules']['device'] ) ) {
+			$device_rules = wp_parse_args( $controls['rules']['device'], [
+				'hideOn' => [],
+			] );
+
+			$hide_on = wp_parse_args( $device_rules['hideOn'], [
+				'mobile'  => null,
+				'tablet'  => null,
+				'desktop' => null,
+			] );
+
+			foreach ( $hide_on as $device => $hidden ) {
+				if ( $hidden ) {
+					$classes[] = 'cc-hide-on-' . esc_attr( $device );
+				}
+			}
+		}
+
+		$classes = apply_filters( 'content_control_get_block_control_classes', $classes, $block );
+
+		return array_unique( $classes );
 	}
 
-	public function render_block() {
+
+	/**
+	 *
+	 * References: https://github.com/WordPress/gutenberg/search?l=PHP&q=%27render_block%27
+	 * - https://github.com/WordPress/gutenberg/blob/9aab0c4f60c78d19aae0af3351a2b66f8fa4c162/lib/block-supports/layout.php#L317
+	 * - https://github.com/WordPress/gutenberg/blob/e776b4f00f690ce9cf21c027ebf5e7442420d716/lib/block-supports/duotone.php#L503
+	 * - https://github.com/WordPress/gutenberg/blob/9aab0c4f60c78d19aae0af3351a2b66f8fa4c162/lib/block-supports/elements.php#L54-L72
+	 *
+	 * @param string $block_content Blocks rendered html.
+	 * @param array  $block Array of block properties.
+	 *
+	 * @return string
+	 */
+	public function render_block( $block_content, $block ) {
+		if ( ! $this->has_block_controls( $block ) ) {
+			return $block_content;
+		}
+
+		$classes = $this->get_block_control_classes( $block );
+
+		if ( empty( $classes ) ) {
+			return $block_content;
+		}
+
+		$class_name = implode( ' ', $classes );
+
+		/** Mimicing WP Cores usage in https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-includes/block-supports/elements.php#L32 */
+		$html_element_matches = [];
+		preg_match( '/<[^>]+>/', $block_content, $html_element_matches, PREG_OFFSET_CAPTURE );
+		$first_element = $html_element_matches[0][0];
+
+		// If the first HTML element has a class attribute just add the new class
+		// as we do on layout and duotone.
+		if ( strpos( $first_element, 'class="' ) !== false || strpos( $first_element, "class='" ) !== false ) {
+			$content = preg_replace(
+				// Matches $1 & $3 is ' or ", $2 are the existing classes.
+				'/class=([\'"])([a-z0-9-_ ]*)([\'"])/',
+				'class=$1$2 ' . $class_name . '$3',
+				$block_content,
+				1
+			);
+		} else {
+			// If the first HTML element has no class attribute we should inject the attribute before the attribute at the end.
+			$first_element_offset = $html_element_matches[0][1];
+			$content              = substr_replace( $block_content, ' class="' . $class_name . '"', $first_element_offset + strlen( $first_element ) - 1, 0 );
+		}
+
+		return $content;
 	}
 }

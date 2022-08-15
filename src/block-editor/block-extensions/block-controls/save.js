@@ -30,22 +30,6 @@ const addWrapperClasses = (
 		return props;
 	}
 
-	if ( controlsEnabled ) {
-		const classes = [];
-
-		if ( deviceRules ) {
-			const { hideOn = {} } = deviceRules;
-
-			Object.entries( hideOn ).forEach( ( [ device, hide = false ] ) => {
-				if ( hide ) {
-					classes.push( `cc-hide-on--${ device }` );
-				}
-			} );
-		}
-
-		props.className = classnames( props.className, ...classes );
-	}
-
 	return props;
 };
 
