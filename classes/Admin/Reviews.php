@@ -24,8 +24,8 @@ class Reviews {
 	 *
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'hooks' ) );
-		add_action( 'wp_ajax_jp_cc_review_action', array( __CLASS__, 'ajax_handler' ) );
+		add_action( 'init', [ __CLASS__, 'hooks' ] );
+		add_action( 'wp_ajax_jp_cc_review_action', [ __CLASS__, 'ajax_handler' ] );
 	}
 
 	/**
@@ -34,9 +34,9 @@ class Reviews {
 	public static function hooks() {
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
 			self::installed_on();
-			add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
-			add_action( 'network_admin_notices', array( __CLASS__, 'admin_notices' ) );
-			add_action( 'user_admin_notices', array( __CLASS__, 'admin_notices' ) );
+			add_action( 'admin_notices', [ __CLASS__, 'admin_notices' ] );
+			add_action( 'network_admin_notices', [ __CLASS__, 'admin_notices' ] );
+			add_action( 'user_admin_notices', [ __CLASS__, 'admin_notices' ] );
 		}
 	}
 
@@ -60,12 +60,12 @@ class Reviews {
 	 * AJAX Handler
 	 */
 	public static function ajax_handler() {
-		$args = wp_parse_args( $_REQUEST, array(
+		$args = wp_parse_args( $_REQUEST, [
 			'group'  => self::get_trigger_group(),
 			'code'   => self::get_trigger_code(),
 			'pri'    => self::get_current_trigger( 'pri' ),
 			'reason' => 'maybe_later',
-		) );
+		] );
 
 		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'jp_cc_review_action' ) ) {
 			wp_send_json_error();
@@ -87,12 +87,11 @@ class Reviews {
 				case 'already_did':
 					self::already_did( true );
 					break;
-                default:
-                    // Do nothing if the reason value does not match one of ours.
+				default:
+					// Do nothing if the reason value does not match one of ours.
 			}
 
 			wp_send_json_success();
-
 		} catch ( \Exception $e ) {
 			wp_send_json_error( $e );
 		}
@@ -105,7 +104,6 @@ class Reviews {
 		static $selected;
 
 		if ( ! isset( $selected ) ) {
-
 			$dismissed_triggers = self::dismissed_triggers();
 
 			$triggers = self::triggers();
@@ -134,7 +132,6 @@ class Reviews {
 		static $selected;
 
 		if ( ! isset( $selected ) ) {
-
 			$dismissed_triggers = self::dismissed_triggers();
 
 			foreach ( self::triggers() as $g => $group ) {
@@ -170,10 +167,10 @@ class Reviews {
 		$trigger = self::triggers( $group, $code );
 
 		if ( empty( $key ) ) {
-		    return $trigger;
-        } else {
-            return isset($trigger[$key]) ? $trigger[$key] : false;
-        }
+			return $trigger;
+		} else {
+			return isset( $trigger[ $key ] ) ? $trigger[ $key ] : false;
+		}
 	}
 
 	/**
@@ -193,7 +190,7 @@ class Reviews {
 		$dismissed_triggers = get_user_meta( $user_id, '_jp_cc_reviews_dismissed_triggers', true );
 
 		if ( ! $dismissed_triggers ) {
-			$dismissed_triggers = array();
+			$dismissed_triggers = [];
 		}
 
 		return $dismissed_triggers;
@@ -230,51 +227,50 @@ class Reviews {
 		static $triggers;
 
 		if ( ! isset( $triggers ) ) {
-
 			$link = 'https://wordpress.org/support/plugin/content-control/reviews/?rate=5#rate-response';
 
 			$time_message = __( 'Hi there! You\'ve been using the Content Control plugin on your site for %s now - We hope it\'s been helpful. If you\'re enjoying the plugin, would you mind rating it 5-stars to help spread the word?', 'content-control' );
-			$triggers     = array(
-				'time_installed' => array(
-					'triggers' => array(
-						'one_week'     => array(
+			$triggers     = [
+				'time_installed' => [
+					'triggers' => [
+						'one_week'     => [
 							'message'    => sprintf( $time_message, __( '1 week', 'content-control' ) ),
-							'conditions' => array(
+							'conditions' => [
 								strtotime( self::installed_on() . ' +1 week' ) < time(),
-							),
+							],
 							'link'       => $link,
 							'pri'        => 10,
-						),
-						'one_month'     => array(
+						],
+						'one_month'    => [
 							'message'    => sprintf( $time_message, __( '1 month', 'content-control' ) ),
-							'conditions' => array(
+							'conditions' => [
 								strtotime( self::installed_on() . ' +1 month' ) < time(),
-							),
+							],
 							'link'       => $link,
 							'pri'        => 20,
-						),
-						'three_months' => array(
+						],
+						'three_months' => [
 							'message'    => sprintf( $time_message, __( '3 months', 'content-control' ) ),
-							'conditions' => array(
+							'conditions' => [
 								strtotime( self::installed_on() . ' +3 months' ) < time(),
-							),
+							],
 							'link'       => $link,
 							'pri'        => 30,
-						),
+						],
 
-					),
+					],
 					'pri'      => 10,
-				),
-			);
+				],
+			];
 
 			$triggers = apply_filters( 'jp_cc_reviews_triggers', $triggers );
 
 			// Sort Groups
-			uasort( $triggers, array( __CLASS__, 'rsort_by_priority' ) );
+			uasort( $triggers, [ __CLASS__, 'rsort_by_priority' ] );
 
 			// Sort each groups triggers.
 			foreach ( $triggers as $k => $v ) {
-				uasort( $triggers[ $k ]['triggers'], array( __CLASS__, 'rsort_by_priority' ) );
+				uasort( $triggers[ $k ]['triggers'], [ __CLASS__, 'rsort_by_priority' ] );
 			}
 		}
 
@@ -284,10 +280,10 @@ class Reviews {
 			}
 
 			if ( ! isset( $code ) ) {
-			    return $triggers[ $group ];
-            } else {
-                return isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
-            }
+				return $triggers[ $group ];
+			} else {
+				return isset( $triggers[ $group ]['triggers'][ $code ] ) ? $triggers[ $group ]['triggers'][ $code ] : false;
+			}
 		}
 
 		return $triggers;
@@ -396,10 +392,10 @@ class Reviews {
 					<br />
 					<?php
 
-					$names = array(
+					$names = [
 						'<a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>',
 						'<a target="_blank" href="https://twitter.com/calumallison" title="Follow Calum on Twitter">@calumallison</a>',
-					);
+					];
 
 					shuffle( $names );
 
@@ -439,11 +435,11 @@ class Reviews {
 	public static function hide_notices() {
 		$code = self::get_trigger_code();
 
-		$conditions = array(
+		$conditions = [
 			self::already_did(),
 			self::last_dismissed() && strtotime( self::last_dismissed() . ' +2 weeks' ) > time(),
 			empty( $code ),
-		);
+		];
 
 		return in_array( true, $conditions );
 	}
