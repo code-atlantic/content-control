@@ -13,11 +13,11 @@ defined( 'ABSPATH' ) || exit;
 class Restrictions {
 
 	public static function init() {
-		add_action( 'jp_cc_restriction_editor', array( __CLASS__, 'restrictions_editor' ) );
+		add_action( 'jp_cc_restriction_editor', [ __CLASS__, 'restrictions_editor' ] );
 	}
 
 	public static function restrictions_editor() {
-		$restrictions = Options::get( 'restrictions', array() );
+		$restrictions = Options::get( 'restrictions', [] );
 
 		$restrictions = Helpers::object_to_array( $restrictions );
 
@@ -88,96 +88,96 @@ class Restrictions {
 	}
 
 	public static function fields() {
-		return array(
-			'general'    => array(
-				array(
+		return [
+			'general'    => [
+				[
 					'type'        => 'text',
 					'id'          => 'title',
 					'name'        => 'title',
 					'label'       => __( 'Restriction Title', 'content-control' ),
 					'placeholder' => __( 'Pages restricted to logged in users', 'content-control' ),
 					'std'         => '',
-				),
-				array(
+				],
+				[
 					'type'    => 'select',
 					'id'      => 'who',
 					'name'    => 'who',
 					'label'   => __( 'Who can see this content?', 'content-control' ),
 					'std'     => '',
-					'options' => array(
+					'options' => [
 						// '' = > __( "Everyone", 'content-control' ),
-						'logged_in'  => __( "Logged In Users", 'content-control' ),
-						'logged_out' => __( "Logged Out Users", 'content-control' ),
-					),
-				),
-				array(
+						'logged_in'  => __( 'Logged In Users', 'content-control' ),
+						'logged_out' => __( 'Logged Out Users', 'content-control' ),
+					],
+				],
+				[
 					'type'         => 'multicheck',
 					'id'           => 'roles',
 					'name'         => 'roles',
 					'label'        => __( 'Choose which roles can see this content, leave blank to apply to every role', 'content-control' ),
 					'options'      => \ContentControl\Roles::allowed_user_roles(),
-					'dependencies' => array(
+					'dependencies' => [
 						'who' => 'logged_in',
-					),
-				),
-			),
-			'protection' => array(
-				array(
+					],
+				],
+			],
+			'protection' => [
+				[
 					'type'    => 'select',
 					'id'      => 'protection_method',
 					'name'    => 'protection_method',
 					'label'   => __( 'Choose how to protect your content', 'content-control' ),
-					'options' => array(
+					'options' => [
 						'custom_message' => __( 'Custom Message', 'content-control' ),
 						'redirect'       => __( 'Redirect', 'content-control' ),
-					),
+					],
 					'std'     => 'redirect',
-				),
-				array(
+				],
+				[
 					'type'         => 'checkbox',
 					'id'           => 'show_excerpts',
 					'name'         => 'show_excerpts',
-					'dependencies' => array(
+					'dependencies' => [
 						'protection_method' => 'custom_message',
-					),
+					],
 					'label'        => __( 'Show excerpts above access denied message?', 'content-control' ),
-				),
-				array(
+				],
+				[
 					'type'         => 'checkbox',
 					'id'           => 'override_default_message',
 					'name'         => 'override_default_message',
 					'label'        => __( 'Override the default message?', 'content-control' ),
-					'dependencies' => array(
+					'dependencies' => [
 						'protection_method' => 'custom_message',
-					),
-				),
-				array(
+					],
+				],
+				[
 					'type'         => 'editor',
 					'id'           => 'custom_message',
 					'name'         => 'custom_message',
 					'label'        => __( 'Enter a custom message to display to restricted users', 'content-control' ),
-					'dependencies' => array(
+					'dependencies' => [
 						'protection_method'        => 'custom_message',
 						'override_default_message' => true,
-					),
-				),
-				array(
+					],
+				],
+				[
 					'type'         => 'select',
 					'id'           => 'redirect_type',
 					'name'         => 'redirect_type',
 					'label'        => __( 'Where will they be taken?', 'content-control' ),
 					'classes'      => 'protection_method--redirect',
-					'options'      => array(
+					'options'      => [
 						'login'  => __( 'Login & Back', 'content-control' ),
 						'home'   => __( 'Home Page', 'content-control' ),
 						'custom' => __( 'Custom URL', 'content-control' ),
-					),
+					],
 					'std'          => 'login',
-					'dependencies' => array(
+					'dependencies' => [
 						'protection_method' => 'redirect',
-					),
-				),
-				array(
+					],
+				],
+				[
 					'type'         => 'link',
 					'id'           => 'redirect_url',
 					'name'         => 'redirect_url',
@@ -185,20 +185,20 @@ class Restrictions {
 					'label'        => __( 'Redirect URL', 'content-control' ),
 					'placeholder'  => __( 'http://example.com', 'content-control' ),
 					'std'          => '',
-					'dependencies' => array(
+					'dependencies' => [
 						'protection_method' => 'redirect',
 						'redirect_type'     => 'custom',
-					),
-				),
-			),
-			'content'    => array(
-				array(
+					],
+				],
+			],
+			'content'    => [
+				[
 					'type' => 'conditions',
 					'id'   => 'conditions',
 					'name' => 'conditions',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 }

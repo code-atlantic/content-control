@@ -14,14 +14,14 @@ class Settings {
 	private static $_tabs;
 	private static $_prefix;
 
-	public static function init( $title, $tabs = array() ) {
+	public static function init( $title, $tabs = [] ) {
 		static::$title   = $title;
 		static::$_tabs   = $tabs;
 		static::$_prefix = trim( Options::$_prefix, '_' ) . '_';
 		Settings\Restrictions::init();
-		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
-		add_filter( static::$_prefix . 'settings_sanitize_text', array( __CLASS__, 'sanitize_text_field' ) );
-		add_filter( static::$_prefix . 'settings_sanitize_field_restrictions', array( __CLASS__, 'sanitize_restrictions' ), 10, 2 );
+		add_action( 'admin_init', [ __CLASS__, 'register_settings' ] );
+		add_filter( static::$_prefix . 'settings_sanitize_text', [ __CLASS__, 'sanitize_text_field' ] );
+		add_filter( static::$_prefix . 'settings_sanitize_field_restrictions', [ __CLASS__, 'sanitize_restrictions' ], 10, 2 );
 	}
 
 	/**
@@ -33,15 +33,16 @@ class Settings {
 		<div class="wrap">
 			<h1><?php echo esc_html( static::$title ); ?></h1>
 
-			<h2 id="<?php echo static::$_prefix; ?>tabs" class="nav-tab-wrapper"><?php
-				foreach ( static::tabs() as $id => $tab ) {
+			<h2 id="<?php echo static::$_prefix; ?>tabs" class="nav-tab-wrapper">
+							   <?php
+								foreach ( static::tabs() as $id => $tab ) {
+									$active = $tab['active'] ? ' nav-tab-active' : '';
 
-					$active = $tab['active'] ? ' nav-tab-active' : '';
-
-					echo '<a href="' . esc_url( $tab['url'] ) . '" title="' . esc_attr( $tab['label'] ) . '" class="nav-tab' . $active . '">';
-					echo esc_html( $tab['label'] );
-					echo '</a>';
-				} ?>
+									echo '<a href="' . esc_url( $tab['url'] ) . '" title="' . esc_attr( $tab['label'] ) . '" class="nav-tab' . $active . '">';
+									echo esc_html( $tab['label'] );
+									echo '</a>';
+								}
+								?>
 			</h2>
 
 			<form id="<?php echo static::$_prefix; ?>settings" method="post" action="options.php">
@@ -50,17 +51,23 @@ class Settings {
 				<div id="poststuff">
 					<div id="post-body" class="metabox-holder columns-1">
 						<div id="post-body-content">
-							<div id="tab_container"><?php
-								if ( static::active_tab() == 'restrictions' ) :
-									do_action( 'jp_cc_restriction_editor' );
-								else : ?>
-									<table class="form-table"><?php
+							<div id="tab_container">
+							<?php
+							if ( static::active_tab() == 'restrictions' ) :
+								do_action( 'jp_cc_restriction_editor' );
+								else :
+									?>
+									<table class="form-table">
+									<?php
 										Setting_Callbacks::init( static::$_prefix, Options::get_all() );
-										do_settings_fields( static::$_prefix . 'settings_' . static::active_tab(), static::$_prefix . 'settings_' . static::active_tab() ); ?>
+										do_settings_fields( static::$_prefix . 'settings_' . static::active_tab(), static::$_prefix . 'settings_' . static::active_tab() );
+									?>
 									</table>
-								<?php endif;
+									<?php
+								endif;
 
-								submit_button(); ?>
+								submit_button();
+								?>
 							</div>
 							<!-- #tab_container-->
 						</div>
@@ -79,11 +86,10 @@ class Settings {
 	 * @return array
 	 */
 	public static function tabs() {
-
 		static $tabs;
 
 		if ( ! isset( $tabs ) ) {
-			$tabs = array();
+			$tabs = [];
 
 			$registered_settings = static::registered_settings();
 
@@ -93,14 +99,14 @@ class Settings {
 
 			foreach ( static::$_tabs as $id => $label ) {
 				if ( ! empty( $registered_settings[ $id ] ) ) {
-					$tabs[ $id ] = array(
+					$tabs[ $id ] = [
 						'label'  => $label,
 						'active' => $id == $active_tab,
-						'url'    => add_query_arg( array(
+						'url'    => add_query_arg( [
 							'settings-updated' => false,
 							'tab'              => $id,
-						) ),
-					);
+						] ),
+					];
 				}
 			}
 		}
@@ -135,7 +141,6 @@ class Settings {
 	 * @return array
 	 */
 	public static function registered_settings() {
-
 		static $settings;
 
 		if ( ! isset( $settings ) ) {
@@ -143,27 +148,27 @@ class Settings {
 			/**
 			 * 'Whitelisted' settings, filters are provided for each settings.
 			 */
-			$settings = array(
+			$settings = [
 				/** General Settings */
-				'restrictions' => apply_filters( static::$_prefix . 'settings_restrictions', array(
-					'restrictions' => array(
+				'restrictions' => apply_filters( static::$_prefix . 'settings_restrictions', [
+					'restrictions' => [
 						'id'   => 'restrictions',
 						'type' => 'hook',
-					),
-				) ),
-				'general'      => apply_filters( static::$_prefix . 'settings_general', array(
-					'default_denial_message' => array(
+					],
+				] ),
+				'general'      => apply_filters( static::$_prefix . 'settings_general', [
+					'default_denial_message' => [
 						'id'    => 'default_denial_message',
 						'label' => __( 'Default Denial Message', 'content-control' ),
 						'type'  => 'rich_editor',
-					),
-				) ),
+					],
+				] ),
 				/** Addon Settings */
-				//'addons'   => apply_filters( static::$_prefix . 'settings_addons', array() ),
-				//'licenses' => apply_filters( static::$_prefix . 'settings_licenses', array() ),
+				// 'addons'   => apply_filters( static::$_prefix . 'settings_addons', array() ),
+				// 'licenses' => apply_filters( static::$_prefix . 'settings_licenses', array() ),
 				/** Misc Settings */
-				'misc'         => apply_filters( static::$_prefix . 'settings_misc', array() ),
-			);
+				'misc'         => apply_filters( static::$_prefix . 'settings_misc', [] ),
+			];
 
 			$settings = apply_filters( static::$_prefix . 'registered_settings', $settings );
 		}
@@ -172,58 +177,51 @@ class Settings {
 	}
 
 	public static function register_settings() {
-
 		if ( false == get_option( static::$_prefix . 'settings' ) ) {
 			add_option( static::$_prefix . 'settings' );
 		}
 
 		foreach ( static::registered_settings() as $tab => $settings ) {
-
 			$page = static::$_prefix . 'settings_' . $tab;
 
 			add_settings_section( $page, __return_null(), '__return_false', $page );
 
 			foreach ( $settings as $id => $option ) {
-
 				$name = isset( $option['label'] ) ? $option['label'] : '';
 
 				if ( method_exists( '\\ContentControl\Admin\Setting_Callbacks', $option['type'] ) ) {
-					$callback = array( '\\ContentControl\Admin\Setting_Callbacks', $option['type'] );
+					$callback = [ '\\ContentControl\Admin\Setting_Callbacks', $option['type'] ];
 				} elseif ( function_exists( static::$_prefix . $option['type'] . '_callback' ) ) {
 					$callback = static::$_prefix . $option['type'] . '_callback';
 				} else {
-					$callback = array( '\\ContentControl\Setting_Callbacks', 'missing_callback' );
+					$callback = [ '\\ContentControl\Setting_Callbacks', 'missing_callback' ];
 				}
 
-				add_settings_field( static::$_prefix . 'settings_' . $option['id'], $name, $callback, $page, $page, array(
-						'section'     => $tab,
-						'id'          => isset( $option['id'] ) ? $option['id'] : $id,
-						'desc'        => ! empty( $option['desc'] ) ? $option['desc'] : '',
-						// TODO replace the hardcoded names in Setting_Callbacks with this value.
-						'name'        => isset( $option['name'] ) ? $option['name'] : null,
-						'size'        => isset( $option['size'] ) ? $option['size'] : null,
-						'options'     => isset( $option['options'] ) ? $option['options'] : '',
-						'std'         => isset( $option['std'] ) ? $option['std'] : '',
-						'min'         => isset( $option['min'] ) ? $option['min'] : null,
-						'max'         => isset( $option['max'] ) ? $option['max'] : null,
-						'step'        => isset( $option['step'] ) ? $option['step'] : null,
-						'chosen'      => isset( $option['chosen'] ) ? $option['chosen'] : null,
-						'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-						'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-						'readonly'    => isset( $option['readonly'] ) ? $option['readonly'] : false,
-					) );
+				add_settings_field( static::$_prefix . 'settings_' . $option['id'], $name, $callback, $page, $page, [
+					'section'     => $tab,
+					'id'          => isset( $option['id'] ) ? $option['id'] : $id,
+					'desc'        => ! empty( $option['desc'] ) ? $option['desc'] : '',
+					// TODO replace the hardcoded names in Setting_Callbacks with this value.
+					'name'        => isset( $option['name'] ) ? $option['name'] : null,
+					'size'        => isset( $option['size'] ) ? $option['size'] : null,
+					'options'     => isset( $option['options'] ) ? $option['options'] : '',
+					'std'         => isset( $option['std'] ) ? $option['std'] : '',
+					'min'         => isset( $option['min'] ) ? $option['min'] : null,
+					'max'         => isset( $option['max'] ) ? $option['max'] : null,
+					'step'        => isset( $option['step'] ) ? $option['step'] : null,
+					'chosen'      => isset( $option['chosen'] ) ? $option['chosen'] : null,
+					'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
+					'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
+					'readonly'    => isset( $option['readonly'] ) ? $option['readonly'] : false,
+				] );
 			}
-
 		}
 
 		// Creates our settings in the options table
-		register_setting( static::$_prefix . 'settings', static::$_prefix . 'settings', array( __CLASS__, 'settings_sanitize' ) );
-
+		register_setting( static::$_prefix . 'settings', static::$_prefix . 'settings', [ __CLASS__, 'settings_sanitize' ] );
 	}
 
 	public static function settings_sanitize( $input ) {
-
-
 		if ( empty( $_POST['_wp_http_referer'] ) ) {
 			return $input;
 		}
@@ -238,7 +236,7 @@ class Settings {
 
 		$settings = static::registered_settings();
 
-		$input = $input ? $input : array();
+		$input = $input ? $input : [];
 
 		// Apply a filter per tab like jp_cc_settings_general_sanitize
 		$input = apply_filters( "{$prefix}settings_{$tab}_sanitize", $input );
@@ -259,7 +257,6 @@ class Settings {
 
 			// General filter
 			$input[ $key ] = apply_filters( "{$prefix}settings_sanitize", $value, $key );
-
 		}
 
 		// Loop through the whitelist and unset any that are empty for the tab being saved
@@ -283,19 +280,17 @@ class Settings {
 		return $output;
 	}
 
-	public static function sanitize_restrictions( $restrictions = array() ) {
+	public static function sanitize_restrictions( $restrictions = [] ) {
 		if ( ! empty( $restrictions ) ) {
-
 			foreach ( $restrictions as $key => $restriction ) {
-
 				if ( is_string( $restriction ) ) {
 					try {
 						$restriction = json_decode( $restriction );
-					} catch ( \Exception $e ) {};
+					} catch ( \Exception $e ) {
+					};
 				}
 
 				$restrictions[ $key ] = Helpers::object_to_array( $restriction );
-
 			}
 		}
 

@@ -17,7 +17,7 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function post_type( $condition = array() ) {
+	public static function post_type( $condition = [] ) {
 		global $post;
 
 		$target = explode( '_', $condition['target'] );
@@ -28,7 +28,7 @@ class Condition_Callbacks {
 		// Post type is the remaining keys combined.
 		$post_type = implode( '_', $target );
 
-		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 
 		switch ( $modifier ) {
 			case 'index':
@@ -101,9 +101,9 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function taxonomy( $condition = array() ) {
-		$target = explode( '_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function taxonomy( $condition = [] ) {
+		$target   = explode( '_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// Remove the tax_ prefix.
 		array_shift( $target );
@@ -129,7 +129,7 @@ class Condition_Callbacks {
 
 			case 'ID':
 			case 'selected':
-				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 
 				if ( is_tax( $taxonomy, wp_parse_id_list( $selected ) ) ) {
 					return true;
@@ -147,10 +147,9 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function category( $condition = array() ) {
-
-		$target = explode( '_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function category( $condition = [] ) {
+		$target   = explode( '_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// Assign the last key as the modifier _all, _selected
 		$modifier = array_pop( $target );
@@ -163,7 +162,7 @@ class Condition_Callbacks {
 				break;
 
 			case 'selected':
-				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 				if ( is_category( wp_parse_id_list( $selected ) ) ) {
 					return true;
 				}
@@ -180,10 +179,9 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function post_tag( $condition = array() ) {
-
-		$target = explode( '_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function post_tag( $condition = [] ) {
+		$target   = explode( '_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// Assign the last key as the modifier _all, _selected
 		$modifier = array_pop( $target );
@@ -196,7 +194,7 @@ class Condition_Callbacks {
 				break;
 
 			case 'selected':
-				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+				$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 				if ( is_tag( wp_parse_id_list( $selected ) ) ) {
 					return true;
 				}
@@ -213,9 +211,9 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function post_type_tax( $condition = array() ) {
-		$target = explode( '_w_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function post_type_tax( $condition = [] ) {
+		$target   = explode( '_w_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// First key is the post type.
 		$post_type = array_shift( $target );
@@ -229,7 +227,7 @@ class Condition_Callbacks {
 			return self::post_type_tag( $condition );
 		}
 
-		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 		if ( self::is_post_type( $post_type ) && has_term( wp_parse_id_list( $selected ), $taxonomy ) ) {
 			return true;
 		}
@@ -244,14 +242,14 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function post_type_category( $condition = array() ) {
-		$target = explode( '_w_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function post_type_category( $condition = [] ) {
+		$target   = explode( '_w_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// First key is the post type.
 		$post_type = array_shift( $target );
 
-		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 		if ( self::is_post_type( $post_type ) && has_category( wp_parse_id_list( $selected ) ) ) {
 			return true;
 		}
@@ -266,14 +264,14 @@ class Condition_Callbacks {
 	 *
 	 * @return bool
 	 */
-	public static function post_type_tag( $condition = array() ) {
-		$target = explode( '_w_', $condition['target'] );
-		$settings = isset( $condition['settings'] ) ? $condition['settings'] : array();
+	public static function post_type_tag( $condition = [] ) {
+		$target   = explode( '_w_', $condition['target'] );
+		$settings = isset( $condition['settings'] ) ? $condition['settings'] : [];
 
 		// First key is the post type.
 		$post_type = array_shift( $target );
 
-		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : array();
+		$selected = ! empty( $condition['settings']['selected'] ) ? $condition['settings']['selected'] : [];
 		if ( self::is_post_type( $post_type ) && has_tag( wp_parse_id_list( $selected ) ) ) {
 			return true;
 		}

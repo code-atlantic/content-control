@@ -9,7 +9,7 @@ class Setting_Callbacks {
 	private static $_prefix;
 	private static $_options;
 
-	public static function init( $prefix, $options = array() ) {
+	public static function init( $prefix, $options = [] ) {
 		static::$_prefix  = $prefix;
 		static::$_options = $options;
 	}
@@ -35,7 +35,7 @@ class Setting_Callbacks {
 	public static function checkbox( $args ) {
 		$checked = isset( static::$_options[ $args['id'] ] ) ? checked( 1, static::$_options[ $args['id'] ], false ) : '';
 		$html    = '<input type="checkbox" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="1" ' . $checked . '/>';
-		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
+		$html   .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
 	}
@@ -49,7 +49,7 @@ class Setting_Callbacks {
 	 */
 	public static function multicheck( $args ) {
 		if ( ! empty( $args['options'] ) ) {
-			foreach ( $args['options'] as $key => $option ):
+			foreach ( $args['options'] as $key => $option ) :
 				if ( isset( static::$_options[ $args['id'] ][ $key ] ) ) {
 					$enabled = $option;
 				} else {
@@ -70,7 +70,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function radio( $args ) {
-
 		foreach ( $args['options'] as $key => $option ) :
 			$checked = false;
 
@@ -95,7 +94,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function text( $args ) {
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -105,7 +103,7 @@ class Setting_Callbacks {
 		$readonly = $args['readonly'] === true ? ' readonly="readonly"' : '';
 		$size     = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
 		$html     = '<input type="text" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
-		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
+		$html    .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
 	}
@@ -118,8 +116,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function number( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -130,8 +126,8 @@ class Setting_Callbacks {
 		$min  = isset( $args['min'] ) ? $args['min'] : 0;
 		$step = isset( $args['step'] ) ? $args['step'] : 1;
 
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+		$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html  = '<input type="number" step="' . esc_attr( $step ) . '" max="' . esc_attr( $max ) . '" min="' . esc_attr( $min ) . '" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
@@ -145,15 +141,13 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function textarea( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
 
-		$html = '<textarea class="large-text" cols="50" rows="5" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
+		$html  = '<textarea class="large-text" cols="50" rows="5" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
@@ -167,16 +161,14 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function password( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
 
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="password" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
+		$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html  = '<input type="password" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '"/>';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
@@ -203,8 +195,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function select( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -218,7 +208,7 @@ class Setting_Callbacks {
 		}
 
 		if ( isset( $args['chosen'] ) ) {
-			$chosen = 'class="'. static::$_prefix . '-chosen"';
+			$chosen = 'class="' . static::$_prefix . '-chosen"';
 		} else {
 			$chosen = '';
 		}
@@ -227,7 +217,7 @@ class Setting_Callbacks {
 
 		foreach ( $args['options'] as $option => $name ) :
 			$selected = selected( $option, $value, false );
-			$html .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
+			$html    .= '<option value="' . $option . '" ' . $selected . '>' . $name . '</option>';
 		endforeach;
 
 		$html .= '</select>';
@@ -244,8 +234,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function dashicon( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -260,7 +248,7 @@ class Setting_Callbacks {
 		$html .= '<input class="regular-text" type="hidden" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"' . $readonly . '/>';
 		$html .= '<span id="' . static::$_prefix . 'settings_' . $args['id'] . '_preview" class="dashicons-picker-preview dashicons ' . $value . '"></span>';
 
-		$html .= '<input type="button" data-target="#'. static::$_prefix . 'settings_' . $args['id'] . '" data-preview="#'. static::$_prefix . '_settings_' . $args['id'] . '_preview" class="button dashicons-picker" value="' . __( 'Choose Icon', 'content-control' ) . '" />';
+		$html .= '<input type="button" data-target="#' . static::$_prefix . 'settings_' . $args['id'] . '" data-preview="#' . static::$_prefix . '_settings_' . $args['id'] . '_preview" class="button dashicons-picker" value="' . __( 'Choose Icon', 'content-control' ) . '" />';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		$html .= '</div>';
@@ -276,8 +264,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function color_select( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -287,7 +273,7 @@ class Setting_Callbacks {
 
 		foreach ( $args['options'] as $option => $color ) :
 			$selected = selected( $option, $value, false );
-			$html .= '<option value="' . $option . '" ' . $selected . '>' . $color['label'] . '</option>';
+			$html    .= '<option value="' . $option . '" ' . $selected . '>' . $color['label'] . '</option>';
 		endforeach;
 
 		$html .= '</select>';
@@ -322,10 +308,10 @@ class Setting_Callbacks {
 
 		if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
 			ob_start();
-			wp_editor( stripslashes( $value ), static::$_prefix . 'settings_' . $args['id'], array(
+			wp_editor( stripslashes( $value ), static::$_prefix . 'settings_' . $args['id'], [
 				'textarea_name' => static::$_prefix . 'settings[' . $args['id'] . ']',
 				'textarea_rows' => $rows,
-			) );
+			] );
 			$html = ob_get_clean();
 		} else {
 			$html = '<textarea class="large-text" rows="10" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']">' . esc_textarea( stripslashes( $value ) ) . '</textarea>';
@@ -344,16 +330,14 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function upload( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
 			$value = isset( $args['std'] ) ? $args['std'] : '';
 		}
 
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
+		$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html  = '<input type="text" class="' . $size . '-text" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
 		$html .= '<span>&nbsp;<input type="button" class="' . static::$_prefix . 'settings_upload_button button-secondary" value="' . __( 'Upload File', 'content-control' ) . '"/></span>';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
@@ -368,8 +352,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function color( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {
@@ -378,8 +360,8 @@ class Setting_Callbacks {
 
 		$default = isset( $args['std'] ) ? $args['std'] : '';
 
-		$size = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
-		$html = '<input type="text" class="'. static::$_prefix . 'color-picker" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
+		$size  = ( isset( $args['size'] ) && ! is_null( $args['size'] ) ) ? $args['size'] : 'regular';
+		$html  = '<input type="text" class="' . static::$_prefix . 'color-picker" id="' . static::$_prefix . 'settings_' . $args['id'] . '" name="' . static::$_prefix . 'settings[' . $args['id'] . ']" value="' . esc_attr( $value ) . '" data-default-color="' . esc_attr( $default ) . '" />';
 		$html .= '<label class="field-description" for="' . static::$_prefix . 'settings_' . $args['id'] . '"> ' . $args['desc'] . '</label>';
 
 		echo $html;
@@ -404,8 +386,6 @@ class Setting_Callbacks {
 	 * @param array $args Arguments passed by the setting
 	 */
 	public static function license_key( $args ) {
-
-
 		if ( isset( static::$_options[ $args['id'] ] ) ) {
 			$value = static::$_options[ $args['id'] ];
 		} else {

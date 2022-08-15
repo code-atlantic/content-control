@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 class Assets {
 
 	public static function init() {
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'scripts_styles' ) );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'scripts_styles' ] );
 	}
 
 	public static function scripts_styles( $hook ) {
@@ -22,61 +22,58 @@ class Assets {
 
 		if ( $hook == 'widgets.php' ) {
 			wp_enqueue_style( 'jpcc-widget-editor', JP_Content_Control::$URL . 'assets/styles/widget-editor' . $suffix . '.css', null, JP_Content_Control::$VER, false );
-			wp_enqueue_script( 'jpcc-widget-editor', JP_Content_Control::$URL . 'assets/scripts/widget-editor' . $suffix . '.js', array( 'jquery' ), JP_Content_Control::$VER, true );
+			wp_enqueue_script( 'jpcc-widget-editor', JP_Content_Control::$URL . 'assets/scripts/widget-editor' . $suffix . '.js', [ 'jquery' ], JP_Content_Control::$VER, true );
 		}
 
 		if ( $hook == 'settings_page_jp-cc-settings' ) {
-
 			if ( Settings::active_tab() == 'restrictions' ) {
-				add_action( 'admin_footer', array( __CLASS__, 'js_wp_editor' ) );
+				add_action( 'admin_footer', [ __CLASS__, 'js_wp_editor' ] );
 			}
 
 			Footer_Templates::init();
 
-			wp_enqueue_style( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/styles/settings-page' . $suffix . '.css', array( 'editor-buttons' ), JP_Content_Control::$VER, false );
-			wp_enqueue_script( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/scripts/settings-page' . $suffix . '.js', array(
+			wp_enqueue_style( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/styles/settings-page' . $suffix . '.css', [ 'editor-buttons' ], JP_Content_Control::$VER, false );
+			wp_enqueue_script( 'jpcc-settings-page', JP_Content_Control::$URL . 'assets/scripts/settings-page' . $suffix . '.js', [
 				'jquery',
 				'underscore',
 				'wp-util',
 				'wplink',
 				'jquery-ui-sortable',
-			), JP_Content_Control::$VER, true );
+			], JP_Content_Control::$VER, true );
 
-			wp_localize_script( 'jpcc-settings-page', 'jp_cc_vars', array(
+			wp_localize_script( 'jpcc-settings-page', 'jp_cc_vars', [
 				'nonce' => wp_create_nonce( 'jp-cc-admin-nonce' ),
-				'I10n' => array(
-					'tabs'              => array(
+				'I10n'  => [
+					'tabs'              => [
 						'general'    => __( 'General', 'content-control' ),
 						'protection' => __( 'Protection', 'content-control' ),
 						'content'    => __( 'Content', 'content-control' ),
-					),
-					'restrictions'      => array(
+					],
+					'restrictions'      => [
 						'confirm_remove' => __( 'Are you sure you want to delete this restriction?', 'content-control' ),
-					),
-					'restriction_modal' => array(
+					],
+					'restriction_modal' => [
 						'title'       => __( 'Restriction Editor', 'content-control' ),
 						'description' => __( 'Use this to modify a restrictions settings.', 'content-control' ),
-					),
-					'conditions'        => array(
-						'not_operand' => array(
+					],
+					'conditions'        => [
+						'not_operand' => [
 							'is'  => __( 'Is', 'content-control' ),
 							'not' => __( 'Not', 'content-control' ),
-						),
-					),
+						],
+					],
 					'save'              => __( 'Save', 'content-control' ),
 					'cancel'            => __( 'Cancel', 'content-control' ),
 					'add'               => __( 'Add', 'content-control' ),
 					'update'            => __( 'Update', 'content-control' ),
-				),
-			) );
-
+				],
+			] );
 		}
-
 	}
 
 
 	/*
-	 *	JavaScript Wordpress editor
+	 *  JavaScript WordPress editor
 	 *	Author: 		Ante Primorac
 	 *	Author URI: 	http://anteprimorac.from.hr
 	 *	Version: 		1.1
@@ -105,16 +102,16 @@ class Assets {
 	 *		client side(jQuery):
 	 *			$('textarea').wp_editor( options );
 	 */
-	public static function js_wp_editor( $settings = array() ) {
+	public static function js_wp_editor( $settings = [] ) {
 		if ( ! class_exists( '\_WP_Editors' ) ) {
-			require( ABSPATH . WPINC . '/class-wp-editor.php' );
+			require ABSPATH . WPINC . '/class-wp-editor.php';
 		}
 
-/*
+		/*
 		ob_start();
 		wp_editor( '', 'jp_cc_id' );
 		ob_get_clean();
-*/
+		*/
 		$set = \_WP_Editors::parse_settings( 'jp_cc_id', $settings );
 
 		if ( ! current_user_can( 'upload_files' ) ) {
@@ -132,17 +129,17 @@ class Assets {
 			if ( ! $post && ! empty( $GLOBALS['post_ID'] ) ) {
 				$post = $GLOBALS['post_ID'];
 			}
-			wp_enqueue_media( array(
+			wp_enqueue_media( [
 				'post' => $post,
-			) );
+			] );
 		}
 
 		\_WP_Editors::editor_settings( 'jp_cc_id', $set );
 
-		$jp_cc_vars = array(
+		$jp_cc_vars = [
 			'url'          => get_home_url(),
 			'includes_url' => includes_url(),
-		);
+		];
 
 		wp_localize_script( 'jpcc-settings-page', 'jp_cc_wpeditor_vars', $jp_cc_vars );
 	}

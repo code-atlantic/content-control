@@ -7,6 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Is
+ *
  * @package ContentControl
  */
 class Is {
@@ -15,24 +16,23 @@ class Is {
 	 *
 	 *
 	 * @param string $who
-	 * @param array $roles
-	 * @param array $args context and other args to pass to the filters, generic for now so it could be extended later.
+	 * @param array  $roles
+	 * @param array  $args context and other args to pass to the filters, generic for now so it could be extended later.
 	 *
 	 * @return bool
 	 */
-	public static function accessible( $who = '', $roles = array(), $args = array() ) {
-
+	public static function accessible( $who = '', $roles = [], $args = [] ) {
 		if ( is_string( $args ) ) {
-			$args = array( 'context' => $args );
+			$args = [ 'context' => $args ];
 		}
 
 		if ( ! is_array( $roles ) ) {
-			$roles = array();
+			$roles = [];
 		}
 
-		$args = wp_parse_args( $args, array(
+		$args = wp_parse_args( $args, [
 			'context' => '',
-		) );
+		] );
 
 		if ( is_string( key( $roles ) ) ) {
 			$roles = array_keys( $roles );
@@ -43,7 +43,6 @@ class Is {
 		$exclude = false;
 
 		switch ( $who ) {
-
 			case 'logged_in':
 				if ( ! $logged_in ) {
 					$exclude = true;
@@ -69,8 +68,8 @@ class Is {
 				$exclude = $logged_in;
 				break;
 
-            default:
-                // Do nothing if the who value does not match logged_in or logged_out.
+			default:
+				// Do nothing if the who value does not match logged_in or logged_out.
 		}
 
 		$exclude = apply_filters( 'jp_cc_is_accessible', $exclude, $who, $roles, $args );
@@ -78,7 +77,7 @@ class Is {
 		return ! $exclude;
 	}
 
-	public static function access_blocked( $who = '', $roles = array(), $args = array() ) {
+	public static function access_blocked( $who = '', $roles = [], $args = [] ) {
 		return ! static::accessible( $who, $roles, $args );
 	}
 }

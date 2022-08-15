@@ -15,8 +15,8 @@ class Settings {
 	 * Initialize Widget Settings
 	 */
 	public static function init() {
-		add_action( 'in_widget_form', array( __CLASS__, 'fields' ), 5, 3 );
-		add_filter( 'widget_update_callback', array( __CLASS__, 'save' ), 5, 3 );
+		add_action( 'in_widget_form', [ __CLASS__, 'fields' ], 5, 3 );
+		add_filter( 'widget_update_callback', [ __CLASS__, 'save' ], 5, 3 );
 	}
 
 	/**
@@ -31,11 +31,11 @@ class Settings {
 
 		wp_nonce_field( 'jpcc-menu-editor-nonce', 'jpcc-menu-editor-nonce' );
 
-		$which_users_options = array(
+		$which_users_options = [
 			''           => __( 'Everyone', 'content-control' ),
 			'logged_out' => __( 'Logged Out Users', 'content-control' ),
 			'logged_in'  => __( 'Logged In Users', 'content-control' ),
-		);
+		];
 
 		$instance = Widget::parse_options( $instance ); ?>
 
@@ -82,11 +82,10 @@ class Settings {
 	 * @return array|bool
 	 */
 	public static function save( $instance, $new_instance, $old_instance ) {
-
-		if (isset( $_POST['jpcc-menu-editor-nonce'] ) && wp_verify_nonce( $_POST['jpcc-menu-editor-nonce'], 'jpcc-menu-editor-nonce' ) ) {
-			$new_instance = Widget::parse_options( $new_instance );
+		if ( isset( $_POST['jpcc-menu-editor-nonce'] ) && wp_verify_nonce( $_POST['jpcc-menu-editor-nonce'], 'jpcc-menu-editor-nonce' ) ) {
+			$new_instance            = Widget::parse_options( $new_instance );
 			$instance['which_users'] = $new_instance['which_users'];
-			$instance['roles'] = $new_instance['roles'];
+			$instance['roles']       = $new_instance['roles'];
 
 			if ( $instance['which_users'] == 'logged_in' ) {
 				$allowed_roles = \ContentControl\Rules\allowed_user_roles();
@@ -97,12 +96,11 @@ class Settings {
 						unset( $instance['roles'][ $key ] );
 					}
 				}
-
 			} else {
 				unset( $instance['roles'] );
 			}
 		} else {
-			$old_instance = Widget::parse_options( $old_instance );
+			$old_instance            = Widget::parse_options( $old_instance );
 			$instance['which_users'] = $old_instance['which_users'];
 
 			if ( empty( $old_instance['roles'] ) ) {

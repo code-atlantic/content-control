@@ -29,14 +29,14 @@ class Conditions {
 	/**
 	 * @var array
 	 */
-	public $condition_sort_order = array();
+	public $condition_sort_order = [];
 
 	/**
 	 * @return \ContentControl\Conditions
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance                = new self;
+			self::$instance                = new self();
 			self::$instance->preload_posts = isset( $_GET['page'] ) && $_GET['page'] == 'jp-cc-settings';
 		}
 
@@ -46,7 +46,7 @@ class Conditions {
 	/**
 	 * @param array $conditions
 	 */
-	public function add_conditions( $conditions = array() ) {
+	public function add_conditions( $conditions = [] ) {
 		foreach ( $conditions as $key => $condition ) {
 			if ( empty( $condition['id'] ) && ! is_numeric( $key ) ) {
 				$condition['id'] = $key;
@@ -59,17 +59,17 @@ class Conditions {
 	/**
 	 * @param array $condition
 	 */
-	public function add_condition( $condition = array() ) {
-		if ( ! empty( $condition['id'] ) && ! isset ( $this->conditions[ $condition['id'] ] ) ) {
-			$condition = wp_parse_args( $condition, array(
+	public function add_condition( $condition = [] ) {
+		if ( ! empty( $condition['id'] ) && ! isset( $this->conditions[ $condition['id'] ] ) ) {
+			$condition = wp_parse_args( $condition, [
 				'id'       => '',
 				'callback' => null,
 				'group'    => '',
 				'name'     => '',
 				'priority' => 10,
-				'fields'   => array(),
+				'fields'   => [],
 				'advanced' => false,
-			) );
+			] );
 
 			$this->conditions[ $condition['id'] ] = $condition;
 		}
@@ -85,7 +85,6 @@ class Conditions {
 			$this->register_conditions();
 		}
 
-
 		return $this->conditions;
 	}
 
@@ -94,28 +93,32 @@ class Conditions {
 	 */
 	public function condition_sort_order() {
 		if ( ! $this->condition_sort_order ) {
-
-			$order = array(
+			$order = [
 				__( 'General', 'content-control' )    => 1,
 				__( 'Pages', 'content-control' )      => 5,
 				__( 'Posts', 'content-control' )      => 5,
 				__( 'Categories', 'content-control' ) => 14,
 				__( 'Tags', 'content-control' )       => 14,
 				__( 'Format', 'content-control' )     => 16,
-			);
+			];
 
-			$post_types = get_post_types( array( 'public' => true, '_builtin' => false ), 'objects' );
+			$post_types = get_post_types( [
+				'public'   => true,
+				'_builtin' => false,
+			], 'objects' );
 			foreach ( $post_types as $name => $post_type ) {
 				$order[ $post_type->labels->name ] = 10;
 			}
 
-			$taxonomies = get_taxonomies( array( 'public' => true, '_builtin' => false ), 'objects' );
+			$taxonomies = get_taxonomies( [
+				'public'   => true,
+				'_builtin' => false,
+			], 'objects' );
 			foreach ( $taxonomies as $tax_name => $taxonomy ) {
 				$order[ $taxonomy->labels->name ] = 15;
 			}
 
 			$this->condition_sort_order = apply_filters( 'jp_cc_condition_sort_order', $order );
-
 		}
 
 		return $this->condition_sort_order;
@@ -128,7 +131,6 @@ class Conditions {
 	 * @return int
 	 */
 	public function sort_condition_groups( $a, $b ) {
-
 		$order = $this->condition_sort_order();
 
 		$ai = isset( $order[ $a ] ) ? intval( $order[ $a ] ) : 10;
@@ -149,15 +151,13 @@ class Conditions {
 		static $groups;
 
 		if ( ! isset( $groups ) ) {
-
-			$groups = array();
+			$groups = [];
 
 			foreach ( $this->get_conditions() as $condition ) {
 				$groups[ $condition['group'] ][ $condition['id'] ] = $condition;
 			}
 
-			uksort( $groups, array( $this, 'sort_condition_groups' ) );
-
+			uksort( $groups, [ $this, 'sort_condition_groups' ] );
 		}
 
 		return $groups;
@@ -167,13 +167,12 @@ class Conditions {
 	 * @return array
 	 */
 	public function conditions_dropdown_list() {
-		$groups = array();
+		$groups = [];
 
 		$conditions_by_group = $this->get_conditions_by_group();
 
 		foreach ( $conditions_by_group as $group => $_conditions ) {
-
-			$conditions = array();
+			$conditions = [];
 
 			foreach ( $_conditions as $id => $condition ) {
 				$conditions[ $id ] = $condition['name'];
@@ -188,12 +187,12 @@ class Conditions {
 	/**
 	 * @param array $args
 	 */
-	public function conditions_selectbox( $args = array() ) {
-		$args = wp_parse_args( $args, array(
+	public function conditions_selectbox( $args = [] ) {
+		$args = wp_parse_args( $args, [
 			'id'      => '',
 			'name'    => '',
 			'current' => '',
-		) );
+		] );
 
 		// TODO: Generate this using PUM_Fields. Use a switch to generate a templ version when needed. ?>
 	<select class="target facet-select" id="<?php esc_attr_e( $args['id'] ); ?>" name="<?php esc_attr_e( $args['name'] ); ?>">
@@ -207,7 +206,8 @@ class Conditions {
 				<?php endforeach ?>
 			</optgroup>
 		<?php endforeach ?>
-		</select><?php
+		</select>
+		<?php
 	}
 
 	/**
@@ -225,109 +225,105 @@ class Conditions {
 	 * @return array
 	 */
 	public function generate_post_type_conditions() {
-		$conditions = array();
-		$post_types = get_post_types( array( 'public' => true ), 'objects' );
+		$conditions = [];
+		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 
 		foreach ( $post_types as $name => $post_type ) {
-
 			if ( $post_type->has_archive ) {
-				$conditions[ $name . '_index' ] = array(
+				$conditions[ $name . '_index' ] = [
 					'group'    => $post_type->labels->name,
 					'name'     => sprintf( _x( '%s Archive', 'condition: post type plural label ie. Posts: All', 'content-control' ), $post_type->labels->name ),
-					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
+					'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
 					'priority' => 5,
-				);
+				];
 			}
 
-			$conditions[ $name . '_all' ] = array(
+			$conditions[ $name . '_all' ] = [
 				'group'    => $post_type->labels->name,
 				'name'     => sprintf( _x( 'A %s', 'condition: post type singular label ie. Posts: All', 'content-control' ), $post_type->labels->singular_name ),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-			);
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+			];
 
-			$conditions[ $name . '_selected' ] = array(
+			$conditions[ $name . '_selected' ] = [
 				'group'    => $post_type->labels->name,
 				'name'     => sprintf( _x( 'A Selected %s', 'condition: post type singular label ie. Posts: Selected', 'content-control' ), $post_type->labels->singular_name ),
-				'fields'   => array(
-					'selected' => array(
+				'fields'   => [
+					'selected' => [
 						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type singular label ie. Select Posts', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
 						'type'        => 'postselect',
 						'post_type'   => $name,
 						'multiple'    => true,
 						'as_array'    => true,
-						'std'         => array(),
-					),
-				),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-			);
+						'std'         => [],
+					],
+				],
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+			];
 
-			$conditions[ $name . '_ID' ] = array(
+			$conditions[ $name . '_ID' ] = [
 				'group'    => $post_type->labels->name,
 				'name'     => sprintf( _x( 'A %s with ID', 'condition: post type singular label ie. Posts: ID', 'content-control' ), $post_type->labels->singular_name ),
-				'fields'   => array(
-					'selected' => array(
+				'fields'   => [
+					'selected' => [
 						'placeholder' => sprintf( _x( '%s IDs: 128, 129', 'condition: post type singular label ie. Posts IDs', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
 						'type'        => 'text',
-					),
-				),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-			);
+					],
+				],
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+			];
 
 			if ( is_post_type_hierarchical( $name ) ) {
-				$conditions[ $name . '_children' ] = array(
+				$conditions[ $name . '_children' ] = [
 					'group'    => $post_type->labels->name,
 					'name'     => sprintf( _x( '%s: Child Of', 'condition: post type plural label ie. Posts: ID', 'content-control' ), $post_type->labels->name ),
-					'fields'   => array(
-						'selected' => array(
+					'fields'   => [
+						'selected' => [
 							'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select Posts', 'content-control' ), strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
 							'as_array'    => true,
-						),
-					),
-					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-				);
+						],
+					],
+					'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+				];
 
-				$conditions[ $name . '_ancestors' ] = array(
+				$conditions[ $name . '_ancestors' ] = [
 					'group'    => $post_type->labels->name,
 					'name'     => sprintf( _x( '%s: Ancestor Of', 'condition: post type plural label ie. Posts: ID', 'content-control' ), $post_type->labels->name ),
-					'fields'   => array(
-						'selected' => array(
+					'fields'   => [
+						'selected' => [
 							'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select Posts', 'content-control' ), strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
 							'as_array'    => true,
-						),
-					),
-					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-				);
-
+						],
+					],
+					'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+				];
 			}
-
 
 			$templates = wp_get_theme()->get_page_templates();
 
 			if ( $name == 'page' && ! empty( $templates ) ) {
-				$conditions[ $name . '_template' ] = array(
+				$conditions[ $name . '_template' ] = [
 					'group'    => $post_type->labels->name,
 					'name'     => sprintf( _x( 'A %s: With Template', 'condition: post type plural label ie. Pages: With Template', 'content-control' ), $post_type->labels->name ),
-					'fields'   => array(
-						'selected' => array(
+					'fields'   => [
+						'selected' => [
 							'type'     => 'select',
 							'select2'  => true,
 							'multiple' => true,
 							'as_array' => true,
-							'options'  => array_merge( array( 'default' => __( 'Default', 'content-control' ) ), $templates ),
-						),
-					),
-					'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type' ),
-				);
+							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
+						],
+					],
+					'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type' ],
+				];
 			}
 
 			$conditions = array_merge( $conditions, $this->generate_post_type_tax_conditions( $name ) );
-
 		}
 
 		return $conditions;
@@ -341,24 +337,23 @@ class Conditions {
 	public function generate_post_type_tax_conditions( $name ) {
 		$post_type  = get_post_type_object( $name );
 		$taxonomies = get_object_taxonomies( $name, 'object' );
-		$conditions = array();
+		$conditions = [];
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
-
-			$conditions[ $name . '_w_' . $tax_name ] = array(
+			$conditions[ $name . '_w_' . $tax_name ] = [
 				'group'    => $post_type->labels->name,
 				'name'     => sprintf( _x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. Posts: With Category', 'content-control' ), $post_type->labels->singular_name, $taxonomy->labels->singular_name ),
-				'fields'   => array(
-					'selected' => array(
+				'fields'   => [
+					'selected' => [
 						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
 						'as_array'    => true,
-						'options'     => $this->preload_posts ? Helpers::taxonomy_selectlist( $tax_name ) : array(),
-					),
-				),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'post_type_tax' ),
-			);
+						'options'     => $this->preload_posts ? Helpers::taxonomy_selectlist( $tax_name ) : [],
+					],
+				],
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type_tax' ],
+			];
 		}
 
 		return $conditions;
@@ -371,44 +366,42 @@ class Conditions {
 	 * @return array
 	 */
 	public function generate_taxonomy_conditions() {
-		$conditions = array();
-		$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+		$conditions = [];
+		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
-
-			$conditions[ 'tax_' . $tax_name . '_all' ] = array(
+			$conditions[ 'tax_' . $tax_name . '_all' ] = [
 				'group'    => $taxonomy->labels->name,
 				'name'     => sprintf( _x( 'A %s', 'condition: taxonomy plural label ie. Categories: All', 'content-control' ), $taxonomy->labels->name ),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
-			);
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'taxonomy' ],
+			];
 
-			$conditions[ 'tax_' . $tax_name . '_selected' ] = array(
+			$conditions[ 'tax_' . $tax_name . '_selected' ] = [
 				'group'    => $taxonomy->labels->name,
 				'name'     => sprintf( _x( '%s: Selected', 'condition: taxonomy plural label ie. Categories: Selected', 'content-control' ), $taxonomy->labels->name ),
-				'fields'   => array(
-					'selected' => array(
+				'fields'   => [
+					'selected' => [
 						'placeholder' => sprintf( _x( 'Select %s.', 'condition: taxonomy plural label ie. Select Categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
 						'as_array'    => true,
-					),
-				),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
-			);
+					],
+				],
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'taxonomy' ],
+			];
 
-			$conditions[ 'tax_' . $tax_name . '_ID' ] = array(
+			$conditions[ 'tax_' . $tax_name . '_ID' ] = [
 				'group'    => $taxonomy->labels->name,
 				'name'     => sprintf( _x( 'A %s with IDs', 'condition: taxonomy plural label ie. Categories: Selected', 'content-control' ), $taxonomy->labels->name ),
-				'fields'   => array(
-					'selected' => array(
+				'fields'   => [
+					'selected' => [
 						'placeholder' => sprintf( _x( '%s IDs: 128, 129', 'condition: taxonomy plural label ie. Category IDs', 'content-control' ), strtolower( $taxonomy->labels->singular_name ) ),
 						'type'        => 'text',
-					),
-				),
-				'callback' => array( '\\ContentControl\Condition_Callbacks', 'taxonomy' ),
-			);
-
+					],
+				],
+				'callback' => [ '\\ContentControl\Condition_Callbacks', 'taxonomy' ],
+			];
 		}
 
 		return $conditions;
@@ -420,31 +413,31 @@ class Conditions {
 	public function register_conditions() {
 		$conditions = array_merge( $this->generate_post_type_conditions(), $this->generate_taxonomy_conditions() );
 
-		$conditions['is_front_page'] = array(
+		$conditions['is_front_page'] = [
 			'group'    => __( 'Pages' ),
 			'name'     => __( 'The Home Page', 'content-control' ),
 			'callback' => 'is_front_page',
 			'priority' => 2,
-		);
+		];
 
-		$conditions['is_home'] = array(
+		$conditions['is_home'] = [
 			'group'    => __( 'Posts' ),
 			'name'     => __( 'The Blog Index', 'content-control' ),
 			'callback' => 'is_home',
 			'priority' => 1,
-		);
+		];
 
-		$conditions['is_search'] = array(
+		$conditions['is_search'] = [
 			'group'    => __( 'Pages' ),
 			'name'     => __( 'A Search Result Page', 'content-control' ),
 			'callback' => 'is_search',
-		);
+		];
 
-		$conditions['is_404'] = array(
+		$conditions['is_404'] = [
 			'group'    => __( 'Pages' ),
 			'name'     => __( 'A 404 Error Page', 'content-control' ),
 			'callback' => 'is_404',
-		);
+		];
 
 		$conditions = apply_filters( 'jp_cc_registered_conditions', $conditions );
 
