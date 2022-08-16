@@ -8,7 +8,7 @@
 
 namespace ContentControl;
 
-use ContentControl\Interfaces\Controller;
+use ContentControl\Base\Controller;
 use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @version 2.0.0
  */
-class BlockEditor implements Controller {
+class BlockEditor extends Controller {
 
 	/**
 	 * Initiate hooks & filter.

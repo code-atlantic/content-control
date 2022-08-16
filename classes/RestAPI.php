@@ -10,12 +10,12 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
-use ContentControl\Interfaces\Controller;
+use ContentControl\Base\Controller;
 
 /**
  * RestAPI function initialization.
  */
-class RestAPI implements Controller {
+class RestAPI extends Controller {
 	/**
 	 * Initiate rest api integrations.
 	 */

@@ -8,7 +8,7 @@
 
 namespace ContentControl;
 
-use ContentControl\Interfaces\Controller;
+use ContentControl\Base\Controller;
 use ContentControl\RuleEngine\Handler;
 
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class Frontend
  */
-class Frontend implements Controller {
+class Frontend extends Controller {
 
 	/**
 	 * Initialize Hooks & Filters
