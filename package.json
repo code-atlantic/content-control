@@ -27,6 +27,8 @@
     "@wordpress/components": "^19.15.0",
     "@wordpress/compose": "^5.11.0",
     "@wordpress/core-data": "^4.11.0",
+    "@wordpress/dom-ready": "^3.15.0",
+    "@wordpress/element": "^4.13.0",
     "@wordpress/hooks": "^3.13.0",
     "@wordpress/i18n": "^4.13.0",
     "@wordpress/icons": "^9.4.0",
@@ -34,7 +36,8 @@
     "nanoid": "^4.0.0",
     "react-sortablejs": "^6.1.4",
     "react-tag-autocomplete": "^6.3.0",
-    "sortablejs": "^1.15.0"
+    "sortablejs": "^1.15.0",
+    "use-query-params": "^2.0.0"
   },
   "devDependencies": {
     "@code-atlantic/browserslist-config": "^1.0.1",
@@ -73,7 +76,7 @@
     "lint:md:js": "wp-scripts lint-md-js",
     "lint:pkg-json": "wp-scripts lint-pkg-json",
     "prelint:php": "wp-env run composer \"install --no-interaction\"",
-		"lint:php": "wp-env run composer run-script lint",
+    "lint:php": "wp-env run composer run-script lint",
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
     "start": "wp-scripts start",
@@ -82,10 +85,9 @@
     "test:unit": "wp-scripts test-unit-js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:php": "npm-run-all lint:php test:unit:php",
-		"test:php:watch": "wp-env run composer run-script test:watch",
-		"pretest:unit:php": "wp-env start",
-		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
-
+    "test:php:watch": "wp-env run composer run-script test:watch",
+    "pretest:unit:php": "wp-env start",
+    "test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
     "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
     "release": "npm run build && npm run translate && gulp release",
     "zip": "gulp release"
