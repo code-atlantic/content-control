@@ -23,7 +23,7 @@ const panelId = 'contctrl-rules-panel';
  * 1. Uses `withFilters` to allow appending components in specific order.
  *
  * 		const Panels = withFilters(
- * 			'contctrl.block-rules.rules-panels'
+ * 			'contentControl.block-rules.rules-panels'
  * 		)( ( props ) => <></> );
  *
  * 2. The filtered components are then called within the `<SlotFillProvider>`
@@ -55,8 +55,8 @@ const panelId = 'contctrl-rules-panel';
 
 
 addFilter(
-	'contctrl.block-rules.rules-panels',
-	'contctrl.core',
+	'contentControl.block-rules.rules-panels',
+	'contentControl.core',
 	( FilteredComponent ) => {
 		return ( props ) => {
 			const { isPanelActive, updateRules, panelId } = props;
@@ -87,7 +87,7 @@ const RulesPanel = ( props ) => {
 	const { rules = {}, updateRules = () => {} } = props;
 
 	const Panels = withFilters(
-		'contctrl.block-rules.rules-panels'
+		'contentControl.block-rules.rules-panels'
 	)( ( props ) => <></> );
 
 	/**

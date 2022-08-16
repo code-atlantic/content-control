@@ -36,7 +36,7 @@ const addAttributes = ( settings ) => {
  */
 const controlAttributes = ( settings ) => {
 	return applyFilters(
-		'contCtrl.blockControls.controlAttributes',
+		'contentControl.blockControls.controlAttributes',
 		{
 			contentControls: {
 				type: 'object',

@@ -8,7 +8,7 @@ import DeviceToggle from '../../device-toggle';
 const DeviceRules = ( props ) => {
 	const { groupRules, setGroupRules } = props;
 
-	const screenSizes = applyFilters( 'contCtrl.blockControls.screenSizes', {
+	const screenSizes = applyFilters( 'contentControl.blockControls.screenSizes', {
 		mobile: { label: __( 'Mobile', 'content-control' ), icon: mobile },
 		tablet: { label: __( 'Tablet', 'content-control' ), icon: tablet },
 		desktop: { label: __( 'Desktop', 'content-control' ), icon: desktop },

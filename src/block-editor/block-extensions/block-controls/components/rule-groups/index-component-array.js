@@ -43,8 +43,8 @@ import DeviceRules from '../device-rules';
 const panelId = 'contctrl-rules-panel';
 
 addFilter(
-	'contCtrl.blockRules.rulePanels',
-	'contCtrl.core',
+	'contentControl.blockRules.rulePanels',
+	'contentControl.core',
 	( rulePanels = [], parentProps ) => [
 		...rulePanels,
 		{
@@ -57,8 +57,8 @@ addFilter(
 );
 
 addFilter(
-	'contCtrl.blockRules.rulePanels',
-	'contctrl.core',
+	'contentControl.blockRules.rulePanels',
+	'contentControl.core',
 	( rulePanels = [], parentProps ) => [
 		...rulePanels,
 		{
@@ -101,7 +101,7 @@ const RulesPanel = ( props ) => {
 	};
 
 	const rulePanels = applyFilters(
-		'contCtrl.blockRules.rulePanels',
+		'contentControl.blockRules.rulePanels',
 		[],
 		props
 	);
