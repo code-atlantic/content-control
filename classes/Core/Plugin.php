@@ -164,10 +164,10 @@ class Plugin {
 		$this->define_paths();
 
 		// Old.
-		new \ContentControl\Admin();
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
+			'Admin'       => new \ContentControl\Admin( $this ),
 			'RestAPI'     => new \ContentControl\RestAPI( $this ),
 			'BlockEditor' => new \ContentControl\BlockEditor( $this ),
 			'Frontend'    => new \ContentControl\Frontend( $this ),
