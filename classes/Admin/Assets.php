@@ -26,7 +26,7 @@ class Assets {
 		}
 
 		if ( $hook == 'settings_page_cc-settings' ) {
-			if ( Settings::active_tab() == 'restrictions' ) {
+			if ( isset( $_GET['tab'] ) && $_GET['tab'] === 'restrictions' ) {
 				add_action( 'admin_footer', [ __CLASS__, 'js_wp_editor' ] );
 			}
 
