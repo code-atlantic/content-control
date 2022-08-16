@@ -1,5 +1,12 @@
 {
 	"compilerOptions": {
+		"baseUrl": "./src",
+		"rootDir": "./src",
+		"paths": {
+			"components/*": [
+				"components/*"
+			]
+		},
 		"declarationDir": "build-types",
 		"allowJs": true,
 		"checkJs": false,
@@ -39,10 +46,19 @@
 		"strictNullChecks": true
 	},
 	"exclude": [
+		"**.js",
 		"**/*.android.js",
 		"**/*.ios.js",
 		"**/*.native.js",
+		"**/assets/**",
+		"assets/**",
 		"**/build/**",
-		"build/**"
+		"build/**",
+		"**/dist/**",
+		"dist/**",
+		"**/vendor/**",
+		"vendor/**",
+		"**/node_modules/**",
+		"node_modules/**",
 	],
 }
