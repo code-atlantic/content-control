@@ -15,8 +15,11 @@ const eslintConfig = {
 			mode: 'typescript',
 		},
 		'import/resolver': {
+			webpack: {
+				config: 'webpack.config.js',
+			},
 			node: {
-				moduleDirectory: [ 'node_modules', 'src/' ],
+				moduleDirectory: [ 'node_modules', 'src' ],
 			},
 		},
 	},

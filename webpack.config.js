@@ -16,6 +16,14 @@ const config = {
 			'webpack://[namespace]/[resource-path]?[loaders]',
 		path: path.resolve( process.cwd(), 'dist' ),
 	},
+	resolve: {
+		...defaultConfig.resolve,
+		alias: {
+			...defaultConfig.resolve.alias,
+			// add as many aliases as you like!
+			'@components': path.resolve( __dirname, 'src/components' ),
+		},
+	},
 };
 
 module.exports = config;
