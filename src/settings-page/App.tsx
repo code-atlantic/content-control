@@ -54,7 +54,7 @@ const App = () => {
 			views.find( ( obj ) => obj.name === view )?.pageTitle ??
 			__( 'Content Control', 'content-control' );
 	}, [ view, views ] );
-	console.log( 'running' );
+
 	return (
 		<>
 			<h1 className="wp-heading-inline">
