@@ -71,13 +71,7 @@ class Settings extends Controller {
 	 */
 	public function render_page() {
 		?>
-		<div class="wrap">
-			<h1 class="wp-heading-inline">
-				<?php esc_html_e( 'Content Control', 'content-control' ); ?>
-			</h1>
-			<hr class="wp-header-end">
 			<div id="content-control-root-container"></div>
-		</div>
 		<?php
 	}
 
