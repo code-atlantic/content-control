@@ -3,8 +3,8 @@ import { useQueryParam, StringParam } from 'use-query-params';
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import { TabPanel } from '@wordpress/components';
 
-import TabPanel from '@components/controlled-tab-panel';
 import RestrictionsTab from './restrictions-tab';
 import SettingsTab from './settings-tab';
 import UpgradeTab from './upgrade-tab';
@@ -54,7 +54,7 @@ const App = () => {
 			views.find( ( obj ) => obj.name === view )?.pageTitle ??
 			__( 'Content Control', 'content-control' );
 	}, [ view, views ] );
-
+	console.log( 'running' );
 	return (
 		<>
 			<h1 className="wp-heading-inline">
@@ -63,10 +63,7 @@ const App = () => {
 			<hr className="wp-header-end" />
 			<TabPanel
 				orientation="horizontal"
-				tabsClass="nav-tab-wrapper"
-				tabClass="nav-tab"
-				activeClass="nav-tab-active"
-				selected={ view }
+				initialTabName={ view !== null ? view : undefined }
 				onSelect={ ( tabName ) => changeView( tabName ) }
 				tabs={ views }
 			>

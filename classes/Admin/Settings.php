@@ -102,7 +102,7 @@ class Settings extends Controller {
 		$meta   = $this->get_asset_meta();
 
 		wp_enqueue_script( $handle, plugin()->get_url( 'dist/settings-page.js' ), $meta['dependencies'], $meta['version'], true );
-		wp_enqueue_style( $handle, plugin()->get_url( 'dist/settings-page.css' ), [], $meta['version'] );
+		wp_enqueue_style( $handle, plugin()->get_url( 'dist/settings-page.css' ), [ 'wp-components' ], $meta['version'] );
 
 		wp_localize_script( $handle, 'contentControlSettingsPageVars',
 			[
