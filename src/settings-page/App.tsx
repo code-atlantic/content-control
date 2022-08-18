@@ -57,11 +57,15 @@ const App = () => {
 
 	return (
 		<>
-			<h1>{ __( 'Content Control', 'content-control' ) }</h1>
+			<h1 className="wp-heading-inline">
+				{ __( 'Content Control', 'content-control' ) }
+			</h1>
+			<hr className="wp-header-end" />
 			<TabPanel
-				orientation="vertical"
-				className="cc-tab-panel"
-				activeClass="active-tab"
+				orientation="horizontal"
+				tabsClass="nav-tab-wrapper"
+				tabClass="nav-tab"
+				activeClass="nav-tab-active"
 				selected={ view }
 				onSelect={ ( tabName ) => changeView( tabName ) }
 				tabs={ views }

@@ -8,7 +8,7 @@ import { partial } from 'lodash';
  * WordPress dependencies
  */
 import { useRef } from '@wordpress/element';
-import { NavigableMenu } from '@wordpress/components';
+import { NavigableMenu, TabbableContainer } from '@wordpress/components';
 import { withInstanceId } from '@wordpress/compose';
 
 /**
@@ -25,11 +25,13 @@ type Tab = {
 
 type Props = {
 	instanceId: string | number;
-	orientation: 'horizontal' | 'vertical';
-	activeClass: string;
-	className: string | string[];
+	orientation?: 'horizontal' | 'vertical';
+	activeClass?: string;
+	tabsClass?: string;
+	tabClass?: string;
+	className?: string | string[];
 	tabs: Tab[];
-	selected: string | null;
+	selected?: string | null;
 	onSelect: ( tabKey: string ) => void;
 	children: ( selected: Tab ) => React.ReactNode;
 };
@@ -38,6 +40,8 @@ const TabPanel = ( {
 	instanceId,
 	orientation = 'horizontal',
 	activeClass = 'is-active',
+	tabsClass = 'tabs',
+	tabClass = 'tab',
 	className,
 	tabs,
 	selected,
@@ -81,14 +85,17 @@ const TabPanel = ( {
 		>
 			<NavigableMenu
 				role="tablist"
-				orientation={ orientation }
 				onNavigate={ onNavigate }
 				onKeyDown={ onKeyDown }
-				className="components-tab-panel__tabs"
+				className={ classnames( [
+					tabsClass,
+					'components-tab-panel__tabs',
+				] ) }
 			>
 				{ tabs.map( ( tab ) => (
 					<TabButton
 						className={ classnames(
+							tabClass,
 							'components-tab-panel__tab',
 							tab.className,
 							{
