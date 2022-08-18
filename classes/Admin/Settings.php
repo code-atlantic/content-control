@@ -1,312 +1,128 @@
 <?php
-
+/**
+ * Settings Page Controller Class.
+ *
+ * @package ContentControl
+ */
 
 namespace ContentControl\Admin;
 
 use ContentControl\Helpers;
 use ContentControl\Options;
 
+use ContentControl\Base\Controller;
+use function ContentControl\plugin;
+
+
 defined( 'ABSPATH' ) || exit;
 
-class Settings {
+/**
+ * Settings Page Controller.
+ *
+ * @package ContentControl\Admin
+ */
+class Settings extends Controller {
 
-	private static $title;
-	private static $_tabs;
-	private static $_prefix;
+	/**
+	 * Settings Page Title.
+	 *
+	 * @var string
+	 */
+	public $page_title = '';
 
-	public static function init( $title, $tabs = [] ) {
-		static::$title   = $title;
-		static::$_tabs   = $tabs;
-		static::$_prefix = trim( Options::$_prefix, '_' ) . '_';
-		Settings\Restrictions::init();
-		add_action( 'admin_init', [ __CLASS__, 'register_settings' ] );
-		add_filter( static::$_prefix . 'settings_sanitize_text', [ __CLASS__, 'sanitize_text_field' ] );
-		add_filter( static::$_prefix . 'settings_sanitize_field_restrictions', [ __CLASS__, 'sanitize_restrictions' ], 10, 2 );
+	/**
+	 * Settings Page Tabs.
+	 *
+	 * @var string[]
+	 */
+	public $tabs = [];
+
+	/**
+	 * Settings Option Prefix.
+	 *
+	 * @var string
+	 */
+	public $prefix = '';
+
+	/**
+	 * Initialize the settings page.
+	 */
+	public function init() {
+		add_action( 'admin_menu', [ $this, 'register_page' ], 999 );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		$this->prefix = $this->container->get( 'option_prefix' ) . '_';
 	}
 
 	/**
-	 * Render settings page with tabs.
+	 * Register admin options pages.
 	 */
-	public static function page() {
+	public function register_page() {
+		add_options_page(
+			__( 'Content Control', 'content-control' ),
+			__( 'Content Control', 'content-control' ),
+			'manage_options',
+			'content-control-settings',
+			[ $this, 'render_page' ]
+		);
+	}
+
+	/**
+	 * Render settings page title & container..
+	 */
+	public function render_page() {
 		?>
-
 		<div class="wrap">
-			<h1><?php echo esc_html( static::$title ); ?></h1>
-
-			<h2 id="<?php echo static::$_prefix; ?>tabs" class="nav-tab-wrapper">
-							   <?php
-								foreach ( static::tabs() as $id => $tab ) {
-									$active = $tab['active'] ? ' nav-tab-active' : '';
-
-									echo '<a href="' . esc_url( $tab['url'] ) . '" title="' . esc_attr( $tab['label'] ) . '" class="nav-tab' . $active . '">';
-									echo esc_html( $tab['label'] );
-									echo '</a>';
-								}
-								?>
-			</h2>
-
-			<form id="<?php echo static::$_prefix; ?>settings" method="post" action="options.php">
-				<?php do_action( static::$_prefix . 'form_nonce' ); ?>
-				<?php settings_fields( static::$_prefix . 'settings' ); ?>
-				<div id="poststuff">
-					<div id="post-body" class="metabox-holder columns-1">
-						<div id="post-body-content">
-							<div id="tab_container">
-							<?php
-							if ( static::active_tab() == 'restrictions' ) :
-								do_action( 'jp_cc_restriction_editor' );
-								else :
-									?>
-									<table class="form-table">
-									<?php
-										Setting_Callbacks::init( static::$_prefix, Options::get_all() );
-										do_settings_fields( static::$_prefix . 'settings_' . static::active_tab(), static::$_prefix . 'settings_' . static::active_tab() );
-									?>
-									</table>
-									<?php
-								endif;
-
-								submit_button();
-								?>
-							</div>
-							<!-- #tab_container-->
-						</div>
-					</div>
-					<br class="clear" />
-				</div>
-			</form>
+			<h1 class="wp-heading-inline">
+				<?php esc_html_e( 'Content Control', 'content-control' ); ?>
+			</h1>
+			<hr class="wp-header-end">
+			<div id="content-control-root-container"></div>
 		</div>
-
 		<?php
 	}
 
 	/**
-	 * Returns all settings tabs, with labels, urls & status.
+	 * Get asset meta from generated files.
 	 *
 	 * @return array
 	 */
-	public static function tabs() {
-		static $tabs;
-
-		if ( ! isset( $tabs ) ) {
-			$tabs = [];
-
-			$registered_settings = static::registered_settings();
-
-			reset( static::$_tabs );
-
-			$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : key( static::$_tabs );
-
-			foreach ( static::$_tabs as $id => $label ) {
-				if ( ! empty( $registered_settings[ $id ] ) ) {
-					$tabs[ $id ] = [
-						'label'  => $label,
-						'active' => $id == $active_tab,
-						'url'    => add_query_arg( [
-							'settings-updated' => false,
-							'tab'              => $id,
-						] ),
-					];
-				}
-			}
-		}
-
-		return $tabs;
+	public function get_asset_meta() {
+		$meta_path = 'dist/settings-page.asset.php';
+		return file_exists( plugin( 'path' ) . $meta_path ) ? require plugin( 'path' ) . $meta_path : [
+			'dependencies' => [],
+			'version'      => plugin( 'version' ),
+		];
 	}
 
 	/**
-	 * Check for the active / current tab.
+	 * Enqueue assets for the settings page.
 	 *
-	 * @return bool|string
+	 * @param string $hook Page hook name.
 	 */
-	public static function active_tab() {
-		static $active;
-
-		if ( ! isset( $active ) ) {
-			$active = false;
-			foreach ( static::tabs() as $id => $tab ) {
-				if ( $tab['active'] ) {
-					$active = $id;
-				}
-			}
+	public function enqueue_scripts( $hook ) {
+		if ( 'settings_page_content-control-settings' !== $hook ) {
+			return;
 		}
 
-		return $active;
+		$handle = 'content-control-settings-page';
+		$meta   = $this->get_asset_meta();
+
+		wp_enqueue_script( $handle, plugin()->get_url( 'dist/settings-page.js' ), $meta['dependencies'], $meta['version'], true );
+		wp_enqueue_style( $handle, plugin()->get_url( 'dist/settings-page.css' ), [], $meta['version'] );
+
+		wp_localize_script( $handle, 'contentControlSettingsPageVars',
+			[
+				'adminUrl'        => admin_url(),
+				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
+				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),
+			]
+		);
+
+		/**
+		 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
+		 * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
+		 * https://make.wordpress.org/core/2018/11/09/new-javascript-i18n-support-in-wordpress/
+		 */
+		wp_set_script_translations( $handle, 'content-control' );
 	}
-
-	/**
-	 * Retrieve the array of plugin settings
-	 *
-	 * @since 1.0.0
-	 * @return array
-	 */
-	public static function registered_settings() {
-		static $settings;
-
-		if ( ! isset( $settings ) ) {
-
-			/**
-			 * 'Whitelisted' settings, filters are provided for each settings.
-			 */
-			$settings = [
-				/** General Settings */
-				'restrictions' => apply_filters( static::$_prefix . 'settings_restrictions', [
-					'restrictions' => [
-						'id'   => 'restrictions',
-						'type' => 'hook',
-					],
-				] ),
-				'general'      => apply_filters( static::$_prefix . 'settings_general', [
-					'default_denial_message' => [
-						'id'    => 'default_denial_message',
-						'label' => __( 'Default Denial Message', 'content-control' ),
-						'type'  => 'rich_editor',
-					],
-				] ),
-				/** Addon Settings */
-				// 'addons'   => apply_filters( static::$_prefix . 'settings_addons', array() ),
-				// 'licenses' => apply_filters( static::$_prefix . 'settings_licenses', array() ),
-				/** Misc Settings */
-				'misc'         => apply_filters( static::$_prefix . 'settings_misc', [] ),
-			];
-
-			$settings = apply_filters( static::$_prefix . 'registered_settings', $settings );
-		}
-
-		return $settings;
-	}
-
-	public static function register_settings() {
-		if ( false == get_option( static::$_prefix . 'settings' ) ) {
-			add_option( static::$_prefix . 'settings' );
-		}
-
-		foreach ( static::registered_settings() as $tab => $settings ) {
-			$page = static::$_prefix . 'settings_' . $tab;
-
-			add_settings_section( $page, __return_null(), '__return_false', $page );
-
-			foreach ( $settings as $id => $option ) {
-				$name = isset( $option['label'] ) ? $option['label'] : '';
-
-				if ( method_exists( '\\ContentControl\Admin\Setting_Callbacks', $option['type'] ) ) {
-					$callback = [ '\\ContentControl\Admin\Setting_Callbacks', $option['type'] ];
-				} elseif ( function_exists( static::$_prefix . $option['type'] . '_callback' ) ) {
-					$callback = static::$_prefix . $option['type'] . '_callback';
-				} else {
-					$callback = [ '\\ContentControl\Setting_Callbacks', 'missing_callback' ];
-				}
-
-				add_settings_field( static::$_prefix . 'settings_' . $option['id'], $name, $callback, $page, $page, [
-					'section'     => $tab,
-					'id'          => isset( $option['id'] ) ? $option['id'] : $id,
-					'desc'        => ! empty( $option['desc'] ) ? $option['desc'] : '',
-					// TODO replace the hardcoded names in Setting_Callbacks with this value.
-					'name'        => isset( $option['name'] ) ? $option['name'] : null,
-					'size'        => isset( $option['size'] ) ? $option['size'] : null,
-					'options'     => isset( $option['options'] ) ? $option['options'] : '',
-					'std'         => isset( $option['std'] ) ? $option['std'] : '',
-					'min'         => isset( $option['min'] ) ? $option['min'] : null,
-					'max'         => isset( $option['max'] ) ? $option['max'] : null,
-					'step'        => isset( $option['step'] ) ? $option['step'] : null,
-					'chosen'      => isset( $option['chosen'] ) ? $option['chosen'] : null,
-					'placeholder' => isset( $option['placeholder'] ) ? $option['placeholder'] : null,
-					'allow_blank' => isset( $option['allow_blank'] ) ? $option['allow_blank'] : true,
-					'readonly'    => isset( $option['readonly'] ) ? $option['readonly'] : false,
-				] );
-			}
-		}
-
-		// Creates our settings in the options table
-		register_setting( static::$_prefix . 'settings', static::$_prefix . 'settings', [ __CLASS__, 'settings_sanitize' ] );
-	}
-
-	public static function settings_sanitize( $input ) {
-		if ( empty( $_POST['_wp_http_referer'] ) ) {
-			return $input;
-		}
-
-		$current_values = Options::get_all();
-
-		parse_str( $_POST['_wp_http_referer'], $referrer );
-
-		$prefix = static::$_prefix;
-
-		$tab = isset( $referrer['tab'] ) ? $referrer['tab'] : static::active_tab();
-
-		$settings = static::registered_settings();
-
-		$input = $input ? $input : [];
-
-		// Apply a filter per tab like jp_cc_settings_general_sanitize
-		$input = apply_filters( "{$prefix}settings_{$tab}_sanitize", $input );
-
-		// Loop through each setting being saved and pass it through a sanitization filter
-		foreach ( $input as $key => $value ) {
-
-			// Field id specific filter
-			$value = apply_filters( "{$prefix}settings_sanitize_field_{$key}", $value );
-
-			// Get the setting type (checkbox, select, etc)
-			$type = isset( $settings[ $tab ][ $key ]['type'] ) ? $settings[ $tab ][ $key ]['type'] : false;
-
-			if ( $type ) {
-				// Field type specific filter
-				$value = apply_filters( "{$prefix}settings_sanitize_{$type}", $value, $key );
-			}
-
-			// General filter
-			$input[ $key ] = apply_filters( "{$prefix}settings_sanitize", $value, $key );
-		}
-
-		// Loop through the whitelist and unset any that are empty for the tab being saved
-		if ( ! empty( $settings[ $tab ] ) ) {
-			foreach ( $settings[ $tab ] as $key => $value ) {
-				// settings used to have numeric keys, now they have keys that match the option ID. This ensures both methods work
-				if ( is_numeric( $key ) ) {
-					$key = $value['id'];
-				}
-				if ( empty( $input[ $key ] ) ) {
-					unset( $current_values[ $key ] );
-				}
-			}
-		}
-
-		// Merge our new settings with the existing
-		$output = array_merge( $current_values, $input );
-
-		add_settings_error( 'jp-cc-notices', '', __( 'Settings updated.', 'content-control' ), 'updated' );
-
-		return $output;
-	}
-
-	public static function sanitize_restrictions( $restrictions = [] ) {
-		if ( ! empty( $restrictions ) ) {
-			foreach ( $restrictions as $key => $restriction ) {
-				if ( is_string( $restriction ) ) {
-					try {
-						$restriction = json_decode( $restriction );
-					} catch ( \Exception $e ) {
-					};
-				}
-
-				$restrictions[ $key ] = Helpers::object_to_array( $restriction );
-			}
-		}
-
-		return $restrictions;
-	}
-
-
-	/**
-	 * Sanitize text fields
-	 *
-	 * @param array $input The field value
-	 *
-	 * @return string $input Sanitizied value
-	 */
-	public static function sanitize_text_field( $input ) {
-		return trim( $input );
-	}
-
 }
