@@ -11,6 +11,10 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
+use function \get_option;
+use function \update_option;
+use function \delete_option;
+
 /**
  * Class Options
  */
@@ -21,7 +25,7 @@ class Options {
 	 *
 	 * @var string
 	 */
-	public static $_prefix;
+	public static $_prefix = 'content_control_';
 
 	/**
 	 * Keeps static copy of the options during runtime.
@@ -32,13 +36,10 @@ class Options {
 
 	/**
 	 * Initialize Options on run.
-	 *
-	 * @param string $prefix
 	 */
-	public static function init( $prefix = 'jp_cc' ) {
+	public static function init() {
 		// Set the prefix on init.
-		static::$_prefix = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
-		static::$_data   = static::get_all();
+		static::$_data = static::get_all();
 	}
 
 	/**
@@ -50,6 +51,7 @@ class Options {
 	 */
 	public static function get_all() {
 		$settings = get_option( static::$_prefix . 'settings' );
+
 		if ( ! is_array( $settings ) ) {
 			$settings = [];
 		}
@@ -68,6 +70,10 @@ class Options {
 	 * @return mixed|void
 	 */
 	public static function get( $key = '', $default = false ) {
+		if ( ! isset( static::$_data ) ) {
+			static::init();
+		}
+
 		$value = isset( static::$_data[ $key ] ) ? static::$_data[ $key ] : $default;
 
 		return apply_filters( static::$_prefix . 'get_option', $value, $key, $default );
