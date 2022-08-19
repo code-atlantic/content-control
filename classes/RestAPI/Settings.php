@@ -9,7 +9,7 @@
 namespace ContentControl\RestAPI;
 
 use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
-use function ContentControl\get_plugin_options;
+use function ContentControl\get_all_plugin_options;
 use function ContentControl\update_options as update_plugin_options;
 
 defined( 'ABSPATH' ) || exit;
@@ -63,7 +63,7 @@ class Settings extends WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function get_settings() {
-		$settings = get_plugin_options();
+		$settings = get_all_plugin_options();
 
 		if ( $settings ) {
 			return new WP_REST_Response( $settings, 200 );
@@ -84,12 +84,12 @@ class Settings extends WP_REST_Controller {
 
 		$error_message = __( 'Something went wrong, the settings could not be updated.', 'content-control' );
 
-		if ( ! get_plugin_options() ) {
+		if ( ! get_all_plugin_options() ) {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
 		update_plugin_options( $settings );
-		$new_settings = get_plugin_options();
+		$new_settings = get_all_plugin_options();
 
 		if ( $new_settings ) {
 			return new WP_REST_Response( $new_settings, 200 );

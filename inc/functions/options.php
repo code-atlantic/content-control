@@ -12,7 +12,7 @@ namespace ContentControl;
  *
  * @return array
  */
-function get_plugin_options() {
+function get_all_plugin_options() {
 	return plugin( 'options' )->get_all();
 }
 
