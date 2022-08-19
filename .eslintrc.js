@@ -4,6 +4,7 @@ const eslintConfig = {
 	globals: {
 		wp: 'readonly',
 		contentControlBlockEditorVars: 'readonly',
+		contentControlSettingsPageVars: 'readonly',
 		window: 'readonly',
 	},
 	env: {
