@@ -23,14 +23,14 @@ class Pages {
 	 * Register admin options pages.
 	 */
 	public static function register_pages() {
-		global $jp_cc_settings_page;
+		global $content_control_settings_page;
 
-		$jp_cc_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'cc-settings', [
-			'\\ContentControl\Admin\Settings',
+		$content_control_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'cc-settings', [
+			'\\ContentControl\Admin\Settings2',
 			'page',
 		] );
 
-		return $jp_cc_settings_page;
+		return $content_control_settings_page;
 	}
 
 

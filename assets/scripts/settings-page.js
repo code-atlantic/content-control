@@ -8269,14 +8269,14 @@ var wpActiveEditor = true;
 				var $this = $(event.target),
 					$row = $this.parents('tr'),
 					index = $row.data('index'),
-					values = !$row.length ? null : $row.serializeObject().jp_cc_settings.restrictions[0];
+					values = !$row.length ? null : $row.serializeObject().content_control_settings.restrictions[0];
 
 				JPCC.restrictions._is_edit = true;
 				JPCC.restrictions.renderForm(index, values);
 			},
 			refresh: function (restrictions) {
 				var $table = $('table#jp-cc-restrictions tbody.has-items'),
-					_restrictions = restrictions || $table.serializeObject().jp_cc_settings.restrictions,
+					_restrictions = restrictions || $table.serializeObject().content_control_settings.restrictions,
 					i = 0;
 
 				$table.find('tr').remove();
@@ -8452,7 +8452,7 @@ var wpActiveEditor = true;
 			},
 			autosave: function () {
 				var $table = $('table#jp-cc-restrictions tbody.has-items'),
-					restrictions = $table.serializeObject().jp_cc_settings.restrictions;
+					restrictions = $table.serializeObject().content_control_settings.restrictions;
 
 				wp.ajax.send( "jp_cc_options_autosave", {
 					success: function (data) {},

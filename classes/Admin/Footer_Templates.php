@@ -476,7 +476,7 @@ class Footer_Templates {
 							{{data.title}}
 						</a>
 					</strong>
-					<input type="hidden" class="jp_cc_restriction" name="jp_cc_settings[restrictions][]" value='{{JSON.stringify(data)}}' />
+					<input type="hidden" class="jp_cc_restriction" name="content_control_settings[restrictions][]" value='{{JSON.stringify(data)}}' />
 					<div class="row-actions">
 						<span class="edit">
 							<button type="button" class="edit_restriction no-button link-button" aria-label="<?php echo _x( 'Edit “{{data.title}}”', 'Edit button label for restriction table', 'content-control' ); ?>"><?php _e( 'Edit', 'content-control' ); ?></button> |

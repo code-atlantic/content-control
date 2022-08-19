@@ -28,6 +28,14 @@ class Admin extends Controller {
 		// Admin Widget Editor
 		Admin\Widget\Settings::init();
 
+		Admin\Settings2::init(
+			__( 'Content Control Settings', 'content-control' ),
+			[
+				'restrictions' => __( 'Restrictions', 'content-control' ),
+				'general'      => __( 'General', 'content-control' ),
+			]
+		);
+
 		// Admin Review Requests
 		Admin\Reviews::init();
 
