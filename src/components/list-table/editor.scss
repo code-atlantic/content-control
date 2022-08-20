@@ -1,0 +1,111 @@
+$border-options: solid #c3c4c7;
+
+.component-list-table {
+	width: 100%;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+	border-spacing: 0;
+
+	* {
+		word-wrap: break-word;
+	}
+
+	th,
+	td {
+		padding: 8px 10px;
+		color: #50575e;
+	}
+
+	td {
+		vertical-align: top;
+		font-size: 13px;
+		line-height: 1.5em;
+	}
+
+	th,
+	thead td,
+	tfoot td {
+		text-align: left;
+		font-size: 14px;
+	}
+
+	tbody tr {
+		&:last-child,
+		&:last-child {
+			th,
+			td {
+				border-bottom: none !important;
+				box-shadow: none;
+			}
+		}
+	}
+
+	thead,
+	tfoot {
+		th,
+		td {
+			border-top: 1px solid #c3c4c7;
+			border-bottom: none;
+			line-height: 1.4em;
+			color: #2c3338;
+			font-weight: 400;
+
+
+			thead & {
+				border-bottom: 1px solid #c3c4c7;
+			}
+
+			tfoot & {
+				border-top: 1px solid #c3c4c7;
+				border-bottom: none;
+			}
+
+			&.sortable {
+				padding: 0;
+			}
+
+			&.check-column {
+				vertical-align: middle;
+				width: 2.2em;
+			}
+		}
+	}
+
+	.check-column {
+		.components-base-control__field {
+			margin-bottom: 0;
+		}
+	}
+
+	a,
+	button.button,
+	button.is-link {
+		text-decoration: none;
+	}
+
+	th.sortable {
+		a,
+		button {
+			display: block;
+			width: 100%;
+			height: 36px;
+			overflow: hidden;
+			padding: 8px;
+			font-size: 14px;
+
+			span {
+				display: table-cell;
+				vertical-align: middle;
+			}
+
+			svg {
+				fill: black;
+			}
+		}
+	}
+
+	&.striped > tbody > :nth-child(odd) {
+		background-color: #f6f7f7;
+	}
+}
