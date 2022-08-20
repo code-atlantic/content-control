@@ -107,6 +107,8 @@ class Settings extends Controller {
 		wp_localize_script( $handle, 'contentControlSettingsPageVars',
 			[
 				'adminUrl'        => admin_url(),
+				'restUrl'         => rest_url(),
+				'restBase'        => 'content-control/v2',
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
 				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),
 			]
