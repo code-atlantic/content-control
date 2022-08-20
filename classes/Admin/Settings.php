@@ -101,13 +101,12 @@ class Settings extends Controller {
 		$handle = 'content-control-settings-page';
 		$meta   = $this->get_asset_meta();
 
-		wp_enqueue_script( $handle, plugin()->get_url( 'dist/settings-page.js' ), $meta['dependencies'], $meta['version'], true );
+		wp_enqueue_script( $handle, plugin()->get_url( 'dist/settings-page.js' ), array_merge( $meta['dependencies'], [ 'wp-api' ] ), $meta['version'], true );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/settings-page.css' ), [ 'wp-components' ], $meta['version'] );
 
 		wp_localize_script( $handle, 'contentControlSettingsPageVars',
 			[
 				'adminUrl'        => admin_url(),
-				'restUrl'         => rest_url(),
 				'restBase'        => 'content-control/v2',
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
 				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),
