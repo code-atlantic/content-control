@@ -3,6 +3,7 @@ const eslintConfig = {
 	extends: [ 'plugin:@code-atlantic/eslint-plugin/recommended' ],
 	globals: {
 		wp: 'readonly',
+		wpApiSettings: 'readonly',
 		contentControlBlockEditorVars: 'readonly',
 		contentControlSettingsPageVars: 'readonly',
 		window: 'readonly',

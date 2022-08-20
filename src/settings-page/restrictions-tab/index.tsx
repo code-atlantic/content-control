@@ -1,98 +1,118 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
-import TableView from '@components/table-view';
+import ListTable from '@components/list-table';
 import { Button, Icon } from '@wordpress/components';
 import { chevronUp } from '@wordpress/icons';
 
-const { restUrl, restBase } = contentControlSettingsPageVars;
+import { getData, sendData } from './api';
+
+type Restriction = { id: number; title: String; [ key: string ]: any };
 
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
-	const [ items, setItems ] = useState( [] );
+	const [ items, setItems ] = useState< Restriction[] >( [] );
 	const [ lastId, setLastId ] = useState( 0 );
 
 	const [ editRestriction, setEditRestriction ] = useState< number | null >(
 		null
 	);
 
+	const saveRestrictions = () => setStatus( 'saving' );
+
+	const trashRestriction = ( id: number ) => {
+		setItems( [ ...items.filter( ( item ) => item.id !== id ) ] );
+		saveRestrictions();
+	};
+
 	useEffect( () => {
-		// Generic fetch function to retrieve settings and variables on render.
-		async function fetchData(
-			route: string,
-			setData: ( data: any ) => void
-		) {
-			setStatus( 'fetching' );
+		getData(
+			'settings',
+			( { restrictions } ) =>
+				setItems(
+					restrictions
+						.sort( ( a: Restriction, b: Restriction ) => {
+							if (
+								undefined === a?.index &&
+								undefined === b?.index
+							) {
+								return 0;
+							}
 
-			// blockVisibilityRestUrl is provided by wp_add_inline_script.
-			const fetchUrl = `${ restUrl }${ restBase }/${ route }`; // eslint-disable-line
-			const response = await fetch( fetchUrl, { method: 'GET' } ); // eslint-disable-line
+							if ( a?.index > b?.index ) {
+								return 1;
+							} else if ( a?.index < b?.index ) {
+								-1;
+							}
 
-			if ( response.ok ) {
-				const data = await response.json();
-				setData( data );
-				setStatus( 'fetched' );
-			} else {
-				setStatus( 'error' );
-			}
-		}
-
-		fetchData( 'settings', ( { restrictions } ) =>
-			setItems(
-				restrictions
-					.sort( ( a, b ) => {
-						if (
-							undefined === a?.index &&
-							undefined === b?.index
-						) {
 							return 0;
-						}
+						} )
+						.map( ( item: Restriction, id: number ) => {
+							if ( item.id ) {
+								return item;
+							}
 
-						if ( a?.index > b?.index ) {
-							return 1;
-						} else if ( a?.index < b?.index ) {
-							-1;
-						}
-
-						return 0;
-					} )
-					.map( ( item, id ) => {
-						if ( item.id ) {
-							return item;
-						}
-
-						return {
-							...item,
-							id,
-						};
-					} )
-			)
+							return {
+								...item,
+								id,
+							};
+						} )
+				),
+			setStatus
 		);
 	}, [] );
 
-	console.log( items );
+	useEffect( () => {
+		if ( 'saving' === status ) {
+			sendData( 'settings', { restrictions: items }, () => {
+				setStatus( 'success' );
+			} );
+		}
+
+		if ( 'success' === status ) {
+			setTimeout( () => {
+				setStatus( 'idle' );
+			}, 3000 );
+		}
+	}, [ status ] );
 
 	return (
 		<>
-			<TableView
+			<ListTable
 				items={ items }
 				columns={ {
 					title: __( 'Title', 'content-control' ),
 					who: __( 'Who', 'content-control' ),
 				} }
 				sortableColumns={ [ 'title', 'who' ] }
-				renderColumn={ ( col, item ) => {
+				renderCell={ ( col, item ) => {
 					switch ( col ) {
 						case 'title':
 							return (
-								<Button
-									variant="link"
-									onClick={ () =>
-										setEditRestriction( item.id )
-									}
-								>
-									{ item[ col ] }
-								</Button>
+								<>
+									<Button
+										variant="link"
+										onClick={ () =>
+											setEditRestriction( item.id )
+										}
+									>
+										{ item[ col ] }
+									</Button>
+
+									<div className="item-actions">
+										<Button onClick={ () => {} }>
+											{ __( 'Edit', 'content-control' ) }
+										</Button>
+										<Button
+											onClick={ () => {
+												confirm( 'Are you sure?' ) &&
+													trashRestriction( item.id );
+											} }
+										>
+											{ __( 'Trash', 'content-control' ) }
+										</Button>
+									</div>
+								</>
 							);
 						default:
 							return item[ col ];

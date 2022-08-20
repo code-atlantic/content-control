@@ -16,7 +16,7 @@ type Props = {
 	columns: {
 		[ key: string ]: React.ReactNode | ( () => React.ReactNode );
 	};
-	renderColumn: (
+	renderCell: (
 		col: string,
 		item: Item
 	) => React.ReactNode | string | number;
@@ -48,7 +48,7 @@ const ListTable = ( {
 	columns,
 	sortableColumns = [],
 	idCol = 'id',
-	renderColumn: renderCell = ( col, item ) => item[ col ],
+	renderCell = ( col, item ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
 	config = {
 		showBulkSelect: true,
