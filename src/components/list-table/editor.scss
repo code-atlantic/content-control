@@ -79,15 +79,6 @@ $border-options: solid #c3c4c7;
 			color: #2c3338;
 			font-weight: 400;
 
-			thead & {
-				border-bottom: 1px solid #c3c4c7;
-			}
-
-			tfoot & {
-				border-top: 1px solid #c3c4c7;
-				border-bottom: none;
-			}
-
 			&.sortable {
 				padding: 0;
 			}
@@ -97,6 +88,17 @@ $border-options: solid #c3c4c7;
 				width: 2.2em;
 			}
 		}
+	}
+
+	thead th,
+	thead td {
+		border-bottom: 1px solid #c3c4c7;
+	}
+
+	tfoot th,
+	tfoot td {
+		border-top: 1px solid #c3c4c7;
+		border-bottom: none;
 	}
 
 	.check-column {
