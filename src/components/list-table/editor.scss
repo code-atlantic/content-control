@@ -31,6 +31,34 @@ $border-options: solid #c3c4c7;
 	}
 
 	tbody tr {
+		.item-actions {
+			position: relative;
+			left: -9999px;
+
+			display: flex;
+			gap: 10px;
+
+			.components-button.is-link {
+				&.is-destructive {
+					color: #cc1818;
+					&:focus:not(:disabled) {
+						color: #cc1818;
+					}
+					&:hover {
+						color: #710d0d;
+						border: none;
+						box-shadow: none !important;
+					}
+				}
+			}
+		}
+
+		&:hover .item-actions,
+		&:focus .item-actions,
+		&:focus-within .item-actions {
+			left: 0;
+		}
+
 		&:last-child,
 		&:last-child {
 			th,
@@ -50,7 +78,6 @@ $border-options: solid #c3c4c7;
 			line-height: 1.4em;
 			color: #2c3338;
 			font-weight: 400;
-
 
 			thead & {
 				border-bottom: 1px solid #c3c4c7;

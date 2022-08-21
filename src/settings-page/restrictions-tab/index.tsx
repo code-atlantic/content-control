@@ -2,6 +2,11 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
 import ListTable, { Item as TableItem } from '@components/list-table';
+import {
+	Button,
+	Icon,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 
 import { getData, sendData } from './api';
 
@@ -14,10 +19,10 @@ const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
 	const [ items, setItems ] = useState< Restriction[] >( [] );
 	const [ lastId, setLastId ] = useState( 0 );
-
-	const [ editRestriction, setEditRestriction ] = useState< number | null >(
-		null
-	);
+	const [ itemToDelete, setItemToDelete ] = useState<
+		Restriction | TableItem | null
+	>( null );
+	const [ editItemId, setEditItemId ] = useState< number | null >( null );
 
 	const saveRestrictions = () => setStatus( 'saving' );
 
@@ -77,6 +82,28 @@ const RestrictionsTab = () => {
 		}
 	}, [ status ] );
 
+	/** Confirmation dialogue component. */
+	const ConfirmAndDelete = () =>
+		itemToDelete ? (
+			<ConfirmDialog
+				onCancel={ () => setItemToDelete( null ) }
+				onConfirm={ () => {
+					trashRestriction( itemToDelete.id );
+					setItemToDelete( null );
+				} }
+			>
+				<p>
+					{ __(
+						'Are you sure you want to delete this set?',
+						'content-control'
+					) }
+				</p>
+				<p>{ itemToDelete.title }</p>
+			</ConfirmDialog>
+		) : (
+			<></>
+		);
+
 	return (
 		<>
 			<ListTable
@@ -94,20 +121,25 @@ const RestrictionsTab = () => {
 									<Button
 										variant="link"
 										onClick={ () =>
-											setEditRestriction( item.id )
+											setEditItemId( item.id )
 										}
 									>
 										{ item[ col ] }
 									</Button>
 
 									<div className="item-actions">
-										<Button onClick={ () => {} }>
+										<Button
+											variant="link"
+											onClick={ () => {} }
+										>
 											{ __( 'Edit', 'content-control' ) }
 										</Button>
 										<Button
+											variant="link"
+											isDestructive={ true }
+											isBusy={ !! itemToDelete }
 											onClick={ () => {
-												confirm( 'Are you sure?' ) &&
-													trashRestriction( item.id );
+												setItemToDelete( item );
 											} }
 										>
 											{ __( 'Trash', 'content-control' ) }
@@ -122,6 +154,7 @@ const RestrictionsTab = () => {
 				// className="wp-list-table widefat fixed striped"
 				className="striped"
 			/>
+			<ConfirmAndDelete />
 		</>
 	);
 };
