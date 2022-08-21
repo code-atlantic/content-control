@@ -3,7 +3,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-import { TabPanel } from '@wordpress/components';
+import { TabPanel, Popover } from '@wordpress/components';
 
 import RestrictionsTab from './restrictions-tab';
 import SettingsTab from './settings-tab';
@@ -69,6 +69,7 @@ const App = () => {
 			>
 				{ ( tab ) => tab.comp ?? tab.title }
 			</TabPanel>
+			<Popover.Slot />
 		</>
 	);
 };
