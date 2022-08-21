@@ -1,19 +1,20 @@
 import { __ } from '@wordpress/i18n';
+import { blockMeta } from '@wordpress/icons';
 import { useState, useEffect } from '@wordpress/element';
-
-import ListTable, { Item as TableItem } from '@components/list-table';
 import {
 	Button,
 	Icon,
+	Modal,
+	Flex,
+	FlexItem,
 	__experimentalConfirmDialog as ConfirmDialog,
+	TextControl,
+	Notice,
 } from '@wordpress/components';
 
 import { getData, sendData } from './api';
-
-interface Restriction extends TableItem {
-	title: string;
-	[ key: string ]: any;
-}
+import Edit from './edit';
+import List from './list';
 
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
@@ -43,35 +44,34 @@ const RestrictionsTab = () => {
 	useEffect( () => {
 		getData(
 			'settings',
-			( { restrictions } ) =>
+			( { restrictions }: { restrictions: Restriction[] } ) =>
 				setRestrictions(
 					restrictions
-						.sort( ( a: Restriction, b: Restriction ) => {
-							if (
-								undefined === a?.index &&
-								undefined === b?.index
-							) {
-								return 0;
-							}
+					// .sort( ( a, b ) => {
+					// 	if (
+					// 		undefined === a?.index &&
+					// 		undefined === b?.index
+					// 	) {
+					// 		return 0;
+					// 	}
 
-							if ( a?.index > b?.index ) {
-								return 1;
-							} else if ( a?.index < b?.index ) {
-								-1;
-							}
+					// 	if ( a?.index > b?.index ) {
+					// 		return 1;
+					// 	} else if ( a?.index < b?.index ) {
+					// 		-1;
+					// 	}
 
-							return 0;
-						} )
-						.map( ( item: Restriction, id: number ) => {
-							if ( item.id ) {
-								return item;
-							}
-
-							return {
-								...item,
-								id,
-							};
-						} )
+					// 	return 0;
+					// } )
+					// add id from array index if not set.
+					// .map( ( r: Restriction, id: number ) =>
+					// 	r.id
+					// 		? r
+					// 		: {
+					// 				...r,
+					// 				id,
+					// 		  }
+					// )
 				),
 			setStatus
 		);
@@ -117,60 +117,133 @@ const RestrictionsTab = () => {
 			</ConfirmDialog>
 		);
 	};
+
+	const EditRestriction = () =>
+		currentSet && (
+			<Modal
+				title={ __( 'Restriction Editor', 'content-control' ) }
+				onRequestClose={ () => updateCurrentSet( null ) }
+				shouldCloseOnClickOutside={ false }
+				style={ { width: '760px' } }
+			>
+				<Flex
+					style={ {
+						marginBottom: 20,
+					} }
+				>
+					<FlexItem
+						style={ {
+							flexGrow: 1,
+							maxWidth: 60,
+						} }
+					>
+						<div
+							style={ {
+								backgroundColor: '#e6f2f9',
+								borderRadius: 100,
+								width: 50,
+								height: 50,
+								padding: 10,
+								paddingLeft: 7,
+								paddingTop: 11,
+								verticalAlign: 'middle',
+								textAlign: 'center',
+							} }
+						>
+							<Icon icon={ blockMeta } size={ 30 } />
+						</div>
+					</FlexItem>
+
+					<FlexItem
+						style={ {
+							flexBasis: 'auto',
+							flexGrow: 3,
+						} }
+					>
+						<h3
+							style={ {
+								margin: 0,
+								marginBottom: 5,
+							} }
+						>
+							{ __( 'Conditional Logic', 'content-control ' ) }
+						</h3>
+						<p
+							style={ {
+								margin: 0,
+							} }
+						>
+							{ __(
+								'Use the power of conditional logic to control when a block is visible.',
+								'content-control'
+							) }
+						</p>
+					</FlexItem>
+				</Flex>
+
+				<TextControl
+					label={ __( 'Condition set label', 'content-control' ) }
+					hideLabelFromVision={ true }
+					placeholder={ __(
+						'Condition set label',
+						'content-control'
+					) }
+					value={ currentSet.title }
+					onChange={ ( label ) =>
+						updateCurrentSet( {
+							...currentSet,
+							label,
+						} )
+					}
+				/>
+
+				{ currentSet.title.length <= 0 && (
+					<Notice status="warning" isDismissible={ false }>
+						{ __(
+							'Enter a label for this set.',
+							'content-control'
+						) }
+					</Notice>
+				) }
+
+				<Flex justify="right">
+					<FlexItem>
+						<Button onClick={ () => updateCurrentSet( null ) }>
+							{ __( 'Cancel', 'content-control' ) }
+						</Button>
+					</FlexItem>
+					<FlexItem>
+						<Button
+							disabled={ ! isSetValid() }
+							variant="primary"
+							onClick={ () => {
+								if ( ! isSetValid() ) {
+									return;
+								}
+								updateSet( currentSet );
+								updateCurrentSet( null );
+							} }
+						>
+							{ __( 'Save', 'content-control' ) }
+						</Button>
+					</FlexItem>
+				</Flex>
+			</Modal>
 		);
 
 	return (
 		<>
-			<ListTable< Restriction >
-				items={ restrictions }
-				columns={ {
-					title: __( 'Title', 'content-control' ),
-					who: __( 'Who', 'content-control' ),
-				} }
-				sortableColumns={ [ 'title', 'who' ] }
-				renderCell={ ( col, restriction ) => {
-					switch ( col ) {
-						case 'title':
-							return (
-								<>
-									<Button
-										variant="link"
-										onClick={ () =>
-											updateCurrentSet( restriction )
-										}
-									>
-										{ restriction[ col ] }
-									</Button>
-
-									<div className="item-actions">
-										<Button
-											variant="link"
-											onClick={ () =>
-												updateCurrentSet( restriction )
-											}
-										>
-											{ __( 'Edit', 'content-control' ) }
-										</Button>
-										<Button
-											variant="link"
-											isDestructive={ true }
-											isBusy={ !! idToDelete }
-											onClick={ () => {
-												setIdToDelete( restriction.id );
-											} }
-										>
-											{ __( 'Trash', 'content-control' ) }
-										</Button>
-									</div>
-								</>
-							);
-						default:
-							return restriction[ col ];
-					}
-				} }
-				// className="wp-list-table widefat fixed striped"
-				className="striped"
+			<List
+				restrictions={ restrictions }
+				editSet={ ( restriction ) => updateCurrentSet( restriction ) }
+				deleteSet={ ( id ) => setIdToDelete( id ) }
+				isDeleting={ !! idToDelete }
 			/>
+
+			{ currentSet && (
+				<Edit values={ currentSet } onChange={ updateCurrentSet } />
+			) }
+
 			<ConfirmAndDelete />
 		</>
 	);
