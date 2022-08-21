@@ -33,6 +33,13 @@ const RestrictionsTab = () => {
 		saveRestrictions();
 	};
 
+	const isSetValid = () => {
+		return (
+			currentSet &&
+			[ currentSet.title.length > 0 ].indexOf( false ) === -1
+		);
+	};
+
 	useEffect( () => {
 		getData(
 			'settings',
