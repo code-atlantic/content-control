@@ -9,6 +9,8 @@ import { getData, sendData } from './api';
 import Edit from './edit';
 import List from './list';
 
+import './editor.scss';
+
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );

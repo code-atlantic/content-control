@@ -1,0 +1,16 @@
+.editor-tabs {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+
+    .components-tab-panel__tabs {
+        width: fit-content;
+        padding-right: 10px;
+        text-align: left;
+        flex-grow: 1;
+    }
+
+    .components-tab-panel__tab-content {
+        flex-grow: 6;
+    }
+}
