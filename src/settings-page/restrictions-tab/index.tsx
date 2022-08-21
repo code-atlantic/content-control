@@ -21,8 +21,11 @@ const RestrictionsTab = () => {
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
 	const [ lastId, setLastId ] = useState( 0 );
 	const [ idToDelete, setIdToDelete ] = useState< number | null >( null );
-	const [ currentSet, updateCurrentSet ] = useState< Restriction | null >(
-		null
+
+	// Manage current set id for the editor via the URL.
+	const [ idToEdit = null, setIdToEdit ] = useQueryParam(
+		'edit',
+		NumberParam
 	);
 
 	const saveRestrictions = () => setStatus( 'saving' );
