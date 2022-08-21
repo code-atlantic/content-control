@@ -6,17 +6,7 @@ import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
 import './editor.scss';
 
-export interface ItemBase {
-	id: number;
-	[ key: string ]: any;
-}
-
-export interface Item extends ItemBase {
-	id: number;
-	[ key: string ]: any;
-}
-
-type Props< T extends ItemBase > = {
+type Props< T extends TableItemBase > = {
 	items: T[];
 	columns: {
 		[ key: string ]: React.ReactNode | ( () => React.ReactNode );
@@ -45,7 +35,7 @@ const TableCell = ( { heading = false, children, ...props }: CellProps ) => {
 
 // TODO Relabel `items` to `rows` or `data` throughtout to be in line with actual tabular data structures.
 
-const ListTable = < T extends ItemBase >( {
+const ListTable = < T extends TableItemBase >( {
 	items,
 	columns,
 	sortableColumns = [],

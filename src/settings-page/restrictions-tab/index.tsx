@@ -136,7 +136,7 @@ const RestrictionsTab = () => {
 									<Button
 										variant="link"
 										onClick={ () =>
-											setEditItemId( item.id )
+											updateCurrentSet( restriction )
 										}
 									>
 										{ restriction[ col ] }

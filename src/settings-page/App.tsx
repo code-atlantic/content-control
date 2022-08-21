@@ -9,15 +9,6 @@ import RestrictionsTab from './restrictions-tab';
 import SettingsTab from './settings-tab';
 import UpgradeTab from './upgrade-tab';
 
-type TabComponent = {
-	name: string;
-	title: string;
-	className: string;
-	pageTitle: string;
-	heading: string;
-	comp: React.ReactElement;
-};
-
 const App = () => {
 	const [ view = 'restrictions', changeView ] = useQueryParam(
 		'view',
@@ -27,24 +18,24 @@ const App = () => {
 	const views: TabComponent[] = applyFilters( 'contentControl.adminTabs', [
 		{
 			name: 'restrictions',
-			title: __( 'Restrictions', 'slug' ),
+			title: __( 'Restrictions', 'content-control' ),
 			className: 'restrictions',
-			pageTitle: __( 'Content Control - Global Restrictions', 'slug' ),
-			heading: __( 'Content Control - Global Restrictions', 'slug' ),
+			pageTitle: __( 'Content Control - Global Restrictions', 'content-control' ),
+			heading: __( 'Content Control - Global Restrictions', 'content-control' ),
 			comp: <RestrictionsTab />,
 		},
 		{
 			name: 'settings',
-			title: __( 'Settings', 'slug' ),
-			pageTitle: __( 'Content Control - Plugin Settings', 'slug' ),
-			heading: __( 'Plugin Settings', 'slug' ),
+			title: __( 'Settings', 'content-control' ),
+			pageTitle: __( 'Content Control - Plugin Settings', 'content-control' ),
+			heading: __( 'Plugin Settings', 'content-control' ),
 			comp: <SettingsTab />,
 		},
 		{
 			name: 'upgrade',
-			title: __( 'Upgrade to Pro', 'slug' ),
-			pageTitle: __( 'Content Control - Upgrade to Pro', 'slug' ),
-			heading: __( 'Content Control - Upgrade to Pro', 'slug' ),
+			title: __( 'Upgrade to Pro', 'content-control' ),
+			pageTitle: __( 'Content Control - Upgrade to Pro', 'content-control' ),
+			heading: __( 'Content Control - Upgrade to Pro', 'content-control' ),
 			comp: <UpgradeTab />,
 		},
 	] ) as TabComponent[];
