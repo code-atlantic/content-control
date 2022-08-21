@@ -6,20 +6,22 @@ import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
 import './editor.scss';
 
-export interface Item {
+export interface ItemBase {
 	id: number;
 	[ key: string ]: any;
 }
 
-type Props = {
-	items: Item[];
+export interface Item extends ItemBase {
+	id: number;
+	[ key: string ]: any;
+}
+
+type Props< T extends ItemBase > = {
+	items: T[];
 	columns: {
 		[ key: string ]: React.ReactNode | ( () => React.ReactNode );
 	};
-	renderCell: (
-		col: string,
-		item: Item
-	) => React.ReactNode | string | number;
+	renderCell: ( col: string, item: T ) => React.ReactNode | string | number;
 	sortableColumns: string[];
 	idCol?: string;
 	noItemsText?: string;
@@ -43,7 +45,7 @@ const TableCell = ( { heading = false, children, ...props }: CellProps ) => {
 	);
 };
 
-const ListTable = ( {
+const ListTable = < T extends ItemBase >( {
 	items,
 	columns,
 	sortableColumns = [],
@@ -54,7 +56,7 @@ const ListTable = ( {
 		showBulkSelect: true,
 	},
 	className,
-}: Props ) => {
+}: Props< T > ) => {
 	const { showBulkSelect } = config;
 
 	const cols = { [ idCol ]: columns[ idCol ] ?? '', ...columns };
