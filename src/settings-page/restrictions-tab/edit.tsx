@@ -1,12 +1,22 @@
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
-import { Modal, TabPanel } from '@wordpress/components';
+import {
+	Button,
+	Flex,
+	FlexItem,
+	Modal,
+	Notice,
+	TabPanel,
+	TextControl,
+} from '@wordpress/components';
+import { useState, useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 type Props = {
 	values: Restriction;
-	onChange: ( values: Restriction ) => void;
+	onSave: ( values: Restriction ) => void;
+	onClose: () => void;
 };
 
 const Edit = ( { values: editorValues, onSave, onClose }: Props ) => {
