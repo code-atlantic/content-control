@@ -17,17 +17,19 @@ interface Restriction extends TableItem {
 
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
-	const [ items, setItems ] = useState< Restriction[] >( [] );
+	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
 	const [ lastId, setLastId ] = useState( 0 );
-	const [ itemToDelete, setItemToDelete ] = useState<
-		Restriction | TableItem | null
-	>( null );
-	const [ editItemId, setEditItemId ] = useState< number | null >( null );
+	const [ idToDelete, setIdToDelete ] = useState< number | null >( null );
+	const [ currentSet, updateCurrentSet ] = useState< Restriction | null >(
+		null
+	);
 
 	const saveRestrictions = () => setStatus( 'saving' );
 
 	const trashRestriction = ( id: number ) => {
-		setItems( [ ...items.filter( ( item ) => item.id !== id ) ] );
+		setRestrictions( [
+			...restrictions.filter( ( restriction ) => restriction.id !== id ),
+		] );
 		saveRestrictions();
 	};
 
@@ -35,7 +37,7 @@ const RestrictionsTab = () => {
 		getData(
 			'settings',
 			( { restrictions } ) =>
-				setItems(
+				setRestrictions(
 					restrictions
 						.sort( ( a: Restriction, b: Restriction ) => {
 							if (
@@ -70,7 +72,7 @@ const RestrictionsTab = () => {
 
 	useEffect( () => {
 		if ( 'saving' === status ) {
-			sendData( 'settings', { restrictions: items }, () => {
+			sendData( 'settings', { restrictions }, () => {
 				setStatus( 'success' );
 			} );
 		}
@@ -83,13 +85,19 @@ const RestrictionsTab = () => {
 	}, [ status ] );
 
 	/** Confirmation dialogue component. */
-	const ConfirmAndDelete = () =>
-		itemToDelete ? (
+	const ConfirmAndDelete = () => {
+		const restriction = restrictions.find( ( r ) => r.id === idToDelete );
+
+		if ( idToDelete === null || ! restriction ) {
+			return <></>;
+		}
+
+		return (
 			<ConfirmDialog
-				onCancel={ () => setItemToDelete( null ) }
+				onCancel={ () => setIdToDelete( null ) }
 				onConfirm={ () => {
-					trashRestriction( itemToDelete.id );
-					setItemToDelete( null );
+					trashRestriction( idToDelete );
+					setIdToDelete( null );
 				} }
 			>
 				<p>
@@ -98,22 +106,22 @@ const RestrictionsTab = () => {
 						'content-control'
 					) }
 				</p>
-				<p>{ itemToDelete.title }</p>
+				<p>{ restriction.title }</p>
 			</ConfirmDialog>
-		) : (
-			<></>
+		);
+	};
 		);
 
 	return (
 		<>
-			<ListTable
-				items={ items }
+			<ListTable< Restriction >
+				items={ restrictions }
 				columns={ {
 					title: __( 'Title', 'content-control' ),
 					who: __( 'Who', 'content-control' ),
 				} }
 				sortableColumns={ [ 'title', 'who' ] }
-				renderCell={ ( col, item ) => {
+				renderCell={ ( col, restriction ) => {
 					switch ( col ) {
 						case 'title':
 							return (
@@ -124,22 +132,24 @@ const RestrictionsTab = () => {
 											setEditItemId( item.id )
 										}
 									>
-										{ item[ col ] }
+										{ restriction[ col ] }
 									</Button>
 
 									<div className="item-actions">
 										<Button
 											variant="link"
-											onClick={ () => {} }
+											onClick={ () =>
+												updateCurrentSet( restriction )
+											}
 										>
 											{ __( 'Edit', 'content-control' ) }
 										</Button>
 										<Button
 											variant="link"
 											isDestructive={ true }
-											isBusy={ !! itemToDelete }
+											isBusy={ !! idToDelete }
 											onClick={ () => {
-												setItemToDelete( item );
+												setIdToDelete( restriction.id );
 											} }
 										>
 											{ __( 'Trash', 'content-control' ) }
@@ -148,7 +158,7 @@ const RestrictionsTab = () => {
 								</>
 							);
 						default:
-							return item[ col ];
+							return restriction[ col ];
 					}
 				} }
 				// className="wp-list-table widefat fixed striped"
