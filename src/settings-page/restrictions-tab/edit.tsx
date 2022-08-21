@@ -34,7 +34,37 @@ const Edit = ( { values: editorValues, onSave, onClose }: Props ) => {
 			{
 				name: 'general',
 				title: __( 'General', 'content-control' ),
-				comp: () => <></>,
+				comp: () => (
+					<div>
+						<TextControl
+							label={ __(
+								'Restriction label',
+								'content-control'
+							) }
+							hideLabelFromVision={ true }
+							placeholder={ __(
+								'Condition set label',
+								'content-control'
+							) }
+							value={ values.title }
+							onChange={ ( title ) =>
+								onChange( {
+									...values,
+									title,
+								} )
+							}
+						/>
+
+						{ values.title.length <= 0 && (
+							<Notice status="warning" isDismissible={ false }>
+								{ __(
+									'Enter a label for this set.',
+									'content-control'
+								) }
+							</Notice>
+						) }
+					</div>
+				),
 			},
 			{
 				name: 'protection',
@@ -61,8 +91,13 @@ const Edit = ( { values: editorValues, onSave, onClose }: Props ) => {
 				initialTabName={ tab !== null ? tab : undefined }
 				onSelect={ ( tabName ) => changeTab( tabName ) }
 				tabs={ tabs }
+				className="editor-tabs"
 			>
-				{ ( tab ) => tab.comp ?? tab.title }
+				{ ( tab ) =>
+					typeof tab.comp === 'undefined'
+						? tab.title
+						: tab.comp( tab )
+				}
 			</TabPanel>
 
 			<Flex justify="right">
