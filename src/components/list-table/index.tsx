@@ -25,9 +25,7 @@ type Props< T extends ItemBase > = {
 	sortableColumns: string[];
 	idCol?: string;
 	noItemsText?: string;
-	config?: {
-		showBulkSelect: boolean;
-	};
+	showBulkSelect: boolean;
 	className?: Argument;
 };
 
@@ -45,6 +43,8 @@ const TableCell = ( { heading = false, children, ...props }: CellProps ) => {
 	);
 };
 
+// TODO Relabel `items` to `rows` or `data` throughtout to be in line with actual tabular data structures.
+
 const ListTable = < T extends ItemBase >( {
 	items,
 	columns,
@@ -52,13 +52,9 @@ const ListTable = < T extends ItemBase >( {
 	idCol = 'id',
 	renderCell = ( col, item ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
-	config = {
-		showBulkSelect: true,
-	},
+	showBulkSelect = true,
 	className,
 }: Props< T > ) => {
-	const { showBulkSelect } = config;
-
 	const cols = { [ idCol ]: columns[ idCol ] ?? '', ...columns };
 	const colCount = Object.keys( cols ).length;
 
