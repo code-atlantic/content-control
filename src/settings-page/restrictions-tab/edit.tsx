@@ -9,11 +9,13 @@ type Props = {
 	onChange: ( values: Restriction ) => void;
 };
 
-const Edit = ( { values = {}, onChange = () => {} }: Props ) => {
-	const [ tab = 'restrictions', changeTab ] = useQueryParam(
-		'tab',
-		StringParam
-	);
+const Edit = ( { values: editorValues, onSave, onClose }: Props ) => {
+
+	// Handles closing the editor and removing url params.
+	const closeEditor = () => {
+		changeTab( undefined );
+		onClose();
+	};
 
 	const tabs: TabComponent[] = applyFilters(
 		'contentControl.restrictionEditorTabs',
@@ -39,7 +41,7 @@ const Edit = ( { values = {}, onChange = () => {} }: Props ) => {
 	return (
 		<Modal
 			title={ __( 'Restriction Editor', 'content-control' ) }
-			onRequestClose={ () => onChange( null ) }
+			onRequestClose={ () => closeEditor() }
 			shouldCloseOnClickOutside={ false }
 			style={ { width: '760px' } }
 		>
@@ -51,6 +53,29 @@ const Edit = ( { values = {}, onChange = () => {} }: Props ) => {
 			>
 				{ ( tab ) => tab.comp ?? tab.title }
 			</TabPanel>
+
+			<Flex justify="right">
+				<FlexItem>
+					<Button onClick={ () => closeEditor() }>
+						{ __( 'Cancel', 'content-control' ) }
+					</Button>
+				</FlexItem>
+				<FlexItem>
+					<Button
+						disabled={ ! isSetValid() }
+						variant="primary"
+						onClick={ () => {
+							if ( ! isSetValid() ) {
+								return;
+							}
+							onSave( values );
+							closeEditor();
+						} }
+					>
+						{ __( 'Save', 'content-control' ) }
+					</Button>
+				</FlexItem>
+			</Flex>
 		</Modal>
 	);
 };
