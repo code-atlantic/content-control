@@ -1,9 +1,11 @@
 import { NumberParam, useQueryParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
-import { blockMeta } from '@wordpress/icons';
 import { useState, useEffect } from '@wordpress/element';
-import { __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
+import {
+	Button,
+	__experimentalConfirmDialog as ConfirmDialog,
+} from '@wordpress/components';
 
 import { getData, sendData } from './api';
 import Edit from './edit';
@@ -14,6 +16,12 @@ import './editor.scss';
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
+	const [ nextId, setNextId ] = useState< number >(
+		restrictions.reduce(
+			( maxId, r ) => ( r.id > maxId ? ( maxId = r.id + 1 ) : maxId ),
+			1
+		)
+	);
 	const [ idToDelete, setIdToDelete ] = useState< number | null >( null );
 
 	// Manage current set id for the editor via the URL.
@@ -23,7 +31,10 @@ const RestrictionsTab = () => {
 	);
 
 	/** Trigger async saving via effect by setting status to saving. */
-	const saveRestrictions = () => setStatus( 'saving' );
+	const saveRestrictions = ( newRestrictions: Restriction[] ) => {
+		setRestrictions( newRestrictions );
+		setStatus( 'saving' );
+	};
 
 	// This effect hanldes status changes and async saving. */
 	useEffect( () => {
@@ -44,12 +55,10 @@ const RestrictionsTab = () => {
 	const getSet = ( id: number ) => restrictions.find( ( r ) => r.id === id );
 
 	/** Trash a restriction set by id. */
-	const trashRestriction = ( id: number ) => {
-		setRestrictions( [
+	const trashRestriction = ( id: number ) =>
+		saveRestrictions( [
 			...restrictions.filter( ( restriction ) => restriction.id !== id ),
 		] );
-		saveRestrictions();
-	};
 
 	useEffect( () => {
 		getData(
@@ -87,10 +96,19 @@ const RestrictionsTab = () => {
 		);
 	}, [] );
 
-	const setToEdit = null !== idToEdit ? getSet( idToEdit ) : null;
+	const setToEdit =
+		null !== idToEdit
+			? idToEdit >= 0
+				? getSet( idToEdit )
+				: { id: nextId, title: '' }
+			: null;
 
 	return (
 		<>
+			<Button onClick={ () => setIdToEdit( -1 ) }>
+				{ __( 'Add New', 'content-control' ) }
+			</Button>
+
 			<List
 				restrictions={ restrictions }
 				editSet={ ( restriction ) => setIdToEdit( restriction.id ) }
@@ -101,13 +119,23 @@ const RestrictionsTab = () => {
 			{ setToEdit && (
 				<Edit
 					values={ setToEdit }
-					onSave={ ( newValues ) =>
-						setRestrictions( [
+					onSave={ ( newValues ) => {
+						const newSet = newValues?.id !== undefined;
+						const newRestrictions = [
 							...restrictions.map( ( r ) =>
-								r.id === idToEdit ? newValues : r
+								newSet || r.id !== idToEdit ? r : newValues
 							),
-						] )
-					}
+						];
+
+						if ( newSet ) {
+							newRestrictions.push( {
+								...newValues,
+							} );
+							setNextId( nextId + 1 );
+						}
+
+						saveRestrictions( newRestrictions );
+					} }
 					onClose={ () => setIdToEdit( null ) }
 				/>
 			) }
