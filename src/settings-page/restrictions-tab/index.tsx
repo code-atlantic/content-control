@@ -11,7 +11,7 @@ import {
 import { getData, sendData } from './api';
 
 interface Restriction extends TableItem {
-	title: String;
+	title: string;
 	[ key: string ]: any;
 }
 
