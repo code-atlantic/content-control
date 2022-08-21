@@ -1,13 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
-import ListTable from '@components/list-table';
-import { Button, Icon } from '@wordpress/components';
-import { chevronUp } from '@wordpress/icons';
+import ListTable, { Item as TableItem } from '@components/list-table';
 
 import { getData, sendData } from './api';
 
-type Restriction = { id: number; title: String; [ key: string ]: any };
+interface Restriction extends TableItem {
+	title: String;
+	[ key: string ]: any;
+}
 
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );

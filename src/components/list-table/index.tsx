@@ -6,10 +6,10 @@ import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
 import './editor.scss';
 
-type Item = {
+export interface Item {
 	id: number;
 	[ key: string ]: any;
-};
+}
 
 type Props = {
 	items: Item[];
