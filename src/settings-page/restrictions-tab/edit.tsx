@@ -10,6 +10,17 @@ type Props = {
 };
 
 const Edit = ( { values: editorValues, onSave, onClose }: Props ) => {
+	const [ tab = 'general', changeTab ] = useQueryParam( 'tab', StringParam );
+
+	const [ values, onChange ] = useState< Props[ 'values' ] >( editorValues );
+
+	// Checks of the set values are valid.
+	const isSetValid = () => {
+		return (
+			values &&
+			[ values.title.length > 0 ].indexOf( false ) === -1
+		);
+	};
 
 	// Handles closing the editor and removing url params.
 	const closeEditor = () => {
