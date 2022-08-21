@@ -25,7 +25,7 @@ type Props< T extends ItemBase > = {
 	sortableColumns: string[];
 	idCol?: string;
 	noItemsText?: string;
-	showBulkSelect: boolean;
+	showBulkSelect?: boolean;
 	className?: Argument;
 };
 
