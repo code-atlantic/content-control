@@ -12,8 +12,11 @@ import type { EditTabProps } from '.';
 
 const { userRoles } = contentControlSettingsPageVars;
 
-const GeneralTab = ( { values, onChange, updateValue }: Props ) => {
-	const { title = '', who = 'logged_in', roles = [] } = values;
+	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.
+	// ** It may be that if we have dedicated migration routine this can be removed.
+	const cleanedRoles = Array.isArray( values.roles )
+		? values.roles
+		: Object.entries( values.roles ).map( ( [ value ] ) => value );
 
 	return (
 		<>
