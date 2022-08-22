@@ -12,7 +12,13 @@ import ContentTab from './content';
 type EditProps = ContentControl.Settings.Restrictions.EditProps;
 type EditTabProps = ContentControl.Settings.Restrictions.EditTabProps;
 
-const Edit = ( { values: editorValues, onSave, onClose }: EditProps ) => {
+import { defaultValues } from '..';
+
+const Edit = ( {
+	values: editorValues = defaultValues,
+	onSave,
+	onClose,
+}: EditProps ) => {
 	const [ tab = 'general', changeTab ] = useQueryParam( 'tab', StringParam );
 
 	const [ values, onChange ] =
