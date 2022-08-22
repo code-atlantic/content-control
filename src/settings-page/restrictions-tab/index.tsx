@@ -104,7 +104,7 @@ const RestrictionsTab = () => {
 			: null;
 
 	return (
-		<>
+		<div className="restriction-list">
 			<Button onClick={ () => setIdToEdit( -1 ) }>
 				{ __( 'Add New', 'content-control' ) }
 			</Button>
@@ -157,7 +157,7 @@ const RestrictionsTab = () => {
 					<p>{ getSet( idToDelete )?.title }</p>
 				</ConfirmDialog>
 			) }
-		</>
+		</div>
 	);
 };
 
