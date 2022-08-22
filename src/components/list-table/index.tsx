@@ -126,10 +126,11 @@ const ListTable = < T extends TableItemBase >( {
 									);
 								} }
 								checked={
+									selectedItems.length > 0 &&
 									selectedItems.length === items.length
 								}
 								indeterminate={
-									selectedItems.length &&
+									selectedItems.length > 0 &&
 									selectedItems.length < items.length
 								}
 							/>
