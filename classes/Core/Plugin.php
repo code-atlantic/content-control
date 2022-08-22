@@ -98,6 +98,7 @@ class Plugin {
 	 */
 	private function process_version_data_migration( $data ) {
 		$has_old_settings_data = get_option( 'jp_cc_settings', false );
+		$has_new_settings_data = get_option( 'content_control_settings', false );
 
 		if ( false !== $has_old_settings_data ) {
 			$old_data = [
