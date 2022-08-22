@@ -35,7 +35,7 @@ class FrontendTest extends WP_UnitTestCase {
 			true,
 		];
 
-		$frontend = new \ContentControl\Frontend();
+		$frontend = new \ContentControl\Frontend( [] );
 
 		foreach ( $test_attribute_sets as $i => $block ) {
 			$this->assertSame( $frontend->has_block_controls( $block ), $expected_results[ $i ] );
@@ -59,7 +59,7 @@ class FrontendTest extends WP_UnitTestCase {
 			],
 		];
 
-		$frontend = new \ContentControl\Frontend();
+		$frontend = new \ContentControl\Frontend( [] );
 
 		$controls = $frontend->get_block_controls( $test_block );
 
@@ -99,7 +99,7 @@ class FrontendTest extends WP_UnitTestCase {
 			],
 		];
 
-		$frontend = new \ContentControl\Frontend();
+		$frontend = new \ContentControl\Frontend( [] );
 
 		foreach ( $test_blocks_html as $i => $block_content ) {
 			$this->assertSame( $expected_blocks_html[ $i ], $frontend->render_block( $block_content, $test_block ) );
