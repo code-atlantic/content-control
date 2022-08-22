@@ -9,10 +9,21 @@ import GeneralTab from './general';
 import ProtectionTab from './protection';
 import ContentTab from './content';
 
-type EditProps = ContentControl.Settings.Restrictions.EditProps;
-type EditTabProps = ContentControl.Settings.Restrictions.EditTabProps;
-
 import { defaultValues } from '..';
+
+export type EditProps = {
+	values: Restriction;
+	onSave: ( values: Restriction ) => void;
+	onClose: () => void;
+};
+
+export type EditTabProps = EditProps & {
+	onChange: ( values: Restriction ) => void;
+	updateValue: < K extends keyof Restriction >(
+		key: K,
+		newValue: Restriction[ K ]
+	) => void;
+};
 
 const Edit = ( {
 	values: editorValues = defaultValues,

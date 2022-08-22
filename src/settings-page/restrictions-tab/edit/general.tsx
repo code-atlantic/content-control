@@ -8,7 +8,7 @@ import {
 } from '@wordpress/components';
 import { whoOptions } from '../options';
 
-type Props = ContentControl.Settings.Restrictions.EditTabProps;
+import type { EditTabProps } from '.';
 
 const { userRoles } = contentControlSettingsPageVars;
 
