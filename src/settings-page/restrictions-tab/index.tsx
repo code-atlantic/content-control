@@ -22,12 +22,25 @@ export const defaultValues: Restriction = {
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
-	const [ nextId, setNextId ] = useState< number >(
-		restrictions.reduce(
-			( maxId, r ) => ( r.id > maxId ? ( maxId = r.id + 1 ) : maxId ),
+
+	const nextIdRef = useRef< number >( 1 );
+
+	const updateNextIdRef = () => {
+		nextIdRef.current = restrictions.reduce(
+			( maxId, r ) => ( r.id > maxId ? ( maxId = r.id ) : maxId ),
 			1
-		)
 	);
+	};
+
+	useEffect( () => {
+		updateNextIdRef();
+	}, [ restrictions ] );
+
+	const nextId = () => {
+		nextIdRef.current += 1;
+		return nextIdRef.current;
+	};
+
 	const [ idToDelete, setIdToDelete ] = useState< number | null >( null );
 
 	// Manage current set id for the editor via the URL.
