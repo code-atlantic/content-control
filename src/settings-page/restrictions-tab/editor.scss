@@ -14,3 +14,27 @@
         flex-grow: 6;
     }
 }
+
+
+.restriction-list {
+    padding: 10px 0;
+
+    > * {
+        margin-bottom: 10px;
+    }
+}
+
+.who-options {
+    display: flex;
+    gap: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+
+    > * {
+
+    }
+}
