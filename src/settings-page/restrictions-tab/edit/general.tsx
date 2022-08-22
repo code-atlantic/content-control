@@ -14,6 +14,7 @@ import type { EditTabProps } from '.';
 
 const { userRoles } = contentControlSettingsPageVars;
 
+const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.
 	// ** It may be that if we have dedicated migration routine this can be removed.
 	const cleanedRoles = Array.isArray( values.roles )
@@ -26,11 +27,11 @@ const { userRoles } = contentControlSettingsPageVars;
 				label={ __( 'Restriction label', 'content-control' ) }
 				hideLabelFromVision={ true }
 				placeholder={ __( 'Condition set label', 'content-control' ) }
-				value={ title }
+				value={ values.title }
 				onChange={ ( newTitle ) => updateValue( 'title', newTitle ) }
 			/>
 
-			{ title.length <= 0 && (
+			{ values.title.length <= 0 && (
 				<Notice status="warning" isDismissible={ false }>
 					{ __( 'Enter a label for this set.', 'content-control' ) }
 				</Notice>
@@ -41,7 +42,9 @@ const { userRoles } = contentControlSettingsPageVars;
 				{ Object.entries( whoOptions ).map( ( [ value, label ] ) => (
 					<Button
 						key={ value }
-						variant={ value === who ? 'primary' : 'secondary' }
+						variant={
+							value === values.who ? 'primary' : 'secondary'
+						}
 						text={ label }
 						onClick={ () =>
 							updateValue(
@@ -53,7 +56,7 @@ const { userRoles } = contentControlSettingsPageVars;
 				) ) }
 			</div>
 
-			{ 'logged_in' === who && (
+			{ 'logged_in' === values.who && (
 				<>
 					<SearchableMulticheckControl
 						label={
