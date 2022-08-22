@@ -49,7 +49,7 @@ const ListTable = < T extends TableItemBase >( {
 	const colCount = Object.keys( cols ).length;
 
 	const [ selectedItems, setSelectedItems ] = useState< number[] >( [] );
-	const [ selectAll, setSelectAll ] = useState< boolean >( false );
+
 	const [ sortBy, setSortBy ] = useState< string | null >(
 		sortableColumns.length ? sortableColumns[ 0 ] : null
 	);
@@ -119,14 +119,19 @@ const ListTable = < T extends TableItemBase >( {
 						{ isBulkSelect ? (
 							<CheckboxControl
 								onChange={ ( checked ) => {
-									setSelectAll( checked );
 									setSelectedItems(
 										! checked
 											? []
 											: items.map( ( item ) => item.id )
 									);
 								} }
-								checked={ selectAll }
+								checked={
+									selectedItems.length === items.length
+								}
+								indeterminate={
+									selectedItems.length &&
+									selectedItems.length < items.length
+								}
 							/>
 						) : isSortable ? (
 							<Button
