@@ -13,6 +13,12 @@ import List from './list';
 
 import './editor.scss';
 
+export const defaultValues: Restriction = {
+	id: 0,
+	title: '',
+	who: 'logged_in',
+	roles: [],
+};
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'idle' );
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
@@ -96,12 +102,32 @@ const RestrictionsTab = () => {
 		);
 	}, [] );
 
-	const setToEdit =
-		null !== idToEdit
-			? idToEdit >= 0
-				? getSet( idToEdit )
-				: { id: nextId, title: '' }
-			: null;
+	const setToEdit = ( () => {
+		if ( null === idToEdit ) {
+			return null;
+		}
+
+		// This prevents showing the editor until the restrictions have loaded.
+		if ( [ 'loaded', 'fetching', 'error' ].indexOf( status ) >= 0 ) {
+			return null;
+		}
+
+		const set = getSet( idToEdit );
+
+		if ( idToEdit > 0 ) {
+			if ( set?.id !== idToEdit ) {
+				setIdToEdit( null );
+				setNoticeMessage(
+					__( 'No matching set found', 'content-control' )
+				);
+				setStatus( 'error' );
+				return null;
+			}
+			return set;
+		}
+
+		return defaultValues;
+	} )();
 
 	return (
 		<div className="restriction-list">
