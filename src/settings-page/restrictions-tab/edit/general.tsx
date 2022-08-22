@@ -13,8 +13,6 @@ type Props = ContentControl.Settings.Restrictions.EditTabProps;
 const { userRoles } = contentControlSettingsPageVars;
 
 const GeneralTab = ( { values, onChange, updateValue }: Props ) => {
-
-	console.log( values );
 	const { title = '', who = 'logged_in', roles = [] } = values;
 
 	return (
