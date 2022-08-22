@@ -1,15 +1,5 @@
 const { restBase } = contentControlSettingsPageVars;
 
-declare global {
-	const wpApiSettings: {
-		root: string;
-		nonce: string;
-	};
-	const contentControlSettingsPageVars: {
-		restBase: string;
-	};
-}
-
 const restUrl = `${ wpApiSettings.root }${ restBase }/`;
 
 export async function getData(

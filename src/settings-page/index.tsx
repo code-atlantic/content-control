@@ -8,6 +8,17 @@ import App from './App';
 
 import './editor.scss';
 
+declare global {
+	const wpApiSettings: {
+		root: string;
+		nonce: string;
+	};
+	const contentControlSettingsPageVars: {
+		userRoles: { [ key: string ]: string }[];
+		restBase: string;
+	};
+}
+
 domReady( () => {
 	render(
 		<StrictMode>
