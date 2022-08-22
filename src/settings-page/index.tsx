@@ -14,7 +14,7 @@ declare global {
 		nonce: string;
 	};
 	const contentControlSettingsPageVars: {
-		userRoles: { [ key: string ]: string }[];
+		userRoles: { [ key: string ]: string };
 		restBase: string;
 	};
 }
