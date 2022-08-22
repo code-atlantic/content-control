@@ -19,8 +19,12 @@ export const defaultValues: Restriction = {
 	who: 'logged_in',
 	roles: [],
 };
+
 const RestrictionsTab = () => {
-	const [ status, setStatus ] = useState( 'idle' );
+	const [ status, setStatus ] = useState( 'loaded' );
+	const [ noticeMessage, setNoticeMessage ] = useState< string | null >(
+		null
+	);
 	const [ restrictions, setRestrictions ] = useState< Restriction[] >( [] );
 
 	const nextIdRef = useRef< number >( 1 );
@@ -60,13 +64,17 @@ const RestrictionsTab = () => {
 		if ( 'saving' === status ) {
 			sendData( 'settings', { restrictions }, () => {
 				setStatus( 'success' );
+				setNoticeMessage(
+					__( 'Succesfully saved restrictions', 'content-control' )
+				);
 			} );
 		}
 
-		if ( 'success' === status ) {
+		if ( 'success' === status || 'error' === status ) {
 			setTimeout( () => {
+				setNoticeMessage( null );
 				setStatus( 'idle' );
-			}, 3000 );
+			}, 4000 );
 		}
 	}, [ status ] );
 
@@ -155,7 +163,12 @@ const RestrictionsTab = () => {
 				isDeleting={ !! idToDelete }
 			/>
 
-			{ setToEdit && (
+			{ noticeMessage && (
+				<Notice className={ `is-${ status }` } isDismissible={ false }>
+					{ noticeMessage }
+				</Notice>
+			) }
+
 				<Edit
 					values={ setToEdit }
 					onSave={ ( newValues ) => {
