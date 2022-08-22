@@ -52,7 +52,7 @@ class Options {
 		$settings = get_option( $this->prefix . 'settings', [] );
 
 		if ( ! is_array( $settings ) ) {
-			$settings = [];
+			$settings = \ContentControl\get_default_settings();
 		}
 
 		return apply_filters( $this->prefix . 'get_options', $settings );
