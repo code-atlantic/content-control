@@ -6,6 +6,8 @@ import {
 	Button,
 	CheckboxControl,
 } from '@wordpress/components';
+
+import SearchableMulticheckControl from '@components/searchable-multicheck-control';
 import { whoOptions } from '../options';
 
 import type { EditTabProps } from '.';
@@ -53,30 +55,27 @@ const { userRoles } = contentControlSettingsPageVars;
 
 			{ 'logged_in' === who && (
 				<>
-					{ Object.entries( userRoles ).map( ( [ value, label ] ) => {
-						const checked = roles.indexOf( value ) !== -1;
-
-						return (
-							<CheckboxControl
-								label={ label }
-								checked={ checked }
-								onChange={ () => {
-									if ( checked ) {
-										updateValue( 'roles', [
-											...roles.filter(
-												( role ) => role !== value
-											),
-										] );
-									} else {
-										updateValue( 'roles', [
-											...roles,
-											value,
-										] );
-									}
-								} }
-							/>
-						);
-					} ) }
+					<SearchableMulticheckControl
+						label={
+							<h4>
+								{ __(
+									'Who can see this content?',
+									'content-control'
+								) }
+							</h4>
+						}
+						placeholder={ __( 'Search roles...', 'content-control' )}
+						value={ cleanedRoles }
+						onChange={ ( newRoles ) =>
+							updateValue( 'roles', newRoles )
+						}
+						options={ Object.entries( userRoles ).map(
+							( [ value, label ] ) => ( {
+								value,
+								label,
+							} )
+						) }
+					/>
 				</>
 			) }
 		</>
