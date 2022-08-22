@@ -1,9 +1,10 @@
 import { NumberParam, useQueryParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import {
 	Button,
+	Notice,
 	__experimentalConfirmDialog as ConfirmDialog,
 } from '@wordpress/components';
 
@@ -81,6 +82,25 @@ const RestrictionsTab = () => {
 	/** Get a single restriction set by id. */
 	const getSet = ( id: number ) => restrictions.find( ( r ) => r.id === id );
 
+	const updateSet = ( set: Restriction ) => {
+		const exists = getSet( set.id )?.id === set.id;
+
+		if ( exists ) {
+			// If set exists, map over all sets & replace the matching set.
+			saveRestrictions( [
+				...restrictions.map( ( r ) => ( r.id === set.id ? set : r ) ),
+			] );
+		} else {
+			saveRestrictions( [
+				...restrictions,
+				{
+					...set,
+					id: nextId(),
+				},
+			] );
+		}
+	};
+
 	/** Trash a restriction set by id. */
 	const trashRestriction = ( id: number ) =>
 		saveRestrictions( [
@@ -90,7 +110,7 @@ const RestrictionsTab = () => {
 	useEffect( () => {
 		getData(
 			'settings',
-			( { restrictions }: { restrictions: Restriction[] } ) =>
+			( { restrictions = [] }: { restrictions: Restriction[] } ) =>
 				setRestrictions(
 					restrictions
 						.sort( ( a, b ) => {
@@ -110,12 +130,12 @@ const RestrictionsTab = () => {
 							return 0;
 						} )
 						//add id from array index if not set.
-						.map( ( r: Restriction, id: number ) =>
+						.map( ( r: Restriction, i: number ) =>
 							r.id
 								? r
 								: {
 										...r,
-										id,
+										id: i + 1,
 								  }
 						)
 				),
@@ -152,7 +172,7 @@ const RestrictionsTab = () => {
 
 	return (
 		<div className="restriction-list">
-			<Button onClick={ () => setIdToEdit( -1 ) }>
+			<Button onClick={ () => setIdToEdit( -1 ) } variant="primary">
 				{ __( 'Add New', 'content-control' ) }
 			</Button>
 
@@ -169,25 +189,10 @@ const RestrictionsTab = () => {
 				</Notice>
 			) }
 
+			{ null !== setToEdit && (
 				<Edit
 					values={ setToEdit }
-					onSave={ ( newValues ) => {
-						const newSet = newValues?.id !== undefined;
-						const newRestrictions = [
-							...restrictions.map( ( r ) =>
-								newSet || r.id !== idToEdit ? r : newValues
-							),
-						];
-
-						if ( newSet ) {
-							newRestrictions.push( {
-								...newValues,
-							} );
-							setNextId( nextId + 1 );
-						}
-
-						saveRestrictions( newRestrictions );
-					} }
+					onSave={ updateSet }
 					onClose={ () => setIdToEdit( null ) }
 				/>
 			) }
