@@ -32,22 +32,27 @@ const List = ( { restrictions, editSet, deleteSet, isDeleting }: Props ) => {
 								</Button>
 
 								<div className="item-actions">
+									{ `${ __( 'ID', 'content-control' ) }: ${
+										restriction.id
+									}` }
 									<Button
+										text={ __( 'Edit', 'content-control' ) }
 										variant="link"
 										onClick={ () => editSet( restriction ) }
-									>
-										{ __( 'Edit', 'content-control' ) }
-									</Button>
+									/>
+
 									<Button
+										text={ __(
+											'Trash',
+											'content-control'
+										) }
 										variant="link"
 										isDestructive={ true }
 										isBusy={ !! isDeleting }
 										onClick={ () => {
 											deleteSet( restriction.id );
 										} }
-									>
-										{ __( 'Trash', 'content-control' ) }
-									</Button>
+									/>
 								</div>
 							</>
 						);
@@ -55,7 +60,6 @@ const List = ( { restrictions, editSet, deleteSet, isDeleting }: Props ) => {
 						return restriction[ col ];
 				}
 			} }
-			// className="wp-list-table widefat fixed striped"
 			className="striped"
 		/>
 	);
