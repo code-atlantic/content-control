@@ -34,7 +34,7 @@ const RestrictionsTab = () => {
 		nextIdRef.current = restrictions.reduce(
 			( maxId, r ) => ( r.id > maxId ? ( maxId = r.id ) : maxId ),
 			1
-	);
+		);
 	};
 
 	useEffect( () => {
