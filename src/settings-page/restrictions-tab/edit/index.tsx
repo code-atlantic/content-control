@@ -90,7 +90,7 @@ const Edit = ( {
 			title={ __( 'Restriction Editor', 'content-control' ) }
 			onRequestClose={ () => closeEditor() }
 			shouldCloseOnClickOutside={ false }
-			style={ { width: '760px' } }
+			style={ { width: '760px', minHeight: '60vh', maxHeight: '80%' } }
 		>
 			<TabPanel
 				orientation="vertical"
