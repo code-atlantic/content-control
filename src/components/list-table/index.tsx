@@ -224,15 +224,6 @@ const ListTable = < T extends TableItemBase >( {
 														setSelectedItems(
 															newSelectedItems
 														);
-
-														if (
-															items.length ===
-															newSelectedItems.length
-														) {
-															setSelectAll(
-																true
-															);
-														}
 													} }
 													checked={
 														selectedItems.indexOf(
