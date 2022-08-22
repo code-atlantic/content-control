@@ -72,3 +72,43 @@ This project is licensed under the GPLv3 License.
 ## Support
 
 This is a developer's portal for Content Control and **should not** be used for support. Please [create a support ticket here](https://wordpress.org/plugins/content-control/).
+
+
+
+## v2 Development Guide Updates
+
+### Requirements
+
+- Composer
+- Node >16 / NPM
+
+### Install & use appropriate version of Node.js via NVM.
+
+```bash
+nvm use
+```
+
+### Install project dependencies.
+
+```bash
+npm i && composer install
+```
+
+### Build assets.
+
+```bash
+npm run build
+```
+
+### Start asset watcher & build routines.
+
+```bash
+npm run start # Normal
+npm run start:hot # Hot module loading via @wordpress/env & Gutenberg plugin.
+```
+
+### Optionally install `wp-env` dev environment
+
+This allows very quick creation of a working development environment using docker.
+
+```npm i -g @wordpress/env```
