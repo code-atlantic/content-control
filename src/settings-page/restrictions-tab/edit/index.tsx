@@ -27,6 +27,7 @@ export type EditTabProps = EditProps & {
 		key: K,
 		newValue: Restriction[ K ]
 	) => void;
+	updateValues: ( values: Partial< Restriction > ) => void;
 };
 
 const Edit = ( {
@@ -49,6 +50,9 @@ const Edit = ( {
 		onChange( { ...values, [ key ]: newValue } );
 	};
 
+	const updateValues: EditTabProps[ 'updateValues' ] = ( newValues ) =>
+		onChange( { ...values, ...newValues } );
+
 	// Checks of the set values are valid.
 	const isSetValid = () => {
 		return values && [ values.title.length > 0 ].indexOf( false ) === -1;
@@ -66,6 +70,7 @@ const Edit = ( {
 		onClose,
 		onChange,
 		updateValue,
+		updateValues,
 	};
 
 	const tabs: TabComponent[] = applyFilters(
