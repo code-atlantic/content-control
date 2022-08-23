@@ -1,26 +1,51 @@
+/* WordPress Imports */
 import { __ } from '@wordpress/i18n';
-import { TextControl, Notice } from '@wordpress/components';
 
-type Props = ContentControl.Settings.Restrictions.EditTabProps;
+/* Internal Imports */
+// TODO Migrate to @components.
+import RuleEngine from '../../../block-editor/block-extensions/block-controls/components/rule-engine';
 
-const ContentTab = ( { values, onChange, updateValue }: Props ) => {
+/* Type Imports */
+import type { EditTabProps } from '.';
 
+/* Global Var Imports */
+const { registeredRules } = contentControlRuleEngine;
+
+/** Filter rules for this context */
+const restrictionRules = [ ...Object.values( registeredRules ) ];
+
+const ContentTab = ( { values, updateValues }: EditTabProps ) => {
 	return (
-		<>
-			<TextControl
-				label={ __( 'Restriction label', 'content-control' ) }
-				hideLabelFromVision={ true }
-				placeholder={ __( 'Condition set label', 'content-control' ) }
-				value={ values.title }
-				onChange={ ( title ) => updateValue( 'title', title ) }
-			/>
+		<div className="content-tab">
+			<h3>
+				{ __(
+					'Apply this restriction if the user views content that is:',
+					'content-control'
+				) }
+			</h3>
+			<p>
+				{ __(
+					'When users visit your site, the plugin will check the viewed content against your selection below and permit or deny access.',
+					'content-control'
+				) }
+			</p>
 
-			{ values.title.length <= 0 && (
-				<Notice status="warning" isDismissible={ false }>
-					{ __( 'Enter a label for this set.', 'content-control' ) }
-				</Notice>
-			) }
-		</>
+			<RuleEngine
+				value={ values.conditions }
+				onChange={ ( conditions ) =>
+					updateValues( {
+						conditions,
+					} )
+				}
+				options={ {
+					features: {
+						notOperand: true,
+						groups: true,
+					},
+					rules: restrictionRules,
+				} }
+			/>
+		</div>
 	);
 };
 
