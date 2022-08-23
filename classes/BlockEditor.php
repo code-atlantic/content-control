@@ -60,11 +60,16 @@ class BlockEditor extends Controller {
 
 		wp_localize_script( $handle, 'contentControlBlockEditorVars',
 			[
-				'allowedBlocks'   => [],
-				'excludedBlocks'  => [
-					// 'core/nextpage',
-					// 'core/freeform',
+				'adminUrl'       => admin_url(),
+				'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),
+				'allowedBlocks'  => [],
+				'excludedBlocks' => [
+					'core/nextpage',
+					'core/freeform',
 				],
+			]
+		);
+
 				'adminUrl'        => admin_url(),
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
 				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),

@@ -1,16 +1,4 @@
-import { value __ } from '@wordpress/i18n';
-
-declare global {
-	interface Window {
-		contentControlBlockEditorVars: {
-			userRoles: { [ key: string ]: string };
-			registeredRules: Record< EngineRuleType[ 'name' ], EngineRuleType >;
-			adminUrl: string;
-		};
-	}
-}
-
-const { userRoles, registeredRules } = window.contentControlBlockEditorVars;
+import { __ } from '@wordpress/i18n';
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
