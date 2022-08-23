@@ -22,6 +22,7 @@ const config = {
 			...defaultConfig.resolve.alias,
 			// add as many aliases as you like!
 			'@components': path.resolve( __dirname, 'src/components' ),
+			'@icons': path.resolve( __dirname, 'src/icons' ),
 		},
 	},
 };

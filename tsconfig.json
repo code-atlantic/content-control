@@ -4,7 +4,10 @@
 		"paths": {
 			"@components/*": [
 				"components/*"
-			]
+			],
+			"@icons": [
+				"icons"
+			],
 		},
 		"declarationDir": "build-types",
 		"allowJs": true,
