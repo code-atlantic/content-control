@@ -29,7 +29,7 @@ import { makeRuleText } from './utils';
 import './finder.scss';
 import { arrowUp, arrowDown } from '@wordpress/icons';
 
-const { adminUrl } = window.contentControlBlockEditorVars;
+const { adminUrl } = contentControlRuleEngine;
 
 type Props = { onSelect: ( ruleItem: Partial< RuleItem > ) => void };
 type Suggestion = {

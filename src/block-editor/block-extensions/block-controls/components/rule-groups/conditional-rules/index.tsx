@@ -18,7 +18,7 @@ import { blockMeta, trash } from '@wordpress/icons';
 import { newSet } from '../../rule-engine/templates';
 import RuleEngine from '../../rule-engine';
 
-const { userRoles, registeredRules } = window.contentControlBlockEditorVars;
+const { registeredRules } = contentControlRuleEngine;
 
 const verbs = {
 	are: __( 'Are', 'content-control' ),
