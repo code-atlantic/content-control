@@ -1,1 +1,11 @@
-Search & Replace `jp-cc` with `conttrol`
+- Search & Replace `jp-cc` with `conttrol`
+-
+
+Restriction Changes
+- [ ] protection_method -> protectionMethod
+  - [ ] custom_message -> message
+- [ ] redirect_type -> redirectType
+- [ ] redirect_url -> redirectUrl
+- [ ] show_excerpts -> showExcerpts
+- [ ] override_default_message -> overrideMessage
+- [ ] custom_message -> customMessage
