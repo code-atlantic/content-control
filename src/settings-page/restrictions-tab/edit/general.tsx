@@ -1,17 +1,12 @@
 import { __ } from '@wordpress/i18n';
-import {
-	TextControl,
-	Notice,
-	BaseControl,
-	Button,
-	CheckboxControl,
-} from '@wordpress/components';
+import { TextControl, Notice } from '@wordpress/components';
 
+import RadioButtonControl from '@components/radio-buttons-control';
 import SearchableMulticheckControl from '@components/searchable-multicheck-control';
+
 import { whoOptions } from '../options';
 
 import type { EditTabProps } from '.';
-import RadioButtonControl from '@components/radio-buttons-control';
 
 const { userRoles } = contentControlSettingsPageVars;
 
@@ -26,7 +21,6 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 		<>
 			<TextControl
 				label={ __( 'Restriction label', 'content-control' ) }
-				hideLabelFromVision={ true }
 				placeholder={ __( 'Condition set label', 'content-control' ) }
 				value={ values.title }
 				onChange={ ( newTitle ) => updateValue( 'title', newTitle ) }
@@ -51,32 +45,23 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 			/>
 
 			{ 'logged_in' === values.who && (
-				<>
-					<SearchableMulticheckControl
-						label={
-							<h4>
-								{ __(
-									'Who can see this content?',
-									'content-control'
-								) }
-							</h4>
-						}
-						placeholder={ __(
-							'Search roles...',
-							'content-control'
-						) }
-						value={ cleanedRoles }
-						onChange={ ( newRoles ) =>
-							updateValue( 'roles', newRoles )
-						}
-						options={ Object.entries( userRoles ).map(
-							( [ value, label ] ) => ( {
-								value,
-								label,
-							} )
-						) }
-					/>
-				</>
+				<SearchableMulticheckControl
+					label={ __(
+						'Who can see this content?',
+						'content-control'
+					) }
+					placeholder={ __( 'Search roles...', 'content-control' ) }
+					value={ cleanedRoles }
+					onChange={ ( newRoles ) =>
+						updateValue( 'roles', newRoles )
+					}
+					options={ Object.entries( userRoles ).map(
+						( [ value, label ] ) => ( {
+							value,
+							label,
+						} )
+					) }
+				/>
 			) }
 		</>
 	);
