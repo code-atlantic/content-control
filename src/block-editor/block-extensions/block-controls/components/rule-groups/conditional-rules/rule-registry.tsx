@@ -16,55 +16,6 @@ const verbs = {
 	werenot: __( 'Were Not', 'content-control' ),
 };
 
-const builderRules: EngineRuleType[] | OldFieldArgs[] = [
-	...Object.values( registeredRules ),
-	{
-		name: 'user__is_logged_in',
-		label: __( 'Logged In', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.is, verbs.isnot ],
-	},
-	{
-		name: 'user__has_role',
-		label: __( 'Role(s)', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.has, verbs.doesnothave ],
-		fields: [
-			{
-				type: 'multicheck',
-				id: 'roles',
-				label: __( 'Role(s)', 'content-control' ),
-				default: [ 'administrator' ],
-				multiple: true,
-				options: userRoles,
-			},
-		],
-	},
-	{
-		name: 'user__has_commented',
-		label: __( 'Commented', 'content-control' ),
-		category: __( 'User', 'content-control' ),
-		format: '{category} {verb} {label}',
-		verbs: [ verbs.has, verbs.hasnot ],
-		fields: [
-			{
-				id: 'comparison',
-				type: 'select',
-				options: [ '>=', '<=', '>', '<', '=' ],
-				label: __( 'Comparison', 'content-control' ),
-				default: '>=',
-			},
-			{
-				type: 'number',
-				id: 'number',
-				label: __( 'More than', 'content-control' ),
-			},
-		],
-	},
-];
-
 export const parseOldArgsToProps = ( args, value ) => {
 	const { type } = args;
 
