@@ -70,9 +70,10 @@ class BlockEditor extends Controller {
 			]
 		);
 
+		wp_localize_script( $handle, 'contentControlRuleEngine',
+			[
 				'adminUrl'        => admin_url(),
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
-				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),
 			]
 		);
 

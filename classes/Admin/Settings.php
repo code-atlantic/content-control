@@ -112,12 +112,10 @@ class Settings extends Controller {
 			]
 		);
 
-		wp_localize_script( $handle, 'contentControlSettingsPageVars',
+		wp_localize_script( $handle, 'contentControlRuleEngine',
 			[
 				'adminUrl'        => admin_url(),
-				'restBase'        => 'content-control/v2',
 				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
-				'userRoles'       => \ContentControl\Rules\allowed_user_roles(),
 			]
 		);
 

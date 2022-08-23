@@ -8,12 +8,9 @@ import App from './App';
 
 import './editor.scss';
 
+/* Global Var Declarations */
 declare global {
-	const wpApiSettings: {
-		root: string;
-		nonce: string;
-	};
-	const contentControlSettingsPageVars: {
+	const contentControlSettingsPage: {
 		userRoles: { [ key: string ]: string };
 		restBase: string;
 	};
