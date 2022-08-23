@@ -33,14 +33,36 @@
 		stroke: currentColor;
 	}
 }
-}
 
-.modal-actions {
-    display: flex;
-    justify-content: right;
-    gap: 10px;
+.restriction-editor {
+	.components-modal__content {
+		margin-bottom: 56px;
+	}
 
-    > * {
+	.modal-actions {
+		box-sizing: border-box;
+		display: flex;
+		justify-content: right;
+		gap: 10px;
+		position: absolute;
+		padding: 0 32px;
+		height: 56px;
+		align-items: center;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-top: 1px solid #c3c4c7;
 
-    }
+		> :first-child {
+			position: absolute;
+			left: 32px;
+
+			svg {
+				margin-right: 3px;
+				fill: #fff;
+				stroke: green;
+			}
+		}
+
+	}
 }
