@@ -1,8 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
+import { useInstanceId } from '@wordpress/compose';
 import { chevronDown, chevronUp } from '@wordpress/icons';
-import { Button, CheckboxControl, TextControl } from '@wordpress/components';
-import { values } from 'lodash';
+import { BaseControl, Button, CheckboxControl } from '@wordpress/components';
 
 import './editor.scss';
 
@@ -21,6 +21,8 @@ const SearchableMulticheckControl = < T extends string | number >( {
 	options = [],
 	onChange = () => {},
 }: Props< T > ) => {
+	const instanceId = useInstanceId( SearchableMulticheckControl );
+
 	const [ searchText, setSearchText ] = useState< string >( '' );
 	const [ sortDirection, setSortDirection ] = useState< 'ASC' | 'DESC' >(
 		'ASC'
@@ -52,12 +54,17 @@ const SearchableMulticheckControl = < T extends string | number >( {
 	} );
 
 	return (
-		<div className="component-searchable-multicheck-control">
-			<TextControl
-				label={ label }
+		<BaseControl
+			id={ `searchable-multicheck-control-${ instanceId }` }
+			label={ label }
+			className="component-searchable-multicheck-control"
+		>
+			<input
+				type="text"
+				className="components-text-control__input"
 				placeholder={ placeholder }
 				value={ searchText }
-				onChange={ setSearchText }
+				onChange={ ( event ) => setSearchText( event.target.value ) }
 			/>
 
 			<table>
@@ -112,7 +119,7 @@ const SearchableMulticheckControl = < T extends string | number >( {
 					) }
 				</tbody>
 			</table>
-		</div>
+		</BaseControl>
 	);
 };
 
