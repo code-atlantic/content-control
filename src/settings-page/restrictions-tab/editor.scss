@@ -24,8 +24,15 @@
 }
 
 .who-options {
-    display: flex;
-    gap: 20px;
+	display: flex;
+	gap: 20px;
+
+	svg {
+		margin-right: 1em;
+		fill: transparent;
+		stroke: currentColor;
+	}
+}
 }
 
 .modal-actions {
