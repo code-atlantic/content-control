@@ -13,7 +13,7 @@ import ContentTab from './content';
 
 import { documenationUrl } from '../../../config';
 
-import { defaultValues } from '..';
+import { defaultRestriction } from '..';
 
 export type EditProps = {
 	values: Restriction;
@@ -31,7 +31,7 @@ export type EditTabProps = EditProps & {
 };
 
 const Edit = ( {
-	values: editorValues = defaultValues,
+	values: editorValues = defaultRestriction,
 	onSave,
 	onClose,
 }: EditProps ) => {

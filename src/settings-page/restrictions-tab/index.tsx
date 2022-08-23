@@ -14,11 +14,17 @@ import List from './list';
 
 import './editor.scss';
 
-export const defaultValues: Restriction = {
+export const defaultRestriction: Restriction = {
 	id: 0,
 	title: '',
 	who: 'logged_in',
 	roles: [],
+	protectionMethod: 'redirect',
+	redirectType: 'login',
+	redirectUrl: '',
+	showExcerpts: false,
+	overrideMessage: false,
+	customMessage: '',
 };
 
 const RestrictionsTab = () => {
@@ -167,7 +173,7 @@ const RestrictionsTab = () => {
 			return set;
 		}
 
-		return defaultValues;
+		return defaultRestriction;
 	} )();
 
 	return (
