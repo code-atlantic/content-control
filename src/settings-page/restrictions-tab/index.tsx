@@ -25,6 +25,10 @@ export const defaultRestriction: Restriction = {
 	showExcerpts: false,
 	overrideMessage: false,
 	customMessage: '',
+	conditions: {
+		logicalOperator: 'and',
+		items: [],
+	},
 };
 
 const RestrictionsTab = () => {
