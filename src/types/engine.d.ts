@@ -30,7 +30,6 @@ interface EngineFieldBase {
 
 interface EngineField extends EngineFieldBase {}
 
-
 interface OldFieldArgs {
 	type?: string;
 	id?: string;
@@ -42,7 +41,7 @@ interface OldFieldArgs {
 	dynamic_desc?: string;
 	size?: string;
 	classes?: string | string[];
-	dependencies?: [  ];
+	dependencies?: [];
 	select2?: boolean;
 	allow_html?: boolean;
 	multiple?: boolean;
@@ -62,7 +61,6 @@ interface OldFieldArgs {
 	[ key: string ]: any;
 }
 
-
 interface EngineRuleType {
 	name: string;
 	label: string;
@@ -74,11 +72,11 @@ interface EngineRuleType {
 
 interface EngineFeatures {
 	/** Enables the (!) Not Operand feature */
-	notOperand: boolean;
+	notOperand?: boolean;
 	/** Enables rule groups */
-	groups: boolean;
+	groups?: boolean;
 	/** Enables rule group nesting */
-	nesting: boolean;
+	nesting?: boolean;
 }
 
 /**
