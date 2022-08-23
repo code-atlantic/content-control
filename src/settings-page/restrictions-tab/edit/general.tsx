@@ -10,7 +10,7 @@ import { whoOptions } from '../options';
 import type { EditTabProps } from '.';
 
 /* Global Var Imports */
-const { userRoles } = contentControlSettingsPageVars;
+const { userRoles } = contentControlSettingsPage;
 
 const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.

@@ -1,4 +1,4 @@
-const { restBase } = contentControlSettingsPageVars;
+const { restBase } = contentControlSettingsPage;
 
 const restUrl = `${ wpApiSettings.root }${ restBase }/`;
 

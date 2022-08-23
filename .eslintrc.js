@@ -5,7 +5,7 @@ const eslintConfig = {
 		wp: 'readonly',
 		wpApiSettings: 'readonly',
 		contentControlBlockEditorVars: 'readonly',
-		contentControlSettingsPageVars: 'readonly',
+		contentControlSettingsPage: 'readonly',
 		window: 'readonly',
 	},
 	env: {
