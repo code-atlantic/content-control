@@ -9,6 +9,8 @@ import GeneralTab from './general';
 import ProtectionTab from './protection';
 import ContentTab from './content';
 
+
+import { documenationUrl } from '../../../config';
 import { defaultValues } from '..';
 
 export type EditProps = {
@@ -105,6 +107,13 @@ const Edit = ( {
 			</TabPanel>
 
 			<div className="modal-actions">
+				<Button
+					text={ __( 'Documentation', 'content-control' ) }
+					href={ documenationUrl }
+					target="_blank"
+					icon={ link }
+					iconSize={ 20 }
+				/>
 				<Button
 					text={ __( 'Cancel', 'content-control' ) }
 					variant="tertiary"
