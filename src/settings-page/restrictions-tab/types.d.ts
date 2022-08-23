@@ -8,5 +8,6 @@ interface Restriction extends TableItemBase {
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
+	conditions: Query;
 	[ key: string ]: any;
 }
