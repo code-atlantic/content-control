@@ -45,14 +45,15 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 						variant={
 							value === values.who ? 'primary' : 'secondary'
 						}
-						text={ label }
 						onClick={ () =>
 							updateValue(
 								'who',
 								value as keyof typeof whoOptions
 							)
 						}
-					/>
+					>
+						{ label }
+					</Button>
 				) ) }
 			</div>
 
