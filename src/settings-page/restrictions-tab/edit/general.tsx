@@ -1,13 +1,15 @@
+/* WordPress Imports */
 import { __ } from '@wordpress/i18n';
 import { TextControl, Notice } from '@wordpress/components';
 
-import RadioButtonControl from '@components/radio-buttons-control';
-import SearchableMulticheckControl from '@components/searchable-multicheck-control';
-
+/* Internal Imports */
+import { RadioButtonControl, SearchableMulticheckControl } from '@components';
 import { whoOptions } from '../options';
 
+/* Type Imports */
 import type { EditTabProps } from '.';
 
+/* Global Var Imports */
 const { userRoles } = contentControlSettingsPageVars;
 
 const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
