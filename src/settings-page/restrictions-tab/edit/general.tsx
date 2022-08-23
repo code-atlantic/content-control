@@ -67,7 +67,10 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 								) }
 							</h4>
 						}
-						placeholder={ __( 'Search roles...', 'content-control' )}
+						placeholder={ __(
+							'Search roles...',
+							'content-control'
+						) }
 						value={ cleanedRoles }
 						onChange={ ( newRoles ) =>
 							updateValue( 'roles', newRoles )
