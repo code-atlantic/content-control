@@ -58,7 +58,7 @@ class BlockEditor extends Controller {
 		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), $meta['dependencies'], $meta['version'], true );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
 
-		wp_localize_script( $handle, 'contentControlBlockEditorVars',
+		wp_localize_script( $handle, 'contentControlBlockEditor',
 			[
 				'adminUrl'       => admin_url(),
 				'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),

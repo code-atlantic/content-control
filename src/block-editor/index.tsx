@@ -2,7 +2,7 @@ import './block-extensions';
 
 /* Global Var Declarations */
 declare global {
-	const contentControlBlockEditorVars: {
+	const contentControlBlockEditor: {
 		adminUrl: string;
 		advancedMode: boolean;
 		allowedBlocks: string[];

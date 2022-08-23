@@ -5,7 +5,7 @@ const {
 	allowedBlocks = [],
 	excludedBlocks = [ 'core/freeform', 'core/nextpage' ],
 	advancedMode = false,
-} = contentControlBlockEditorVars;
+} = contentControlBlockEditor;
 
 /**
  * Array of explicitly allowed block types.
