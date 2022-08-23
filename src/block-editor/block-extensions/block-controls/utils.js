@@ -1,32 +1,28 @@
 import { applyFilters } from '@wordpress/hooks';
 import { hasBlockSupport } from '@wordpress/blocks';
 
+const {
+	allowedBlocks = [],
+	excludedBlocks = [ 'core/freeform', 'core/nextpage' ],
+	advancedMode = false,
+} = contentControlBlockEditorVars;
+
 /**
  * Array of explicitly allowed block types.
  *
  * @type {Array}
  */
-const allowedBlocks = applyFilters(
-	'contentControl.allowedBlocks',
-	contentControlBlockEditorVars.allowedBlocks || []
-);
+const allowed = applyFilters( 'contentControl.allowedBlocks', allowedBlocks );
 
 /**
  * Array of explicitly excluded block types.
  *
  * @type {Array}
  */
-const excludedBlocks = applyFilters(
+const excluded = applyFilters(
 	'contentControl.excludedBlocks',
-	contentControlBlockEditorVars.excludedBlocks || [
-		'core/freeform',
-		'core/nextpage',
-	]
+	excludedBlocks
 );
-
-const { advancedMode = false } = contentControlBlockEditorVars;
-
-export { advancedMode };
 
 /**
  *\Check if block controls should be enabled for given block type.
@@ -43,7 +39,7 @@ const blockControlsEnabled = ( settings ) => {
 	}
 
 	// If block is explicitly on allow list, return true now.
-	if ( allowedBlocks.length && allowedBlocks.includes( name ) ) {
+	if ( allowed.length && allowed.includes( name ) ) {
 		return true;
 	}
 
@@ -52,7 +48,7 @@ const blockControlsEnabled = ( settings ) => {
 	 * 1. Block is on exclusion list.
 	 * 2. Reusable blocks (for now) via block support of `inserter` feature.
 	 */
-	if ( excludedBlocks.length && excludedBlocks.includes( name ) ) {
+	if ( excluded.length && excluded.includes( name ) ) {
 		return false;
 	}
 
