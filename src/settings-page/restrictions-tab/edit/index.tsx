@@ -1,16 +1,18 @@
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
+import { link } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+
 import { Button, Modal, TabPanel } from '@wordpress/components';
 
 import GeneralTab from './general';
 import ProtectionTab from './protection';
 import ContentTab from './content';
 
-
 import { documenationUrl } from '../../../config';
+
 import { defaultValues } from '..';
 
 export type EditProps = {
@@ -90,6 +92,7 @@ const Edit = ( {
 	return (
 		<Modal
 			title={ __( 'Restriction Editor', 'content-control' ) }
+			className="restriction-editor"
 			onRequestClose={ () => closeEditor() }
 			shouldCloseOnClickOutside={ false }
 			style={ { width: '760px', minHeight: '60vh', maxHeight: '80%' } }
@@ -121,7 +124,11 @@ const Edit = ( {
 					onClick={ () => closeEditor() }
 				/>
 				<Button
-					text={ __( 'Save', 'content-control' ) }
+					text={
+						values.id > 0
+							? __( 'Save Restriction', 'content-control' )
+							: __( 'Add Restriction', 'content-control' )
+					}
 					variant="primary"
 					disabled={ ! isSetValid() }
 					onClick={ () => {
