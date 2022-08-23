@@ -11,6 +11,7 @@ import SearchableMulticheckControl from '@components/searchable-multicheck-contr
 import { whoOptions } from '../options';
 
 import type { EditTabProps } from '.';
+import RadioButtonControl from '@components/radio-buttons-control';
 
 const { userRoles } = contentControlSettingsPageVars;
 
@@ -37,25 +38,17 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 				</Notice>
 			) }
 
-			<h4>{ __( 'Who can see this content?', 'content-control' ) }</h4>
-			<div className="who-options">
-				{ Object.entries( whoOptions ).map( ( [ value, label ] ) => (
-					<Button
-						key={ value }
-						variant={
-							value === values.who ? 'primary' : 'secondary'
-						}
-						onClick={ () =>
-							updateValue(
-								'who',
-								value as keyof typeof whoOptions
-							)
-						}
-					>
-						{ label }
-					</Button>
-				) ) }
-			</div>
+			<RadioButtonControl
+				label={ __( 'Who can see this content?', 'content-control' ) }
+				value={ values.who }
+				onChange={ ( who ) =>
+					updateValue(
+						'who',
+						who as typeof whoOptions[ number ][ 'value' ]
+					)
+				}
+				options={ whoOptions }
+			/>
 
 			{ 'logged_in' === values.who && (
 				<>
