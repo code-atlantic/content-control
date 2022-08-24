@@ -83,12 +83,14 @@ $gap4: $gap * 4;
 
 	.components-radio-button-control {
 		.options {
+			max-width: 500px;
 			gap: $gap;
 		}
 		.components-button {
+			flex: 1 1 0%;
 			height: auto;
 			box-sizing: border-box;
-			padding: $gap $gap2;
+			padding: $gap 0;
 			font-style: normal;
 			font-weight: 600;
 			font-size: 13px;
@@ -175,16 +177,5 @@ $gap4: $gap * 4;
 
 	> * {
 		margin-bottom: 10px;
-	}
-}
-
-.who-options {
-	display: flex;
-	gap: $gap;
-
-	svg {
-		margin-right: 1em;
-		fill: transparent;
-		stroke: currentColor;
 	}
 }
