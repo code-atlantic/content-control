@@ -39,13 +39,12 @@ const SearchableMulticheckControl = < T extends string | number >( {
 	);
 
 	const isChecked = ( optValue: T ) => value.indexOf( optValue ) !== -1;
-	const toggleOption = ( optValue: T ) => {
+	const toggleOption = ( optValue: T ) =>
 		onChange(
 			isChecked( optValue )
 				? [ ...value.filter( ( v ) => v !== optValue ) ]
 				: [ ...value, optValue ]
 		);
-	};
 
 	const filteredOptions = options.filter( ( { label, value, keywords } ) => {
 		return (
@@ -72,6 +71,44 @@ const SearchableMulticheckControl = < T extends string | number >( {
 				className,
 			] ) }
 		>
+			<div className="select-actions">
+				<Button
+					variant="link"
+					text={ __( 'Select All', 'content-control' ) }
+					onClick={ () => {
+						// Get all current options values.
+						const selected = filteredOptions.map(
+							( { value } ) => value
+						);
+
+						// Get combined list of values, previous & all selected.
+						const newValue = [ ...value, ...selected ];
+
+						// Make list unique.
+						onChange( [ ...new Set( newValue ) ] );
+					} }
+				/>
+				<Button
+					variant="link"
+					text={ __( 'Deselect All', 'content-control' ) }
+					onClick={ () => {
+						// Get all current options values.
+						const unSelected = filteredOptions.map(
+							( { value } ) => value
+						);
+
+						// Get list of current values - unselected.
+						const newValue = [
+							...value.filter(
+								( v ) => unSelected.indexOf( v ) === -1
+							),
+						];
+
+						// Make list unique.
+						onChange( [ ...new Set( newValue ) ] );
+					} }
+				/>
+			</div>
 			<div
 				className={ classnames( [ searchIcon ? 'icon-input' : null ] ) }
 			>

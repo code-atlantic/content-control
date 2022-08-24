@@ -1,4 +1,21 @@
 .component-searchable-multicheck-control {
+	position: relative;
+
+	.select-actions {
+		position: absolute;
+		right: 0;
+		top: 0;
+		display: flex;
+		gap: 16px;
+
+		.components-button {
+			font-size: 12px;
+			font-weight: 500;
+			line-height: 1.4;
+			text-decoration: none;
+		}
+	}
+
 	.icon-input {
 		position: relative;
 		vertical-align: middle;
@@ -29,6 +46,19 @@
 			}
 		}
 
+		thead {
+			td,
+			th {
+				border-bottom: 1px solid #cccccc;
+			}
+
+			&:after {
+				line-height: .5em;
+				content: "\200C";
+				display: block;
+			}
+		}
+
 		tbody tr {
 			th,
 			td {
@@ -50,7 +80,7 @@
 		}
 
 		.cb-column {
-			width: 8em;
+			width: 80px;
 			text-align: center;
 
 			* {
