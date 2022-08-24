@@ -25,7 +25,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 	className,
 	options = [],
 	orientation = 'horizontal',
-	spacing = 10,
+	spacing,
 }: Props< T > ) => {
 	const instanceId = useInstanceId( RadioButtonControl );
 
