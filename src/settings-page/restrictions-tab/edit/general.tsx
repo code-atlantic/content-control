@@ -1,5 +1,6 @@
 /* WordPress Imports */
 import { __ } from '@wordpress/i18n';
+import { search } from '@wordpress/icons';
 import { TextControl, Notice, TextareaControl } from '@wordpress/components';
 
 /* Internal Imports */

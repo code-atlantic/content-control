@@ -53,6 +53,7 @@ const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
 								'Custom Redirect URL',
 								'content-control'
 							) }
+							className="is-large"
 							value={ values.redirectUrl }
 							onChange={ ( redirectUrl ) =>
 								updateValues( { redirectUrl } )
