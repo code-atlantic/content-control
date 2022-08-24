@@ -4,7 +4,7 @@ $gap3: $gap * 3;
 $gap4: $gap * 4;
 
 .restriction-editor {
-	width: 760px;
+	width: 860px;
 	min-height: 60vh;
 	max-height: 80%;
 	margin: 10vh auto auto;
@@ -81,35 +81,6 @@ $gap4: $gap * 4;
 		}
 	}
 
-	.title-field {
-		.components-text-control__input {
-			height: auto;
-			border: none;
-			padding: 0;
-			font-size: 1.8em;
-			line-height: 1;
-		}
-		.components-base-control__field {
-			margin-bottom: 0;
-		}
-	}
-
-	.description-field {
-		.components-text-control__input,
-		.components-textarea-control__input {
-			height: auto;
-			border: none;
-			padding: 0;
-			font-size: 0.9em;
-			resize: none;
-			min-height: auto;
-		}
-
-		.components-base-control__field {
-			margin-bottom: $gap2;
-		}
-	}
-
 	.components-radio-button-control {
 		.options {
 			gap: $gap;
@@ -158,6 +129,43 @@ $gap4: $gap * 4;
 					}
 				}
 			}
+		}
+	}
+
+	.general-tab {
+		.title-field {
+			.components-text-control__input {
+				height: auto;
+				border: none;
+				padding: 0 0 0 2px;
+				font-size: 1.8em;
+				line-height: 1;
+			}
+			.components-base-control__field {
+				margin-bottom: 0;
+			}
+		}
+
+		.description-field {
+			.components-text-control__input,
+			.components-textarea-control__input {
+				height: auto;
+				border: none;
+				padding: 0 0 0 4px;
+				font-size: 0.9em;
+				resize: none;
+				min-height: auto;
+			}
+
+			.components-base-control__field {
+				margin-bottom: $gap2;
+			}
+		}
+	}
+
+	.protection-tab {
+		h3 {
+			margin-top: 0;
 		}
 	}
 }
