@@ -24,7 +24,7 @@ const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
 				) }
 			</p>
 
-			<RadioButtonControl< Restriction[ 'protectionMethod' ] >
+			<RadioButtonControl
 				label={ __( 'Who can see this content?', 'content-control' ) }
 				value={ values.protectionMethod }
 				onChange={ ( protectionMethod ) =>
