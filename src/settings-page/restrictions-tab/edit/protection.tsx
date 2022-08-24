@@ -14,6 +14,14 @@ import { protectionMethodOptions, redirectTypeOptions } from '../options';
 import type { EditTabProps } from '.';
 
 const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
+	const customMessageRowEst = values.customMessage?.length / 80;
+	const customMessageRows =
+		customMessageRowEst < 4
+			? 4
+			: customMessageRowEst > 20
+			? 30
+			: customMessageRowEst;
+
 	return (
 		<div className="protection-tab">
 			<h3>{ __( 'Protecting Content', 'content-control' ) }</h3>
@@ -92,6 +100,7 @@ const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
 								'Enter a custom message to display to restricted users',
 								'content-control'
 							) }
+							rows={ customMessageRows }
 							value={ values.customMessage }
 							onChange={ ( customMessage ) =>
 								updateValues( { customMessage } )
