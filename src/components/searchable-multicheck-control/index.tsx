@@ -2,24 +2,34 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useInstanceId } from '@wordpress/compose';
 import { chevronDown, chevronUp } from '@wordpress/icons';
-import { BaseControl, Button, CheckboxControl } from '@wordpress/components';
+import {
+	BaseControl,
+	Button,
+	CheckboxControl,
+	Icon,
+} from '@wordpress/components';
 
 import './editor.scss';
+import classnames, { Argument } from 'classnames';
 
 type Props< T extends string | number > = {
 	label?: string | React.ReactNode;
 	placeholder: string;
+	searchIcon?: Icon.Props< {} >[ 'icon' ] | undefined;
 	value: T[];
 	options: { label: string; value: T; keywords?: string }[];
 	onChange: ( value: T[] ) => void;
+	className: Argument;
 };
 
 const SearchableMulticheckControl = < T extends string | number >( {
 	label = '',
 	placeholder = '',
+	searchIcon,
 	value = [],
 	options = [],
 	onChange = () => {},
+	className = '',
 }: Props< T > ) => {
 	const instanceId = useInstanceId( SearchableMulticheckControl );
 
@@ -57,15 +67,25 @@ const SearchableMulticheckControl = < T extends string | number >( {
 		<BaseControl
 			id={ `searchable-multicheck-control-${ instanceId }` }
 			label={ label }
-			className="component-searchable-multicheck-control"
+			className={ classnames( [
+				'component-searchable-multicheck-control',
+				className,
+			] ) }
 		>
-			<input
-				type="text"
-				className="components-text-control__input"
-				placeholder={ placeholder }
-				value={ searchText }
-				onChange={ ( event ) => setSearchText( event.target.value ) }
-			/>
+			<div
+				className={ classnames( [ searchIcon ? 'icon-input' : null ] ) }
+			>
+				<input
+					type="text"
+					className="components-text-control__input"
+					placeholder={ placeholder }
+					value={ searchText }
+					onChange={ ( event ) =>
+						setSearchText( event.target.value )
+					}
+				/>
+				{ searchIcon && <Icon icon={ searchIcon } /> }
+			</div>
 
 			<table>
 				<thead>

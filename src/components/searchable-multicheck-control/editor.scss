@@ -1,4 +1,16 @@
 .component-searchable-multicheck-control {
+	.icon-input {
+		position: relative;
+		vertical-align: middle;
+		display: flex;
+		align-items: center;
+
+		svg {
+			position: absolute;
+			right: 1em;
+		}
+	}
+
 	table {
 		width: 100%;
 		padding: 8px;
