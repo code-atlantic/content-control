@@ -15,7 +15,7 @@ type Props< T extends string | number = string | number > = {
 		label: string | JSX.Element;
 	} )[];
 	orientation?: 'horizontal' | 'vertical';
-	equalWidth: boolean;
+	equalWidth?: boolean;
 	spacing?: string | number;
 };
 
