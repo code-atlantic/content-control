@@ -1,4 +1,4 @@
-import './index.scss';
+import './editor.scss';
 import './style.scss';
 
 import { addFilter } from '@wordpress/hooks';
@@ -6,6 +6,7 @@ import { addFilter } from '@wordpress/hooks';
 import { addAttributes } from './attributes';
 import editControls from './edit';
 import { addWrapperClasses } from './save';
+import addEditorBlockClasses from './block-classes';
 
 /**
  * Register the extra block attributes and contentControl support.
