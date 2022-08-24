@@ -55,21 +55,17 @@ $gap4: $gap * 4;
 		width: 100%;
 
 		.components-tab-panel__tabs {
-			width: 100%;
-			max-width: 150px;
-			padding-right: 10px;
 			text-align: left;
-			flex-grow: 1;
-		}
-
-		.components-tab-panel__tabs-item {
-			&.is-active {
-				background-color: #f0f0f0;
+			flex: 1 1 200px;
+			.components-tab-panel__tabs-item {
+				&.is-active {
+					background-color: #f0f0f0;
+				}
 			}
 		}
 
 		.components-tab-panel__tab-content {
-			flex-grow: 3;
+			flex: 3 1 100%;
 		}
 	}
 
