@@ -1,6 +1,6 @@
 /* WordPress Imports */
 import { __ } from '@wordpress/i18n';
-import { TextControl, Notice } from '@wordpress/components';
+import { TextControl, Notice, TextareaControl } from '@wordpress/components';
 
 /* Internal Imports */
 import { RadioButtonControl, SearchableMulticheckControl } from '@components';
@@ -12,20 +12,41 @@ import type { EditTabProps } from '.';
 /* Global Var Imports */
 const { userRoles } = contentControlSettingsPage;
 
-const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
+const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.
 	// ** It may be that if we have dedicated migration routine this can be removed.
 	const cleanedRoles = Array.isArray( values.roles )
 		? values.roles
 		: Object.entries( values.roles ).map( ( [ value ] ) => value );
 
+	const descriptionRowEst = values.description.length / 80;
+	const descriptionRows =
+		descriptionRowEst < 1
+			? 1
+			: descriptionRowEst > 5
+			? 5
+			: descriptionRowEst;
+
 	return (
 		<>
 			<TextControl
 				label={ __( 'Restriction label', 'content-control' ) }
-				placeholder={ __( 'Condition set label', 'content-control' ) }
+				hideLabelFromVision={ true }
+				placeholder={ __( 'Name...', 'content-control' ) }
+				className="title-field"
 				value={ values.title }
-				onChange={ ( newTitle ) => updateValue( 'title', newTitle ) }
+				onChange={ ( title ) => updateValues( { title } ) }
+			/>
+
+			<TextareaControl
+				rows={ descriptionRows }
+				scrolling={ descriptionRows > 5 ? 'auto' : 'no' }
+				label={ __( 'Restriction description', 'content-control' ) }
+				hideLabelFromVision={ true }
+				placeholder={ __( 'Add description...', 'content-control' ) }
+				className="description-field"
+				value={ values.description }
+				onChange={ ( description ) => updateValues( { description } ) }
 			/>
 
 			{ values.title.length <= 0 && (
@@ -37,12 +58,7 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 			<RadioButtonControl
 				label={ __( 'Who can see this content?', 'content-control' ) }
 				value={ values.who }
-				onChange={ ( who ) =>
-					updateValue(
-						'who',
-						who as typeof whoOptions[ number ][ 'value' ]
-					)
-				}
+				onChange={ ( who ) => updateValues( { who } ) }
 				options={ whoOptions }
 			/>
 
@@ -52,11 +68,11 @@ const GeneralTab = ( { values, updateValue }: EditTabProps ) => {
 						'Who can see this content?',
 						'content-control'
 					) }
+					searchIcon={ search }
 					placeholder={ __( 'Search roles...', 'content-control' ) }
+					className="is-large"
 					value={ cleanedRoles }
-					onChange={ ( newRoles ) =>
-						updateValue( 'roles', newRoles )
-					}
+					onChange={ ( roles ) => updateValues( roles ) }
 					options={ Object.entries( userRoles ).map(
 						( [ value, label ] ) => ( {
 							value,

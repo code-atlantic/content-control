@@ -1,5 +1,6 @@
 interface Restriction extends TableItemBase {
 	title: string;
+	description: string;
 	who: 'logged_in' | 'logged_out';
 	roles: string[];
 	protectionMethod: 'redirect' | 'message';

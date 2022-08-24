@@ -17,6 +17,7 @@ import './editor.scss';
 export const defaultRestriction: Restriction = {
 	id: 0,
 	title: '',
+	description: '',
 	who: 'logged_in',
 	roles: [],
 	protectionMethod: 'redirect',
