@@ -15,6 +15,7 @@ type Props< T extends string | number = string | number > = {
 		label: string | JSX.Element;
 	} )[];
 	orientation?: 'horizontal' | 'vertical';
+	equalWidth: boolean;
 	spacing?: string | number;
 };
 
@@ -25,6 +26,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 	className,
 	options = [],
 	orientation = 'horizontal',
+	equalWidth = false,
 	spacing,
 }: Props< T > ) => {
 	const instanceId = useInstanceId( RadioButtonControl );
@@ -36,6 +38,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 			className={ classnames(
 				'components-radio-button-control',
 				orientation,
+				equalWidth && 'equal-width',
 				className
 			) }
 		>

@@ -4,6 +4,7 @@
 
 		.components-button {
 			padding: 6px 12px;
+			justify-content: center;
 
 			.components-icon,
 			svg {
@@ -17,6 +18,14 @@
 	&.vertical {
 		.options {
 			flex-direction: column;
+		}
+	}
+
+	&.equal-width {
+		.options {
+			.components-button {
+				flex: 1 0 0%;
+			}
 		}
 	}
 }
