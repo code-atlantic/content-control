@@ -33,3 +33,13 @@ addFilter(
 	'content-control/block-controls/block-props',
 	addWrapperClasses
 );
+
+addFilter(
+	'editor.BlockListBlock',
+	'content-control/controlled-content-icon',
+	addEditorBlockClasses
+);
+
+document.write(
+	`<style>.controlled-content::before {background-image: url('${ contentControlBlockEditor.pluginUrl }assets/images/controlled-content.svg');}</style>`
+);

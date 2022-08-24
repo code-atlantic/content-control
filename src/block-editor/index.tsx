@@ -4,6 +4,7 @@ import './block-extensions';
 declare global {
 	const contentControlBlockEditor: {
 		adminUrl: string;
+		pluginUrl: string;
 		advancedMode: boolean;
 		allowedBlocks: string[];
 		excludedBlocks: string[];

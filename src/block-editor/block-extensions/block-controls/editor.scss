@@ -1,6 +1,20 @@
-@import '~@wordpress/base-styles/variables';
-@import '~@wordpress/base-styles/mixins';
-@import '~@wordpress/base-styles/colors';
+@import "~@wordpress/base-styles/variables";
+@import "~@wordpress/base-styles/mixins";
+@import "~@wordpress/base-styles/colors";
+
+.controlled-content {
+	&::before {
+		content: " ";
+		background: no-repeat center center rgba(30, 30, 30, 0.5);
+		border-radius: 100px;
+		width: 32px;
+		height: 32px;
+		display: block;
+		position: absolute;
+		top: -16px;
+		right: -16px;
+	}
+}
 
 .cc__block-controls {
 	border-bottom: $border-width solid $gray-200;

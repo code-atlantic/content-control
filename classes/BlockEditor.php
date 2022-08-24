@@ -61,6 +61,7 @@ class BlockEditor extends Controller {
 		wp_localize_script( $handle, 'contentControlBlockEditor',
 			[
 				'adminUrl'       => admin_url(),
+				'pluginUrl'       => plugin()->get_url(),
 				'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),
 				'allowedBlocks'  => [],
 				'excludedBlocks' => [
