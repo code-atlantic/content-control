@@ -29,7 +29,7 @@ const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 			: descriptionRowEst;
 
 	return (
-		<>
+		<div className="general-tab">
 			<TextControl
 				label={ __( 'Restriction label', 'content-control' ) }
 				hideLabelFromVision={ true }
@@ -82,7 +82,7 @@ const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 					) }
 				/>
 			) }
-		</>
+		</div>
 	);
 };
 
