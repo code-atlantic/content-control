@@ -73,7 +73,7 @@ const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 					placeholder={ __( 'Search roles...', 'content-control' ) }
 					className="is-large"
 					value={ cleanedRoles }
-					onChange={ ( roles ) => updateValues( roles ) }
+					onChange={ ( roles ) => updateValues( { roles } ) }
 					options={ Object.entries( userRoles ).map(
 						( [ value, label ] ) => ( {
 							value,
