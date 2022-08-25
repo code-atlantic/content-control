@@ -22,10 +22,11 @@
   },
   "dependencies": {
     "@wordpress/base-styles": "^4.6.0",
-    "@wordpress/block-editor": "^9.5.0",
+    "@wordpress/block-editor": "^9.8.0",
     "@wordpress/components": "^19.15.0",
     "@wordpress/compose": "^5.11.0",
-    "@wordpress/core-data": "^4.11.0",
+    "@wordpress/core-data": "^4.14.0",
+    "@wordpress/data": "^7.0.0",
     "@wordpress/dom-ready": "^3.15.0",
     "@wordpress/element": "^4.13.0",
     "@wordpress/hooks": "^3.13.0",
