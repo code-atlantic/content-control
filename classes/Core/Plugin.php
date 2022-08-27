@@ -168,10 +168,11 @@ class Plugin {
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
-			'Admin'       => new \ContentControl\Admin( $this ),
-			'RestAPI'     => new \ContentControl\RestAPI( $this ),
-			'BlockEditor' => new \ContentControl\BlockEditor( $this ),
-			'Frontend'    => new \ContentControl\Frontend( $this ),
+			'Restrictions' => new \ContentControl\Restrictions( $this ),
+			'Admin'        => new \ContentControl\Admin( $this ),
+			'RestAPI'      => new \ContentControl\RestAPI( $this ),
+			'BlockEditor'  => new \ContentControl\BlockEditor( $this ),
+			'Frontend'     => new \ContentControl\Frontend( $this ),
 		];
 
 		foreach ( $controllers as $controller ) {
@@ -205,7 +206,7 @@ class Plugin {
 	 * @param string $path Sub url to return.
 	 * @return string
 	 */
-	public function get_url( $path ) {
+	public function get_url( $path = '' ) {
 		return $this->container['url'] . $path;
 	}
 
