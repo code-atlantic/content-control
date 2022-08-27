@@ -1,0 +1,3 @@
+type RestrictionsState = {
+	restrictions: Restriction[];
+};
