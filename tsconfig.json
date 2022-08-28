@@ -8,6 +8,9 @@
 			"@components": [
 				"components",
 			],
+			"@data": [
+				"data/",
+			],
 			"@icons": [
 				"icons"
 			],
