@@ -45,7 +45,6 @@ class Restrictions extends Controller {
 			'show_in_nav_menus'   => false,
 			'delete_with_user'    => false,
 			'exclude_from_search' => true,
-			'capability_type'     => 'manage_options',
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
 			'can_export'          => true,
