@@ -12,7 +12,7 @@ type Props = {
 
 const List = ( { restrictions, editSet, deleteSet, isDeleting }: Props ) => {
 	return (
-		<ListTable< Restriction >
+		<ListTable
 			items={ restrictions }
 			columns={ {
 				title: __( 'Title', 'content-control' ),
