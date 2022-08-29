@@ -11,6 +11,9 @@
 			"@data": [
 				"data/",
 			],
+			"@data/*": [
+				"data/*",
+			],
 			"@icons": [
 				"icons"
 			],
