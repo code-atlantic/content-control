@@ -56,5 +56,27 @@ class Restrictions extends Controller {
 		];
 
 		register_post_type( 'cc_restriction', $args );
+
+		register_rest_field( 'cc_restriction', 'settings', [
+			'get_callback'    => function ( $object ) {
+				return get_post_meta( $object['id'], 'restriction_settings', true );
+			},
+			'update_callback' => function ( $value, $object ) {
+				// Update the field/meta value.
+				update_post_meta( $object->ID, 'restriction_settings', $value );
+			},
+		] );
+
+		register_rest_field( 'cc_restriction', 'description', [
+			'get_callback'    => function ( $object ) {
+				return get_the_excerpt( $object['id'] );
+			},
+			'update_callback' => function ( $value, $object ) {
+				wp_update_post( [
+					'ID'           => $object->ID,
+					'post_excerpt' => sanitize_text_field( $value ),
+				] );
+			},
+		] );
 	}
 }

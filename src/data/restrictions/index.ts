@@ -10,9 +10,7 @@ import * as resolvers from './resolvers';
 import reducer from './reducer';
 import localControls from '../controls';
 
-import STORE_NAME from './name';
-
-const initialState: RestrictionsState = { restrictions: [] };
+import { initialState, restrictionDefaults, STORE_NAME } from './constants';
 
 const storeConfig = () => ( {
 	initialState,
@@ -25,4 +23,4 @@ const storeConfig = () => ( {
 
 const store = createReduxStore( STORE_NAME, storeConfig() );
 
-export { STORE_NAME, store };
+export { STORE_NAME, store, restrictionDefaults as defaultRestriction };
