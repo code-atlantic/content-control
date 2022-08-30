@@ -125,11 +125,13 @@ export function* createRestriction( restriction: Restriction ) {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
+		const { id, ...noIdRestriction } = restriction;
+
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
 		const result: SettingsState = yield fetch( getResourcePath(), {
 			method: 'POST',
-			body: restriction,
+			body: noIdRestriction,
 		} );
 
 		if ( result ) {
