@@ -13,7 +13,7 @@ interface Restriction {
 		customMessage: string;
 		conditions: Query;
 		[ key: string ]: any;
-	};
+	status: 'publish' | 'draft' | 'pending' | 'scheduled';
 	[ key: string ]: any;
 }
 

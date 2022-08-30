@@ -30,6 +30,7 @@ export const restrictionDefaults: Restriction = {
 	id: 0,
 	title: '',
 	description: '',
+	status: 'draft',
 	settings: {
 		who: 'logged_in',
 		roles: [],
