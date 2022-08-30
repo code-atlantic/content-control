@@ -1,10 +1,10 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { fetch } from '../controls';
 import { hydrate } from './actions';
-import { getErrorMessage, getResourcePath } from './utils';
+import { appendUrlParams, getErrorMessage, getResourcePath } from './utils';
 
 import { ACTION_TYPES } from './constants';
-const { RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;
+const { UPDATE, RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;
 
 /**
  * Resolves get restrictions requests from the server.
@@ -46,15 +46,44 @@ export function* getRestrictions( searchArgs: { [ key: string ]: any } ) {
 	}
 }
 
-// Since getRestriction already uses getRestrictions it handles this for us currenlty.
-// export function* getRestriction( restrictionId: Restriction[ 'id' ] ) {
-// 	const result: Restriction = yield fetch( getResourcePath( restrictionId ), {
-// 		method: 'GET',
-// 	} );
+/**
+ * Resolves get restrictions requests from the server.
+ *
+ * @returns Action object to update single restriction store.
+ */
+export function* getRestriction( restrictionId: Restriction[ 'id' ] ) {
+	// catch any request errors.
+	try {
+		// execution will pause here until the `FETCH` control function's return
+		// value has resolved.
+		const restriction: Restriction = yield fetch(
+			getResourcePath( restrictionId )
+		);
 
-// 	if ( result ) {
-// 		return hydrate( [ result ] );
-// 	}
+		if ( restriction ) {
+			return {
+				type: UPDATE,
+				restriction,
+			};
+		}
 
-// 	return null;
-// }
+		// if execution arrives here, then thing didn't update in the state so return
+		// action object that will add an error to the state about this.
+		return {
+			type: RESTRICTIONS_FETCH_ERROR,
+			message: sprintf(
+				__(
+					`An error occurred, restriction %d were not loaded.`,
+					'content-control'
+				),
+				restrictionId
+			),
+		};
+	} catch ( error ) {
+		// returning an action object that will save the update error to the state.
+		return {
+			type: RESTRICTIONS_FETCH_ERROR,
+			message: getErrorMessage( error ),
+		};
+	}
+}
