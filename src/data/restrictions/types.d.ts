@@ -1,19 +1,22 @@
+interface RestrictionSettings {
+	who: 'logged_in' | 'logged_out';
+	roles: string[];
+	protectionMethod: 'redirect' | 'message';
+	redirectType: 'login' | 'home' | 'custom';
+	redirectUrl: string;
+	showExcerpts: boolean;
+	overrideMessage: boolean;
+	customMessage: string;
+	conditions: Query;
+	[ key: string ]: any;
+}
+
 interface Restriction {
 	id: number;
 	title: string;
 	description: string;
-	settings: {
-		who: 'logged_in' | 'logged_out';
-		roles: string[];
-		protectionMethod: 'redirect' | 'message';
-		redirectType: 'login' | 'home' | 'custom';
-		redirectUrl: string;
-		showExcerpts: boolean;
-		overrideMessage: boolean;
-		customMessage: string;
-		conditions: Query;
-		[ key: string ]: any;
 	status: 'publish' | 'draft' | 'pending' | 'scheduled';
+	settings: RestrictionSettings;
 	[ key: string ]: any;
 }
 
