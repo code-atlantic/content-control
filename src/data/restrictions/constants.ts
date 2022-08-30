@@ -5,9 +5,11 @@ export const ACTION_TYPES = {
 	UPDATE: 'UPDATE',
 	DELETE: 'DELETE',
 	HYDRATE: 'HYDRATE',
+	EDITOR_CHANGE_ID: 'EDITOR_CHANGE_ID',
+	EDITOR_CLEAR_DATA: 'EDITOR_CLEAR_DATA',
+	EDITOR_UPDATE_VALUES: 'EDITOR_UPDATE_VALUES',
 	CHANGE_ACTION_STATUS: 'CHANGE_ACTION_STATUS',
 	RESTRICTIONS_FETCH_ERROR: 'RESTRICTIONS_FETCH_ERROR',
-	RESTRICTIONS_UPDATE_ERROR: 'RESTRICTIONS_UPDATE_ERROR',
 };
 
 export const enum Status {
@@ -21,6 +23,7 @@ export type Statuses = typeof Status[ keyof typeof Status ];
 
 export const initialState: RestrictionsState = {
 	restrictions: [],
+	editor: {},
 };
 
 export const restrictionDefaults: Restriction = {

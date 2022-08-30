@@ -25,6 +25,45 @@ export const getRestriction = (
 	getRestrictions( state ).find( ( restriction ) => restriction.id === id );
 
 /**
+ * Check if the editor is active.
+ *
+ * @param {RestrictionsState} state Current state.
+ *
+ * @return {boolean} If editor is active.
+ */
+export const isEditorActive = ( state: RestrictionsState ): boolean => {
+	const editorId = state?.editor?.id;
+
+	if ( typeof editorId === 'string' && editorId === 'new' ) {
+		return true;
+	}
+
+	return typeof editorId === 'number' && editorId > 0;
+};
+
+/**
+ * Check if the editor is active.
+ *
+ * @param {RestrictionsState} state Current state.
+ *
+ * @return {number|"new"|undefined} If editor is active.
+ */
+export const getEditorId = (
+	state: RestrictionsState
+): RestrictionsState[ 'editor' ][ 'id' ] => state?.editor?.id;
+
+/**
+ * Get current editor values.
+ *
+ * @param {RestrictionsState} state Current state.
+ *
+ * @return {Restriction|undefined} If editor is active.
+ */
+export const getEditorValues = (
+	state: RestrictionsState
+): RestrictionsState[ 'editor' ][ 'values' ] => state?.editor?.values;
+
+/**
  * Get current status for dispatched action.
  *
  * @param {RestrictionsState} state      Current state.

@@ -11,7 +11,9 @@ const {
 	UPDATE,
 	HYDRATE,
 	CHANGE_ACTION_STATUS,
-	RESTRICTIONS_UPDATE_ERROR,
+	EDITOR_CHANGE_ID,
+	EDITOR_CLEAR_DATA,
+	EDITOR_UPDATE_VALUES,
 } = ACTION_TYPES;
 
 /**
@@ -32,6 +34,81 @@ export const changeActionStatus = (
 		actionName,
 		status,
 		error,
+	};
+};
+
+/**
+ * Changes the editor to edit the new item by id.
+ *
+ * @param {number|"new"|undefined} editorId Id of the item to be edited.
+ * @returns Action to be dispatched.
+ */
+export function* changeEditorId(
+	editorId: RestrictionsState[ 'editor' ][ 'id' ]
+) {
+	// catch any request errors.
+	try {
+		if ( typeof editorId === 'undefined' ) {
+			return {
+				type: EDITOR_CHANGE_ID,
+				editorId: undefined,
+				editorValues: undefined,
+			};
+		}
+
+		let restriction: Restriction | undefined =
+			editorId === 'new' ? restrictionDefaults : undefined;
+
+		if ( typeof editorId === 'number' && editorId > 0 ) {
+			restriction = yield select(
+				STORE_NAME,
+				'getRestriction',
+				editorId
+			);
+		}
+
+		if ( restriction ) {
+			return {
+				type: EDITOR_CHANGE_ID,
+				editorId,
+				editorValues: restriction,
+			};
+		}
+	} catch ( error ) {
+		console.log( error );
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			'changeEditorId',
+			Status.Error,
+			getErrorMessage( error )
+		);
+	}
+
+	return;
+}
+
+/**
+ * Update value of the current editor data.
+ *
+ * @param values Values to update.
+ * @returns Action to be dispatched.
+ */
+export const updateEditorValues = ( editorValues: Partial< Restriction > ) => {
+	return {
+		type: EDITOR_UPDATE_VALUES,
+		editorValues,
+	};
+};
+
+/**
+ * Update value of the current editor data.
+ *
+ * @param values Values to update.
+ * @returns Action to be dispatched.
+ */
+export const clearEditorData = () => {
+	return {
+		type: EDITOR_CLEAR_DATA,
 	};
 };
 

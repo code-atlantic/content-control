@@ -19,6 +19,10 @@ interface Restriction {
 
 type RestrictionsState = {
 	restrictions: Restriction[];
+	editor: {
+		id?: number | 'new';
+		values?: Restriction;
+	};
 	dispatchStatus?: {
 		[ Property in keyof RestrictionsStore[ 'Actions' ] ]?: {
 			status: string;

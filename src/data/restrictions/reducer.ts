@@ -6,7 +6,9 @@ const {
 	UPDATE,
 	HYDRATE,
 	CHANGE_ACTION_STATUS,
-	RESTRICTIONS_UPDATE_ERROR,
+	EDITOR_CHANGE_ID,
+	EDITOR_CLEAR_DATA,
+	EDITOR_UPDATE_VALUES,
 } = ACTION_TYPES;
 
 type ActionPayloadTypes = {
@@ -17,6 +19,8 @@ type ActionPayloadTypes = {
 	actionName: ActionNames;
 	status: Statuses;
 	error: string;
+	editorId: RestrictionsState[ 'editor' ][ 'id' ];
+	editorValues: RestrictionsState[ 'editor' ][ 'values' ];
 };
 
 const reducer = (
@@ -29,6 +33,8 @@ const reducer = (
 		actionName,
 		status,
 		error,
+		editorId,
+		editorValues,
 	}: ActionPayloadTypes
 ) => {
 	switch ( type ) {
@@ -52,7 +58,30 @@ const reducer = (
 			};
 
 		case HYDRATE:
-			return { restrictions: incomingRestrictions };
+		case EDITOR_CHANGE_ID:
+			return {
+				...state,
+				editor: {
+					...state.editor,
+					id: editorId,
+					values: editorValues,
+				},
+			};
+
+		case EDITOR_UPDATE_VALUES:
+			return {
+				...state,
+				editor: {
+					...state.editor,
+					values: editorValues,
+				},
+			};
+
+		case EDITOR_CLEAR_DATA:
+			return {
+				...state,
+				editor: {},
+			};
 
 		case CHANGE_ACTION_STATUS:
 			return {
