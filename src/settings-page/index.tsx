@@ -19,23 +19,6 @@ declare global {
 	};
 }
 
-/** Type Overrides */
-declare module '@wordpress/data' {
-	export function useSelect(
-		key: typeof restrictionsStore | 'content-control/restrictions'
-	): RestrictionsStore[ 'Selectors' ];
-	export function useDispatch(
-		key: typeof restrictionsStore | 'content-control/restrictions'
-	): RestrictionsStore[ 'Actions' ];
-
-	export function useSelect(
-		key: typeof settingsStore | 'content-control/settings'
-	): SettingsStore[ 'Selectors' ];
-	export function useDispatch(
-		key: typeof settingsStore | 'content-control/settings'
-	): SettingsStore[ 'Actions' ];
-}
-
 domReady( () => {
 	render(
 		<StrictMode>
