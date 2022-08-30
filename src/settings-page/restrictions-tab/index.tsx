@@ -14,23 +14,7 @@ import List from './list';
 
 import './editor.scss';
 
-export const defaultRestriction: Restriction = {
-	id: 0,
-	title: '',
-	description: '',
-	who: 'logged_in',
-	roles: [],
-	protectionMethod: 'redirect',
-	redirectType: 'login',
-	redirectUrl: '',
-	showExcerpts: false,
-	overrideMessage: false,
-	customMessage: '',
-	conditions: {
-		logicalOperator: 'and',
-		items: [],
-	},
-};
+import { restrictionDefaults } from '@data/restrictions';
 
 const RestrictionsTab = () => {
 	const [ status, setStatus ] = useState( 'loaded' );
@@ -178,7 +162,7 @@ const RestrictionsTab = () => {
 			return set;
 		}
 
-		return defaultRestriction;
+		return restrictionDefaults;
 	} )();
 
 	return (

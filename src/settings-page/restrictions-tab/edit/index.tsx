@@ -4,7 +4,6 @@ import { __ } from '@wordpress/i18n';
 import { link } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-
 import { Button, Modal, TabPanel } from '@wordpress/components';
 
 import GeneralTab from './general';
@@ -13,7 +12,7 @@ import ContentTab from './content';
 
 import { documenationUrl } from '../../../config';
 
-import { defaultRestriction } from '..';
+import { restrictionDefaults } from '@data/restrictions';
 
 export type EditProps = {
 	values: Restriction;
@@ -31,7 +30,7 @@ export type EditTabProps = EditProps & {
 };
 
 const Edit = ( {
-	values: editorValues = defaultRestriction,
+	values: editorValues = restrictionDefaults,
 	onSave,
 	onClose,
 }: EditProps ) => {
