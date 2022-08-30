@@ -40,11 +40,13 @@ const reducer = (
 	switch ( type ) {
 		case CREATE:
 			return {
-				retstrictions: [ ...state.restrictions, restriction ],
+				...state,
+				restrictions: [ ...state.restrictions, restriction ],
 			};
 
 		case UPDATE:
 			return {
+				...state,
 				restrictions: state.restrictions
 					.filter( ( existing ) => existing.id !== restriction.id )
 					.concat( [ restriction ] ),
@@ -52,12 +54,18 @@ const reducer = (
 
 		case DELETE:
 			return {
+				...state,
 				restrictions: state.restrictions.filter(
 					( existing ) => existing.id !== restrictionId
 				),
 			};
 
 		case HYDRATE:
+			return {
+				...state,
+				restrictions: incomingRestrictions,
+			};
+
 		case EDITOR_CHANGE_ID:
 			return {
 				...state,
@@ -85,6 +93,7 @@ const reducer = (
 
 		case CHANGE_ACTION_STATUS:
 			return {
+				...state,
 				dispatchStatus: {
 					...state.dispatchStatus,
 					[ actionName ]: {
@@ -93,11 +102,6 @@ const reducer = (
 						error,
 					},
 				},
-			};
-
-		case RESTRICTIONS_UPDATE_ERROR:
-			return {
-				error,
 			};
 
 		default:
