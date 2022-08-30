@@ -3,7 +3,13 @@ import { select } from '@wordpress/data-controls';
 
 import { fetch } from '../controls';
 import { getErrorMessage, getResourcePath } from './utils';
-import { STORE_NAME, ACTION_TYPES, Statuses, Status } from './constants';
+import {
+	STORE_NAME,
+	ACTION_TYPES,
+	Statuses,
+	Status,
+	restrictionDefaults,
+} from './constants';
 
 const {
 	CREATE,
@@ -29,6 +35,10 @@ export const changeActionStatus = (
 	status: Statuses,
 	error?: string | undefined
 ) => {
+	if ( error ) {
+		console.log( actionName, error );
+	}
+
 	return {
 		type: CHANGE_ACTION_STATUS,
 		actionName,
@@ -205,21 +215,22 @@ export function* updateRestriction( restriction: Restriction ) {
 
 		// if execution arrives here, then thing didn't update in the state so return
 		// action object that will add an error to the state about this.
-		return {
-			type: RESTRICTIONS_UPDATE_ERROR,
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
 			actionName,
-			message: __(
+			Status.Error,
+			__(
 				'An error occurred, restriction was not saved.',
 				'content-control'
-			),
-		};
+			)
+		);
 	} catch ( error ) {
 		// returning an action object that will save the update error to the state.
-		return {
-			type: RESTRICTIONS_UPDATE_ERROR,
+		return changeActionStatus(
 			actionName,
-			message: getErrorMessage( error ),
-		};
+			Status.Error,
+			getErrorMessage( error )
+		);
 	}
 }
 
@@ -255,6 +266,7 @@ export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
+
 			return {
 				type: DELETE,
 				restrictionId,
@@ -263,21 +275,22 @@ export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
 
 		// if execution arrives here, then thing didn't update in the state so return
 		// action object that will add an error to the state about this.
-		return {
-			type: RESTRICTIONS_UPDATE_ERROR,
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
 			actionName,
-			error: __(
+			Status.Error,
+			__(
 				'An error occurred, restriction was not deletd.',
 				'content-control'
-			),
-		};
+			)
+		);
 	} catch ( error ) {
 		// returning an action object that will save the update error to the state.
-		return {
-			type: RESTRICTIONS_UPDATE_ERROR,
+		return changeActionStatus(
 			actionName,
-			error: getErrorMessage( error ),
-		};
+			Status.Error,
+			getErrorMessage( error )
+		);
 	}
 }
 
