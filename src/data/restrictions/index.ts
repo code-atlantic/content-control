@@ -23,4 +23,4 @@ const storeConfig = () => ( {
 
 const store = createReduxStore( STORE_NAME, storeConfig() );
 
-export { STORE_NAME, store, restrictionDefaults as defaultRestriction };
+export { STORE_NAME, store, restrictionDefaults };
