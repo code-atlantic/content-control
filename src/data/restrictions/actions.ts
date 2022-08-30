@@ -240,7 +240,7 @@ export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
 		// value has resolved.
 		const restriction: Restriction = yield select(
 			STORE_NAME,
-			'getProduct',
+			'getRestriction',
 			restrictionId
 		);
 
