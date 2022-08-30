@@ -47,6 +47,10 @@ class Restrictions {
 	 * Initiate functionality.
 	 */
 	public function init() {
+		if ( \ContentControl\is_rest() ) {
+			return;
+		}
+
 		add_action( 'template_redirect', [ $this, 'template_redirect' ] );
 	}
 

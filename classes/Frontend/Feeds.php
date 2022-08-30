@@ -21,6 +21,10 @@ class Feeds {
 	 * Initiate functionality.
 	 */
 	public function __construct() {
+		if (  \ContentControl\is_rest()  ) {
+			return;
+		}
+
 		add_action( 'the_excerpt', [ $this, 'filter_feed_posts' ] );
 		add_action( 'the_content', [ $this, 'filter_feed_posts' ] );
 		add_filter( 'content_control_restricted_message', [ $this, 'restricted_message_filter' ], 10, 1 );

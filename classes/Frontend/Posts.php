@@ -23,6 +23,10 @@ class Posts {
 	 * Initiate functionality.
 	 */
 	public function __construct() {
+		if ( \ContentControl\is_rest() ) {
+			return;
+		}
+
 		if ( ! is_admin() ) {
 			add_action( 'the_content', [ $this, 'the_content' ], 1000 );
 		}
