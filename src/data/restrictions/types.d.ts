@@ -14,6 +14,7 @@ interface Restriction {
 		conditions: Query;
 		[ key: string ]: any;
 	};
+	[ key: string ]: any;
 }
 
 type RestrictionsState = {
