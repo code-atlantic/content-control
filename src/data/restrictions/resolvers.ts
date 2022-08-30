@@ -11,12 +11,16 @@ const { RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;
  *
  * @returns Action object to hydrate store.
  */
-export function* getRestrictions() {
+export function* getRestrictions( searchArgs: { [ key: string ]: any } ) {
 	// catch any request errors.
 	try {
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const restrictions: Restriction[] = yield fetch( getResourcePath() );
+		const restrictions: Restriction[] = yield fetch(
+			appendUrlParams( getResourcePath(), {
+				...searchArgs,
+			} )
+		);
 
 		if ( restrictions ) {
 			// thing was successfully updated so return the action object that will
