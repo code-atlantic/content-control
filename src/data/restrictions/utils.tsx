@@ -6,17 +6,26 @@
  * @return {string} Resulting resource path.
  */
 export const getResourcePath = (
-	id: Restriction[ 'id' ] | undefined = undefined,
-	urlParams: object | undefined = undefined
-) => {
+	id: Restriction[ 'id' ] | undefined = undefined
+): string => {
 	const root = `content-control/v2/restrictions`;
 
+	return id ? `${ root }/${ id }` : root;
+};
+
+/**
+ * Append params to url.
+ *
+ * @param {string} url    Url to append params to.
+ * @param {Object} params Object of url parameters.
+ * @return {string} Resulting resource path.
+ */
+export const appendUrlParams = ( url: string, params: object ) => {
 	const query = new URLSearchParams( {
-		context: 'view',
-		...urlParams,
+		...params,
 	} );
 
-	return id ? `${ root }/${ id }?${ query }` : `${ root }?${ query }`;
+	return `${ url }?${ query }`;
 };
 
 /**
