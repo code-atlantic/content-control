@@ -6,13 +6,15 @@ export const fetch = (
 	path: string,
 	options: { [ key: string ]: any } = {}
 ) => {
+	options.headers = {
+		'Content-Type': 'application/json',
+		'X-WP-Nonce': wpApiSettings.nonce,
+	};
+
 	if ( options.body ) {
 		options.body = JSON.stringify( options.body );
-		options.headers = {
-			'Content-Type': 'application/json',
-			'X-WP-Nonce': wpApiSettings.nonce,
-		};
 	}
+
 	// ensures things work with cors.
 	options.credentials = 'same-origin';
 
