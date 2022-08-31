@@ -1,3 +1,5 @@
+type EditorID = 'new' | number | undefined;
+
 interface RestrictionSettings {
 	who: 'logged_in' | 'logged_out';
 	roles: string[];
@@ -15,7 +17,7 @@ interface Restriction {
 	id: number;
 	title: string;
 	description: string;
-	status: 'publish' | 'draft' | 'pending' | 'scheduled';
+	status: 'publish' | 'draft' | 'pending' | 'trash';
 	settings: RestrictionSettings;
 	[ key: string ]: any;
 }
@@ -23,7 +25,7 @@ interface Restriction {
 type RestrictionsState = {
 	restrictions: Restriction[];
 	editor: {
-		id?: number | 'new';
+		id?: EditorID;
 		values?: Restriction;
 	};
 	dispatchStatus?: {
