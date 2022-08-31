@@ -139,7 +139,7 @@ export function* createRestriction( restriction: Restriction ) {
 
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const result: SettingsState = yield fetch( getResourcePath(), {
+		const result: Restriction = yield fetch( getResourcePath(), {
 			method: 'POST',
 			body: noIdRestriction,
 		} );
@@ -149,10 +149,24 @@ export function* createRestriction( restriction: Restriction ) {
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
 
-			return {
+			const editorId: EditorID = yield select(
+				STORE_NAME,
+				'getEditorId'
+			);
+
+			const returnAction = {
 				type: CREATE,
 				restriction: result,
 			};
+
+			if ( editorId === 'new' ) {
+				yield returnAction;
+				// Change editor ID to continue editing.
+				yield changeEditorId( result.id );
+				return;
+			}
+
+			return returnAction;
 		}
 
 		return changeActionStatus(
