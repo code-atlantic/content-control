@@ -24,3 +24,9 @@ const storeConfig = () => ( {
 const store = createReduxStore( STORE_NAME, storeConfig() );
 
 export { STORE_NAME, store, restrictionDefaults };
+
+declare module '@wordpress/data' {
+	function select( key: StoreKey ): Selectors;
+	function dispatch( key: StoreKey ): Actions;
+	function useDispatch( key: StoreKey ): Actions;
+}
