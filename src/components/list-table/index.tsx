@@ -198,11 +198,6 @@ const ListTable = < T extends TableItemBase >( {
 											scope={
 												isIdCol ? 'row' : undefined
 											}
-											data-colname={
-												! isBulkSelect
-													? colLabel
-													: undefined
-											}
 										>
 											{ isIdCol ? (
 												<CheckboxControl
