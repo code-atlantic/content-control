@@ -1,4 +1,4 @@
-type EditorID = 'new' | number | undefined;
+type EditorId = 'new' | number | undefined;
 
 interface RestrictionSettings {
 	who: 'logged_in' | 'logged_out';
@@ -25,7 +25,7 @@ interface Restriction {
 type RestrictionsState = {
 	restrictions: Restriction[];
 	editor: {
-		id?: EditorID;
+		id?: EditorId;
 		values?: Restriction;
 	};
 	dispatchStatus?: {
@@ -39,9 +39,16 @@ type RestrictionsState = {
 
 interface RestrictionsStore {
 	State: RestrictionsState;
-	Selectors: typeof import('./selectors');
-	Actions: typeof import('./actions');
+	Selectors: Selectors;
+	Actions: Actions;
 }
 
 type SelectorNames = keyof RestrictionsStore[ 'Selectors' ];
 type ActionNames = keyof RestrictionsStore[ 'Actions' ];
+
+type Selectors = OmitFirstArgs< typeof import('./selectors') >;
+type Actions = RemoveReturnTypes< typeof import('./actions') >;
+type StoreKey =
+	| 'store/name'
+	| typeof import('./index').STORE_NAME
+	| typeof import('./index').store;
