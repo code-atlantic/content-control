@@ -48,9 +48,8 @@ export const isEditorActive = ( state: RestrictionsState ): boolean => {
  *
  * @return {number|"new"|undefined} If editor is active.
  */
-export const getEditorId = (
-	state: RestrictionsState
-): RestrictionsState[ 'editor' ][ 'id' ] => state?.editor?.id;
+export const getEditorId = ( state: RestrictionsState ): EditorID =>
+	state?.editor?.id;
 
 /**
  * Get current editor values.
@@ -79,15 +78,32 @@ export const getDispatchStatus = (
 /**
  * Check if action is dispatching.
  *
- * @param {RestrictionsState} state      Current state.
- * @param {ActionNames}       actionName Action name to check.
+ * @param {RestrictionsState}         state       Current state.
+ * @param {ActionNames|ActionNames[]} actionNames Action name or array of names to check.
  *
  * @return {boolean} True if is dispatching.
  */
 export const isDispatching = (
 	state: RestrictionsState,
-	actionName: ActionNames
-): boolean => getDispatchStatus( state, actionName ) === Status.Resolving;
+	actionNames: ActionNames | ActionNames[]
+): boolean => {
+	if ( ! Array.isArray( actionNames ) ) {
+		return getDispatchStatus( state, actionNames ) === Status.Resolving;
+	}
+
+	let dispatching = false;
+
+	for ( let i = 0; actionNames.length > i; i++ ) {
+		dispatching =
+			getDispatchStatus( state, actionNames[ i ] ) === Status.Resolving;
+
+		if ( dispatching ) {
+			return true;
+		}
+	}
+
+	return dispatching;
+};
 
 /**
  * Check if action has finished dispatching.
