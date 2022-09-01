@@ -81,7 +81,10 @@ const reducer = (
 				...state,
 				editor: {
 					...state.editor,
-					values: editorValues,
+					values: {
+						...state.editor?.values,
+						...editorValues,
+					},
 				},
 			};
 
