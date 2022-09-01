@@ -100,7 +100,7 @@ export function* changeEditorId(
 /**
  * Update value of the current editor data.
  *
- * @param values Values to update.
+ * @param editorValues Values to update.
  * @returns Action to be dispatched.
  */
 export const updateEditorValues = ( editorValues: Partial< Restriction > ) => {
@@ -149,7 +149,7 @@ export function* createRestriction( restriction: Restriction ) {
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
 
-			const editorId: EditorID = yield select(
+			const editorId: EditorId = yield select(
 				STORE_NAME,
 				'getEditorId'
 			);
@@ -251,10 +251,14 @@ export function* updateRestriction( restriction: Restriction ) {
 /**
  * Delete a restriction from the store.
  *
- * @param {number} restrictionId Restriction ID.
+ * @param restrictionId Restriction ID.
+ * @param forceDelete Whether to trash or force delete.
  * @returns Delete Action.
  */
-export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
+export function* deleteRestriction(
+	restrictionId: Restriction[ 'id' ],
+	forceDelete: boolean = false
+) {
 	const actionName = 'deleteRestriction';
 
 	// catch any request errors.
@@ -269,22 +273,27 @@ export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
 			restrictionId
 		);
 
-		const result: boolean = yield fetch(
-			getResourcePath( restriction.id ),
-			{
-				method: 'DELETE',
-			}
-		);
+		const force = forceDelete ? '?force=true' : '';
+		const path = getResourcePath( restriction.id ) + force;
+
+		const result: boolean = yield fetch( path, {
+			method: 'DELETE',
+		} );
 
 		if ( result ) {
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
 
-			return {
-				type: DELETE,
-				restrictionId,
-			};
+			return forceDelete
+				? {
+						type: DELETE,
+						restrictionId,
+				  }
+				: {
+						type: UPDATE,
+						restriction: { ...restriction, status: 'trash' },
+				  };
 		}
 
 		// if execution arrives here, then thing didn't update in the state so return
@@ -294,7 +303,7 @@ export function* deleteRestriction( restrictionId: Restriction[ 'id' ] ) {
 			actionName,
 			Status.Error,
 			__(
-				'An error occurred, restriction was not deletd.',
+				'An error occurred, restriction was not deleted.',
 				'content-control'
 			)
 		);
