@@ -103,7 +103,11 @@ $border-options: solid #c3c4c7;
 
 	.check-column {
 		.components-base-control__field {
-			margin-bottom: 0;
+			margin-bottom: 0!important;
+		}
+		.components-checkbox-control__input-container,
+		.components-checkbox-control__input {
+			margin-right: 0!important;
 		}
 	}
 
