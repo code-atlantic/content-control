@@ -14,7 +14,7 @@ const { registeredRules } = contentControlRuleEngine;
 /** Filter rules for this context */
 const restrictionRules = [ ...Object.values( registeredRules ) ];
 
-const ContentTab = ( { values, updateValues }: EditTabProps ) => {
+const ContentTab = ( { values, updateSettings }: EditTabProps ) => {
 	return (
 		<div className="content-tab">
 			<h3>
@@ -31,9 +31,9 @@ const ContentTab = ( { values, updateValues }: EditTabProps ) => {
 			</p>
 
 			<RuleEngine
-				value={ values.conditions }
+				value={ values.settings.conditions }
 				onChange={ ( conditions ) =>
-					updateValues( {
+					updateSettings( {
 						conditions,
 					} )
 				}
