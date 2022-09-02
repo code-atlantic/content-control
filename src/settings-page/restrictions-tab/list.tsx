@@ -1,14 +1,9 @@
-import {
-	NumberParam,
-	StringParam,
-	useQueryParams,
-	withDefault,
-} from 'use-query-params';
+import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { info } from '@wordpress/icons';
-import { useEffect } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { useCallback, useEffect } from '@wordpress/element';
 import {
 	Button,
 	Icon,
@@ -30,22 +25,19 @@ const statusOptionLabels: Record< Statuses, string > = {
 };
 
 const List = () => {
+	// Get the shared method for setting editor Id & query params.
 	const { setEditorId } = useEditor();
 
 	// Fetch needed data from the @data & @wordpress/data stores.
-	const { restrictions, isLoading, isDeleting } = useSelect(
-		( select ) => ( {
-			// Restriction List & Load Status.
-			restrictions: select( restrictionsStore ).getRestrictions(),
-			isLoading:
-				select( restrictionsStore ).isResolving( 'getRestrictions' ),
-			isDeleting:
-				select( restrictionsStore ).isDispatching(
-					'deleteRestriction'
-				),
-		} ),
-		[]
-	);
+	const { restrictions, isLoading, isDeleting } = useSelect( ( select ) => {
+		const sel = select( restrictionsStore );
+		// Restriction List & Load Status.
+		return {
+			restrictions: sel.getRestrictions(),
+			isLoading: sel.isResolving( 'getRestrictions' ),
+			isDeleting: sel.isDispatching( 'deleteRestriction' ),
+		};
+	}, [] );
 
 	// Get action dispatchers.
 	const { updateRestriction, deleteRestriction } =
@@ -66,16 +58,27 @@ const List = () => {
 	useEffect( () => clearFilterParams, [] );
 
 	// List of unique statuses from all items.
-	const activeStatusCounts = restrictions.reduce<
-		Record< Statuses, number >
-	>(
-		( s, r ) => {
-			s[ r.status ] = ( s[ r.status ] ?? 0 ) + 1;
-			s.all++;
-			return s;
-		},
-		{ all: 0 }
-	);
+	const activeStatusCounts = useCallback(
+		() =>
+			restrictions.reduce< Record< Statuses, number > >(
+				( s, r ) => {
+					s[ r.status ] = ( s[ r.status ] ?? 0 ) + 1;
+					s.all++;
+					return s;
+				},
+				{ all: 0 }
+			),
+		[ restrictions ]
+	)();
+
+	// If the current status tab has no results, switch to all.
+	useEffect( () => {
+		const count = activeStatusCounts?.[ status ];
+
+		if ( ! count || count <= 0 ) {
+			setFilters( { status: 'all' } );
+		}
+	}, [ activeStatusCounts ] );
 
 	/**
 	 * Checks if Status button should be visible.
@@ -86,8 +89,12 @@ const List = () => {
 	const isStatusActive = ( s: Statuses ) => activeStatusCounts?.[ s ] > 0;
 
 	// Filtered list of restrictions for the current status filter.
-	const filteredRestrictions = restrictions.filter( ( r ) =>
-		status === 'all' ? true : status === r.status
+	const filteredRestrictions = useCallback(
+		() =>
+			restrictions.filter( ( r ) =>
+				status === 'all' ? true : status === r.status
+			),
+		[ restrictions ]
 	);
 
 	return (
@@ -117,7 +124,7 @@ const List = () => {
 				) }
 				<ListTable
 					className="striped"
-					items={ ! isLoading ? filteredRestrictions : [] }
+					items={ ! isLoading ? filteredRestrictions() : [] }
 					columns={ {
 						enabled: () => (
 							<>
