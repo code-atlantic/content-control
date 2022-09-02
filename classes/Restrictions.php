@@ -13,6 +13,7 @@ class Restrictions extends Controller {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_post_type' ] );
+		add_action( 'init', [ $this, 'register_rest_fields' ] );
 	}
 
 	/**
@@ -55,14 +56,23 @@ class Restrictions extends Controller {
 		];
 
 		register_post_type( 'cc_restriction', $args );
+	}
 
-		register_rest_field( 'cc_restriction', 'settings', [
+	/**
+	 * Registers custom REST API fields for cc_restrictions post type.
+	 *
+	 * @return void
+	 */
+	public function register_rest_fields() {
+		register_rest_field( 'cc_restriction', 'title', [
 			'get_callback'    => function ( $object ) {
-				return get_post_meta( $object['id'], 'restriction_settings', true );
+				return get_the_title( $object['id'] );
 			},
 			'update_callback' => function ( $value, $object ) {
-				// Update the field/meta value.
-				update_post_meta( $object->ID, 'restriction_settings', $value );
+				wp_update_post( [
+					'ID'         => $object->ID,
+					'post_title' => sanitize_text_field( $value ),
+				] );
 			},
 		] );
 
@@ -75,6 +85,16 @@ class Restrictions extends Controller {
 					'ID'           => $object->ID,
 					'post_excerpt' => sanitize_text_field( $value ),
 				] );
+			},
+		] );
+
+		register_rest_field( 'cc_restriction', 'settings', [
+			'get_callback'    => function ( $object ) {
+				return get_post_meta( $object['id'], 'restriction_settings', true );
+			},
+			'update_callback' => function ( $value, $object ) {
+				// Update the field/meta value.
+				update_post_meta( $object->ID, 'restriction_settings', $value );
 			},
 		] );
 	}
