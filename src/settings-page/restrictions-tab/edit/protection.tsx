@@ -1,10 +1,8 @@
 /* WordPress Imports */
 import { __ } from '@wordpress/i18n';
-import {
-	CheckboxControl,
-	TextareaControl,
-	TextControl,
-} from '@wordpress/components';
+import { CheckboxControl, TextareaControl } from '@wordpress/components';
+
+import { LinkControl } from '@components';
 
 /* Internal Imports */
 import { RadioButtonControl } from '@components';
@@ -13,8 +11,14 @@ import { protectionMethodOptions, redirectTypeOptions } from '../options';
 /* Type Imports */
 import type { EditTabProps } from '.';
 
-const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
-	const customMessageRowEst = values.customMessage?.length / 80;
+const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
+	// Shortcut settings access.
+	const { settings } = values;
+
+	// Estimate number of colrows based on length of the text.
+	const customMessageRowEst = settings.customMessage?.length / 80;
+
+	// Cap upper and lower limit on rows.
 	const customMessageRows =
 		customMessageRowEst < 4
 			? 4
@@ -34,53 +38,56 @@ const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
 
 			<RadioButtonControl
 				label={ __( 'Who can see this content?', 'content-control' ) }
-				value={ values.protectionMethod }
+				value={ settings.protectionMethod }
 				onChange={ ( protectionMethod ) =>
-					updateValues( { protectionMethod } )
+					updateSettings( { protectionMethod } )
 				}
 				options={ protectionMethodOptions }
 			/>
 
-			{ 'redirect' === values.protectionMethod && (
+			{ 'redirect' === settings.protectionMethod && (
 				<>
 					<RadioButtonControl< Restriction[ 'redirectType' ] >
 						label={ __(
 							'Where will the user be taken?',
 							'content-control'
 						) }
-						value={ values.redirectType }
+						value={ settings.redirectType }
 						onChange={ ( redirectType ) =>
-							updateValues( { redirectType } )
+							updateSettings( { redirectType } )
 						}
 						options={ redirectTypeOptions }
 					/>
 
-					{ 'custom' === values.redirectType && (
-						<TextControl
+					{ 'custom' === settings.redirectType && (
+						<LinkControl
 							label={ __(
 								'Custom Redirect URL',
 								'content-control'
 							) }
 							className="is-large"
-							value={ values.redirectUrl }
+							searchInputPlaceholder="Search here..."
+							value={ settings.redirectUrl }
 							onChange={ ( redirectUrl ) =>
-								updateValues( { redirectUrl } )
+								updateSettings( {
+									redirectUrl: redirectUrl.toString(),
+								} )
 							}
 						/>
 					) }
 				</>
 			) }
 
-			{ 'message' === values.protectionMethod && (
+			{ 'message' === settings.protectionMethod && (
 				<>
 					<CheckboxControl
 						label={ __(
 							'Show excerpts above access denied message?',
 							'content-control'
 						) }
-						checked={ values.showExcerpts }
+						checked={ settings.showExcerpts }
 						onChange={ ( showExcerpts ) =>
-							updateValues( { showExcerpts } )
+							updateSettings( { showExcerpts } )
 						}
 					/>
 					<CheckboxControl
@@ -88,22 +95,22 @@ const ProtectionTab = ( { values, updateValues }: EditTabProps ) => {
 							'Override the default message?',
 							'content-control'
 						) }
-						checked={ values.overrideMessage }
+						checked={ settings.overrideMessage }
 						onChange={ ( overrideMessage ) =>
-							updateValues( { overrideMessage } )
+							updateSettings( { overrideMessage } )
 						}
 					/>
 
-					{ values.overrideMessage && (
+					{ settings.overrideMessage && (
 						<TextareaControl
 							label={ __(
 								'Enter a custom message to display to restricted users',
 								'content-control'
 							) }
 							rows={ customMessageRows }
-							value={ values.customMessage }
+							value={ settings.customMessage }
 							onChange={ ( customMessage ) =>
-								updateValues( { customMessage } )
+								updateSettings( { customMessage } )
 							}
 						/>
 					) }
