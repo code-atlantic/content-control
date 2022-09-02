@@ -10,7 +10,7 @@ import * as resolvers from './resolvers';
 import reducer from './reducer';
 import localControls from '../controls';
 
-import STORE_NAME from './name';
+import { STORE_NAME } from './constants';
 
 const initialState: SettingsState = {
 	settings: {

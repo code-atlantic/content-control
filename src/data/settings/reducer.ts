@@ -1,4 +1,4 @@
-import TYPES from './action-types';
+import { TYPES } from './constants';
 
 const { UPDATE, HYDRATE } = TYPES;
 

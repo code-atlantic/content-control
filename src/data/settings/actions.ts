@@ -2,7 +2,7 @@ import { select } from '@wordpress/data-controls';
 import { fetch } from '../controls';
 import { getResourcePath } from './utils';
 
-import TYPES from './action-types';
+import { TYPES } from './constants';
 const { UPDATE, HYDRATE } = TYPES;
 
 import STORE_NAME from './name';
