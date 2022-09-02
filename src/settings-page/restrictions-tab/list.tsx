@@ -51,15 +51,13 @@ const List = () => {
 	// Allow initiating the editor directly from a url.
 	const [ filters, setFilters ] = useQueryParams( {
 		status: withDefault( StringParam, 'all' ),
-		page: withDefault( NumberParam, 1 ),
 	} );
 
 	// Quick helper to reset all query params.
-	const clearFilterParams = () =>
-		setFilters( { status: undefined, page: undefined } );
+	const clearFilterParams = () => setFilters( { status: undefined } );
 
 	// Extract params with usable names.
-	const { status, page } = filters;
+	const { status } = filters;
 
 	// Self clear query params when component is removed.
 	useEffect( () => clearFilterParams, [] );
