@@ -9,7 +9,13 @@ import { __ } from '@wordpress/i18n';
 import { info } from '@wordpress/icons';
 import { useEffect } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { Button, Icon, ToggleControl, Tooltip } from '@wordpress/components';
+import {
+	Button,
+	Icon,
+	Spinner,
+	ToggleControl,
+	Tooltip,
+} from '@wordpress/components';
 
 import { ListTable } from '@components';
 import { restrictionsStore } from '@data';
@@ -102,140 +108,151 @@ const List = () => {
 				) }
 			</div>
 
-			<ListTable
-				className="striped"
-				items={ filteredRestrictions }
-				columns={ {
-					enabled: () => (
-						<>
-							<Tooltip
-								text={ __(
-									'Enable or disable the restriction',
-									'content-control'
-								) }
-								position="top right"
-							>
-								<span>
-									<Icon icon={ info } />
-								</span>
-							</Tooltip>
-						</>
-					),
-					title: __( 'Title', 'content-control' ),
-					description: __( 'Description', 'content-control' ),
-				} }
-				sortableColumns={ [ 'title' ] }
-				renderCell={ (
-					col:
-						| string
-						| keyof Pick<
-								Restriction,
-								'id' | 'title' | 'description'
-						  >
-						| keyof Restriction[ 'settings' ],
-					restriction
-				) => {
-					switch ( col ) {
-						case 'enabled':
-							return (
-								<ToggleControl
-									checked={ restriction.status === 'publish' }
-									onChange={ ( checked ) => {
-										updateRestriction( {
-											...restriction,
-											status: checked
-												? 'publish'
-												: 'draft',
-										} );
-									} }
-								/>
-							);
-						case 'title':
-							const isTrash = restriction.status === 'trash';
-							return (
-								<>
-									<Button
-										variant="link"
-										onClick={ () =>
-											changeEditorId( restriction.id )
+			<div className="list-table-container">
+				{ isLoading && (
+					<div className="is-loading">
+						<Spinner />
+					</div>
+				) }
+				<ListTable
+					className="striped"
+					items={ ! isLoading ? filteredRestrictions : [] }
+					columns={ {
+						enabled: () => (
+							<>
+								<Tooltip
+									text={ __(
+										'Enable or disable the restriction',
+										'content-control'
+									) }
+									position="top right"
+								>
+									<span>
+										<Icon icon={ info } />
+									</span>
+								</Tooltip>
+							</>
+						),
+						title: __( 'Title', 'content-control' ),
+						description: __( 'Description', 'content-control' ),
+					} }
+					sortableColumns={ [ 'title' ] }
+					renderCell={ (
+						col:
+							| string
+							| keyof Pick<
+									Restriction,
+									'id' | 'title' | 'description'
+							  >
+							| keyof Restriction[ 'settings' ],
+						restriction
+					) => {
+						switch ( col ) {
+							case 'enabled':
+								return (
+									<ToggleControl
+										checked={
+											restriction.status === 'publish'
 										}
-									>
-										{ restriction.title }
-									</Button>
-
-									<div className="item-actions">
-										{ `${ __(
-											'ID',
-											'content-control'
-										) }: ${ restriction.id }` }
+										onChange={ ( checked ) => {
+											updateRestriction( {
+												...restriction,
+												status: checked
+													? 'publish'
+													: 'draft',
+											} );
+										} }
+									/>
+								);
+							case 'title':
+								const isTrash = restriction.status === 'trash';
+								return (
+									<>
 										<Button
-											text={ __(
-												'Edit',
-												'content-control'
-											) }
 											variant="link"
 											onClick={ () =>
 												changeEditorId( restriction.id )
 											}
-										/>
+										>
+											{ restriction.title }
+										</Button>
 
-										<Button
-											text={
-												isTrash
-													? __(
-															'Untrash',
-															'content-control'
-													  )
-													: __(
-															'Trash',
-															'content-control'
-													  )
-											}
-											variant="link"
-											isDestructive={ true }
-											isBusy={ !! isDeleting }
-											onClick={ () =>
-												isTrash
-													? updateRestriction( {
-															...restriction,
-															status: 'draft',
-													  } )
-													: deleteRestriction(
-															restriction.id
-													  )
-											}
-										/>
-
-										{ isTrash && (
+										<div className="item-actions">
+											{ `${ __(
+												'ID',
+												'content-control'
+											) }: ${ restriction.id }` }
 											<Button
 												text={ __(
-													'Delete Permanently',
+													'Edit',
 													'content-control'
 												) }
+												variant="link"
+												onClick={ () =>
+													changeEditorId(
+														restriction.id
+													)
+												}
+											/>
+
+											<Button
+												text={
+													isTrash
+														? __(
+																'Untrash',
+																'content-control'
+														  )
+														: __(
+																'Trash',
+																'content-control'
+														  )
+												}
 												variant="link"
 												isDestructive={ true }
 												isBusy={ !! isDeleting }
 												onClick={ () =>
-													window.confirm() &&
-													deleteRestriction(
-														restriction.id,
-														true
-													)
+													isTrash
+														? updateRestriction( {
+																...restriction,
+																status: 'draft',
+														  } )
+														: deleteRestriction(
+																restriction.id
+														  )
 												}
 											/>
-										) }
-									</div>
-								</>
-							);
-						default:
-							return (
-								restriction[ col ] ??
-								restriction.settings[ col ] ??
-								''
-							);
-					}
-				} }
-			/>
+
+											{ isTrash && (
+												<Button
+													text={ __(
+														'Delete Permanently',
+														'content-control'
+													) }
+													variant="link"
+													isDestructive={ true }
+													isBusy={ !! isDeleting }
+													onClick={ () =>
+														window.confirm() &&
+														deleteRestriction(
+															restriction.id,
+															true
+														)
+													}
+												/>
+											) }
+										</div>
+									</>
+								);
+							default:
+								return (
+									restriction[ col ] ??
+									restriction.settings[ col ] ??
+									''
+								);
+						}
+					} }
+				/>
+			</div>
 		</>
 	);
 };
