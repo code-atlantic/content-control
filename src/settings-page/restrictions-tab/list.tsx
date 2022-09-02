@@ -2,8 +2,8 @@ import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { info } from '@wordpress/icons';
+import { useEffect, useMemo } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useCallback, useEffect } from '@wordpress/element';
 import {
 	Button,
 	Icon,
@@ -58,7 +58,7 @@ const List = () => {
 	useEffect( () => clearFilterParams, [] );
 
 	// List of unique statuses from all items.
-	const activeStatusCounts = useCallback(
+	const activeStatusCounts = useMemo(
 		() =>
 			restrictions.reduce< Record< Statuses, number > >(
 				( s, r ) => {
@@ -69,7 +69,7 @@ const List = () => {
 				{ all: 0 }
 			),
 		[ restrictions ]
-	)();
+	);
 
 	// If the current status tab has no results, switch to all.
 	useEffect( () => {
@@ -89,7 +89,7 @@ const List = () => {
 	const isStatusActive = ( s: Statuses ) => activeStatusCounts?.[ s ] > 0;
 
 	// Filtered list of restrictions for the current status filter.
-	const filteredRestrictions = useCallback(
+	const filteredRestrictions = useMemo(
 		() =>
 			restrictions.filter( ( r ) =>
 				status === 'all' ? true : status === r.status
@@ -124,7 +124,7 @@ const List = () => {
 				) }
 				<ListTable
 					className="striped"
-					items={ ! isLoading ? filteredRestrictions() : [] }
+					items={ ! isLoading ? filteredRestrictions : [] }
 					columns={ {
 						enabled: () => (
 							<>
