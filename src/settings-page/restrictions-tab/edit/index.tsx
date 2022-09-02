@@ -13,6 +13,7 @@ import ProtectionTab from './protection';
 import ContentTab from './content';
 
 import { documenationUrl } from '../../../config';
+import useEditor from '../use-editor';
 
 export type EditProps = {
 	onSave?: ( values: Restriction ) => void;
@@ -26,8 +27,7 @@ export type EditTabProps = EditProps & {
 };
 
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
-	// Set state for current tab.
-	const [ tab, setTab ] = useState( 'general' );
+	const { tab, setTab, setEditorId } = useEditor();
 
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const { editorId, values, isSaving } = useSelect(
