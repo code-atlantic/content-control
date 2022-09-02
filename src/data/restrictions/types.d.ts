@@ -22,6 +22,8 @@ interface Restriction {
 	[ key: string ]: any;
 }
 
+type Statuses = Restriction[ 'status' ] | 'all' | string;
+
 type RestrictionsState = {
 	restrictions: Restriction[];
 	editor: {
