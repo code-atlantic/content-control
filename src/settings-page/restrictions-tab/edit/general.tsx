@@ -13,12 +13,20 @@ import type { EditTabProps } from '.';
 /* Global Var Imports */
 const { userRoles } = contentControlSettingsPage;
 
-const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
+const GeneralTab = ( {
+	values,
+	updateValues,
+	updateSettings,
+}: EditTabProps ) => {
+	const { settings } = values;
+
 	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.
 	// ** It may be that if we have dedicated migration routine this can be removed.
-	const cleanedRoles = Array.isArray( values.roles )
-		? values.roles
-		: Object.entries( values.roles ).map( ( [ value ] ) => value );
+	const cleanedRoles = Array.isArray( settings.roles )
+		? settings.roles
+		: typeof settings.roles === 'object'
+		? Object.entries( settings.roles ).map( ( [ value ] ) => value )
+		: [];
 
 	const descriptionRowEst = values.description.length / 80;
 	const descriptionRows =
@@ -58,12 +66,12 @@ const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 
 			<RadioButtonControl
 				label={ __( 'Who can see this content?', 'content-control' ) }
-				value={ values.who }
-				onChange={ ( who ) => updateValues( { who } ) }
+				value={ settings.who }
+				onChange={ ( who ) => updateSettings( { who } ) }
 				options={ whoOptions }
 			/>
 
-			{ 'logged_in' === values.who && (
+			{ 'logged_in' === settings.who && (
 				<SearchableMulticheckControl
 					label={ __(
 						'Who can see this content?',
@@ -73,7 +81,7 @@ const GeneralTab = ( { values, updateValues }: EditTabProps ) => {
 					placeholder={ __( 'Search roles...', 'content-control' ) }
 					className="is-large"
 					value={ cleanedRoles }
-					onChange={ ( roles ) => updateValues( { roles } ) }
+					onChange={ ( roles ) => updateSettings( { roles } ) }
 					options={ Object.entries( userRoles ).map(
 						( [ value, label ] ) => ( {
 							value,
