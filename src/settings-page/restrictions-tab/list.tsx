@@ -19,6 +19,7 @@ import {
 
 import { ListTable } from '@components';
 import { restrictionsStore } from '@data';
+import useEditor from './use-editor';
 
 const statusOptionLabels: Record< Statuses, string > = {
 	all: __( 'All', 'content-control' ),
@@ -29,6 +30,8 @@ const statusOptionLabels: Record< Statuses, string > = {
 };
 
 const List = () => {
+	const { setEditorId } = useEditor();
+
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const { restrictions, isLoading, isDeleting } = useSelect(
 		( select ) => ( {
@@ -45,7 +48,7 @@ const List = () => {
 	);
 
 	// Get action dispatchers.
-	const { changeEditorId, updateRestriction, deleteRestriction } =
+	const { updateRestriction, deleteRestriction } =
 		useDispatch( restrictionsStore );
 
 	// Allow initiating the editor directly from a url.
@@ -169,7 +172,7 @@ const List = () => {
 										<Button
 											variant="link"
 											onClick={ () =>
-												changeEditorId( restriction.id )
+												setEditorId( restriction.id )
 											}
 										>
 											{ restriction.title }
@@ -187,7 +190,7 @@ const List = () => {
 												) }
 												variant="link"
 												onClick={ () =>
-													changeEditorId(
+													setEditorId(
 														restriction.id
 													)
 												}
