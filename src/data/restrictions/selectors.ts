@@ -48,7 +48,7 @@ export const isEditorActive = ( state: RestrictionsState ): boolean => {
  *
  * @return {number|"new"|undefined} If editor is active.
  */
-export const getEditorId = ( state: RestrictionsState ): EditorID =>
+export const getEditorId = ( state: RestrictionsState ): EditorId =>
 	state?.editor?.id;
 
 /**
