@@ -1,9 +1,8 @@
 import { noop } from 'lodash';
-import { StringParam, withDefault, useQueryParam } from 'use-query-params';
 
 import { link } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
-import { useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Button, Modal, Spinner, TabPanel } from '@wordpress/components';
@@ -27,6 +26,9 @@ export type EditTabProps = EditProps & {
 };
 
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
+	// Set state for current tab.
+	const [ tab, setTab ] = useState( 'general' );
+
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const { editorId, values, isSaving } = useSelect(
 		( select ) => ( {
@@ -49,13 +51,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	} = useDispatch( restrictionsStore );
 
 	// Get the current editor tab.
-	const [ tab, changeTab ] = useQueryParam(
-		'tab',
-		withDefault( StringParam, 'general' )
-	);
-
-	// Clear params on component unmount.
-	useEffect( () => () => changeTab( undefined ), [] );
 
 	// When no editorId, dont' show the editor.
 	if ( ! editorId ) {
@@ -125,7 +120,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	 * Handles closing the editor and removing url params.
 	 */
 	const closeEditor = () => {
-		changeTab( undefined );
 		clearEditorData();
 		onClose();
 	};
@@ -178,8 +172,8 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		>
 			<TabPanel
 				orientation="vertical"
-				initialTabName={ tab !== null ? tab : undefined }
-				onSelect={ ( tabName ) => changeTab( tabName ) }
+				initialTabName={ tab }
+				onSelect={ setTab }
 				tabs={ tabs }
 				className="editor-tabs"
 			>
