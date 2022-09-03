@@ -1,4 +1,5 @@
 import { __, sprintf } from '@wordpress/i18n';
+
 import { fetch } from '../controls';
 import { hydrate } from './actions';
 import { getResourcePath } from './utils';

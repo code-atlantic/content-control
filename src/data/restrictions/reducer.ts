@@ -9,6 +9,7 @@ const {
 	EDITOR_CHANGE_ID,
 	EDITOR_CLEAR_DATA,
 	EDITOR_UPDATE_VALUES,
+	RESTRICTIONS_FETCH_ERROR,
 } = ACTION_TYPES;
 
 type ActionPayloadTypes = {
@@ -16,11 +17,12 @@ type ActionPayloadTypes = {
 	restriction: Restriction;
 	restrictions: Restriction[];
 	restrictionId: Restriction[ 'id' ];
-	actionName: RestrictionsStore[ 'ActionNames' ];
-	status: Statuses;
-	error: string;
 	editorId: RestrictionsState[ 'editor' ][ 'id' ];
 	editorValues: RestrictionsState[ 'editor' ][ 'values' ];
+	// Boilerplate.
+	actionName: RestrictionsStore[ 'ActionNames' ];
+	status: Statuses;
+	message: string;
 };
 
 const reducer = (
@@ -30,11 +32,12 @@ const reducer = (
 		restriction,
 		restrictionId,
 		type,
-		actionName,
-		status,
-		error,
 		editorId,
 		editorValues,
+		// Boilerplate
+		actionName,
+		status,
+		message,
 	}: ActionPayloadTypes
 ) => {
 	switch ( type ) {
@@ -64,6 +67,12 @@ const reducer = (
 			return {
 				...state,
 				restrictions: incomingRestrictions,
+			};
+
+		case RESTRICTIONS_FETCH_ERROR:
+			return {
+				...state,
+				error: message,
 			};
 
 		case EDITOR_CHANGE_ID:
@@ -102,7 +111,7 @@ const reducer = (
 					[ actionName ]: {
 						...state?.dispatchStatus?.[ actionName ],
 						status,
-						error,
+						error: message,
 					},
 				},
 			};

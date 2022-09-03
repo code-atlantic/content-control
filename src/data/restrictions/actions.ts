@@ -29,23 +29,23 @@ const {
  *
  * @param actionName Action name to change status of.
  * @param status New status.
- * @param error Optional error message.
+ * @param message Optional error message.
  * @returns Action object.
  */
 export const changeActionStatus = (
-	actionName: RestrictionsStore['ActionNames'],
+	actionName: RestrictionsStore[ 'ActionNames' ],
 	status: Statuses,
-	error?: string | undefined
+	message?: string | undefined
 ) => {
-	if ( error ) {
-		console.log( actionName, error );
+	if ( message ) {
+		console.log( actionName, message );
 	}
 
 	return {
 		type: CHANGE_ACTION_STATUS,
 		actionName,
 		status,
-		error,
+		message,
 	};
 };
 

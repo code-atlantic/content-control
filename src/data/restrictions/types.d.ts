@@ -32,7 +32,7 @@ type RestrictionsState = {
 	};
 	// Boilerplate
 	dispatchStatus?: {
-		[ Property in keyof RestrictionsStore[ 'Actions' ] ]?: {
+		[ Property in RestrictionsStore[ 'ActionNames' ] ]?: {
 			status: string;
 			error: string;
 		};
