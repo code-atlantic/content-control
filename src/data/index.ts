@@ -15,15 +15,23 @@ import {
 	store as restrictionsStore,
 } from './restrictions';
 
+import {
+	STORE_NAME as URL_SEARCH_STORE,
+	store as urlSearchStore,
+} from './url-search';
+
 const registry = createRegistry( {} );
 registry.register( coreStore );
 registry.register( settingsStore );
 registry.register( restrictionsStore );
+registry.register( urlSearchStore );
 
 export {
 	registry,
 	RESTRICTION_STORE,
 	SETTINGS_STORE,
+	URL_SEARCH_STORE,
 	settingsStore,
 	restrictionsStore,
+	urlSearchStore,
 };
