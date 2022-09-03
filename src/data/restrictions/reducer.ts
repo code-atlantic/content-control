@@ -16,7 +16,7 @@ type ActionPayloadTypes = {
 	restriction: Restriction;
 	restrictions: Restriction[];
 	restrictionId: Restriction[ 'id' ];
-	actionName: ActionNames;
+	actionName: RestrictionsStore[ 'ActionNames' ];
 	status: Statuses;
 	error: string;
 	editorId: RestrictionsState[ 'editor' ][ 'id' ];

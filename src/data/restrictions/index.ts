@@ -25,8 +25,10 @@ const store = createReduxStore( STORE_NAME, storeConfig() );
 
 export { STORE_NAME, store, restrictionDefaults };
 
+type S = RestrictionsStore;
+
 declare module '@wordpress/data' {
-	function select( key: StoreKey ): Selectors;
-	function dispatch( key: StoreKey ): Actions;
-	function useDispatch( key: StoreKey ): Actions;
+	function select( key: S[ 'StoreKey' ] ): S[ 'Selectors' ];
+	function dispatch( key: S[ 'StoreKey' ] ): S[ 'Actions' ];
+	function useDispatch( key: S[ 'StoreKey' ] ): S[ 'Actions' ];
 }

@@ -30,6 +30,7 @@ type RestrictionsState = {
 		id?: EditorId;
 		values?: Restriction;
 	};
+	// Boilerplate
 	dispatchStatus?: {
 		[ Property in keyof RestrictionsStore[ 'Actions' ] ]?: {
 			status: string;
@@ -40,17 +41,13 @@ type RestrictionsState = {
 };
 
 interface RestrictionsStore {
+	StoreKey:
+		| 'content-control/restrictions'
+		| typeof import('./index').STORE_NAME
+		| typeof import('./index').store;
 	State: RestrictionsState;
-	Selectors: Selectors;
-	Actions: Actions;
+	Actions: RemoveReturnTypes< typeof import('./actions') >;
+	Selectors: OmitFirstArgs< typeof import('./selectors') >;
+	ActionNames: keyof RestrictionsStore[ 'Actions' ];
+	SelectorNames: keyof RestrictionsStore[ 'Selectors' ];
 }
-
-type SelectorNames = keyof RestrictionsStore[ 'Selectors' ];
-type ActionNames = keyof RestrictionsStore[ 'Actions' ];
-
-type Selectors = OmitFirstArgs< typeof import('./selectors') >;
-type Actions = RemoveReturnTypes< typeof import('./actions') >;
-type StoreKey =
-	| 'store/name'
-	| typeof import('./index').STORE_NAME
-	| typeof import('./index').store;

@@ -1,7 +1,8 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { fetch } from '../controls';
 import { hydrate } from './actions';
-import { appendUrlParams, getErrorMessage, getResourcePath } from './utils';
+import { getResourcePath } from './utils';
+import { appendUrlParams, getErrorMessage } from '../utils';
 
 import { ACTION_TYPES } from './constants';
 const { UPDATE, RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;

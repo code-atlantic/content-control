@@ -2,7 +2,9 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data-controls';
 
 import { fetch } from '../controls';
-import { getErrorMessage, getResourcePath } from './utils';
+import { getResourcePath } from './utils';
+import { getErrorMessage } from '../utils';
+
 import {
 	STORE_NAME,
 	ACTION_TYPES,
@@ -31,7 +33,7 @@ const {
  * @returns Action object.
  */
 export const changeActionStatus = (
-	actionName: ActionNames,
+	actionName: RestrictionsStore['ActionNames'],
 	status: Statuses,
 	error?: string | undefined
 ) => {

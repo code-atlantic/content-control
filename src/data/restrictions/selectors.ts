@@ -65,27 +65,29 @@ export const getEditorValues = (
 /**
  * Get current status for dispatched action.
  *
- * @param {RestrictionsState} state      Current state.
- * @param {ActionNames}       actionName Action name to check.
+ * @param {RestrictionsState}                state      Current state.
+ * @param {RestrictionsStore['ActionNames']} actionName Action name to check.
  *
  * @return {string} Current status for dispatched action.
  */
 export const getDispatchStatus = (
 	state: RestrictionsState,
-	actionName: ActionNames
+	actionName: RestrictionsStore[ 'ActionNames' ]
 ): string | undefined => state?.dispatchStatus?.[ actionName ]?.status;
 
 /**
  * Check if action is dispatching.
  *
- * @param {RestrictionsState}         state       Current state.
- * @param {ActionNames|ActionNames[]} actionNames Action name or array of names to check.
+ * @param {RestrictionsState}                                                   state       Current state.
+ * @param {RestrictionsStore['ActionNames']|RestrictionsStore['ActionNames'][]} actionNames Action name or array of names to check.
  *
  * @return {boolean} True if is dispatching.
  */
 export const isDispatching = (
 	state: RestrictionsState,
-	actionNames: ActionNames | ActionNames[]
+	actionNames:
+		| RestrictionsStore[ 'ActionNames' ]
+		| RestrictionsStore[ 'ActionNames' ][]
 ): boolean => {
 	if ( ! Array.isArray( actionNames ) ) {
 		return getDispatchStatus( state, actionNames ) === Status.Resolving;
@@ -108,14 +110,14 @@ export const isDispatching = (
 /**
  * Check if action has finished dispatching.
  *
- * @param {RestrictionsState} state      Current state.
- * @param {ActionNames}       actionName Action name to check.
+ * @param {RestrictionsState}                state      Current state.
+ * @param {RestrictionsStore['ActionNames']} actionName Action name to check.
  *
  * @return {boolean} True if dispatched.
  */
 export const hasDispatched = (
 	state: RestrictionsState,
-	actionName: ActionNames
+	actionName: RestrictionsStore[ 'ActionNames' ]
 ): boolean => {
 	const status = getDispatchStatus( state, actionName );
 
@@ -128,12 +130,12 @@ export const hasDispatched = (
 /**
  * Get dispatch action error if esists.
  *
- * @param {RestrictionsState} state      Current state.
- * @param {ActionNames}       actionName Action name to check.
+ * @param {RestrictionsState}                state      Current state.
+ * @param {RestrictionsStore['ActionNames']} actionName Action name to check.
  *
- * @return {string} Current error message.
+ * @return {string|undefined} Current error message.
  */
 export const getDispatchError = (
 	state: RestrictionsState,
-	actionName: ActionNames
-) => state?.dispatchStatus?.[ actionName ]?.error;
+	actionName: RestrictionsStore[ 'ActionNames' ]
+): string | undefined => state?.dispatchStatus?.[ actionName ]?.error;
