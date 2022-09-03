@@ -1,5 +1,4 @@
 type Settings = {
-	restrictions: Restriction[];
 	excludedBlocks: string[];
 	permissions: {
 		viewBlockControls: string;
@@ -11,10 +10,24 @@ type Settings = {
 
 type SettingsState = {
 	settings: Settings;
+	// Boilerplate
+	dispatchStatus?: {
+		[ Property in SettingsStore[ 'ActionNames' ] ]?: {
+			status: string;
+			error: string;
+		};
+	};
+	error?: string;
 };
 
 interface SettingsStore {
+	StoreKey:
+		| 'content-control/settings'
+		| typeof import('./index').STORE_NAME
+		| typeof import('./index').store;
 	State: SettingsState;
-	Selectors: typeof import('./selectors');
-	Actions: typeof import('./actions');
+	Actions: RemoveReturnTypes< typeof import('./actions') >;
+	Selectors: OmitFirstArgs< typeof import('./selectors') >;
+	ActionNames: keyof SettingsStore[ 'Actions' ];
+	SelectorNames: keyof SettingsStore[ 'Selectors' ];
 }

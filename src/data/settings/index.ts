@@ -10,20 +10,7 @@ import * as resolvers from './resolvers';
 import reducer from './reducer';
 import localControls from '../controls';
 
-import { STORE_NAME } from './constants';
-
-const initialState: SettingsState = {
-	settings: {
-		restrictions: [],
-		excludedBlocks: [],
-		permissions: {
-			viewBlockControls: 'manage_options',
-			editBlockControls: 'manage_options',
-			manageSettings: 'manage_options',
-			editRestrictions: 'manage_options',
-		},
-	},
-};
+import { initialState, settingsDefaults, STORE_NAME } from './constants';
 
 const storeConfig = () => ( {
 	initialState,
@@ -36,4 +23,12 @@ const storeConfig = () => ( {
 
 const store = createReduxStore( STORE_NAME, storeConfig() );
 
-export { STORE_NAME, store };
+export { STORE_NAME, store, settingsDefaults };
+
+type S = SettingsStore;
+
+declare module '@wordpress/data' {
+	function select( key: S[ 'StoreKey' ] ): S[ 'Selectors' ];
+	function dispatch( key: S[ 'StoreKey' ] ): S[ 'Actions' ];
+	function useDispatch( key: S[ 'StoreKey' ] ): S[ 'Actions' ];
+}

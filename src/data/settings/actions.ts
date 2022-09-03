@@ -1,35 +1,93 @@
+import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data-controls';
+
 import { fetch } from '../controls';
 import { getResourcePath } from './utils';
+import { getErrorMessage } from '../utils';
 
-import { TYPES } from './constants';
-const { UPDATE, HYDRATE } = TYPES;
+import { Status, Statuses, STORE_NAME, ACTION_TYPES } from './constants';
 
-import STORE_NAME from './name';
+const { UPDATE, HYDRATE, CHANGE_ACTION_STATUS } = ACTION_TYPES;
 
-export function* udpateSettings( settings: Partial< Settings > ) {
-	const currentSettings: Settings = yield select( STORE_NAME, 'getSettings' );
-
-	const result: Settings = yield fetch( getResourcePath(), {
-		method: 'PUT',
-		body: { ...currentSettings, ...settings },
-	} );
-
-	if ( result ) {
-		return {
-			type: UPDATE,
-			settings: result,
-		};
+/**
+ * Change status of a dispatch action request.
+ *
+ * @param actionName Action name to change status of.
+ * @param status New status.
+ * @param message Optional error message.
+ * @returns Action object.
+ */
+export const changeActionStatus = (
+	actionName: SettingsStore[ 'ActionNames' ],
+	status: Statuses,
+	message?: string | undefined
+) => {
+	if ( message ) {
+		console.log( actionName, message );
 	}
 
-	return null;
-}
+	return {
+		type: CHANGE_ACTION_STATUS,
+		actionName,
+		status,
+		message,
+	};
+};
 
-export function* udpateSetting< K extends keyof Settings = keyof Settings >(
-	key: K,
-	value: Settings[ K ]
-) {
-	return udpateSettings( { [ key ]: value } );
+/**
+ * Update settings.
+ *
+ * @param settings Object of settings to update.
+ * @returns Action object.
+ */
+export function* udpateSettings( settings: Partial< Settings > ) {
+	const actionName = 'udpateSettings';
+
+	try {
+		yield changeActionStatus( actionName, Status.Resolving );
+
+		// execution will pause here until the `FETCH` control function's return
+		// value has resolved.
+		const currentSettings: Settings = yield select(
+			STORE_NAME,
+			'getSettings'
+		);
+
+		const result: Settings = yield fetch( getResourcePath(), {
+			method: 'PUT',
+			body: { ...currentSettings, ...settings },
+		} );
+
+		if ( result ) {
+			// thing was successfully updated so return the action object that will
+			// update the saved thing in the state.
+			yield changeActionStatus( actionName, Status.Success );
+
+			return {
+				type: UPDATE,
+				settings: result,
+			};
+		}
+
+		// if execution arrives here, then thing didn't update in the state so return
+		// action object that will add an error to the state about this.
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			__(
+				'An error occurred, settings were not saved.',
+				'content-control'
+			)
+		);
+	} catch ( error ) {
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			getErrorMessage( error )
+		);
+	}
 }
 
 export const hydrate = ( settings: Settings ) => {
