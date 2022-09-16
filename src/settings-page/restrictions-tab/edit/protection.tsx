@@ -66,13 +66,12 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 								'content-control'
 							) }
 							className="is-large"
-							searchInputPlaceholder="Search here..."
 							value={ settings.redirectUrl }
-							onChange={ ( redirectUrl ) =>
+							onChange={ ( { url: redirectUrl } ) => {
 								updateSettings( {
-									redirectUrl: redirectUrl.toString(),
-								} )
-							}
+									redirectUrl,
+								} );
+							} }
 						/>
 					) }
 				</>
