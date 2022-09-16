@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 import { CheckboxControl, TextareaControl } from '@wordpress/components';
 
-import { LinkControl } from '@components';
+import { URLControl } from '@components';
 
 /* Internal Imports */
 import { RadioButtonControl } from '@components';
@@ -60,7 +60,7 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 					/>
 
 					{ 'custom' === settings.redirectType && (
-						<LinkControl
+						<URLControl
 							label={ __(
 								'Custom Redirect URL',
 								'content-control'
