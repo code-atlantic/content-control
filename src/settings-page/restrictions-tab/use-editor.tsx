@@ -52,7 +52,6 @@ const useEditor = () => {
 		}
 
 		if ( urlId !== editorId ) {
-			console.log( urlId );
 			changeEditorId( urlId );
 		}
 	}, [ edit, add ] );
