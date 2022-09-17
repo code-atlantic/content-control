@@ -6,8 +6,12 @@
  * @return {string} Resulting resource path.
  */
 export const appendUrlParams = ( url: string, params: object ) => {
+	const filteredParams = Object.fromEntries(
+		Object.entries( params ).filter( ( [ , value ] ) => !! value )
+	);
+
 	const query = new URLSearchParams( {
-		...params,
+		...filteredParams,
 	} );
 
 	return `${ url }?${ query }`;
