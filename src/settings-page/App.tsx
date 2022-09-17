@@ -1,19 +1,19 @@
+import classNames from 'classnames';
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-import { TabPanel, Popover } from '@wordpress/components';
+import { TabPanel, Popover, Icon } from '@wordpress/components';
 
 import RestrictionsTab from './restrictions-tab';
 import SettingsTab from './settings-tab';
 import UpgradeTab from './upgrade-tab';
+import Header from './header';
+import { upgrade } from '@icons';
 
 const App = () => {
-	const [ view = 'restrictions', changeView ] = useQueryParam(
-		'view',
-		StringParam
-	);
+	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
 
 	const views: TabComponent[] = applyFilters( 'contentControl.adminTabs', [
 		{
@@ -33,6 +33,7 @@ const App = () => {
 		{
 			name: 'settings',
 			title: __( 'Settings', 'content-control' ),
+			className: 'settings',
 			pageTitle: __(
 				'Content Control - Plugin Settings',
 				'content-control'
@@ -42,7 +43,13 @@ const App = () => {
 		},
 		{
 			name: 'upgrade',
-			title: __( 'Upgrade to Pro', 'content-control' ),
+			className: 'upgrade',
+			title: (
+				<>
+					<Icon size={ 20 } icon={ upgrade } />
+					{ __( 'Upgrade to Pro', 'content-control' ) }
+				</>
+			),
 			pageTitle: __(
 				'Content Control - Upgrade to Pro',
 				'content-control'
@@ -55,6 +62,8 @@ const App = () => {
 		},
 	] ) as TabComponent[];
 
+	const currentView = views.find( ( _view ) => _view.name === view );
+
 	useEffect( () => {
 		document.title =
 			views.find( ( obj ) => obj.name === view )?.pageTitle ??
@@ -62,21 +71,13 @@ const App = () => {
 	}, [ view, views ] );
 
 	return (
-		<>
-			<h1 className="wp-heading-inline">
-				{ __( 'Content Control', 'content-control' ) }
-			</h1>
-			<hr className="wp-header-end" />
-			<TabPanel
-				orientation="horizontal"
-				initialTabName={ view !== null ? view : undefined }
-				onSelect={ ( tabName ) => changeView( tabName ) }
-				tabs={ views }
-			>
-				{ ( tab ) => tab.comp ?? tab.title }
-			</TabPanel>
+		<div
+			className={ classNames( [ 'cc-settings-page', `view-${ view }` ] ) }
+		>
+			<Header tabs={ views } />
+			<div className="cc-settings-page__content">{ currentView?.comp }</div>
 			<Popover.Slot />
-		</>
+		</div>
 	);
 };
 
