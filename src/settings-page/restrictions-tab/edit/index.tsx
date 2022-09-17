@@ -184,13 +184,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 
 			<div className="modal-actions">
 				<Button
-					text={ __( 'Documentation', 'content-control' ) }
-					href={ documenationUrl }
-					target="_blank"
-					icon={ link }
-					iconSize={ 20 }
-				/>
-				<Button
 					text={ __( 'Cancel', 'content-control' ) }
 					variant="tertiary"
 					isDestructive={ true }
@@ -212,6 +205,14 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 						? __( 'Add Restriction', 'content-control' )
 						: __( 'Save Restriction', 'content-control' ) }
 				</Button>
+
+				<Button
+					text={ __( 'Documentation', 'content-control' ) }
+					href={ documenationUrl }
+					target="_blank"
+					icon={ link }
+					iconSize={ 20 }
+				/>
 			</div>
 		</Modal>
 	);

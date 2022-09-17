@@ -37,7 +37,7 @@ $gap4: $gap * 4;
 		right: 0;
 		border-top: 1px solid #c3c4c7;
 
-		> :first-child {
+		> :last-child {
 			position: absolute;
 			left: $gap2;
 
