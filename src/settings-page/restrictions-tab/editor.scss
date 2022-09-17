@@ -134,6 +134,12 @@ $gap4: $gap * 4;
 		}
 	}
 
+	.components-url-input {
+		.url-input__input {
+			min-height: 40px;
+		}
+	}
+
 	.general-tab {
 		.title-field {
 			.components-text-control__input {
