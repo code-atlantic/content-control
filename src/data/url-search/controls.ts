@@ -36,7 +36,12 @@ export default {
 
 		const queries: Promise< WPLinkSearchResult[] >[] = [];
 
-		if ( ! type || type === 'post' ) {
+		const typeCheck = ( t: string ) =>
+			! type ||
+			type == t ||
+			( Array.isArray( type ) && type.indexOf( t ) >= 0 );
+
+		if ( typeCheck( 'post' ) ) {
 			queries.push(
 				apiFetch< WPLinkSearchResult[] >( {
 					path: getResourcePath( {
@@ -59,7 +64,7 @@ export default {
 			);
 		}
 
-		if ( ! type || type === 'term' ) {
+		if ( typeCheck( 'term' ) ) {
 			queries.push(
 				apiFetch< WPLinkSearchResult[] >( {
 					path: getResourcePath( {
@@ -82,7 +87,7 @@ export default {
 			);
 		}
 
-		if ( ! disablePostFormats && ( ! type || type === 'post-format' ) ) {
+		if ( ! disablePostFormats && typeCheck( 'post-format' ) ) {
 			queries.push(
 				apiFetch< WPLinkSearchResult[] >( {
 					path: getResourcePath( {
@@ -105,7 +110,7 @@ export default {
 			);
 		}
 
-		if ( ! type || type === 'attachment' ) {
+		if ( typeCheck( 'attachment' ) ) {
 			queries.push(
 				apiFetch< WPLinkSearchResult[] >( {
 					path: getResourcePath( {
@@ -126,35 +131,35 @@ export default {
 			);
 		}
 
-		const results_4 = await Promise.all( queries );
-		return results_4
-			.reduce(
-				( accumulator: WPLinkSearchResult[], current ) =>
-					accumulator.concat( current ),
-				[]
-			)
-			.filter( ( result_4: { id: number } ) => {
-				return !! result_4.id;
-			} )
-			.slice( 0, perPage )
-			.map( ( result_5 ) => {
-				const isMedia = result_5.type === 'attachment';
+		return Promise.all( queries ).then( ( results ) => {
+			return results
+				.reduce(
+					( accumulator, current ) => accumulator.concat( current ), // Flatten list.
+					[]
+				)
+				.filter( ( result ) => {
+					return !! result.id;
+				} )
+				.slice( 0, perPage )
+				.map( ( result ) => {
+					const isMedia = result.type === 'attachment';
 
-				return {
-					id: result_5.id,
-					// @ts-ignore fix when we make this a TS file
-					url: isMedia ? result_5.source_url : result_5.url,
-					title:
-						// decodeEntities(
-						isMedia
-							? // @ts-ignore fix when we make this a TS file
-							  result_5.title.rendered
-							: result_5.title ||
-							  '' ||
-							  /* ) */ __( '(no title)' ),
-					type: result_5.subtype || result_5.type,
-					kind: result_5?.meta?.kind,
-				};
-			} );
+					return {
+						id: result.id,
+						// @ts-ignore fix when we make this a TS file
+						url: isMedia ? result.source_url : result.url,
+						title:
+							// decodeEntities(
+							isMedia
+								? // @ts-ignore fix when we make this a TS file
+								  result.title.rendered
+								: result.title ||
+								  '' ||
+								  /* ) */ __( '(no title)' ),
+						type: result?.subtype || result.type,
+						kind: result?.meta?.kind,
+					};
+				} );
+		} );
 	},
 };

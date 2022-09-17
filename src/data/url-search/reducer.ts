@@ -1,12 +1,17 @@
 import { ACTION_TYPES, initialState, Statuses } from './constants';
 
-const { SEARCH_ERROR, SEARCH_REQUEST, SEARCH_SUCCESS, CHANGE_ACTION_STATUS } =
-	ACTION_TYPES;
+const {
+	SEARCH_ERROR,
+	SEARCH_REQUEST,
+	SEARCH_SUCCESS,
+	CHANGE_ACTION_STATUS,
+	UPDATE_SUGGESTIONS,
+} = ACTION_TYPES;
 
 interface ActionPayloadTypes {
 	type: keyof typeof ACTION_TYPES;
 	queryText: string;
-	payload: { results: WPLinkSearchResult[]; query: string };
+	results: WPLinkSearchResult[];
 	error: string;
 	// Boilerplate.
 	actionName: SettingsStore[ 'ActionNames' ];
@@ -19,7 +24,7 @@ const reducer = (
 	{
 		type,
 		queryText,
-		payload,
+		results,
 		error,
 		// Boilerplate
 		actionName,
@@ -35,15 +40,15 @@ const reducer = (
 			};
 
 		case SEARCH_SUCCESS:
-			if ( state.currentQuery === payload.query ) {
+			if ( state.currentQuery === queryText ) {
 				return {
-					searchResults: payload.results,
+					searchResults: results,
 				};
 			}
 			return state;
 
 		case SEARCH_ERROR:
-			if ( state.currentQuery === payload.query ) {
+			if ( state.currentQuery === queryText ) {
 				return {
 					...state,
 					error,
@@ -57,7 +62,7 @@ const reducer = (
 				dispatchStatus: {
 					...state.dispatchStatus,
 					[ actionName ]: {
-						...state?.dispatchStatus?.[ actionName ],
+						...( state?.dispatchStatus?.[ actionName ] ?? {} ),
 						status,
 						error: message,
 					},

@@ -1,9 +1,10 @@
+type SearchArgTypes = 'post' | 'term' | 'post-format' | string;
 type SearchArgs = {
 	search: string;
 	context?: 'view' | 'embed';
 	page?: number;
 	per_page?: number | string;
-	type?: 'post' | 'term' | 'post-format' | string;
+	type?: SearchArgTypes | SearchArgTypes[];
 	subtype?: 'any' | 'post' | 'page' | 'category' | 'post_tag' | string;
 	isInitialSuggestions?: boolean;
 };
@@ -13,10 +14,14 @@ type SearchOptions = Omit< SearchArgs, 'search' | 'per_page' > & {
 };
 
 type WPLinkSearchResult = {
-	id: number;
-	title: string;
+	id?: number;
+	title?: string;
 	url: string;
-	type: string;
+	type?: string;
+	subtype?: string | undefined;
+	meta?: {
+		kind?: string;
+	};
 };
 
 type URLSearchQuery = {
@@ -31,7 +36,7 @@ type URLSearchState = {
 	queries: Record< URLSearchQuery[ 'text' ], URLSearchQuery >;
 	// Boilerplate
 	dispatchStatus?: {
-		[ Property in SettingsStore[ 'ActionNames' ] ]?: {
+		[ Property in URLSearchStore[ 'ActionNames' ] ]?: {
 			status: string;
 			error: string;
 		};

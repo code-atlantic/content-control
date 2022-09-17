@@ -6,7 +6,6 @@ import { controls as wpControls } from '@wordpress/data-controls';
 
 import * as actions from './actions';
 import * as selectors from './selectors';
-import * as resolvers from './resolvers';
 import reducer from './reducer';
 import sharedControls from '../controls';
 import localControls from './controls';
@@ -18,7 +17,6 @@ const storeConfig = () => ( {
 	selectors,
 	actions,
 	reducer,
-	resolvers,
 	controls: { ...wpControls, ...sharedControls, ...localControls },
 } );
 
