@@ -6,9 +6,10 @@ import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { TabPanel, Popover, Icon } from '@wordpress/components';
 
-import RestrictionsTab from './restrictions-tab';
-import SettingsTab from './settings-tab';
-import UpgradeTab from './upgrade-tab';
+import RestrictionsView from './restrictions-view';
+import SettingsView from './settings-view';
+import UpgradeView from './upgrade-view';
+
 import Header from './header';
 import { upgrade } from '@icons';
 
@@ -28,7 +29,7 @@ const App = () => {
 				'Content Control - Global Restrictions',
 				'content-control'
 			),
-			comp: <RestrictionsTab />,
+			comp: <RestrictionsView />,
 		},
 		{
 			name: 'settings',
@@ -39,7 +40,7 @@ const App = () => {
 				'content-control'
 			),
 			heading: __( 'Plugin Settings', 'content-control' ),
-			comp: <SettingsTab />,
+			comp: <SettingsView />,
 		},
 		{
 			name: 'upgrade',
@@ -58,7 +59,7 @@ const App = () => {
 				'Content Control - Upgrade to Pro',
 				'content-control'
 			),
-			comp: <UpgradeTab />,
+			comp: <UpgradeView />,
 		},
 	] ) as TabComponent[];
 
@@ -75,7 +76,9 @@ const App = () => {
 			className={ classNames( [ 'cc-settings-page', `view-${ view }` ] ) }
 		>
 			<Header tabs={ views } />
-			<div className="cc-settings-page__content">{ currentView?.comp }</div>
+			<div className="cc-settings-page__content">
+				{ currentView?.comp }
+			</div>
 			<Popover.Slot />
 		</div>
 	);

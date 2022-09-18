@@ -10,7 +10,7 @@ import './editor.scss';
 import classNames from 'classnames';
 import useSettings from './use-settings';
 
-const SettingsTab = () => {
+const SettingsView = () => {
 	// Allow initiating the editor directly from a url.
 	const { tab } = useSettings();
 
@@ -21,7 +21,7 @@ const SettingsTab = () => {
 			{
 				name: 'general',
 				title: __( 'General', 'content-control' ),
-				// comp: () => <GeneralTab { ...componentProps } />,
+				comp: () => <GeneralTab />,
 			},
 			{
 				name: 'permissions',
@@ -63,4 +63,4 @@ const SettingsTab = () => {
 	);
 };
 
-export default SettingsTab;
+export default SettingsView;

@@ -17,7 +17,7 @@ import './editor.scss';
  *
  * @returns Restrictions tab component.
  */
-const RestrictionsTab = () => {
+const RestrictionsView = () => {
 	const { setEditorId } = useEditor();
 
 	// Fetch needed data from the @data & @wordpress/data stores.
@@ -41,4 +41,4 @@ const RestrictionsTab = () => {
 	);
 };
 
-export default RestrictionsTab;
+export default RestrictionsView;
