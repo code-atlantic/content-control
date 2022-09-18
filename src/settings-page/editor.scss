@@ -9,6 +9,7 @@
 	.cc-settings-page__header {
 		background-color: #fff;
 		border-bottom: 1px solid #ddd;
+		padding-right: 20px;
 
 		display: flex;
 		align-items: center;
@@ -18,19 +19,23 @@
 		}
 
 		.branding {
-			margin: 0.75em;
+			margin: 20px;
 			margin-right: 50px;
 		}
 
 		.tabs {
 			align-self: flex-end;
 			flex-grow: 1;
+
+			.components-tab-panel__tabs {
+				gap: 20px;
+			}
 		}
 
 		.components-tab-panel__tabs-item {
 			font-size: 1.125em;
 			height: 60px;
-			padding: 3px 16px;
+			padding: 3px 0;
 			color: #1e1e1e;
 			text-decoration: none;
 
