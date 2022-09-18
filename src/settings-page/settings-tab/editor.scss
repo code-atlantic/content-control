@@ -1,0 +1,58 @@
+.cc-settings-page {
+	.cc-settings-view__header {
+		.header-top-bar {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			margin-bottom: 10px;
+
+			.wp-heading-inline {
+				font-size: 1.875em;
+				margin-right: auto;
+			}
+
+			.settings-search {
+				display: flex;
+				align-items: center;
+
+				svg {
+					fill: #999;
+				}
+
+				&:focus-within {
+					svg {
+						fill: #3c434a;
+					}
+				}
+
+				.components-base-control__field {
+					margin: 0;
+				}
+
+				.components-text-control__input {
+					background-color: transparent;
+					border: 0;
+					width: 140px;
+					font-size: 16px;
+				}
+			}
+		}
+
+		.tabs {
+			.components-tab-panel__tabs {
+				gap: 20px;
+			}
+
+			.components-tab-panel__tabs-item {
+				font-size: 14px;
+				padding: 3px 0;
+
+				&.is-active {
+					box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus)
+							#0000,
+						inset 0 -2px 0 0 var(--wp-admin-theme-color);
+				}
+			}
+		}
+	}
+}
