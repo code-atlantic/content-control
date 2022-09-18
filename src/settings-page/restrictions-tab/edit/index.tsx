@@ -140,17 +140,17 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			{
 				name: 'general',
 				title: __( 'General', 'content-control' ),
-				component: () => <GeneralTab { ...componentProps } />,
+				comp: () => <GeneralTab { ...componentProps } />,
 			},
 			{
 				name: 'protection',
 				title: __( 'Protection', 'content-control' ),
-				component: () => <ProtectionTab { ...componentProps } />,
+				comp: () => <ProtectionTab { ...componentProps } />,
 			},
 			{
 				name: 'content',
 				title: __( 'Content', 'content-control' ),
-				component: () => <ContentTab { ...componentProps } />,
+				comp: () => <ContentTab { ...componentProps } />,
 			},
 		]
 	) as TabComponent[];
@@ -177,8 +177,8 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				tabs={ tabs }
 				className="editor-tabs"
 			>
-				{ ( { title, component } ) =>
-					typeof component === 'undefined' ? title : component()
+				{ ( { title, comp } ) =>
+					typeof comp === 'undefined' ? title : comp()
 				}
 			</TabPanel>
 
