@@ -16,7 +16,7 @@ const SettingsView = () => {
 
 	// Filtered & mappable list of TabComponent definitions.
 	const tabs: TabComponent[] = applyFilters(
-		'contentControl.restrictionEditorTabs',
+		'contentControl.settingsPageTabs',
 		[
 			{
 				name: 'general',
