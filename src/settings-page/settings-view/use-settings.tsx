@@ -1,24 +1,15 @@
-import { StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { StringParam, useQueryParam, withDefault } from 'use-query-params';
 
-import { useEffect, useMemo, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
 import { settingsStore } from '@data';
 
 const useSettings = () => {
 	// Allow initiating the editor directly from a url.
-	const [ queryParams, setQueryParams ] = useQueryParams( {
-		tab: withDefault( StringParam, 'general' ),
-	} );
-
-	// Quick helper to reset all query params.
-	const clearParams = () => setQueryParams( { tab: undefined } );
-
-	// Extract params with usable names.
-	const { tab } = queryParams;
-
-	// Clear params on component removal.
-	useEffect( () => () => clearParams(), [] );
+	const [ tab, setTab ] = useQueryParam(
+		'tab',
+		withDefault( StringParam, 'general' )
+	);
 
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
@@ -64,7 +55,7 @@ const useSettings = () => {
 
 	return {
 		tab,
-		setTab: ( newTab: string ) => setQueryParams( { tab: newTab } ),
+		setTab,
 		currentSettings,
 		settings,
 		getSetting,
