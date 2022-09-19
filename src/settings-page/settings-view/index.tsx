@@ -1,13 +1,13 @@
+import classNames from 'classnames';
+
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
+import useSettings from './use-settings';
 import Header from './header';
+import GeneralTab from './tabs/general';
 
 import './editor.scss';
-import classNames from 'classnames';
-import useSettings from './use-settings';
-
-import GeneralTab from './tabs/general';
 
 const SettingsView = () => {
 	const { tab } = useSettings();
