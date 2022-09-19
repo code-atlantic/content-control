@@ -1,11 +1,14 @@
+import type { IconProps } from '@wordpress/icons/build-types/icon';
+
 import { __ } from '@wordpress/i18n';
 import { desktop } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 
 import Section from '../../section';
 import CustomRedirects from './custom-redirects';
+import DeviceMediaQueries from './device-media-queries';
 
-import type { IconProps } from '@wordpress/icons/build-types/icon';
+import { customRedirect, monitor } from '@icons';
 
 type Props = {};
 
@@ -16,10 +19,16 @@ const GeneralTab = ( props: Props ) => {
 		'contentControl.generalSettingsTabSections',
 		[
 			{
-				name: 'general',
+				name: 'redirects',
 				title: __( 'Custom Redirects', 'content-control' ),
-				icon: desktop,
+				icon: customRedirect,
 				comp: <CustomRedirects />,
+			},
+			{
+				name: 'media-queries',
+				title: __( 'Device & Media Queries', 'content-control' ),
+				icon: monitor,
+				comp: <DeviceMediaQueries />,
 			},
 		]
 	) as SectionList;
@@ -27,9 +36,11 @@ const GeneralTab = ( props: Props ) => {
 	return (
 		<>
 			{ sections.map( ( { name, title, icon, comp } ) => (
-				<Section key={ name } title={ title } icon={ icon }>
-					{ typeof comp === 'undefined' ? title : comp }
-				</Section>
+				<>
+					<Section key={ name } title={ title } icon={ icon }>
+						{ typeof comp === 'undefined' ? title : comp }
+					</Section>
+				</>
 			) ) }
 		</>
 	);
