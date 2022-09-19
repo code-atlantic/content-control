@@ -41,8 +41,8 @@ type State = {
 type Props = {
 	label?: string;
 	value?: string | WPLinkSearchResult;
-	onChange: ( value: WPLinkSearchResult ) => void;
-	className: string | Argument;
+	onChange?: ( value: WPLinkSearchResult ) => void;
+	className?: string | Argument;
 };
 
 const minQueryLength = 1;
