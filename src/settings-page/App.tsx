@@ -4,7 +4,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-import { TabPanel, Popover, Icon } from '@wordpress/components';
+import { Popover, Icon } from '@wordpress/components';
 
 import RestrictionsView from './restrictions-view';
 import SettingsView from './settings-view';
@@ -16,7 +16,8 @@ import { upgrade } from '@icons';
 const App = () => {
 	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
 
-	const views: TabComponent[] = applyFilters( 'contentControl.adminTabs', [
+	// Generated filtered list of admin views.
+	const views: TabComponent[] = applyFilters( 'contentControl.adminViews', [
 		{
 			name: 'restrictions',
 			title: __( 'Restrictions', 'content-control' ),
@@ -63,8 +64,10 @@ const App = () => {
 		},
 	] ) as TabComponent[];
 
+	// Assign the current view from the list of views.
 	const currentView = views.find( ( _view ) => _view.name === view );
 
+	// Update page title with contextual info based on current view.
 	useEffect( () => {
 		document.title =
 			views.find( ( obj ) => obj.name === view )?.pageTitle ??
