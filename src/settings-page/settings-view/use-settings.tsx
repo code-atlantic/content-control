@@ -1,6 +1,6 @@
 import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
-import { useEffect } from '@wordpress/element';
+import { useEffect, useMemo, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
 import { settingsStore } from '@data';
@@ -21,49 +21,28 @@ const useSettings = () => {
 	useEffect( () => () => clearParams(), [] );
 
 	// Fetch needed data from the @data & @wordpress/data stores.
-	const { settings: currentSettings, isSaving } = useSelect( ( select ) => {
-		const storeSelect = select( settingsStore );
+	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
+		useSelect( ( select ) => {
+			const storeSelect = select( settingsStore );
 
-		return {
-			settings: storeSelect.getSettings(),
-			isSaving: storeSelect.isDispatching( 'udpateSettings' ),
-		};
-	}, [] );
+			const unsavedChanges = storeSelect.getUnsavedChanges();
+
+			return {
+				unsavedChanges,
+				hasUnsavedChanges: Object.keys( unsavedChanges ).length > 0,
+				currentSettings: storeSelect.getSettings(),
+				isSaving:
+					storeSelect.isDispatching( 'updateSettings' ) ||
+					storeSelect.isDispatching( 'saveSettings' ),
+			};
+		}, [] );
 
 	// Grab needed action dispatchers.
-	const { udpateSettings } = useDispatch( settingsStore );
+	const { updateSettings, saveSettings, stageUnsavedChanges } =
+		useDispatch( settingsStore );
 
-	// Maintain a list of unsaved changes.
-	const unsavedChanges: Partial< Settings > = {};
-
-	// Boolean check if there are unsaved changes.
-	const hasUnsavedChanges = Object.keys( unsavedChanges ).length > 0;
-
-	// Exposed function to save unsaved changes.
-	const saveUnchangedChanges = () => {
-		if ( ! hasUnsavedChanges ) {
-			return;
-		}
-
-		udpateSettings( unsavedChanges );
-	};
-
-	// Clear unsavedChanges when they are saved.
-	useEffect( () => {
-		if ( hasUnsavedChanges && ! isSaving ) {
-			return;
-		}
-
-		( Object.keys( unsavedChanges ) as Array< keyof Settings > ).forEach(
-			( k: keyof Settings ) => {
-				if ( unsavedChanges[ k ] === currentSettings[ k ] ) {
-					delete unsavedChanges[ k ];
-				}
-			}
-		);
-	}, [ currentSettings, isSaving ] );
-
-	const settings = { ...currentSettings, unsavedChanges };
+	// Merge current & unsaved changes.
+	const settings = { ...currentSettings, ...unsavedChanges };
 
 	/**
 	 * Get setting by name.
@@ -89,10 +68,11 @@ const useSettings = () => {
 		currentSettings,
 		settings,
 		getSetting,
-		udpateSettings,
+		updateSettings,
+		saveSettings,
 		isSaving,
 		hasUnsavedChanges,
-		saveUnchangedChanges,
+		stageUnsavedChanges,
 		unsavedChanges,
 	};
 };

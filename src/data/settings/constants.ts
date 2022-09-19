@@ -2,6 +2,8 @@ export const STORE_NAME = 'content-control/settings';
 
 export const ACTION_TYPES = {
 	UPDATE: 'UPDATE',
+	STAGE_CHANGES: 'STAGE_CHANGES',
+	SAVE_CHANGES: 'SAVE_CHANGES',
 	HYDRATE: 'HYDRATE',
 	CHANGE_ACTION_STATUS: 'CHANGE_ACTION_STATUS',
 	SETTINGS_FETCH_ERROR: 'RESTRICTIONS_FETCH_ERROR',
@@ -17,6 +19,7 @@ export type Statuses = typeof Status[ keyof typeof Status ];
 
 export const settingsDefaults: Settings = {
 	excludedBlocks: [],
+	urlOverrides: {},
 	permissions: {
 		viewBlockControls: 'manage_options',
 		editBlockControls: 'manage_options',
@@ -27,4 +30,5 @@ export const settingsDefaults: Settings = {
 
 export const initialState: SettingsState = {
 	settings: settingsDefaults,
+	unsavedChanges: {},
 };

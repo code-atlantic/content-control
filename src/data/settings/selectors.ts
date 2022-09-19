@@ -30,6 +30,16 @@ export const getSetting = <
 };
 
 /**
+ * Gets object of unsaved settings changes.
+ *
+ * @param {SettingsState} state Current state.
+ * @return {SettingsState['unsavedChanges']} Object containing unsaved changes.
+ */
+export const getUnsavedChanges = ( state: SettingsState ) => {
+	return state?.unsavedChanges ?? {};
+};
+
+/**
  * Get list of excluded blocks.
  *
  * @param {SettingsState} state Current state.

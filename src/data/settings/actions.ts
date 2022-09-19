@@ -7,7 +7,8 @@ import { getErrorMessage } from '../utils';
 
 import { Status, Statuses, STORE_NAME, ACTION_TYPES } from './constants';
 
-const { UPDATE, HYDRATE, CHANGE_ACTION_STATUS } = ACTION_TYPES;
+const { UPDATE, SAVE_CHANGES, STAGE_CHANGES, HYDRATE, CHANGE_ACTION_STATUS } =
+	ACTION_TYPES;
 
 /**
  * Change status of a dispatch action request.
@@ -40,8 +41,8 @@ export const changeActionStatus = (
  * @param settings Object of settings to update.
  * @returns Action object.
  */
-export function* udpateSettings( settings: Partial< Settings > ) {
-	const actionName = 'udpateSettings';
+export function* updateSettings( settings: Partial< Settings > ) {
+	const actionName = 'updateSettings';
 
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
@@ -89,6 +90,79 @@ export function* udpateSettings( settings: Partial< Settings > ) {
 		);
 	}
 }
+
+/**
+ * Save staged/unsaved changes.
+ *
+ * @returns Action object.
+ */
+export function* saveSettings() {
+	const actionName = 'saveSettings';
+
+	try {
+		yield changeActionStatus( actionName, Status.Resolving );
+
+		// execution will pause here until the `FETCH` control function's return
+		// value has resolved.
+		const currentSettings: Settings = yield select(
+			STORE_NAME,
+			'getSettings'
+		);
+
+		const unsavedChanges: Settings = yield select(
+			STORE_NAME,
+			'getUnsavedChanges'
+		);
+
+		const result: Settings = yield fetch( getResourcePath(), {
+			method: 'PUT',
+			body: { ...currentSettings, ...unsavedChanges },
+		} );
+
+		if ( result ) {
+			// thing was successfully updated so return the action object that will
+			// update the saved thing in the state.
+			yield changeActionStatus( actionName, Status.Success );
+
+			return {
+				type: SAVE_CHANGES,
+				settings: result,
+			};
+		}
+
+		// if execution arrives here, then thing didn't update in the state so return
+		// action object that will add an error to the state about this.
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			__(
+				'An error occurred, settings were not saved.',
+				'content-control'
+			)
+		);
+	} catch ( error ) {
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			getErrorMessage( error )
+		);
+	}
+}
+
+/**
+ * Update settings.
+ *
+ * @param settings Object of settings to update.
+ * @returns Action object.
+ */
+export const stageUnsavedChanges = ( settings: Partial< Settings > ) => {
+	return {
+		type: STAGE_CHANGES,
+		settings,
+	};
+};
 
 export const hydrate = ( settings: Settings ) => {
 	return {

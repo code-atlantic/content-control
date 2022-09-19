@@ -1,3 +1,5 @@
+type URLOverrideTypes = 'login' | 'registration' | 'recovery';
+
 type Settings = {
 	excludedBlocks: string[];
 	permissions: {
@@ -6,10 +8,17 @@ type Settings = {
 		manageSettings: string;
 		editRestrictions: string;
 	};
+	urlOverrides: {
+		[ Property in URLOverrideTypes ]?: {
+			enabled: boolean;
+			url: string;
+		};
+	};
 };
 
 type SettingsState = {
 	settings: Settings;
+	unsavedChanges?: Partial< Settings >;
 	// Boilerplate
 	dispatchStatus?: {
 		[ Property in SettingsStore[ 'ActionNames' ] ]?: {

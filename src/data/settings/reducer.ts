@@ -1,7 +1,13 @@
 import { ACTION_TYPES, initialState, Statuses } from './constants';
 
-const { UPDATE, HYDRATE, CHANGE_ACTION_STATUS, SETTINGS_FETCH_ERROR } =
-	ACTION_TYPES;
+const {
+	UPDATE,
+	STAGE_CHANGES,
+	SAVE_CHANGES,
+	HYDRATE,
+	CHANGE_ACTION_STATUS,
+	SETTINGS_FETCH_ERROR,
+} = ACTION_TYPES;
 
 interface ActionPayloadTypes< T extends keyof Settings = keyof Settings > {
 	type: keyof typeof ACTION_TYPES;
@@ -36,6 +42,25 @@ const reducer = (
 			return {
 				...state,
 				error: message,
+			};
+
+		case STAGE_CHANGES:
+			return {
+				...state,
+				unsavedChanges: {
+					...( state.unsavedChanges ?? {} ),
+					...settings,
+				},
+			};
+
+		case SAVE_CHANGES:
+			return {
+				...state,
+				settings: {
+					...state.settings,
+					...settings,
+				},
+				unsavedChanges: {},
 			};
 
 		case UPDATE:
