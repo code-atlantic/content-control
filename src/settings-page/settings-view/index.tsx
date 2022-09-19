@@ -9,9 +9,9 @@ import Header from './header';
 import './editor.scss';
 import classNames from 'classnames';
 import useSettings from './use-settings';
+import GeneralTab from './tabs/general';
 
 const SettingsView = () => {
-	// Allow initiating the editor directly from a url.
 	const { tab } = useSettings();
 
 	// Filtered & mappable list of TabComponent definitions.
@@ -21,7 +21,7 @@ const SettingsView = () => {
 			{
 				name: 'general',
 				title: __( 'General', 'content-control' ),
-				comp: () => <GeneralTab />,
+				comp: <GeneralTab />,
 			},
 			{
 				name: 'permissions',
@@ -51,13 +51,13 @@ const SettingsView = () => {
 		]
 	) as TabComponent[];
 
-	const currentTab = tabs.find( ( t ) => t.name === tab );
+	const { title, comp } = tabs.find( ( t ) => t.name === tab ) ?? {};
 
 	return (
 		<div className={ classNames( [ 'cc-settings-view', `tab-${ tab }` ] ) }>
 			<Header tabs={ tabs } />
 			<div className="cc-settings-view__content">
-				{ currentTab?.comp }
+				{ typeof comp === 'undefined' ? title : comp }
 			</div>
 		</div>
 	);

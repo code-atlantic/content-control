@@ -55,4 +55,74 @@
 			}
 		}
 	}
+
+	.cc-settings-view__content {
+		padding: 20px 0;
+	}
+
+	.settings-section-panel {
+		.components-panel__header {
+			display: flex;
+			justify-content: left;
+			align-items: center;
+			min-height: 60px;
+		}
+
+		.panel-icon {
+			display: flex;
+			align-items: center;
+			margin-right: 10px;
+		}
+
+		.panel-title {
+			font-size: 1.1em;
+			font-weight: 500;
+		}
+
+		.panel-actions {
+			display: flex;
+			gap: 10px;
+			margin-left: auto;
+			align-items: center;
+
+			.components-base-control__field {
+				margin-bottom: 0;
+
+				.components-form-toggle {
+					margin-right: 0;
+				}
+			}
+
+			.components-button.has-icon {
+				padding: 0;
+			}
+		}
+
+		.field-group {
+			display: flex;
+
+			padding-bottom: 20px;
+			margin-top: 20px;
+
+			border-bottom: 1px solid #ccc;
+
+
+			&:last-child {
+				padding-bottom: 0;
+				border-bottom: 0;
+
+			}
+
+
+			.field-group__label {
+				width: 340px;
+			}
+
+			.field-group__controls {
+				justify-content: left;
+				flex-grow: 1;
+			}
+
+		}
+	}
 }
