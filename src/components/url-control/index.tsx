@@ -200,7 +200,7 @@ const URLControl = (
 	useEffect( () => {
 		setTimeout( () => {
 			if ( suggestionRefs.current ) {
-				suggestionRefs?.current?.[ selected ]?.scrollIntoView();
+				// suggestionRefs?.current?.[ selected ]?.scrollIntoView();
 			}
 		}, 25 );
 	}, [ selected, showSuggestions ] );
@@ -288,71 +288,78 @@ const URLControl = (
 	};
 
 	return (
-		<div
+		<BaseControl
+			id={ inputId }
+			label={ label }
 			className={ classNames( [
 				'components-url-control',
 				isFocused && 'is-focused',
 				className,
 			] ) }
-			ref={ wrapperRef }
-			onFocus={ () => {
-				setState( {
-					...state,
-					isFocused: true,
-					showSuggestions: query.length >= minQueryLength,
-				} );
-			} }
-			onBlur={ ( event ) => {
-				// If focus is now on element outside this container, clear state.
-				if ( ! wrapperRef.current?.contains( event.relatedTarget ) ) {
+		>
+			<div
+				ref={ wrapperRef }
+				onFocus={ () => {
 					setState( {
 						...state,
-						selected: -1,
-						isFocused: false,
-						showSuggestions: false,
+						isFocused: true,
+						showSuggestions: query.length >= minQueryLength,
 					} );
-				}
-			} }
-		>
-			{ ! isEditing && parsedValue.url.length > 0 ? (
-				<div className="suggestion">
-					<Icon icon={ globe } className="suggestion-item-icon" />
-					<span className="suggestion-item-header">
-						<span className="suggestion-item-title">
-							<>{ value?.title ?? value?.url }</>
+				} }
+				onBlur={ ( event ) => {
+					// If focus is now on element outside this container, clear state.
+					if (
+						! wrapperRef.current?.contains( event.relatedTarget )
+					) {
+						setState( {
+							...state,
+							selected: -1,
+							isFocused: false,
+							showSuggestions: false,
+						} );
+					}
+				} }
+			>
+				{ ! isEditing && parsedValue.url.length > 0 ? (
+					<div className="suggestion">
+						<Icon icon={ globe } className="suggestion-item-icon" />
+						<span className="suggestion-item-header">
+							<span className="suggestion-item-title">
+								<>{ value?.title ?? value?.url }</>
+							</span>
+							<span
+								aria-hidden="true"
+								className="suggestion-item-info"
+							>
+								{ value.url }
+							</span>
 						</span>
-						<span
-							aria-hidden="true"
-							className="suggestion-item-info"
+						<Button
+							aria-label={ __( 'Edit', 'content-control' ) }
+							icon={ edit }
+							onClick={ () => {
+								setState( {
+									...state,
+									isEditing: true,
+									isFocused: true,
+									query: parsedValue.url,
+								} );
+							} }
+							ref={ editBtnRef }
+						/>
+					</div>
+				) : (
+					<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
+						<div
+							className={ classNames( [
+								'url-control-wrapper',
+							] ) }
+							ref={ inputWrapperRef }
 						>
-							{ value.url }
-						</span>
-					</span>
-					<Button
-						aria-label={ __( 'Edit', 'content-control' ) }
-						icon={ edit }
-						onClick={ () => {
-							setState( {
-								...state,
-								isEditing: true,
-								isFocused: true,
-								query: parsedValue.url,
-							} );
-						} }
-						ref={ editBtnRef }
-					/>
-				</div>
-			) : (
-				<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
-					<div
-						className={ classNames( [ 'url-control-wrapper' ] ) }
-						ref={ inputWrapperRef }
-					>
-						<BaseControl id={ inputId } label={ label }>
-							<div className="url-input">
+							<div className="url-control">
 								<input
 									id={ inputId }
-									className="url-input__input"
+									className="url-control__input"
 									ref={ inputRef }
 									type="text"
 									role="combobox"
@@ -381,7 +388,7 @@ const URLControl = (
 											  ) /* Ensure input always has an accessible label */
 									}
 								/>
-								<div className="url-input__actions">
+								<div className="url-control__actions">
 									{ isFetchingSuggestions && <Spinner /> }
 									<Button
 										icon={ keyboardReturn }
@@ -395,92 +402,101 @@ const URLControl = (
 									/>
 								</div>
 							</div>
-						</BaseControl>
 
-						{ showSuggestions && suggestions.length > 0 && (
-							<Popover
-								focusOnMount={ false }
-								onClose={ () => setFocusedSuggestion( -1 ) }
-								position="bottom right"
-								getAnchorRect={ () =>
-									inputWrapperRef.current?.getBoundingClientRect()
-								}
-								className="suggestions-popover"
-							>
-								<div
-									className="suggestions"
-									id={ suggestionsListId }
-									role="listbox"
+							{ showSuggestions && suggestions.length > 0 && (
+								<Popover
+									focusOnMount={ false }
+									onClose={ () => setFocusedSuggestion( -1 ) }
+									position="bottom right"
+									getAnchorRect={ () =>
+										inputWrapperRef.current?.getBoundingClientRect()
+									}
+									className="suggestions-popover"
 								>
-									{ suggestions.map( ( suggestion, i ) => (
-										<LinkSuggestion
-											key={ suggestion.id }
-											id={ `${ suggestionOptionIdPrefix }-${ i }` }
-											title={ suggestion.title }
-											info={ suggestion.url }
-											type={ suggestion.type }
-											isSelected={ i === currentIndex }
-											onSelect={ () =>
-												selectSuggestion( suggestion )
-											}
-											onFocus={ () =>
-												setFocusedSuggestion( i )
-											}
-											ref={ (
-												_ref: HTMLButtonElement
-											) => {
-												suggestionRefs.current[ i ] =
-													_ref;
-											} }
-										/>
-									) ) }
+									<div
+										className="suggestions"
+										id={ suggestionsListId }
+										role="listbox"
+									>
+										{ suggestions.map(
+											( suggestion, i ) => (
+												<LinkSuggestion
+													key={ suggestion.id }
+													id={ `${ suggestionOptionIdPrefix }-${ i }` }
+													title={ suggestion.title }
+													info={ suggestion.url }
+													type={ suggestion.type }
+													isSelected={
+														i === currentIndex
+													}
+													onSelect={ () =>
+														selectSuggestion(
+															suggestion
+														)
+													}
+													onFocus={ () =>
+														setFocusedSuggestion(
+															i
+														)
+													}
+													ref={ (
+														_ref: HTMLButtonElement
+													) => {
+														suggestionRefs.current[
+															i
+														] = _ref;
+													} }
+												/>
+											)
+										) }
 
-									{ query.length > 0 && (
-										<LinkSuggestion
-											key={ 'use-current-input-text' }
-											id={ `${ suggestionOptionIdPrefix }-${ maxSelectionIndex }` }
-											icon={ globe }
-											title={ query }
-											info={ __(
-												'Press ENTER to add this link',
-												'content-control'
-											) }
-											type={ __(
-												'URL',
-												'content-control'
-											) }
-											className="is-url"
-											isSelected={
-												maxSelectionIndex ===
-												currentIndex
-											}
-											onSelect={ () =>
-												selectSuggestion( {
-													...value,
-													url: query,
-												} )
-											}
-											onFocus={ () => {
-												setFocusedSuggestion(
-													maxSelectionIndex
-												);
-											} }
-											ref={ (
-												_ref: HTMLButtonElement
-											) => {
-												suggestionRefs.current[
-													maxSelectionIndex
-												] = _ref;
-											} }
-										/>
-									) }
-								</div>
-							</Popover>
-						) }
-					</div>
-				</KeyboardShortcuts>
-			) }
-		</div>
+										{ query.length > 0 && (
+											<LinkSuggestion
+												key={ 'use-current-input-text' }
+												id={ `${ suggestionOptionIdPrefix }-${ maxSelectionIndex }` }
+												icon={ globe }
+												title={ query }
+												info={ __(
+													'Press ENTER to add this link',
+													'content-control'
+												) }
+												type={ __(
+													'URL',
+													'content-control'
+												) }
+												className="is-url"
+												isSelected={
+													maxSelectionIndex ===
+													currentIndex
+												}
+												onSelect={ () =>
+													selectSuggestion( {
+														...value,
+														url: query,
+													} )
+												}
+												onFocus={ () => {
+													setFocusedSuggestion(
+														maxSelectionIndex
+													);
+												} }
+												ref={ (
+													_ref: HTMLButtonElement
+												) => {
+													suggestionRefs.current[
+														maxSelectionIndex
+													] = _ref;
+												} }
+											/>
+										) }
+									</div>
+								</Popover>
+							) }
+						</div>
+					</KeyboardShortcuts>
+				) }
+			</div>
+		</BaseControl>
 	);
 };
 

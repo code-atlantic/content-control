@@ -4,17 +4,17 @@
 	}
 
 	.url-control-wrapper {
-		.url-input {
+		.url-control {
 			position: relative;
 
-			.url-input__input {
+			.url-control__input {
 				display: block;
 				width: 100%;
 				min-height: 50px;
 				font-size: 1.2em;
 			}
 
-			.url-input__actions {
+			.url-control__actions {
 				position: absolute;
 				right: 9px;
 				top: 9px;

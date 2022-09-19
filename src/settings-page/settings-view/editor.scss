@@ -98,6 +98,10 @@
 			}
 		}
 
+		.components-notice {
+			margin: 5px 0 30px;
+		}
+
 		.field-group {
 			display: flex;
 
@@ -106,23 +110,24 @@
 
 			border-bottom: 1px solid #ccc;
 
-
 			&:last-child {
 				padding-bottom: 0;
 				border-bottom: 0;
-
 			}
 
-
 			.field-group__label {
-				width: 340px;
+				width: 350px;
+				padding-right: 20px;
 			}
 
 			.field-group__controls {
 				justify-content: left;
 				flex-grow: 1;
-			}
 
+				.components-base-control {
+					margin-bottom: 20px;
+				}
+			}
 		}
 	}
 }
