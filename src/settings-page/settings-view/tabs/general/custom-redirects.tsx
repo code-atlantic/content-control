@@ -48,7 +48,7 @@ const CustomRedirects = () => {
 				<div key={ name } className="field-group">
 					<div className="field-group__label">
 						<h3>{ label }</h3>
-						<p>{ description }</p>
+						{ description && <p>{ description }</p> }
 					</div>
 
 					<div className="field-group__controls">
