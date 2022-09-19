@@ -35,8 +35,20 @@ export const getSetting = <
  * @param {SettingsState} state Current state.
  * @return {SettingsState['unsavedChanges']} Object containing unsaved changes.
  */
-export const getUnsavedChanges = ( state: SettingsState ) => {
+export const getUnsavedChanges = (
+	state: SettingsState
+): SettingsState[ 'unsavedChanges' ] => {
 	return state?.unsavedChanges ?? {};
+};
+
+/**
+ * Check if there are any unsaved changes.
+ *
+ * @param {SettingsState} state Current state.
+ * @return {boolean} Object contains unsaved changes.
+ */
+export const hasUnsavedChanges = ( state: SettingsState ): boolean => {
+	return Object.keys( state?.unsavedChanges ?? {} ).length > 0;
 };
 
 /**
