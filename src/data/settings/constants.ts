@@ -26,6 +26,20 @@ export const settingsDefaults: Settings = {
 		manageSettings: 'manage_options',
 		editRestrictions: 'manage_options',
 	},
+	mediaQueries: {
+		mobile: {
+			override: false,
+			breakpoint: 640,
+		},
+		tablet: {
+			override: false,
+			breakpoint: 920,
+		},
+		desktop: {
+			override: false,
+			breakpoint: 1440,
+		},
+	},
 };
 
 export const initialState: SettingsState = {

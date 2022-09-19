@@ -1,5 +1,10 @@
 type URLOverrideTypes = 'login' | 'registration' | 'recovery';
 
+type DeviceMediaQuerySettings = {
+	override: boolean;
+	breakpoint: number;
+};
+
 type Settings = {
 	excludedBlocks: string[];
 	permissions: {
@@ -13,6 +18,25 @@ type Settings = {
 			enabled: boolean;
 			url: string;
 		};
+	};
+	mediaQueries: {
+		mobile: {
+			override: boolean;
+			breakpoint: number;
+		};
+		tablet: {
+			override: boolean;
+			breakpoint: number;
+		};
+		desktop: {
+			override: boolean;
+			breakpoint: number;
+		};
+		// [ key: string ]:
+		// 	| DeviceMediaQuerySettings
+		// 	| {
+		// 			query: string;
+		// 	  };
 	};
 };
 
