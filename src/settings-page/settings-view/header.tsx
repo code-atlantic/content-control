@@ -16,7 +16,7 @@ type Props = {
 };
 
 const Header = ( { tabs }: Props ) => {
-	const { tab, setTab, isSaving, saveUnchangedChanges, hasUnsavedChanges } =
+	const { tab, setTab, isSaving, saveSettings, hasUnsavedChanges } =
 		useSettings();
 
 	const [ searchText, setSearchText ] = useState( '' );
@@ -44,7 +44,7 @@ const Header = ( { tabs }: Props ) => {
 					variant="primary"
 					disabled={ isSaving || ! hasUnsavedChanges }
 					className="save-settings"
-					onClick={ () => saveUnchangedChanges() }
+					onClick={ () => saveSettings() }
 				>
 					{ isSaving && <Spinner /> }
 					{ __( 'Save Settings', 'content-control' ) }
