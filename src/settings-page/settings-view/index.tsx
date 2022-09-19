@@ -1,14 +1,12 @@
-import { StringParam, useQueryParams, withDefault } from 'use-query-params';
-
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
-import { Button, TabPanel } from '@wordpress/components';
 
 import Header from './header';
 
 import './editor.scss';
 import classNames from 'classnames';
 import useSettings from './use-settings';
+
 import GeneralTab from './tabs/general';
 
 const SettingsView = () => {
