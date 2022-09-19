@@ -15,12 +15,9 @@ const useSettings = () => {
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
 		useSelect( ( select ) => {
 			const storeSelect = select( settingsStore );
-
-			const unsavedChanges = storeSelect.getUnsavedChanges();
-
 			return {
-				unsavedChanges,
-				hasUnsavedChanges: Object.keys( unsavedChanges ).length > 0,
+				unsavedChanges: storeSelect.getUnsavedChanges(),
+				hasUnsavedChanges: storeSelect.hasUnsavedChanges(),
 				currentSettings: storeSelect.getSettings(),
 				isSaving:
 					storeSelect.isDispatching( 'updateSettings' ) ||
