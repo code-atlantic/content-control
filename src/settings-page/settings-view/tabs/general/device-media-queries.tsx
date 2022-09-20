@@ -25,11 +25,7 @@ interface RegisteredMediaQuery {
 type Props = {};
 
 const DeviceMediaQueries = () => {
-	const {
-		settings,
-		stageUnsavedChanges: updateSettings,
-		setTab,
-	} = useSettings();
+	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 
 	// Filtered & mappable list of TabComponent definitions.
 	const mediaQueries: RegisteredMediaQuery[] = applyFilters(
