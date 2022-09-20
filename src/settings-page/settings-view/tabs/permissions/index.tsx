@@ -132,6 +132,10 @@ const PermissionsTab = ( props: Props ) => {
 									onChange={ ( newCap ) =>
 										updatePermission( name, {
 											cap: newCap,
+											other:
+												newCap === 'other'
+													? cap
+													: undefined,
 										} )
 									}
 								>
