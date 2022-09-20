@@ -16,6 +16,12 @@ declare global {
 	const contentControlSettingsPage: {
 		userRoles: { [ key: string ]: string };
 		restBase: string;
+		rolesAndCaps: {
+			[ key: string ]: {
+				name: string;
+				capabilities: { [ key: string ]: boolean };
+			};
+		};
 	};
 }
 

@@ -1,13 +1,14 @@
 import classNames from 'classnames';
+import { useQueryParam, StringParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
 import Header from './header';
 import GeneralTab from './tabs/general';
+import PermissionsTab from './tabs/permissions';
 
 import './editor.scss';
-import { useQueryParam, StringParam } from 'use-query-params';
 
 type Props = {};
 
@@ -26,7 +27,7 @@ const SettingsView = ( {}: Props ) => {
 			{
 				name: 'permissions',
 				title: __( 'Permissions', 'content-control' ),
-				// component: () => <ProtectionTab { ...componentProps } />,
+				comp: PermissionsTab,
 			},
 			{
 				name: 'block-manager',
