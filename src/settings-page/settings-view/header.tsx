@@ -18,7 +18,7 @@ type Props = {
 };
 
 const Header = ( { tabs }: Props ) => {
-	const [ tab = 'general' ] = useQueryParam( 'tab', StringParam );
+	const [ tab = 'general', setTab ] = useQueryParam( 'tab', StringParam );
 
 	const { isSaving, saveSettings, hasUnsavedChanges } = useSettings();
 
