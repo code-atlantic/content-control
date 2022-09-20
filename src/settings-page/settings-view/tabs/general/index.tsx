@@ -35,9 +35,9 @@ const GeneralTab = ( props: Props ) => {
 
 	return (
 		<>
-			{ sections.map( ( { name, title, icon, comp } ) => (
+			{ sections.map( ( { name, title, icon, comp: Component } ) => (
 				<Section key={ name } title={ title } icon={ icon }>
-					{ typeof comp === 'undefined' ? title : comp }
+					{ Component ? <Component /> : title }
 				</Section>
 			) ) }
 		</>

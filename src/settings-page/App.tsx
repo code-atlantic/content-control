@@ -30,7 +30,7 @@ const App = () => {
 				'Content Control - Global Restrictions',
 				'content-control'
 			),
-			comp: <RestrictionsView />,
+			comp: RestrictionsView,
 		},
 		{
 			name: 'settings',
@@ -41,7 +41,7 @@ const App = () => {
 				'content-control'
 			),
 			heading: __( 'Plugin Settings', 'content-control' ),
-			comp: <SettingsView />,
+			comp: SettingsView,
 		},
 		{
 			name: 'upgrade',
@@ -60,12 +60,15 @@ const App = () => {
 				'Content Control - Upgrade to Pro',
 				'content-control'
 			),
-			comp: <UpgradeView />,
+			comp: UpgradeView,
 		},
 	] ) as TabComponent[];
 
 	// Assign the current view from the list of views.
 	const currentView = views.find( ( _view ) => _view.name === view );
+
+	// Create a generic component from currentView.
+	const ViewComponent = currentView?.comp ? currentView.comp : () => <></>;
 
 	// Update page title with contextual info based on current view.
 	useEffect( () => {
@@ -80,7 +83,7 @@ const App = () => {
 		>
 			<Header tabs={ views } />
 			<div className="cc-settings-page__content">
-				{ currentView?.comp }
+				<ViewComponent />
 			</div>
 			<Popover.Slot />
 		</div>

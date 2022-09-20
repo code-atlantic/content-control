@@ -21,7 +21,7 @@ const SettingsView = ( {}: Props ) => {
 			{
 				name: 'general',
 				title: __( 'General', 'content-control' ),
-				comp: <GeneralTab />,
+				comp: GeneralTab,
 			},
 			{
 				name: 'permissions',
@@ -51,13 +51,14 @@ const SettingsView = ( {}: Props ) => {
 		]
 	) as TabComponent[];
 
-	const { title, comp } = tabs.find( ( t ) => t.name === tab ) ?? {};
+	const { title, comp: Component } =
+		tabs.find( ( t ) => t.name === tab ) ?? {};
 
 	return (
 		<div className={ classNames( [ 'cc-settings-view', `tab-${ tab }` ] ) }>
 			<Header tabs={ tabs } />
 			<div className="cc-settings-view__content">
-				{ typeof comp === 'undefined' ? title : comp }
+				{ Component ? <Component /> : title }
 			</div>
 		</div>
 	);

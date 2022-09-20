@@ -4,5 +4,5 @@ type TabComponent = {
 	className: string;
 	pageTitle: string;
 	heading: string;
-	comp: React.ReactElement;
+	comp?: () => JSX.Element;
 };
