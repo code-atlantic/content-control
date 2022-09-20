@@ -5,13 +5,23 @@ type DeviceMediaQuerySettings = {
 	breakpoint: number;
 };
 
+type PermissionValue = { cap: string; other?: string };
+
 type Settings = {
 	excludedBlocks: string[];
 	permissions: {
-		viewBlockControls: string;
-		editBlockControls: string;
-		manageSettings: string;
-		editRestrictions: string;
+		// Block Controls
+		viewBlockControls: PermissionValue;
+		editBlockControls: PermissionValue;
+		// Restrictions
+		addRestriction: PermissionValue;
+		deleteRestriction: PermissionValue;
+		editRestriction: PermissionValue;
+		// Settings
+		viewSettings: PermissionValue;
+		manageSettings: PermissionValue;
+		// Extendable
+		[ key: string ]: PermissionValue;
 	};
 	urlOverrides: {
 		[ Property in URLOverrideTypes ]?: {
