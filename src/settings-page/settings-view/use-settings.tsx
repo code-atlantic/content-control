@@ -1,16 +1,8 @@
-import { StringParam, useQueryParam, withDefault } from 'use-query-params';
-
 import { useDispatch, useSelect } from '@wordpress/data';
 
 import { settingsStore } from '@data';
 
 const useSettings = () => {
-	// Allow initiating the editor directly from a url.
-	const [ tab, setTab ] = useQueryParam(
-		'tab',
-		withDefault( StringParam, 'general' )
-	);
-
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
 		useSelect( ( select ) => {
@@ -51,8 +43,6 @@ const useSettings = () => {
 	};
 
 	return {
-		tab,
-		setTab,
 		currentSettings,
 		settings,
 		getSetting,

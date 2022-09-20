@@ -3,14 +3,16 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 
-import useSettings from './use-settings';
 import Header from './header';
 import GeneralTab from './tabs/general';
 
 import './editor.scss';
+import { useQueryParam, StringParam } from 'use-query-params';
 
-const SettingsView = () => {
-	const { tab } = useSettings();
+type Props = {};
+
+const SettingsView = ( {}: Props ) => {
+	const [ tab = 'general' ] = useQueryParam( 'tab', StringParam );
 
 	// Filtered & mappable list of TabComponent definitions.
 	const tabs: TabComponent[] = applyFilters(

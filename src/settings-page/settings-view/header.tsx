@@ -1,3 +1,5 @@
+import { StringParam, useQueryParam } from 'use-query-params';
+
 import { __ } from '@wordpress/i18n';
 import { search } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
@@ -16,8 +18,9 @@ type Props = {
 };
 
 const Header = ( { tabs }: Props ) => {
-	const { tab, setTab, isSaving, saveSettings, hasUnsavedChanges } =
-		useSettings();
+	const [ tab = 'general' ] = useQueryParam( 'tab', StringParam );
+
+	const { isSaving, saveSettings, hasUnsavedChanges } = useSettings();
 
 	const [ searchText, setSearchText ] = useState( '' );
 
