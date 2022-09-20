@@ -81,6 +81,15 @@ $gap4: $gap * 4;
 		}
 	}
 
+	.components-base-control__label,
+	.components-input-control__label,
+	.components-toggle-control__label,
+	.components-checkbox-control__label {
+		text-transform: none!important;
+		font-weight: 500!important;
+		font-size: 13px!important;
+	}
+
 	.components-radio-button-control {
 		.options {
 			max-width: 500px;
