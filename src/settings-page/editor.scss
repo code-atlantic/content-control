@@ -23,16 +23,11 @@
 		.tabs {
 			align-self: flex-end;
 			flex-grow: 1;
-
-			.components-tab-panel__tabs {
-				gap: 20px;
-			}
 		}
 
 		.components-tab-panel__tabs-item {
 			font-size: 1.125em;
 			height: 60px;
-			padding: 3px 0;
 			color: #1e1e1e;
 			text-decoration: none;
 
@@ -70,9 +65,8 @@
 	}
 }
 
-
 .branding-pro-tag {
-	background-color: #007CBA;
+	background-color: #007cba;
 	border-radius: 1em;
 	color: #fff;
 	font-size: 13px;
