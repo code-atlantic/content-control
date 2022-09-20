@@ -22,13 +22,13 @@ const GeneralTab = ( props: Props ) => {
 				name: 'redirects',
 				title: __( 'Custom Redirects', 'content-control' ),
 				icon: customRedirect,
-				comp: <CustomRedirects />,
+				comp: CustomRedirects,
 			},
 			{
 				name: 'media-queries',
 				title: __( 'Device & Media Queries', 'content-control' ),
 				icon: monitor,
-				comp: <DeviceMediaQueries />,
+				comp: DeviceMediaQueries,
 			},
 		]
 	) as SectionList;
