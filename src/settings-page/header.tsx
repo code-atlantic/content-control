@@ -2,7 +2,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { lifesaver } from '@wordpress/icons';
-import { Button, Modal } from '@wordpress/components';
+import { Button, Flex, Modal } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
@@ -23,16 +23,22 @@ const Header = ( { tabs }: Props ) => {
 	 * The following section covers notifying users of unsaved changes during
 	 * various state changes and attempts to leave the page.
 	 */
-	const [ ignoreNotice, setIgnoreNotice ] = useState( false );
-	const [ attemptedView, setAttemptedView ] = useState< string >();
-	const [ showNotice, setShowNotice ] = useState( false );
+	const defaultState = {
+		showNotice: false,
+		ignoreNotice: false,
+		retryView: '',
+	};
+
+	const [ state, setState ] = useState< {
+		showNotice: boolean;
+		ignoreNotice: boolean;
+		retryView: string;
+	} >( defaultState );
+
+	const { showNotice, ignoreNotice, retryView } = state;
 
 	// Quick function to reset states.
-	const resetState = () => {
-		setShowNotice( false );
-		setIgnoreNotice( false );
-		setAttemptedView( undefined );
-	};
+	const resetState = () => setState( defaultState );
 
 	// Selectors for unsaved changes.
 	const hasUnsavedChanges = useSelect(
@@ -44,15 +50,9 @@ const Header = ( { tabs }: Props ) => {
 	const { saveSettings } = useDispatch( settingsStore );
 
 	// Hacked version of setTab to intercept when unsaved changes exist.
-	const changeView = ( newView: string | undefined ) => {
-		if ( view !== 'settings' ) {
-			setView( newView );
-			return;
-		}
-
-		if ( hasUnsavedChanges && ! ignoreNotice ) {
-			setShowNotice( true );
-			setAttemptedView( newView );
+	const changeView = ( newView: string ) => {
+		if ( view === 'settings' && hasUnsavedChanges && ! ignoreNotice ) {
+			setState( { ...state, showNotice: true, retryView: newView } );
 			return;
 		}
 
@@ -66,6 +66,7 @@ const Header = ( { tabs }: Props ) => {
 			event.returnValue = false;
 		}
 	};
+
 	// Add beforeunload listener for unsaved changes.
 	useEffect( () => {
 		window.addEventListener( 'beforeunload', beforeunload );
@@ -73,14 +74,18 @@ const Header = ( { tabs }: Props ) => {
 		return () => {
 			window.removeEventListener( 'beforeunload', beforeunload );
 		};
-	}, [ hasUnsavedChanges ] );
+	}, [] );
 
 	// Listens for unsaved changes & user ignoring notice. Changes views & resets accordingly.
 	useEffect( () => {
-		if ( ( ! hasUnsavedChanges || ignoreNotice ) && attemptedView ) {
-			// After user ignroed changes or saved, set the view.
-			setView( attemptedView );
+		// Reset state if there are no longer unsaved changes.
+		if ( ! hasUnsavedChanges ) {
 			resetState();
+		}
+
+		if ( ( ! hasUnsavedChanges || ignoreNotice ) && retryView ) {
+			// After user ignroed changes or saved, set the view.
+			setView( retryView );
 		}
 
 		return () => resetState();
@@ -94,7 +99,6 @@ const Header = ( { tabs }: Props ) => {
 				<h1 className="branding wp-heading-inline">
 					{ __( 'Content Control', 'content-control' ) }
 				</h1>
-
 				<ControlledTabPanel
 					className="tabs"
 					orientation="horizontal"
@@ -102,7 +106,6 @@ const Header = ( { tabs }: Props ) => {
 					onSelect={ ( tabName: string ) => changeView( tabName ) }
 					tabs={ tabs }
 				/>
-
 				<Button
 					variant="link"
 					icon={ lifesaver }
@@ -117,35 +120,32 @@ const Header = ( { tabs }: Props ) => {
 			{ showNotice && (
 				<Modal
 					title={ __( 'Unsaved changes', 'content-control' ) }
-					onRequestClose={ () => setShowNotice( false ) }
+					onRequestClose={ () => resetState() }
 				>
-					<>
-						<p>
-							{ __(
-								'Changes you made may not be saved.',
-								'content-control'
-							) }
-						</p>
-
+					<p>
+						{ __(
+							'Changes you made may not be saved.',
+							'content-control'
+						) }
+					</p>
+					<Flex justify="right">
 						<Button
 							isDestructive={ true }
-							onClick={ () => {
-								setIgnoreNotice( true );
-								changeView( attemptedView );
-								setShowNotice( false );
-							} }
+							onClick={ () =>
+								setState( {
+									...state,
+									showNotice: false,
+									ignoreNotice: true,
+								} )
+							}
 							text={ __( 'Ignore', 'content-control' ) }
 						/>
 						<Button
 							variant="primary"
-							onClick={ () => {
-								saveSettings();
-								changeView( attemptedView );
-								setShowNotice( false );
-							} }
+							onClick={ () => saveSettings() }
 							text={ __( 'Save Settings', 'content-control' ) }
 						/>
-					</>
+					</Flex>
 				</Modal>
 			) }
 		</>
