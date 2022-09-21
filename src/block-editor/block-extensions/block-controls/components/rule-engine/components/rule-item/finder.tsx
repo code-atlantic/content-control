@@ -113,6 +113,7 @@ const Finder = (
 		() =>
 			ruleOptions.filter( ( suggestion ) => {
 				return (
+					// Fills an array of true/false for each query term.
 					[
 						...queryTerms.map(
 							( term ) =>
