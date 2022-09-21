@@ -1,13 +1,12 @@
 /** WordPress Imports */
 import { __ } from '@wordpress/i18n';
-import { Button } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 
 /** Internal Imports */
 import { restrictionsStore } from '@data';
 import Edit from './edit';
 import List from './list';
-import useEditor from './use-editor';
+import Header from './header';
 
 /** Style Imports */
 import './editor.scss';
@@ -18,8 +17,6 @@ import './editor.scss';
  * @returns Restrictions tab component.
  */
 const RestrictionsView = () => {
-	const { setEditorId } = useEditor();
-
 	// Fetch needed data from the @data & @wordpress/data stores.
 	const isEditorActive = useSelect(
 		( select ) => select( restrictionsStore ).isEditorActive(),
@@ -28,14 +25,8 @@ const RestrictionsView = () => {
 
 	return (
 		<div className="restriction-list">
-			<Button onClick={ () => setEditorId( 'new' ) } variant="primary">
-				{ __( 'Add New', 'content-control' ) }
-			</Button>
-
-			<hr />
-
+			<Header />
 			<List />
-
 			{ isEditorActive && <Edit /> }
 		</div>
 	);
