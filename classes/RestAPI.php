@@ -27,6 +27,7 @@ class RestAPI extends Controller {
 	 * Register Rest API routes.
 	 */
 	public function register_routes() {
+		( new RestAPI\BlockTypes() )->register_routes();
 		( new RestAPI\Settings() )->register_routes();
 	}
 }

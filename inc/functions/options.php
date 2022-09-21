@@ -67,3 +67,53 @@ function update_options( $new_options = [] ) {
 function delete_options( $keys = '' ) {
 	return plugin( 'options' )->delete( $keys );
 }
+
+/**
+ * Get index of blockTypes.
+ *
+ * @return array
+ */
+function get_block_types() {
+	return \get_option( 'content_control_known_blockTypes', [] );
+}
+
+/**
+ * Sanitize expeced block type data.
+ *
+ * @param array $type Block type definition.
+ * @return array Sanitized definition.
+ */
+function sanitize_block_type( $type = [] ) {
+	foreach ( $type as $key => $value ) {
+		$type[ $key ] = is_array( $value )
+			? sanitize_block_type( $value )
+			: \sanitize_text_field( $value );
+	}
+
+	return $type;
+}
+
+/**
+ * Update block type list.
+ *
+ * @param array $incoming_block_types Array of updated block type declarations.
+ */
+function update_block_types( $incoming_block_types = [] ) {
+	$block_types = [];
+
+	// Convert to a named index for deduplication.
+	foreach ( get_block_types() as $type ) {
+		$block_types[ $type['name'] ] = $type;
+	}
+
+	// Add or update incoming block types into the array.
+	foreach ( $incoming_block_types as $type ) {
+		// Sanitize each new block type.
+		$block_types[ $type['name'] ] = sanitize_block_type( $type );
+	}
+
+	// Flatten values to a simple array for storage.
+	$block_types = array_values( $block_types );
+
+	\update_option( 'content_control_known_blockTypes', $block_types );
+}
