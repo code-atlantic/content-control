@@ -1,3 +1,4 @@
+export { default as block } from './block';
 export { default as customRedirect } from './custom-redirect';
 export { default as controlledContent } from './controlled-content';
 export { default as incognito } from './incognito';
