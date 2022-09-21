@@ -30,10 +30,11 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	const { tab, setTab, setEditorId } = useEditor();
 
 	// Fetch needed data from the @data & @wordpress/data stores.
-	const { editorId, values, isSaving } = useSelect(
+	const { editorId, isEditorActive, values, isSaving } = useSelect(
 		( select ) => ( {
 			editorId: select( restrictionsStore ).getEditorId(),
 			values: select( restrictionsStore ).getEditorValues(),
+			isEditorActive: select( restrictionsStore ).isEditorActive(),
 			isSaving: select( restrictionsStore ).isDispatching( [
 				'createRestriction',
 				'updateRestriction',
@@ -50,7 +51,10 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		clearEditorData,
 	} = useDispatch( restrictionsStore );
 
-	// Get the current editor tab.
+	// If the editor isn't active, return empty.
+	if ( ! isEditorActive ) {
+		return null;
+	}
 
 	// When no editorId, dont' show the editor.
 	if ( ! editorId ) {
