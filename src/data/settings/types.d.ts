@@ -53,6 +53,14 @@ type Settings = {
 type SettingsState = {
 	settings: Settings;
 	unsavedChanges?: Partial< Settings >;
+	knownBlockTypes?: {
+		name: string;
+		title: string;
+		category?: string;
+		description?: string;
+		keywords?: string[];
+		icon?: any;
+	}[];
 	// Boilerplate
 	dispatchStatus?: {
 		[ Property in SettingsStore[ 'ActionNames' ] ]?: {

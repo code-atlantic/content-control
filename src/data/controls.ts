@@ -1,6 +1,6 @@
 export const restBase = 'content-control/v2';
 
-export const restUrl = `${ wpApiSettings.root }content-control/v2/`;
+export const restUrl = `${ wpApiSettings.root }${ restBase }/`;
 
 type FetchOptions = { [ key: string ]: any };
 type FetchArgs = {

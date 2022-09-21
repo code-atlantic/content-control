@@ -7,8 +7,14 @@ import { getErrorMessage } from '../utils';
 
 import { Status, Statuses, STORE_NAME, ACTION_TYPES } from './constants';
 
-const { UPDATE, SAVE_CHANGES, STAGE_CHANGES, HYDRATE, CHANGE_ACTION_STATUS } =
-	ACTION_TYPES;
+const {
+	UPDATE,
+	SAVE_CHANGES,
+	STAGE_CHANGES,
+	HYDRATE,
+	CHANGE_ACTION_STATUS,
+	HYDRATE_BLOCK_TYPES,
+} = ACTION_TYPES;
 
 /**
  * Change status of a dispatch action request.
@@ -168,5 +174,14 @@ export const hydrate = ( settings: Settings ) => {
 	return {
 		type: HYDRATE,
 		settings,
+	};
+};
+
+export const hydrateBlockTypes = (
+	blockTypes: SettingsState[ 'knownBlockTypes' ]
+) => {
+	return {
+		type: HYDRATE_BLOCK_TYPES,
+		blockTypes,
 	};
 };

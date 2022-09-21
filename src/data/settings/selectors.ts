@@ -9,6 +9,16 @@ import { settingsDefaults, Status } from './constants';
 export const getSettings = ( state: SettingsState ): Settings => state.settings;
 
 /**
+ * Get list of known block types.
+ *
+ * @param {SettingsState} state Current state.
+ * @return {SettingsState['knownBlockTypes']} List of excluded block types.
+ */
+export const getKnownBlockTypes = (
+	state: SettingsState
+): SettingsState[ 'knownBlockTypes' ] => state.knownBlockTypes;
+
+/**
  * Get setting by name.
  *
  * @param {SettingsState} state        Current state.
