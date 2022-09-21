@@ -7,6 +7,7 @@ import { applyFilters } from '@wordpress/hooks';
 import Header from './header';
 import GeneralTab from './tabs/general';
 import PermissionsTab from './tabs/permissions';
+import BlockManagerTab from './tabs/block-manager';
 
 import './editor.scss';
 
@@ -32,7 +33,7 @@ const SettingsView = ( {}: Props ) => {
 			{
 				name: 'block-manager',
 				title: __( 'Block Manager', 'content-control' ),
-				// component: () => <BlockManagerTab { ...componentProps } />,
+				comp: BlockManagerTab,
 			},
 			{
 				name: 'preset-manager',
