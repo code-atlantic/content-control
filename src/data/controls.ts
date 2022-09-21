@@ -1,6 +1,6 @@
-const { restBase } = contentControlSettingsPage;
+export const restBase = 'content-control/v2';
 
-const restUrl = `${ wpApiSettings.root }${ restBase }/`;
+export const restUrl = `${ wpApiSettings.root }content-control/v2/`;
 
 type FetchOptions = { [ key: string ]: any };
 type FetchArgs = {
@@ -8,7 +8,7 @@ type FetchArgs = {
 	options: { [ key: string ]: any };
 };
 
-const fetchCredOpts = ( options: FetchOptions = {} ): RequestInit => ( {
+export const fetchCredOpts = ( options: FetchOptions = {} ): RequestInit => ( {
 	...options,
 	headers: {
 		...options.headers,

@@ -5,6 +5,8 @@ declare module '@wordpress/core-data' {
 import { createRegistry, StoreDescriptor } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
+export * from './controls';
+
 import {
 	STORE_NAME as SETTINGS_STORE,
 	store as settingsStore,
