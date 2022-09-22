@@ -127,19 +127,17 @@ const List = () => {
 					items={ ! isLoading ? filteredRestrictions : [] }
 					columns={ {
 						enabled: () => (
-							<>
-								<Tooltip
-									text={ __(
-										'Enable or disable the restriction',
-										'content-control'
-									) }
-									position="top right"
-								>
-									<span>
-										<Icon icon={ info } />
-									</span>
-								</Tooltip>
-							</>
+							<Tooltip
+								text={ __(
+									'Enable or disable the restriction',
+									'content-control'
+								) }
+								position="top right"
+							>
+								<span>
+									<Icon icon={ info } />
+								</span>
+							</Tooltip>
 						),
 						title: __( 'Title', 'content-control' ),
 						description: __( 'Description', 'content-control' ),
