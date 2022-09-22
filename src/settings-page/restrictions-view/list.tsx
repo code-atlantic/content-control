@@ -1,21 +1,33 @@
 import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
-import { info } from '@wordpress/icons';
-import { useEffect, useMemo } from '@wordpress/element';
+import {
+	bug,
+	filter,
+	info,
+	moreVertical,
+	search,
+	upload,
+} from '@wordpress/icons';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
 	Button,
+	DropdownMenu,
 	Flex,
 	Icon,
+	NavigableMenu,
+	Popover,
+	SelectControl,
 	Spinner,
+	TextControl,
 	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
 
 import { ListTable } from '@components';
 import { restrictionsStore } from '@data';
-import { incognito, lockedUser } from '@icons';
+import { filterLines, incognito, lockedUser } from '@icons';
 
 import useEditor from './use-editor';
 
@@ -41,6 +53,24 @@ const List = () => {
 			isDeleting: sel.isDispatching( 'deleteRestriction' ),
 		};
 	}, [] );
+
+	const filtersBtnRef = useRef< HTMLButtonElement >();
+
+	const [ searchText, setSearchText ] = useState( '' );
+	const [ showFiltersPopover, setShowFiltersPopover ] = useState( false );
+	const [ showOptionsPopover, setShowOptionsPopover ] = useState( false );
+
+	const toggleFiltersPopover = () =>
+		setShowFiltersPopover( ! showFiltersPopover );
+
+	const toggleOptionsPopover = () =>
+		setShowOptionsPopover( ! showOptionsPopover );
+
+	useEffect( () => {
+		if ( ! showFiltersPopover ) {
+			filtersBtnRef.current?.focus();
+		}
+	}, [ showFiltersPopover ] );
 
 	// Get action dispatchers.
 	const { updateRestriction, deleteRestriction } =
@@ -102,31 +132,126 @@ const List = () => {
 
 	return (
 		<>
-			{ /*// TODO Move to a new sub component */ }
-			<div className="list-table-status-filters">
-				{ Object.entries( statusOptionLabels ).map( ( [ s, label ] ) =>
-					isStatusActive( s ) ? (
-						<Button
-							key={ s }
-							variant="link"
-							onClick={ () => setFilters( { status: s } ) }
-							className={ s === status ? 'active' : '' }
-						>
-							<span className="label">{ label }</span>
-							<span className="count">{ `(${ activeStatusCounts[ s ] })` }</span>
-						</Button>
-					) : null
-				) }
-			</div>
-
 			<div className="list-table-container">
 				{ isLoading && (
 					<div className="is-loading">
 						<Spinner />
 					</div>
 				) }
+
+				<div className="list-table-header">
+					<div className="list-search">
+						<Icon icon={ search } />
+						<TextControl
+							placeholder={ __(
+								'Search Restrictions...',
+								'content-control'
+							) }
+							value={ searchText }
+							onChange={ setSearchText }
+						/>
+					</div>
+
+					<div className="list-table-filters">
+						<Button
+							ref={ ( ref: HTMLButtonElement ) => {
+								filtersBtnRef.current = ref;
+							} }
+							variant="secondary"
+							onClick={ () => toggleFiltersPopover() }
+							icon={ filterLines }
+							iconSize={ 20 }
+							text={ __( 'Filters', 'content-control' ) }
+						/>
+						{ showFiltersPopover && (
+							<Popover
+								className="list-table-filters-popover"
+								noArrow={ false }
+								position="bottom left"
+								onFocusOutside={ ( event ) => {
+									if (
+										event.relatedTarget ===
+										filtersBtnRef.current
+									) {
+										return;
+									}
+									setShowFiltersPopover( false );
+								} }
+								onClose={ () => setShowFiltersPopover( false ) }
+								headerTitle={ __(
+									'Filter restrictoins',
+									'content-control'
+								) }
+								focusOnMount="firstElement"
+								expandOnMobile={ true }
+							>
+								<div className="list-filters-popover-title">
+									{ __(
+										'Filter restrictions',
+										'content-control'
+									) }
+								</div>
+								<div className="list-table-available-filters">
+									<SelectControl
+										label={ __(
+											'Status',
+											'content-control'
+										) }
+										value={ status }
+										options={ Object.entries(
+											statusOptionLabels
+										)
+											// Filter statuses with 0 items.
+											.filter(
+												( [ value ] ) =>
+													( activeStatusCounts[
+														value
+													] ?? 0 ) > 0
+											)
+											// Map statuses to options.
+											.map( ( [ value, label ] ) => {
+												return {
+													label: `${ label } (${
+														activeStatusCounts[
+															value
+														] ?? 0
+													})`,
+													value,
+												};
+											} ) }
+										onChange={ ( s ) =>
+											setFilters( {
+												status: s,
+											} )
+										}
+									/>
+								</div>
+							</Popover>
+						) }
+					</div>
+					<div className="list-table-options-menu">
+						<DropdownMenu
+							icon={ moreVertical }
+							label="Select a direction"
+							controls={ [
+								{
+									title: __( 'Import', 'content-control' ),
+									icon: upload,
+									onClick: () => console.log( 'up' ),
+								},
+								{
+									title: __(
+										'Troubleshoot',
+										'content-control'
+									),
+									icon: bug,
+									onClick: () => console.log( 'up' ),
+								},
+							] }
+						/>
+					</div>
+				</div>
 				<ListTable
-					className="striped"
 					items={ ! isLoading ? filteredRestrictions : [] }
 					columns={ {
 						enabled: () => (

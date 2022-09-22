@@ -8,7 +8,7 @@ $gap4: $gap * 4;
 		display: flex;
 		gap: 10px;
 		align-items: center;
-		margin-bottom: 10px;
+		margin-bottom: 30px;
 
 		.view-title {
 			margin: 0;
@@ -214,7 +214,103 @@ $gap4: $gap * 4;
 }
 
 .list-table-container {
+}
+
+.list-table-header {
 	display: flex;
+	gap: 5px;
+
+	.list-search {
+		margin-right: auto;
+		position: relative;
+
+		svg {
+			position: absolute;
+			top: 5px;
+			left: 5px;
+		}
+
+		.components-base-control__field {
+			margin: 0;
+		}
+
+		input {
+			padding-left: 30px;
+		}
+	}
+
+	.list-table-filters {
+		.components-button {
+			color: #1a191b;
+			font-size: 14px;
+			font-weight: 500;
+			box-shadow: inset 0 0 0 1px #d0d5dd;
+			padding: 10px 16px;
+			border-radius: 3px;
+			line-height: 1;
+
+			svg {
+				margin-right: 8px;
+			}
+
+			&:focus:not(:disabled) {
+				box-shadow: 0 0 0 var(--wp-admin-border-width-focus)
+					var(--wp-admin-theme-color);
+				outline: 3px solid #0000;
+			}
+		}
+	}
+}
+
+.list-table-filters-popover {
+	margin-top: 10px;
+	.components-popover__content {
+		padding: 10px;
+		width: max-content;
+
+		.list-filters-popover-title {
+			text-transform: capitalize;
+			font-size: 14px;
+			font-weight: 500;
+			margin-bottom: 10px;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.list-table-available-filters {
+			.components-flex {
+				flex-direction: row;
+				align-items: center;
+			}
+		}
+	}
+}
+
+.list-table-container {
+	background-color: #fff;
+	position: relative;
+	border-radius: 4px;
+	// margin-bottom: 0;
+	// padding: 10px;
+	border: 1px solid #ddd;
+	// border-bottom: 0;
+	// border-top-color: #c3c4c7;
+
+	.list-table-header {
+		padding: 10px;
+	}
+
+	.component-list-table {
+		border: 0;
+	}
+
+	.list-table {
+		border-color: #ddd;
+		border-radius: 0 0 4px 4px;
+		overflow: hidden;
+	}
+
+	// display: flex;
 	position: relative;
 
 	.is-loading {
@@ -243,6 +339,15 @@ $gap4: $gap * 4;
 
 	> * {
 		margin-bottom: 10px;
+	}
+
+	.list-table-header {
+		margin-bottom: 0;
+	}
+	.list-table-container {
+		table {
+			border-top: 0;
+		}
 	}
 
 	th,
@@ -278,7 +383,7 @@ $gap4: $gap * 4;
 
 			.components-flex {
 				gap: 6px;
-				justify-content:left;
+				justify-content: left;
 			}
 		}
 
@@ -292,15 +397,16 @@ $gap4: $gap * 4;
 				> span {
 					text-transform: capitalize;
 					border-radius: 16px;
-					font-size: 12px;
 					line-height: 1;
-					padding:  5px;
+					padding: 5px 8px;
 					color: #0570a6;
-					background-color: rgba(0, 124, 186, 0.05);
+					background-color: rgba(5, 112, 166, 0.05);
 
 					&.remaining {
+						margin-left: -8px;
 						background-color: transparent;
 						color: #344054;
+						font-weight: 500;
 					}
 				}
 			}
