@@ -120,19 +120,20 @@ $border-options: solid #c3c4c7;
 	th.sortable {
 		a,
 		button {
-			display: block;
+			display: flex;
+			align-items: center;
 			width: 100%;
 			height: 36px;
 			overflow: hidden;
-			padding: 8px;
+			padding: 8px 10px;
 			font-size: 14px;
 
 			span {
-				display: table-cell;
-				vertical-align: middle;
+				line-height: 1;
 			}
 
 			svg {
+				margin-left: 3px;
 				fill: black;
 			}
 		}
