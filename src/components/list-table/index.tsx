@@ -1,7 +1,8 @@
 import classNames, { Argument } from 'classnames';
+
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import { chevronUp, chevronDown } from '@wordpress/icons';
+import { arrowDown, arrowUp } from '@wordpress/icons';
 import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
 import './editor.scss';
@@ -98,16 +99,14 @@ const ListTable = < T extends TableItemBase >( {
 							<>
 								<span>{ colLabel }</span>
 								{ isSortedBy && (
-									<span>
-										<Icon
-											icon={
-												sortDirection === 'ASC'
-													? chevronUp
-													: chevronDown
-											}
-											size={ 20 }
-										/>
-									</span>
+									<Icon
+										icon={
+											sortDirection === 'ASC'
+												? arrowUp
+												: arrowDown
+										}
+										size={ 16 }
+									/>
 								) }
 							</>
 						) }
@@ -118,13 +117,13 @@ const ListTable = < T extends TableItemBase >( {
 					<TableCell { ...cellProps }>
 						{ isBulkSelect ? (
 							<CheckboxControl
-								onChange={ ( checked ) => {
+								onChange={ ( checked ) =>
 									setSelectedItems(
 										! checked
 											? []
 											: items.map( ( item ) => item.id )
-									);
-								} }
+									)
+								}
 								checked={
 									selectedItems.length > 0 &&
 									selectedItems.length === items.length
