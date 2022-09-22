@@ -3,6 +3,32 @@ $gap2: $gap * 2;
 $gap3: $gap * 3;
 $gap4: $gap * 4;
 
+.cc-settings-page.view-restrictions {
+	header.cc-settings-view__header {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		margin-bottom: 10px;
+
+		.view-title {
+			margin: 0;
+			line-height: 1;
+		}
+
+		.item-count {
+			display: inline-block;
+			margin-top: 8px;
+			color: #667085;
+		}
+
+		button.add-restriction {
+			margin-left: auto;
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+	}
+}
+
 .restriction-editor {
 	width: 860px;
 	min-height: 60vh;
@@ -85,9 +111,9 @@ $gap4: $gap * 4;
 	.components-input-control__label,
 	.components-toggle-control__label,
 	.components-checkbox-control__label {
-		text-transform: none!important;
-		font-weight: 500!important;
-		font-size: 13px!important;
+		text-transform: none !important;
+		font-weight: 500 !important;
+		font-size: 13px !important;
 	}
 
 	.components-radio-button-control {
@@ -229,10 +255,53 @@ $gap4: $gap * 4;
 			vertical-align: middle;
 			text-align: center;
 
+			.components-toggle-control__label {
+				display: none;
+			}
+
 			.components-toggle-control .components-base-control__field {
 				margin: 0;
 				.components-form-toggle {
 					margin: 0;
+				}
+			}
+		}
+	}
+
+	tbody {
+		td.column-restrictedTo {
+			vertical-align: middle;
+
+			svg {
+				stroke: #667085;
+			}
+
+			.components-flex {
+				gap: 6px;
+				justify-content:left;
+			}
+		}
+
+		td.column-roles {
+			vertical-align: middle;
+
+			.components-flex {
+				gap: 8px;
+				justify-content: left;
+
+				> span {
+					text-transform: capitalize;
+					border-radius: 16px;
+					font-size: 12px;
+					line-height: 1;
+					padding:  5px;
+					color: #0570a6;
+					background-color: rgba(0, 124, 186, 0.05);
+
+					&.remaining {
+						background-color: transparent;
+						color: #344054;
+					}
 				}
 			}
 		}
