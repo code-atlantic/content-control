@@ -94,7 +94,7 @@ const List = () => {
 			restrictions.filter( ( r ) =>
 				status === 'all' ? true : status === r.status
 			),
-		[ restrictions ]
+		[ restrictions, status ]
 	);
 
 	return (
