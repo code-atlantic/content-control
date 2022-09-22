@@ -6,6 +6,7 @@ import { useEffect, useMemo } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
 	Button,
+	Flex,
 	Icon,
 	Spinner,
 	ToggleControl,
@@ -14,6 +15,8 @@ import {
 
 import { ListTable } from '@components';
 import { restrictionsStore } from '@data';
+import { incognito, lockedUser } from '@icons';
+
 import useEditor from './use-editor';
 
 const statusOptionLabels: Record< Statuses, string > = {
@@ -141,6 +144,8 @@ const List = () => {
 						),
 						title: __( 'Title', 'content-control' ),
 						description: __( 'Description', 'content-control' ),
+						restrictedTo: __( 'Restricted to', 'content-control' ),
+						roles: __( 'Roles', 'content-control' ),
 					} }
 					sortableColumns={ [ 'title' ] }
 					renderCell={ (
@@ -248,6 +253,65 @@ const List = () => {
 											) }
 										</div>
 									</>
+								);
+							case 'restrictedTo':
+								return restriction.settings.who ===
+									'logged_in' ? (
+									<Flex>
+										<Icon icon={ lockedUser } size={ 20 } />
+										<span>
+											{ __(
+												'Logged in users',
+												'content-control'
+											) }
+										</span>
+									</Flex>
+								) : (
+									<Flex>
+										<Icon icon={ incognito } size={ 20 } />
+										<span>
+											{ __(
+												'Logged out users',
+												'content-control'
+											) }
+										</span>
+									</Flex>
+								);
+
+							case 'roles':
+								const { roles, who } = restriction.settings;
+
+								if (
+									who === 'logged_out' ||
+									roles.length === 0
+								) {
+									return (
+										<Flex>
+											<span>
+												{ __(
+													'Everyone',
+													'content-control'
+												) }
+											</span>
+										</Flex>
+									);
+								}
+
+								return (
+									<Flex>
+										{ roles
+											.slice( 0, 2 )
+											.map( ( role: string ) => (
+												<span key={ role }>
+													{ role }
+												</span>
+											) ) }
+										{ roles.length > 2 && (
+											<span className="remaining">
+												{ '+' + ( roles.length - 2 ) }
+											</span>
+										) }
+									</Flex>
 								);
 							default:
 								return (
