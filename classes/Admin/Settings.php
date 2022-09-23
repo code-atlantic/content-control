@@ -110,6 +110,7 @@ class Settings extends Controller {
 				'restBase'     => 'content-control/v2',
 				'userRoles'    => \ContentControl\Rules\allowed_user_roles(),
 				'rolesAndCaps' => wp_roles()->roles,
+				'version'      => plugin( 'version' ),
 			]
 		);
 

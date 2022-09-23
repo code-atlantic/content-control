@@ -1,0 +1,14 @@
+.list-table-options-menu__popover {
+	.components-popover__content {
+		padding: 8px;
+
+		.components-button {
+			width: 100%;
+			justify-content: left;
+
+			&.has-icon svg {
+				margin-right: 5px;
+			}
+		}
+	}
+}

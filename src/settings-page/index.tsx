@@ -22,6 +22,7 @@ declare global {
 				capabilities: { [ key: string ]: boolean };
 			};
 		};
+		version: string;
 	};
 }
 
