@@ -1,6 +1,7 @@
 export { default as block } from './block';
 export { default as customRedirect } from './custom-redirect';
 export { default as controlledContent } from './controlled-content';
+export { default as checkAll } from './check-all';
 export { default as incognito } from './incognito';
 export { default as filterLines } from './filter-lines';
 export { default as lockedUser } from './locked-user';
