@@ -24,6 +24,7 @@ const config = {
 			'@components': path.resolve( __dirname, 'src/components' ),
 			'@data': path.resolve( __dirname, 'src/data' ),
 			'@icons': path.resolve( __dirname, 'src/icons' ),
+			'@utils': path.resolve( __dirname, 'src/utils' ),
 		},
 	},
 };

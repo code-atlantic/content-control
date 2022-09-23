@@ -17,6 +17,9 @@
 			"@icons": [
 				"icons"
 			],
+			"@utils": [
+				"utils"
+			],
 		},
 		"declarationDir": "build-types",
 		"allowJs": true,
