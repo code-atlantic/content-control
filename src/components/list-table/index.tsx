@@ -1,7 +1,7 @@
 import classNames, { Argument } from 'classnames';
 
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { arrowDown, arrowUp } from '@wordpress/icons';
 import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
@@ -18,6 +18,7 @@ type Props< T extends TableItemBase > = {
 	noItemsText?: string;
 	showBulkSelect?: boolean;
 	className?: Argument;
+	onSelectItems?: ( selectedItems: number[] ) => void;
 };
 
 type CellProps = {
@@ -45,6 +46,7 @@ const ListTable = < T extends TableItemBase >( {
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
 	className,
+	onSelectItems = () => {},
 }: Props< T > ) => {
 	const cols = { [ idCol ]: columns[ idCol ] ?? '', ...columns };
 	const colCount = Object.keys( cols ).length;
@@ -57,6 +59,10 @@ const ListTable = < T extends TableItemBase >( {
 	const [ sortDirection, setSortDirection ] = useState< 'ASC' | 'DESC' >(
 		'ASC'
 	);
+
+	useEffect( () => {
+		onSelectItems( selectedItems );
+	}, [ selectedItems ] );
 
 	const sortedItems = ! sortBy
 		? items
