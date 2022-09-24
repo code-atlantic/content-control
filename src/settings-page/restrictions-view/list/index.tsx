@@ -48,6 +48,8 @@ const List = () => {
 					filteredRestrictions = [],
 					updateRestriction = noop,
 					deleteRestriction = noop,
+					filters: { searchText = '' },
+					setFilters,
 				} ) => (
 					<>
 						<ConfirmDialogue
@@ -69,8 +71,15 @@ const List = () => {
 											'Search Restrictions...',
 											'content-control'
 										) }
-										value={ searchText }
-										onChange={ setSearchText }
+										value={ searchText ?? '' }
+										onChange={ ( value ) =>
+											setFilters( {
+												searchText:
+													value !== ''
+														? value
+														: undefined,
+											} )
+										}
 									/>
 								</div>
 

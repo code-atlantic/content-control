@@ -11,7 +11,8 @@ import { restrictionsStore } from '@data';
 import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 type Filters = {
-	status: string;
+	status?: string | null;
+	searchText?: string | null;
 };
 
 type ListContext = {
@@ -23,9 +24,7 @@ type ListContext = {
 	setBulkSelection: ( bulkSelection: number[] ) => void;
 	isLoading: boolean;
 	isDeleting: boolean;
-	filters?: {
-		status?: string;
-	};
+	filters: Filters;
 	setFilters: ( filters: Partial< Filters > ) => void;
 };
 
@@ -42,6 +41,7 @@ const defaultContext: ListContext = {
 	isDeleting: false,
 	filters: {
 		status: 'all',
+		searchText: '',
 	},
 	setFilters: noop,
 };
@@ -56,16 +56,17 @@ type ProviderProps = {
 };
 
 export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
-	const [ searchText, setSearchText ] = useState( '' );
 	const [ bulkSelection, setBulkSelection ] = useState< number[] >( [] );
 
 	// Allow initiating the editor directly from a url.
 	const [ filters, setFilters ] = useQueryParams( {
 		status: withDefault( StringParam, 'all' ),
+		searchText: withDefault( StringParam, '' ),
 	} );
 
 	// Quick helper to reset all query params.
-	const clearFilterParams = () => setFilters( { status: undefined } );
+	const clearFilterParams = () =>
+		setFilters( { status: undefined, searchText: undefined } );
 
 	// Self clear query params when component is removed.
 	useEffect( () => clearFilterParams, [] );
@@ -88,9 +89,27 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 	// Filtered list of restrictions for the current status filter.
 	const filteredRestrictions = useMemo(
 		() =>
-			restrictions.filter( ( r ) =>
-				filters.status === 'all' ? true : filters.status === r.status
-			),
+			restrictions
+				.filter( ( r ) =>
+					filters.status === 'all'
+						? true
+						: filters.status === r.status
+				)
+				.filter( ( r ) => {
+					console.log(
+						! filters.searchText,
+						! filters.searchText.length,
+						r.title.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0,
+						r.description.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0
+					);
+
+					return (
+						! filters.searchText ||
+						! filters.searchText.length ||
+						r.title.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0 ||
+						r.description.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0
+					);
+				} ),
 		[ restrictions, filters ]
 	);
 
