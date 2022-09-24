@@ -61,8 +61,8 @@ const List = () => {
 								/>
 							</div>
 
-							{ bulkSelection.length > 0 && <ListBulkActions /> }
-							{ bulkSelection.length === 0 && <ListFilters /> }
+							<ListBulkActions />
+							<ListFilters />
 							<ListOptions />
 						</div>
 						<ListTable
