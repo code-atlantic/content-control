@@ -2,6 +2,10 @@
 	.components-popover__content {
 		padding: 8px;
 
+		hr {
+			width: 100%;
+		}
+
 		.components-button {
 			width: 100%;
 			justify-content: left;
