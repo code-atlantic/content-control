@@ -95,21 +95,17 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 						? true
 						: filters.status === r.status
 				)
-				.filter( ( r ) => {
-					console.log(
-						! filters.searchText,
-						! filters.searchText.length,
-						r.title.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0,
-						r.description.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0
-					);
-
-					return (
+				.filter(
+					( r ) =>
 						! filters.searchText ||
 						! filters.searchText.length ||
-						r.title.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0 ||
-						r.description.toLowerCase().indexOf( filters.searchText.toLowerCase() ) >= 0
-					);
-				} ),
+						r.title
+							.toLowerCase()
+							.indexOf( filters.searchText.toLowerCase() ) >= 0 ||
+						r.description
+							.toLowerCase()
+							.indexOf( filters.searchText.toLowerCase() ) >= 0
+				),
 		[ restrictions, filters ]
 	);
 
