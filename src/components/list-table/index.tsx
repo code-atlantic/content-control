@@ -5,6 +5,8 @@ import { useEffect, useState } from '@wordpress/element';
 import { arrowDown, arrowUp } from '@wordpress/icons';
 import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
+import { useControlledState } from '@utils';
+
 import './editor.scss';
 
 type Props< T extends TableItemBase > = {
@@ -18,6 +20,7 @@ type Props< T extends TableItemBase > = {
 	noItemsText?: string;
 	showBulkSelect?: boolean;
 	className?: Argument;
+	selectedItems?: number[];
 	onSelectItems?: ( selectedItems: number[] ) => void;
 };
 
@@ -46,12 +49,17 @@ const ListTable = < T extends TableItemBase >( {
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
 	className,
+	selectedItems: incomingSelectedItems = [],
 	onSelectItems = () => {},
 }: Props< T > ) => {
 	const cols = { [ idCol ]: columns[ idCol ] ?? '', ...columns };
 	const colCount = Object.keys( cols ).length;
 
-	const [ selectedItems, setSelectedItems ] = useState< number[] >( [] );
+	const [ selectedItems, setSelectedItems ] = useControlledState< number[] >(
+		incomingSelectedItems,
+		[],
+		onSelectItems
+	);
 
 	const [ sortBy, setSortBy ] = useState< string | null >(
 		sortableColumns.length ? sortableColumns[ 0 ] : null
