@@ -202,7 +202,9 @@ const List = () => {
 																!! isDeleting
 															}
 															onClick={ () =>
-																window.confirm() &&
+																window.confirm(
+																	'Are you sure you want to premanently delete this restriction?'
+																) &&
 																deleteRestriction(
 																	restriction.id,
 																	true
