@@ -1,11 +1,13 @@
-import { useRegistry } from '@wordpress/data';
 import { sprintf, _n, __ } from '@wordpress/i18n';
 import { useRef, useState } from '@wordpress/element';
+import { useRegistry, useSelect } from '@wordpress/data';
 import {
 	cancelCircleFilled,
 	chevronDown,
 	chevronUp,
 	download,
+	link,
+	linkOff,
 	trash,
 } from '@wordpress/icons';
 import {
@@ -17,6 +19,7 @@ import {
 } from '@wordpress/components';
 
 import { checkAll } from '@icons';
+import { restrictionsStore } from '@data';
 import { ConfirmDialogue } from '@components';
 import { cleanRestrictionData, saveFile } from '@utils';
 
@@ -29,21 +32,30 @@ const { version } = contentControlSettingsPage;
 type Props = {};
 
 const ListBulkActions = ( props: Props ) => {
+	const registry = useRegistry();
+
 	const {
 		bulkSelection = [],
+		setBulkSelection,
 		restrictions = [],
 		deleteRestriction,
-		setBulkSelection,
+		updateRestriction,
 	} = useList();
+
+	const { getRestriction } = useSelect(
+		( select ) => ( {
+			getRestriction: select( restrictionsStore ).getRestriction,
+		} ),
+		[]
+	);
 
 	const [ confirmDialogue, setConfirmDialogue ] = useState< {
 		message: string;
 		callback: () => void;
+		isDestructive?: boolean;
 	} >();
 
 	const clearConfirm = () => setConfirmDialogue( undefined );
-
-	const registry = useRegistry();
 
 	const bulkActionsBtnRef = useRef< HTMLButtonElement >();
 
@@ -54,7 +66,6 @@ const ListBulkActions = ( props: Props ) => {
 	return (
 		<>
 			<ConfirmDialogue { ...confirmDialogue } onClose={ clearConfirm } />
-
 			<Dropdown
 				className="list-table-bulk-actions"
 				contentClassName="list-table-bulk-actions__popover"
@@ -164,11 +175,13 @@ const ListBulkActions = ( props: Props ) => {
 							} }
 						/>
 
+						<hr />
 						<Button
 							text={ __( 'Trash', 'content-control' ) }
 							icon={ trash }
 							onClick={ () => {
 								setConfirmDialogue( {
+									isDestructive: true,
 									message: sprintf(
 										__(
 											'Are you sure you want to trash %d items?',
@@ -189,7 +202,10 @@ const ListBulkActions = ( props: Props ) => {
 							} }
 						/>
 						<Button
-							text={ __( 'Delete', 'content-control' ) }
+							text={ __(
+								'Delete Permanently',
+								'content-control'
+							) }
 							icon={ cancelCircleFilled }
 							isDestructive={ true }
 							onClick={ () => {
