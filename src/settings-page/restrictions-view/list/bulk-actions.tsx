@@ -120,6 +120,50 @@ const ListBulkActions = ( props: Props ) => {
 								);
 							} }
 						/>
+						<hr />
+						<Button
+							text={ __( 'Enable', 'content-control' ) }
+							icon={ link }
+							onClick={ () => {
+								// This will only rerender the components once.
+								registry.batch( () => {
+									bulkSelection.forEach( ( id ) => {
+										const restriction =
+											getRestriction( id );
+
+										if ( restriction?.id === id ) {
+											updateRestriction( {
+												...restriction,
+												status: 'publish',
+											} );
+										}
+									} );
+									setBulkSelection( [] );
+								} );
+							} }
+						/>
+						<Button
+							text={ __( 'Disable', 'content-control' ) }
+							icon={ linkOff }
+							onClick={ () => {
+								// This will only rerender the components once.
+								registry.batch( () => {
+									bulkSelection.forEach( ( id ) => {
+										const restriction =
+											getRestriction( id );
+
+										if ( restriction?.id === id ) {
+											updateRestriction( {
+												...restriction,
+												status: 'draft',
+											} );
+										}
+									} );
+									setBulkSelection( [] );
+								} );
+							} }
+						/>
+
 						<Button
 							text={ __( 'Trash', 'content-control' ) }
 							icon={ trash }
