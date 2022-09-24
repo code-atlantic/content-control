@@ -210,6 +210,7 @@ const ListBulkActions = ( props: Props ) => {
 							isDestructive={ true }
 							onClick={ () => {
 								setConfirmDialogue( {
+									isDestructive: true,
 									message: sprintf(
 										__(
 											'Are you sure you want to premanently delete %d items?',
