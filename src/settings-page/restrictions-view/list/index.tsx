@@ -66,8 +66,9 @@ const List = () => {
 							<ListOptions />
 						</div>
 						<ListTable
-							onSelectItems={ ( bulkSelection ) =>
-								setBulkSelection( bulkSelection )
+							selectedItems={ bulkSelection }
+							onSelectItems={ ( newSelection ) =>
+								setBulkSelection( newSelection )
 							}
 							items={ ! isLoading ? filteredRestrictions : [] }
 							columns={ {
