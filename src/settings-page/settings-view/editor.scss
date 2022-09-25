@@ -140,4 +140,60 @@
 			}
 		}
 	}
+
+	.preset-manager-preview {
+		display: block;
+		position: relative;
+
+		.preview-overlay {
+			z-index: 2;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 15px;
+
+			font-size: 1.4em;
+			line-height: 1;
+
+			span {
+				color: #fff;
+				margin-bottom: 20px;
+			}
+
+			span:first-child {
+				font-size: 2em;
+			}
+
+			.components-button {
+				font-size: 1.2em;
+				height: max-content;
+				padding: .5em 1em;
+				line-height: 1.2;
+
+				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25);
+			}
+		}
+
+		&::after {
+			z-index: 1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			content: "";
+			background-color: #000;
+			opacity: 0.75;
+		}
+
+		img {
+			z-index: 0;
+		}
+	}
 }

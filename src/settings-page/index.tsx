@@ -14,6 +14,8 @@ import './editor.scss';
 /* Global Var Declarations */
 declare global {
 	const contentControlSettingsPage: {
+		adminUrl: string;
+		pluginUrl: string;
 		userRoles: { [ key: string ]: string };
 		restBase: string;
 		rolesAndCaps: {

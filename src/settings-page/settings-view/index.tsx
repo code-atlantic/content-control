@@ -9,12 +9,18 @@ import GeneralTab from './tabs/general';
 import PermissionsTab from './tabs/permissions';
 import BlockManagerTab from './tabs/block-manager';
 
+const { pluginUrl } = contentControlSettingsPage;
+
 import './editor.scss';
+import { Button } from '@wordpress/components';
 
 type Props = {};
 
 const SettingsView = ( {}: Props ) => {
-	const [ tab = 'general' ] = useQueryParam( 'tab', StringParam );
+	const [ { tab = 'general' }, setParams ] = useQueryParams( {
+		tab: StringParam,
+		view: StringParam,
+	} );
 
 	// Filtered & mappable list of TabComponent definitions.
 	const tabs: TabComponent[] = applyFilters(
@@ -38,17 +44,44 @@ const SettingsView = ( {}: Props ) => {
 			{
 				name: 'preset-manager',
 				title: __( 'Preset Manager', 'content-control' ),
-				// component: () => <BlockManagerTab { ...componentProps } />,
-			},
-			{
-				name: 'advanced',
-				title: __( 'Advanced Options', 'content-control' ),
-				// component: () => <BlockManagerTab { ...componentProps } />,
-			},
-			{
-				name: 'licensing',
-				title: __( 'Licensing', 'content-control' ),
-				// component: () => <BlockManagerTab { ...componentProps } />,
+				comp: () => (
+					<div className="preset-manager-preview">
+						<img
+							src={ `${ pluginUrl }assets/images/preset-manager-preview.svg` }
+							alt={ __(
+								'Block Controls Preset Manager',
+								'content-control'
+							) }
+						/>
+						<div className="preview-overlay">
+							<span>
+								{ __(
+									'Block Control Presets',
+									'content-control'
+								) }
+							</span>
+							<span>
+								{ __(
+									'Presets allow more quickly enhancing block content with customized restrictions',
+									'content-control'
+								) }
+							</span>
+							<Button
+								variant="primary"
+								href="#"
+								onClick={ ( event ) => {
+									event.preventDefault();
+									setParams( {
+										tab: undefined,
+										view: 'upgrade',
+									} );
+								} }
+							>
+								{ __( 'Learn more...', 'content-control' ) }
+							</Button>
+						</div>
+					</div>
+				),
 			},
 		]
 	) as TabComponent[];

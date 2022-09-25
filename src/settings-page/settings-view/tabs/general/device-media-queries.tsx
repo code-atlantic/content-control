@@ -1,16 +1,14 @@
+import { StringParam, useQueryParams } from 'use-query-params';
+
 // WordPress Imports
 import { __ } from '@wordpress/i18n';
-import { info } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
 import {
 	TextControl,
 	ToggleControl,
 	Tooltip,
-	Icon,
+	Button,
 } from '@wordpress/components';
-
-// Internal Imports
-import { URLControl } from '@components';
 
 // Local Imports
 import useSettings from '../../use-settings';
@@ -25,6 +23,11 @@ interface RegisteredMediaQuery {
 type Props = {};
 
 const DeviceMediaQueries = () => {
+	const [ , setParams ] = useQueryParams( {
+		tab: StringParam,
+		view: StringParam,
+	} );
+
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 
 	// Filtered & mappable list of TabComponent definitions.
@@ -158,6 +161,21 @@ const DeviceMediaQueries = () => {
 								) }
 								checked={ false }
 								onChange={ () => {} }
+							/>
+							<Button
+								href="https://code-atlantic.com/products/content-control/"
+								variant="link"
+								onClick={ ( event ) => {
+									event.preventDefault();
+									setParams( {
+										tab: undefined,
+										view: 'upgrade',
+									} );
+								} }
+								text={ __(
+									'Learn more...',
+									'content-control'
+								) }
 							/>
 						</span>
 					</Tooltip>

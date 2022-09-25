@@ -106,6 +106,7 @@ class Settings extends Controller {
 
 		wp_localize_script( $handle, 'contentControlSettingsPage',
 			[
+				'pluginUrl'    => plugin( 'url' ),
 				'adminUrl'     => admin_url(),
 				'restBase'     => 'content-control/v2',
 				'userRoles'    => \ContentControl\Rules\allowed_user_roles(),
