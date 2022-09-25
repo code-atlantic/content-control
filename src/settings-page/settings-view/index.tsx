@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useQueryParam, StringParam } from 'use-query-params';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { __ } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
@@ -83,6 +83,16 @@ const SettingsView = ( {}: Props ) => {
 					</div>
 				),
 			},
+			// {
+			// 	name: 'advanced',
+			// 	title: __( 'Advanced Options', 'content-control' ),
+			// 	comp: () => <BlockManagerTab { ...componentProps } />,
+			// },
+			// {
+			// 	name: 'licensing',
+			// 	title: __( 'Licensing', 'content-control' ),
+			// 	comp: () => <BlockManagerTab { ...componentProps } />,
+			// },
 		]
 	) as TabComponent[];
 
