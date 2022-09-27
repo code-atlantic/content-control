@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { Button, Dropdown, SelectControl } from '@wordpress/components';
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 
-import { filterLines } from '@icons';
+import { filterLines } from '@content-control/icons';
 
 import { useList } from '../context';
 

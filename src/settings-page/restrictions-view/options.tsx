@@ -6,7 +6,7 @@ import {
 	lockedUser,
 	protectedMessage,
 	protectedRedirect,
-} from '@icons';
+} from '@content-control/icons';
 
 export const whoOptions: {
 	value: Restriction[ 'who' ];

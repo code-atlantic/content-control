@@ -11,7 +11,7 @@ import SettingsView from './settings-view';
 import UpgradeView from './upgrade-view';
 
 import Header from './header';
-import { upgrade } from '@icons';
+import { upgrade } from '@content-control/icons';
 
 const App = () => {
 	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );

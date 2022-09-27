@@ -12,7 +12,7 @@ import {
 } from '@wordpress/components';
 
 import { ConfirmDialogue, ListTable } from '@content-control/components';
-import { incognito, lockedUser } from '@icons';
+import { incognito, lockedUser } from '@content-control/icons';
 
 import useEditor from '../use-editor';
 import ListFilters from './filters';

@@ -18,7 +18,7 @@ import {
 	NavigableMenu,
 } from '@wordpress/components';
 
-import { checkAll } from '@icons';
+import { checkAll } from '@content-control/icons';
 import { restrictionsStore } from '@content-control/core-data';
 import { ConfirmDialogue } from '@content-control/components';
 import { cleanRestrictionData, saveFile } from '@utils';

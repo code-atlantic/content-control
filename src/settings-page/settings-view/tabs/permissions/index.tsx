@@ -3,7 +3,7 @@ import { useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { Notice, SelectControl, TextControl } from '@wordpress/components';
 
-import { permissions as permissionsIcon } from '@icons';
+import { permissions as permissionsIcon } from '@content-control/icons';
 import useSettings from '../../use-settings';
 import Section from '../../section';
 

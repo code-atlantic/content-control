@@ -8,7 +8,7 @@ import Section from '../../section';
 import CustomRedirects from './custom-redirects';
 import DeviceMediaQueries from './device-media-queries';
 
-import { customRedirect, monitor } from '@icons';
+import { customRedirect, monitor } from '@content-control/icons';
 
 type Props = {};
 

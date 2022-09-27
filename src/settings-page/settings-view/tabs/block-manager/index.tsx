@@ -12,7 +12,8 @@ import {
 	ToggleControl,
 } from '@wordpress/components';
 
-import { block } from '@icons';
+import { block } from '@content-control/icons';
+
 import useSettings from '../../use-settings';
 import Section from '../../section';
 
@@ -27,7 +28,7 @@ const BlockManagerTab = ( props: Props ) => {
 		stageUnsavedChanges: updateSettings,
 	} = useSettings();
 
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { knownBlockTypes = [] } = useSelect(
 		( select ) => ( {
 			knownBlockTypes: select( settingsStore ).getKnownBlockTypes(),
