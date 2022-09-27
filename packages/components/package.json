@@ -29,7 +29,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@content-control/core-data": "file:../core-data",
+    "@content-control/core-data": "*",
+    "@content-control/utils": "*",
+    "@wordpress/base-styles": "^4.8.0",
     "@wordpress/components": "^21.1.0",
     "@wordpress/compose": "^5.16.0",
     "@wordpress/data": "^7.2.0",
@@ -40,9 +42,15 @@
     "classnames": "^2.3.2",
     "lodash": "^4.17.21"
   },
+  "devDependencies": {
+    "@types/wordpress__data": "^6.0.1",
+    "@types/wordpress__i18n": "^3.11.0",
+    "@types/wordpress__components": "^19.10.3",
+    "@types/wordpress__compose": "^4.0.1",
+    "@types/lodash": "^4.14.185"
+  },
   "scripts": {
     "build:tsc": "tsc",
-    "build:types": "tsc --build",
-    "test": "node ./__tests__/components.test.js"
+    "build:types": "tsc --build"
   }
 }

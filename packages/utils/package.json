@@ -29,9 +29,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"dependencies": {
-
-	},
+	"dependencies": {},
 	"scripts": {
 		"build:tsc": "tsc",
 		"build:types": "tsc --build"

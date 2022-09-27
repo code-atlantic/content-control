@@ -46,6 +46,12 @@
 		"react-router-dom": "6.4.0",
 		"use-query-params": "2.1.0"
 	},
+	"devDependencies": {
+		"@types/react-router-dom": "^5.3.3",
+		"@types/wordpress__core-data": "^2.4.5",
+		"@types/wordpress__data": "^6.0.1",
+		"@types/wordpress__data-controls": "^2.2.0"
+	},
 	"scripts": {
 		"build:tsc": "tsc",
 		"build:types": "tsc --build"

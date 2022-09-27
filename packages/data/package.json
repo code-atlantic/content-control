@@ -30,9 +30,13 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@content-control/core-data": "file:../core-data",
+		"@content-control/core-data": "*",
 		"@wordpress/core-data": "^5.1.0",
 		"@wordpress/data": "^7.2.0"
+	},
+	"devDependencies": {
+		"@types/wordpress__core-data": "^2.4.5",
+		"@types/wordpress__data": "^6.0.1"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
