@@ -1,4 +1,4 @@
-import { noop } from 'lodash';
+import { noop } from '@content-control/utils';
 import classNames, { Argument } from 'classnames';
 
 import { forwardRef } from '@wordpress/element';
