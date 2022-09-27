@@ -1,0 +1,57 @@
+type SearchArgTypes = 'post' | 'term' | 'post-format' | string;
+type SearchArgs = {
+	search: string;
+	context?: 'view' | 'embed';
+	page?: number;
+	per_page?: number | string;
+	type?: SearchArgTypes | SearchArgTypes[];
+	subtype?: 'any' | 'post' | 'page' | 'category' | 'post_tag' | string;
+	isInitialSuggestions?: boolean;
+};
+
+type SearchOptions = Omit< SearchArgs, 'search' | 'per_page' > & {
+	perPage?: number;
+};
+
+type WPLinkSearchResult = {
+	id?: number;
+	title?: string;
+	url: string;
+	type?: string;
+	subtype?: string | undefined;
+	meta?: {
+		kind?: string;
+	};
+};
+
+type URLSearchQuery = {
+	text: string;
+	results: WPLinkSearchResult[];
+	xtotal: number;
+};
+
+type URLSearchState = {
+	currentQuery?: string;
+	searchResults?: WPLinkSearchResult[];
+	queries: Record< URLSearchQuery[ 'text' ], URLSearchQuery >;
+	// Boilerplate
+	dispatchStatus?: {
+		[ Property in URLSearchStore[ 'ActionNames' ] ]?: {
+			status: string;
+			error: string;
+		};
+	};
+	error?: string;
+};
+
+interface URLSearchStore {
+	StoreKey:
+		| 'content-control/url-search'
+		| typeof import('../url-search/index').STORE_NAME
+		| typeof import('../url-search/index').store;
+	State: URLSearchState;
+	Actions: RemoveReturnTypes< typeof import('../url-search/actions') >;
+	Selectors: OmitFirstArgs< typeof import('../url-search/selectors') >;
+	ActionNames: keyof URLSearchStore[ 'Actions' ];
+	SelectorNames: keyof URLSearchStore[ 'Selectors' ];
+}

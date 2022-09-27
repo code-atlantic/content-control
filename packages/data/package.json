@@ -1,0 +1,42 @@
+{
+	"name": "@content-control/data",
+	"version": "1.0.0",
+	"description": "Data registry for Content Control.",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"content control",
+		"data",
+		"redux"
+	],
+	"homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/data#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/code-atlantic/content-control.git",
+		"directory": "packages/data"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"main": "build/index.js",
+	"module": "build-module/index.js",
+	"react-native": "src/index",
+	"types": "./src/types.d.ts",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@content-control/core-data": "file:../core-data",
+		"@wordpress/core-data": "^5.1.0",
+		"@wordpress/data": "^7.2.0"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"build:tsc": "tsc",
+		"build:types": "tsc --build"
+	}
+}
