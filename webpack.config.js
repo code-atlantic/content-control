@@ -32,8 +32,6 @@ const config = {
 				'packages/core-data'
 			),
 			'@content-control/data': path.resolve( __dirname, 'packages/data' ),
-			'@components': path.resolve( __dirname, 'src/components' ),
-			'@data': path.resolve( __dirname, 'src/data' ),
 			'@icons': path.resolve( __dirname, 'src/icons' ),
 			'@utils': path.resolve( __dirname, 'src/utils' ),
 		},
