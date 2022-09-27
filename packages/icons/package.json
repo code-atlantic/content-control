@@ -1,0 +1,39 @@
+{
+	"name": "@content-control/icons",
+	"version": "1.0.0",
+	"description": "Reusable icons for Content Control",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"content control",
+		"data",
+		"redux"
+	],
+	"homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/icons#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/code-atlantic/content-control.git",
+		"directory": "packages/icons"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"main": "build/index",
+	"module": "build-module/index.js",
+	"react-native": "src/index",
+	"types": "build-types",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@wordpress/primitives": "^3.16.0"
+	},
+	"scripts": {
+		"build:tsc": "tsc",
+		"build:types": "tsc --build"
+	}
+}

@@ -32,7 +32,10 @@ const config = {
 				'packages/core-data'
 			),
 			'@content-control/data': path.resolve( __dirname, 'packages/data' ),
-			'@icons': path.resolve( __dirname, 'src/icons' ),
+			'@content-control/icons': path.resolve(
+				__dirname,
+				'packages/icons'
+			),
 			'@utils': path.resolve( __dirname, 'src/utils' ),
 		},
 	},
@@ -55,6 +58,7 @@ const config = {
 						'coreData',
 					],
 					'@content-control/data': [ 'contentControl', 'data' ],
+					'@content-control/icons': [ 'contentControl', 'icons' ],
 				};
 
 				if ( typeof externalMap[ request ] !== 'undefined' ) {
@@ -66,6 +70,7 @@ const config = {
 					'@content-control/components': 'content-control-components',
 					'@content-control/core-data': 'content-control-core-data',
 					'@content-control/data': 'content-control-data',
+					'@content-control/icons': 'content-control-icons',
 				};
 
 				if ( typeof handleMap[ request ] !== 'undefined' ) {

@@ -24,6 +24,7 @@
     "@content-control/components": "file:./packages/components",
     "@content-control/core-data": "file:./packages/core-data",
     "@content-control/data": "file:./packages/data",
+    "@content-control/icons": "file:./packages/icons",
     "@types/lodash": "^4.14.185",
     "@wordpress/api-fetch": "^6.14.0",
     "@wordpress/base-styles": "^4.8.0",

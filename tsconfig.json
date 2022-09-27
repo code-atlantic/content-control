@@ -3,9 +3,6 @@
 	"compilerOptions": {
 		"baseUrl": "./src",
 		"paths": {
-			"@icons": [
-				"icons"
-			],
 			"@utils": [
 				"utils"
 			],
@@ -26,6 +23,9 @@
 		},
 		{
 			"path": "packages/data"
+		},
+		{
+			"path": "packages/icons"
 		}
 	],
 }
