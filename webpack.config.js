@@ -23,6 +23,15 @@ const config = {
 		alias: {
 			...defaultConfig.resolve.alias,
 			// add as many aliases as you like!
+			'@content-control/components': path.resolve(
+				__dirname,
+				'packages/components'
+			),
+			'@content-control/core-data': path.resolve(
+				__dirname,
+				'packages/core-data'
+			),
+			'@content-control/data': path.resolve( __dirname, 'packages/data' ),
 			'@components': path.resolve( __dirname, 'src/components' ),
 			'@data': path.resolve( __dirname, 'src/data' ),
 			'@icons': path.resolve( __dirname, 'src/icons' ),
@@ -39,6 +48,10 @@ const config = {
 			useDefaults: true,
 			requestToExternal( request ) {
 				const externalMap = {
+					'@content-control/components': [
+						'contentControl',
+						'components',
+					],
 					'@content-control/core-data': [
 						'contentControl',
 						'coreData',
@@ -52,6 +65,7 @@ const config = {
 			},
 			requestToHandle( request ) {
 				const handleMap = {
+					'@content-control/components': 'content-control-components',
 					'@content-control/core-data': 'content-control-core-data',
 					'@content-control/data': 'content-control-data',
 				};
