@@ -4,7 +4,7 @@ import { search } from '@wordpress/icons';
 import { TextControl, Notice, TextareaControl } from '@wordpress/components';
 
 /* Internal Imports */
-import { RadioButtonControl, SearchableMulticheckControl } from '@components';
+import { RadioButtonControl, SearchableMulticheckControl } from '@content-control/components';
 import { whoOptions } from '../options';
 
 /* Type Imports */

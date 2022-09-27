@@ -11,7 +11,7 @@ import {
 	Tooltip,
 } from '@wordpress/components';
 
-import { ConfirmDialogue, ListTable } from '@components';
+import { ConfirmDialogue, ListTable } from '@content-control/components';
 import { incognito, lockedUser } from '@icons';
 
 import useEditor from '../use-editor';

@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { ToggleControl, Notice } from '@wordpress/components';
 
 // Internal Imports
-import { URLControl } from '@components';
+import { URLControl } from '@content-control/components';
 
 // Local Imports
 import useSettings from '../../use-settings';

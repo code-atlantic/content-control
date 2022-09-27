@@ -2,10 +2,9 @@
 import { __ } from '@wordpress/i18n';
 import { CheckboxControl, TextareaControl } from '@wordpress/components';
 
-import { URLControl } from '@components';
+import { RadioButtonControl, URLControl } from '@content-control/components';
 
 /* Internal Imports */
-import { RadioButtonControl } from '@components';
 import { protectionMethodOptions, redirectTypeOptions } from '../options';
 
 /* Type Imports */

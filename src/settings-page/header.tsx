@@ -6,8 +6,8 @@ import { Button, Flex, Modal } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
-import { settingsStore } from '@data';
-import { ControlledTabPanel } from '@components';
+import { settingsStore } from '@content-control/core-data';
+import { ControlledTabPanel } from '@content-control/components';
 
 type Props = {
 	tabs: TabComponent[];

@@ -2,7 +2,7 @@
 import { __ } from '@wordpress/i18n';
 
 /* Internal Imports */
-// TODO Migrate to @components.
+// TODO Migrate to @content-control/components.
 import RuleEngine from '../../../block-editor/block-extensions/block-controls/components/rule-engine';
 
 /* Type Imports */

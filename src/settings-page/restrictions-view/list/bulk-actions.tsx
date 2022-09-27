@@ -19,8 +19,8 @@ import {
 } from '@wordpress/components';
 
 import { checkAll } from '@icons';
-import { restrictionsStore } from '@data';
-import { ConfirmDialogue } from '@components';
+import { restrictionsStore } from '@content-control/core-data';
+import { ConfirmDialogue } from '@content-control/components';
 import { cleanRestrictionData, saveFile } from '@utils';
 
 import { useList } from '../context';
