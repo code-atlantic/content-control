@@ -5,7 +5,7 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { BrowserRouter } from 'react-router-dom';
 import { RegistryProvider } from '@wordpress/data';
 
-import { registry } from '@data';
+import { registry } from '@content-control/data';
 
 import App from './App';
 

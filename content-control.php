@@ -33,9 +33,8 @@ function get_plugin_config() {
 		// EDD Product ID for Software Licensing.
 		'edd_id'        => null,
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
-		'text_domain'   => 'content - control',
+		'text_domain'   => 'content-control',
 		'fullname'      => \__( 'Content Control', 'content-control' ),
-		'shortname'     => 'content - control',
 		'min_php_ver'   => '5.6.0',
 		'min_wp_ver'    => '5.6.0',
 		'file'          => __FILE__,
