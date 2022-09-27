@@ -36,7 +36,10 @@ const config = {
 				__dirname,
 				'packages/icons'
 			),
-			'@utils': path.resolve( __dirname, 'src/utils' ),
+			'@content-control/utils': path.resolve(
+				__dirname,
+				'packages/utils'
+			),
 		},
 	},
 	plugins: [
@@ -59,6 +62,7 @@ const config = {
 					],
 					'@content-control/data': [ 'contentControl', 'data' ],
 					'@content-control/icons': [ 'contentControl', 'icons' ],
+					'@content-control/utils': [ 'contentControl', 'utils' ],
 				};
 
 				if ( typeof externalMap[ request ] !== 'undefined' ) {
@@ -71,6 +75,7 @@ const config = {
 					'@content-control/core-data': 'content-control-core-data',
 					'@content-control/data': 'content-control-data',
 					'@content-control/icons': 'content-control-icons',
+					'@content-control/utils': 'content-control-utils',
 				};
 
 				if ( typeof handleMap[ request ] !== 'undefined' ) {

@@ -2,11 +2,7 @@
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
 		"baseUrl": "./src",
-		"paths": {
-			"@utils": [
-				"utils"
-			],
-		},
+		"paths": {},
 	},
 	"include": [
 		"src/**/*"
@@ -26,6 +22,8 @@
 		},
 		{
 			"path": "packages/icons"
+		{
+			"path": "packages/utils"
 		}
 	],
 }
