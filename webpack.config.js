@@ -1,6 +1,8 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const path = require( 'path' );
 
+const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
+
 const config = {
 	...defaultConfig,
 	// Maps our buildList into a new object of { key: build.entry }.
@@ -27,6 +29,39 @@ const config = {
 			'@utils': path.resolve( __dirname, 'src/utils' ),
 		},
 	},
+	plugins: [
+		...defaultConfig.plugins.filter(
+			( plugin ) =>
+				plugin.constructor.name !== 'DependencyExtractionWebpackPlugin'
+		),
+		new DependencyExtractionWebpackPlugin( {
+			injectPolyfill: true,
+			useDefaults: true,
+			requestToExternal( request ) {
+				const externalMap = {
+					'@content-control/core-data': [
+						'contentControl',
+						'coreData',
+					],
+					'@content-control/data': [ 'contentControl', 'data' ],
+				};
+
+				if ( typeof externalMap[ request ] !== 'undefined' ) {
+					return externalMap[ request ];
+				}
+			},
+			requestToHandle( request ) {
+				const handleMap = {
+					'@content-control/core-data': 'content-control-core-data',
+					'@content-control/data': 'content-control-data',
+				};
+
+				if ( typeof handleMap[ request ] !== 'undefined' ) {
+					return handleMap[ request ];
+				}
+			},
+		} ),
+	],
 };
 
 module.exports = config;
