@@ -10,32 +10,33 @@
 			"dom",
 			"esnext"
 		],
+		"skipLibCheck": true,
 		"declaration": true,
 		"declarationDir": "build-types",
 		"declarationMap": true,
 		"composite": true,
-		"emitDeclarationOnly": true,
+		"emitDeclarationOnly": false,
 		"isolatedModules": true,
 		/* Strict Type-Checking Options */
 		"strict": true,
 		/* Additional Checks */
+		"noImplicitAny": false,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"importsNotUsedAsValues": "error",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
 		/* Module Resolution Options */
 		"moduleResolution": "node",
 		/* This needs to be false so our types are possible to consume without setting this */
 		"esModuleInterop": false,
 		"resolveJsonModule": true,
-		"typeRoots": [
-			"./typings",
-			"./node_modules/@types"
-		],
-		"types": [
-			// "node",
-		],
+		// "typeRoots": [
+		// 	"./typings",
+		// 	"./node_modules/@types"
+		// ],
 		"strictNullChecks": true
 	},
 	"exclude": [
