@@ -9,10 +9,10 @@ import {
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 
-import { restrictionsStore } from '@data';
+import { restrictionsStore } from '@content-control/core-data';
 
 const useEditor = () => {
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { isEditorActive, editorId } = useSelect( ( select ) => {
 		const storeSelect = select( restrictionsStore );
 

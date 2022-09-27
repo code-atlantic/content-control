@@ -17,7 +17,7 @@ import useSettings from '../../use-settings';
 import Section from '../../section';
 
 import './editor.scss';
-import { settingsStore } from '@data';
+import { settingsStore } from '@content-control/core-data';
 
 type Props = {};
 

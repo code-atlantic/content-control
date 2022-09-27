@@ -1,9 +1,9 @@
 import { useDispatch, useSelect } from '@wordpress/data';
 
-import { settingsStore } from '@data';
+import { settingsStore } from '@content-control/core-data';
 
 const useSettings = () => {
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
 		useSelect( ( select ) => {
 			const storeSelect = select( settingsStore );

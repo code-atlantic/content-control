@@ -2,7 +2,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { Button, Spinner } from '@wordpress/components';
 
-import { restrictionsStore } from '@data';
+import { restrictionsStore } from '@content-control/core-data';
 import useEditor from './use-editor';
 
 type Props = {};
@@ -10,7 +10,7 @@ type Props = {};
 const Header = ( {}: Props ) => {
 	const { setEditorId } = useEditor();
 
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { restrictions, isLoading } = useSelect( ( select ) => {
 		const sel = select( restrictionsStore );
 		// Restriction List & Load Status.

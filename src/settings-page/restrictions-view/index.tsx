@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 
 /** Internal Imports */
-import { restrictionsStore } from '@data';
+import { restrictionsStore } from '@content-control/core-data';
 import Edit from './edit';
 import List from './list';
 import Header from './header';
@@ -17,7 +17,7 @@ import './editor.scss';
  * @returns Restrictions tab component.
  */
 const RestrictionsView = () => {
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const isEditorActive = useSelect(
 		( select ) => select( restrictionsStore ).isEditorActive(),
 		[]

@@ -7,7 +7,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { Button, Modal, Spinner, TabPanel } from '@wordpress/components';
 
-import { restrictionsStore } from '@data';
+import { restrictionsStore } from '@content-control/core-data';
 import GeneralTab from './general';
 import ProtectionTab from './protection';
 import ContentTab from './content';
@@ -29,7 +29,7 @@ export type EditTabProps = EditProps & {
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	const { tab, setTab, setEditorId } = useEditor();
 
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { editorId, isEditorActive, values, isSaving } = useSelect(
 		( select ) => ( {
 			editorId: select( restrictionsStore ).getEditorId(),

@@ -7,7 +7,7 @@ import {
 	useState,
 } from '@wordpress/element';
 
-import { restrictionsStore } from '@data';
+import { restrictionsStore } from '@content-control/core-data';
 import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 type Filters = {
@@ -71,7 +71,7 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 	// Self clear query params when component is removed.
 	useEffect( () => clearFilterParams, [] );
 
-	// Fetch needed data from the @data & @wordpress/data stores.
+	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { restrictions, isLoading, isDeleting } = useSelect( ( select ) => {
 		const sel = select( restrictionsStore );
 		// Restriction List & Load Status.
