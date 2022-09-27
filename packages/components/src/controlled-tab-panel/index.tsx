@@ -2,13 +2,11 @@
  * External dependencies
  */
 import classnames from 'classnames';
-import { partial } from 'lodash';
 
 /**
  * WordPress dependencies
  */
-import { useRef } from '@wordpress/element';
-import { NavigableMenu, TabbableContainer } from '@wordpress/components';
+import { NavigableMenu } from '@wordpress/components';
 import { withInstanceId } from '@wordpress/compose';
 
 /**

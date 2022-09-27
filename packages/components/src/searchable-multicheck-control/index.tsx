@@ -1,3 +1,4 @@
+import classnames, { Argument } from 'classnames';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { useInstanceId } from '@wordpress/compose';
@@ -10,7 +11,6 @@ import {
 } from '@wordpress/components';
 
 import './editor.scss';
-import classnames, { Argument } from 'classnames';
 
 type Props< T extends string | number > = {
 	label?: string | React.ReactNode;

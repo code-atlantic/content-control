@@ -5,7 +5,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { arrowDown, arrowUp } from '@wordpress/icons';
 import { Button, CheckboxControl, Icon } from '@wordpress/components';
 
-import { useControlledState } from '@utils';
+import { useControlledState } from '../utils';
 
 import './editor.scss';
 
@@ -142,6 +142,7 @@ const ListTable = < T extends TableItemBase >( {
 									selectedItems.length > 0 &&
 									selectedItems.length === items.length
 								}
+								// @ts-ignore
 								indeterminate={
 									selectedItems.length > 0 &&
 									selectedItems.length < items.length
@@ -193,10 +194,8 @@ const ListTable = < T extends TableItemBase >( {
 					sortedItems.map( ( item ) => (
 						<tr key={ item.id }>
 							{ Object.entries( cols ).map(
-								( [ col, colLabel ] ) => {
+								( [ col, ] ) => {
 									const isIdCol = col === idCol;
-									const isBulkSelect =
-										isIdCol && showBulkSelect;
 
 									return (
 										<TableCell

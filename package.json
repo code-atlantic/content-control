@@ -21,6 +21,7 @@
     "node": "^16"
   },
   "dependencies": {
+    "@content-control/components": "file:./packages/components",
     "@content-control/core-data": "file:./packages/core-data",
     "@content-control/data": "file:./packages/data",
     "@types/lodash": "^4.14.185",

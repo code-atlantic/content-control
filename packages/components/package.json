@@ -1,0 +1,48 @@
+{
+  "name": "@content-control/components",
+  "version": "1.0.0",
+  "description": "Core components for Content Control",
+  "author": "Code Atlantic",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "wordpress",
+    "content control",
+    "components"
+  ],
+  "homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/components#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-atlantic/content-control.git",
+    "directory": "packages/components"
+  },
+  "bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+  "main": "build/index.jsx",
+	"module": "build-module/index.js",
+	"react-native": "src/index",
+	"types": "build-types",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+  "dependencies": {
+    "@content-control/core-data": "file:../core-data",
+    "@wordpress/components": "^21.1.0",
+    "@wordpress/compose": "^5.16.0",
+    "@wordpress/data": "^7.2.0",
+    "@wordpress/element": "^4.16.0",
+    "@wordpress/icons": "^9.9.0",
+    "@wordpress/i18n": "^4.18.0",
+    "@wordpress/url": "^3.19.0",
+    "classnames": "^2.3.2",
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "build:tsc": "tsc",
+    "build:types": "tsc --build",
+    "test": "node ./__tests__/components.test.js"
+  }
+}

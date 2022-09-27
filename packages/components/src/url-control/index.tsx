@@ -23,11 +23,13 @@ import {
 	Spinner,
 } from '@wordpress/components';
 
-import { urlSearchStore } from '@data';
+import { urlSearchStore } from '@content-control/core-data';
 
 import LinkSuggestion from './suggestion';
 
 import './editor.scss';
+
+import type { WPLinkSearchResult } from '@wordpress/core-data/build-types/fetch/__experimental-fetch-link-suggestions';
 
 type State = {
 	value: WPLinkSearchResult;

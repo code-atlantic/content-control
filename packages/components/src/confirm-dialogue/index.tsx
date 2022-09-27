@@ -1,4 +1,3 @@
-import { useControlledState } from '@utils';
 import { Button, Flex, Modal } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
