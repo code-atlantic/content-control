@@ -8,6 +8,7 @@ import {
 	Notice,
 	SelectControl,
 	TextControl,
+	// Replace this with @content-control/components ConfirmDialogue & rename it.
 	__experimentalConfirmDialog as ConfirmDialog,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';

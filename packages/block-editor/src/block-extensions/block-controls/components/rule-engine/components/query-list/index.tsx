@@ -1,9 +1,9 @@
 /** External Imports */
 import classNames from 'classnames';
-import { isEqual, noop } from 'lodash';
+import { isEqual } from 'lodash';
 
 /** WordPress Imports */
-import { useState, useEffect, useRef } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';

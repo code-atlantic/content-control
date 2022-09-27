@@ -1,5 +1,5 @@
 /** External Imports */
-import { noop } from 'lodash';
+import { noop } from '@content-control/utils';
 import ReactTags from 'react-tag-autocomplete';
 
 /** WordPress Imports */

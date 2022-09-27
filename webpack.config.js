@@ -23,6 +23,10 @@ const config = {
 		alias: {
 			...defaultConfig.resolve.alias,
 			// add as many aliases as you like!
+			'@content-control/block-editor': path.resolve(
+				__dirname,
+				'packages/block-editor'
+			),
 			'@content-control/components': path.resolve(
 				__dirname,
 				'packages/components'
@@ -35,6 +39,10 @@ const config = {
 			'@content-control/icons': path.resolve(
 				__dirname,
 				'packages/icons'
+			),
+			'@content-control/settings-page': path.resolve(
+				__dirname,
+				'packages/settings-page'
 			),
 			'@content-control/utils': path.resolve(
 				__dirname,
@@ -52,6 +60,10 @@ const config = {
 			useDefaults: true,
 			requestToExternal( request ) {
 				const externalMap = {
+					'@content-control/block-editor': [
+						'contentControl',
+						'blockEditor',
+					],
 					'@content-control/components': [
 						'contentControl',
 						'components',
@@ -62,6 +74,10 @@ const config = {
 					],
 					'@content-control/data': [ 'contentControl', 'data' ],
 					'@content-control/icons': [ 'contentControl', 'icons' ],
+					'@content-control/settings-page': [
+						'contentControl',
+						'settingsPage',
+					],
 					'@content-control/utils': [ 'contentControl', 'utils' ],
 				};
 
@@ -71,10 +87,14 @@ const config = {
 			},
 			requestToHandle( request ) {
 				const handleMap = {
+					'@content-control/block-editor':
+						'content-control-block-editor',
 					'@content-control/components': 'content-control-components',
 					'@content-control/core-data': 'content-control-core-data',
 					'@content-control/data': 'content-control-data',
 					'@content-control/icons': 'content-control-icons',
+					'@content-control/settings-page':
+						'content-control-settings-page',
 					'@content-control/utils': 'content-control-utils',
 				};
 

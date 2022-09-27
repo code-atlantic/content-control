@@ -5,7 +5,6 @@ import ReactTags from 'react-tag-autocomplete';
 /** WordPress Imports */
 import { __ } from '@wordpress/i18n';
 import {
-	useState,
 	useRef,
 	useEffect,
 	useMemo,

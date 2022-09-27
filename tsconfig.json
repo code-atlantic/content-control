@@ -12,6 +12,9 @@
 	],
 	"references": [
 		{
+			"path": "packages/block-editor"
+		},
+		{
 			"path": "packages/components"
 		},
 		{
@@ -22,6 +25,10 @@
 		},
 		{
 			"path": "packages/icons"
+		},
+		{
+			"path": "packages/settings-page"
+		},
 		{
 			"path": "packages/utils"
 		}

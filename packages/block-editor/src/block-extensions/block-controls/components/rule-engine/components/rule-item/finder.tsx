@@ -1,5 +1,5 @@
 /** External Imports */
-import { clamp, noop } from 'lodash';
+import { clamp } from 'lodash';
 import classNames from 'classnames';
 
 /** WordPress Imports */
@@ -18,6 +18,9 @@ import {
 	KeyboardShortcuts,
 	Button,
 } from '@wordpress/components';
+
+import { noop } from '@content-control/utils';
+
 /** Temporary WP Imports */
 import TextHighlight from './highlight';
 
