@@ -1,0 +1,53 @@
+{
+	"name": "@content-control/settings-page",
+	"version": "1.0.0",
+	"description": "Settings page for Content Control.",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"content control",
+		"data",
+		"redux"
+	],
+	"homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/settings-page#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/code-atlantic/content-control.git",
+		"directory": "packages/settings-page"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"main": "build/index",
+	"module": "build-module/index.js",
+	"react-native": "src/index",
+	"types": "build-types",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@content-control/components": "*",
+		"@content-control/core-data": "*",
+		"@content-control/data": "*",
+		"@content-control/icons": "*",
+		"@content-control/utils": "*",
+		"@wordpress/components": "^21.1.0",
+		"@wordpress/data": "^7.2.0",
+		"@wordpress/dom-ready": "^3.18.0",
+		"@wordpress/element": "^4.16.0",
+		"@wordpress/hooks": "^3.18.0",
+		"@wordpress/i18n": "^4.18.0",
+		"@wordpress/icons": "^9.9.0",
+		"classnames": "^2.3.2",
+		"react-router-dom": "6.4.0",
+		"use-query-params": "2.1.0"
+	},
+	"scripts": {
+		"build:tsc": "tsc",
+		"build:types": "tsc --build"
+	}
+}
