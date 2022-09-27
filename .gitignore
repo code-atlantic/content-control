@@ -17,10 +17,11 @@ project.properties
 .wp-env.override.json
 
 # Built code
-/build
-/node_modules
-/release
-/dist
+build
+build-types
+node_modules
+release
+dist
 
 # Logs
 /logs
@@ -31,3 +32,9 @@ project.properties
 /yarn-error.log
 
 .php_cs.cache
+
+*.tsbuildinfo
+lerna-debug.log
+npm-debug.log
+packages/*/lib
+.idea
