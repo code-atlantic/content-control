@@ -4,6 +4,9 @@
 		"rootDir": "src",
 		"outDir": "build",
 		"declarationDir": "build-types",
+		"typeRoots": [
+			"src/typings"
+		]
 	},
 	"include": [
 		"src/**/*"
