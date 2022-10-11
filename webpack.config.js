@@ -3,14 +3,65 @@ const path = require( 'path' );
 
 const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 
+const packages = [
+	{
+		name: 'block-editor',
+		path: 'packages/block-editor',
+		exportAs: 'blockEditor',
+	},
+	{
+		name: 'components',
+		path: 'packages/components',
+		exportAs: 'components',
+	},
+	{
+		name: 'core-data',
+		path: 'packages/core-data',
+		exportAs: 'coreData',
+	},
+
+	{
+		name: 'core-data',
+		path: 'packages/core-data',
+		exportAs: 'coreData',
+	},
+	{
+		name: 'data',
+		path: 'packages/data',
+		exportAs: 'data',
+	},
+	{
+		name: 'icons',
+		path: 'packages/icons',
+		exportAs: false,
+	},
+	{
+		name: 'rule-engine',
+		path: 'packages/rule-engine',
+		exportAs: 'ruleEngine',
+	},
+	{
+		name: 'settings-page',
+		path: 'packages/settings-page',
+		exportAs: 'settingsPage',
+	},
+	{
+		name: 'utils',
+		path: 'packages/utils',
+		exportAs: false,
+	},
+];
+
 const config = {
 	...defaultConfig,
 	// Maps our buildList into a new object of { key: build.entry }.
-	entry: {
-		'block-editor': path.resolve( process.cwd(), 'src', 'block-editor' ),
-		'settings-page': path.resolve( process.cwd(), 'src', 'settings-page' ),
-		'widget-editor': path.resolve( process.cwd(), 'src', 'widget-editor' ),
-	},
+	entry: packages.reduce( ( entry, p ) => {
+		if ( p.exportAs ) {
+			entry[ p.name ] = path.resolve( process.cwd(), p.path, 'src' );
+		}
+
+		return entry;
+	}, {} ),
 	output: {
 		...defaultConfig.output,
 		devtoolNamespace: 'content-control/core',
@@ -22,32 +73,14 @@ const config = {
 		...defaultConfig.resolve,
 		alias: {
 			...defaultConfig.resolve.alias,
-			// add as many aliases as you like!
-			'@content-control/block-editor': path.resolve(
-				__dirname,
-				'packages/block-editor'
-			),
-			'@content-control/components': path.resolve(
-				__dirname,
-				'packages/components'
-			),
-			'@content-control/core-data': path.resolve(
-				__dirname,
-				'packages/core-data'
-			),
-			'@content-control/data': path.resolve( __dirname, 'packages/data' ),
-			'@content-control/icons': path.resolve(
-				__dirname,
-				'packages/icons'
-			),
-			'@content-control/settings-page': path.resolve(
-				__dirname,
-				'packages/settings-page'
-			),
-			'@content-control/utils': path.resolve(
-				__dirname,
-				'packages/utils'
-			),
+			...packages.reduce( ( alias, p ) => {
+				alias[ `@content-control/${ p.name }` ] = path.resolve(
+					__dirname,
+					p.path
+				);
+
+				return alias;
+			}, {} ),
 		},
 	},
 	plugins: [
@@ -59,44 +92,31 @@ const config = {
 			injectPolyfill: true,
 			useDefaults: true,
 			requestToExternal( request ) {
-				const externalMap = {
-					'@content-control/block-editor': [
-						'contentControl',
-						'blockEditor',
-					],
-					'@content-control/components': [
-						'contentControl',
-						'components',
-					],
-					'@content-control/core-data': [
-						'contentControl',
-						'coreData',
-					],
-					'@content-control/data': [ 'contentControl', 'data' ],
-					'@content-control/icons': [ 'contentControl', 'icons' ],
-					'@content-control/settings-page': [
-						'contentControl',
-						'settingsPage',
-					],
-					'@content-control/utils': [ 'contentControl', 'utils' ],
-				};
+				const externalMap = packages.reduce( ( map, p ) => {
+					if ( p.exportAs ) {
+						map[ `@content-control/${ p.name }` ] = [
+							'contentControl',
+							p.exportAs,
+						];
+					}
+
+					return map;
+				}, {} );
 
 				if ( typeof externalMap[ request ] !== 'undefined' ) {
 					return externalMap[ request ];
 				}
 			},
 			requestToHandle( request ) {
-				const handleMap = {
-					'@content-control/block-editor':
-						'content-control-block-editor',
-					'@content-control/components': 'content-control-components',
-					'@content-control/core-data': 'content-control-core-data',
-					'@content-control/data': 'content-control-data',
-					'@content-control/icons': 'content-control-icons',
-					'@content-control/settings-page':
-						'content-control-settings-page',
-					'@content-control/utils': 'content-control-utils',
-				};
+				const handleMap = packages.reduce( ( map, p ) => {
+					if ( p.exportAs ) {
+						map[
+							`@content-control/${ p.name }`
+						] = `content-control-${ p.name }`;
+					}
+
+					return map;
+				}, {} );
 
 				if ( typeof handleMap[ request ] !== 'undefined' ) {
 					return handleMap[ request ];
