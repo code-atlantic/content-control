@@ -91,6 +91,10 @@ nvm use
 ### Install project dependencies.
 
 ```bash
+# install lerna
+npm install -g lerna
+
+# install deps
 npm i && composer install
 ```
 
