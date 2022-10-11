@@ -1,11 +1,7 @@
 import { ACTION_TYPES, initialState, Statuses } from './constants';
 
-const {
-	SEARCH_ERROR,
-	SEARCH_REQUEST,
-	SEARCH_SUCCESS,
-	CHANGE_ACTION_STATUS,
-} = ACTION_TYPES;
+const { SEARCH_ERROR, SEARCH_REQUEST, SEARCH_SUCCESS, CHANGE_ACTION_STATUS } =
+	ACTION_TYPES;
 
 interface ActionPayloadTypes {
 	type: keyof typeof ACTION_TYPES;
