@@ -1,142 +1,124 @@
 {
-    "type": "object",
-    "properties": {
-        "enabled": {
-            "type": "boolean",
-            "default": false
-        },
-        "rules": {
-            "type": "object",
-            "properties": {
-                "device": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "mobile": {
-                                "type": "string"
-                            },
-                            "tablet": {
-                                "type": "string"
-                            },
-                            "device": {
-                                "type": "string"
-                            },
-                            "additionalProperties": {
-                                "type": "boolean"
-                            }
-                        }
-                    }
-                },
-                "conditional": {
-                    "type": "object",
-                    "properties": {
-                        "anyAll": {
-                            "type": {
-                                "enum": [
-                                    "any",
-                                    "all",
-                                    "none"
-                                ]
-                            },
-                            "default": "all"
-                        },
-                        "conditionSets": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "id": {
-                                        "type": "string"
-                                    },
-                                    "label": {
-                                        "type": "string"
-                                    },
-                                    "query": {
-                                        "$ref": "#/$defs/query"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "required": [
-        "enabled"
-    ],
-    "$defs": {
-        "rule": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "notOperand": {
-                    "type": "boolean"
-                },
-                "options": {
-                    "type": "object"
-                }
-            },
-            "required": [
-                "id",
-                "type",
-                "name"
-            ]
-        },
-        "group": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                },
-                "label": {
-                    "type": "string"
-                },
-                "query": {
-                    "$ref": "#/$defs/query"
-                }
-            },
-            "required": [
-                "id",
-                "type",
-                "label",
-                "query"
-            ]
-        },
-        "query": {
-            "type": "object",
-            "properties": {
-                "logicalOperator": {
-                    "type": "string"
-                },
-                "items": {
-                    "type": "array",
-                    "items": [
-                        {
-                            "$ref": "#/$defs/rule"
-                        },
-                        {
-                            "$ref": "#/$defs/group"
-                        }
-                    ]
-                }
-            },
-            "required": [
-                "logicalOperator",
-                "items"
-            ]
-        }
-    }
+	"type": "object",
+	"properties": {
+		"enabled": {
+			"type": "boolean",
+			"default": false
+		},
+		"rules": {
+			"type": "object",
+			"properties": {
+				"device": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"mobile": {
+								"type": "string"
+							},
+							"tablet": {
+								"type": "string"
+							},
+							"device": {
+								"type": "string"
+							},
+							"additionalProperties": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"conditional": {
+					"type": "object",
+					"properties": {
+						"anyAll": {
+							"type": {
+								"enum": [ "any", "all", "none" ]
+							},
+							"default": "all"
+						},
+						"conditionSets": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string"
+									},
+									"label": {
+										"type": "string"
+									},
+									"query": {
+										"$ref": "#/$defs/query"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"required": [ "enabled" ],
+	"$defs": {
+		"rule": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"notOperand": {
+					"type": "boolean"
+				},
+				"options": {
+					"type": "object"
+				}
+			},
+			"required": [ "id", "type", "name" ]
+		},
+		"group": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"label": {
+					"type": "string"
+				},
+				"query": {
+					"$ref": "#/$defs/query"
+				}
+			},
+			"required": [ "id", "type", "label", "query" ]
+		},
+		"query": {
+			"type": "object",
+			"properties": {
+				"logicalOperator": {
+					"type": "string"
+				},
+				"items": {
+					"type": "array",
+					"items": [
+						{
+							"$ref": "#/$defs/rule"
+						},
+						{
+							"$ref": "#/$defs/group"
+						}
+					]
+				}
+			},
+			"required": [ "logicalOperator", "items" ]
+		}
+	}
 }

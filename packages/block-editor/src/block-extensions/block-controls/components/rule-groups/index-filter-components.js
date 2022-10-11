@@ -53,7 +53,6 @@ const panelId = 'contctrl-rules-panel';
  *
  */
 
-
 addFilter(
 	'contentControl.block-rules.rules-panels',
 	'contentControl.core',
@@ -86,9 +85,9 @@ addFilter(
 const RulesPanel = ( props ) => {
 	const { rules = {}, updateRules = () => {} } = props;
 
-	const Panels = withFilters(
-		'contentControl.block-rules.rules-panels'
-	)( ( props ) => <></> );
+	const Panels = withFilters( 'contentControl.block-rules.rules-panels' )(
+		( props ) => <></>
+	);
 
 	/**
 	 * Check if given panel is active.
