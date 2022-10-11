@@ -10,6 +10,7 @@ import { whoOptions } from '../options';
 
 /* Type Imports */
 import type { EditTabProps } from '.';
+import { clamp } from '@content-control/utils';
 
 /* Global Var Imports */
 const { userRoles } = contentControlSettingsPage;
@@ -23,19 +24,18 @@ const GeneralTab = ( {
 
 	// ** TODO REVIEW -  This is here to ensure old data does not throw errors.
 	// ** It may be that if we have dedicated migration routine this can be removed.
-	const cleanedRoles = Array.isArray( settings.roles )
-		? settings.roles
-		: typeof settings.roles === 'object'
-		? Object.entries( settings.roles ).map( ( [ value ] ) => value )
-		: [];
+	let cleanedRoles: string[] = [];
+
+	if ( Array.isArray( settings.roles ) ) {
+		cleanedRoles = settings.roles;
+	} else if ( typeof settings.roles === 'object' ) {
+		cleanedRoles = Object.entries( settings.roles ).map(
+			( [ value ] ) => value
+		);
+	}
 
 	const descriptionRowEst = values.description.length / 80;
-	const descriptionRows =
-		descriptionRowEst < 1
-			? 1
-			: descriptionRowEst > 5
-			? 5
-			: descriptionRowEst;
+	const descriptionRows = clamp( descriptionRowEst, 1, 5 );
 
 	return (
 		<div className="general-tab">
