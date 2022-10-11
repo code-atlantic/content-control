@@ -18,5 +18,8 @@
 		{
 			"path": "../core-data"
 		},
+		{
+			"path": "../rule-engine"
+		},
 	],
 }
