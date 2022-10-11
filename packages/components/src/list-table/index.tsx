@@ -193,58 +193,52 @@ const ListTable = < T extends TableItemBase >( {
 				{ sortedItems.length ? (
 					sortedItems.map( ( item ) => (
 						<tr key={ item.id }>
-							{ Object.entries( cols ).map(
-								( [ col, ] ) => {
-									const isIdCol = col === idCol;
+							{ Object.entries( cols ).map( ( [ col ] ) => {
+								const isIdCol = col === idCol;
 
-									return (
-										<TableCell
-											key={ col }
-											heading={ isIdCol }
-											className={ classNames( [
-												`column-${ col }`,
-												showBulkSelect &&
-													isIdCol &&
-													'check-column',
-											] ) }
-											scope={
-												isIdCol ? 'row' : undefined
-											}
-										>
-											{ isIdCol ? (
-												<CheckboxControl
-													onChange={ ( checked ) => {
-														const newSelectedItems =
-															! checked
-																? selectedItems.filter(
-																		(
-																			id
-																		) =>
-																			id !==
-																			item.id
-																  )
-																: [
-																		...selectedItems,
-																		item.id,
-																  ];
+								return (
+									<TableCell
+										key={ col }
+										heading={ isIdCol }
+										className={ classNames( [
+											`column-${ col }`,
+											showBulkSelect &&
+												isIdCol &&
+												'check-column',
+										] ) }
+										scope={ isIdCol ? 'row' : undefined }
+									>
+										{ isIdCol ? (
+											<CheckboxControl
+												onChange={ ( checked ) => {
+													const newSelectedItems =
+														! checked
+															? selectedItems.filter(
+																	( id ) =>
+																		id !==
+																		item.id
+															  )
+															: [
+																	...selectedItems,
+																	item.id,
+															  ];
 
-														setSelectedItems(
-															newSelectedItems
-														);
-													} }
-													checked={
-														selectedItems.indexOf(
-															item.id
-														) >= 0
-													}
-												/>
-											) : (
-												renderCell( col, item )
-											) }
-										</TableCell>
-									);
-								}
-							) }
+													setSelectedItems(
+														newSelectedItems
+													);
+												} }
+												checked={
+													selectedItems.indexOf(
+														item.id
+													) >= 0
+												}
+											/>
+										) : (
+											renderCell( col, item )
+										) }
+									</TableCell>
+								);
+							} ) }
 						</tr>
 					) )
 				) : (

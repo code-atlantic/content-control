@@ -30,7 +30,7 @@ const ConfirmDialogue = ( {
 					onClick={ onClose }
 				/>
 				<Button
-					variant='primary'
+					variant="primary"
 					text={ __( 'Confirm', 'content-control' ) }
 					isDestructive={ isDestructive }
 					onClick={ () => {
