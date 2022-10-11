@@ -1,5 +1,5 @@
 // TODO Migrate to @content-control/components.
-import RuleEngine from '@content-control/block-editor/block-extensions/block-controls/components/rule-engine';
+import RuleEngine from '@content-control/rule-engine';
 import { __ } from '@wordpress/i18n';
 
 /* Type Imports */
