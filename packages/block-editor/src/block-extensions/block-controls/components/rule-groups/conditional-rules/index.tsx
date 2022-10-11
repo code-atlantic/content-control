@@ -16,9 +16,9 @@ import { _x, __ } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
 /** Internal Imports */
-import { newSet } from '../../rule-engine/templates';
-import RuleEngine from '../../rule-engine';
-
+//! Fix this with proper @content-control/rule-engine refs.
+import { newSet } from '../../../../../../../rule-engine/src/templates';
+import RuleEngine from '../../../../../../../rule-engine';
 const { registeredRules } = contentControlRuleEngine;
 
 const verbs = {
