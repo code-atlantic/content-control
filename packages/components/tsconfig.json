@@ -4,10 +4,12 @@
         "rootDir": "src",
         "declarationDir": "build-types",
         "outDir": "build",
-        "emitDeclarationOnly": false
+        "typeRoots": [
+            "src/typings"
+        ]
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
     ],
     "references": [
         {
