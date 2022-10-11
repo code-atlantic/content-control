@@ -1,5 +1,6 @@
 export { default as ControlledTabPanel } from './controlled-tab-panel';
 export { default as ConfirmDialogue } from './confirm-dialogue';
+export { default as Field } from './fields';
 export { default as DeviceToggle } from './device-toggle';
 export { default as URLControl } from './url-control';
 export { default as ListTable } from './list-table';
