@@ -26,6 +26,9 @@ declare global {
 		};
 		version: string;
 	};
+	const contentControlRuleEngine: {
+		[ key: string ]: any;
+	};
 }
 
 domReady( () => {
