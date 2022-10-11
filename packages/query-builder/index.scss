@@ -1,0 +1,17 @@
+@import "./styles/variables.scss";
+@import "./styles/animations.scss";
+@import "./styles/mixins.scss";
+
+.cc-query-builder {
+}
+
+.cc-query-builder__controls {
+}
+
+/* Component Overrides */
+.cc-query-builder-item-list > .cc-query-builder-item-wrapper:first-child {
+	> .cc-query-builder-item-wrapper__header {
+		padding: 10;
+		display: none;
+	}
+}

@@ -1,0 +1,74 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.cc-query-builder-item {
+	margin: $spacing 0;
+	padding: 0;
+}
+
+.cc-query-builder-item-wrapper {
+	margin: 0;
+	// padding: $spacing;
+	position: relative;
+
+	&--group {
+	}
+
+	&--rule {
+	}
+
+	/**
+	 * These are status classes added by react sortablejs.
+	 * @see components/root-query.txs @ <ReactSortable> for declarations.
+	 */
+
+	&:hover {
+	}
+
+	// On mousedown of handle. First as its on during drag as well.
+	&.is-chosen {
+		.cc-query-builder-item {
+		}
+	}
+
+	// Ghost item that appears in list as you sort.
+	&.is-placeholder {
+		.cc-query-builder-item {
+			border-color: transparent;
+			background: lightblue;
+			@include elevation(3);
+		}
+	}
+
+	// Dragged item class. This is the one shown with cursor.
+	&.is-dragging {
+		.cc-query-builder-item {
+			border-color: transparent;
+			background: lightblue;
+		}
+	}
+}
+
+.cc-query-builder-item-wrapper__header {
+	.components-flex-item {
+		&:first-child {
+			flex-grow: 1;
+			max-width: 60px;
+		}
+
+		&:last-child {
+			flex-basis: auto;
+			flex-grow: 3;
+		}
+	}
+}
+
+.cc-condition-editor-item-actions {
+	line-height: 1;
+	.components-button.is-small.has-icon:not(.has-text) {
+		padding: 0;
+		min-width: 16px;
+		width: 20px;
+		margin-left: 5px;
+	}
+}
