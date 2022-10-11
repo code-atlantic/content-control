@@ -1,5 +1,4 @@
 import { CheckboxControl, FormToggle } from '@wordpress/components';
-import { values } from 'lodash';
 
 const parseOptions = ( options: Options ) => {
 	if ( typeof options === 'string' ) {

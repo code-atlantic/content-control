@@ -1,6 +1,6 @@
 import { TextareaControl } from '@wordpress/components';
 
-const TextField = ( {
+const TextAreaField = ( {
 	value,
 	onChange,
 	...fieldProps
@@ -9,10 +9,11 @@ const TextField = ( {
 		<TextareaControl
 			value={ value }
 			onChange={ onChange }
+			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
 			{ ...fieldProps }
 		/>
 	);
 };
 
-export default TextField;
+export default TextAreaField;

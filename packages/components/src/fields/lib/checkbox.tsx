@@ -3,21 +3,26 @@ import { CheckboxControl, FormToggle } from '@wordpress/components';
 const CheckboxField = ( {
 	value,
 	onChange,
+	label,
 	...fieldProps
-}: ControlledInputProps< boolean > & CheckboxControl.Props ) => {
+}: ControlledInputProps< any > & CheckboxControl.Props ) => {
 	const toggle = false;
 
-	if ( toggle ) {
+	if ( ! toggle ) {
 		return (
 			<CheckboxControl
+				label={ label }
 				checked={ value }
 				onChange={ onChange }
 				{ ...fieldProps }
 			/>
 		);
 	}
+
 	return (
 		<FormToggle
+			// Neccessary to fix TS errors for now.
+			label={ ( <>{ label }</> ).toString() }
 			checked={ value }
 			onChange={ () => onChange( ! value ) }
 			{ ...fieldProps }

@@ -1,6 +1,7 @@
 import ReactTags from 'react-tag-autocomplete';
 
 import { useSelect } from '@wordpress/data';
+import { store as coreDataStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 import { useState, useRef, useEffect } from '@wordpress/element';
 
@@ -28,7 +29,7 @@ const ObjectSelectField = ( {
 	const { options, isLoading } = useSelect(
 		( select ) => ( {
 			options: Object.values(
-				select( 'core' ).getEntityRecords(
+				select( coreDataStore ).getEntityRecords(
 					entityKind,
 					entityType,
 					queryArgs

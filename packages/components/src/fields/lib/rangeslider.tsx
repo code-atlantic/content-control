@@ -11,6 +11,7 @@ const RangeSliderField = ( {
 		<RangeControl
 			value={ value }
 			onChange={ onChange }
+			/* @ts-ignore - This exists in package but is not fully typed. */
 			withInputField={ true }
 			__nextHasNoMarginBottom={ true }
 			{ ...fieldProps }

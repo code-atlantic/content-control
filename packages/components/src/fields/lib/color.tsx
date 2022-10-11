@@ -1,7 +1,7 @@
 import {
-	ColorPicker,
 	ColorIndicator,
 	ColorPalette,
+	ColorPicker,
 } from '@wordpress/components';
 
 const ColorField = ( {
@@ -19,10 +19,10 @@ const ColorField = ( {
 		<>
 			<ColorIndicator colorValue={ value } />
 			<ColorPicker
-				color={ value }
-				onChange={ onChange }
-				defaultColor={ value }
 				{ ...fieldProps }
+				color={ value }
+				onChangeComplete={ ( color ) => onChange( color.hex ) }
+				defaultColor={ value }
 			/>
 			<ColorPalette
 				value={ value }

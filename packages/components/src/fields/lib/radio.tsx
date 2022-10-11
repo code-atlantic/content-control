@@ -12,6 +12,7 @@ const RadioField = ( {
 			selected={ value }
 			options={ options }
 			onChange={ onChange }
+			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
 			{ ...fieldProps }
 		/>

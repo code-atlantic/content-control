@@ -1,33 +1,10 @@
-import classNames from 'classnames';
-import { pick, omit } from 'lodash';
+import { pick, omit } from '@content-control/utils';
 
-import { __, sprintf } from '@wordpress/i18n';
-
-import SelectField from './select';
-import CheckboxField from './checkbox';
-import TextField from './text';
-import NumberField from './number';
-import RangeSliderField from './rangeslider';
-import MulticheckField from './multicheck';
-import RadioField from './radio';
-import MeasureField from './measure';
-import ObjectSelectField from './object-select';
-
-/**
- * 1. - Remap old keys to new ones.
- * 2. - Parse defaults
- * 3. - Build Type Props
- * 	3.a - Process props by type.
- *  3.b - Extract Required Props.
- * 4. Render Control
- */
-
-const oldFieldDefaults = {
-	type: 'text',
+export const oldFieldDefaults = {
 	id: '',
 	id_prefix: '',
 	name: '',
-	label: null,
+	label: '',
 	placeholder: '',
 	desc: null,
 	dynamic_desc: null,
@@ -53,8 +30,34 @@ const oldFieldDefaults = {
 	meta: {},
 };
 
-const getFieldTypePropList = ( type ) => {
-	const baseProps = [
+export const remapFieldsArgs = ( args: OldFieldArgs ) => {
+	const remappedKeys = {
+		// old: 'new',
+		classes: 'className',
+		desc: 'help',
+		as_array: 'asArray',
+		allow_html: 'allowHtml',
+	};
+
+	const remappedFieldArgs = { ...args };
+
+	Object.entries( remappedKeys ).forEach( ( [ oldKey, newKey ] ) => {
+		if ( oldKey in remappedFieldArgs ) {
+			remappedFieldArgs[ newKey ] = remappedFieldArgs[ oldKey ];
+			delete remappedFieldArgs[ oldKey ];
+		}
+	} );
+
+	return remappedFieldArgs;
+};
+
+export const getFieldTypePropList = <
+	T extends FieldType,
+	F extends OldFieldMap[ T ]
+>(
+	type: T
+): Array< keyof F > => {
+	const baseProps: any[] = [
 		'type',
 		'id',
 		'name',
@@ -80,6 +83,7 @@ const getFieldTypePropList = ( type ) => {
 		case 'text':
 		case 'email':
 		case 'phone':
+		default:
 			return [ ...baseProps, 'placeholder', 'size' ];
 
 		case 'number':
@@ -98,20 +102,29 @@ const getFieldTypePropList = ( type ) => {
 	}
 };
 
-const parseOldArgsToProps = ( args, value ) => {
+export const parseOldArgsToProps = < A extends OldFieldArgs >(
+	args: A,
+	value: any
+): Partial< FieldProps< A[ 'type' ] > > => {
 	const { type } = args;
 
-	const fieldProps = {
-		className: [],
+	const fieldProps: Partial< FieldProps< A[ 'type' ] > > = {
 		default: args?.std,
 	};
+
+	if ( ! Array.isArray( fieldProps.className ) ) {
+		fieldProps.className =
+			typeof fieldProps.className === 'string'
+				? [ fieldProps.className ]
+				: [];
+	}
 
 	// Deprecated Class Handling.
 	if ( typeof args.classes !== 'undefined' ) {
 		if ( 'string' === typeof args.classes ) {
-			fieldProps.className.push( args.classes.split( ' ' ) );
+			fieldProps.className.push( ...args.classes.split( ' ' ) );
 		} else if ( Array.isArray( args.classes ) ) {
-			fieldProps.className.push( args.classes );
+			fieldProps.className.push( ...args.classes );
 		}
 	}
 
@@ -165,25 +178,29 @@ const parseOldArgsToProps = ( args, value ) => {
 			break;
 	}
 
-	// Dependencies
+	//* Dependencies
 
-	// Dynamic Descriptions
+	//* Dynamic Descriptions
 
-	// Allow HTML
+	//* Allow HTML
 
 	return fieldProps;
 };
 
-const parseFieldValue = ( value, fieldProps ) => {
-	let parsedValue = value;
+export const parseFieldValue = <
+	T extends FieldType,
+	V extends FieldTypeValueMap[ T ],
+	OV extends OldFieldValueMap[ T ]
+>(
+	type: T,
+	value: V | OV,
+	fieldProps: Partial< FieldProps< T > > = {}
+): V => {
+	let parsedValue: any = value;
 
-	const { type, default: std } = fieldProps;
+	const { default: std } = fieldProps;
 
-	if (
-		std !== undefined &&
-		type !== 'checkbox' &&
-		( parsedValue === null || parsedValue === false )
-	) {
+	if ( std !== undefined && type !== 'checkbox' && parsedValue === null ) {
 		parsedValue = std;
 	}
 
@@ -195,16 +212,13 @@ const parseFieldValue = ( value, fieldProps ) => {
 		case 'checkbox':
 			switch ( typeof parsedValue ) {
 				case 'object':
-					if (
-						Array.isArray( parsedValue ) &&
-						parsedValue.length === 1 &&
-						parsedValue[ 0 ].toString() === '1'
-					) {
-						parsedValue = true;
+					if ( Array.isArray( parsedValue ) ) {
+						parsedValue =
+							parsedValue.length === 1 &&
+							parsedValue[ 0 ].toString() === '1';
 					}
 					break;
 				case 'string':
-				case 'number':
 					if (
 						[ 'true', 'yes', '1', 1, true ].indexOf(
 							parsedValue
@@ -212,8 +226,34 @@ const parseFieldValue = ( value, fieldProps ) => {
 						parseInt( parsedValue, 10 ) > 0
 					) {
 						parsedValue = true;
+					} else {
+						parsedValue = false;
 					}
 					break;
+
+				case 'number':
+					if ( parsedValue > 0 ) {
+						parsedValue = true;
+					}
+					break;
+			}
+			break;
+
+		case 'number':
+			if ( typeof parsedValue === 'string' ) {
+				parsedValue =
+					parsedValue.indexOf( '.' ) > 0
+						? parseFloat( parsedValue )
+						: parseInt( parsedValue );
+			}
+			break;
+
+		case 'number':
+			if ( typeof parsedValue === 'string' ) {
+				parsedValue =
+					parsedValue.indexOf( '.' ) > 0
+						? parseFloat( parsedValue )
+						: parseInt( parsedValue );
 			}
 			break;
 
@@ -225,6 +265,7 @@ const parseFieldValue = ( value, fieldProps ) => {
 				parsedValue = parsedValue.split( ',' );
 			}
 			break;
+
 		case 'license_key':
 			parsedValue = {
 				key: '',
@@ -242,20 +283,26 @@ const parseFieldValue = ( value, fieldProps ) => {
 	return parsedValue;
 };
 
-const parseFieldProps = ( props ) => {
+export const parseFieldProps = <
+	T extends FieldType,
+	// Enforce type is set but others are all optional.
+	P extends Partial< FieldProps< T > > & { type: T }
+>(
+	props: P
+) => {
 	const { type } = props;
 
-	const validTypeProps = getFieldTypePropList( type );
+	const validTypeProps = getFieldTypePropList( type ) as Array< keyof P >;
 
 	const fieldProps = pick(
 		{
 			...oldFieldDefaults,
 			...props,
 		},
-		validTypeProps
+		...validTypeProps
 	);
 
-	const leftOverProps = omit( props, validTypeProps );
+	const leftOverProps = omit( props, ...validTypeProps );
 
 	console.log( 'Extra Props Found', leftOverProps );
 
@@ -266,73 +313,3 @@ const parseFieldProps = ( props ) => {
 
 	return fieldProps;
 };
-
-const FieldComponent = ( props ) => {
-	const { type } = props;
-	// Mutable copy!.
-	const fieldProps = { ...props };
-
-	switch ( type ) {
-		case 'select':
-		case 'multiselect':
-			return <SelectField { ...fieldProps } />;
-		case 'objectselect':
-		case 'postselect':
-		case 'taxonomyselect':
-			return <ObjectSelectField { ...fieldProps } />;
-		case 'checkbox':
-			return <CheckboxField { ...fieldProps } />;
-		case 'multicheck':
-			return <MulticheckField { ...fieldProps } />;
-		case 'radio':
-			return <RadioField { ...fieldProps } />;
-		case 'rangeslider':
-			return <RangeSliderField { ...fieldProps } />;
-		case 'measure':
-			return <MeasureField { ...fieldProps } />;
-		case 'text':
-		case 'phone':
-		case 'email':
-			return <TextField { ...fieldProps } />;
-		case 'number':
-			return <NumberField { ...fieldProps } />;
-		case 'textarea':
-			return <TextField { ...fieldProps } />;
-	}
-
-	return sprintf(
-		/* translators: 1. type of field not found. */
-		__( 'Field type `%s` not found', 'content-control' ),
-		type
-	);
-};
-
-const Field = ( {
-	value: unparseValue,
-	onChange,
-	className = [],
-	...props
-} ) => {
-	const fieldProps = parseFieldProps( props );
-	const value = parseFieldValue( unparseValue, fieldProps );
-	const { type, ...otherProps } = fieldProps;
-
-	return (
-		<div
-			className={ classNames( [
-				'cc-field',
-				`cc-field--${ type }`,
-				className,
-			] ) }
-		>
-			<FieldComponent
-				type={ type }
-				value={ value }
-				onChange={ onChange }
-				{ ...otherProps }
-			/>
-		</div>
-	);
-};
-
-export default Field;
