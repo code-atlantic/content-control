@@ -38,7 +38,6 @@
     "@wordpress/scripts": "^23.7.2",
     "del": "^7.0.0",
     "eslint": "^8.23.1",
-    "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-import": "^2.26.0",
     "gulp": "^4.0.2",
     "gulp-load-plugins": "^2.0.7",
