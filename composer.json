@@ -28,7 +28,7 @@
             "dep_namespace": "ContentControl\\Dependencies\\",
             "dep_directory": "/classes/Dependencies/",
             "classmap_directory": "/packages/",
-            "classmap_prefix": "PUM_Scheduling_",
+            "classmap_prefix": "ContentControl_",
             "packages": [
                 "pimple/pimple"
             ],
