@@ -35,6 +35,7 @@
 		"@content-control/core-data": "*",
 		"@content-control/data": "*",
 		"@content-control/icons": "*",
+		"@content-control/rule-engine": "*",
 		"@content-control/utils": "*",
 		"@wordpress/components": "^21.1.0",
 		"@wordpress/data": "^7.2.0",
@@ -49,9 +50,7 @@
 	},
 	"devDependencies": {
 		"@types/react-router-dom": "^5.3.3",
-		"@types/wordpress__core-data": "^2.4.5",
-		"@types/wordpress__data": "^6.0.1",
-		"@types/wordpress__data-controls": "^2.2.0"
+		"@types/wordpress__data": "^6.0.1"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
