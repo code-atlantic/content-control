@@ -26,6 +26,7 @@
     "@content-control/core-data": "file:./packages/core-data",
     "@content-control/data": "file:./packages/data",
     "@content-control/icons": "file:./packages/icons",
+    "@content-control/rule-engine": "file:./packages/rule-engine",
     "@content-control/settings-page": "file:./packages/settings-page",
     "@content-control/utils": "file:./packages/utils"
   },
@@ -59,6 +60,7 @@
     "check-licenses": "wp-scripts check-licenses",
     "format": "wp-scripts format",
     "format:src": "wp-scripts format ./src",
+    "format:packages": "wp-scripts format ./packages/**/src",
     "format:php": "wp-env run composer run-script format",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",

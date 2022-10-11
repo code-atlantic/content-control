@@ -10,6 +10,7 @@ declare global {
 	const contentControlRuleEngine: {
 		adminUrl: string;
 		pluginUrl: string;
+		registeredRules: EngineRuleType[];
 	};
 }
 

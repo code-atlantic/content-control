@@ -27,6 +27,9 @@
 			"path": "packages/icons"
 		},
 		{
+			"path": "packages/rule-engine"
+		},
+		{
 			"path": "packages/settings-page"
 		},
 		{
