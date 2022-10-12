@@ -1,3 +1,5 @@
+import type { Query } from '@content-control/rule-engine';
+
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
 export type EditorId = 'new' | number | undefined;
