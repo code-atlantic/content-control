@@ -1,7 +1,9 @@
-import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
+import { __ } from '@wordpress/i18n';
 
 import { getResourcePath } from './utils';
+
+import type { SearchOptions, WPLinkSearchResult } from './types';
 
 export const fetchLinkSuggestions = (
 	search: string,
@@ -38,7 +40,7 @@ export default {
 
 		const typeCheck = ( t: string ) =>
 			! type ||
-			type == t ||
+			type === t ||
 			( Array.isArray( type ) && type.indexOf( t ) >= 0 );
 
 		if ( typeCheck( 'post' ) ) {

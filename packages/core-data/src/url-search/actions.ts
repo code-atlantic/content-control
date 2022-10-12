@@ -1,12 +1,23 @@
 import { __ } from '@wordpress/i18n';
 
+import { Status } from '../constants';
 import { getErrorMessage } from '../utils';
+import { ACTION_TYPES } from './constants';
 import { fetchLinkSuggestions } from './controls';
-import { Statuses, ACTION_TYPES, Status } from './constants';
+
+import type { Statuses } from '../constants';
+import type { SearchOptions, URLSearchStore, WPLinkSearchResult } from './types';
 
 const { SEARCH_REQUEST, SEARCH_SUCCESS, SEARCH_ERROR, CHANGE_ACTION_STATUS } =
 	ACTION_TYPES;
 
+/**
+ * Set query search text.
+ *
+ * @param {string}                    queryText     Query text.
+ * @param {SearchOptions[]|undefined} searchOptions Search options.
+ * @return {Generator} Action object.
+ */
 export function* updateSuggestions(
 	queryText: string,
 	searchOptions?: SearchOptions
@@ -42,14 +53,26 @@ export function* updateSuggestions(
 	}
 }
 
+/**
+ * Populate search results.
+ *
+ * @param {string} queryText Query text.
+ * @return {Object} Action object.
+ */
 export function searchRequest( queryText: string ) {
-	console.log( 'request received' );
 	return {
 		type: SEARCH_REQUEST,
 		queryText,
 	};
 }
 
+/**
+ * Populate search results.
+ *
+ * @param {string}               queryText Query text.
+ * @param {WPLinkSearchResult[]} results   Search results.
+ * @return {Object} Action object.
+ */
 export function searchSuccess(
 	queryText: string,
 	results: WPLinkSearchResult[]
@@ -61,6 +84,13 @@ export function searchSuccess(
 	};
 }
 
+/**
+ * Generate a search error action.
+ *
+ * @param {string} queryText Query text.
+ * @param {string} error     Error message.
+ * @return {Object} Action object.
+ */
 export function searchError( queryText: string, error: string ) {
 	return {
 		type: SEARCH_ERROR,
@@ -72,10 +102,10 @@ export function searchError( queryText: string, error: string ) {
 /**
  * Change status of a dispatch action request.
  *
- * @param actionName Action name to change status of.
- * @param status New status.
- * @param message Optional error message.
- * @returns Action object.
+ * @param {URLSearchStore[ 'ActionNames' ]} actionName Action name to change status of.
+ * @param {Statuses}                        status     New status.
+ * @param {string | undefined}              message    Optional error message.
+ * @return {Object} Action object.
  */
 export const changeActionStatus = (
 	actionName: URLSearchStore[ 'ActionNames' ],
@@ -83,6 +113,7 @@ export const changeActionStatus = (
 	message?: string | undefined
 ) => {
 	if ( message ) {
+		// eslint-disable-next-line no-console
 		console.log( actionName, message );
 	}
 

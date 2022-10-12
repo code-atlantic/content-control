@@ -1,3 +1,5 @@
+import type { URLSearchState } from './types';
+
 export const STORE_NAME = 'content-control/url-search';
 
 export const ACTION_TYPES = {
@@ -8,15 +10,6 @@ export const ACTION_TYPES = {
 	// Boilerplate.
 	CHANGE_ACTION_STATUS: 'CHANGE_ACTION_STATUS',
 };
-
-export const enum Status {
-	Idle = 'IDLE',
-	Resolving = 'RESOLVING',
-	Error = 'ERROR',
-	Success = 'SUCCESS',
-}
-
-export type Statuses = typeof Status[ keyof typeof Status ];
 
 export const initialState: URLSearchState = {
 	currentQuery: '',

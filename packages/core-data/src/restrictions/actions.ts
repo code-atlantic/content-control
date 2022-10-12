@@ -1,17 +1,18 @@
-import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data-controls';
+import { __ } from '@wordpress/i18n';
 
+import { Status, Statuses } from '../constants';
 import { fetch } from '../controls';
-import { getResourcePath } from './utils';
 import { getErrorMessage } from '../utils';
+import { ACTION_TYPES, restrictionDefaults, STORE_NAME } from './constants';
+import { getResourcePath } from './utils';
 
-import {
-	STORE_NAME,
-	ACTION_TYPES,
-	Statuses,
-	Status,
-	restrictionDefaults,
-} from './constants';
+import type {
+	EditorId,
+	Restriction,
+	RestrictionsState,
+	RestrictionsStore,
+} from './types';
 
 const {
 	CREATE,
@@ -27,10 +28,10 @@ const {
 /**
  * Change status of a dispatch action request.
  *
- * @param actionName Action name to change status of.
- * @param status New status.
- * @param message Optional error message.
- * @returns Action object.
+ * @param {RestrictionsStore[ 'ActionNames' ]} actionName Action name to change status of.
+ * @param {Statuses}                           status     New status.
+ * @param {string|undefined}                   message    Optional error message.
+ * @return {Object} Action object.
  */
 export const changeActionStatus = (
 	actionName: RestrictionsStore[ 'ActionNames' ],
@@ -38,6 +39,7 @@ export const changeActionStatus = (
 	message?: string | undefined
 ) => {
 	if ( message ) {
+		// eslint-disable-next-line no-console
 		console.log( actionName, message );
 	}
 
@@ -53,7 +55,8 @@ export const changeActionStatus = (
  * Changes the editor to edit the new item by id.
  *
  * @param {number|"new"|undefined} editorId Id of the item to be edited.
- * @returns Action to be dispatched.
+ *
+ * @return {Object} Action to be dispatched.
  */
 export function* changeEditorId(
 	editorId: RestrictionsState[ 'editor' ][ 'id' ]
@@ -79,14 +82,13 @@ export function* changeEditorId(
 			);
 		}
 
-		if ( restriction ) {
-			return {
-				type: EDITOR_CHANGE_ID,
-				editorId,
-				editorValues: restriction,
-			};
-		}
+		return {
+			type: EDITOR_CHANGE_ID,
+			editorId,
+			editorValues: restriction,
+		};
 	} catch ( error ) {
+		// eslint-disable-next-line no-console
 		console.log( error );
 		// returning an action object that will save the update error to the state.
 		return changeActionStatus(
@@ -95,15 +97,13 @@ export function* changeEditorId(
 			getErrorMessage( error )
 		);
 	}
-
-	return;
 }
 
 /**
  * Update value of the current editor data.
  *
- * @param editorValues Values to update.
- * @returns Action to be dispatched.
+ * @param {Partial< Restriction >} editorValues Values to update.
+ * @return {Object} Action to be dispatched.
  */
 export const updateEditorValues = ( editorValues: Partial< Restriction > ) => {
 	return {
@@ -115,8 +115,7 @@ export const updateEditorValues = ( editorValues: Partial< Restriction > ) => {
 /**
  * Update value of the current editor data.
  *
- * @param values Values to update.
- * @returns Action to be dispatched.
+ * @return {Object} Action to be dispatched.
  */
 export const clearEditorData = () => {
 	return {
@@ -128,7 +127,7 @@ export const clearEditorData = () => {
  * Update a restriction.
  *
  * @param {Restriction} restriction Restriction to be updated.
- * @returns Action to be dispatched.
+ * @return {Generator} Action to be dispatched.
  */
 export function* createRestriction( restriction: Restriction ) {
 	const actionName = 'createRestriction';
@@ -193,7 +192,7 @@ export function* createRestriction( restriction: Restriction ) {
  * Update a restriction.
  *
  * @param {Restriction} restriction Restriction to be updated.
- * @returns Action to be dispatched.
+ * @return {Generator} Action to be dispatched.
  */
 export function* updateRestriction( restriction: Restriction ) {
 	const actionName = 'updateRestriction';
@@ -253,9 +252,9 @@ export function* updateRestriction( restriction: Restriction ) {
 /**
  * Delete a restriction from the store.
  *
- * @param restrictionId Restriction ID.
- * @param forceDelete Whether to trash or force delete.
- * @returns Delete Action.
+ * @param {number}  restrictionId Restriction ID.
+ * @param {boolean} forceDelete   Whether to trash or force delete.
+ * @return {Generator} Delete Action.
  */
 export function* deleteRestriction(
 	restrictionId: Restriction[ 'id' ],
@@ -323,7 +322,7 @@ export function* deleteRestriction(
  * Hyrdate the restriction store.
  *
  * @param {Restriction[]} restrictions Array of restrictions.
- * @returns Action.
+ * @return {Object} Action.
  */
 export const hydrate = ( restrictions: Restriction[] ) => {
 	return {

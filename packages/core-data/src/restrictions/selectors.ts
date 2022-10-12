@@ -1,4 +1,11 @@
-import { Status } from './constants';
+import { Status } from '../constants';
+
+import type {
+	EditorId,
+	Restriction,
+	RestrictionsState,
+	RestrictionsStore,
+} from './types';
 
 /**
  * Get all restrictions.

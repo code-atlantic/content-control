@@ -1,17 +1,19 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 import { fetch } from '../controls';
-import { hydrate } from './actions';
-import { getResourcePath } from './utils';
 import { appendUrlParams, getErrorMessage } from '../utils';
-
+import { hydrate } from './actions';
 import { ACTION_TYPES } from './constants';
+import { getResourcePath } from './utils';
+
+import type { Restriction } from './types';
+
 const { UPDATE, RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;
 
 /**
  * Resolves get restrictions requests from the server.
  *
- * @returns Action object to hydrate store.
+ * @return {Generator} Action object to hydrate store.
  */
 export function* getRestrictions() {
 	// catch any request errors.
@@ -52,7 +54,9 @@ export function* getRestrictions() {
 /**
  * Resolves get restrictions requests from the server.
  *
- * @returns Action object to update single restriction store.
+ * @param {number} restrictionId
+ *
+ * @return {Generator} Action object to update single restriction store.
  */
 export function* getRestriction( restrictionId: Restriction[ 'id' ] ) {
 	// catch any request errors.
@@ -75,6 +79,7 @@ export function* getRestriction( restrictionId: Restriction[ 'id' ] ) {
 		return {
 			type: RESTRICTIONS_FETCH_ERROR,
 			message: sprintf(
+				/* translators: 1: restriction id */
 				__(
 					`An error occurred, restriction %d were not loaded.`,
 					'content-control'

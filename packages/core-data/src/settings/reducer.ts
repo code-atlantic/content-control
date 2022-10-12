@@ -1,4 +1,7 @@
-import { ACTION_TYPES, Statuses } from './constants';
+import { ACTION_TYPES } from './constants';
+
+import type { Settings, SettingsState, SettingsStore } from './types';
+import type { Statuses } from '../constants';
 
 const {
 	UPDATE,

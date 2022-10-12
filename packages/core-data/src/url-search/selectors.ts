@@ -1,11 +1,11 @@
-import { Status } from './constants';
+import { Status } from '../constants';
+
+import type { URLSearchState, URLSearchStore, WPLinkSearchResult } from './types';
 
 /**
  * Get search results for link suggestions.
  *
- * @param {URLSearchState} state         Current state.
- * @param {string}         queryText     Search string
- * @param {SearchOptions}  searchOptions Additional search options such as post type.
+ * @param {URLSearchState} state Current state.
  * @return {WPLinkSearchResult[]} Array of link search results.
  */
 export const getSuggestions = ( state: URLSearchState ): WPLinkSearchResult[] =>

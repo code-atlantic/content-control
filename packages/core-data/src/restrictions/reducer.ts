@@ -1,4 +1,11 @@
-import { ACTION_TYPES, initialState, Statuses } from './constants';
+import { ACTION_TYPES, initialState } from './constants';
+
+import type {
+	Restriction,
+	RestrictionsState,
+	RestrictionsStore,
+	RestrictionStatuses,
+} from './types';
 
 const {
 	CREATE,
@@ -21,7 +28,7 @@ type ActionPayloadTypes = {
 	editorValues: RestrictionsState[ 'editor' ][ 'values' ];
 	// Boilerplate.
 	actionName: RestrictionsStore[ 'ActionNames' ];
-	status: Statuses;
+	status: RestrictionStatuses;
 	message: string;
 };
 

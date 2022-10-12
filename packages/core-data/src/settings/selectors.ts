@@ -1,4 +1,7 @@
-import { settingsDefaults, Status } from './constants';
+import { Status } from '../constants';
+import { settingsDefaults } from './constants';
+
+import type { Settings, SettingsState, SettingsStore } from './types';
 
 /**
  * Get setting by name.

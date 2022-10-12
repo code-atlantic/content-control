@@ -1,11 +1,14 @@
-import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data-controls';
+import { __ } from '@wordpress/i18n';
 
+import { Status } from '../constants';
 import { fetch } from '../controls';
-import { getResourcePath } from './utils';
 import { getErrorMessage } from '../utils';
+import { ACTION_TYPES, STORE_NAME } from './constants';
+import { getResourcePath } from './utils';
 
-import { Status, Statuses, STORE_NAME, ACTION_TYPES } from './constants';
+import type { Statuses } from '../constants';
+import type { Settings, SettingsState, SettingsStore } from './types';
 
 const {
 	UPDATE,
@@ -19,10 +22,10 @@ const {
 /**
  * Change status of a dispatch action request.
  *
- * @param actionName Action name to change status of.
- * @param status New status.
- * @param message Optional error message.
- * @returns Action object.
+ * @param {SettingsStore[ 'ActionNames' ]} actionName Action name to change status of.
+ * @param {Statuses}                       status     New status.
+ * @param {string | undefined}             message    Optional error message.
+ * @return {Object} Action object.
  */
 export const changeActionStatus = (
 	actionName: SettingsStore[ 'ActionNames' ],
@@ -30,6 +33,7 @@ export const changeActionStatus = (
 	message?: string | undefined
 ) => {
 	if ( message ) {
+		// eslint-disable-next-line no-console
 		console.log( actionName, message );
 	}
 
@@ -44,8 +48,8 @@ export const changeActionStatus = (
 /**
  * Update settings.
  *
- * @param settings Object of settings to update.
- * @returns Action object.
+ * @param {Partial< Settings >} settings Object of settings to update.
+ * @return {Generator} Action object.
  */
 export function* updateSettings( settings: Partial< Settings > ) {
 	const actionName = 'updateSettings';
@@ -100,7 +104,7 @@ export function* updateSettings( settings: Partial< Settings > ) {
 /**
  * Save staged/unsaved changes.
  *
- * @returns Action object.
+ * @return {Generator} Action object.
  */
 export function* saveSettings() {
 	const actionName = 'saveSettings';
@@ -160,8 +164,8 @@ export function* saveSettings() {
 /**
  * Update settings.
  *
- * @param settings Object of settings to update.
- * @returns Action object.
+ * @param {Partial< Settings >} settings Object of settings to update.
+ * @return {Generator} Action object.
  */
 export const stageUnsavedChanges = ( settings: Partial< Settings > ) => {
 	return {
@@ -170,6 +174,11 @@ export const stageUnsavedChanges = ( settings: Partial< Settings > ) => {
 	};
 };
 
+/**
+ *
+ * @param {Settings} settings
+ * @return {Object} Action object.
+ */
 export const hydrate = ( settings: Settings ) => {
 	return {
 		type: HYDRATE,

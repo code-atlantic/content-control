@@ -1,4 +1,11 @@
-import { ACTION_TYPES, initialState, Statuses } from './constants';
+import { ACTION_TYPES, initialState } from './constants';
+
+import type { Statuses } from '../constants';
+import type {
+	URLSearchState,
+	URLSearchStore,
+	WPLinkSearchResult,
+} from './types';
 
 const { SEARCH_ERROR, SEARCH_REQUEST, SEARCH_SUCCESS, CHANGE_ACTION_STATUS } =
 	ACTION_TYPES;

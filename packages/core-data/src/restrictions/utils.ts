@@ -1,8 +1,9 @@
+import type { Restriction } from './types';
+
 /**
  * Get resuource path for various configs.
  *
- * @param {number} id        Restriction id.
- * @param {Object} urlParams Object of url parameters.
+ * @param {number} id Restriction id.
  * @return {string} Resulting resource path.
  */
 export const getResourcePath = (

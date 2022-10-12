@@ -3,11 +3,18 @@ export const restBase = 'content-control/v2';
 export const restUrl = `${ wpApiSettings.root }${ restBase }/`;
 
 type FetchOptions = { [ key: string ]: any };
+
 type FetchArgs = {
 	path: string;
 	options: { [ key: string ]: any };
 };
 
+/**
+ * Fetch opts with creds.
+ *
+ * @param {FetchArgs[ 'options' ]} options Fetch options.
+ * @return {FetchArgs[ 'options' ]} Modified fetch options.
+ */
 export const fetchCredOpts = ( options: FetchOptions = {} ): RequestInit => ( {
 	...options,
 	headers: {
@@ -19,6 +26,13 @@ export const fetchCredOpts = ( options: FetchOptions = {} ): RequestInit => ( {
 	credentials: 'same-origin',
 } );
 
+/**
+ * Fetch with credentials.
+ *
+ * @param {FetchArgs[ 'path' ]}    path    Path to fetch.
+ * @param {FetchArgs[ 'options' ]} options Fetch options.
+ * @return {Object} fetch action.
+ */
 export const fetch = ( path: string, options: FetchOptions = {} ) => {
 	if ( options.body ) {
 		options.body = JSON.stringify( options.body );
@@ -31,6 +45,13 @@ export const fetch = ( path: string, options: FetchOptions = {} ) => {
 	};
 };
 
+/**
+ * Fetch with credentials.
+ *
+ * @param {FetchArgs[ 'path' ]}    path    Path to fetch.
+ * @param {FetchArgs[ 'options' ]} options Fetch options.
+ * @return {Promise} fetch promise.
+ */
 export const fetchWithCreds = (
 	path: FetchArgs[ 'path' ],
 	options: FetchArgs[ 'options' ]
@@ -45,6 +66,12 @@ export const fetchWithCreds = (
 };
 
 export default {
+	/**
+	 * Fetch with credentials.
+	 *
+	 * @param {FetchArgs} args Fetch args.
+	 * @return {Promise} fetch promise.
+	 */
 	FETCH( { path, options }: FetchArgs ) {
 		return new Promise( ( resolve, reject ) => {
 			window

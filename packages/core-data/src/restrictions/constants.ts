@@ -1,3 +1,5 @@
+import type { Restriction, RestrictionsState } from './types';
+
 export const STORE_NAME = 'content-control/restrictions';
 
 export const ACTION_TYPES = {
@@ -11,15 +13,6 @@ export const ACTION_TYPES = {
 	CHANGE_ACTION_STATUS: 'CHANGE_ACTION_STATUS',
 	RESTRICTIONS_FETCH_ERROR: 'RESTRICTIONS_FETCH_ERROR',
 };
-
-export const enum Status {
-	Idle = 'IDLE',
-	Resolving = 'RESOLVING',
-	Error = 'ERROR',
-	Success = 'SUCCESS',
-}
-
-export type Statuses = typeof Status[ keyof typeof Status ];
 
 export const initialState: RestrictionsState = {
 	restrictions: [],

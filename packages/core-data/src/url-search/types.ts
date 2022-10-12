@@ -1,5 +1,8 @@
-type SearchArgTypes = 'post' | 'term' | 'post-format' | string;
-type SearchArgs = {
+import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
+
+export type SearchArgTypes = 'post' | 'term' | 'post-format' | string;
+
+export type SearchArgs = {
 	search: string;
 	context?: 'view' | 'embed';
 	page?: number;
@@ -9,11 +12,11 @@ type SearchArgs = {
 	isInitialSuggestions?: boolean;
 };
 
-type SearchOptions = Omit< SearchArgs, 'search' | 'per_page' > & {
+export type SearchOptions = Omit< SearchArgs, 'search' | 'per_page' > & {
 	perPage?: number;
 };
 
-type WPLinkSearchResult = {
+export type WPLinkSearchResult = {
 	id?: number;
 	title?: string;
 	url: string;
@@ -24,13 +27,13 @@ type WPLinkSearchResult = {
 	};
 };
 
-type URLSearchQuery = {
+export type URLSearchQuery = {
 	text: string;
 	results: WPLinkSearchResult[];
 	xtotal: number;
 };
 
-type URLSearchState = {
+export type URLSearchState = {
 	currentQuery?: string;
 	searchResults?: WPLinkSearchResult[];
 	queries: Record< URLSearchQuery[ 'text' ], URLSearchQuery >;
@@ -44,11 +47,11 @@ type URLSearchState = {
 	error?: string;
 };
 
-interface URLSearchStore {
+export interface URLSearchStore {
 	StoreKey:
 		| 'content-control/url-search'
-		| typeof import('../url-search/index').STORE_NAME
-		| typeof import('../url-search/index').store;
+		| typeof import('../url-search/index').URL_SEARCH_STORE
+		| typeof import('../url-search/index').urlSearchStore;
 	State: URLSearchState;
 	Actions: RemoveReturnTypes< typeof import('../url-search/actions') >;
 	Selectors: OmitFirstArgs< typeof import('../url-search/selectors') >;

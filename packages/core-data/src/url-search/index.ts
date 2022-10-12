@@ -1,16 +1,13 @@
-/**
- * WordPress dependencies
- */
 import { createReduxStore } from '@wordpress/data';
 import { controls as wpControls } from '@wordpress/data-controls';
 
-import * as actions from './actions';
-import * as selectors from './selectors';
-import reducer from './reducer';
 import sharedControls from '../controls';
-import localControls from './controls';
-
+import * as actions from './actions';
 import { initialState, STORE_NAME } from './constants';
+import localControls from './controls';
+import reducer from './reducer';
+import * as selectors from './selectors';
+import type { URLSearchStore } from './types';
 
 const storeConfig = () => ( {
 	initialState,
@@ -22,8 +19,6 @@ const storeConfig = () => ( {
 
 const store = createReduxStore( STORE_NAME, storeConfig() );
 
-export { STORE_NAME, store };
-
 type S = URLSearchStore;
 
 declare module '@wordpress/data' {
@@ -34,3 +29,7 @@ declare module '@wordpress/data' {
 	// @ts-ignore
 	export function useDispatch( key: S[ 'StoreKey' ] ): S[ 'Actions' ];
 }
+
+export { STORE_NAME as URL_SEARCH_STORE, store as urlSearchStore };
+
+export * from './types';

@@ -1,13 +1,15 @@
-type URLOverrideTypes = 'login' | 'registration' | 'recovery';
+import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
-type DeviceMediaQuerySettings = {
+export type URLOverrideTypes = 'login' | 'registration' | 'recovery';
+
+export type DeviceMediaQuerySettings = {
 	override: boolean;
 	breakpoint: number;
 };
 
-type PermissionValue = { cap: string; other?: string };
+export type PermissionValue = { cap: string; other?: string };
 
-type Settings = {
+export type Settings = {
 	excludedBlocks: string[];
 	permissions: {
 		// Block Controls
@@ -42,15 +44,10 @@ type Settings = {
 			override: boolean;
 			breakpoint: number;
 		};
-		// [ key: string ]:
-		// 	| DeviceMediaQuerySettings
-		// 	| {
-		// 			query: string;
-		// 	  };
 	};
 };
 
-type SettingsState = {
+export type SettingsState = {
 	settings: Settings;
 	unsavedChanges?: Partial< Settings >;
 	knownBlockTypes?: {
@@ -71,11 +68,11 @@ type SettingsState = {
 	error?: string;
 };
 
-interface SettingsStore {
+export interface SettingsStore {
 	StoreKey:
 		| 'content-control/settings'
-		| typeof import('../settings/index').STORE_NAME
-		| typeof import('../settings/index').store;
+		| typeof import('../settings/index').SETTINGS_STORE
+		| typeof import('../settings/index').settingsStore;
 	State: SettingsState;
 	Actions: RemoveReturnTypes< typeof import('../settings/actions') >;
 	Selectors: OmitFirstArgs< typeof import('../settings/selectors') >;

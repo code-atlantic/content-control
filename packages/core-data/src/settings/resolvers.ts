@@ -1,11 +1,13 @@
 import { __ } from '@wordpress/i18n';
 
-import { getResourcePath } from './utils';
-import { getErrorMessage } from '../utils';
 import { fetch, restBase } from '../controls';
+import { getErrorMessage } from '../utils';
 import { hydrate, hydrateBlockTypes } from './actions';
-
 import { ACTION_TYPES } from './constants';
+import { getResourcePath } from './utils';
+
+import type { Settings, SettingsState } from './types';
+
 const { SETTINGS_FETCH_ERROR, BLOCK_TYPES_FETCH_ERROR } = ACTION_TYPES;
 
 export function* getSettings() {

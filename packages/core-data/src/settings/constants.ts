@@ -1,3 +1,5 @@
+import type { Settings, SettingsState } from './types';
+
 export const STORE_NAME = 'content-control/settings';
 
 export const ACTION_TYPES = {
@@ -10,14 +12,6 @@ export const ACTION_TYPES = {
 	HYDRATE_BLOCK_TYPES: 'HYDRATE_BLOCK_TYPES',
 	BLOCK_TYPES_FETCH_ERROR: 'BLOCK_TYPES_FETCH_ERROR',
 };
-
-export const enum Status {
-	Idle = 'IDLE',
-	Resolving = 'RESOLVING',
-	Error = 'ERROR',
-	Success = 'SUCCESS',
-}
-export type Statuses = typeof Status[ keyof typeof Status ];
 
 export const settingsDefaults: Settings = {
 	excludedBlocks: [],
