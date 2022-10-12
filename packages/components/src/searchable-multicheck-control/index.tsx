@@ -1,16 +1,17 @@
+import './editor.scss';
+
 import classnames, { Argument } from 'classnames';
-import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
-import { useInstanceId } from '@wordpress/compose';
-import { chevronDown, chevronUp } from '@wordpress/icons';
+
 import {
 	BaseControl,
 	Button,
 	CheckboxControl,
 	Icon,
 } from '@wordpress/components';
-
-import './editor.scss';
+import { useInstanceId } from '@wordpress/compose';
+import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { chevronDown, chevronUp } from '@wordpress/icons';
 
 type Props< T extends string | number > = {
 	label?: string | React.ReactNode;
@@ -46,20 +47,22 @@ const SearchableMulticheckControl = < T extends string | number >( {
 				: [ ...value, optValue ]
 		);
 
-	const filteredOptions = options.filter( ( { label, value, keywords } ) => {
-		return (
-			label.includes( searchText ) ||
-			( typeof value === 'string' && value.includes( searchText ) ) ||
-			( keywords && keywords.includes( searchText ) )
-		);
-	} );
+	const filteredOptions = options.filter(
+		( { label: optLabel, value: optValue, keywords } ) => {
+			return (
+				optLabel.includes( searchText ) ||
+				( typeof optValue === 'string' &&
+					optValue.includes( searchText ) ) ||
+				( keywords && keywords.includes( searchText ) )
+			);
+		}
+	);
 
 	const sortedOptions = filteredOptions.sort( ( a, b ) => {
 		if ( sortDirection === 'ASC' ) {
 			return a.label > b.label ? 1 : -1;
-		} else {
-			return b.label > a.label ? 1 : -1;
 		}
+		return b.label > a.label ? 1 : -1;
 	} );
 
 	return (
@@ -78,7 +81,7 @@ const SearchableMulticheckControl = < T extends string | number >( {
 					onClick={ () => {
 						// Get all current options values.
 						const selected = filteredOptions.map(
-							( { value } ) => value
+							( { value: optValue } ) => optValue
 						);
 
 						// Get combined list of values, previous & all selected.
@@ -94,7 +97,7 @@ const SearchableMulticheckControl = < T extends string | number >( {
 					onClick={ () => {
 						// Get all current options values.
 						const unSelected = filteredOptions.map(
-							( { value } ) => value
+							( { value: optValue } ) => optValue
 						);
 
 						// Get list of current values - unselected.

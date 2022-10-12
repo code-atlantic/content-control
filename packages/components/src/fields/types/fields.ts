@@ -1,4 +1,4 @@
-type FieldType =
+export type FieldType =
 	| 'checkbox'
 	| 'color'
 	| 'email'
@@ -20,8 +20,7 @@ type FieldType =
 	| 'text'
 	| 'textarea';
 
-type FieldTypeValueMap = {
-	[ key: FieldType ]: any;
+export type FieldTypeValueMap = {
 	checkbox: boolean;
 	color: string;
 	email: string;
@@ -44,12 +43,15 @@ type FieldTypeValueMap = {
 	textarea: string;
 };
 
-type FieldValue< T > = FieldTypeValueMap[ T ];
+export type FieldValue< T extends FieldType > = FieldTypeValueMap[ T ];
 
-type FieldProps< T extends FieldType > = {
+export type FieldProps<
+	T extends FieldType,
+	V extends FieldTypeValueMap[ T ] = FieldTypeValueMap[ T ]
+> = {
 	type: T;
-	value: FieldTypeValueMap[ T ];
-	onChange: ( value: FieldTypeValueMap[ T ] ) => void;
+	value: V;
+	onChange: ( value: V ) => void;
 	className?: string;
 	default?: any;
 	allowHtml?: boolean;

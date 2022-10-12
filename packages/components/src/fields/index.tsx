@@ -14,6 +14,7 @@ import {
 	TextField,
 } from './lib';
 import { parseFieldProps, parseFieldValue } from './utils';
+import type { FieldProps, FieldType } from './types';
 
 /**
  * 1. - Remap old keys to new ones.
@@ -24,8 +25,8 @@ import { parseFieldProps, parseFieldValue } from './utils';
  * 4. Render Control
  */
 
-const FieldComponent = < T extends FieldType = 'checkbox' >(
-	props: FieldProps< T > & { type: T }
+const FieldComponent = < T extends FieldType >(
+	props: FieldProps< T >
 ): JSX.Element => {
 	// Mutable copy!.
 	const fieldProps = { ...props };
@@ -34,7 +35,9 @@ const FieldComponent = < T extends FieldType = 'checkbox' >(
 
 	switch ( type ) {
 		case 'checkbox':
-			return <CheckboxField { ...fieldProps } />;
+			const { value } = fieldProps;
+
+			return <CheckboxField { ...fieldProps } value={ value } />;
 		case 'measure':
 			return <MeasureField { ...fieldProps } />;
 		case 'multicheck':

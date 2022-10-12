@@ -5,13 +5,14 @@ export default function useControlledState< T >(
 	defaultValue: T,
 	onChange: ( value: T, ...args: any[] ) => void
 ): [ T, ( value: T, ...args: any[] ) => void ] {
-	let [ stateValue, setStateValue ] = useState( value || defaultValue );
-	let ref = useRef( value !== undefined );
-	let wasControlled = ref.current;
-	let isControlled = value !== undefined;
+	const [ stateValue, setStateValue ] = useState( value || defaultValue );
+	const ref = useRef( value !== undefined );
+	const wasControlled = ref.current;
+	const isControlled = value !== undefined;
 	// Internal state reference for useCallback
-	let stateRef = useRef( stateValue );
+	const stateRef = useRef( stateValue );
 	if ( wasControlled !== isControlled ) {
+		// eslint-disable-next-line no-console
 		console.warn(
 			`WARN: A component changed from ${
 				wasControlled ? 'controlled' : 'uncontrolled'
@@ -21,20 +22,21 @@ export default function useControlledState< T >(
 
 	ref.current = isControlled;
 
-	let setValue = useCallback(
-		( value, ...args ) => {
-			let onChangeCaller = ( value, ...onChangeArgs ) => {
+	const setValue = useCallback(
+		( _value, ...args ) => {
+			const onChangeCaller = ( newValue, ...onChangeArgs ) => {
 				if ( onChange ) {
-					if ( ! Object.is( stateRef.current, value ) ) {
-						onChange( value, ...onChangeArgs );
+					if ( ! Object.is( stateRef.current, newValue ) ) {
+						onChange( newValue, ...onChangeArgs );
 					}
 				}
 				if ( ! isControlled ) {
-					stateRef.current = value;
+					stateRef.current = newValue;
 				}
 			};
 
-			if ( typeof value === 'function' ) {
+			if ( typeof _value === 'function' ) {
+				// eslint-disable-next-line no-console
 				console.warn(
 					'We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320'
 				);
@@ -43,8 +45,8 @@ export default function useControlledState< T >(
 				// this will call our useState setState with a function as well which invokes myFunc and calls onChange with the value from myFunc
 				// if we're in an uncontrolled state, then we also return the value of myFunc which to setState looks as though it was just called with myFunc from the beginning
 				// otherwise we just return the controlled value, which won't cause a rerender because React knows to bail out when the value is the same
-				let updateFunction = ( oldValue, ...functionArgs ) => {
-					let interceptedValue = value(
+				const updateFunction = ( oldValue, ...functionArgs ) => {
+					const interceptedValue = _value(
 						isControlled ? stateRef.current : oldValue,
 						...functionArgs
 					);
@@ -57,9 +59,9 @@ export default function useControlledState< T >(
 				setStateValue( updateFunction );
 			} else {
 				if ( ! isControlled ) {
-					setStateValue( value );
+					setStateValue( _value );
 				}
-				onChangeCaller( value, ...args );
+				onChangeCaller( _value, ...args );
 			}
 		},
 		[ isControlled, onChange ]

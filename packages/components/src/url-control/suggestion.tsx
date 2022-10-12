@@ -1,8 +1,8 @@
-import { noop } from '@content-control/utils';
 import classNames, { Argument } from 'classnames';
 
-import { forwardRef } from '@wordpress/element';
+import { noop } from '@content-control/utils';
 import { Button, Icon } from '@wordpress/components';
+import { forwardRef } from '@wordpress/element';
 
 type Props = {
 	icon?: JSX.Element;

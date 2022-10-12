@@ -1,17 +1,6 @@
-/**
- * External dependencies
- */
 import { escapeRegExp } from 'lodash';
 
-/**
- * WordPress dependencies
- */
 import { createInterpolateElement } from '@wordpress/element';
-
-/**
- * Internal dependencies
- */
-// import type { TextHighlightProps } from './types';
 
 export type TextHighlightProps = {
 	/**
@@ -45,7 +34,7 @@ export type TextHighlightProps = {
  * );
  * ```
  *
- * @param  props
+ * @param {TextHighlightProps} props Text highlight props.
  */
 export const TextHighlight = ( props: TextHighlightProps ) => {
 	const { text = '', highlight = '' } = props;

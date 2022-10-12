@@ -4,6 +4,8 @@ import {
 	ColorPicker,
 } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const ColorField = ( {
 	value = '',
 	onChange,
@@ -22,7 +24,6 @@ const ColorField = ( {
 				{ ...fieldProps }
 				color={ value }
 				onChangeComplete={ ( color ) => onChange( color.hex ) }
-				defaultColor={ value }
 			/>
 			<ColorPalette
 				value={ value }

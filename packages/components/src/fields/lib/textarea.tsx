@@ -1,5 +1,7 @@
 import { TextareaControl } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const TextAreaField = ( {
 	value,
 	onChange,

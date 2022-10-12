@@ -1,12 +1,12 @@
-type OptionLabel = string;
-type OptionValue = string;
+export type OptionLabel = string;
+export type OptionValue = string;
 
-interface Option {
+export interface Option {
 	value: OptionValue;
 	label: OptionLabel;
 }
 
-type Options =
+export type Options =
 	| string
 	| Option[]
 	| {
@@ -14,14 +14,14 @@ type Options =
 	  }
 	| OptionLabel[];
 
-type OptGroups = {
+export type OptGroups = {
 	[ key: string ]: Options;
 };
 
 /**
  * General ControlledInput prop type. Accepts value type as argument.
  */
-interface ControlledInputProps< T > {
+export interface ControlledInputProps< T > {
 	/** Controlled value */
 	value: T;
 	/** Callback used when the value changes */

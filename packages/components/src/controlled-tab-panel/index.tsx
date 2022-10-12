@@ -1,17 +1,8 @@
-/**
- * External dependencies
- */
 import classnames from 'classnames';
 
-/**
- * WordPress dependencies
- */
 import { NavigableMenu } from '@wordpress/components';
 import { withInstanceId } from '@wordpress/compose';
 
-/**
- * Internal dependencies
- */
 import TabButton from './tab-button';
 
 type Tab = {

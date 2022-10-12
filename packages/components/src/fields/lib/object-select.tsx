@@ -1,9 +1,11 @@
 import ReactTags from 'react-tag-autocomplete';
 
-import { useSelect } from '@wordpress/data';
 import { store as coreDataStore } from '@wordpress/core-data';
+import { useSelect } from '@wordpress/data';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { useState, useRef, useEffect } from '@wordpress/element';
+
+import type { ControlledInputProps } from '../types';
 
 const ObjectSelectField = ( {
 	value = '',

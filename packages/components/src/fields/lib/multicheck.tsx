@@ -1,5 +1,7 @@
 import { CheckboxControl, FormToggle } from '@wordpress/components';
 
+import type { ControlledInputProps, Options } from '../types';
+
 const parseOptions = ( options: Options ) => {
 	if ( typeof options === 'string' ) {
 		/* ex. 'Option 1, Option 2' */

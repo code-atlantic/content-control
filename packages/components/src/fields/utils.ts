@@ -1,4 +1,12 @@
+import classNames from 'classnames';
+
 import { pick, omit } from '@content-control/utils';
+import type { FieldProps, FieldType, FieldTypeValueMap } from './types/fields';
+import type {
+	OldFieldArgs,
+	OldFieldMap,
+	OldFieldValueMap,
+} from './types/old-field';
 
 export const oldFieldDefaults = {
 	id: '',
@@ -108,32 +116,31 @@ export const parseOldArgsToProps = < A extends OldFieldArgs >(
 ): Partial< FieldProps< A[ 'type' ] > > => {
 	const { type } = args;
 
+	const classes: string[] = [];
+
 	const fieldProps: Partial< FieldProps< A[ 'type' ] > > = {
 		default: args?.std,
 	};
 
-	if ( ! Array.isArray( fieldProps.className ) ) {
-		fieldProps.className =
-			typeof fieldProps.className === 'string'
-				? [ fieldProps.className ]
-				: [];
+	if ( typeof fieldProps.className === 'string' ) {
+		classes.push( fieldProps.className );
 	}
 
 	// Deprecated Class Handling.
 	if ( typeof args.classes !== 'undefined' ) {
 		if ( 'string' === typeof args.classes ) {
-			fieldProps.className.push( ...args.classes.split( ' ' ) );
+			classes.push( ...args.classes.split( ' ' ) );
 		} else if ( Array.isArray( args.classes ) ) {
-			fieldProps.className.push( ...args.classes );
+			classes.push( ...args.classes );
 		}
 	}
 
 	if ( typeof args.class !== 'undefined' ) {
-		fieldProps.className.push( args.class );
+		classes.push( args.class );
 	}
 
 	if ( fieldProps.allowHtml ) {
-		fieldProps.className.push( 'allows-html' );
+		classes.push( 'allows-html' );
 	}
 
 	switch ( type ) {
@@ -146,8 +153,8 @@ export const parseOldArgsToProps = < A extends OldFieldArgs >(
 		case 'objectselect':
 		case 'postselect':
 		case 'taxonomyselect':
-			fieldProps.className.push( 'objectselect' );
-			fieldProps.className.push(
+			classes.push( 'objectselect' );
+			classes.push(
 				args.type === 'postselect' ? 'postselect' : 'taxonomyselect'
 			);
 
@@ -168,12 +175,10 @@ export const parseOldArgsToProps = < A extends OldFieldArgs >(
 				...value,
 			};
 
-			fieldProps.className.push(
-				'jp-cc-license-' + value.status + '-notice'
-			);
+			classes.push( 'jp-cc-license-' + value.status + '-notice' );
 
 			if ( value.classes ) {
-				fieldProps.className.push( value.classes );
+				classes.push( value.classes );
 			}
 			break;
 	}
@@ -184,7 +189,7 @@ export const parseOldArgsToProps = < A extends OldFieldArgs >(
 
 	//* Allow HTML
 
-	return fieldProps;
+	return { ...fieldProps, className: classNames( classes ) };
 };
 
 export const parseFieldValue = <
@@ -248,15 +253,6 @@ export const parseFieldValue = <
 			}
 			break;
 
-		case 'number':
-			if ( typeof parsedValue === 'string' ) {
-				parsedValue =
-					parsedValue.indexOf( '.' ) > 0
-						? parseFloat( parsedValue )
-						: parseInt( parsedValue );
-			}
-			break;
-
 		case 'multicheck':
 			if (
 				typeof parsedValue === 'string' &&
@@ -304,6 +300,7 @@ export const parseFieldProps = <
 
 	const leftOverProps = omit( props, ...validTypeProps );
 
+	// eslint-disable-next-line no-console
 	console.log( 'Extra Props Found', leftOverProps );
 
 	// if ( typeof data.dynamic_desc === 'string' && data.dynamic_desc.length ) {

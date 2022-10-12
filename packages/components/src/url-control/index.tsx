@@ -1,10 +1,19 @@
-import { debounce, throttle, clamp } from 'lodash';
-import classNames, { Argument } from 'classnames';
+import './editor.scss';
 
-import { __ } from '@wordpress/i18n';
+import classNames, { Argument } from 'classnames';
+import { clamp, debounce, throttle } from 'lodash';
+
+import { urlSearchStore } from '@content-control/core-data';
+import {
+	BaseControl,
+	Button,
+	Icon,
+	KeyboardShortcuts,
+	Popover,
+	Spinner,
+} from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { edit, globe, keyboardReturn } from '@wordpress/icons';
 import {
 	forwardRef,
 	useCallback,
@@ -14,22 +23,12 @@ import {
 	useRef,
 	useState,
 } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	Icon,
-	KeyboardShortcuts,
-	Popover,
-	Spinner,
-} from '@wordpress/components';
-
-import { urlSearchStore } from '@content-control/core-data';
+import { __ } from '@wordpress/i18n';
+import { edit, globe, keyboardReturn } from '@wordpress/icons';
 
 import LinkSuggestion from './suggestion';
 
-import './editor.scss';
-
-import type { WPLinkSearchResult } from '@wordpress/core-data/build-types/fetch/__experimental-fetch-link-suggestions';
+import type { WPLinkSearchResult } from '@content-control/core-data';
 
 type State = {
 	value: WPLinkSearchResult;
@@ -260,21 +259,19 @@ const URLControl = (
 				currentIndex !== maxSelectionIndex
 			) {
 				selectSuggestion( suggestions[ currentIndex ] );
+			} else if ( value.url === query ) {
+				setState( {
+					...state,
+					isEditing: false,
+					query: '',
+					showSuggestions: false,
+					selected: -1,
+				} );
 			} else {
-				if ( value.url === query ) {
-					setState( {
-						...state,
-						isEditing: false,
-						query: '',
-						showSuggestions: false,
-						selected: -1,
-					} );
-				} else {
-					selectSuggestion( {
-						...value,
-						url: query,
-					} );
-				}
+				selectSuggestion( {
+					...value,
+					url: query,
+				} );
 			}
 		},
 		// Close the popover.

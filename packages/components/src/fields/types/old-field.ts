@@ -1,4 +1,7 @@
-interface OldFieldArgs {
+import type { FieldType } from './fields';
+import type { OptGroups, Options } from './general';
+
+export interface OldFieldArgs {
 	type: FieldType;
 	allow_html?: boolean;
 	as_array?: boolean;
@@ -31,15 +34,15 @@ interface OldFieldArgs {
 	meta?: {};
 }
 
-interface OldFieldBase< T extends FieldType, V extends OldFieldValueMap[ T ] > {
+export interface OldFieldBase< T extends FieldType > {
 	id?: string;
 	id_prefix?: string;
 	//? Should this be optional?
 	name: string;
 	label: string;
 	type: T;
-	value: V;
-	std: V | undefined | null;
+	value: OldFieldValueMap[ T ];
+	std: OldFieldValueMap[ T ] | undefined | null;
 	desc?: string;
 	dynamic_desc?: string;
 	desc_position?: string;
@@ -52,85 +55,87 @@ interface OldFieldBase< T extends FieldType, V extends OldFieldValueMap[ T ] > {
 	dependencies: Record< OldField[ 'type' ], string | boolean | number >;
 }
 
-interface OldHiddenField extends OldFieldBase {
+export interface OldHiddenField extends OldFieldBase< 'hidden' > {
 	type: 'hidden';
 }
 
-interface OldTextField extends OldFieldBase {
+export interface OldTextField
+	extends OldFieldBase< 'text' | 'email' | 'phone' | 'password' > {
 	type: 'text' | 'email' | 'phone' | 'password';
 	size?: string;
 	placeholder?: string;
 }
 
-interface OldNumberField extends OldTextField {
+export interface OldNumberField extends Omit< OldTextField, 'type' > {
 	type: 'number' | 'rangeslider';
 	min?: number;
 	max?: number;
 	step?: number;
 }
 
-interface OldMeasureField extends OldNumberField {
+export interface OldMeasureField extends Omit< OldNumberField, 'type' > {
 	type: 'measure';
 	unit?: string;
 	units?: {};
 }
 
-interface OldLicenseField extends OldTextField {
+export interface OldLicenseField extends Omit< OldTextField, 'type' > {
 	type: 'license_key';
 }
 
-interface OldColorField extends OldTextField {
+export interface OldColorField extends Omit< OldTextField, 'type' > {
 	type: 'color';
 }
 
-interface OldRadioField extends OldFieldBase {
+export interface OldRadioField extends OldFieldBase< 'radio' > {
 	type: 'radio';
 	options: Options | OptGroups;
 }
 
-interface OldMulticheckField extends OldRadioField {
+export interface OldMulticheckField extends Omit< OldRadioField, 'type' > {
 	type: 'multicheck';
 }
 
-interface OldSelectField extends OldRadioField {
+export interface OldSelectField extends Omit< OldRadioField, 'type' > {
 	type: 'select' | 'multiselect';
 	select2?: boolean;
 	multiple?: boolean;
 	as_array?: boolean;
 }
 
-interface OldSelect2Field extends OldSelectField {
+export interface OldSelect2Field extends Omit< OldSelectField, 'type' > {
 	type: 'select2';
 	select2: true;
 }
 
-interface OldObjectSelectField extends OldSelect2Field {
+export interface OldObjectSelectField extends Omit< OldSelect2Field, 'type' > {
 	type: 'objectselect' | 'postselect' | 'taxonomyselect';
 	object_type: string;
 	object_key?: string;
 }
 
-interface OldPostSelectField extends OldObjectSelectField {
+export interface OldPostSelectField
+	extends Omit< OldObjectSelectField, 'type' > {
 	type: 'postselect';
 	object_type: 'post';
 }
 
-interface OldTaxnomySelectField extends OldObjectSelectField {
+export interface OldTaxnomySelectField
+	extends Omit< OldObjectSelectField, 'type' > {
 	type: 'taxonomyselect';
 	object_type: 'taxonomy';
 }
 
-interface OldCheckboxField extends OldFieldBase {
+export interface OldCheckboxField extends OldFieldBase< 'checkbox' > {
 	type: 'checkbox';
 }
 
-interface OldTextareaField extends OldFieldBase {
+export interface OldTextareaField extends OldFieldBase< 'textarea' > {
 	type: 'textarea';
 	allow_html?: boolean;
 }
 
-type OldFieldMap = {
-	[ key: FieldType ]: OldField;
+export type OldFieldMap = {
 	checkbox: OldCheckboxField;
 	color: OldColorField;
 	email: OldTextField;
@@ -153,8 +158,7 @@ type OldFieldMap = {
 	textarea: OldTextareaField;
 };
 
-type OldFieldValueMap = {
-	[ key: FieldType ]: any;
+export type OldFieldValueMap = {
 	checkbox: boolean | number | string;
 	color: string;
 	email: string;
@@ -178,5 +182,5 @@ type OldFieldValueMap = {
 };
 
 // Catch all union of field types & values.
-type OldField = OldFieldMap[ keyof OldFieldMap ];
-type OldFieldValue = OldFieldValueMap[ keyof OldFieldValueMap ];
+export type OldField = OldFieldMap[ keyof OldFieldMap ];
+export type OldFieldValue = OldFieldValueMap[ keyof OldFieldValueMap ];

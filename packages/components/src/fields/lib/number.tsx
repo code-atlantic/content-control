@@ -1,5 +1,7 @@
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const NumberField = ( {
 	value = '',
 	onChange,

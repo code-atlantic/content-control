@@ -1,6 +1,3 @@
-/**
- * WordPress dependencies
- */
 import { isURL } from '@wordpress/url';
 
 /**

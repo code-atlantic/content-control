@@ -1,5 +1,7 @@
 import { __experimentalUnitControl as UnitControl } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const MeasureField = ( {
 	value,
 	onChange,

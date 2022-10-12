@@ -1,5 +1,7 @@
 import { TextControl } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const TextField = ( {
 	value,
 	onChange,

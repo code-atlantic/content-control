@@ -1,5 +1,7 @@
 import { RadioControl } from '@wordpress/components';
 
+import type { ControlledInputProps } from '../types';
+
 const RadioField = ( {
 	value,
 	onChange,

@@ -3,10 +3,7 @@
     "compilerOptions": {
         "rootDir": "src",
         "declarationDir": "build-types",
-        "outDir": "build",
-        "typeRoots": [
-            "src/typings"
-        ]
+        "outDir": "build"
     },
     "include": [
         "src/**/*",

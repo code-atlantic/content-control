@@ -1,9 +1,9 @@
+import './editor.scss';
+
 import classnames, { Argument as classNamesArg } from 'classnames';
 
-import { useInstanceId } from '@wordpress/compose';
 import { BaseControl, Button } from '@wordpress/components';
-
-import './editor.scss';
+import { useInstanceId } from '@wordpress/compose';
 
 type Props< T extends string | number = string | number > = {
 	value: T;

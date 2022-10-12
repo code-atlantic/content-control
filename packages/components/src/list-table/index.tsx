@@ -1,13 +1,14 @@
+import './editor.scss';
+
 import classNames, { Argument } from 'classnames';
 
-import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
-import { arrowDown, arrowUp } from '@wordpress/icons';
 import { Button, CheckboxControl, Icon } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { arrowDown, arrowUp } from '@wordpress/icons';
 
 import { useControlledState } from '../utils';
-
-import './editor.scss';
+import type { TableItemBase } from './types';
 
 type Props< T extends TableItemBase > = {
 	items: T[];
@@ -39,7 +40,6 @@ const TableCell = ( { heading = false, children, ...props }: CellProps ) => {
 };
 
 // TODO Relabel `items` to `rows` or `data` throughtout to be in line with actual tabular data structures.
-
 const ListTable = < T extends TableItemBase >( {
 	items,
 	columns,
@@ -77,19 +77,20 @@ const ListTable = < T extends TableItemBase >( {
 		: items.sort( ( a, b ) => {
 				if ( sortDirection === 'ASC' ) {
 					return a[ sortBy ] > b[ sortBy ] ? 1 : -1;
-				} else {
-					return b[ sortBy ] > a[ sortBy ] ? 1 : -1;
 				}
+
+				return b[ sortBy ] > a[ sortBy ] ? 1 : -1;
 		  } );
 
 	const ColumnHeaders = ( { header = false } ) => (
 		<>
 			{ Object.entries( cols ).map( ( [ col, colLabel ] ) => {
 				const isIdCol = col === idCol;
-				const isSortable = sortableColumns.indexOf( col ) >= 0;
-				const isSortedBy = col === sortBy;
-
 				const isBulkSelect = showBulkSelect && isIdCol;
+				const isSortedBy = col === sortBy;
+				const isSortable = ! isBulkSelect
+					? sortableColumns.indexOf( col ) >= 0
+					: false;
 
 				const cellProps = {
 					key: col,
@@ -128,8 +129,8 @@ const ListTable = < T extends TableItemBase >( {
 				);
 
 				return (
-					<TableCell { ...cellProps }>
-						{ isBulkSelect ? (
+					<TableCell { ...cellProps } key={ col }>
+						{ isBulkSelect && (
 							<CheckboxControl
 								onChange={ ( checked ) =>
 									setSelectedItems(
@@ -148,7 +149,9 @@ const ListTable = < T extends TableItemBase >( {
 									selectedItems.length < items.length
 								}
 							/>
-						) : isSortable ? (
+						) }
+
+						{ ! isBulkSelect && isSortable && (
 							<Button
 								variant="link"
 								onClick={ () => {
@@ -166,9 +169,9 @@ const ListTable = < T extends TableItemBase >( {
 							>
 								<Label />
 							</Button>
-						) : (
-							<Label />
 						) }
+
+						{ ! isBulkSelect && ! isSortable && <Label /> }
 					</TableCell>
 				);
 			} ) }
@@ -257,3 +260,5 @@ const ListTable = < T extends TableItemBase >( {
 };
 
 export default ListTable;
+
+export * from './types';
