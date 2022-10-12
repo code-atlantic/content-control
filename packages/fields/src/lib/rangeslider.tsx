@@ -1,10 +1,11 @@
 import { RangeControl } from '@wordpress/components';
+import type { FieldProps } from '../types';
 
 const RangeSliderField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: RangeControl.Props ) => {
+}: FieldProps< 'rangeslider' > & RangeControl.Props ) => {
 	const { step } = fieldProps;
 
 	return (

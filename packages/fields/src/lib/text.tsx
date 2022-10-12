@@ -1,12 +1,17 @@
 import { TextControl } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { ControlledInputProps, FieldProps } from '../types';
 
-const TextField = ( {
+
+
+
+const TextField = <
+	T extends 'text' | 'phone' | 'color' | 'email' | 'hidden' | 'password'
+>( {
 	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string > & TextControl.Props ) => {
+}: FieldProps< T > & TextControl.Props ) => {
 	return (
 		<TextControl
 			value={ value }

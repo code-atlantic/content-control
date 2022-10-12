@@ -1,12 +1,12 @@
 import { RadioControl } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { FieldProps } from '../types';
 
 const RadioField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string > & RadioControl.Props< string > ) => {
+}: FieldProps< 'radio' > & RadioControl.Props< string > ) => {
 	const options = fieldProps.options;
 
 	return (

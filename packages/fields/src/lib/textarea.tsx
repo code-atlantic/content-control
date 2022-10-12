@@ -1,12 +1,12 @@
 import { TextareaControl } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { FieldProps } from '../types';
 
 const TextAreaField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string > & TextareaControl.Props ) => {
+}: FieldProps< 'textarea' > & TextareaControl.Props ) => {
 	return (
 		<TextareaControl
 			value={ value }

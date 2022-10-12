@@ -1,13 +1,13 @@
 import { CheckboxControl, FormToggle } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { FieldProps } from '../types';
 
 const CheckboxField = ( {
 	value,
 	onChange,
 	label,
 	...fieldProps
-}: ControlledInputProps< boolean > & CheckboxControl.Props ) => {
+}: FieldProps< 'checkbox' > ) => {
 	const toggle = false;
 
 	if ( ! toggle ) {

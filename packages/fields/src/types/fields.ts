@@ -1,24 +1,24 @@
-export type FieldType =
-	| 'checkbox'
-	| 'color'
-	| 'email'
-	| 'hidden'
-	| 'license_key'
-	| 'measure'
-	| 'multicheck'
-	| 'multiselect'
-	| 'number'
-	| 'objectselect'
-	| 'password'
-	| 'phone'
-	| 'postselect'
-	| 'radio'
-	| 'rangeslider'
-	| 'select'
-	| 'select2'
-	| 'taxonomyselect'
-	| 'text'
-	| 'textarea';
+// export type FieldType =
+// 	| 'checkbox'
+// 	| 'color'
+// 	| 'email'
+// 	| 'hidden'
+// 	| 'license_key'
+// 	| 'measure'
+// 	| 'multicheck'
+// 	| 'multiselect'
+// 	| 'number'
+// 	| 'objectselect'
+// 	| 'password'
+// 	| 'phone'
+// 	| 'postselect'
+// 	| 'radio'
+// 	| 'rangeslider'
+// 	| 'select'
+// 	| 'select2'
+// 	| 'taxonomyselect'
+// 	| 'text'
+// 	| 'textarea';
 
 export type FieldTypeValueMap = {
 	checkbox: boolean;
@@ -43,15 +43,16 @@ export type FieldTypeValueMap = {
 	textarea: string;
 };
 
-export type FieldValue< T extends FieldType > = FieldTypeValueMap[ T ];
+export type FieldType = keyof FieldTypeValueMap;
 
-export type FieldProps<
-	T extends FieldType,
-	V extends FieldTypeValueMap[ T ] = FieldTypeValueMap[ T ]
-> = {
+export type FieldValue< T extends keyof FieldTypeValueMap > =
+	FieldTypeValueMap[ T ];
+
+export type FieldProps< T extends FieldType > = {
 	type: T;
-	value: V;
-	onChange: ( value: V ) => void;
+	value: FieldValue< T >;
+	onChange: ( value: FieldValue< T > ) => void;
+	label: string;
 	className?: string;
 	default?: any;
 	allowHtml?: boolean;

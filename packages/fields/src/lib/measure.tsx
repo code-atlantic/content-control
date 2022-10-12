@@ -1,12 +1,12 @@
 import { __experimentalUnitControl as UnitControl } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { FieldProps } from '../types';
 
 const MeasureField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string | string[] > & UnitControl.Props ) => {
+}: FieldProps< 'measure' > ) => {
 	// const number = parseInt( value ) || null;
 	// const unit = value.replace( number, '' ) || null;
 

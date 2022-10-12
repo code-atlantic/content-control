@@ -1,6 +1,6 @@
 import { CheckboxControl, FormToggle } from '@wordpress/components';
 
-import type { ControlledInputProps, Options } from '../types';
+import type { ControlledInputProps, FieldProps, Options } from '../types';
 
 const parseOptions = ( options: Options ) => {
 	if ( typeof options === 'string' ) {
@@ -32,7 +32,7 @@ const MulticheckField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string[] > & CheckboxControl.Props ) => {
+}: FieldProps< 'multicheck' > & CheckboxControl.Props ) => {
 	const toggle = false;
 
 	const options = parseOptions( fieldProps?.options );

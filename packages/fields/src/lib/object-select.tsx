@@ -5,13 +5,15 @@ import { useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-import type { ControlledInputProps } from '../types';
+import type { FieldProps } from '../types';
 
-const ObjectSelectField = ( {
+const ObjectSelectField = <
+	T extends 'objectselect' | 'postselect' | 'taxonomyselect'
+>( {
 	value = '',
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string | string[] | number | number[] > ) => {
+}: FieldProps< T > ) => {
 	const inputRef = useRef< ReactTags >( null );
 	const {
 		entityKind = 'postType',

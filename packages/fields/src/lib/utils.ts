@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 
 import { pick, omit } from '@content-control/utils';
-import type { FieldProps, FieldType, FieldTypeValueMap } from './types/fields';
+import type { FieldProps, FieldType, FieldTypeValueMap } from '../types/fields';
 import type {
 	OldFieldArgs,
 	OldFieldMap,
 	OldFieldValueMap,
-} from './types/old-field';
+} from '../types/old-field';
 
 export const oldFieldDefaults = {
 	id: '',

@@ -1,6 +1,11 @@
 import { SelectControl } from '@wordpress/components';
 
-import type { ControlledInputProps, OptGroups, Options } from '../types';
+import type {
+	ControlledInputProps,
+	FieldProps,
+	OptGroups,
+	Options,
+} from '../types';
 
 const parseOptions = ( options: Options ) => {
 	if ( typeof options === 'string' ) {
@@ -52,7 +57,7 @@ const SelectField = ( {
 	value = '',
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string | string[] > ) => {
+}: FieldProps< 'select' | 'multiselect' > ) => {
 	const { multiple = false } = fieldProps;
 
 	const options = fieldProps.options ?? {};
