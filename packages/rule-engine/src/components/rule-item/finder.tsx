@@ -1,11 +1,9 @@
-/** Styles */
 import './finder.scss';
 
-/** External Imports */
 import classNames from 'classnames';
 import { clamp } from 'lodash';
 
-/** WordPress Imports */
+import { noop } from '@content-control/utils';
 import {
 	Button,
 	KeyboardShortcuts,
@@ -23,17 +21,17 @@ import {
 import { __ } from '@wordpress/i18n';
 import { arrowDown, arrowUp } from '@wordpress/icons';
 
-import { noop } from '@content-control/utils';
-
-/** Internal Imports */
 import { useRules } from '../../contexts';
 /** Temporary WP Imports */
 import TextHighlight from './highlight';
 import { makeRuleText } from './utils';
 
+import type { EngineRuleType, RuleItem } from '../../types';
+
 const { adminUrl } = contentControlRuleEngine;
 
 type Props = { onSelect: ( ruleItem: Partial< RuleItem > ) => void };
+
 type Suggestion = {
 	id: string;
 	label: string;

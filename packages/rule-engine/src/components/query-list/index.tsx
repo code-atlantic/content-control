@@ -1,21 +1,24 @@
-/** Styles */
 import './index.scss';
 
-/** External Imports */
 import classNames from 'classnames';
 import { isEqual } from 'lodash';
 
-/** WordPress Imports */
 import { Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
-/** Internal Imports */
 import { QueryContextProvider, useOptions, useQuery } from '../../contexts';
 import { newGroup, newRule } from '../../templates';
 import Item from '../item';
 import Sortablelist from './sortable-list';
+
+import type {
+	GroupItem,
+	Item as ItemType,
+	QueryContextProps,
+	QueryProps,
+} from '../../types';
 
 type Props = QueryProps & {
 	indexs?: number[];
@@ -49,7 +52,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 		 * Nested lists will then call setRootList and pass a SetStateFunctional
 		 * that modifies the rootList based on the current list indexs list.
 		 *
-		 * @param {Item[]} newList Array of current lists items.
+		 * @param {ItemType[]} newList Array of current lists items.
 		 */
 		setList: isRootList
 			? ( newList ) => {
@@ -205,7 +208,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 						key={ item.id }
 						index={ i }
 						value={ item }
-						onChange={ ( updatedItem: Item ) =>
+						onChange={ ( updatedItem: ItemType ) =>
 							updateItem( item.id, updatedItem )
 						}
 					/>

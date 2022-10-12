@@ -1,4 +1,6 @@
+import type { BaseItem } from './model';
+
 /** Used to generate a React.SetStateAction like type for Items */
-type SetListFunctional< I extends BaseItem > =
+export type SetListFunctional< I extends BaseItem > =
 	| I[]
 	| ( ( sourceList: I[] ) => I[] );

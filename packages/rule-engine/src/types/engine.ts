@@ -1,5 +1,5 @@
-interface EngineFieldBase {
-	type: EngineField[ 'type' ];
+export interface EngineFieldBase {
+	type: string;
 	id: string;
 	name?: string;
 	label: string;
@@ -8,9 +8,9 @@ interface EngineFieldBase {
 	disabled?: boolean;
 }
 
-interface EngineField extends EngineFieldBase {}
+export interface EngineField extends EngineFieldBase {}
 
-interface EngineRuleType {
+export interface EngineRuleType {
 	name: string;
 	label: string;
 	category: string;
@@ -19,7 +19,7 @@ interface EngineRuleType {
 	verbs?: [ string, string ];
 }
 
-interface EngineFeatures {
+export interface EngineFeatures {
 	/** Enables the (!) Not Operand feature */
 	notOperand?: boolean;
 	/** Enables rule groups */
@@ -31,7 +31,7 @@ interface EngineFeatures {
 /**
  * Options to customize the rule engine
  */
-interface EngineOptions {
+export interface EngineOptions {
 	/** Enable & disable sub features of the engine */
 	features: EngineFeatures;
 	/** List of rules the builder can use */

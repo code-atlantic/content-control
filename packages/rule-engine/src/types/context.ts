@@ -1,4 +1,7 @@
-interface QueryContextProps {
+import type { Identifier, Item, LogicalOperator, Query } from './model';
+import type { SetListFunctional } from './utils';
+
+export interface QueryContextProps {
 	isRoot: boolean;
 	query: Query;
 	logicalOperator: LogicalOperator;

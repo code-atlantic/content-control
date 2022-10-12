@@ -1,5 +1,6 @@
-/* WordPress Imports */
 import { createContext, useContext } from '@wordpress/element';
+
+import type { EngineOptions } from '../types';
 
 const defaultEngineOptions: EngineOptions = {
 	features: {

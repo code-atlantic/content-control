@@ -8,11 +8,13 @@
 	 */
 
 	&:hover {
+		$placeholder: 1;
 	}
 
 	// On mousedown of handle. First as its on during drag as well.
 	&.is-chosen {
 		.cc-rule-engine-item {
+			$placeholder: 1;
 		}
 	}
 

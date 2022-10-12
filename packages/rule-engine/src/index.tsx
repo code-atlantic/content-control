@@ -1,9 +1,14 @@
-/** Internal Imports  */
-import { OptionsProvider } from './contexts';
-import { QueryList } from './components';
-
-/** Styles */
 import './index.scss';
+
+import { QueryList } from './components';
+import { OptionsProvider } from './contexts';
+
+import type {
+	ControlledInputProps,
+	EngineOptions,
+	EngineRuleType,
+	Query,
+} from './types';
 
 /* Global Var Declarations */
 declare global {
@@ -30,3 +35,5 @@ const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 };
 
 export default RuleEngine;
+
+export * from './types';

@@ -1,5 +1,6 @@
-/* WordPress Imports */
 import { createContext, useContext } from '@wordpress/element';
+
+import type { QueryContextProps } from '../types';
 
 export const QueryContext: React.Context< QueryContextProps > =
 	createContext< QueryContextProps >( {} as QueryContextProps );

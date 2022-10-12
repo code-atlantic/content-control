@@ -1,14 +1,13 @@
-/** Styles */
 import './index.scss';
 
-/** External Imports */
 import classNames from 'classnames';
 
-/** Internal Imports */
 import { ItemActions, QueryList } from '../';
 import LabelControl from './label-control';
 
-type Props = ItemProps< GroupItem > & {
+import type { GroupItem as GroupItemType, ItemProps } from '../../types';
+
+type Props = ItemProps< GroupItemType > & {
 	indexs: number[];
 };
 
@@ -17,7 +16,7 @@ const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
 		query: { items },
 	} = groupProps;
 
-	const updateGroup = ( newValues: Partial< GroupItem > ) =>
+	const updateGroup = ( newValues: Partial< GroupItemType > ) =>
 		onChange( {
 			...groupProps,
 			...newValues,

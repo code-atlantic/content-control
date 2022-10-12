@@ -3,14 +3,14 @@
 		rgba(0, 0, 0, calc($value / 20));
 }
 
-@mixin flexRow( $gap: $spacing, $align-items: center ) {
+@mixin flexRow($gap: $spacing, $align-items: center) {
 	display: flex;
 	flex-direction: row;
 	align-items: $align-items;
 	gap: $gap;
 }
 
-@mixin flexColumn( $gap: $spacing, $align-items: left ) {
+@mixin flexColumn($gap: $spacing, $align-items: left) {
 	display: flex;
 	flex-direction: column;
 	align-items: $align-items;

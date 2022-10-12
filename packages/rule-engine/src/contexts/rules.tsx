@@ -1,5 +1,7 @@
 import useOptions from './options';
 
+import type { EngineRuleType } from '../types';
+
 const useRules = () => {
 	const { rules } = useOptions();
 

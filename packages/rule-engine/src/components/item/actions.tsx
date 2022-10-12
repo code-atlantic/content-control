@@ -1,12 +1,11 @@
-/** Styles */
 import './index.scss';
 
-/** WordPress Imports */
 import { Button } from '@wordpress/components';
 import { dragHandle } from '@wordpress/icons';
 
-/** Internal Imports */
 import { useQuery } from '../../contexts';
+
+import type { Identifier } from '../../types';
 
 const deleteIcon = (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 13">

@@ -1,14 +1,16 @@
-/** Styles */
 import './index.scss';
 
-/** External Imports */
 import classNames from 'classnames';
 
-/** WordPress Imports */
 import { SelectControl } from '@wordpress/components';
 import { __, _x } from '@wordpress/i18n';
 
-type LogicalOperatorProps = ControlledInputProps< LogicalOperator >;
+import type {
+	ControlledInputProps,
+	LogicalOperator as LogicalOperatorType,
+} from '../../types';
+
+type LogicalOperatorProps = ControlledInputProps< LogicalOperatorType >;
 
 const LogicalOperator = ( { value, onChange }: LogicalOperatorProps ) => {
 	return (

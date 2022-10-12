@@ -1,8 +1,9 @@
-/** WordPress Imports */
 import { Button, TextControl } from '@wordpress/components';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { cancelCircleFilled, check, edit } from '@wordpress/icons';
+
+import type { ControlledInputProps } from '../../types';
 
 const LabelControl = ( {
 	value,

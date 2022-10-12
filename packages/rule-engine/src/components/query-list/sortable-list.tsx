@@ -1,12 +1,11 @@
-/** External Imports */
 import classNames, { Argument as ClassNameArg } from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
 
-/** Internal Imports */
 import { useQuery } from '../../contexts';
 import { sortableConfig } from './sortable-options';
 
 import type { ReactNode } from 'react';
+import type { BaseItem, SetListFunctional } from '../../types';
 
 const SortableList = < T extends BaseItem >( {
 	list,

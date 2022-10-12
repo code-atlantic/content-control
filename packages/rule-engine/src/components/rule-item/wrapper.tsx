@@ -1,15 +1,14 @@
-/** External Imports */
 import classNames from 'classnames';
 
-/** WordPress Imports */
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
-/** Internal Imports */
 import { useQuery } from '../../contexts';
 import { newRule } from '../../templates';
 import ItemActions from '../item/actions';
+
+import type { QueryContextProps } from '../../types';
 
 type Props = {
 	id: string;

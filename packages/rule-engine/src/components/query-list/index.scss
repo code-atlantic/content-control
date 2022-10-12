@@ -6,12 +6,16 @@
 
 	// Status Classes
 	&.has-item {
+		$placeholder: 1;
 	}
 	&.has-items {
+		$placeholder: 1;
 	}
 	&.is-root {
+		$placeholder: 1;
 	}
 	&.is-nested {
+		$placeholder: 1;
 	}
 
 	// Handles parent and nested list dropzone highlights.

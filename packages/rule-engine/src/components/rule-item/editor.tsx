@@ -3,6 +3,8 @@ import { Field } from '@content-control/components';
 
 import { makeRuleText } from './utils';
 
+import type { EngineField, ItemProps, RuleItem } from '../../types';
+
 const Editor = ( {
 	ruleDef,
 	value: ruleProps,

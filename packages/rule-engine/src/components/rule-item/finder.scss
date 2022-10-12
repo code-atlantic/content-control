@@ -36,7 +36,9 @@
 	min-width: 100%;
 	cursor: pointer;
 
-	&:hover, &:focus, &.is-selected  {
+	&:hover,
+	&:focus,
+	&.is-selected {
 		background-color: var(--wp-admin-theme-color);
 		color: #fff;
 	}

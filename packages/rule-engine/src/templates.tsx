@@ -1,5 +1,6 @@
-/** External Imports */
 import { customAlphabet } from 'nanoid';
+
+import type { GroupItem, QuerySet, RuleItem } from './types';
 
 export const newUUID = customAlphabet(
 	'abcdefghijklmnopqrstuvwxyz0123456789',

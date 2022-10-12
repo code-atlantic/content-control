@@ -1,12 +1,16 @@
-/** External Imports */
 import classNames from 'classnames';
 
-/** Internal Imports */
 import { GroupItem, LogicalOperator, RuleItem } from '../';
 import { useQuery } from '../../contexts';
 import ItemActions from './actions';
 
-interface Props extends ItemProps< GroupItem | RuleItem > {
+import type {
+	GroupItem as GroupItemType,
+	ItemProps,
+	RuleItem as RuleItemType,
+} from '../../types';
+
+interface Props extends ItemProps< GroupItemType | RuleItemType > {
 	index: number;
 }
 

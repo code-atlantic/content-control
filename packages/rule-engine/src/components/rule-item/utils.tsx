@@ -1,4 +1,6 @@
-import { sprintf, __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+
+import type { EngineRuleType } from '../../types';
 
 export const formatToSprintf = ( format: string ) =>
 	format

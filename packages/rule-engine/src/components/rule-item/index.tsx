@@ -1,19 +1,22 @@
-/** Styles */
 import './index.scss';
 
-/** Internal Imports */
 import { useRules } from '../../contexts';
 import Editor from './editor';
 import Finder from './finder';
 import MissingNotice from './missing-notice';
 import Wrapper from './wrapper';
 
-const RuleItem = ( { onChange, value: ruleProps }: ItemProps< RuleItem > ) => {
+import type { ItemProps, RuleItem as RuleItemType } from '../../types';
+
+const RuleItem = ( {
+	onChange,
+	value: ruleProps,
+}: ItemProps< RuleItemType > ) => {
 	const { name, id } = ruleProps;
 
 	const { getRule } = useRules();
 
-	const updateRule = ( newValues: Partial< RuleItem > ) =>
+	const updateRule = ( newValues: Partial< RuleItemType > ) =>
 		onChange( {
 			...ruleProps,
 			...newValues,

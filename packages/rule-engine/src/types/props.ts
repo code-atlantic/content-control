@@ -1,7 +1,9 @@
+import type { BaseItem, Query } from './model';
+
 /**
  * General ControlledInput prop type. Accepts value type as argument.
  */
-interface ControlledInputProps< T > {
+export interface ControlledInputProps< T > {
 	/** Controlled value */
 	value: T;
 	/** Callback used when the value changes */
@@ -12,7 +14,7 @@ interface ControlledInputProps< T > {
 /**
  * Props for Query Lists
  */
-interface QueryProps {
+export interface QueryProps {
 	query: Query;
 	onChange: ( value: Query ) => void;
 }
@@ -20,4 +22,5 @@ interface QueryProps {
 /**
  * Props for Items.
  */
-interface ItemProps< T extends BaseItem > extends ControlledInputProps< T > {}
+export interface ItemProps< T extends BaseItem >
+	extends ControlledInputProps< T > {}
