@@ -1,5 +1,4 @@
-/** Internal Imports */
-import { Field } from '@content-control/components';
+import { Field } from '@content-control/fields';
 
 import { makeRuleText } from './utils';
 
