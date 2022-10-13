@@ -1,4 +1,4 @@
-import type { Query } from '@content-control/rule-engine';
+// import type { Query } from '@content-control/rule-engine';
 
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
@@ -13,7 +13,7 @@ export interface RestrictionSettings {
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
-	conditions: Query;
+	// conditions: Query;
 	[ key: string ]: any;
 }
 
