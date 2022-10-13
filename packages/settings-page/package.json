@@ -20,10 +20,7 @@
 		"url": "https://github.com/code-atlantic/content-control/issues"
 	},
 	"main": "build/index",
-	"module": "build-module/index.js",
-	"react-native": "src/index",
 	"types": "build-types",
-	"exports": "./src",
 	"peerDependencies": {
 		"react": "^17.0.0"
 	},

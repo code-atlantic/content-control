@@ -6,6 +6,6 @@
 		"declarationDir": "build-types",
 	},
 	"include": [
-		"src/**/*"
-	],
+		"./src/**/*"
+	]
 }
