@@ -31,6 +31,11 @@ const packages = [
 		exportAs: 'data',
 	},
 	{
+		name: 'fields',
+		path: 'packages/fields',
+		exportAs: 'fields',
+	},
+	{
 		name: 'icons',
 		path: 'packages/icons',
 		exportAs: false,

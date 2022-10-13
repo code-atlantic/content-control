@@ -25,6 +25,7 @@
     "@content-control/components": "file:./packages/components",
     "@content-control/core-data": "file:./packages/core-data",
     "@content-control/data": "file:./packages/data",
+    "@content-control/fields": "file:./packages/fields",
     "@content-control/icons": "file:./packages/icons",
     "@content-control/rule-engine": "file:./packages/rule-engine",
     "@content-control/settings-page": "file:./packages/settings-page",
