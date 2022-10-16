@@ -1,6 +1,12 @@
 import Field from './field';
 
-const Fields = ( props ) => {
+import type { FieldPropsWithOnChange } from '../types';
+
+type Props = {
+	fields: FieldPropsWithOnChange[];
+};
+
+const Fields = ( props: Props ) => {
 	const { fields } = props;
 
 	return (

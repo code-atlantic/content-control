@@ -2,9 +2,9 @@ import classnames from 'classnames';
 
 import { __, sprintf } from '@wordpress/i18n';
 
-import { parseFieldProps, parseFieldValue } from './utils';
 import {
 	CheckboxField,
+	ColorField,
 	MeasureField,
 	MulticheckField,
 	NumberField,
@@ -16,60 +16,42 @@ import {
 	TextField,
 } from './';
 
-import type {
-	FieldProps,
-	FieldType,
-	FieldTypeValueMap,
-	FieldValue,
-} from '../types';
+import type { FieldPropsWithOnChange } from '../types';
 
-/**
- * 1. - Remap old keys to new ones.
- * 2. - Parse defaults
- * 3. - Build Type Props
- * 	3.a - Process props by type.
- *  3.b - Extract Required Props.
- * 4. Render Control
- */
-
-const FieldComponent = < T extends FieldType >(
-	props: FieldProps< T >
-): JSX.Element => {
-	const { type, value } = props;
-
-	// Mutable copy!.
-	// const fieldProps = { ...props };
+const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
+	const { type } = fieldProps;
 
 	switch ( type ) {
 		case 'checkbox':
-			return <CheckboxField { ...props } />;
+			return <CheckboxField { ...fieldProps } />;
+		case 'color':
+			return <ColorField { ...fieldProps } />;
 		case 'measure':
-			return <MeasureField { ...props } />;
+			return <MeasureField { ...fieldProps } />;
 		case 'multicheck':
-			return <MulticheckField { ...props } />;
-		case 'multiselect':
+			return <MulticheckField { ...fieldProps } />;
 		case 'select':
-			return <SelectField { ...props } />;
+		case 'multiselect':
+			return <SelectField { ...fieldProps } />;
 		case 'objectselect':
 		case 'postselect':
 		case 'taxonomyselect':
-			return <ObjectSelectField { ...props } />;
+			return <ObjectSelectField { ...fieldProps } />;
 		case 'radio':
-			return <RadioField { ...props } />;
+			return <RadioField { ...fieldProps } />;
 		case 'rangeslider':
-			return <RangeSliderField { ...props } />;
+			return <RangeSliderField { ...fieldProps } />;
 		case 'number':
-			return <NumberField { ...props } value={ value } />;
-		case 'color':
+			return <NumberField { ...fieldProps } />;
 		case 'email':
 		case 'phone':
 		case 'hidden':
 		case 'text':
 		case 'password': {
-			return <TextField { ...props } />;
+			return <TextField { ...fieldProps } />;
 		}
 		case 'textarea':
-			return <TextAreaField { ...props } />;
+			return <TextAreaField { ...fieldProps } />;
 	}
 
 	return (
@@ -83,15 +65,8 @@ const FieldComponent = < T extends FieldType >(
 	);
 };
 
-const Field = < T extends FieldType >( {
-	value: unparseValue,
-	onChange,
-	className,
-	...props
-}: FieldProps< T > ) => {
-	const fieldProps = parseFieldProps( props );
-	const { type, ...otherProps } = fieldProps;
-	const value = parseFieldValue( type, unparseValue, fieldProps );
+const Field = ( props: FieldPropsWithOnChange ) => {
+	const { type, className } = props;
 
 	return (
 		<div
@@ -101,12 +76,7 @@ const Field = < T extends FieldType >( {
 				className,
 			] ) }
 		>
-			<FieldComponent< typeof type >
-				type={ type }
-				value={ value }
-				onChange={ onChange }
-				{ ...otherProps }
-			/>
+			<FieldComponent { ...props } />
 		</div>
 	);
 };

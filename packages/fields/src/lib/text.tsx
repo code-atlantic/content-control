@@ -7,7 +7,7 @@ const TextField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: WithOnChange< TextFieldProps | HiddenFieldProps > ) => {
+}: WithOnChange< TextFieldProps > | WithOnChange< HiddenFieldProps > ) => {
 	return (
 		<TextControl
 			{ ...fieldProps }
