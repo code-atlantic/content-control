@@ -20,6 +20,7 @@ export type PropsWithOnChange< F > = F extends FieldBaseProps
 	: never;
 
 export interface FieldBaseProps {
+	// v: 2;
 	type: string;
 	value?: any;
 	id?: string;

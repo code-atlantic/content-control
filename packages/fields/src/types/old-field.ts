@@ -40,6 +40,8 @@ export interface OldFieldArgs {
 }
 
 export interface OldFieldBase {
+	// Possible delineated union from newer field models.
+	// v: 1;
 	type: string;
 	value?: any;
 	id?: string;
