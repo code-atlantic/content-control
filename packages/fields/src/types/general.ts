@@ -1,13 +1,16 @@
 export type OptionLabel = string;
 export type OptionValue = string;
 
+export type StringArray = string[];
+export type StringObject = { [ key: string ]: string };
+export type BooleanObject = { [ key: string ]: boolean };
+
 export interface Option {
 	value: OptionValue;
 	label: OptionLabel;
 }
 
 export type Options =
-	| string
 	| Option[]
 	| {
 			[ key: OptionValue ]: OptionLabel;
@@ -15,7 +18,7 @@ export type Options =
 	| OptionLabel[];
 
 export type OptGroups = {
-	[ key: string ]: Options;
+	[ key: string ]: Option[];
 };
 
 /**

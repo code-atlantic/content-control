@@ -5,21 +5,27 @@ import { useSelect } from '@wordpress/data';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-import type { FieldProps } from '../types';
+import type { Post, Taxonomy } from '@wordpress/core-data';
 
-const ObjectSelectField = <
-	T extends 'objectselect' | 'postselect' | 'taxonomyselect'
->( {
-	value = '',
+import type {
+	ObjectSelectFieldProps,
+	PostSelectFieldProps,
+	TaxonomySelectFieldProps,
+	WithOnChange,
+} from '../types';
+
+const ObjectSelectField = ( {
+	value,
 	onChange,
 	...fieldProps
-}: FieldProps< T > ) => {
+}: WithOnChange<
+	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
+> ) => {
 	const inputRef = useRef< ReactTags >( null );
 	const {
 		entityKind = 'postType',
 		entityType = 'post',
 		multiple = false,
-		asArray = true,
 	} = fieldProps;
 
 	const [ queryText, setQueryText ] = useState( '' );
@@ -32,13 +38,11 @@ const ObjectSelectField = <
 
 	const { options, isLoading } = useSelect(
 		( select ) => ( {
-			options: Object.values(
-				select( coreDataStore ).getEntityRecords(
-					entityKind,
-					entityType,
-					queryArgs
-				)
-			),
+			options: select( coreDataStore ).getEntityRecords(
+				entityKind,
+				entityType,
+				queryArgs
+			) as ( Taxonomy< 'view' > | Post< 'view' > )[],
 			isLoading: select( 'core/data' ).isResolving(
 				'core',
 				'getEntityRecords',
@@ -47,14 +51,6 @@ const ObjectSelectField = <
 		} ),
 		[ entityKind, entityType, queryText ]
 	);
-
-	// const isLoading = useSelect( ( select ) => {
-	// 	return select( 'core/data' ).isResolving(
-	// 		'core',
-	// 		'getEntityRecords',
-	// 		searchArgs
-	// 	);
-	// } );
 
 	const onSelect = ( chosen: string ) => {
 		setSelected( [ ...selected, chosen ] );
@@ -72,19 +68,27 @@ const ObjectSelectField = <
 		}
 	}, [] );
 
+	type ObjectOption = {
+		id?: number;
+		slug?: string;
+		name?: string;
+	};
+
 	return (
 		<div className="cc-rule-engine-search-box">
 			<ReactTags
 				placeholderText={ __( 'Select a rule', 'content-control' ) }
 				ref={ inputRef }
-				tags={ options.map( ( { id, title: name } ) => ( {
-					id,
+				tags={ options.map( ( { id, slug, name }: ObjectOption ) => ( {
+					id: id ?? slug,
 					name,
 				} ) ) }
-				suggestions={ options.map( ( { id, name } ) => ( {
-					id,
-					name,
-				} ) ) }
+				suggestions={ options.map(
+					( { id, slug, name }: ObjectOption ) => ( {
+						id: id ?? slug,
+						name,
+					} )
+				) }
 				onInput={ setQueryText }
 				onAddition={ ( chosen: number | string ) => {
 					setSelected( [ ...selected, chosen ] );

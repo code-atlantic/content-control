@@ -1,6 +1,6 @@
 import { CheckboxControl, FormToggle } from '@wordpress/components';
 
-import type { ControlledInputProps, FieldProps, Options } from '../types';
+import type { MulticheckFieldProps, Options, WithOnChange } from '../types';
 
 const parseOptions = ( options: Options ) => {
 	if ( typeof options === 'string' ) {
@@ -32,10 +32,12 @@ const MulticheckField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: FieldProps< 'multicheck' > & CheckboxControl.Props ) => {
+}: WithOnChange< MulticheckFieldProps > ) => {
 	const toggle = false;
 
-	const options = parseOptions( fieldProps?.options );
+	const options = parseOptions( fieldProps.options );
+
+	const checkedOpts = value ?? [];
 
 	/**
 	 * Foreach option render a checkbox. value can be an array
@@ -51,21 +53,22 @@ const MulticheckField = ( {
 					  Object.keys( value ).length >= 1 &&
 					  typeof value[ optValue ] !== 'undefined';
 
+				const toggleOption = () =>
+					onChange(
+						checked
+							? [ checkedOpts, optValue ]
+							: checkedOpts.filter(
+									( val: string ) => optValue !== val
+							  )
+					);
+
 				if ( ! toggle ) {
 					return (
 						<CheckboxControl
 							key={ optValue }
 							label={ optLabel }
 							checked={ checked }
-							onChange={ ( isChecked ) => {
-								const newValue = isChecked
-									? [ ...( value ?? [] ), optValue ]
-									: value.filter(
-											( val: string ) => optValue !== val
-									  );
-
-								onChange( newValue );
-							} }
+							onChange={ toggleOption }
 						/>
 					);
 				}
@@ -74,7 +77,7 @@ const MulticheckField = ( {
 						key={ optValue }
 						label={ optLabel }
 						checked={ checked }
-						onChange={ () => onChange( ! value ) }
+						onChange={ toggleOption }
 					/>
 				);
 			} ) }

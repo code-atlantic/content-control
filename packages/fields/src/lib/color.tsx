@@ -4,13 +4,13 @@ import {
 	ColorPicker,
 } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { HexColorFieldProps, WithOnChange } from '../types';
 
 const ColorField = ( {
 	value = '',
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string > & ColorPicker.Props ) => {
+}: WithOnChange< HexColorFieldProps > ) => {
 	const colors = [
 		{ name: 'red', color: '#f00' },
 		{ name: 'white', color: '#fff' },

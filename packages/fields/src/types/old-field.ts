@@ -1,13 +1,20 @@
-import type { FieldType } from './fields';
-import type { OptGroups, Options } from './general';
+import type {
+	OptGroups,
+	Option,
+	OptionLabel,
+	Options,
+	OptionValue,
+	StringObject,
+} from './general';
+import type { AtLeast } from './generics';
 
 export interface OldFieldArgs {
-	type: FieldType;
+	type: OldField[ 'type' ];
 	allow_html?: boolean;
 	as_array?: boolean;
 	class?: string;
 	classes?: string | string[];
-	dependencies?: [];
+	dependencies?: { [ key: string ]: string | boolean | number };
 	desc?: string;
 	desc_position?: string;
 	dynamic_desc?: string;
@@ -18,8 +25,6 @@ export interface OldFieldArgs {
 	min?: number;
 	multiple?: boolean;
 	name?: string;
-	object_key?: string;
-	object_type?: string;
 	post_type?: string;
 	taxonomy?: string;
 	options?: Options | OptGroups;
@@ -34,49 +39,54 @@ export interface OldFieldArgs {
 	meta?: {};
 }
 
-export interface OldFieldBase< T extends FieldType > {
+export interface OldFieldBase {
+	type: string;
+	value?: any;
 	id?: string;
 	id_prefix?: string;
 	//? Should this be optional?
-	name: string;
-	label: string;
-	type: T;
-	value: OldFieldValueMap[ T ];
-	std: OldFieldValueMap[ T ] | undefined | null;
+	name?: string;
+	label?: string;
+	std?: any;
 	desc?: string;
 	dynamic_desc?: string;
 	desc_position?: string;
+	class?: string;
 	classes?: string | string[];
 	required?: boolean;
+	//! TODO Check all known usage types of this.
 	meta?: {
 		[ key: string ]: any;
 	};
 	//! TODO Check all known usage types of this.
-	dependencies: Record< OldField[ 'type' ], string | boolean | number >;
+	dependencies?: { [ key: string ]: string | boolean | number };
 }
 
-export interface OldHiddenField extends OldFieldBase< 'hidden' > {
+export interface OldHiddenField extends OldFieldBase {
 	type: 'hidden';
 }
 
-export interface OldTextField
-	extends OldFieldBase< 'text' | 'email' | 'phone' | 'password' > {
+export interface OldTextField extends OldFieldBase {
 	type: 'text' | 'email' | 'phone' | 'password';
 	size?: string;
 	placeholder?: string;
 }
 
 export interface OldNumberField extends Omit< OldTextField, 'type' > {
-	type: 'number' | 'rangeslider';
+	type: 'number';
 	min?: number;
 	max?: number;
 	step?: number;
 }
 
+export interface OldRangesliderField extends Omit< OldNumberField, 'type' > {
+	type: 'rangeslider';
+}
+
 export interface OldMeasureField extends Omit< OldNumberField, 'type' > {
 	type: 'measure';
 	unit?: string;
-	units?: {};
+	units?: StringObject;
 }
 
 export interface OldLicenseField extends Omit< OldTextField, 'type' > {
@@ -87,20 +97,29 @@ export interface OldColorField extends Omit< OldTextField, 'type' > {
 	type: 'color';
 }
 
-export interface OldRadioField extends OldFieldBase< 'radio' > {
+export interface OldRadioField extends OldFieldBase {
 	type: 'radio';
-	options: Options | OptGroups;
+	options: Option[];
 }
 
 export interface OldMulticheckField extends Omit< OldRadioField, 'type' > {
 	type: 'multicheck';
 }
 
-export interface OldSelectField extends Omit< OldRadioField, 'type' > {
-	type: 'select' | 'multiselect';
+//! TODO This needs to be checked against known select types.
+export type OldSelectOptions =
+	| Option[]
+	| {
+			[ key: OptionValue ]: OptionLabel;
+	  }
+	| OptionLabel[];
+
+export interface OldSelectField extends OldFieldBase {
+	type: 'select';
 	select2?: boolean;
 	multiple?: boolean;
 	as_array?: boolean;
+	options: OldSelectOptions;
 }
 
 export interface OldSelect2Field extends Omit< OldSelectField, 'type' > {
@@ -110,30 +129,54 @@ export interface OldSelect2Field extends Omit< OldSelectField, 'type' > {
 
 export interface OldObjectSelectField extends Omit< OldSelect2Field, 'type' > {
 	type: 'objectselect' | 'postselect' | 'taxonomyselect';
-	object_type: string;
-	object_key?: string;
+	object_type: 'post' | 'taxonomy';
+	post_type?: string;
+	taxonomy?: string;
 }
 
-export interface OldPostSelectField
-	extends Omit< OldObjectSelectField, 'type' > {
+export interface OldPostSelectField extends OldObjectSelectField {
 	type: 'postselect';
 	object_type: 'post';
+	post_type: string;
 }
 
-export interface OldTaxnomySelectField
-	extends Omit< OldObjectSelectField, 'type' > {
+export interface OldTaxnomySelectField extends OldObjectSelectField {
 	type: 'taxonomyselect';
 	object_type: 'taxonomy';
+	taxonomy: string;
 }
 
-export interface OldCheckboxField extends OldFieldBase< 'checkbox' > {
+export interface OldCheckboxField extends OldFieldBase {
 	type: 'checkbox';
 }
 
-export interface OldTextareaField extends OldFieldBase< 'textarea' > {
+export interface OldTextareaField extends OldFieldBase {
 	type: 'textarea';
 	allow_html?: boolean;
 }
+
+export type OldFieldProps =
+	| OldHiddenField
+	| OldTextField
+	| OldNumberField
+	| OldRangesliderField
+	| OldMeasureField
+	| OldLicenseField
+	| OldColorField
+	| OldRadioField
+	| OldMulticheckField
+	| OldSelectField
+	| OldSelect2Field
+	| OldObjectSelectField
+	| OldPostSelectField
+	| OldTaxnomySelectField
+	| OldCheckboxField
+	| OldTextareaField;
+
+/**
+ * Union of FieldProps converted to partials that still require `type`.
+ */
+export type PartialOldFieldProps = AtLeast< OldFieldProps, 'type' >;
 
 export type OldFieldMap = {
 	checkbox: OldCheckboxField;
@@ -150,7 +193,7 @@ export type OldFieldMap = {
 	phone: OldTextField;
 	postselect: OldPostSelectField;
 	radio: OldRadioField;
-	rangeslider: OldNumberField;
+	rangeslider: OldRangesliderField;
 	select: OldSelectField;
 	select2: OldSelect2Field;
 	taxonomyselect: OldTaxnomySelectField;

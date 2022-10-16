@@ -1,18 +1,18 @@
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
 
-import type { ControlledInputProps } from '../types';
+import type { NumberFieldProps, WithOnChange } from '../types';
 
 const NumberField = ( {
-	value = '',
+	value,
 	onChange,
 	...fieldProps
-}: ControlledInputProps< string > & NumberControl.Props ) => {
+}: WithOnChange< NumberFieldProps > ) => {
 	return (
 		<NumberControl
+			{ ...fieldProps }
 			value={ value }
 			onChange={ onChange }
 			__nextHasNoMarginBottom={ true }
-			{ ...fieldProps }
 		/>
 	);
 };

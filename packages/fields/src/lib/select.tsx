@@ -1,10 +1,11 @@
 import { SelectControl } from '@wordpress/components';
 
 import type {
-	ControlledInputProps,
-	FieldProps,
+	MultiselectFieldProps,
 	OptGroups,
 	Options,
+	SelectFieldProps,
+	WithOnChange,
 } from '../types';
 
 const parseOptions = ( options: Options ) => {
@@ -43,7 +44,7 @@ const Options = ( { options }: { options: Options } ) => (
 	</>
 );
 
-const OptGroups = ( { optgroups }: { optgroups: OptGroups } ) => (
+const OptGroups = ( optgroups: OptGroups ) => (
 	<>
 		{ Object.entries( optgroups ).map( ( [ label, options ] ) => (
 			<optgroup key={ label } label={ label }>
@@ -54,10 +55,10 @@ const OptGroups = ( { optgroups }: { optgroups: OptGroups } ) => (
 );
 
 const SelectField = ( {
-	value = '',
+	value,
 	onChange,
 	...fieldProps
-}: FieldProps< 'select' | 'multiselect' > ) => {
+}: WithOnChange< SelectFieldProps | MultiselectFieldProps > ) => {
 	const { multiple = false } = fieldProps;
 
 	const options = fieldProps.options ?? {};
@@ -79,6 +80,8 @@ const SelectField = ( {
 
 	return (
 		<SelectControl
+			{ ...fieldProps }
+			multiple={ multiple }
 			value={
 				// Correct older string typ values (here for sanity).
 				multiple && typeof value === 'string'
@@ -88,7 +91,6 @@ const SelectField = ( {
 			onChange={ onChange }
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
-			{ ...fieldProps }
 		>
 			{ hasOptGroups ? (
 				<OptGroups optgroups={ options } />

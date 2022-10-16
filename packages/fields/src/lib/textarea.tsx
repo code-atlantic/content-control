@@ -1,19 +1,21 @@
 import { TextareaControl } from '@wordpress/components';
 
-import type { FieldProps } from '../types';
+import type { TextareaFieldProps, WithOnChange } from '../types';
 
 const TextAreaField = ( {
 	value,
 	onChange,
+	rows = 5,
 	...fieldProps
-}: FieldProps< 'textarea' > & TextareaControl.Props ) => {
+}: WithOnChange< TextareaFieldProps > ) => {
 	return (
 		<TextareaControl
-			value={ value }
+			{ ...fieldProps }
+			value={ value ?? '' }
 			onChange={ onChange }
+			rows={ rows }
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
-			{ ...fieldProps }
 		/>
 	);
 };

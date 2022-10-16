@@ -1,22 +1,22 @@
 import { RadioControl } from '@wordpress/components';
 
-import type { FieldProps } from '../types';
+import type { RadioFieldProps, WithOnChange } from '../types';
 
 const RadioField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: FieldProps< 'radio' > & RadioControl.Props< string > ) => {
+}: WithOnChange< RadioFieldProps > ) => {
 	const options = fieldProps.options;
 
 	return (
 		<RadioControl
+			{ ...fieldProps }
 			selected={ value }
 			options={ options }
 			onChange={ onChange }
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
-			{ ...fieldProps }
 		/>
 	);
 };
