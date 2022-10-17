@@ -7,36 +7,34 @@ import type {
 	SelectFieldProps,
 	WithOnChange,
 } from '../types';
+import { parseFieldOptions } from './utils';
 
-const parseOptions = ( options: Options ) => {
-	if ( typeof options === 'string' ) {
-		/* ex. 'Option 1, Option 2' */
-		return options
-			.split( ',' )
-			.map( ( option ) => ( { label: option, value: option } ) );
-	} else if ( ! Array.isArray( options ) && typeof options === 'object' ) {
-		/* ex. { option1: 'Option 1', option2: 'Option 2' } */
-		return Object.entries( options ).map( ( [ value, label ] ) => ( {
-			label,
-			value,
-		} ) );
-	}
+/**
+ * Options|OptGroups Type check handler.
+ *
+ * @param {Options|OptGroups} options Options to check for groups.
+ * @return {boolean} True if optgroups found.
+ */
+export const hasOptGroups = (
+	options: Options | OptGroups
+): options is OptGroups =>
+	Object.entries( options ).reduce( ( hasGroups, [ _key, _value ] ) => {
+		if ( true === hasGroups ) {
+			return hasGroups;
+		}
 
-	return options.map( ( option ) =>
-		typeof option === 'string'
-			? /* ex. [ 'Option 1', 'Option 2' ] */
-			  {
-					label: option,
-					value: option,
-			  }
-			: /* ex. [ { value: 'option1', label: 'Option 1' }, { value: 'option2', label: 'Option 2' } ] */
-			  option
-	);
-};
+		return (
+			typeof _key === 'string' &&
+			! ( parseInt( _key ) >= 0 ) &&
+			typeof _value === 'object'
+		);
+	}, false );
 
-const Options = ( { options }: { options: Options } ) => (
+type OptionsProps = { options: Options };
+
+const Options = ( { options }: OptionsProps ) => (
 	<>
-		{ parseOptions( options ).map( ( { label, value } ) => (
+		{ parseFieldOptions( options ).map( ( { label, value } ) => (
 			<option key={ value } value={ value }>
 				{ label }
 			</option>
@@ -44,9 +42,9 @@ const Options = ( { options }: { options: Options } ) => (
 	</>
 );
 
-const OptGroups = ( optgroups: OptGroups ) => (
+const OptGroups = ( { optGroups }: { optGroups: OptGroups } ) => (
 	<>
-		{ Object.entries( optgroups ).map( ( [ label, options ] ) => (
+		{ Object.entries( optGroups ).map( ( [ label, options ] ) => (
 			<optgroup key={ label } label={ label }>
 				<Options options={ options } />
 			</optgroup>
@@ -65,21 +63,6 @@ const SelectField = ( {
 
 	const options = fieldProps.options ?? {};
 
-	const hasOptGroups = Object.entries( options ).reduce(
-		( hasGroups, [ _key, _value ] ) => {
-			if ( true === hasGroups ) {
-				return hasGroups;
-			}
-
-			return (
-				typeof _key === 'string' &&
-				! ( parseInt( _key ) >= 0 ) &&
-				typeof _value === 'object'
-			);
-		},
-		false
-	);
-
 	return (
 		<SelectControl
 			{ ...fieldProps }
@@ -94,8 +77,8 @@ const SelectField = ( {
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }
 		>
-			{ hasOptGroups ? (
-				<OptGroups optgroups={ options } />
+			{ hasOptGroups( options ) ? (
+				<OptGroups optGroups={ options } />
 			) : (
 				<Options options={ options } />
 			) }
