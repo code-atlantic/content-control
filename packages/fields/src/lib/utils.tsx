@@ -9,6 +9,7 @@ import type {
 	PartialFieldProps,
 } from '../types/fields';
 import type { OldFieldBase, OldFieldProps } from '../types/old-field';
+import type { AcceptibleOptions, Option, Options } from '../types';
 
 /**
  * Default args for old field definitions.
@@ -140,7 +141,7 @@ export const parseOldArgsToProps = (
 		case 'multiselect':
 			if ( fieldProps.type === args.type || 'select2' === args.type ) {
 				// Handle options migration for optgroups.
-				fieldProps.options = args.options ?? [];
+				fieldProps.options = parseFieldOptions( args.options ?? [] );
 				fieldProps.searchable = 'select2' === args.type;
 				fieldProps.multiple =
 					fieldProps.type === 'multiselect' || args.multiple;
@@ -205,6 +206,40 @@ export const parseOldArgsToProps = (
 				} ),
 			};
 	}
+};
+
+/**
+ * Parse field options.
+ *
+ * @param {AcceptibleOptions|string} options Options to parse.
+ * @return {Options} Parsed options.
+ */
+export const parseFieldOptions = (
+	options: AcceptibleOptions | string
+): Options => {
+	if ( typeof options === 'string' ) {
+		/* ex. 'Option 1, Option 2' */
+		return options
+			.split( ',' )
+			.map( ( option ) => ( { label: option, value: option } ) );
+	} else if ( ! Array.isArray( options ) && typeof options === 'object' ) {
+		/* ex. { option1: 'Option 1', option2: 'Option 2' } */
+		return Object.entries( options ).map( ( [ value, label ] ) => ( {
+			label,
+			value,
+		} ) );
+	}
+
+	return options.map( ( option: Option | string ) =>
+		typeof option === 'string'
+			? /* ex. [ 'Option 1', 'Option 2' ] */
+			  {
+					label: option,
+					value: option,
+			  }
+			: /* ex. [ { value: 'option1', label: 'Option 1' }, { value: 'option2', label: 'Option 2' } ] */
+			  option
+	);
 };
 
 /**

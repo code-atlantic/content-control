@@ -1,10 +1,4 @@
-import type {
-	OptGroups,
-	Option,
-	Options,
-	StringArray,
-	StringObject,
-} from './general';
+import type { OptGroups, Option, Options, StringObject } from './general';
 
 import type { AtLeast } from './generics';
 
@@ -83,8 +77,8 @@ export interface MeasureFieldProps
 
 export interface MulticheckFieldProps extends FieldBaseProps {
 	type: 'multicheck';
-	options: Option[];
-	value?: StringArray;
+	options: Options;
+	value?: ( string | number )[];
 }
 
 export interface MultiselectFieldProps extends SelectFieldBaseProps {
