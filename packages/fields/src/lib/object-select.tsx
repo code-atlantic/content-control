@@ -25,36 +25,31 @@ const ObjectSelectField = ( {
 	const {
 		entityKind = 'postType',
 		entityType = 'post',
-		multiple = false,
+		// multiple = false,
 	} = fieldProps;
 
 	const [ queryText, setQueryText ] = useState( '' );
-	const [ selected, setSelected ] = useState< ReactTags >( [] );
+	const [ selected, setSelected ] = useState< ReactTags >();
 
 	const queryArgs = {
 		search: queryText,
 		per_page: 10,
 	};
 
-	const { options, isLoading } = useSelect(
+	const { options } = useSelect(
 		( select ) => ( {
 			options: select( coreDataStore ).getEntityRecords(
 				entityKind,
 				entityType,
 				queryArgs
 			) as ( Taxonomy< 'view' > | Post< 'view' > )[],
-			isLoading: select( 'core/data' ).isResolving(
-				'core',
-				'getEntityRecords',
-				[ entityKind, entityType, queryArgs ]
-			),
 		} ),
 		[ entityKind, entityType, queryText ]
 	);
 
-	const onSelect = ( chosen: string ) => {
-		setSelected( [ ...selected, chosen ] );
-	};
+	// const onSelect = ( chosen: string ) => {
+	// 	setSelected( [ ...selected, chosen ] );
+	// };
 
 	/**
 	 * Focus the input when this component is rendered.
