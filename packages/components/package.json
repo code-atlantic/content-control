@@ -18,8 +18,8 @@
   "bugs": {
     "url": "https://github.com/code-atlantic/content-control/issues"
   },
-	"main": "build/index",
-	"types": "build-types",
+  "main": "build/index",
+  "types": "build-types",
   "peerDependencies": {
     "react": "^17.0.0"
   },
@@ -29,14 +29,14 @@
   "dependencies": {
     "@content-control/core-data": "*",
     "@content-control/utils": "*",
-    "@wordpress/base-styles": "^4.8.0",
-    "@wordpress/components": "^21.1.0",
-    "@wordpress/compose": "^5.16.0",
-    "@wordpress/data": "^7.2.0",
-    "@wordpress/element": "^4.16.0",
-    "@wordpress/i18n": "^4.18.0",
-    "@wordpress/icons": "^9.9.0",
-    "@wordpress/url": "^3.19.0",
+    "@wordpress/base-styles": "^4.10.0",
+    "@wordpress/components": "^21.2.0",
+    "@wordpress/compose": "^5.17.0",
+    "@wordpress/data": "^7.3.0",
+    "@wordpress/element": "^4.17.0",
+    "@wordpress/i18n": "^4.19.0",
+    "@wordpress/icons": "^9.10.0",
+    "@wordpress/url": "^3.20.0",
     "classnames": "^2.3.2",
     "lodash": "^4.17.21"
   },
@@ -45,7 +45,7 @@
     "@types/wordpress__i18n": "^3.11.0",
     "@types/wordpress__components": "^19.10.3",
     "@types/wordpress__compose": "^4.0.1",
-    "@types/lodash": "^4.14.185"
+    "@types/lodash": "^4.14.186"
   },
   "scripts": {
     "build:tsc": "tsc",
