@@ -1,14 +1,6 @@
-export interface EngineFieldBase {
-	type: string;
-	id: string;
-	name?: string;
-	label: string;
-	value?: any | undefined;
-	default?: any | undefined;
-	disabled?: boolean;
-}
+import type { FieldProps } from '@content-control/fields';
 
-export interface EngineField extends EngineFieldBase {}
+export type EngineField = FieldProps;
 
 export interface EngineRuleType {
 	name: string;

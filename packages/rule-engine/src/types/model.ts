@@ -1,5 +1,3 @@
-import type { EngineField } from './engine';
-
 export type Identifier = string;
 export type LogicalOperator = 'and' | 'or';
 export type NotOperand = boolean;
@@ -22,7 +20,7 @@ export interface RuleItem extends BaseItem {
 	type: 'rule';
 	name: string;
 	options?: {
-		[ key: string ]: EngineField[ 'value' ];
+		[ key: string ]: any;
 	};
 	notOperand?: NotOperand;
 }

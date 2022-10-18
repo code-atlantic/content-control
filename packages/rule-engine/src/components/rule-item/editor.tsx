@@ -2,13 +2,20 @@ import { Field } from '@content-control/fields';
 
 import { makeRuleText } from './utils';
 
-import type { EngineField, ItemProps, RuleItem } from '../../types';
+import type { FieldProps } from '@content-control/fields';
 
-const Editor = ( {
-	ruleDef,
-	value: ruleProps,
-	onChange,
-}: ItemProps< RuleItem > ) => {
+import type {
+	EngineField,
+	EngineRuleType,
+	ItemProps,
+	RuleItem,
+} from '../../types';
+
+type Props = ItemProps< RuleItem > & {
+	ruleDef: EngineRuleType;
+};
+
+const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 	const { notOperand = false, options: ruleOptions = {} } = ruleProps;
 
 	const { fields = [] } = ruleDef ?? {};
@@ -39,19 +46,17 @@ const Editor = ( {
 
 			{ fields.length > 0 && (
 				<div className="rule-fields">
-					{ fields.map( ( field: EngineField ) => {
+					{ fields.map( < F extends FieldProps >( field: F ) => {
 						const { id } = field;
 
 						return (
 							<Field
 								key={ id }
-								value={
-									ruleOptions[ id ] as EngineField[ 'value' ]
-								}
-								onChange={ (
-									newValue: EngineField[ 'value' ]
-								) => updateOption( id, newValue ) }
 								{ ...field }
+								value={ ruleOptions[ id ] }
+								onChange={ ( newValue: F[ 'value' ] ) =>
+									updateOption( id, newValue )
+								}
 							/>
 						);
 					} ) }
