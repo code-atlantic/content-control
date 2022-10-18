@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@content-control/components": "*",
+		"@content-control/fields": "*",
 		"@content-control/utils": "*",
 		"@wordpress/base-styles": "^4.10.0",
 		"@wordpress/components": "^21.2.0",
