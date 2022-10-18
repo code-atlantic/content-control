@@ -9,8 +9,8 @@ import DeviceRules from './device-rules';
 import { tablet /* , blockMeta */ } from '@wordpress/icons';
 
 import { SVG, Path } from '@wordpress/primitives';
-import { QuerySet } from '../query-builder/types';
-import { newUUID } from '../query-builder/templates';
+import type { QuerySet } from '../../../../../../query-builder/types';
+import { newUUID } from '../../../../../../query-builder/templates';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
