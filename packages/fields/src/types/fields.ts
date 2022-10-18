@@ -15,9 +15,9 @@ export type PropsWithOnChange< F > = F extends FieldBaseProps
 
 export interface FieldBaseProps {
 	// v: 2;
+	id: string;
 	type: string;
 	value?: any;
-	id?: string;
 	name?: string;
 	label?: string;
 	className?: string;
@@ -172,30 +172,38 @@ export type FieldProps =
 export type FieldPropsWithOnChange = PropsWithOnChange< FieldProps >;
 
 /**
+ * Single point list of minimum shared fields for a valid field declaration.
+ */
+export type MinFieldProps = 'id' | 'type';
+
+/**
  * Union of FieldProps converted to partials that still require `type`.
  */
-export type PartialFieldProps = AtLeast< FieldProps, 'type' >;
+export type PartialFieldProps = AtLeast< FieldProps, MinFieldProps >;
 
 /**
  * Intermediary field props includes all required fields, used for conversions.
  */
 export type IntermediaryFieldProps =
-	| AtLeast< CheckboxFieldProps, 'type' >
-	| AtLeast< HexColorFieldProps, 'type' >
-	| AtLeast< HiddenFieldProps, 'type' >
-	| AtLeast< LicenseKeyFieldProps, 'type' >
-	| AtLeast< MeasureFieldProps, 'type' | 'units' >
-	| AtLeast< MulticheckFieldProps, 'type' >
-	| AtLeast< MultiselectFieldProps, 'type' >
-	| AtLeast< NumberFieldProps, 'type' >
-	| AtLeast< ObjectSelectFieldProps, 'type' | 'entityKind' | 'entityType' >
-	| AtLeast< PostSelectFieldProps, 'type' | 'entityType' >
-	| AtLeast< TaxonomySelectFieldProps, 'type' | 'entityType' >
-	| AtLeast< RadioFieldProps, 'type' | 'options' >
-	| AtLeast< RangesliderFieldProps, 'type' >
-	| AtLeast< SelectFieldProps, 'type' | 'options' >
-	| AtLeast< TextFieldProps, 'type' >
-	| AtLeast< TextareaFieldProps, 'type' >;
+	| AtLeast< CheckboxFieldProps, MinFieldProps >
+	| AtLeast< HexColorFieldProps, MinFieldProps >
+	| AtLeast< HiddenFieldProps, MinFieldProps >
+	| AtLeast< LicenseKeyFieldProps, MinFieldProps >
+	| AtLeast< MeasureFieldProps, MinFieldProps | 'units' >
+	| AtLeast< MulticheckFieldProps, MinFieldProps >
+	| AtLeast< MultiselectFieldProps, MinFieldProps >
+	| AtLeast< NumberFieldProps, MinFieldProps >
+	| AtLeast<
+			ObjectSelectFieldProps,
+			MinFieldProps | 'entityKind' | 'entityType'
+	  >
+	| AtLeast< PostSelectFieldProps, MinFieldProps | 'entityType' >
+	| AtLeast< TaxonomySelectFieldProps, MinFieldProps | 'entityType' >
+	| AtLeast< RadioFieldProps, MinFieldProps | 'options' >
+	| AtLeast< RangesliderFieldProps, MinFieldProps >
+	| AtLeast< SelectFieldProps, MinFieldProps | 'options' >
+	| AtLeast< TextFieldProps, MinFieldProps >
+	| AtLeast< TextareaFieldProps, MinFieldProps >;
 
 export type FieldPropsMap = {
 	checkbox: CheckboxFieldProps;
