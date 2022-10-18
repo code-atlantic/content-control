@@ -47,7 +47,8 @@
     "@types/wordpress__i18n": "^3.11.0",
     "@types/wordpress__components": "^19.10.3",
     "@types/wordpress__compose": "^4.0.1",
-    "@types/lodash": "^4.14.186"
+    "@types/lodash": "^4.14.186",
+    "@types/react-tag-autocomplete": "^6.3.0"
   },
   "scripts": {
     "build:tsc": "tsc",

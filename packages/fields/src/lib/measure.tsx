@@ -1,3 +1,5 @@
+// @ts-ignore
+// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 import { __experimentalUnitControl as UnitControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 

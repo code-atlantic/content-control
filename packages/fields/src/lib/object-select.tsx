@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 import type { Post, Taxonomy } from '@wordpress/core-data';
+import type { Tag } from 'react-tag-autocomplete';
 
 import type {
 	ObjectSelectFieldProps,
@@ -29,7 +30,7 @@ const ObjectSelectField = ( {
 	} = fieldProps;
 
 	const [ queryText, setQueryText ] = useState( '' );
-	const [ selected, setSelected ] = useState< ReactTags >();
+	const [ selected, setSelected ] = useState< Tag[] >( [] );
 
 	const queryArgs = {
 		search: queryText,
@@ -59,12 +60,13 @@ const ObjectSelectField = ( {
 
 		if ( null !== firstEl ) {
 			// ReactTags exposed method, not HTML .focus().
+			// @ts-ignore
 			firstEl.focusInput();
 		}
 	}, [] );
 
 	type ObjectOption = {
-		id?: number;
+		id?: string | number;
 		slug?: string;
 		name?: string;
 	};
@@ -74,18 +76,20 @@ const ObjectSelectField = ( {
 			<ReactTags
 				placeholderText={ __( 'Select a rule', 'content-control' ) }
 				ref={ inputRef }
-				tags={ options.map( ( { id, slug, name }: ObjectOption ) => ( {
-					id: id ?? slug,
-					name,
-				} ) ) }
+				tags={ options.map(
+					( { id, slug, name }: ObjectOption, i ) => ( {
+						id: id ?? slug ?? i,
+						name: name ?? slug ?? '',
+					} )
+				) }
 				suggestions={ options.map(
-					( { id, slug, name }: ObjectOption ) => ( {
-						id: id ?? slug,
-						name,
+					( { id, slug, name }: ObjectOption, i ) => ( {
+						id: id ?? slug ?? i,
+						name: name ?? slug ?? '',
 					} )
 				) }
 				onInput={ setQueryText }
-				onAddition={ ( chosen: number | string ) => {
+				onAddition={ ( chosen: Tag ) => {
 					setSelected( [ ...selected, chosen ] );
 				} }
 				onDelete={ ( tagIndex: number ) =>

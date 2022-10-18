@@ -58,6 +58,7 @@ export const parseOldArgsToProps = (
 		type: 'select2' !== args.type ? args.type : 'select',
 		// Migrate default value.
 		default: args.std,
+		id: args.id ?? args.name ?? '',
 		// Basic remappings.
 		...pick(
 			args,
