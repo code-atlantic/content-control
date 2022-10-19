@@ -12,11 +12,11 @@ import BlockManagerTab from './tabs/block-manager';
 import GeneralTab from './tabs/general';
 import PermissionsTab from './tabs/permissions';
 
+import type { TabComponent } from '../types';
+
 const { pluginUrl } = contentControlSettingsPage;
 
-type Props = {};
-
-const SettingsView = ( {}: Props ) => {
+const SettingsView = () => {
 	const [ { tab = 'general' }, setParams ] = useQueryParams( {
 		tab: StringParam,
 		view: StringParam,
@@ -77,7 +77,7 @@ const SettingsView = ( {}: Props ) => {
 									} );
 								} }
 							>
-								{ __( 'Learn more...', 'content-control' ) }
+								{ __( 'Learn more…', 'content-control' ) }
 							</Button>
 						</div>
 					</div>

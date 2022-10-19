@@ -7,11 +7,11 @@ import { __ } from '@wordpress/i18n';
 import Section from '../../section';
 import useSettings from '../../use-settings';
 
+import type { PermissionValue } from '@content-control/core-data';
+
 const { rolesAndCaps } = contentControlSettingsPage;
 
-type Props = {};
-
-const PermissionsTab = ( props: Props ) => {
+const PermissionsTab = () => {
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 
 	// Filtered & mappable list of TabComponent definitions.
@@ -55,14 +55,16 @@ const PermissionsTab = ( props: Props ) => {
 	const roles = useMemo( () => {
 		const list: { label: string; value: string }[] = [];
 
-		Object.entries( rolesAndCaps ).map( ( [ value, { name: label } ] ) => {
-			if (
-				typeof list.find( ( role ) => role.value === value ) ===
-				'undefined'
-			) {
-				list.push( { label, value } );
+		Object.entries( rolesAndCaps ).forEach(
+			( [ value, { name: label } ] ) => {
+				if (
+					typeof list.find( ( role ) => role.value === value ) ===
+					'undefined'
+				) {
+					list.push( { label, value } );
+				}
 			}
-		} );
+		);
 
 		return list;
 	}, [] );
@@ -70,8 +72,8 @@ const PermissionsTab = ( props: Props ) => {
 	const caps = useMemo( () => {
 		const list: { label: string; value: string }[] = [];
 
-		Object.values( rolesAndCaps ).map( ( { capabilities } ) => {
-			Object.keys( capabilities ).map( ( cap ) => {
+		Object.values( rolesAndCaps ).forEach( ( { capabilities } ) => {
+			Object.keys( capabilities ).forEach( ( cap ) => {
 				if (
 					typeof list.find( ( { value } ) => cap === value ) ===
 					'undefined'
@@ -113,7 +115,8 @@ const PermissionsTab = ( props: Props ) => {
 				</Notice>
 
 				{ pluginPermissions.map( ( { name, label, description } ) => {
-					const { cap, other = '' } = settings?.permissions?.[ name ];
+					const { cap, other = '' } =
+						settings?.permissions?.[ name ] ?? {};
 
 					return (
 						<div key={ name } className="field-group">
@@ -145,14 +148,16 @@ const PermissionsTab = ( props: Props ) => {
 											'content-control'
 										) }
 									>
-										{ roles.map( ( { label, value } ) => (
-											<option
-												key={ value }
-												value={ value }
-											>
-												{ label }
-											</option>
-										) ) }
+										{ roles.map(
+											( { label: rLabel, value } ) => (
+												<option
+													key={ value }
+													value={ value }
+												>
+													{ rLabel }
+												</option>
+											)
+										) }
 									</optgroup>
 									<optgroup
 										label={ __(
@@ -160,14 +165,16 @@ const PermissionsTab = ( props: Props ) => {
 											'content-control'
 										) }
 									>
-										{ caps.map( ( { label, value } ) => (
-											<option
-												key={ value }
-												value={ value }
-											>
-												{ label }
-											</option>
-										) ) }
+										{ caps.map(
+											( { label: cLabel, value } ) => (
+												<option
+													key={ value }
+													value={ value }
+												>
+													{ cLabel }
+												</option>
+											)
+										) }
 									</optgroup>
 
 									<option value="other">

@@ -5,9 +5,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 
 import useEditor from './use-editor';
 
-type Props = {};
-
-const Header = ( {}: Props ) => {
+const Header = () => {
 	const { setEditorId } = useEditor();
 
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
@@ -16,6 +14,7 @@ const Header = ( {}: Props ) => {
 		// Restriction List & Load Status.
 		return {
 			restrictions: sel.getRestrictions(),
+			// @ts-ignore temporarily ignore this for now.
 			isLoading: sel.isResolving( 'getRestrictions' ),
 		};
 	}, [] );
@@ -32,6 +31,7 @@ const Header = ( {}: Props ) => {
 					<Spinner />
 				) : (
 					sprintf(
+						/* translators: 1. Number of items */
 						_n( '%d item', '%d items', count, 'content-control' ),
 						count
 					)

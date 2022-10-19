@@ -17,7 +17,7 @@ type Props = {
 	extraActions?: [];
 };
 
-const Section = ( { title, icon, enabled, extraActions, children }: Props ) => {
+const Section = ( { title, icon, enabled, children }: Props ) => {
 	const [ showDropdown, toggleDropdown ] = useState( false );
 
 	return (

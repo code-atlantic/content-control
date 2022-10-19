@@ -7,9 +7,9 @@ import { __ } from '@wordpress/i18n';
 
 import { useList } from '../context';
 
-type Props = {};
+import type { RestrictionStatuses } from '@content-control/core-data';
 
-const statusOptionLabels: Record< Statuses, string > = {
+const statusOptionLabels: Record< RestrictionStatuses, string > = {
 	all: __( 'All', 'content-control' ),
 	publish: __( 'Enabled', 'content-control' ),
 	draft: __( 'Disabled', 'content-control' ),
@@ -17,7 +17,7 @@ const statusOptionLabels: Record< Statuses, string > = {
 	trash: __( 'Trash', 'content-control' ),
 };
 
-const ListFilters = ( props: Props ) => {
+const ListFilters = () => {
 	const { filters = {}, setFilters, restrictions = [] } = useList();
 
 	const filtersBtnRef = useRef< HTMLButtonElement >();
@@ -25,7 +25,7 @@ const ListFilters = ( props: Props ) => {
 	// List of unique statuses from all items.
 	const activeStatusCounts = useMemo(
 		() =>
-			restrictions.reduce< Record< Statuses, number > >(
+			restrictions.reduce< Record< RestrictionStatuses, number > >(
 				( s, r ) => {
 					s[ r.status ] = ( s[ r.status ] ?? 0 ) + 1;
 					s.all++;
@@ -50,10 +50,11 @@ const ListFilters = ( props: Props ) => {
 	/**
 	 * Checks if Status button should be visible.
 	 *
-	 * @param s Status to check
-	 * @returns True if button should be available.
+	 * @param {RestrictionStatuses} s Status to check
+	 * @return {boolean} True if button should be available.
 	 */
-	const isStatusActive = ( s: Statuses ) => activeStatusCounts?.[ s ] > 0;
+	const isStatusActive = ( s: RestrictionStatuses ): boolean =>
+		activeStatusCounts?.[ s ] > 0;
 
 	return (
 		<Dropdown
@@ -61,6 +62,7 @@ const ListFilters = ( props: Props ) => {
 			contentClassName="list-table-filters__popover"
 			position="bottom left"
 			focusOnMount="firstElement"
+			// @ts-ignore this is not typed in WP yet.
 			popoverProps={ { noArrow: false } }
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button

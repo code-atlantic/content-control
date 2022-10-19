@@ -4,6 +4,8 @@ import { __ } from '@wordpress/i18n';
 
 import useSettings from '../../use-settings';
 
+import type { URLOverrideTypes } from '@content-control/core-data';
+
 const CustomRedirects = () => {
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 

@@ -1,14 +1,14 @@
 import { StringParam, useQueryParams } from 'use-query-params';
 
-// WordPress Imports
-import { __ } from '@wordpress/i18n';
-import { applyFilters } from '@wordpress/hooks';
 import {
+	Button,
 	TextControl,
 	ToggleControl,
 	Tooltip,
-	Button,
 } from '@wordpress/components';
+import { applyFilters } from '@wordpress/hooks';
+// WordPress Imports
+import { __ } from '@wordpress/i18n';
 
 // Local Imports
 import useSettings from '../../use-settings';
@@ -19,8 +19,6 @@ interface RegisteredMediaQuery {
 	description?: string;
 	type: string;
 }
-
-type Props = {};
 
 const DeviceMediaQueries = () => {
 	const [ , setParams ] = useQueryParams( {
@@ -172,10 +170,7 @@ const DeviceMediaQueries = () => {
 										view: 'upgrade',
 									} );
 								} }
-								text={ __(
-									'Learn more...',
-									'content-control'
-								) }
+								text={ __( 'Learn more…', 'content-control' ) }
 							/>
 						</span>
 					</Tooltip>

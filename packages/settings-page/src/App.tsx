@@ -12,6 +12,8 @@ import RestrictionsView from './restrictions-view';
 import SettingsView from './settings-view';
 import UpgradeView from './upgrade-view';
 
+import type { TabComponent } from './types';
+
 const App = () => {
 	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
 

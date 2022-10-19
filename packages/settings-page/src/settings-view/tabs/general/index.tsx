@@ -8,9 +8,9 @@ import Section from '../../section';
 import CustomRedirects from './custom-redirects';
 import DeviceMediaQueries from './device-media-queries';
 
-type Props = {};
+import type { TabComponent } from '../../../types';
 
-const GeneralTab = ( props: Props ) => {
+const GeneralTab = () => {
 	// Filtered & mappable list of TabComponent definitions.
 	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 	const sections: SectionList = applyFilters(

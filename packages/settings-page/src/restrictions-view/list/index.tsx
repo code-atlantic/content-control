@@ -1,5 +1,6 @@
 import { ConfirmDialogue, ListTable } from '@content-control/components';
 import { incognito, lockedUser } from '@content-control/icons';
+import { noop } from '@content-control/utils';
 import {
 	Button,
 	Flex,
@@ -19,13 +20,13 @@ import ListBulkActions from './bulk-actions';
 import ListFilters from './filters';
 import ListOptions from './options';
 
-const noop = () => {};
+import type { Restriction } from '@content-control/core-data';
 
 const List = () => {
 	// Get the shared method for setting editor Id & query params.
 	const { setEditorId } = useEditor();
 
-	const [ searchText, setSearchText ] = useState( '' );
+	// const [ searchText, setSearchText ] = useState( '' );
 
 	const [ confirmDialogue, setConfirmDialogue ] = useState< {
 		message: string;
@@ -66,7 +67,7 @@ const List = () => {
 									<Icon icon={ search } />
 									<TextControl
 										placeholder={ __(
-											'Search Restrictions...',
+											'Search Restrictions…',
 											'content-control'
 										) }
 										value={ searchText ?? '' }
@@ -147,7 +148,7 @@ const List = () => {
 													} }
 												/>
 											);
-										case 'title':
+										case 'title': {
 											const isTrash =
 												restriction.status === 'trash';
 											return (
@@ -254,6 +255,7 @@ const List = () => {
 													</div>
 												</>
 											);
+										}
 										case 'restrictedTo':
 											return restriction.settings.who ===
 												'logged_in' ? (
@@ -284,7 +286,7 @@ const List = () => {
 												</Flex>
 											);
 
-										case 'roles':
+										case 'roles': {
 											const { roles, who } =
 												restriction.settings;
 
@@ -328,6 +330,7 @@ const List = () => {
 													) }
 												</Flex>
 											);
+										}
 										default:
 											return (
 												restriction[ col ] ??

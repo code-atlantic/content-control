@@ -1,6 +1,8 @@
 import { settingsStore } from '@content-control/core-data';
 import { useDispatch, useSelect } from '@wordpress/data';
 
+import type { Settings } from '@content-control/core-data';
+
 const useSettings = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
@@ -26,9 +28,8 @@ const useSettings = () => {
 	/**
 	 * Get setting by name.
 	 *
-	 * @param {SettingsState} state        Current state.
-	 * @param {string}        name         Setting to get.
-	 * @param {any}           defaultValue Default value if not already set.
+	 * @param {string} name         Setting to get.
+	 * @param {any}    defaultValue Default value if not already set.
 	 * @return {any} Current value of given setting.
 	 */
 	const getSetting = <

@@ -1,4 +1,4 @@
-type TabComponent = {
+export type TabComponent = {
 	name: string;
 	title: string;
 	className: string;

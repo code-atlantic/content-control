@@ -13,6 +13,8 @@ import { search } from '@wordpress/icons';
 
 import useSettings from './use-settings';
 
+import type { TabComponent } from '../types';
+
 type Props = {
 	tabs: TabComponent[];
 };
@@ -37,7 +39,7 @@ const Header = ( { tabs }: Props ) => {
 						value={ searchText }
 						onChange={ setSearchText }
 						placeholder={ __(
-							'Search Settings...',
+							'Search Settings…',
 							'content-control'
 						) }
 					/>
@@ -61,7 +63,7 @@ const Header = ( { tabs }: Props ) => {
 				onSelect={ ( tabName: string ) => setTab( tabName ) }
 				tabs={ tabs }
 			>
-				{ ( tab ) => <></> }
+				{ () => <></> }
 			</TabPanel>
 		</div>
 	);

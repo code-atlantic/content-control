@@ -1,8 +1,6 @@
-// TODO Migrate to @content-control/components.
 import RuleEngine from '@content-control/rule-engine';
 import { __ } from '@wordpress/i18n';
 
-/* Type Imports */
 import type { EditTabProps } from '.';
 
 /* Global Var Imports */

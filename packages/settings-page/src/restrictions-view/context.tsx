@@ -10,9 +10,14 @@ import {
 	useState,
 } from '@wordpress/element';
 
+import type {
+	RestrictionsState,
+	RestrictionsStore,
+} from '@content-control/core-data';
+
 type Filters = {
-	status?: string | null;
-	searchText?: string | null;
+	status?: string;
+	searchText?: string;
 };
 
 type ListContext = {
@@ -48,7 +53,7 @@ const defaultContext: ListContext = {
 
 const Context = createContext< ListContext >( defaultContext );
 
-const { Provider, Consumer } = Context;
+const { Provider, Consumer } = Context as React.Context< ListContext >;
 
 type ProviderProps = {
 	value?: Partial< ListContext >;
@@ -77,6 +82,7 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 		// Restriction List & Load Status.
 		return {
 			restrictions: sel.getRestrictions(),
+			// @ts-ignore temporarily ignore this for now.
 			isLoading: sel.isResolving( 'getRestrictions' ),
 			isDeleting: sel.isDispatching( 'deleteRestriction' ),
 		};

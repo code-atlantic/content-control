@@ -5,11 +5,16 @@ import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
 import { link } from '@wordpress/icons';
 
-import { documenationUrl } from '../../../../../src/config';
 import useEditor from '../use-editor';
 import ContentTab from './content';
 import GeneralTab from './general';
 import ProtectionTab from './protection';
+
+export const documenationUrl =
+	'https://code-atlantic.com/products/content-control/';
+
+import type { Restriction } from '@content-control/core-data';
+import type { TabComponent } from '../../types';
 
 export type EditProps = {
 	onSave?: ( values: Restriction ) => void;
@@ -25,7 +30,7 @@ export type EditTabProps = EditProps & {
 const noop = () => {};
 
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
-	const { tab, setTab, setEditorId } = useEditor();
+	const { tab, setTab } = useEditor();
 
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { editorId, isEditorActive, values, isSaving } = useSelect(
@@ -73,8 +78,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 
 	/**
 	 * Trigger the correct save action.
-	 *
-	 * @returns Nothing
 	 */
 	function saveRestriction() {
 		if ( ! editorId || ! values ) {
@@ -95,7 +98,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	/**
 	 * Update settings for the given restriction.
 	 *
-	 * @param newSettings Updated settings.
+	 * @param {Partial< Restriction[ 'settings' ] >} newSettings Updated settings.
 	 */
 	const updateSettings = (
 		newSettings: Partial< Restriction[ 'settings' ] >
@@ -112,9 +115,9 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	/**
 	 * Checks of the set values are valid.
 	 *
-	 * @returns True when set values are valid.
+	 * @return {boolean} True when set values are valid.
 	 */
-	const isSetValid = () => {
+	const isSetValid = (): boolean => {
 		return values && [ values.title.length > 0 ].indexOf( false ) === -1;
 	};
 
@@ -159,6 +162,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 
 	// Define the modal title dynamically using editorId.
 	const modalTitle = sprintf(
+		// translators: 1. Id of set to edit.
 		__( 'Restriction Editor%s', 'content-control' ),
 		editorId === 'new'
 			? ': ' + __( 'New Restriction', 'content-control' )

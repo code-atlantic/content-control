@@ -3,7 +3,7 @@ import './editor.scss';
 import classNames from 'classnames';
 
 import { settingsStore } from '@content-control/core-data';
-import { block } from '@content-control/icons';
+import { block as blockIcon } from '@content-control/icons';
 import {
 	Icon,
 	Notice,
@@ -19,9 +19,7 @@ import { search } from '@wordpress/icons';
 import Section from '../../section';
 import useSettings from '../../use-settings';
 
-type Props = {};
-
-const BlockManagerTab = ( props: Props ) => {
+const BlockManagerTab = () => {
 	const {
 		settings: { excludedBlocks = [] },
 		stageUnsavedChanges: updateSettings,
@@ -36,8 +34,6 @@ const BlockManagerTab = ( props: Props ) => {
 	);
 
 	const [ searchText, setSearchText ] = useState( '' );
-
-	console.log( knownBlockTypes );
 
 	const isBlockDisabled = ( blockName: string ) =>
 		excludedBlocks?.indexOf( blockName ) >= 0;
@@ -94,7 +90,7 @@ const BlockManagerTab = ( props: Props ) => {
 	return (
 		<Section
 			title={ __( 'Block Manager', 'content-control' ) }
-			icon={ block }
+			icon={ blockIcon }
 		>
 			<>
 				<header>
@@ -111,7 +107,7 @@ const BlockManagerTab = ( props: Props ) => {
 						<Icon icon={ search } />
 						<TextControl
 							placeholder={ __(
-								'Search Blocks...',
+								'Search Blocks…',
 								'content-control'
 							) }
 							value={ searchText }
@@ -135,7 +131,10 @@ const BlockManagerTab = ( props: Props ) => {
 										) }
 									>
 										<div className="block-icon">
-											<Icon icon={ block } size={ 30 } />
+											<Icon
+												icon={ blockIcon }
+												size={ 30 }
+											/>
 										</div>
 										<div className="block-info">
 											<h4 className="block-name">

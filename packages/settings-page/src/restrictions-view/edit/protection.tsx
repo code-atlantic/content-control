@@ -1,12 +1,12 @@
 import { RadioButtonControl, URLControl } from '@content-control/components';
+import { clamp } from '@content-control/utils';
 import { CheckboxControl, TextareaControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-/* Internal Imports */
 import { protectionMethodOptions, redirectTypeOptions } from '../options';
 
-/* Type Imports */
 import type { EditTabProps } from '.';
+import type { Restriction } from '@content-control/core-data';
 
 const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 	// Shortcut settings access.
@@ -16,12 +16,7 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 	const customMessageRowEst = settings.customMessage?.length / 80;
 
 	// Cap upper and lower limit on rows.
-	const customMessageRows =
-		customMessageRowEst < 4
-			? 4
-			: customMessageRowEst > 20
-			? 30
-			: customMessageRowEst;
+	const customMessageRows = clamp( customMessageRowEst, 4, 20 );
 
 	return (
 		<div className="protection-tab">

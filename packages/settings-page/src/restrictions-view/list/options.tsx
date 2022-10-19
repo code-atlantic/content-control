@@ -9,12 +9,11 @@ import {
 import { __ } from '@wordpress/i18n';
 import { bug, moreVertical, upload } from '@wordpress/icons';
 
-type Props = {};
-
-const ListOptions = ( props: Props ) => {
+const ListOptions = () => {
 	const handleUpload = ( uploadData: string ) => {
 		const data = JSON.parse( uploadData );
 		// Temporary placeholder for import handling.
+		// eslint-disable-next-line no-alert
 		alert( `Found ${ data?.restrictions?.length } items.` );
 	};
 
@@ -24,6 +23,7 @@ const ListOptions = ( props: Props ) => {
 			contentClassName="list-table-options-menu__popover"
 			position="bottom left"
 			focusOnMount="firstElement"
+			// @ts-ignore this does function correctly, not yet typed in WP.
 			popoverProps={ { noArrow: false } }
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
@@ -54,7 +54,7 @@ const ListOptions = ( props: Props ) => {
 					<Button
 						icon={ bug }
 						text={ __( 'Troubleshoot', 'content-control' ) }
-						onClick={ () => console.log( 'troubleshoot' ) }
+						onClick={ () => {} }
 					/>
 				</NavigableMenu>
 			) }

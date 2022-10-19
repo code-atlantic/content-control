@@ -7,6 +7,8 @@ import {
 import { __ } from '@wordpress/i18n';
 import { home, link, login } from '@wordpress/icons';
 
+import type { Restriction } from '@content-control/core-data';
+
 export const whoOptions: {
 	value: Restriction[ 'who' ];
 	label: string;

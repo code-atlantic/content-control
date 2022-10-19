@@ -10,6 +10,8 @@ import { restrictionsStore } from '@content-control/core-data';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 
+import type { EditorId } from '@content-control/core-data';
+
 const useEditor = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { isEditorActive, editorId } = useSelect( ( select ) => {
@@ -70,7 +72,7 @@ const useEditor = () => {
 	 * NOTE: It is important that both get updated at the same time, to prevent
 	 * infinite state updates via useEffect above.
 	 *
-	 * @param id Id to edit.
+	 * @param {number|'new'|undefined} id Id to edit.
 	 */
 	const setEditorId = ( id: number | 'new' | undefined ) => {
 		setQueryParams( {

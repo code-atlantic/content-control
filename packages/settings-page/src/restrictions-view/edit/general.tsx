@@ -2,15 +2,14 @@ import {
 	RadioButtonControl,
 	SearchableMulticheckControl,
 } from '@content-control/components';
+import { clamp } from '@content-control/utils';
 import { Notice, TextareaControl, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { search } from '@wordpress/icons';
 
 import { whoOptions } from '../options';
 
-/* Type Imports */
 import type { EditTabProps } from '.';
-import { clamp } from '@content-control/utils';
 
 /* Global Var Imports */
 const { userRoles } = contentControlSettingsPage;
@@ -42,7 +41,7 @@ const GeneralTab = ( {
 			<TextControl
 				label={ __( 'Restriction label', 'content-control' ) }
 				hideLabelFromVision={ true }
-				placeholder={ __( 'Name...', 'content-control' ) }
+				placeholder={ __( 'Name…', 'content-control' ) }
 				className="title-field"
 				value={ values.title }
 				onChange={ ( title ) => updateValues( { title } ) }
@@ -53,7 +52,7 @@ const GeneralTab = ( {
 				scrolling={ descriptionRows > 5 ? 'auto' : 'no' }
 				label={ __( 'Restriction description', 'content-control' ) }
 				hideLabelFromVision={ true }
-				placeholder={ __( 'Add description...', 'content-control' ) }
+				placeholder={ __( 'Add description…', 'content-control' ) }
 				className="description-field"
 				value={ values.description }
 				onChange={ ( description ) => updateValues( { description } ) }
@@ -79,7 +78,7 @@ const GeneralTab = ( {
 						'content-control'
 					) }
 					searchIcon={ search }
-					placeholder={ __( 'Search roles...', 'content-control' ) }
+					placeholder={ __( 'Search roles…', 'content-control' ) }
 					className="is-large"
 					value={ cleanedRoles }
 					onChange={ ( roles ) => updateSettings( { roles } ) }

@@ -8,6 +8,8 @@ import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { lifesaver } from '@wordpress/icons';
 
+import type { TabComponent } from './types';
+
 type Props = {
 	tabs: TabComponent[];
 };

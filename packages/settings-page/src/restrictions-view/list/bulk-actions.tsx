@@ -29,9 +29,7 @@ import { cleanRestrictionData } from './utils';
 
 const { version } = contentControlSettingsPage;
 
-type Props = {};
-
-const ListBulkActions = ( props: Props ) => {
+const ListBulkActions = () => {
 	const registry = useRegistry();
 
 	const {
@@ -71,11 +69,13 @@ const ListBulkActions = ( props: Props ) => {
 				contentClassName="list-table-bulk-actions__popover"
 				position="bottom left"
 				focusOnMount="firstElement"
+				// @ts-ignore this is not typed in WP yet.
 				popoverProps={ { noArrow: false } }
 				renderToggle={ ( { isOpen, onToggle } ) => (
 					<Flex>
 						<span className="selected-items">
 							{ sprintf(
+								// translators: 1. number of items.
 								_n(
 									'%d item selected',
 									'%d items selected',
@@ -137,6 +137,7 @@ const ListBulkActions = ( props: Props ) => {
 							icon={ link }
 							onClick={ () => {
 								// This will only rerender the components once.
+								// @ts-ignore not yet typed in WP.
 								registry.batch( () => {
 									bulkSelection.forEach( ( id ) => {
 										const restriction =
@@ -158,6 +159,7 @@ const ListBulkActions = ( props: Props ) => {
 							icon={ linkOff }
 							onClick={ () => {
 								// This will only rerender the components once.
+								// @ts-ignore not yet typed in WP.
 								registry.batch( () => {
 									bulkSelection.forEach( ( id ) => {
 										const restriction =
@@ -183,6 +185,7 @@ const ListBulkActions = ( props: Props ) => {
 								setConfirmDialogue( {
 									isDestructive: true,
 									message: sprintf(
+										// translators: 1. number of items
 										__(
 											'Are you sure you want to trash %d items?',
 											'content-control'
@@ -191,6 +194,7 @@ const ListBulkActions = ( props: Props ) => {
 									),
 									callback: () => {
 										// This will only rerender the components once.
+										// @ts-ignore not yet typed in WP.
 										registry.batch( () => {
 											bulkSelection.forEach( ( id ) =>
 												deleteRestriction( id )
@@ -212,6 +216,7 @@ const ListBulkActions = ( props: Props ) => {
 								setConfirmDialogue( {
 									isDestructive: true,
 									message: sprintf(
+										// translators: 1. restriction label.
 										__(
 											'Are you sure you want to premanently delete %d items?',
 											'content-control'
@@ -220,6 +225,7 @@ const ListBulkActions = ( props: Props ) => {
 									),
 									callback: () => {
 										// This will only rerender the components once.
+										// @ts-ignore not yet typed in WP.
 										registry.batch( () => {
 											bulkSelection.forEach( ( id ) =>
 												deleteRestriction( id, true )
