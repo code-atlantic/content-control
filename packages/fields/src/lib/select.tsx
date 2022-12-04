@@ -1,23 +1,23 @@
 import { SelectControl } from '@wordpress/components';
 
+import { parseFieldOptions } from './utils';
+
 import type {
 	MultiselectFieldProps,
-	OptGroups,
-	Options,
+	OptGroups as OptGroupsProp,
+	Options as OptsProp,
 	SelectFieldProps,
 	WithOnChange,
 } from '../types';
-import { parseFieldOptions } from './utils';
-
 /**
  * Options|OptGroups Type check handler.
  *
- * @param {Options|OptGroups} options Options to check for groups.
+ * @param {OptsProp|OptGroupsProp} options Options to check for groups.
  * @return {boolean} True if optgroups found.
  */
 export const hasOptGroups = (
-	options: Options | OptGroups
-): options is OptGroups =>
+	options: OptsProp | OptGroupsProp
+): options is OptGroupsProp =>
 	Object.entries( options ).reduce( ( hasGroups, [ _key, _value ] ) => {
 		if ( true === hasGroups ) {
 			return hasGroups;
@@ -30,7 +30,7 @@ export const hasOptGroups = (
 		);
 	}, false );
 
-type OptionsProps = { options: Options };
+type OptionsProps = { options: OptsProp };
 
 const Options = ( { options }: OptionsProps ) => (
 	<>
@@ -42,7 +42,7 @@ const Options = ( { options }: OptionsProps ) => (
 	</>
 );
 
-const OptGroups = ( { optGroups }: { optGroups: OptGroups } ) => (
+const OptGroups = ( { optGroups }: { optGroups: OptGroupsProp } ) => (
 	<>
 		{ Object.entries( optGroups ).map( ( [ label, options ] ) => (
 			<optgroup key={ label } label={ label }>
