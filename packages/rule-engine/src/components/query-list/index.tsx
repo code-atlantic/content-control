@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
 import { QueryContextProvider, useOptions, useQuery } from '../../contexts';
-import { newGroup, newRule } from '../../templates';
+import { newGroup, newRule } from '../../utils';
 import Item from '../item';
 import Sortablelist from './sortable-list';
 

@@ -5,7 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
 import { useQuery } from '../../contexts';
-import { newRule } from '../../templates';
+import { newRule } from '../../utils';
 import ItemActions from '../item/actions';
 
 import type { QueryContextProps } from '../../types';
