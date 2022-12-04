@@ -1,6 +1,7 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
+		"strict": true,
 		"rootDir": "src",
 		"outDir": "build",
 		"declarationDir": "build-types"
@@ -17,6 +18,9 @@
 		},
 		{
 			"path": "../rule-engine"
+		},
+		{
+			"path": "../utils"
 		},
 	],
 }
