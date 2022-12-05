@@ -1,20 +1,26 @@
-import classnames from 'classnames';
 import { blockControlsEnabled } from './utils';
+
+import type { Block } from '@wordpress/blocks';
+import type { BlockExtraProps, BlockInstanceWithControls } from './types';
 
 /**
  * Add css classes to block element wrapper.
  *
- * @param {Object}         props                      Element props.
- * @param {Object}         blockType                  Blocks object.
- * @param {Object}         attributes                 Blocks attributes.
- * @param {Object|boolean} attributes.contentControls Block control settings.
+ * @param {BlockExtraProps}                           props      Element props.
+ * @param {Block}                                     blockType  Blocks object.
+ * @param {BlockInstanceWithControls[ 'attributes' ]} attributes Blocks attributes.
  *
  * @return {Object} Block element props..
  */
 const addWrapperClasses = (
-	props,
-	blockType,
-	{ contentControls = {}, ...attributes }
+	props: BlockExtraProps,
+	blockType: Block,
+	{
+		contentControls = {
+			enabled: false,
+			rules: {},
+		},
+	}: BlockInstanceWithControls[ 'attributes' ]
 ) => {
 	const { enabled: controlsEnabled = false, rules = {} } = contentControls;
 

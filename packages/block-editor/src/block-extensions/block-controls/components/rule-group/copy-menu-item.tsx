@@ -1,10 +1,18 @@
 import classnames from 'classnames';
 
-import { MenuItem, Spinner } from '@wordpress/components';
+import { Button, MenuItem, Spinner } from '@wordpress/components';
 import { useCopyToClipboard } from '@wordpress/compose';
-import { useRef, useEffect, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
+import { __, _x } from '@wordpress/i18n';
 import { check, copy } from '@wordpress/icons';
-import { _x, __ } from '@wordpress/i18n';
+
+type Props = {
+	text: string;
+	className?: string;
+	children?: React.ReactNode;
+	onCopy: () => void;
+	onFinish: () => void;
+} & Pick< Button.Props, 'icon' >;
 
 const CopyMenuItem = ( {
 	className,
@@ -13,12 +21,12 @@ const CopyMenuItem = ( {
 	onFinish,
 	text,
 	...buttonProps
-} ) => {
-	const [ status, setStatus ] = useState( null );
+}: Props ) => {
+	const [ status, setStatus ] = useState< string | null >( null );
 
-	const timeoutId = useRef( null );
+	const timeoutId = useRef< ReturnType< typeof setTimeout > >();
 
-	const ref = useCopyToClipboard( text, () => {
+	const ref = useCopyToClipboard< HTMLButtonElement >( text, () => {
 		onCopy();
 		setStatus( 'loading' );
 		clearTimeout( timeoutId.current );
@@ -57,7 +65,7 @@ const CopyMenuItem = ( {
 			case 'loading':
 				return (
 					<Spinner
-						className={ 'test' }
+						// @ts-ignore - Undcoumented, but accepts all props.
 						style={ {
 							width: 16,
 							height: 16,

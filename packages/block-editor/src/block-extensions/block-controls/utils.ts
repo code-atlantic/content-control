@@ -1,5 +1,7 @@
-import { applyFilters } from '@wordpress/hooks';
 import { hasBlockSupport } from '@wordpress/blocks';
+import { applyFilters } from '@wordpress/hooks';
+
+import type { Block } from '@wordpress/blocks';
 
 const {
 	allowedBlocks = [],
@@ -10,27 +12,30 @@ const {
 /**
  * Array of explicitly allowed block types.
  *
- * @type {Array}
+ * @type {string[]}
  */
-const allowed = applyFilters( 'contentControl.allowedBlocks', allowedBlocks );
+const allowed: string[] = applyFilters(
+	'contentControl.allowedBlocks',
+	allowedBlocks
+) as string[];
 
 /**
  * Array of explicitly excluded block types.
  *
- * @type {Array}
+ * @type {string[]}
  */
-const excluded = applyFilters(
+const excluded: string[] = applyFilters(
 	'contentControl.excludedBlocks',
 	excludedBlocks
-);
+) as string[];
 
 /**
- *\Check if block controls should be enabled for given block type.
+ * Check if block controls should be enabled for given block type.
  *
- * @param {Object} settings Object containing block type settings declarations.
+ * @param {Block} settings Object containing block type settings declarations.
  * @return {boolean} Whether block controls should be anbled for given block type.
  */
-const blockControlsEnabled = ( settings ) => {
+const blockControlsEnabled = ( settings: Block ): boolean => {
 	const { name } = settings;
 
 	// Force compatiblity mode for older gutenberg blocks.

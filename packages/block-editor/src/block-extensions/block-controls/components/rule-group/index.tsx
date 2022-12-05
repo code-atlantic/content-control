@@ -1,36 +1,27 @@
-/**
- * External Imports
- */
-import classNames from 'classnames';
-
-/**
- * WordPress Imports
- */
-import { Children, cloneElement, isValidElement } from '@wordpress/element';
-
-/**
- * Internal Imports.
- */
-import RuleGroupHeader from './header';
-
-/**
- * Style Imports
- */
 import './index.scss';
 
-/**
- * RuleGroup component.
- *
- * @param {Object} props          Object container required props.
- * @param          props.label
- * @param          props.groupId
- * @param          props.icon
- * @param          props.rules
- * @param          props.setRules
- * @param          props.defaults
- * @param          props.children
- */
-const RuleGroup = ( {
+import classNames from 'classnames';
+
+import { Children, cloneElement, isValidElement } from '@wordpress/element';
+
+import RuleGroupHeader from './header';
+
+import type { Icon } from '@wordpress/components';
+import type { RuleGroup } from '../../types';
+
+type Props = {
+	label: string;
+	groupId: string;
+	icon: Icon.IconType< any >;
+	rules: any;
+	setRules: ( rules: any ) => void;
+	defaults: {
+		[ key: string ]: any;
+	};
+	children: NonNullable< React.ReactNode > | NonNullable< React.ReactNode >[];
+};
+
+const RuleGroupComponent = ( {
 	label,
 	groupId,
 	icon,
@@ -40,7 +31,7 @@ const RuleGroup = ( {
 	children,
 	// isOpened = false,
 	...extraChildProps
-} ) => {
+}: Props ) => {
 	const { [ groupId ]: groupRules = null } = rules;
 
 	const isOpened = null !== groupRules;
@@ -50,46 +41,45 @@ const RuleGroup = ( {
 	 *
 	 * This will replace the entire group object with the newRules.
 	 *
-	 * @param {Object|Array|null} newRules New rules to save for group.
-	 *
-	 * @return {void}
+	 * @param {RuleGroup} newRules New rules to save for group.
 	 */
-	const setGroupRules = ( newRules ) => {
+	const setGroupRules = ( newRules: RuleGroup | null ) =>
 		setRules( {
 			...rules,
 			[ groupId ]: newRules,
 		} );
-	};
 
 	/**
 	 * Append/update rules for the group.
 	 *
-	 * @param {Object} newRules Rules to append to the group settings.
-	 * @return {void}
+	 * @param {RuleGroup} newRules Rules to append to the group settings.
 	 */
-	const updateGroupRules = ( newRules ) => {
+	const updateGroupRules = ( newRules: RuleGroup | null ) =>
 		setGroupRules( {
 			...groupRules,
 			...newRules,
 		} );
-	};
 
 	/**
 	 * Render children with additional props.
 	 */
-	const childrenWithProps = Children.map( children, ( child ) => {
-		// Checking isValidElement is the safe way and avoids a typescript
-		// error too.
-		if ( isValidElement( child ) ) {
-			return cloneElement( child, {
-				...extraChildProps,
-				groupRules,
-				setGroupRules,
-				updateGroupRules,
-			} );
-		}
-		return child;
-	} );
+	const ChildrenWithProps = () => (
+		<>
+			{ Children.map( children, ( child ) => {
+				// Checking isValidElement is the safe way and avoids a typescript
+				// error too.
+				if ( isValidElement( child ) ) {
+					return cloneElement( child, {
+						...extraChildProps,
+						groupRules,
+						setGroupRules,
+						updateGroupRules,
+					} );
+				}
+				return child;
+			} ) }
+		</>
+	);
 
 	return (
 		<div
@@ -100,24 +90,20 @@ const RuleGroup = ( {
 			] ) }
 		>
 			<RuleGroupHeader
-				headerProps={ {
-					className: 'cc__rules-group__header',
-				} }
 				label={ label }
 				isOpened={ isOpened }
 				icon={ icon }
 				setGroupRules={ setGroupRules }
-				updateGroupRules={ updateGroupRules }
 				groupRules={ groupRules }
 				groupDefaults={ defaults[ groupId ] }
 			/>
 			{ isOpened && (
 				<div className="cc__rules-group__body">
-					{ childrenWithProps }
+					<ChildrenWithProps />
 				</div>
 			) }
 		</div>
 	);
 };
 
-export default RuleGroup;
+export default RuleGroupComponent;

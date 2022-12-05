@@ -26,21 +26,23 @@
  * - Requires using filters to register each component for proper ordering.
  */
 
-import { __ } from '@wordpress/i18n';
-
+import { noop } from '@content-control/utils';
 import {
-	SlotFillProvider,
-	Slot,
-	Fill,
 	__experimentalToolsPanel as ToolsPanel,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	Fill,
+	Slot,
+	SlotFillProvider,
 } from '@wordpress/components';
-import { applyFilters, addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
+import { __ } from '@wordpress/i18n';
 
-import ConditionalRules from '../conditional-rules';
-import DeviceRules from '../device-rules';
+import ConditionalRules from './conditional-rules';
+import DeviceRules from './device-rules';
 
-const panelId = 'contctrl-rules-panel';
+import type { RulePanel } from '../../types';
+
+const toolsPanelId = 'contctrl-rules-panel';
 
 addFilter(
 	'contentControl.blockRules.rulePanels',
@@ -70,16 +72,21 @@ addFilter(
 	10
 );
 
-const RulesPanel = ( props ) => {
-	const { rules = {}, updateRules = () => {} } = props;
+type Props = {
+	rules: never;
+	updateRules: ( value: never ) => void;
+};
+
+const RulesPanel = ( props: Props ) => {
+	const { rules = {}, updateRules = noop } = props;
 
 	/**
 	 * Check if given panel is active.
 	 *
 	 * @param {string} panelId Panel ID.
-	 * @return {boolean}
+	 * @return {boolean} Whether or not the panel is active.
 	 */
-	const isPanelActive = ( panelId ) =>
+	const isPanelActive = ( panelId: string ): boolean =>
 		typeof rules[ panelId ] !== 'undefined' && rules[ panelId ];
 
 	/**
@@ -104,7 +111,7 @@ const RulesPanel = ( props ) => {
 		'contentControl.blockRules.rulePanels',
 		[],
 		props
-	);
+	) as RulePanel[];
 
 	return (
 		<SlotFillProvider>
@@ -113,22 +120,22 @@ const RulesPanel = ( props ) => {
 				{ rulePanels.map( ( rulePanel ) => {
 					const {
 						name,
-						onSelect = () => {},
-						onDeselect = () => {},
-						resetAllFilter = () => {},
+						onSelect = noop,
+						onDeselect = noop,
+						resetAllFilter = noop,
 						items = <></>,
 					} = rulePanel;
 
 					return (
 						<ToolsPanelItem
+							key={ name }
 							{ ...rulePanel }
-							panelId={ panelId }
+							panelId={ toolsPanelId }
 							hasValue={ () => isPanelActive( name ) }
-							onSelect={ () =>
-								updateRules( { [ name ]: {} } ) &&
-								onSelect &&
-								onSelect()
-							}
+							onSelect={ () => {
+								updateRules( { [ name ]: {} } );
+								onSelect();
+							} }
 							onDeselect={ () =>
 								updateRules( {
 									[ name ]: undefined,
@@ -164,7 +171,7 @@ const RulesPanel = ( props ) => {
 					'content-control'
 				) }
 				resetAll={ resetAll }
-				panelId={ panelId }
+				panelId={ toolsPanelId }
 			>
 				<Slot name="ContentControlBlockRulesPanels" />
 			</ToolsPanel>

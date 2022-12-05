@@ -2,17 +2,24 @@ import classnames from 'classnames';
 
 import {
 	Button,
-	MenuItem,
-	Modal,
-	TextControl,
-	ToggleControl,
 	Flex,
 	FlexItem,
+	MenuItem,
+	Modal,
 	Notice,
+	TextControl,
+	ToggleControl,
 } from '@wordpress/components';
-import { useRef, useEffect, useState } from '@wordpress/element';
-import { upload } from '@wordpress/icons';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { upload } from '@wordpress/icons';
+
+type Props = {
+	className?: string;
+	children?: React.ReactNode;
+	onSave: ( values: string, merge: boolean ) => void;
+	onFinish: () => void;
+} & Pick< Button.Props, 'icon' >;
 
 const PasteMenuItem = ( {
 	className,
@@ -20,7 +27,7 @@ const PasteMenuItem = ( {
 	onSave,
 	onFinish,
 	...buttonProps
-} ) => {
+}: Props ) => {
 	const defaults = {
 		modalOpen: false,
 		noticeVisible: false,
@@ -31,7 +38,7 @@ const PasteMenuItem = ( {
 	};
 
 	const [ state, setState ] = useState( defaults );
-	const timeoutId = useRef( null );
+	const timeoutId = useRef< ReturnType< typeof setTimeout > >();
 
 	const { modalOpen, noticeVisible, data } = state;
 

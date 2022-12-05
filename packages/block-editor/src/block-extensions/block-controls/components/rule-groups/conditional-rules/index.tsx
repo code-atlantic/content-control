@@ -1,5 +1,6 @@
-/** WordPress Imports */
+import RuleEngine, { newSet } from '@content-control/rule-engine';
 import {
+	__experimentalConfirmDialog as ConfirmDialog,
 	Button,
 	Flex,
 	FlexItem,
@@ -8,20 +9,16 @@ import {
 	Notice,
 	SelectControl,
 	TextControl,
-	// Replace this with @content-control/components ConfirmDialogue & rename it.
-	__experimentalConfirmDialog as ConfirmDialog,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { _x, __ } from '@wordpress/i18n';
+import { __, _x } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
-/** Internal Imports */
-//! Fix this with proper @content-control/rule-engine refs.
-import { newSet } from '../../../../../../../rule-engine/src/templates';
-import RuleEngine from '../../../../../../../rule-engine';
+import type { Item, Query, QuerySet } from '@content-control/rule-engine';
+
 const { registeredRules } = contentControlRuleEngine;
 
-const verbs = {
+export const verbs = {
 	are: __( 'Are', 'content-control' ),
 	arenot: __( 'Are Not', 'content-control' ),
 	is: __( 'Is', 'content-control' ),

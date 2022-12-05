@@ -1,14 +1,25 @@
 import { applyFilters } from '@wordpress/hooks';
+
 import { blockControlsEnabled } from './utils';
+
+import type { Block, BlockSupports } from '@wordpress/blocks';
+
+type Mutable< Type > = {
+	-readonly [ Key in keyof Type ]: Type[ Key ];
+};
 
 /**
  * Add custom attributes for handling & targeting & visibility.
  *
- * @param {Object} settings Settings for the block.
+ * @param {Block} settings Settings for the block.
  *
- * @return {Object} settings Modified settings.
+ * @return {Block} settings Modified settings.
  */
-const addAttributes = ( settings ) => {
+const addAttributes = (
+	settings: Mutable<
+		Block & { supports: BlockSupports & { [ key: string ]: any } }
+	>
+): Block => {
 	const enabled = blockControlsEnabled( settings );
 
 	// Add contentControl support property to blocks for easy detection.
@@ -34,7 +45,7 @@ const addAttributes = ( settings ) => {
  * @param {Object} settings Settings for the block.
  * @return {Object} attributes Modified settings.
  */
-const controlAttributes = ( settings ) => {
+const controlAttributes = ( settings: object ): object => {
 	return applyFilters(
 		'contentControl.blockControls.controlAttributes',
 		{
@@ -94,7 +105,7 @@ const controlAttributes = ( settings ) => {
 			},
 		},
 		settings
-	);
+	) as object;
 };
 
 export { addAttributes, controlAttributes };

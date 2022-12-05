@@ -1,9 +1,17 @@
+import { DeviceToggle } from '@content-control/components';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { mobile, tablet, desktop } from '@wordpress/icons';
-import { DeviceToggle } from '@content-control/components';
+import { desktop, mobile, tablet } from '@wordpress/icons';
 
-const DeviceRules = ( props ) => {
+import type {
+	DeviceRules as DeviceRulesProps,
+	DeviceScreenSizes,
+	GroupOptionProps,
+} from '../../../types';
+
+type Props = GroupOptionProps< DeviceRulesProps & {} >;
+
+const DeviceRules = ( props: Props ) => {
 	const { groupRules, setGroupRules } = props;
 
 	const screenSizes = applyFilters(
@@ -16,11 +24,11 @@ const DeviceRules = ( props ) => {
 				icon: desktop,
 			},
 		}
-	);
+	) as DeviceScreenSizes;
 
 	const { hideOn = {} } = groupRules;
 
-	const toggleDeviceRule = ( device, hide ) => {
+	const toggleDeviceRule = ( device: string, hide: boolean ) =>
 		setGroupRules( {
 			...groupRules,
 			hideOn: {
@@ -28,7 +36,6 @@ const DeviceRules = ( props ) => {
 				[ device ]: !! hide,
 			},
 		} );
-	};
 
 	return (
 		<>

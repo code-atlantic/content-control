@@ -1,17 +1,15 @@
+import { newUUID } from '@content-control/rule-engine';
+import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-
-import { SlotFillProvider, Slot, Fill } from '@wordpress/components';
+import { tablet } from '@wordpress/icons';
+import { Path, SVG } from '@wordpress/primitives';
 
 import RuleGroup from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import { tablet /* , blockMeta */ } from '@wordpress/icons';
-
-import { SVG, Path } from '@wordpress/primitives';
-import type { QuerySet } from '../../../../../../query-builder/types';
-import { newUUID } from '../../../../../../query-builder/templates';
-
+import type { QuerySet } from '@content-control/rule-engine';
+import type { Rules as RulesType } from '../../types';
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path
@@ -67,25 +65,22 @@ const defaults: BlockAttributes = {
 	},
 };
 
+type Props = {
+	rules: RulesType;
+	setRules: ( rules: RulesType ) => void;
+};
+
 const RuleGroups = ( {
 	rules = {},
 	setRules = ( newRules ) => {},
 	...props
-} ) => {
-	/**
-	 * Check if given rule group is active.
-	 *
-	 * @param {string} groupId Group ID.
-	 * @return {boolean} Whether the group is enabled for this block or not.
-	 */
-	const ruleGroupEnabled = ( groupId ) => typeof rules[ groupId ] !== null;
-
+}: Props ) => {
 	/**
 	 * Reset all panels to defaults.
 	 *
 	 * @return {void}
 	 */
-	const resetAll = () => {
+	const resetAll = (): void => {
 		const newRules = Object.keys( rules ).reduce(
 			( accumulator, groupId ) => ( {
 				...accumulator,
@@ -103,7 +98,6 @@ const RuleGroups = ( {
 				<RuleGroup
 					label={ __( 'Device Rules', 'content-control' ) }
 					icon={ tablet }
-					isOpened={ ruleGroupEnabled( 'device' ) }
 					groupId="device"
 					rules={ rules }
 					setRules={ setRules }
@@ -117,7 +111,6 @@ const RuleGroups = ( {
 				<RuleGroup
 					label={ __( 'Conditional Rules', 'content-controls' ) }
 					icon={ blockMeta }
-					isOpened={ ruleGroupEnabled( 'conditional' ) }
 					groupId="conditional"
 					rules={ rules }
 					setRules={ setRules }

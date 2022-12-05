@@ -1,152 +1,33 @@
+import { noop } from '@content-control/utils';
 import {
+	__experimentalHeading as Heading,
+	__experimentalHStack as HStack,
 	Button,
 	DropdownMenu,
 	Icon,
-	__experimentalHStack as HStack,
-	__experimentalText as Text,
-	__experimentalHeading as Heading,
-	MenuGroup,
-	MenuItem,
 } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { __, _x, sprintf } from '@wordpress/i18n';
+import { moreVertical, plus } from '@wordpress/icons';
 
-import {
-	moreVertical,
-	plus,
-	check,
-	trash,
-	rotateLeft,
-	copy,
-} from '@wordpress/icons';
-import { sprintf, _x, __ } from '@wordpress/i18n';
+import DefaultGroupOptions from './default-group-options';
+import OptionalGroupOptions from './optional-group-options';
 
-const noop = () => {};
+import type {
+	AdditionalGroupOptionProps,
+	GroupOptionProps,
+	GroupRules,
+} from '../../types';
 
-import CopyMenuItem from './copy-menu-item';
-import PasteMenuItem from './paste-menu-item';
-
-const DefaultGroupOptions = ( {
-	groupDefaults,
-	groupRules,
-	setGroupRules,
-	onClose,
-	labelText,
-} ) => {
-	const [ status, setStatus ] = useState( null );
-
-	if ( ! labelText ) {
-		return <></>;
-	}
-
-	return (
-		<>
-			<MenuGroup>
-				<CopyMenuItem
-					text={ JSON.stringify( groupRules ) }
-					onCopy={ () => {
-						setStatus( 'copied' );
-					} }
-					onFinish={ () => {
-						setStatus( null );
-					} }
-					icon={ status === 'copied' ? check : copy }
-				>
-					{ <Text>{ __( 'Copy', 'content-control' ) }</Text> }
-				</CopyMenuItem>
-				<PasteMenuItem
-					onSave={ ( newValues, merge = false ) => {
-						setGroupRules(
-							merge
-								? {
-										...groupRules,
-										...JSON.parse( newValues ),
-								  }
-								: JSON.parse( newValues )
-						);
-					} }
-					onFinish={ () => {
-						setStatus( null );
-						onClose();
-					} }
-					icon={ status === 'copied' ? check : copy }
-				>
-					{ <Text>{ __( 'Paste', 'content-control' ) }</Text> }
-				</PasteMenuItem>
-				<MenuItem
-					icon={ rotateLeft }
-					variant={ 'tertiary' }
-					onClick={ () => {
-						setGroupRules( groupDefaults );
-						onClose();
-					} }
-				>
-					<Text>{ __( 'Restore Defaults', 'content-control' ) }</Text>
-				</MenuItem>
-			</MenuGroup>
-
-			<MenuGroup>
-				<MenuItem
-					icon={ trash }
-					variant={ 'tertiary' }
-					onClick={ () => {
-						setGroupRules( null );
-						onClose();
-					} }
-				>
-					<Text>
-						{ sprintf(
-							/* translators: 1. rule group title. */
-							__( 'Disable %1$s', 'content-control' ),
-							labelText
-						) }
-					</Text>
-				</MenuItem>
-			</MenuGroup>
-		</>
-	);
+type Props = GroupOptionProps< GroupRules > & {
+	isOpened: boolean;
+	icon: Icon.IconType< {} >;
+	additionalOptions?: AdditionalGroupOptionProps[];
+	dropdownMenuClassName?: string;
+	headingClassName?: string;
+	label: string;
 };
 
-const OptionalGroupOptions = ( { items, onClose, toggleItem } ) => {
-	if ( ! items.length ) {
-		return <></>;
-	}
-
-	return (
-		<MenuGroup>
-			{ items.map( ( [ label, isSelected ] ) => {
-				const itemLabel = isSelected
-					? sprintf(
-							// translators: %s: The name of the control being hidden and reset e.g. "Padding".
-							__( 'Hide and reset %s' ),
-							label
-					  )
-					: sprintf(
-							// translators: %s: The name of the control to display e.g. "Padding".
-							__( 'Show %s' ),
-							label
-					  );
-
-				return (
-					<MenuItem
-						key={ label }
-						icon={ isSelected && check }
-						isSelected={ isSelected }
-						label={ itemLabel }
-						onClick={ () => {
-							toggleItem( label );
-							onClose();
-						} }
-						role="menuitemcheckbox"
-					>
-						{ label }
-					</MenuItem>
-				);
-			} ) }
-		</MenuGroup>
-	);
-};
-
-const RuleGroupHeader = ( props ) => {
+const RuleGroupHeader = ( props: Props ) => {
 	const {
 		isOpened,
 		icon,
@@ -157,7 +38,6 @@ const RuleGroupHeader = ( props ) => {
 		dropdownMenuClassName,
 		headingClassName = 'cc__rules-group__title',
 		label: labelText,
-		...headerProps
 	} = props;
 
 	if ( ! labelText ) {
@@ -167,7 +47,7 @@ const RuleGroupHeader = ( props ) => {
 	const toggleIconSize = 24;
 
 	return (
-		<HStack { ...headerProps } className="cc__rules-group__header">
+		<HStack className="cc__rules-group__header">
 			<Heading level={ 2 } className={ headingClassName }>
 				{ labelText }
 				{ icon && (
