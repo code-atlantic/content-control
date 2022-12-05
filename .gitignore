@@ -17,8 +17,8 @@ project.properties
 .wp-env.override.json
 
 # Built code
-build
-build-types
+**/build/
+**/build-types/
 node_modules
 release
 dist
