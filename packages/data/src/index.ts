@@ -19,14 +19,14 @@ declare module '@wordpress/data' {
 		select: Function;
 		dispatch: Function;
 		register: Function;
-		registerStoreInstance: Function;
 	};
 }
 
 const registry = createRegistry( {} );
+
 registry.register( coreStore );
-registry.registerStoreInstance( settingsStore );
-registry.registerStoreInstance( restrictionsStore );
-registry.registerStoreInstance( urlSearchStore );
+registry.register( settingsStore );
+registry.register( restrictionsStore );
+registry.register( urlSearchStore );
 
 export { registry };
