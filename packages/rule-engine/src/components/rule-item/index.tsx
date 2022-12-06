@@ -1,6 +1,6 @@
 import './index.scss';
 
-import { __, sprintf } from '@wordpress/i18n/build-types';
+import { __, sprintf } from '@wordpress/i18n';
 
 import { useRules } from '../../contexts';
 import Editor from './editor';
