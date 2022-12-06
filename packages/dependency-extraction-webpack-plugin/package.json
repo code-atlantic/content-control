@@ -1,0 +1,31 @@
+{
+	"name": "@content-control/dependency-extraction-webpack-plugin",
+	"version": "1.0.0",
+	"description": "Content Control Dependency Extraction Webpack Plugin",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"content-control"
+	],
+	"engines": {
+		"node": "^16.13.1"
+	},
+	"homepage": "https://github.com/code-atlantic/content-control/tree/trunk/packages/dependency-extraction-webpack-plugin/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/code-atlantic/content-control.git"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"main": "src/index.js",
+	"dependencies": {
+		"@wordpress/dependency-extraction-webpack-plugin": "^4.5.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {},
+	"scripts": {}
+}
