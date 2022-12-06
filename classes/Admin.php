@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Admin controller  class.
+ *
+ * @package ContentControl
  */
 class Admin extends Controller {
 
@@ -22,7 +24,6 @@ class Admin extends Controller {
 		Admin\Ajax::init();
 		Admin\Pages::init();
 
-		Admin\Assets::init();
 		Admin\Settings\Restrictions::init();
 
 		// Admin Widget Editor
@@ -40,7 +41,8 @@ class Admin extends Controller {
 		Admin\Reviews::init();
 
 		$controllers = [
-			'Settings' => new Admin\Settings( $this->container ),
+			'Admin\Assets'   => new Admin\Assets( $this->container ),
+			'Admin\Settings' => new Admin\Settings( $this->container ),
 		];
 
 		foreach ( $controllers as $controller ) {

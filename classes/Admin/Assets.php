@@ -1,33 +1,116 @@
 <?php
-
+/**
+ * Admin assets controller.
+ *
+ * @package ContentControl\Admin
+ */
 
 namespace ContentControl\Admin;
 
-use function \ContentControl\plugin;
+use ContentControl\Base\Controller;
+use ContentControl\Dependencies\Pimple\Exception\UnknownIdentifierException;
+
+use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Admin assets controller.
+ *
+ * @package ContentControl\Admin
+ */
+class Assets extends Controller {
 
-class Assets {
-
-	public static function init() {
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'scripts_styles' ] );
+	/**
+	 * Initialize the assets controller.
+	 */
+	public function init() {
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'v1_scripts' ] );
 	}
 
-	public static function scripts_styles( $hook ) {
-		global $post_type;
+	/**
+	 * Enqueue shared admin scripts.
+	 */
+	public function enqueue_scripts() {
+		$packages = [
+			'components'  => [
+				'handle' => 'content-control-components',
+			],
+			'core-data'   => [
+				'handle' => 'content-control-core-data',
+				'deps'   => [
+					'wp-api',
+				],
+			],
+			'data'        => [
+				'handle' => 'content-control-data',
+			],
+			'fields'      => [
+				'handle' => 'content-control-fields',
+			],
+			'icons'       => [
+				'handle' => 'content-control-icons',
+			],
+			'rule-engine' => [
+				'handle'   => 'content-control-rule-engine',
+				'varsName' => 'contentControlRuleEngine',
+				'vars'     => [
+					'adminUrl'        => admin_url(),
+					'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
+				],
+			],
+			'utils'       => [
+				'handle' => 'content-control-utils',
+			],
+		];
 
-		// Use minified libraries if SCRIPT_DEBUG is turned off
+		foreach ( $packages as $package => $package_data ) {
+			$handle = $package_data['handle'];
+			$meta   = $this->get_asset_meta( $package );
+
+			$js_deps = isset( $package_data['deps'] ) ? $package_data['deps'] : [];
+
+			wp_register_script( $handle, plugin()->get_url( "dist/$package.js" ), array_merge( $meta['dependencies'], $js_deps ), $meta['version'], true );
+			wp_register_style( $handle, plugin()->get_url( "dist/$package.css" ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
+
+			if ( isset( $package_data['varsName'] ) && ! empty( $package_data['vars'] ) ) {
+				wp_localize_script( $handle, $package_data['varsName'], $package_data['vars'] );
+			}
+		}
+	}
+
+	/**
+	 * Get asset meta from generated files.
+	 *
+	 * @param string $package Package name.
+	 * @return array
+	 */
+	public function get_asset_meta( $package ) {
+		$meta_path = "dist/$package.asset.php";
+		return file_exists( plugin( 'path' ) . $meta_path ) ? require plugin( 'path' ) . $meta_path : [
+			'dependencies' => [],
+			'version'      => plugin( 'version' ),
+		];
+	}
+
+	/**
+	 * Enqueue v1 admin scripts.
+	 *
+	 * @param mixed $hook Admin page hook name.
+	 */
+	public function v1_scripts( $hook ) {
+		// Use minified libraries if SCRIPT_DEBUG is turned off.
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		if ( $hook == 'widgets.php' ) {
+		if ( 'widgets.php' === $hook ) {
 			wp_enqueue_style( 'jpcc-widget-editor', plugin()->get_url( 'assets/styles/widget-editor' . $suffix . '.css' ), null, plugin( 'version' ), false );
 			wp_enqueue_script( 'jpcc-widget-editor', plugin()->get_url( 'assets/scripts/widget-editor' . $suffix . '.js' ), [ 'jquery' ], plugin( 'version' ), true );
 		}
 
-		if ( $hook == 'settings_page_cc-settings' ) {
-			if ( isset( $_GET['tab'] ) && $_GET['tab'] === 'restrictions' ) {
-				add_action( 'admin_footer', [ __CLASS__, 'js_wp_editor' ] );
+		if ( 'settings_page_cc-settings' === $hook ) {
+			if ( isset( $_GET['tab'] ) && 'restrictions' === $_GET['tab'] ) {
+				add_action( 'admin_footer', [ $this, 'js_wp_editor' ] );
 			}
 
 			Footer_Templates::init();
@@ -71,47 +154,43 @@ class Assets {
 		}
 	}
 
-
-	/*
+	/**
 	 *  JavaScript WordPress editor
-	 *	Author: 		Ante Primorac
-	 *	Author URI: 	http://anteprimorac.from.hr
-	 *	Version: 		1.1
-	 *	License:
-	 *		Copyright (c) 2013 Ante Primorac
-	 *		Permission is hereby granted, free of charge, to any person obtaining a copy
-	 *		of this software and associated documentation files (the "Software"), to deal
-	 *		in the Software without restriction, including without limitation the rights
-	 *		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	 *		copies of the Software, and to permit persons to whom the Software is
-	 *		furnished to do so, subject to the following conditions:
+	 *  Author:         Ante Primorac
+	 *  Author URI:     http://anteprimorac.from.hr
+	 *  Version:        1.1
+	 *  License:
+	 *      Copyright (c) 2013 Ante Primorac
+	 *      Permission is hereby granted, free of charge, to any person obtaining a copy
+	 *      of this software and associated documentation files (the "Software"), to deal
+	 *      in the Software without restriction, including without limitation the rights
+	 *      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 *      copies of the Software, and to permit persons to whom the Software is
+	 *      furnished to do so, subject to the following conditions:
 	 *
-	 *		The above copyright notice and this permission notice shall be included in
-	 *		all copies or substantial portions of the Software.
+	 *      The above copyright notice and this permission notice shall be included in
+	 *      all copies or substantial portions of the Software.
 	 *
-	 *		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	 *		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	 *		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	 *		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	 *		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	 *		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	 *		THE SOFTWARE.
-	 *	Usage:
-	 *		server side(WP):
-	 *			js_wp_editor( $settings );
-	 *		client side(jQuery):
-	 *			$('textarea').wp_editor( options );
+	 *      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	 *      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	 *      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	 *      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	 *      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	 *      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	 *      THE SOFTWARE.
+	 *  Usage:
+	 *      server side(WP):
+	 *          js_wp_editor( $settings );
+	 *      client side(jQuery):
+	 *          $('textarea').wp_editor( options );
+	 *
+	 * @param array $settings Array of settings.
 	 */
-	public static function js_wp_editor( $settings = [] ) {
+	public function js_wp_editor( $settings = [] ) {
 		if ( ! class_exists( '\_WP_Editors' ) ) {
 			require ABSPATH . WPINC . '/class-wp-editor.php';
 		}
 
-		/*
-		ob_start();
-		wp_editor( '', 'jp_cc_id' );
-		ob_get_clean();
-		*/
 		$set = \_WP_Editors::parse_settings( 'jp_cc_id', $settings );
 
 		if ( ! current_user_can( 'upload_files' ) ) {
