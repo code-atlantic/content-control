@@ -27,43 +27,76 @@ class Assets extends Controller {
 	public function init() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'v1_scripts' ] );
+		add_action( 'admin_print_scripts', [ $this, 'autoload_styles_for_scripts' ], 0 );
 	}
 
 	/**
-	 * Enqueue shared admin scripts.
+	 * Get list of plugin packages.
+	 *
+	 * @return array
 	 */
-	public function enqueue_scripts() {
+	public function get_packages() {
 		$packages = [
-			'components'  => [
-				'handle' => 'content-control-components',
+			'block-editor'  => [
+				'handle'   => 'content-control-block-editor',
+				'styles'   => true,
+				'varsName' => 'contentControlBlockEditor',
+				'vars'     => [
+					'adminUrl'       => admin_url(),
+					'pluginUrl'      => plugin()->get_url(),
+					'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),
+					'allowedBlocks'  => [],
+					'excludedBlocks' => [
+						'core/nextpage',
+						'core/freeform',
+					],
+				],
 			],
-			'core-data'   => [
+			'components'    => [
+				'handle' => 'content-control-components',
+				'styles' => true,
+			],
+			'core-data'     => [
 				'handle' => 'content-control-core-data',
 				'deps'   => [
 					'wp-api',
 				],
 			],
-			'data'        => [
+			'data'          => [
 				'handle' => 'content-control-data',
 			],
-			'fields'      => [
+			'fields'        => [
 				'handle' => 'content-control-fields',
 			],
-			'icons'       => [
+			'icons'         => [
 				'handle' => 'content-control-icons',
 			],
-			'rule-engine' => [
+			'rule-engine'   => [
 				'handle'   => 'content-control-rule-engine',
 				'varsName' => 'contentControlRuleEngine',
 				'vars'     => [
 					'adminUrl'        => admin_url(),
 					'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
 				],
+				'styles'   => true,
 			],
-			'utils'       => [
+			'settings-page' => [
+				'handle' => 'content-control-settings-page',
+				'styles' => true,
+			],
+			'utils'         => [
 				'handle' => 'content-control-utils',
 			],
 		];
+
+		return $packages;
+	}
+
+	/**
+	 * Enqueue shared admin scripts.
+	 */
+	public function enqueue_scripts() {
+		$packages = $this->get_packages();
 
 		foreach ( $packages as $package => $package_data ) {
 			$handle = $package_data['handle'];
@@ -72,10 +105,28 @@ class Assets extends Controller {
 			$js_deps = isset( $package_data['deps'] ) ? $package_data['deps'] : [];
 
 			wp_register_script( $handle, plugin()->get_url( "dist/$package.js" ), array_merge( $meta['dependencies'], $js_deps ), $meta['version'], true );
-			wp_register_style( $handle, plugin()->get_url( "dist/$package.css" ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
+
+			if ( isset( $package_data['styles'] ) && $package_data['styles'] ) {
+				wp_register_style( $handle, plugin()->get_url( "dist/$package.css" ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
+			}
 
 			if ( isset( $package_data['varsName'] ) && ! empty( $package_data['vars'] ) ) {
 				wp_localize_script( $handle, $package_data['varsName'], $package_data['vars'] );
+			}
+		}
+	}
+
+	/**
+	 * Auto load styles if scripts are enqueued.
+	 */
+	function autoload_styles_for_scripts() {
+		$packages = $this->get_packages();
+
+		foreach ( $packages as $package => $package_data ) {
+			if ( wp_script_is( $package_data['handle'], 'enqueued' ) ) {
+				if ( isset( $package_data['styles'] ) && $package_data['styles'] ) {
+					wp_enqueue_style( $package_data['handle'] );
+				}
 			}
 		}
 	}
