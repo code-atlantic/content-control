@@ -1,91 +1,70 @@
-const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const { get } = require( 'lodash' );
 const path = require( 'path' );
+const CustomTemplatedPathPlugin = require( '@wordpress/custom-templated-path-webpack-plugin' );
+const DependencyExtractionWebpackPlugin = require( './packages/dependency-extraction-webpack-plugin' );
 
-const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
-const packages = [
-	{
-		name: 'block-editor',
-		path: 'packages/block-editor',
-		exportAs: 'blockEditor',
-	},
-	{
-		name: 'components',
-		path: 'packages/components',
-		exportAs: 'components',
-	},
-	{
-		name: 'core-data',
-		path: 'packages/core-data',
-		exportAs: 'coreData',
-	},
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
-	{
-		name: 'core-data',
-		path: 'packages/core-data',
-		exportAs: 'coreData',
-	},
-	{
-		name: 'data',
-		path: 'packages/data',
-		exportAs: 'data',
-	},
-	{
-		name: 'fields',
-		path: 'packages/fields',
-		exportAs: 'fields',
-	},
-	{
-		name: 'icons',
-		path: 'packages/icons',
-		exportAs: false,
-	},
-	{
-		name: 'rule-engine',
-		path: 'packages/rule-engine',
-		exportAs: 'ruleEngine',
-	},
-	{
-		name: 'settings-page',
-		path: 'packages/settings-page',
-		exportAs: 'settingsPage',
-	},
-	{
-		name: 'utils',
-		path: 'packages/utils',
-		exportAs: false,
-	},
-];
+const packages = {
+	'block-editor': 'packages/block-editor',
+	components: 'packages/components',
+	'core-data': 'packages/core-data',
+	data: 'packages/data',
+	fields: 'packages/fields',
+	icons: 'packages/icons',
+	'rule-engine': 'packages/rule-engine',
+	'settings-page': 'packages/settings-page',
+	utils: 'packages/utils',
+};
 
 const config = {
 	...defaultConfig,
 	// Maps our buildList into a new object of { key: build.entry }.
-	entry: packages.reduce( ( entry, p ) => {
-		if ( p.exportAs ) {
-			entry[ p.name ] = path.resolve( process.cwd(), p.path, 'src' );
-		}
-
-		return entry;
-	}, {} ),
+	entry: Object.entries( packages ).reduce(
+		( entry, [ packageName, packagePath ] ) => {
+			entry[ packageName ] = path.resolve(
+				process.cwd(),
+				packagePath,
+				'src'
+			);
+			return entry;
+		},
+		{}
+	),
 	output: {
-		...defaultConfig.output,
+		filename: ( data ) => {
+			const name = data.chunk.name;
+			return '[name].js';
+		},
+		path: path.resolve( process.cwd(), 'dist' ),
 		devtoolNamespace: 'content-control/core',
 		devtoolModuleFilenameTemplate:
 			'webpack://[namespace]/[resource-path]?[loaders]',
-		path: path.resolve( process.cwd(), 'dist' ),
+		library: {
+			// Expose the exports of entry points so we can consume the libraries in window.wc.[modulename] with WooCommerceDependencyExtractionWebpackPlugin.
+			name: [ 'contentControl', '[modulename]' ],
+			type: 'window',
+		},
+		// A unique name of the webpack build to avoid multiple webpack runtimes to conflict when using globals.
+		uniqueName: '__contentControlAdmin_webpackJsonp',
 	},
 	resolve: {
-		...defaultConfig.resolve,
+		extensions: [ '.json', '.js', '.jsx', '.ts', '.tsx' ],
 		alias: {
 			...defaultConfig.resolve.alias,
-			...packages.reduce( ( alias, p ) => {
-				alias[ `@content-control/${ p.name }` ] = path.resolve(
-					__dirname,
-					p.path
-				);
+			...Object.entries( packages ).reduce(
+				( alias, [ packageName, packagePath ] ) => {
+					alias[ `@content-control/${ packageName }` ] = path.resolve(
+						__dirname,
+						packagePath
+					);
 
-				return alias;
-			}, {} ),
+					return alias;
+				},
+				{}
+			),
 		},
 	},
 	plugins: [
@@ -93,42 +72,28 @@ const config = {
 			( plugin ) =>
 				plugin.constructor.name !== 'DependencyExtractionWebpackPlugin'
 		),
-		new DependencyExtractionWebpackPlugin( {
-			injectPolyfill: true,
-			useDefaults: true,
-			requestToExternal( request ) {
-				const externalMap = packages.reduce( ( map, p ) => {
-					if ( p.exportAs ) {
-						map[ `@content-control/${ p.name }` ] = [
-							'contentControl',
-							p.exportAs,
-						];
-					}
-
-					return map;
-				}, {} );
-
-				if ( typeof externalMap[ request ] !== 'undefined' ) {
-					return externalMap[ request ];
+		new CustomTemplatedPathPlugin( {
+			modulename( outputPath, data ) {
+				const entryName = get( data, [ 'chunk', 'name' ] );
+				if ( entryName ) {
+					// Convert the dash-case name to a camel case module name.
+					// For example, 'csv-export' -> 'csvExport'
+					return entryName.replace( /-([a-z])/g, ( match, letter ) =>
+						letter.toUpperCase()
+					);
 				}
-			},
-			requestToHandle( request ) {
-				const handleMap = packages.reduce( ( map, p ) => {
-					if ( p.exportAs ) {
-						map[
-							`@content-control/${ p.name }`
-						] = `content-control-${ p.name }`;
-					}
-
-					return map;
-				}, {} );
-
-				if ( typeof handleMap[ request ] !== 'undefined' ) {
-					return handleMap[ request ];
-				}
+				return outputPath;
 			},
 		} ),
+		new DependencyExtractionWebpackPlugin( {
+			// injectPolyfill: true,
+			// useDefaults: true,
+		} ),
 	],
+	optimization: {
+		...defaultConfig.optimization,
+		minimize: NODE_ENV !== 'development',
+	},
 };
 
 module.exports = config;
