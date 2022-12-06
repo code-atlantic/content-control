@@ -38,6 +38,10 @@ export const fetch = ( path: string, options: FetchOptions = {} ) => {
 		options.body = JSON.stringify( options.body );
 	}
 
+	if ( wpApiSettings.root.includes( '?' ) ) {
+		path = path.replace( '?', '&' );
+	}
+
 	return {
 		type: 'FETCH',
 		path: `${ wpApiSettings.root }${ path }`,
