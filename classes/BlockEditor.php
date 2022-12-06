@@ -53,23 +53,8 @@ class BlockEditor extends Controller {
 	 */
 	public function register_editor_assets() {
 		$handle = 'content-control-block-editor';
-		$meta   = $this->get_asset_meta();
 
-		wp_enqueue_script( $handle, plugin()->get_url( 'dist/block-editor.js' ), $meta['dependencies'], $meta['version'], true );
-		wp_enqueue_style( $handle, plugin()->get_url( 'dist/block-editor.css' ), [], $meta['version'] );
-
-		wp_localize_script( $handle, 'contentControlBlockEditor',
-			[
-				'adminUrl'       => admin_url(),
-				'pluginUrl'       => plugin()->get_url(),
-				'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),
-				'allowedBlocks'  => [],
-				'excludedBlocks' => [
-					'core/nextpage',
-					'core/freeform',
-				],
-			]
-		);
+		wp_enqueue_script( $handle );
 
 		/**
 		 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
