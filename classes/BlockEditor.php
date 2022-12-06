@@ -71,13 +71,6 @@ class BlockEditor extends Controller {
 			]
 		);
 
-		wp_localize_script( $handle, 'contentControlRuleEngine',
-			[
-				'adminUrl'        => admin_url(),
-				'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
-			]
-		);
-
 		/**
 		 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
 		 * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
