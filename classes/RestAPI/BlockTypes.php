@@ -80,7 +80,8 @@ class BlockTypes extends WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function update_block_types( $request ) {
-		$block_types = $request->get_params();
+		// Get request json params.
+		$block_types = $request->get_json_params();
 
 		$error_message = __( 'Something went wrong, the block types could not be updated.', 'content-control' );
 
@@ -89,7 +90,6 @@ class BlockTypes extends WP_REST_Controller {
 		}
 
 		// TODO Add validation & schema as needed.
-
 		update_block_types( $block_types );
 		$new_block_types = get_block_types();
 
