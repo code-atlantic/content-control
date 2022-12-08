@@ -16,12 +16,13 @@
 			// width: 100%;
 			justify-content: left;
 
-
 			&.is-destructive:not(:disabled) {
 				box-shadow: none;
 				color: #1e1e1e;
 
-				svg { color: #cc1818;}
+				svg {
+					color: #cc1818;
+				}
 			}
 
 			&:focus:not(:disabled) {

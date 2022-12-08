@@ -7,10 +7,8 @@ import {
 	Tooltip,
 } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
-// WordPress Imports
 import { __ } from '@wordpress/i18n';
 
-// Local Imports
 import useSettings from '../../use-settings';
 
 interface RegisteredMediaQuery {
