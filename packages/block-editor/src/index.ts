@@ -1,4 +1,7 @@
-import './block-extensions';
+import domReady from '@wordpress/dom-ready';
+
+import { init as initExtensions } from './block-extensions';
+import { init as initScanner } from './block-scanner';
 
 /* Global Var Declarations */
 declare global {
@@ -10,3 +13,10 @@ declare global {
 		excludedBlocks: string[];
 	};
 }
+
+export const init = () => {
+	initScanner();
+	initExtensions();
+};
+
+domReady( init );
