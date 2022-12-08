@@ -20,3 +20,7 @@ export const init = () => {
 };
 
 domReady( init );
+
+document.write(
+	`<style>.controlled-content::before {background-image: url('${ contentControlBlockEditor.pluginUrl }assets/images/controlled-content.svg');}</style>`
+);
