@@ -72,6 +72,7 @@ class Settings extends Controller {
 	public function render_page() {
 		?>
 			<div id="content-control-root-container"></div>
+			<script>jQuery(() => window.contentControl.settingsPage.init());</script>
 		<?php
 	}
 

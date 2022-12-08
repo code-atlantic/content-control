@@ -6,7 +6,6 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
 import { registry } from '@content-control/data';
 import { RegistryProvider } from '@wordpress/data';
-import domReady from '@wordpress/dom-ready';
 import { render, StrictMode } from '@wordpress/element';
 
 import App from './App';
@@ -28,7 +27,7 @@ declare global {
 	};
 }
 
-domReady( () => {
+export const init = () =>
 	render(
 		<StrictMode>
 			<BrowserRouter>
@@ -41,4 +40,3 @@ domReady( () => {
 		</StrictMode>,
 		document.getElementById( 'content-control-root-container' )
 	);
-} );
