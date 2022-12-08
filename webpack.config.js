@@ -1,6 +1,6 @@
 const { get } = require( 'lodash' );
 const path = require( 'path' );
-const CustomTemplatedPathPlugin = require( '@wordpress/custom-templated-path-webpack-plugin' );
+const CustomTemplatedPathPlugin = require( './packages/custom-templated-path-webpack-plugin' );
 const DependencyExtractionWebpackPlugin = require( './packages/dependency-extraction-webpack-plugin' );
 
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
