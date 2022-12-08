@@ -4,9 +4,9 @@ import './style.scss';
 import { addFilter } from '@wordpress/hooks';
 
 import { addAttributes } from './attributes';
+import addEditorBlockClasses from './block-classes';
 import editControls from './edit';
 import { addWrapperClasses } from './save';
-import addEditorBlockClasses from './block-classes';
 
 export const init = () => {
 	/**

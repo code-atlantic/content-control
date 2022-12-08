@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 
-import { __ } from '@wordpress/i18n';
+import { InspectorControls } from '@wordpress/block-editor';
 import {
 	ExternalLink,
 	Panel,
@@ -9,10 +9,10 @@ import {
 	ToggleControl,
 } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { InspectorControls } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 
-import { blockControlsEnabled } from './utils';
 import { RuleGroups } from './components';
+import { blockControlsEnabled } from './utils';
 
 /**
  * Add block controls on block inspector sidebar.

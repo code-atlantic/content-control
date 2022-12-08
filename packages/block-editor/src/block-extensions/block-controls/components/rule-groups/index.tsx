@@ -10,6 +10,7 @@ import DeviceRules from './device-rules';
 
 import type { QuerySet } from '@content-control/rule-engine';
 import type { Rules as RulesType } from '../../types';
+
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path
