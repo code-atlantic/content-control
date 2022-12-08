@@ -307,9 +307,8 @@ const Finder = (
 							focusOnMount={ false }
 							onClose={ () => setSelectedSuggestion( -1 ) }
 							position="bottom right"
-							getAnchorRect={ () =>
-								wrapperRef.current?.getBoundingClientRect()
-							}
+							// @ts-ignore This exists, just not typed in wp-core.
+							anchor={ wrapperRef.current }
 							className="cc-rule-engine-search__suggestions-popover"
 						>
 							{ suggestions.length ? (
