@@ -14,12 +14,14 @@ declare global {
 	};
 }
 
-export const init = () => {
-	initScanner();
-	initExtensions();
-};
+// Expose the scanner to the window object.
+export { initScanner };
 
-domReady( init );
+// Filters need to be added immediately.
+initExtensions();
+
+// The scanner needs to be initialized after the DOM is ready.
+domReady( initScanner );
 
 document.write(
 	`<style>.controlled-content::before {background-image: url('${ contentControlBlockEditor.pluginUrl }assets/images/controlled-content.svg');}</style>`
