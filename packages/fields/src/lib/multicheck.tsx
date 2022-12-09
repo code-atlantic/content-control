@@ -27,13 +27,12 @@ const MulticheckField = ( {
 			{ options.map( ( { label: optLabel, value: optValue } ) => {
 				const isChecked = checked.indexOf( optValue ) >= 0;
 
-				const toggleOption = () => {
+				const toggleOption = () =>
 					onChange(
-						isChecked
+						! isChecked
 							? [ ...checkedOpts, optValue ]
 							: checkedOpts.filter( ( val ) => optValue !== val )
 					);
-				};
 
 				if ( ! toggle ) {
 					return (
