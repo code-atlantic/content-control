@@ -1,8 +1,4 @@
-import {
-	__experimentalText as Text,
-	MenuGroup,
-	MenuItem,
-} from '@wordpress/components';
+import { MenuGroup, MenuItem } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { check, copy, rotateLeft, trash } from '@wordpress/icons';
@@ -44,7 +40,7 @@ const DefaultGroupOptions = ( {
 					} }
 					icon={ status === 'copied' ? check : copy }
 				>
-					{ <Text>{ __( 'Copy', 'content-control' ) }</Text> }
+					{ __( 'Copy', 'content-control' ) }
 				</CopyMenuItem>
 				<PasteMenuItem
 					onSave={ ( newValues, merge = false ) => {
@@ -63,7 +59,7 @@ const DefaultGroupOptions = ( {
 					} }
 					icon={ status === 'copied' ? check : copy }
 				>
-					{ <Text>{ __( 'Paste', 'content-control' ) }</Text> }
+					{ __( 'Paste', 'content-control' ) }
 				</PasteMenuItem>
 				<MenuItem
 					icon={ rotateLeft }
@@ -73,7 +69,7 @@ const DefaultGroupOptions = ( {
 						onClose();
 					} }
 				>
-					<Text>{ __( 'Restore Defaults', 'content-control' ) }</Text>
+					{ __( 'Restore Defaults', 'content-control' ) }
 				</MenuItem>
 			</MenuGroup>
 
@@ -86,13 +82,11 @@ const DefaultGroupOptions = ( {
 						onClose();
 					} }
 				>
-					<Text>
-						{ sprintf(
-							/* translators: 1. rule group title. */
-							__( 'Disable %1$s', 'content-control' ),
-							labelText
-						) }
-					</Text>
+					{ sprintf(
+						/* translators: 1. rule group title. */
+						__( 'Disable %1$s', 'content-control' ),
+						labelText
+					) }
 				</MenuItem>
 			</MenuGroup>
 		</>
