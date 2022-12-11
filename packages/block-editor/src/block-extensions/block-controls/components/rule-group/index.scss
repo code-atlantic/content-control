@@ -13,6 +13,13 @@
 }
 
 .cc__rules-group__header {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	gap: calc(8px);
+	justify-content: space-between;
+	width: 100%;
+
 	h2 {
 		margin: 0;
 		line-height: normal;
@@ -28,6 +35,10 @@
 	.cc__rules-group__options-menu {
 		margin: calc(-5px) 0px;
 		line-height: 0;
+
+		.components-menu-item__item {
+			color: rgb(30, 30, 30);
+		}
 
 		.cc__rules-group__options-toggle.components-button.is-small {
 			padding: 0;

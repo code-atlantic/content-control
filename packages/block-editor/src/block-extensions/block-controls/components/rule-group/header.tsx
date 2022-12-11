@@ -1,11 +1,7 @@
+import classNames from 'classnames';
+
 import { noop } from '@content-control/utils';
-import {
-	__experimentalHeading as Heading,
-	__experimentalHStack as HStack,
-	Button,
-	DropdownMenu,
-	Icon,
-} from '@wordpress/components';
+import { Button, DropdownMenu, Icon } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { moreVertical, plus } from '@wordpress/icons';
 
@@ -47,13 +43,18 @@ const RuleGroupHeader = ( props: Props ) => {
 	const toggleIconSize = 24;
 
 	return (
-		<HStack className="cc__rules-group__header">
-			<Heading level={ 2 } className={ headingClassName }>
+		<div className="cc__rules-group__header">
+			<h2
+				className={ classNames( [
+					headingClassName,
+					'components-truncate components-text components-heading',
+				] ) }
+			>
 				{ labelText }
 				{ icon && (
 					<Icon className="cc__rules-group__icon" icon={ icon } />
 				) }
-			</Heading>
+			</h2>
 
 			<div className="cc__rules-group__options-menu">
 				{ isOpened ? (
@@ -110,7 +111,7 @@ const RuleGroupHeader = ( props: Props ) => {
 					</Button>
 				) }
 			</div>
-		</HStack>
+		</div>
 	);
 };
 
