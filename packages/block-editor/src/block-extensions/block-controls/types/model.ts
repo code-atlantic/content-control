@@ -9,25 +9,15 @@ export type DeviceScreenSizes = {
 	[ key: string ]: DeviceScreenSize;
 };
 
-export interface RuleGroupBase {
-	settings: {};
-}
-
-export interface DeviceRuleGroup {}
-
-export interface ConditionalRuleGroup {}
-
-export type RuleGroup = DeviceRuleGroup | ConditionalRuleGroup;
-
 export interface GroupRulesBase {}
 
-export interface DeviceRules {
+export interface DeviceRules extends GroupRulesBase {
 	hideOn: {
 		[ key: string ]: boolean;
 	};
 }
 
-export interface ConditionalRules {
+export interface ConditionalRules extends GroupRulesBase {
 	anyAll: 'any' | 'all' | 'none';
 	conditionSets: {
 		id: string;
@@ -36,6 +26,8 @@ export interface ConditionalRules {
 }
 
 export type GroupRules = ConditionalRules | DeviceRules;
+// TODO Remove this.
+export type RuleGroup = GroupRules;
 
 export type Rules = {
 	device?: DeviceRules;
