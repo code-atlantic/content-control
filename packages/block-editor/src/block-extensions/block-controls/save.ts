@@ -24,8 +24,6 @@ const addWrapperClasses = (
 ) => {
 	const { enabled: controlsEnabled = false, rules = {} } = contentControls;
 
-	const { device: deviceRules = null } = rules;
-
 	/**
 	 * Bail early if block controls disabled and this block didn't previously have them configured.
 	 *

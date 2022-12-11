@@ -4,7 +4,6 @@ import {
 	Button,
 	Flex,
 	FlexItem,
-	Icon,
 	__experimentalInputControl as InputControl,
 } from '@wordpress/components';
 import { cancelCircleFilled, check, edit } from '@wordpress/icons';
