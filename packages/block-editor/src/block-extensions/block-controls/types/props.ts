@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { GroupRules, GroupRulesBase } from './model';
+import type { GroupRulesBase } from './model';
 
 export type BlockExtraProps = {
 	[ key: string ]: string;
