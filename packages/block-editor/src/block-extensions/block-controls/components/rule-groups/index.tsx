@@ -10,6 +10,7 @@ import DeviceRules from './device-rules';
 
 import type { QuerySet } from '@content-control/rule-engine';
 import type { Rules as RulesType } from '../../types';
+import { noop } from '@content-control/utils';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -71,27 +72,25 @@ type Props = {
 	setRules: ( rules: RulesType ) => void;
 };
 
-const RuleGroups = ( {
-	rules = {},
-	setRules = ( newRules ) => {},
-	...props
-}: Props ) => {
+const RuleGroups = ( props: Props ) => {
+	const { rules = {}, setRules = noop } = props;
+
 	/**
 	 * Reset all panels to defaults.
 	 *
 	 * @return {void}
 	 */
-	const resetAll = (): void => {
-		const newRules = Object.keys( rules ).reduce(
-			( accumulator, groupId ) => ( {
-				...accumulator,
-				[ groupId ]: null,
-			} ),
-			{}
-		);
+	// const resetAll = (): void => {
+	// 	const newRules = Object.keys( rules ).reduce(
+	// 		( accumulator, groupId ) => ( {
+	// 			...accumulator,
+	// 			[ groupId ]: null,
+	// 		} ),
+	// 		{}
+	// 	);
 
-		setRules( newRules );
-	};
+	// 	setRules( newRules );
+	// };
 
 	return (
 		<SlotFillProvider>
