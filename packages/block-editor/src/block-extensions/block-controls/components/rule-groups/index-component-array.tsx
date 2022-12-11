@@ -26,27 +26,24 @@
  * - Requires using filters to register each component for proper ordering.
  */
 
+import { newUUID } from '@content-control/rule-engine';
 import { noop } from '@content-control/utils';
-import {
-	__experimentalToolsPanel as ToolsPanel,
-	__experimentalToolsPanelItem as ToolsPanelItem,
-	Fill,
-	Slot,
-	SlotFillProvider,
-} from '@wordpress/components';
+import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
+import RuleGroupComponent from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
+import type { BlockAttributes } from '@wordpress/blocks';
+import type { Rules as RulesType } from '../../types';
 import type { RulePanel } from '../../types';
-
-const toolsPanelId = 'contctrl-rules-panel';
 
 addFilter(
 	'contentControl.blockRules.rulePanels',
 	'contentControl.core',
+	// TODO Type this properly.
 	( rulePanels = [], parentProps ) => [
 		...rulePanels,
 		{
@@ -61,6 +58,7 @@ addFilter(
 addFilter(
 	'contentControl.blockRules.rulePanels',
 	'contentControl.core',
+	// TODO Type this properly.
 	( rulePanels = [], parentProps ) => [
 		...rulePanels,
 		{
@@ -72,40 +70,48 @@ addFilter(
 	10
 );
 
-type Props = {
-	rules: never;
-	updateRules: ( value: never ) => void;
+/**
+ * TODO This should be globally defined.
+ * Move this to a set of generator functions exported as utilitiles.
+ * Each location using this should then just use the needed generators.
+ */ const defaults: BlockAttributes = {
+	device: {
+		hideOn: {
+			mobile: false,
+			tablet: false,
+			desktop: false,
+		},
+	},
+	conditional: {
+		anyAll: 'all',
+		conditionSets: [
+			{
+				id: newUUID(),
+				label: __( 'User Logged In', 'content-control' ),
+				query: {
+					logicalOperator: 'and',
+					items: [
+						{
+							id: newUUID(),
+							type: 'rule',
+							name: 'user_is_logged_in',
+						},
+					],
+				},
+			},
+		],
+	},
 };
 
+// TODO This needs to be typed properly.
+type Props = {
+	rules: RulesType;
+	setRules: ( rules: RulesType ) => void;
+};
+
+// TODO This needs to be typed properly.
 const RulesPanel = ( props: Props ) => {
-	const { rules = {}, updateRules = noop } = props;
-
-	/**
-	 * Check if given panel is active.
-	 *
-	 * @param {string} panelId Panel ID.
-	 * @return {boolean} Whether or not the panel is active.
-	 */
-	const isPanelActive = ( panelId: string ): boolean =>
-		typeof rules[ panelId ] !== 'undefined' && rules[ panelId ];
-
-	/**
-	 * Reset all panels to default.
-	 *
-	 * @param {Array} resetFilters Array of reset filters.
-	 */
-	const resetAll = ( resetFilters = [] ) => {
-		let newRules = {};
-
-		resetFilters.forEach( ( resetFilter ) => {
-			newRules = {
-				...newRules,
-				...resetFilter( newRules ),
-			};
-		} );
-
-		updateRules( newRules );
-	};
+	const { rules = {}, setRules = noop } = props;
 
 	const rulePanels = applyFilters(
 		'contentControl.blockRules.rulePanels',
@@ -116,65 +122,33 @@ const RulesPanel = ( props: Props ) => {
 	return (
 		<SlotFillProvider>
 			{ /** Render filtered panels. */ }
-			<Fill name="ContentControlBlockRulesPanels">
+			<Fill name="ContentControlBlockRules">
+				// TODO This needs to be typed properly.
 				{ rulePanels.map( ( rulePanel ) => {
 					const {
 						name,
-						onSelect = noop,
-						onDeselect = noop,
-						resetAllFilter = noop,
+						label,
+						icon = 'admin-generic',
 						items = <></>,
 					} = rulePanel;
 
 					return (
-						<ToolsPanelItem
+						<RuleGroupComponent
 							key={ name }
-							{ ...rulePanel }
-							panelId={ toolsPanelId }
-							hasValue={ () => isPanelActive( name ) }
-							onSelect={ () => {
-								updateRules( { [ name ]: {} } );
-								onSelect();
-							} }
-							onDeselect={ () =>
-								updateRules( {
-									[ name ]: undefined,
-								} ) &&
-								onDeselect &&
-								onDeselect()
-							}
-							resetAllFilter={ ( newRules ) => {
-								const resetRules = {
-									[ conditional ]: undefined,
-								};
-
-								if ( ! resetAllFilter ) {
-									return resetRules;
-								}
-
-								return resetAllFilter( {
-									...newRules,
-									resetRules,
-								} );
-							} }
+							label={ label }
+							icon={ icon }
+							groupId={ name }
+							rules={ rules }
+							setRules={ setRules }
+							defaults={ defaults }
 						>
 							{ items }
-						</ToolsPanelItem>
+						</RuleGroupComponent>
 					);
 				} ) }
 			</Fill>
 
-			<ToolsPanel
-				shouldRenderPlaceholderItems={ true }
-				label={ __(
-					'Select some rules for this block',
-					'content-control'
-				) }
-				resetAll={ resetAll }
-				panelId={ toolsPanelId }
-			>
-				<Slot name="ContentControlBlockRulesPanels" />
-			</ToolsPanel>
+			<Slot name="ContentControlBlockRules" />
 		</SlotFillProvider>
 	);
 };
