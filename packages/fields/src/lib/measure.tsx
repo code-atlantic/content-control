@@ -1,6 +1,7 @@
-// @ts-ignore
-// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
-import { __experimentalUnitControl as UnitControl } from '@wordpress/components';
+import {
+	// @ts-ignore
+	__experimentalUnitControl as UnitControl,
+} from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 
 import type { MeasureFieldProps, WithOnChange } from '../types';
