@@ -1,3 +1,4 @@
+import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type React from 'react';
 import type { GroupRulesBase } from './model';
 
@@ -17,9 +18,11 @@ export type AdditionalGroupOptionProps = {
 };
 
 export type RulePanel = {
+	label: string;
 	name: string;
+	icon?: IconProps[ 'icon' ];
 	onSelect: () => void;
 	onDeselect: () => void;
 	resetAllFilter: () => void;
-	items: React.ReactNode;
+	items: React.ReactChildren;
 };
