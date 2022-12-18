@@ -4,12 +4,12 @@ import { __ } from '@wordpress/i18n';
 import { desktop, mobile, tablet } from '@wordpress/icons';
 
 import type {
-	DeviceControlsGroup as DeviceRulesProps,
+	DeviceBlockControlsGroup,
 	DeviceScreenSizes,
 	GroupOptionProps,
 } from '../../../types';
 
-type Props = GroupOptionProps< DeviceRulesProps & {} >;
+type Props = GroupOptionProps< DeviceBlockControlsGroup & {} >;
 
 const DeviceRules = ( props: Props ) => {
 	const { groupRules, setGroupRules } = props;

@@ -11,33 +11,24 @@ export type DeviceScreenSizes = {
 
 export interface BlockControlsGroupBase {}
 
-export interface DeviceControlsGroup extends BlockControlsGroupBase {
+export interface DeviceBlockControlsGroup extends BlockControlsGroupBase {
 	hideOn: {
 		[ key: string ]: boolean;
 	};
 }
 
-export interface ConditionalControlsGroup extends BlockControlsGroupBase {
+export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
 	anyAll: 'any' | 'all' | 'none';
+	// TODO Refactor to take query from rule-engine package.
 	conditionSets: {
 		id: string;
 		type: 'rule' | 'group';
 	}[];
 }
 
-export interface BlockControls {
-	enabled: boolean;
-	rules: ControlGroups;
-}
-
 export interface ControlGroups {
-	device: DeviceControlsGroup;
-	conditional: ConditionalControlsGroup;
+	device: DeviceBlockControlsGroup;
+	conditional: ConditionalBlockControlsGroup;
 }
-
-export type BlockControlAttrs = {
-	contentControls?: BlockControls;
-	[ key: string ]: any;
-};
 
 export type BlockControlsGroup = ControlGroups[ keyof ControlGroups ];
