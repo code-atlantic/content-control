@@ -16,6 +16,10 @@ import { __, _x } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
 import type { Item, Query, QuerySet } from '@content-control/rule-engine';
+import type {
+	BlockControlsGroupProps,
+	ConditionalBlockControlsGroup,
+} from '../../../types';
 
 const { registeredRules } = contentControlRuleEngine;
 
@@ -53,19 +57,15 @@ const anyAllOptions = [
 	},
 ];
 
-type ConditionalGroupRules = {
-	anyAll: 'all' | 'any' | 'none';
-	conditionSets: QuerySet[];
-};
-
-type ConditionalRulesProps = {
-	groupRules: ConditionalGroupRules;
-	setGroupRules: ( groupRules: ConditionalGroupRules ) => void;
-};
+type ConditionalRulesProps =
+	BlockControlsGroupProps< ConditionalBlockControlsGroup >;
 
 const ConditionalRules = ( props: ConditionalRulesProps ) => {
-	const { groupRules, setGroupRules } = props;
-	const { anyAll = 'all', conditionSets = [] } = groupRules;
+	const { groupRules, setGroupRules, groupDefaults } = props;
+
+	const currentRules = groupRules ?? groupDefaults;
+
+	const { anyAll = 'all', conditionSets = [] } = currentRules;
 
 	const [ currentSet, updateCurrentSet ] = useState< QuerySet | null >(
 		null
@@ -141,7 +141,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 		}
 
 		setGroupRules( {
-			...groupRules,
+			...currentRules,
 			conditionSets: newSets,
 		} );
 	};
@@ -153,7 +153,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	 */
 	const removeSet = ( id: string ) =>
 		setGroupRules( {
-			...groupRules,
+			...currentRules,
 			conditionSets: conditionSets.filter( ( set ) => set.id !== id ),
 		} );
 
@@ -196,7 +196,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 				value={ anyAll }
 				onChange={ ( value ) => {
 					setGroupRules( {
-						...groupRules,
+						...currentRules,
 						anyAll: value,
 					} );
 				} }

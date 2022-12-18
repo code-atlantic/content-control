@@ -7,7 +7,7 @@ import { Children, cloneElement, isValidElement } from '@wordpress/element';
 import RuleGroupHeader from './header';
 
 import type { Icon } from '@wordpress/components';
-import type { BlockControlsGroup } from '../../types';
+import type { BlockControlsGroup, BlockControlsGroupProps } from '../../types';
 
 type Props = React.PropsWithChildren< {
 	label: string;
@@ -19,6 +19,12 @@ type Props = React.PropsWithChildren< {
 		[ key: string ]: any;
 	};
 } >;
+
+type OtherProps = BlockControlsGroupProps< BlockControlsGroup > &
+	Props & {
+		setGroupRules: ( rules?: BlockControlsGroup | null ) => void;
+		updateGroupRules: ( rules?: BlockControlsGroup | null ) => void;
+	};
 
 const RuleGroupComponent = ( {
 	label,
@@ -42,7 +48,7 @@ const RuleGroupComponent = ( {
 	 *
 	 * @param {BlockControlsGroup} newRules New rules to save for group.
 	 */
-	const setGroupRules = ( newRules: BlockControlsGroup | null ) =>
+	const setGroupRules = ( newRules?: BlockControlsGroup | null ) =>
 		setRules( {
 			...rules,
 			[ groupId ]: newRules,
@@ -53,7 +59,7 @@ const RuleGroupComponent = ( {
 	 *
 	 * @param {BlockControlsGroup} newRules Rules to append to the group settings.
 	 */
-	const updateGroupRules = ( newRules: BlockControlsGroup | null ) =>
+	const updateGroupRules = ( newRules?: BlockControlsGroup | null ) =>
 		setGroupRules( {
 			...groupRules,
 			...newRules,
@@ -65,18 +71,23 @@ const RuleGroupComponent = ( {
 	const ChildrenWithProps = () => (
 		<>
 			{ Children.map( children, ( child ) => {
+				const item = child as React.ReactElement<
+					React.PropsWithChildren< Props >
+				>;
+
 				// Checking isValidElement is the safe way and avoids a typescript
 				// error too.
-				if ( isValidElement( child ) ) {
+				if ( isValidElement< OtherProps >( item ) ) {
 					// TODO LEFT OFF HERE.
-					return cloneElement< Props >( child, {
+					return cloneElement( item, {
 						...extraChildProps,
 						groupRules,
 						setGroupRules,
 						updateGroupRules,
 					} );
 				}
-				return child;
+
+				return item;
 			} ) }
 		</>
 	);

@@ -7,8 +7,8 @@ export type BlockExtraProps = {
 
 export type BlockControlsGroupProps< T extends BlockControlsGroupBase > = {
 	groupDefaults: T;
-	groupRules: T;
-	setGroupRules: ( groupRules: T | null ) => void;
+	groupRules?: T | null;
+	setGroupRules: ( groupRules?: T | null ) => void;
 };
 
 export type BlockControlsGroupOption = {

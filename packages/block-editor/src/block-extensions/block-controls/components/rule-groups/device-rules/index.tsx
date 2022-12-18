@@ -12,7 +12,9 @@ import type {
 type Props = BlockControlsGroupProps< DeviceBlockControlsGroup & {} >;
 
 const DeviceRules = ( props: Props ) => {
-	const { groupRules, setGroupRules } = props;
+	const { groupRules, setGroupRules, groupDefaults } = props;
+
+	const currentRules = groupRules ?? groupDefaults;
 
 	const screenSizes = applyFilters(
 		'contentControl.blockControls.screenSizes',
@@ -26,11 +28,11 @@ const DeviceRules = ( props: Props ) => {
 		}
 	) as DeviceScreenSizes;
 
-	const { hideOn = {} } = groupRules;
+	const { hideOn = {} } = currentRules;
 
 	const toggleDeviceRule = ( device: string, hide: boolean ) =>
 		setGroupRules( {
-			...groupRules,
+			...currentRules,
 			hideOn: {
 				...hideOn,
 				[ device ]: !! hide,

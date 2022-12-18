@@ -115,7 +115,17 @@ addFilter(
 							setRules={ setRules }
 							defaults={ defaults }
 						>
-							<DeviceRules { ...props } />
+							<DeviceRules
+								{ ...props }
+								groupDefaults={ defaults[ 'device' ] }
+								groupRules={ rules[ 'device' ] }
+								setGroupRules={ ( groupRules ): void => {
+									setRules( {
+										...rules,
+										device: groupRules,
+									} );
+								} }
+							/>
 						</RuleGroupComponent>
 					</Fill>
 				</>
@@ -150,7 +160,17 @@ addFilter(
 							setRules={ setRules }
 							defaults={ defaults }
 						>
-							<ConditionalRules { ...props } />
+							<ConditionalRules
+								{ ...props }
+								groupDefaults={ defaults[ 'conditional' ] }
+								groupRules={ rules[ 'conditional' ] }
+								setGroupRules={ ( groupRules ): void => {
+									setRules( {
+										...rules,
+										conditional: groupRules,
+									} );
+								} }
+							/>
 						</RuleGroupComponent>
 					</Fill>
 				</>

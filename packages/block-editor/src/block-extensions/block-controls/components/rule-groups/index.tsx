@@ -8,8 +8,12 @@ import RuleGroup from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type { QuerySet } from '@content-control/rule-engine';
-import type { ControlGroups } from '../../types';
+import type {
+	ConditionalBlockControlsGroup,
+	ControlGroups,
+	DeviceBlockControlsGroup,
+	NonNullableFields,
+} from '../../types';
 import { noop } from '@content-control/utils';
 
 const blockMeta = (
@@ -22,23 +26,11 @@ const blockMeta = (
 	</SVG>
 );
 
-type BlockAttributes = {
-	device: {
-		hideOn: {
-			[ key: string ]: boolean;
-		};
-	};
-	conditional: {
-		anyAll: 'any' | 'all';
-		conditionSets: QuerySet[];
-	};
-};
-
 /**
  * Move this to a set of generator functions exported as utilitiles.
  * Each location using this should then just use the needed generators.
  */
-const defaults: ControlGroups = {
+const defaults: Required< NonNullableFields< ControlGroups > > = {
 	device: {
 		hideOn: {
 			mobile: false,
@@ -103,7 +95,19 @@ const RuleGroups = ( props: Props ) => {
 					setRules={ setRules }
 					defaults={ defaults }
 				>
-					<DeviceRules { ...props } />
+					<DeviceRules
+						{ ...props }
+						groupRules={ rules[ 'device' ] }
+						groupDefaults={ defaults[ 'device' ] }
+						setGroupRules={ (
+							groupRules?: DeviceBlockControlsGroup | null
+						) => {
+							setRules( {
+								...rules,
+								device: groupRules,
+							} );
+						} }
+					/>
 				</RuleGroup>
 			</Fill>
 
@@ -118,9 +122,16 @@ const RuleGroups = ( props: Props ) => {
 				>
 					<ConditionalRules
 						{ ...props }
-						groupRules={
-							rules[ 'conditional' ] ?? defaults[ 'conditional' ]
-						}
+						groupRules={ rules[ 'conditional' ] }
+						groupDefaults={ defaults[ 'conditional' ] }
+						setGroupRules={ (
+							groupRules?: ConditionalBlockControlsGroup | null
+						) => {
+							setRules( {
+								...rules,
+								conditional: groupRules,
+							} );
+						} }
 					/>
 				</RuleGroup>
 			</Fill>

@@ -1,3 +1,4 @@
+import type { QuerySet } from '@content-control/rule-engine';
 import type { Icon } from '@wordpress/components';
 
 export type DeviceScreenSize = {
@@ -19,16 +20,18 @@ export interface DeviceBlockControlsGroup extends BlockControlsGroupBase {
 
 export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
 	anyAll: 'any' | 'all' | 'none';
-	// TODO Refactor to take query from rule-engine package.
-	conditionSets: {
-		id: string;
-		type: 'rule' | 'group';
-	}[];
+	conditionSets: QuerySet[];
 }
 
 export interface ControlGroups {
-	device: DeviceBlockControlsGroup;
-	conditional: ConditionalBlockControlsGroup;
+	device?: DeviceBlockControlsGroup | null;
+	conditional?: ConditionalBlockControlsGroup | null;
 }
 
-export type BlockControlsGroup = ControlGroups[ keyof ControlGroups ];
+export type BlockControlsGroup = NonNullable<
+	ControlGroups[ keyof ControlGroups ]
+>;
+
+export type NonNullableFields< T > = {
+	[ P in keyof T ]: NonNullable< T[ P ] >;
+};
