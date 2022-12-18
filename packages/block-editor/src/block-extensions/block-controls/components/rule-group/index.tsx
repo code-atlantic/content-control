@@ -7,7 +7,7 @@ import { Children, cloneElement, isValidElement } from '@wordpress/element';
 import RuleGroupHeader from './header';
 
 import type { Icon } from '@wordpress/components';
-import type { RuleGroup, GroupRules } from '../../types';
+import type { BlockControlsGroup } from '../../types';
 
 type Props = React.PropsWithChildren< {
 	label: string;
@@ -40,9 +40,9 @@ const RuleGroupComponent = ( {
 	 *
 	 * This will replace the entire group object with the newRules.
 	 *
-	 * @param {GroupRules} newRules New rules to save for group.
+	 * @param {BlockControlsGroup} newRules New rules to save for group.
 	 */
-	const setGroupRules = ( newRules: GroupRules | null ) =>
+	const setGroupRules = ( newRules: BlockControlsGroup | null ) =>
 		setRules( {
 			...rules,
 			[ groupId ]: newRules,
@@ -51,9 +51,9 @@ const RuleGroupComponent = ( {
 	/**
 	 * Append/update rules for the group.
 	 *
-	 * @param {GroupRules} newRules Rules to append to the group settings.
+	 * @param {BlockControlsGroup} newRules Rules to append to the group settings.
 	 */
-	const updateGroupRules = ( newRules: GroupRules | null ) =>
+	const updateGroupRules = ( newRules: BlockControlsGroup | null ) =>
 		setGroupRules( {
 			...groupRules,
 			...newRules,

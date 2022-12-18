@@ -6,9 +6,9 @@ import { check, copy, rotateLeft, trash } from '@wordpress/icons';
 import CopyMenuItem from './copy-menu-item';
 import PasteMenuItem from './paste-menu-item';
 
-import type { GroupOptionProps, GroupRules } from '../../types';
+import type { GroupOptionProps, BlockControlsGroup } from '../../types';
 
-type Props = GroupOptionProps< GroupRules > & {
+type Props = GroupOptionProps< BlockControlsGroup > & {
 	labelText: string;
 } & {
 	onClose: () => void;

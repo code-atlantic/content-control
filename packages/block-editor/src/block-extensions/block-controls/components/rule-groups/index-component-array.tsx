@@ -37,7 +37,7 @@ import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
 import type { BlockAttributes } from '@wordpress/blocks';
-import type { Rules as RulesType } from '../../types';
+import type { ControlGroups } from '../../types';
 import type { RulePanel } from '../../types';
 
 addFilter(
@@ -105,8 +105,8 @@ addFilter(
 
 // TODO This needs to be typed properly.
 type Props = {
-	rules: RulesType;
-	setRules: ( rules: RulesType ) => void;
+	rules: ControlGroups;
+	setRules: ( rules: ControlGroups ) => void;
 };
 
 // TODO This needs to be typed properly.

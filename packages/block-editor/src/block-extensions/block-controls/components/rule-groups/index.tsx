@@ -9,7 +9,7 @@ import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
 import type { QuerySet } from '@content-control/rule-engine';
-import type { Rules as RulesType } from '../../types';
+import type { ControlGroups } from '../../types';
 import { noop } from '@content-control/utils';
 
 const blockMeta = (
@@ -38,7 +38,7 @@ type BlockAttributes = {
  * Move this to a set of generator functions exported as utilitiles.
  * Each location using this should then just use the needed generators.
  */
-const defaults: BlockAttributes = {
+const defaults: ControlGroups = {
 	device: {
 		hideOn: {
 			mobile: false,
@@ -68,8 +68,8 @@ const defaults: BlockAttributes = {
 };
 
 type Props = {
-	rules: RulesType;
-	setRules: ( rules: RulesType ) => void;
+	rules: ControlGroups;
+	setRules: ( rules: ControlGroups ) => void;
 };
 
 const RuleGroups = ( props: Props ) => {
@@ -116,7 +116,12 @@ const RuleGroups = ( props: Props ) => {
 					setRules={ setRules }
 					defaults={ defaults }
 				>
-					<ConditionalRules { ...props } />
+					<ConditionalRules
+						{ ...props }
+						groupRules={
+							rules[ 'conditional' ] ?? defaults[ 'conditional' ]
+						}
+					/>
 				</RuleGroup>
 			</Fill>
 

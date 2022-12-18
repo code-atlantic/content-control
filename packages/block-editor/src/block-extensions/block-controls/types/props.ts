@@ -1,12 +1,12 @@
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type React from 'react';
-import type { GroupRulesBase } from './model';
+import type { BlockControlsGroupBase } from './model';
 
 export type BlockExtraProps = {
 	[ key: string ]: string;
 };
 
-export type GroupOptionProps< T extends GroupRulesBase > = {
+export type GroupOptionProps< T extends BlockControlsGroupBase > = {
 	groupDefaults: T;
 	groupRules: T;
 	setGroupRules: ( groupRules: T | null ) => void;

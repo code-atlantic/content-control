@@ -11,10 +11,10 @@ import OptionalGroupOptions from './optional-group-options';
 import type {
 	AdditionalGroupOptionProps,
 	GroupOptionProps,
-	GroupRules,
+	BlockControlsGroup,
 } from '../../types';
 
-type Props = GroupOptionProps< GroupRules > & {
+type Props = GroupOptionProps< BlockControlsGroup > & {
 	isOpened: boolean;
 	icon: Icon.IconType< {} >;
 	additionalOptions?: AdditionalGroupOptionProps[];

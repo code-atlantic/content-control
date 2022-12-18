@@ -13,7 +13,7 @@ import RuleGroupComponent from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type { Rules as RulesType } from '../../types';
+import type { ControlGroups } from '../../types';
 import type { BlockAttributes } from '@wordpress/blocks';
 
 /**
@@ -56,8 +56,8 @@ import type { BlockAttributes } from '@wordpress/blocks';
 
 // TODO This needs to be typed properly.
 type Props = {
-	rules: RulesType;
-	setRules: ( rules: RulesType ) => void;
+	rules: ControlGroups;
+	setRules: ( rules: ControlGroups ) => void;
 };
 
 /**
