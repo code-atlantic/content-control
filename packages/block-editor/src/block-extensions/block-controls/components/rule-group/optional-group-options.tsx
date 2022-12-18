@@ -4,12 +4,12 @@ import { __, _x, sprintf } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 
 import type {
-	RuleGroup,
+	GroupRules,
 	AdditionalGroupOptionProps,
 	GroupOptionProps,
 } from '../../types';
 
-type Props = GroupOptionProps< RuleGroup > & {
+type Props = GroupOptionProps< GroupRules > & {
 	items: AdditionalGroupOptionProps[];
 	toggleItem?: ( item: string ) => void;
 	onClose: () => void;

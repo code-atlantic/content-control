@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { desktop, mobile, tablet } from '@wordpress/icons';
 
 import type {
-	DeviceRules as DeviceRulesProps,
+	DeviceGroupRules as DeviceRulesProps,
 	DeviceScreenSizes,
 	GroupOptionProps,
 } from '../../../types';

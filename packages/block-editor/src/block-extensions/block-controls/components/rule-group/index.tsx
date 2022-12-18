@@ -7,9 +7,9 @@ import { Children, cloneElement, isValidElement } from '@wordpress/element';
 import RuleGroupHeader from './header';
 
 import type { Icon } from '@wordpress/components';
-import type { RuleGroup } from '../../types';
+import type { RuleGroup, GroupRules } from '../../types';
 
-type Props = {
+type Props = React.PropsWithChildren< {
 	label: string;
 	groupId: string;
 	icon: Icon.IconType< any >;
@@ -18,8 +18,7 @@ type Props = {
 	defaults: {
 		[ key: string ]: any;
 	};
-	children: NonNullable< React.ReactNode > | NonNullable< React.ReactNode >[];
-};
+} >;
 
 const RuleGroupComponent = ( {
 	label,
@@ -41,9 +40,9 @@ const RuleGroupComponent = ( {
 	 *
 	 * This will replace the entire group object with the newRules.
 	 *
-	 * @param {RuleGroup} newRules New rules to save for group.
+	 * @param {GroupRules} newRules New rules to save for group.
 	 */
-	const setGroupRules = ( newRules: RuleGroup | null ) =>
+	const setGroupRules = ( newRules: GroupRules | null ) =>
 		setRules( {
 			...rules,
 			[ groupId ]: newRules,
@@ -52,9 +51,9 @@ const RuleGroupComponent = ( {
 	/**
 	 * Append/update rules for the group.
 	 *
-	 * @param {RuleGroup} newRules Rules to append to the group settings.
+	 * @param {GroupRules} newRules Rules to append to the group settings.
 	 */
-	const updateGroupRules = ( newRules: RuleGroup | null ) =>
+	const updateGroupRules = ( newRules: GroupRules | null ) =>
 		setGroupRules( {
 			...groupRules,
 			...newRules,
@@ -69,7 +68,8 @@ const RuleGroupComponent = ( {
 				// Checking isValidElement is the safe way and avoids a typescript
 				// error too.
 				if ( isValidElement( child ) ) {
-					return cloneElement( child, {
+					// TODO LEFT OFF HERE.
+					return cloneElement< Props >( child, {
 						...extraChildProps,
 						groupRules,
 						setGroupRules,

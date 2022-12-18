@@ -22,7 +22,7 @@ const addWrapperClasses = (
 		},
 	}: BlockInstanceWithControls[ 'attributes' ]
 ) => {
-	const { enabled: controlsEnabled = false, rules = {} } = contentControls;
+	const { enabled: controlsEnabled = false } = contentControls;
 
 	/**
 	 * Bail early if block controls disabled and this block didn't previously have them configured.

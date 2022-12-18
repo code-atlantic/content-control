@@ -11,13 +11,13 @@ export type DeviceScreenSizes = {
 
 export interface GroupRulesBase {}
 
-export interface DeviceRules extends GroupRulesBase {
+export interface DeviceGroupRules extends GroupRulesBase {
 	hideOn: {
 		[ key: string ]: boolean;
 	};
 }
 
-export interface ConditionalRules extends GroupRulesBase {
+export interface ConditionalGroupRules extends GroupRulesBase {
 	anyAll: 'any' | 'all' | 'none';
 	conditionSets: {
 		id: string;
@@ -25,13 +25,13 @@ export interface ConditionalRules extends GroupRulesBase {
 	}[];
 }
 
-export type GroupRules = ConditionalRules | DeviceRules;
+export type GroupRules = ConditionalGroupRules | DeviceGroupRules;
 // TODO Remove this.
 export type RuleGroup = GroupRules;
 
 export type Rules = {
-	device?: DeviceRules;
-	conditional?: ConditionalRules;
+	device?: DeviceGroupRules;
+	conditional?: ConditionalGroupRules;
 };
 
 export type BlockControls = {
