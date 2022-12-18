@@ -5,12 +5,12 @@ import { check } from '@wordpress/icons';
 
 import type {
 	BlockControlsGroup,
-	AdditionalGroupOptionProps,
-	GroupOptionProps,
+	BlockControlsGroupOption,
+	BlockControlsGroupProps,
 } from '../../types';
 
-type Props = GroupOptionProps< BlockControlsGroup > & {
-	items: AdditionalGroupOptionProps[];
+type Props = BlockControlsGroupProps< BlockControlsGroup > & {
+	items: BlockControlsGroupOption[];
 	toggleItem?: ( item: string ) => void;
 	onClose: () => void;
 };

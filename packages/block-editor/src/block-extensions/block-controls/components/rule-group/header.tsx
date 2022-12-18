@@ -9,15 +9,15 @@ import DefaultGroupOptions from './default-group-options';
 import OptionalGroupOptions from './optional-group-options';
 
 import type {
-	AdditionalGroupOptionProps,
-	GroupOptionProps,
+	BlockControlsGroupOption,
+	BlockControlsGroupProps,
 	BlockControlsGroup,
 } from '../../types';
 
-type Props = GroupOptionProps< BlockControlsGroup > & {
+type Props = BlockControlsGroupProps< BlockControlsGroup > & {
 	isOpened: boolean;
 	icon: Icon.IconType< {} >;
-	additionalOptions?: AdditionalGroupOptionProps[];
+	additionalOptions?: BlockControlsGroupOption[];
 	dropdownMenuClassName?: string;
 	headingClassName?: string;
 	label: string;

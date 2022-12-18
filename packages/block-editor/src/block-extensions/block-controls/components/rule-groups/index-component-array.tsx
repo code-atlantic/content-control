@@ -38,7 +38,18 @@ import DeviceRules from './device-rules';
 
 import type { BlockAttributes } from '@wordpress/blocks';
 import type { ControlGroups } from '../../types';
-import type { RulePanel } from '../../types';
+
+import type { Icon } from '@wordpress/components';
+
+export type RulePanel = {
+	label: string;
+	name: string;
+	icon?: Icon.IconType< {} >;
+	onSelect: () => void;
+	onDeselect: () => void;
+	resetAllFilter: () => void;
+	items: React.ReactChildren;
+};
 
 addFilter(
 	'contentControl.blockRules.rulePanels',
