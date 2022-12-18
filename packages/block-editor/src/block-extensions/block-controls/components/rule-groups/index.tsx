@@ -1,4 +1,5 @@
 import { newUUID } from '@content-control/rule-engine';
+import { noop } from '@content-control/utils';
 import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { tablet } from '@wordpress/icons';
@@ -14,8 +15,6 @@ import type {
 	DeviceBlockControlsGroup,
 	NonNullableFields,
 } from '../../types';
-import { noop } from '@content-control/utils';
-
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path
