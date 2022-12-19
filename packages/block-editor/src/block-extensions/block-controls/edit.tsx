@@ -12,7 +12,10 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
 import { RuleGroups } from './components';
-import { blockControlsEnabled } from './utils';
+import { blockHasControls } from './utils';
+
+import type { BlockEditProps } from '@wordpress/blocks';
+import type { BlockInstanceWithControls } from './types';
 
 /**
  * Add block controls on block inspector sidebar.
@@ -24,9 +27,17 @@ import { blockControlsEnabled } from './utils';
  * @return {Function} BlockEdit Modified block edit component.
  */
 const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
-	return ( props ) => {
+	return (
+		props: BlockInstanceWithControls &
+			BlockEditProps< BlockInstanceWithControls[ 'attributes' ] >
+	) => {
 		const {
-			attributes: { contentControls = {} },
+			attributes: {
+				contentControls = {
+					enabled: false,
+					rules: {},
+				},
+			},
 			setAttributes,
 			isSelected,
 		} = props;
@@ -55,7 +66,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 		return (
 			<>
 				<BlockEdit { ...props } />
-				{ isSelected && blockControlsEnabled( props ) && (
+				{ isSelected && blockHasControls( props ) && (
 					<InspectorControls key="content-control">
 						<div
 							className={ classnames( [

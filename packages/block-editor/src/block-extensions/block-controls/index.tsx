@@ -36,6 +36,9 @@ export const init = () => {
 		addWrapperClasses
 	);
 
+	/**
+	 * Add icon to controlled blocks.
+	 */
 	addFilter(
 		'editor.BlockListBlock',
 		'content-control/controlled-content-icon',

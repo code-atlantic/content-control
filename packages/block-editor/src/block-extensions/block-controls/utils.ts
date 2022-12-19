@@ -1,12 +1,11 @@
 import { hasBlockSupport } from '@wordpress/blocks';
 import { applyFilters } from '@wordpress/hooks';
 
-import type { Block } from '@wordpress/blocks';
+import type { BlockInstanceWithControls, BlockWithControls } from './types';
 
 const {
 	allowedBlocks = [],
 	excludedBlocks = [ 'core/freeform', 'core/nextpage' ],
-	advancedMode = false,
 } = contentControlBlockEditor;
 
 /**
@@ -32,10 +31,12 @@ const excluded: string[] = applyFilters(
 /**
  * Check if block controls should be enabled for given block type.
  *
- * @param {Block} settings Object containing block type settings declarations.
+ * @param {BlockWithControls|BlockInstanceWithControls} settings Object containing block type settings declarations.
  * @return {boolean} Whether block controls should be anbled for given block type.
  */
-const blockControlsEnabled = ( settings: Block ): boolean => {
+const blockControlsEnabled = (
+	settings: BlockWithControls | BlockInstanceWithControls
+): boolean => {
 	const { name } = settings;
 
 	// Force compatiblity mode for older gutenberg blocks.
@@ -59,14 +60,36 @@ const blockControlsEnabled = ( settings: Block ): boolean => {
 
 	// Enabled by default for all insertable block types. (Temporary).
 	if (
-		hasBlockSupport( settings, 'inserter', true ) &&
+		hasBlockSupport( name, 'inserter', true ) &&
 		! Object.prototype.hasOwnProperty.call( settings, 'parent' )
 	) {
 		return true;
 	}
 
 	// If advanced mode is enabled, attempt to load it on all blocks.
-	return advancedMode !== false;
+	return false;
 };
 
-export { blockControlsEnabled };
+/**
+ * Check if block instance has controls.
+ *
+ * @param {BlockInstanceWithControls} settings Instance of block, maybe with controls.
+ * @returns {boolean} Whether block has controls.
+ */
+const blockHasControls = ( settings: BlockInstanceWithControls ): boolean => {
+	if ( ! blockControlsEnabled( settings ) ) {
+		return false;
+	}
+
+	const { attributes } = settings;
+
+	if ( ! attributes ) {
+		return false;
+	}
+
+	const { contentControls = { enabled: false } } = attributes;
+
+	return contentControls.enabled;
+};
+
+export { blockControlsEnabled, blockHasControls };
