@@ -1,4 +1,5 @@
 /build/*
+/build-types/*
 /node_modules/*
 /vendor/*
 /.vscode/*

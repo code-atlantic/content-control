@@ -18,7 +18,9 @@ project.properties
 
 # Built code
 **/build/
+**/build/**/*
 **/build-types/
+**/build-types/**/*
 node_modules
 release
 dist
