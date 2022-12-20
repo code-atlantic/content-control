@@ -1,8 +1,9 @@
 import type { Block, BlockInstance } from '@wordpress/blocks';
 import type { ControlGroups } from './model';
 
-export interface BlockControls extends ControlGroups {
+export interface BlockControls {
 	enabled: boolean;
+	rules: ControlGroups;
 }
 
 export type BlockControlAttrs = {
