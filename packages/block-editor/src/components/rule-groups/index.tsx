@@ -1,4 +1,3 @@
-import { newUUID } from '@content-control/rule-engine';
 import { noop } from '@content-control/utils';
 import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -15,6 +14,10 @@ import type {
 	DeviceBlockControlsGroup,
 	NonNullableFields,
 } from '../../types';
+import {
+	defaultConditionBlockControls,
+	defaultDeviceBlockControls,
+} from '../../contexts';
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path
@@ -30,32 +33,8 @@ const blockMeta = (
  * Each location using this should then just use the needed generators.
  */
 const defaults: Required< NonNullableFields< ControlGroups > > = {
-	device: {
-		hideOn: {
-			mobile: false,
-			tablet: false,
-			desktop: false,
-		},
-	},
-	conditional: {
-		anyAll: 'all',
-		conditionSets: [
-			{
-				id: newUUID(),
-				label: __( 'User Logged In', 'content-control' ),
-				query: {
-					logicalOperator: 'and',
-					items: [
-						{
-							id: newUUID(),
-							type: 'rule',
-							name: 'user_is_logged_in',
-						},
-					],
-				},
-			},
-		],
-	},
+	device: defaultDeviceBlockControls,
+	conditional: defaultConditionBlockControls,
 };
 
 type Props = {

@@ -17,6 +17,10 @@ declare global {
 // Expose the scanner to the window object.
 export { initScanner };
 
+// Export contexts & components.
+export * from './contexts';
+export * from './components';
+
 // Export types.
 export * from './types';
 

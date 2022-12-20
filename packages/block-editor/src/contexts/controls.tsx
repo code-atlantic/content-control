@@ -1,4 +1,7 @@
+import { newUUID } from '@content-control/rule-engine';
 import { createContext, useContext } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
+import { __ } from '@wordpress/i18n';
 
 import type {
 	BlockControls,
@@ -20,7 +23,22 @@ export const defaultDeviceBlockControls: DeviceBlockControlsGroup = {
 
 export const defaultConditionBlockControls: ConditionalBlockControlsGroup = {
 	anyAll: 'any',
-	conditionSets: [],
+	conditionSets: [
+		{
+			id: newUUID(),
+			label: __( 'User Logged In', 'content-control' ),
+			query: {
+				logicalOperator: 'and',
+				items: [
+					{
+						id: newUUID(),
+						type: 'rule',
+						name: 'user_is_logged_in',
+					},
+				],
+			},
+		},
+	],
 };
 
 type BlockControlsContextType = BlockControls & {
@@ -43,7 +61,7 @@ export const BlockControlsContextProvider = ( {
 	);
 };
 
-const useBlockControls = () => {
+export const useBlockControls = () => {
 	const context = useContext( BlockControlsContext );
 
 	if ( context === undefined ) {
@@ -52,7 +70,17 @@ const useBlockControls = () => {
 		);
 	}
 
-	return context;
+	const blockControlsContext = {
+		...context,
+		defaultBlockControls,
+		defaultDeviceBlockControls,
+		defaultConditionBlockControls,
+	};
+
+	return applyFilters(
+		'contentControl.blockControlsContext',
+		blockControlsContext
+	) as typeof blockControlsContext;
 };
 
 export default useBlockControls;
