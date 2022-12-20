@@ -12,7 +12,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
 import { RuleGroups } from './components';
-import { blockHasControls } from './utils';
+import { blockControlsEnabled } from './utils';
 
 import type { BlockEditProps } from '@wordpress/blocks';
 import type { BlockInstanceWithControls } from './types';
@@ -66,29 +66,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 		return (
 			<>
 				<BlockEdit { ...props } />
-				{ isSelected && blockHasControls( props ) && (
-					<InspectorControls key="content-control">
-						<div
-							className={ classnames( [
-								'cc__block-controls',
-								enabled ? 'cc__block-controls--enabled' : null,
-							] ) }
-						>
-							<Panel className="cc__block-controls__main-panel">
-								<PanelBody
-									title={ __(
-										'Content Controls',
-										'content-control'
-									) }
-									icon="welcome-view-site"
-								>
-									<div className="cc__block-controls__top-panel">
-										<PanelRow>
-											{ __(
-												'Block controls let you choose who will see your content & when they will see it.',
-												'content-control'
-											) }
-										</PanelRow>
+				{ isSelected && blockControlsEnabled( props ) && (
 
 										<PanelRow>
 											<ExternalLink href="#">
