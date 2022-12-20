@@ -48,6 +48,8 @@
 		"assets/**",
 		"**/build/**",
 		"build/**",
+		"**/build-types/**",
+		"build-types/**",
 		"**/dist/**",
 		"dist/**",
 		"**/vendor/**",
