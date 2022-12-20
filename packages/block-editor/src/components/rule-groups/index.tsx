@@ -8,11 +8,7 @@ import RuleGroup from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type {
-	ConditionalBlockControlsGroup,
-	ControlGroups,
-	NonNullableFields,
-} from '../../types';
+import type { ControlGroups, NonNullableFields } from '../../types';
 import {
 	getDefaultConditionBlockControls,
 	getDefaultDeviceBlockControls,
@@ -85,19 +81,7 @@ const RuleGroups = ( props: Props ) => {
 					setRules={ setRules }
 					defaults={ defaults }
 				>
-					<ConditionalRules
-						{ ...props }
-						groupRules={ rules[ 'conditional' ] }
-						groupDefaults={ defaults[ 'conditional' ] }
-						setGroupRules={ (
-							groupRules?: ConditionalBlockControlsGroup | null
-						) => {
-							setRules( {
-								...rules,
-								conditional: groupRules,
-							} );
-						} }
-					/>
+					<ConditionalRules />
 				</RuleGroup>
 			</Fill>
 

@@ -16,10 +16,8 @@ import { __, _x } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
 import type { Item, Query, QuerySet } from '@content-control/rule-engine';
-import type {
-	BlockControlsGroupProps,
-	ConditionalBlockControlsGroup,
-} from '../../../types';
+import type { ConditionalBlockControlsGroup } from '../../../types';
+import { useBlockControls } from '../../../contexts';
 
 const { registeredRules } = contentControlRuleEngine;
 
@@ -57,13 +55,16 @@ const anyAllOptions = [
 	},
 ];
 
-type ConditionalRulesProps =
-	BlockControlsGroupProps< ConditionalBlockControlsGroup >;
+const ConditionalRules = () => {
+	const { getGroupRules, setGroupRules, getGroupDefaults } =
+		useBlockControls();
 
-const ConditionalRules = ( props: ConditionalRulesProps ) => {
-	const { groupRules, setGroupRules, groupDefaults } = props;
+	const defaultValues = getGroupDefaults( 'conditional' );
+	const currentRules = getGroupRules( 'conditional' ) ?? defaultValues;
 
-	const currentRules = groupRules ?? groupDefaults;
+	const setConditionalRules = (
+		conditionalRules: ConditionalBlockControlsGroup
+	) => setGroupRules( 'conditional', conditionalRules );
 
 	const { anyAll = 'all', conditionSets = [] } = currentRules;
 
@@ -140,7 +141,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 			newSets.push( cleanedSet );
 		}
 
-		setGroupRules( {
+		setConditionalRules( {
 			...currentRules,
 			conditionSets: newSets,
 		} );
@@ -152,7 +153,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 	 * @param {string} id
 	 */
 	const removeSet = ( id: string ) =>
-		setGroupRules( {
+		setConditionalRules( {
 			...currentRules,
 			conditionSets: conditionSets.filter( ( set ) => set.id !== id ),
 		} );
@@ -195,7 +196,7 @@ const ConditionalRules = ( props: ConditionalRulesProps ) => {
 				options={ anyAllOptions }
 				value={ anyAll }
 				onChange={ ( value ) => {
-					setGroupRules( {
+					setConditionalRules( {
 						...currentRules,
 						anyAll: value,
 					} );

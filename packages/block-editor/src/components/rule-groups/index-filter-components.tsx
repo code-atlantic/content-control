@@ -150,17 +150,7 @@ addFilter(
 							setRules={ setRules }
 							defaults={ defaults }
 						>
-							<ConditionalRules
-								{ ...props }
-								groupDefaults={ defaults[ 'conditional' ] }
-								groupRules={ rules[ 'conditional' ] }
-								setGroupRules={ ( groupRules ): void => {
-									setRules( {
-										...rules,
-										conditional: groupRules,
-									} );
-								} }
-							/>
+							<ConditionalRules />
 						</RuleGroupComponent>
 					</Fill>
 				</>
