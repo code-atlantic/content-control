@@ -8,13 +8,7 @@ const addEditorBlockClasses = ( BlockListBlock ) => ( props ) => {
 		attributes: { contentControls = {} },
 	} = props;
 
-	const {
-		enabled = false,
-		rules = {
-			conditional: null,
-			device: null,
-		},
-	} = contentControls;
+	const { enabled = false, rules = {} } = contentControls;
 
 	if (
 		! enabled ||

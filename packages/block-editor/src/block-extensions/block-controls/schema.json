@@ -14,13 +14,13 @@
 						"type": "object",
 						"properties": {
 							"mobile": {
-								"type": "string"
+								"type": "boolean"
 							},
 							"tablet": {
-								"type": "string"
+								"type": "boolean"
 							},
 							"device": {
-								"type": "string"
+								"type": "boolean"
 							},
 							"additionalProperties": {
 								"type": "boolean"
