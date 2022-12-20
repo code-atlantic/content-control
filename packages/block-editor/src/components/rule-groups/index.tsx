@@ -11,12 +11,11 @@ import DeviceRules from './device-rules';
 import type {
 	ConditionalBlockControlsGroup,
 	ControlGroups,
-	DeviceBlockControlsGroup,
 	NonNullableFields,
 } from '../../types';
 import {
-	defaultConditionBlockControls,
-	defaultDeviceBlockControls,
+	getDefaultConditionBlockControls,
+	getDefaultDeviceBlockControls,
 } from '../../contexts';
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -33,8 +32,8 @@ const blockMeta = (
  * Each location using this should then just use the needed generators.
  */
 const defaults: Required< NonNullableFields< ControlGroups > > = {
-	device: defaultDeviceBlockControls,
-	conditional: defaultConditionBlockControls,
+	device: getDefaultDeviceBlockControls(),
+	conditional: getDefaultConditionBlockControls(),
 };
 
 type Props = {
@@ -73,19 +72,7 @@ const RuleGroups = ( props: Props ) => {
 					setRules={ setRules }
 					defaults={ defaults }
 				>
-					<DeviceRules
-						{ ...props }
-						groupRules={ rules[ 'device' ] }
-						groupDefaults={ defaults[ 'device' ] }
-						setGroupRules={ (
-							groupRules?: DeviceBlockControlsGroup | null
-						) => {
-							setRules( {
-								...rules,
-								device: groupRules,
-							} );
-						} }
-					/>
+					<DeviceRules />
 				</RuleGroup>
 			</Fill>
 

@@ -2,19 +2,22 @@ import { DeviceToggle } from '@content-control/components';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { desktop, mobile, tablet } from '@wordpress/icons';
+import { useBlockControls } from '../../../contexts';
 
 import type {
 	DeviceBlockControlsGroup,
 	DeviceScreenSizes,
-	BlockControlsGroupProps,
 } from '../../../types';
 
-type Props = BlockControlsGroupProps< DeviceBlockControlsGroup & {} >;
+const DeviceRules = () => {
+	const { getGroupRules, setGroupRules, getGroupDefaults } =
+		useBlockControls();
 
-const DeviceRules = ( props: Props ) => {
-	const { groupRules, setGroupRules, groupDefaults } = props;
+	const defaultValues = getGroupDefaults( 'device' );
+	const currentRules = getGroupRules( 'device' ) ?? defaultValues;
 
-	const currentRules = groupRules ?? groupDefaults;
+	const setDeviceRules = ( deviceRules: DeviceBlockControlsGroup ) =>
+		setGroupRules( 'device', deviceRules );
 
 	const screenSizes = applyFilters(
 		'contentControl.blockControls.screenSizes',
@@ -31,7 +34,7 @@ const DeviceRules = ( props: Props ) => {
 	const { hideOn = {} } = currentRules;
 
 	const toggleDeviceRule = ( device: string, hide: boolean ) =>
-		setGroupRules( {
+		setDeviceRules( {
 			...currentRules,
 			hideOn: {
 				...hideOn,
