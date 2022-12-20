@@ -31,7 +31,3 @@ export interface ControlGroups {
 export type BlockControlsGroup = NonNullable<
 	ControlGroups[ keyof ControlGroups ]
 >;
-
-export type NonNullableFields< T > = {
-	[ P in keyof T ]: NonNullable< T[ P ] >;
-};

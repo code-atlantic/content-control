@@ -4,9 +4,7 @@ import { blockControlsEnabled } from './utils';
 
 import type { Block, BlockSupports } from '@wordpress/blocks';
 
-type Mutable< Type > = {
-	-readonly [ Key in keyof Type ]: Type[ Key ];
-};
+import type { Mutable } from '../../types';
 
 /**
  * Add custom attributes for handling & targeting & visibility.
