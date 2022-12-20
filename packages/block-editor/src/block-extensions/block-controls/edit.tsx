@@ -11,13 +11,12 @@ import {
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
-import { RuleGroups } from './components';
+import { RuleGroups } from '../../components';
+import { BlockControlsContextProvider } from '../../contexts';
 import { blockControlsEnabled } from './utils';
 
 import type { BlockEditProps } from '@wordpress/blocks';
 import type { BlockInstanceWithControls } from '../../types';
-
-import { BlockControlsContextProvider } from '../../contexts';
 
 /**
  * Add block controls on block inspector sidebar.
