@@ -37,20 +37,13 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			attributes: {
 				contentControls = {
 					enabled: false,
-					rules: {},
 				},
 			},
 			setAttributes,
 			isSelected,
 		} = props;
 
-		const {
-			enabled = false,
-			rules = {
-				conditional: null,
-				device: null,
-			},
-		} = contentControls;
+		const { enabled = false, ...rules } = contentControls;
 
 		/**
 		 * Update block control attributes.

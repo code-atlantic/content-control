@@ -18,7 +18,6 @@ const addWrapperClasses = (
 	{
 		contentControls = {
 			enabled: false,
-			rules: {},
 		},
 	}: BlockInstanceWithControls[ 'attributes' ]
 ): BlockExtraProps => {
