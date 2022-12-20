@@ -17,6 +17,9 @@ declare global {
 // Expose the scanner to the window object.
 export { initScanner };
 
+// Export types.
+export * from './types';
+
 // Filters need to be added immediately.
 initExtensions();
 
