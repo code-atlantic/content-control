@@ -17,6 +17,8 @@ import { blockControlsEnabled } from './utils';
 import type { BlockEditProps } from '@wordpress/blocks';
 import type { BlockInstanceWithControls } from './types';
 
+import { BlockControlsContextProvider } from '../../contexts';
+
 /**
  * Add block controls on block inspector sidebar.
  *
@@ -63,56 +65,87 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 				},
 			} );
 
+		const blockControlsContext = {
+			...contentControls,
+			setBlockControls: setControls,
+		};
+
 		return (
 			<>
 				<BlockEdit { ...props } />
 				{ isSelected && blockControlsEnabled( props ) && (
-
-										<PanelRow>
-											<ExternalLink href="#">
+					<BlockControlsContextProvider { ...blockControlsContext }>
+						<InspectorControls key="content-control">
+							<div
+								className={ classnames( [
+									'cc__block-controls',
+									enabled
+										? 'cc__block-controls--enabled'
+										: null,
+								] ) }
+							>
+								<Panel className="cc__block-controls__main-panel">
+									<PanelBody
+										title={ __(
+											'Content Controls',
+											'content-control'
+										) }
+										icon="welcome-view-site"
+									>
+										<div className="cc__block-controls__top-panel">
+											<PanelRow>
 												{ __(
-													'Documentation',
+													'Block controls let you choose who will see your content & when they will see it.',
 													'content-control'
 												) }
-											</ExternalLink>
-										</PanelRow>
+											</PanelRow>
 
-										<PanelRow>
-											<ToggleControl
-												label={ __(
-													'Enable Controls',
-													'content-control'
-												) }
-												className="cc__block-controls__toggle-enabled"
-												checked={ enabled }
-												onChange={ ( checked ) =>
-													setControls( {
-														enabled: checked,
-													} )
-												}
-											/>
-										</PanelRow>
-									</div>
+											<PanelRow>
+												<ExternalLink href="#">
+													{ __(
+														'Documentation',
+														'content-control'
+													) }
+												</ExternalLink>
+											</PanelRow>
 
-									{ enabled && (
-										<div className="cc__block-controls__rules-panels">
-											<RuleGroups
-												rules={ rules }
-												setRules={ ( newRules ) =>
-													setControls( {
-														rules: {
-															...rules,
-															...newRules,
-														},
-													} )
-												}
-											/>
+											<PanelRow>
+												<ToggleControl
+													label={ __(
+														'Enable Controls',
+														'content-control'
+													) }
+													className="cc__block-controls__toggle-enabled"
+													checked={ enabled }
+													onChange={ ( checked ) =>
+														setControls( {
+															enabled: checked,
+														} )
+													}
+												/>
+											</PanelRow>
 										</div>
-									) }
-								</PanelBody>
-							</Panel>
-						</div>
-					</InspectorControls>
+
+										{ enabled && (
+											<div className="cc__block-controls__rules-panels">
+												<RuleGroups
+													rules={ rules }
+													setRules={ ( newRules ) =>
+														setControls( {
+															rules: {
+																...rules,
+																...newRules,
+															},
+														} )
+													}
+												/>
+											</div>
+										) }
+									</PanelBody>
+								</Panel>
+							</div>
+						</InspectorControls>
+					</BlockControlsContextProvider>
 				) }
 			</>
 		);
