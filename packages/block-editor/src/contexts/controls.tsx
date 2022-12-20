@@ -11,6 +11,7 @@ import type {
 
 export const defaultBlockControls: BlockControls = {
 	enabled: false,
+	rules: {},
 };
 
 export const defaultDeviceBlockControls: DeviceBlockControlsGroup = {
