@@ -1,7 +1,7 @@
 import { hasBlockSupport } from '@wordpress/blocks';
 import { applyFilters } from '@wordpress/hooks';
 
-import type { BlockInstanceWithControls, BlockWithControls } from './types';
+import type { BlockInstanceWithControls, BlockWithControls } from '../../types';
 
 const {
 	allowedBlocks = [],

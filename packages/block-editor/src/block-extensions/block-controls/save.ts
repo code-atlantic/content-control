@@ -1,7 +1,7 @@
 import { blockControlsEnabled } from './utils';
 
 import type { Block } from '@wordpress/blocks';
-import type { BlockExtraProps, BlockInstanceWithControls } from './types';
+import type { BlockExtraProps, BlockInstanceWithControls } from '../../types';
 
 /**
  * Add css classes to block element wrapper.

@@ -7,7 +7,7 @@ import type {
 	BlockControlsGroup,
 	BlockControlsGroupOption,
 	BlockControlsGroupProps,
-} from '../../types';
+} from '../../../../types';
 
 type Props = BlockControlsGroupProps< BlockControlsGroup > & {
 	items: BlockControlsGroupOption[];

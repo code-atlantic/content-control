@@ -6,7 +6,7 @@ import { check, copy, rotateLeft, trash } from '@wordpress/icons';
 import CopyMenuItem from './copy-menu-item';
 import PasteMenuItem from './paste-menu-item';
 
-import type { BlockControlsGroupProps, BlockControlsGroup } from '../../types';
+import type { BlockControlsGroupProps, BlockControlsGroup } from '../../../../types';
 
 type Props = BlockControlsGroupProps< BlockControlsGroup > & {
 	labelText: string;

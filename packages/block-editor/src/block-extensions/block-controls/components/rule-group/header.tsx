@@ -12,7 +12,7 @@ import type {
 	BlockControlsGroupOption,
 	BlockControlsGroupProps,
 	BlockControlsGroup,
-} from '../../types';
+} from '../../../../types';
 
 type Props = BlockControlsGroupProps< BlockControlsGroup > & {
 	isOpened: boolean;

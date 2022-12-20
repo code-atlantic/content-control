@@ -7,7 +7,7 @@ import type {
 	DeviceBlockControlsGroup,
 	DeviceScreenSizes,
 	BlockControlsGroupProps,
-} from '../../../types';
+} from '../../../../../types';
 
 type Props = BlockControlsGroupProps< DeviceBlockControlsGroup & {} >;
 

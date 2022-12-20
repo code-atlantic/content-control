@@ -4,7 +4,7 @@ import type {
 	BlockControls,
 	ConditionalBlockControlsGroup,
 	DeviceBlockControlsGroup,
-} from '../block-extensions/block-controls/types';
+} from '../types';
 
 export const defaultBlockControls: BlockControls = {
 	enabled: false,

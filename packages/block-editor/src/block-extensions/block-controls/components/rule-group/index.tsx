@@ -7,7 +7,7 @@ import { Children, cloneElement, isValidElement } from '@wordpress/element';
 import RuleGroupHeader from './header';
 
 import type { Icon } from '@wordpress/components';
-import type { BlockControlsGroup, BlockControlsGroupProps } from '../../types';
+import type { BlockControlsGroup, BlockControlsGroupProps } from '../../../../types';
 
 type Props = React.PropsWithChildren< {
 	label: string;

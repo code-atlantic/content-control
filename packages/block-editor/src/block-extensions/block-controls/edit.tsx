@@ -15,7 +15,7 @@ import { RuleGroups } from './components';
 import { blockControlsEnabled } from './utils';
 
 import type { BlockEditProps } from '@wordpress/blocks';
-import type { BlockInstanceWithControls } from './types';
+import type { BlockInstanceWithControls } from '../../types';
 
 import { BlockControlsContextProvider } from '../../contexts';
 
