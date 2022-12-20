@@ -6,43 +6,84 @@ import { __ } from '@wordpress/i18n';
 import type {
 	BlockControls,
 	ConditionalBlockControlsGroup,
+	ControlGroups,
 	DeviceBlockControlsGroup,
+	NonNullableFields,
 } from '../types';
 
-export const defaultBlockControls: BlockControls = {
-	enabled: false,
-	rules: {},
-};
-
-export const defaultDeviceBlockControls: DeviceBlockControlsGroup = {
-	hideOn: {
-		desktop: false,
-		tablet: false,
-		mobile: false,
-	},
-};
-
-export const defaultConditionBlockControls: ConditionalBlockControlsGroup = {
-	anyAll: 'any',
-	conditionSets: [
+// if withRules true, return rules, type of rules NonNullableFields<BlockControls['rules']>
+export function getDefaultBlockControls< B extends true | false >(
+	withRules?: B
+): B extends true
+	? {
+			enabled: boolean;
+			rules: NonNullableFields< BlockControls[ 'rules' ] >;
+	  }
+	: BlockControls {
+	const defaults = applyFilters(
+		'contentControl.blockControls.defaultBlockControls',
 		{
-			id: newUUID(),
-			label: __( 'User Logged In', 'content-control' ),
-			query: {
-				logicalOperator: 'and',
-				items: [
+			enabled: false,
+			rules: {
+				device: getDefaultDeviceBlockControls(),
+				conditional: getDefaultConditionBlockControls(),
+			},
+		}
+	) as B extends true
+		? {
+				enabled: boolean;
+				rules: NonNullableFields< BlockControls[ 'rules' ] >;
+		  }
+		: BlockControls;
+
+	if ( ! withRules ) {
+		defaults.rules = {};
+	}
+
+	return defaults;
+}
+
+export const getDefaultDeviceBlockControls = (): DeviceBlockControlsGroup => {
+	return applyFilters(
+		'contentControl.blockControls.defaultDeviceBlockControls',
+		{
+			hideOn: {
+				desktop: false,
+				tablet: false,
+				mobile: false,
+			},
+		}
+	) as DeviceBlockControlsGroup;
+};
+
+export const getDefaultConditionBlockControls =
+	(): ConditionalBlockControlsGroup => {
+		return applyFilters(
+			'contentControl.blockControls.defaultConditionBlockControls',
+			{
+				anyAll: 'any',
+				conditionSets: [
 					{
 						id: newUUID(),
-						type: 'rule',
-						name: 'user_is_logged_in',
+						label: __( 'User Logged In', 'content-control' ),
+						query: {
+							logicalOperator: 'and',
+							items: [
+								{
+									id: newUUID(),
+									type: 'rule',
+									name: 'user_is_logged_in',
+								},
+							],
+						},
 					},
 				],
-			},
-		},
-	],
-};
+			}
+		) as ConditionalBlockControlsGroup;
+	};
 
-type BlockControlsContextType = BlockControls & {
+type BlockControlsContextType = {
+	blockControls: BlockControls;
 	setBlockControls: ( blockControls: BlockControls ) => void;
 };
 
@@ -71,11 +112,51 @@ export const useBlockControls = () => {
 		);
 	}
 
+	const { blockControls, setBlockControls } = context;
+
+	const isEnabled = () => !! blockControls?.enabled;
+
+	const getRules = () => blockControls?.rules;
+
+	const setRules = ( rules: BlockControls[ 'rules' ] ) =>
+		setBlockControls( {
+			...blockControls,
+			rules,
+		} );
+
+	const getGroupRules = < K extends keyof ControlGroups >( name: K ) =>
+		blockControls?.rules[ name ];
+
+	const setGroupRules = < K extends keyof ControlGroups >(
+		name: K,
+		rules: ControlGroups[ K ]
+	) => {
+		setBlockControls( {
+			...blockControls,
+			rules: {
+				...blockControls.rules,
+				[ name ]: rules,
+			},
+		} );
+	};
+
+	const getDefaults = ( withRules?: boolean ) =>
+		getDefaultBlockControls( withRules );
+
+	const getGroupDefaults = < K extends keyof ControlGroups >(
+		name: K
+	): NonNullable< ControlGroups[ K ] > =>
+		getDefaultBlockControls( true ).rules[ name ];
+
 	const blockControlsContext = {
 		...context,
-		defaultBlockControls,
-		defaultDeviceBlockControls,
-		defaultConditionBlockControls,
+		isEnabled,
+		getDefaults,
+		getRules,
+		setRules,
+		getGroupDefaults,
+		getGroupRules,
+		setGroupRules,
 	};
 
 	return applyFilters(

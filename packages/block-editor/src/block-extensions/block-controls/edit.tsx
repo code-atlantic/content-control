@@ -65,7 +65,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			} );
 
 		const blockControlsContext = {
-			...contentControls,
+			blockControls: contentControls,
 			setBlockControls: setControls,
 		};
 
