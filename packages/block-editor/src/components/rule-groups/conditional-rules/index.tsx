@@ -19,7 +19,7 @@ import type { Item, Query, QuerySet } from '@content-control/rule-engine';
 import type {
 	BlockControlsGroupProps,
 	ConditionalBlockControlsGroup,
-} from '../../../../../types';
+} from '../../../types';
 
 const { registeredRules } = contentControlRuleEngine;
 

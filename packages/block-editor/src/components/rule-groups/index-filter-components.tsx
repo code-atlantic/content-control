@@ -13,7 +13,7 @@ import RuleGroupComponent from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type { ControlGroups } from '../../../../types';
+import type { ControlGroups } from '../../types';
 import type { BlockAttributes } from '@wordpress/blocks';
 
 /**
