@@ -11,22 +11,18 @@ const {
 /**
  * Array of explicitly allowed block types.
  *
- * @type {string[]}
+ * @returns {string[]} Array of explicitly allowed block types.
  */
-const allowed: string[] = applyFilters(
-	'contentControl.allowedBlocks',
-	allowedBlocks
-) as string[];
+export const explicitlyAllowedBlocks = (): string[] =>
+	applyFilters( 'contentControl.allowedBlocks', allowedBlocks ) as string[];
 
 /**
  * Array of explicitly excluded block types.
  *
- * @type {string[]}
+ * @returns {string[]} Array of explicitly excluded block types.
  */
-const excluded: string[] = applyFilters(
-	'contentControl.excludedBlocks',
-	excludedBlocks
-) as string[];
+export const explicitlyExcludedBlocks = (): string[] =>
+	applyFilters( 'contentControl.excludedBlocks', excludedBlocks ) as string[];
 
 /**
  * Check if block controls should be enabled for given block type.
@@ -34,7 +30,7 @@ const excluded: string[] = applyFilters(
  * @param {BlockWithControls|BlockInstanceWithControls} settings Object containing block type settings declarations.
  * @return {boolean} Whether block controls should be anbled for given block type.
  */
-const blockControlsEnabled = (
+export const blockControlsEnabled = (
 	settings: BlockWithControls | BlockInstanceWithControls
 ): boolean => {
 	const { name } = settings;
@@ -45,6 +41,8 @@ const blockControlsEnabled = (
 	}
 
 	// If block is explicitly on allow list, return true now.
+	const allowed = explicitlyAllowedBlocks();
+
 	if ( allowed.length && allowed.includes( name ) ) {
 		return true;
 	}
@@ -54,6 +52,8 @@ const blockControlsEnabled = (
 	 * 1. Block is on exclusion list.
 	 * 2. Reusable blocks (for now) via block support of `inserter` feature.
 	 */
+	const excluded = explicitlyExcludedBlocks();
+
 	if ( excluded.length && excluded.includes( name ) ) {
 		return false;
 	}
@@ -76,7 +76,9 @@ const blockControlsEnabled = (
  * @param {BlockInstanceWithControls} settings Instance of block, maybe with controls.
  * @returns {boolean} Whether block has controls.
  */
-const blockHasControls = ( settings: BlockInstanceWithControls ): boolean => {
+export const blockHasControls = (
+	settings: BlockInstanceWithControls
+): boolean => {
 	if ( ! blockControlsEnabled( settings ) ) {
 		return false;
 	}
@@ -91,5 +93,3 @@ const blockHasControls = ( settings: BlockInstanceWithControls ): boolean => {
 
 	return contentControls.enabled;
 };
-
-export { blockControlsEnabled, blockHasControls };
