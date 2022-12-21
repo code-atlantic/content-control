@@ -67,13 +67,7 @@ const RuleGroupHeader = () => {
 									groupDefaults={ groupDefaults }
 									onClose={ onClose }
 								/>
-								<DefaultGroupOptions
-									labelText={ label }
-									groupRules={ groupRules }
-									setGroupRules={ setGroupRules }
-									groupDefaults={ groupDefaults }
-									onClose={ onClose }
-								/>
+								<DefaultGroupOptions onClose={ onClose } />
 							</>
 						) }
 					</DropdownMenu>

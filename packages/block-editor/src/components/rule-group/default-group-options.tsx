@@ -3,27 +3,21 @@ import { useState } from '@wordpress/element';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { check, copy, rotateLeft, trash } from '@wordpress/icons';
 
+import { useBlockControlsForGroup } from '../../contexts';
 import CopyMenuItem from './copy-menu-item';
 import PasteMenuItem from './paste-menu-item';
 
-import type { BlockControlsGroupProps, BlockControlsGroup } from '../../types';
-
-type Props = BlockControlsGroupProps< BlockControlsGroup > & {
-	labelText: string;
-} & {
+type Props = {
 	onClose: () => void;
 };
 
-const DefaultGroupOptions = ( {
-	groupDefaults,
-	groupRules,
-	setGroupRules,
-	onClose,
-	labelText,
-}: Props ) => {
+const DefaultGroupOptions = ( { onClose }: Props ) => {
+	const { groupRules, setGroupRules, groupDefaults, label } =
+		useBlockControlsForGroup();
+
 	const [ status, setStatus ] = useState< string | null >( null );
 
-	if ( ! labelText ) {
+	if ( ! label ) {
 		return <></>;
 	}
 
@@ -85,7 +79,7 @@ const DefaultGroupOptions = ( {
 					{ sprintf(
 						/* translators: 1. rule group title. */
 						__( 'Disable %1$s', 'content-control' ),
-						labelText
+						label
 					) }
 				</MenuItem>
 			</MenuGroup>
