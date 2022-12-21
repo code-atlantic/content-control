@@ -62,9 +62,7 @@ const RuleGroupHeader = () => {
 							<>
 								<OptionalGroupOptions
 									items={ additionalOptions }
-									setGroupRules={ setGroupRules }
-									groupRules={ groupRules }
-									groupDefaults={ groupDefaults }
+									toggleItem={ ( item: string ) => {} }
 									onClose={ onClose }
 								/>
 								<DefaultGroupOptions onClose={ onClose } />

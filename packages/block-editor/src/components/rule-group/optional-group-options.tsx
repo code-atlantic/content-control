@@ -3,13 +3,9 @@ import { MenuGroup, MenuItem } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 
-import type {
-	BlockControlsGroup,
-	BlockControlsGroupOption,
-	BlockControlsGroupProps,
-} from '../../types';
+import type { BlockControlsGroupOption } from '../../types';
 
-type Props = BlockControlsGroupProps< BlockControlsGroup > & {
+type Props = {
 	items: BlockControlsGroupOption[];
 	toggleItem?: ( item: string ) => void;
 	onClose: () => void;
@@ -17,8 +13,8 @@ type Props = BlockControlsGroupProps< BlockControlsGroup > & {
 
 const OptionalGroupOptions = ( {
 	items,
-	onClose,
 	toggleItem = noop,
+	onClose,
 }: Props ) => {
 	if ( ! items.length ) {
 		return <></>;
