@@ -4,6 +4,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 import type {
+	BlockControlGroups,
 	BlockControls,
 	ConditionalBlockControlsGroup,
 	ControlGroups,
@@ -82,7 +83,7 @@ export const getDefaultConditionBlockControls =
 		) as ConditionalBlockControlsGroup;
 	};
 
-type BlockControlsContextType = {
+export type BlockControlsContextType = {
 	blockControls: BlockControls;
 	setBlockControls: ( blockControls: BlockControls ) => void;
 };
@@ -124,10 +125,10 @@ export const useBlockControls = () => {
 			rules,
 		} );
 
-	const getGroupRules = < K extends keyof ControlGroups >( name: K ) =>
+	const getGroupRules = < K extends BlockControlGroups >( name: K ) =>
 		blockControls?.rules[ name ];
 
-	const setGroupRules = < K extends keyof ControlGroups >(
+	const setGroupRules = < K extends BlockControlGroups >(
 		name: K,
 		rules: ControlGroups[ K ]
 	) => {
@@ -140,10 +141,26 @@ export const useBlockControls = () => {
 		} );
 	};
 
+	const updateGroupRules = < K extends BlockControlGroups >(
+		name: K,
+		rules: Partial< ControlGroups[ K ] >
+	) => {
+		setBlockControls( {
+			...blockControls,
+			rules: {
+				...blockControls.rules,
+				[ name ]: {
+					...blockControls.rules[ name ],
+					...rules,
+				},
+			},
+		} );
+	};
+
 	const getDefaults = ( withRules?: boolean ) =>
 		getDefaultBlockControls( withRules );
 
-	const getGroupDefaults = < K extends keyof ControlGroups >(
+	const getGroupDefaults = < K extends BlockControlGroups >(
 		name: K
 	): NonNullable< ControlGroups[ K ] > =>
 		getDefaultBlockControls( true ).rules[ name ];
@@ -157,6 +174,7 @@ export const useBlockControls = () => {
 		getGroupDefaults,
 		getGroupRules,
 		setGroupRules,
+		updateGroupRules,
 	};
 
 	return applyFilters(
