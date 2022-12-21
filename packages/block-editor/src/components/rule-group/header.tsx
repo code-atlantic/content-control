@@ -5,52 +5,36 @@ import { Button, DropdownMenu, Icon } from '@wordpress/components';
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { moreVertical, plus } from '@wordpress/icons';
 
+import useBlockControlsForGroup from '../../contexts/group';
 import DefaultGroupOptions from './default-group-options';
 import OptionalGroupOptions from './optional-group-options';
 
-import type {
-	BlockControlsGroupOption,
-	BlockControlsGroupProps,
-	BlockControlsGroup,
-} from '../../types';
-
-type Props = BlockControlsGroupProps< BlockControlsGroup > & {
-	isOpened: boolean;
-	icon: Icon.IconType< {} >;
-	additionalOptions?: BlockControlsGroupOption[];
-	dropdownMenuClassName?: string;
-	headingClassName?: string;
-	label: string;
-};
-
-const RuleGroupHeader = ( props: Props ) => {
+const RuleGroupHeader = () => {
 	const {
-		isOpened,
 		icon,
+		isOpened,
+		label,
 		groupRules,
 		setGroupRules,
 		groupDefaults,
 		additionalOptions = [],
-		dropdownMenuClassName,
-		headingClassName = 'cc__rules-group__title',
-		label: labelText,
-	} = props;
+	} = useBlockControlsForGroup();
 
-	if ( ! labelText ) {
+	const iconSize = 24;
+
+	if ( ! label ) {
 		return <></>;
 	}
-
-	const toggleIconSize = 24;
 
 	return (
 		<div className="cc__rules-group__header">
 			<h2
 				className={ classNames( [
-					headingClassName,
+					'cc__rules-group__title',
 					'components-truncate components-text components-heading',
 				] ) }
 			>
-				{ labelText }
+				{ label }
 				{ icon && (
 					<Icon className="cc__rules-group__icon" icon={ icon } />
 				) }
@@ -67,10 +51,12 @@ const RuleGroupHeader = ( props: Props ) => {
 						) }
 						toggleProps={ {
 							isSmall: true,
-							iconSize: toggleIconSize,
+							iconSize: iconSize,
 							className: 'cc__rules-group__options-toggle',
 						} }
-						menuProps={ { className: dropdownMenuClassName } }
+						menuProps={ {
+							className: 'cc__rules-group__options-dropdown-menu',
+						} }
 					>
 						{ ( { onClose = noop } ) => (
 							<>
@@ -82,7 +68,7 @@ const RuleGroupHeader = ( props: Props ) => {
 									onClose={ onClose }
 								/>
 								<DefaultGroupOptions
-									labelText={ labelText }
+									labelText={ label }
 									groupRules={ groupRules }
 									setGroupRules={ setGroupRules }
 									groupDefaults={ groupDefaults }
@@ -96,7 +82,7 @@ const RuleGroupHeader = ( props: Props ) => {
 						label={ sprintf(
 							/* translators: 1. rule group title. */
 							__( 'Enable %1$s', 'content-control' ),
-							labelText
+							label
 						) }
 						showTooltip={ true }
 						className="cc__rules-group__options-toggle"
@@ -106,7 +92,7 @@ const RuleGroupHeader = ( props: Props ) => {
 						<Icon
 							className="cc__rules-group__options-icon"
 							icon={ plus }
-							size={ toggleIconSize }
+							size={ iconSize }
 						/>
 					</Button>
 				) }

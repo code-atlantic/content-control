@@ -43,13 +43,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			isSelected,
 		} = props;
 
-		const {
-			enabled = false,
-			rules = {
-				conditional: null,
-				device: null,
-			},
-		} = contentControls;
+		const { enabled = false } = contentControls;
 
 		/**
 		 * Update block control attributes.
@@ -127,17 +121,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 
 										{ enabled && (
 											<div className="cc__block-controls__rules-panels">
-												<RuleGroups
-													rules={ rules }
-													setRules={ ( newRules ) =>
-														setControls( {
-															rules: {
-																...rules,
-																...newRules,
-															},
-														} )
-													}
-												/>
+												<RuleGroups />
 											</div>
 										) }
 									</PanelBody>

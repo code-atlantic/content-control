@@ -26,8 +26,6 @@
  * - Requires using filters to register each component for proper ordering.
  */
 
-import { newUUID } from '@content-control/rule-engine';
-import { noop } from '@content-control/utils';
 import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -36,14 +34,12 @@ import RuleGroupComponent from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type { BlockAttributes } from '@wordpress/blocks';
-import type { ControlGroups } from '../../types';
-
 import type { Icon } from '@wordpress/components';
+import type { BlockControlGroups } from '../../types';
 
 export type RulePanel = {
 	label: string;
-	name: string;
+	name: BlockControlGroups;
 	icon?: Icon.IconType< {} >;
 	onSelect: () => void;
 	onDeselect: () => void;
@@ -81,49 +77,11 @@ addFilter(
 	10
 );
 
-/**
- * TODO This should be globally defined.
- * Move this to a set of generator functions exported as utilitiles.
- * Each location using this should then just use the needed generators.
- */ const defaults: BlockAttributes = {
-	device: {
-		hideOn: {
-			mobile: false,
-			tablet: false,
-			desktop: false,
-		},
-	},
-	conditional: {
-		anyAll: 'all',
-		conditionSets: [
-			{
-				id: newUUID(),
-				label: __( 'User Logged In', 'content-control' ),
-				query: {
-					logicalOperator: 'and',
-					items: [
-						{
-							id: newUUID(),
-							type: 'rule',
-							name: 'user_is_logged_in',
-						},
-					],
-				},
-			},
-		],
-	},
-};
-
 // TODO This needs to be typed properly.
-type Props = {
-	rules: ControlGroups;
-	setRules: ( rules: ControlGroups ) => void;
-};
+type Props = {};
 
 // TODO This needs to be typed properly.
 const RulesPanel = ( props: Props ) => {
-	const { rules = {}, setRules = noop } = props;
-
 	const rulePanels = applyFilters(
 		'contentControl.blockRules.rulePanels',
 		[],
@@ -149,9 +107,6 @@ const RulesPanel = ( props: Props ) => {
 							label={ label }
 							icon={ icon }
 							groupId={ name }
-							rules={ rules }
-							setRules={ setRules }
-							defaults={ defaults }
 						>
 							{ items }
 						</RuleGroupComponent>

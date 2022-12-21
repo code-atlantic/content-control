@@ -1,4 +1,3 @@
-import { newUUID } from '@content-control/rule-engine';
 import {
 	Fill,
 	Slot,
@@ -12,9 +11,6 @@ import { blockMeta, tablet } from '@wordpress/icons';
 import RuleGroupComponent from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
-
-import type { ControlGroups } from '../../types';
-import type { BlockAttributes } from '@wordpress/blocks';
 
 /**
  * SlotFill using withFilter to control render order:
@@ -54,55 +50,13 @@ import type { BlockAttributes } from '@wordpress/blocks';
  *
  */
 
-// TODO This needs to be typed properly.
-type Props = {
-	rules: ControlGroups;
-	setRules: ( rules: ControlGroups ) => void;
-};
-
-/**
- * TODO This should be globally defined.
- * Move this to a set of generator functions exported as utilitiles.
- * Each location using this should then just use the needed generators.
- */ const defaults: BlockAttributes = {
-	device: {
-		hideOn: {
-			mobile: false,
-			tablet: false,
-			desktop: false,
-		},
-	},
-	conditional: {
-		anyAll: 'all',
-		conditionSets: [
-			{
-				id: newUUID(),
-				label: __( 'User Logged In', 'content-control' ),
-				query: {
-					logicalOperator: 'and',
-					items: [
-						{
-							id: newUUID(),
-							type: 'rule',
-							name: 'user_is_logged_in',
-						},
-					],
-				},
-			},
-		],
-	},
-};
+type Props = {};
 
 addFilter(
 	'contentControl.block-rules.rules-groups',
 	'contentControl.core',
-	// TODO This should be globally defined.
 	( FilteredComponent ) => {
-		// TODO This should be globally defined.
 		return ( props: Props ) => {
-			// TODO This should be globally defined.
-			const { rules, setRules } = props;
-
 			return (
 				<>
 					<FilteredComponent { ...props } />
@@ -111,9 +65,6 @@ addFilter(
 							label={ __( 'Device Rules', 'content-control' ) }
 							icon={ tablet }
 							groupId="device"
-							rules={ rules }
-							setRules={ setRules }
-							defaults={ defaults }
 						>
 							<DeviceRules />
 						</RuleGroupComponent>
@@ -128,13 +79,8 @@ addFilter(
 addFilter(
 	'contentControl.block-rules.rules-groups',
 	'contentControl.core',
-	// TODO This should be globally defined.
 	( FilteredComponent ) => {
-		// TODO This should be globally defined.
 		return ( props: Props ) => {
-			// TODO This should be globally defined.
-			const { rules, setRules } = props;
-
 			return (
 				<>
 					<FilteredComponent { ...props } />
@@ -146,9 +92,6 @@ addFilter(
 							) }
 							icon={ blockMeta }
 							groupId="conditional"
-							rules={ rules }
-							setRules={ setRules }
-							defaults={ defaults }
 						>
 							<ConditionalRules />
 						</RuleGroupComponent>
@@ -160,7 +103,6 @@ addFilter(
 	20
 );
 
-// TODO This needs to be typed properly.
 const RuleGroups = ( props: Props ) => {
 	const Groups = withFilters( 'contentControl.block-rules.rule-groups' )(
 		( _props: Props ) => <></>

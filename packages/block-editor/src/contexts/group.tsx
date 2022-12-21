@@ -61,6 +61,7 @@ export const useBlockControlsForGroup = < K extends BlockControlGroups >() => {
 		updateGroupRules: ( rules: Partial< ControlGroups[ K ] > ) =>
 			parentContext.updateGroupRules( groupId, rules ),
 		getGroupDefaults: () => parentContext.getGroupDefaults( groupId ),
+		additionalOptions: [],
 	};
 };
 

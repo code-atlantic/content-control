@@ -1,4 +1,3 @@
-import { noop } from '@content-control/utils';
 import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { tablet } from '@wordpress/icons';
@@ -8,11 +7,6 @@ import RuleGroup from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
 
-import type { ControlGroups, NonNullableFields } from '../../types';
-import {
-	getDefaultConditionBlockControls,
-	getDefaultDeviceBlockControls,
-} from '../../contexts';
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path
@@ -23,50 +17,14 @@ const blockMeta = (
 	</SVG>
 );
 
-/**
- * Move this to a set of generator functions exported as utilitiles.
- * Each location using this should then just use the needed generators.
- */
-const defaults: Required< NonNullableFields< ControlGroups > > = {
-	device: getDefaultDeviceBlockControls(),
-	conditional: getDefaultConditionBlockControls(),
-};
-
-type Props = {
-	rules: ControlGroups;
-	setRules: ( rules: ControlGroups ) => void;
-};
-
-const RuleGroups = ( props: Props ) => {
-	const { rules = {}, setRules = noop } = props;
-
-	/**
-	 * Reset all panels to defaults.
-	 *
-	 * @return {void}
-	 */
-	// const resetAll = (): void => {
-	// 	const newRules = Object.keys( rules ).reduce(
-	// 		( accumulator, groupId ) => ( {
-	// 			...accumulator,
-	// 			[ groupId ]: null,
-	// 		} ),
-	// 		{}
-	// 	);
-
-	// 	setRules( newRules );
-	// };
-
+const RuleGroups = () => {
 	return (
 		<SlotFillProvider>
 			<Fill name="ContentControlBlockRules">
 				<RuleGroup
+					groupId="device"
 					label={ __( 'Device Rules', 'content-control' ) }
 					icon={ tablet }
-					groupId="device"
-					rules={ rules }
-					setRules={ setRules }
-					defaults={ defaults }
 				>
 					<DeviceRules />
 				</RuleGroup>
@@ -74,12 +32,9 @@ const RuleGroups = ( props: Props ) => {
 
 			<Fill name="ContentControlBlockRules">
 				<RuleGroup
+					groupId="conditional"
 					label={ __( 'Conditional Rules', 'content-controls' ) }
 					icon={ blockMeta }
-					groupId="conditional"
-					rules={ rules }
-					setRules={ setRules }
-					defaults={ defaults }
 				>
 					<ConditionalRules />
 				</RuleGroup>
