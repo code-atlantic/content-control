@@ -15,9 +15,9 @@ import { useState } from '@wordpress/element';
 import { __, _x } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
+import { useBlockControlsForGroup } from '../../../contexts';
+
 import type { Item, Query, QuerySet } from '@content-control/rule-engine';
-import type { ConditionalBlockControlsGroup } from '../../../types';
-import { useBlockControls } from '../../../contexts';
 
 const { registeredRules } = contentControlRuleEngine;
 
@@ -56,25 +56,13 @@ const anyAllOptions = [
 ];
 
 const ConditionalRules = () => {
-	const { getGroupRules, setGroupRules, getGroupDefaults } =
-		useBlockControls();
+	const { groupRules, updateGroupRules, groupDefaults } =
+		useBlockControlsForGroup< 'conditional' >();
 
-	const defaultValues = getGroupDefaults( 'conditional' );
-	const currentRules = getGroupRules( 'conditional' ) ?? defaultValues;
+	const { anyAll = 'all', conditionSets = [] } = groupRules ?? groupDefaults;
 
-	const setConditionalRules = (
-		conditionalRules: ConditionalBlockControlsGroup
-	) => setGroupRules( 'conditional', conditionalRules );
-
-	const { anyAll = 'all', conditionSets = [] } = currentRules;
-
-	const [ currentSet, updateCurrentSet ] = useState< QuerySet | null >(
-		null
-	);
-
-	const [ setToDelete, confirmDeleteSet ] = useState< QuerySet | null >(
-		null
-	);
+	const [ currentSet, updateCurrentSet ] = useState< QuerySet >();
+	const [ setToDelete, confirmDeleteSet ] = useState< QuerySet >();
 
 	/** Add new set. */
 	const addSet = () => {
@@ -141,8 +129,7 @@ const ConditionalRules = () => {
 			newSets.push( cleanedSet );
 		}
 
-		setConditionalRules( {
-			...currentRules,
+		updateGroupRules( {
 			conditionSets: newSets,
 		} );
 	};
@@ -153,18 +140,17 @@ const ConditionalRules = () => {
 	 * @param {string} id
 	 */
 	const removeSet = ( id: string ) =>
-		setConditionalRules( {
-			...currentRules,
+		updateGroupRules( {
 			conditionSets: conditionSets.filter( ( set ) => set.id !== id ),
 		} );
 
 	/** Confirmation dialogue component. */
 	const confirmAndDelete = setToDelete && (
 		<ConfirmDialog
-			onCancel={ () => confirmDeleteSet( null ) }
+			onCancel={ () => confirmDeleteSet( undefined ) }
 			onConfirm={ () => {
 				removeSet( setToDelete.id );
-				confirmDeleteSet( null );
+				confirmDeleteSet( undefined );
 			} }
 		>
 			<p>
@@ -196,8 +182,7 @@ const ConditionalRules = () => {
 				options={ anyAllOptions }
 				value={ anyAll }
 				onChange={ ( value ) => {
-					setConditionalRules( {
-						...currentRules,
+					updateGroupRules( {
 						anyAll: value,
 					} );
 				} }
@@ -237,7 +222,7 @@ const ConditionalRules = () => {
 						'Content Control -- Conditional Logic',
 						'content-control'
 					) }
-					onRequestClose={ () => updateCurrentSet( null ) }
+					onRequestClose={ () => updateCurrentSet( undefined ) }
 					shouldCloseOnClickOutside={ false }
 					style={ { width: '760px' } }
 				>
@@ -344,7 +329,9 @@ const ConditionalRules = () => {
 
 					<Flex justify="right">
 						<FlexItem>
-							<Button onClick={ () => updateCurrentSet( null ) }>
+							<Button
+								onClick={ () => updateCurrentSet( undefined ) }
+							>
 								{ __( 'Cancel', 'content-control' ) }
 							</Button>
 						</FlexItem>
@@ -357,7 +344,7 @@ const ConditionalRules = () => {
 										return;
 									}
 									updateSet( currentSet );
-									updateCurrentSet( null );
+									updateCurrentSet( undefined );
 								} }
 							>
 								{ __( 'Save', 'content-control' ) }
