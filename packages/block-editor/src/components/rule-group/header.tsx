@@ -14,7 +14,6 @@ const RuleGroupHeader = () => {
 		icon,
 		isOpened,
 		label,
-		groupRules,
 		setGroupRules,
 		groupDefaults,
 		additionalOptions = [],
@@ -62,7 +61,9 @@ const RuleGroupHeader = () => {
 							<>
 								<OptionalGroupOptions
 									items={ additionalOptions }
-									toggleItem={ ( item: string ) => {} }
+									toggleItem={ ( item: string ) => {
+										item; // Here to prevent TS error.
+									} }
 									onClose={ onClose }
 								/>
 								<DefaultGroupOptions onClose={ onClose } />
