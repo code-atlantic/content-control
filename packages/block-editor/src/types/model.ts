@@ -28,6 +28,8 @@ export interface ControlGroups {
 	conditional?: ConditionalBlockControlsGroup | null;
 }
 
+export type BlockControlGroups = keyof ControlGroups;
+
 export type BlockControlsGroup = NonNullable<
 	ControlGroups[ keyof ControlGroups ]
 >;
