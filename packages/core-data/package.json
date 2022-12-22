@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@wordpress/api-fetch": "^6.16.0",
 		"@wordpress/data": "^7.3.0",
-		"@wordpress/data-controls": "^2.19.0",
+		"@wordpress/data-controls": "2.22.0",
 		"@wordpress/i18n": "^4.19.0"
 	},
 	"devDependencies": {
