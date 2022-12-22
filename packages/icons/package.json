@@ -24,6 +24,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@wordpress/primitives": "^3.21.0"
 	},

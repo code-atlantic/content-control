@@ -24,6 +24,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@content-control/components": "*",
 		"@content-control/fields": "*",
@@ -38,8 +41,14 @@
 		"lodash": "^4.17.21",
 		"nanoid": "^4.0.0",
 		"react-sortablejs": "^6.1.4",
-		"react-tag-autocomplete": "^6.3.0",
 		"sortablejs": "^1.15.0"
+	},
+	"devDependencies": {
+		"@types/wordpress__i18n": "^3.11.0",
+		"@types/wordpress__compose": "^4.0.1",
+		"@types/wordpress__components": "^19.10.5",
+		"@types/wordpress__element": "^2.14.1",
+		"@types/lodash": "^4.14.191"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

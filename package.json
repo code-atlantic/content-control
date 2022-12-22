@@ -1,6 +1,6 @@
 {
   "name": "content-control",
-  "version": "1.1.9",
+  "version": "2.0.0-beta.1",
   "description": "",
   "author": "Code Atlantic",
   "license": "GPL-2.0-or-later",
@@ -38,7 +38,7 @@
     "@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
     "@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
     "@types/node": "^18.11.17",
-    "@wordpress/scripts": "^24.6.0",
+    "@wordpress/scripts": "^25.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "del": "^7.0.0",
     "eslint": "^8.30.0",

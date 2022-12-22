@@ -24,6 +24,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@content-control/core-data": "*",
 		"@wordpress/core-data": "^6.0.0",

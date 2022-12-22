@@ -24,6 +24,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@content-control/components": "*",
 		"@content-control/core-data": "*",
@@ -43,7 +46,11 @@
 	},
 	"devDependencies": {
 		"@types/react-router-dom": "^5.3.3",
-		"@types/wordpress__data": "^6.0.1"
+		"@types/wordpress__components": "19.10.5",
+		"@types/wordpress__data": "^6.0.1",
+		"@types/wordpress__element": "^2.14.1",
+		"@types/wordpress__hooks": "^2.11.0",
+		"@types/wordpress__i18n": "^3.11.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
