@@ -10,13 +10,7 @@ export const RulesInspector = ( { children = [] }: Props ) => {
 	return <Fill>{ children }</Fill>;
 };
 
-export const RulesInspectorSlot = ( props: Props ) => {
-	const { children } = props;
-
-	// TODO Left off here, need to make sure slot is rendered within provider.
-	// Further need to export these and consume them internally.
-	// Then test if they work in external plugin.
-
+export const RulesInspectorSlot = ( { children }: Props ) => {
 	return (
 		<>
 			<div className="cc_block-controls__block-rules-slot">
