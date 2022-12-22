@@ -1,4 +1,4 @@
-import { Fill, Slot, SlotFillProvider } from '@wordpress/components';
+import { Fill, SlotFillProvider } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { tablet } from '@wordpress/icons';
 import { Path, SVG } from '@wordpress/primitives';
@@ -6,6 +6,7 @@ import { Path, SVG } from '@wordpress/primitives';
 import RuleGroup from '../rule-group';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
+import { RulesInspectorSlot } from '../rules-inspector';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -40,7 +41,7 @@ const RuleGroups = () => {
 				</RuleGroup>
 			</Fill>
 
-			<Slot name="ContentControlBlockRules" />
+			<RulesInspectorSlot />
 		</SlotFillProvider>
 	);
 };
