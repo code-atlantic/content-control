@@ -21,13 +21,16 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
 		"@content-control/core-data": "*",
-		"@wordpress/core-data": "^6.0.0",
-		"@wordpress/data": "^8.0.0"
+		"@wordpress/core-data": "^5.5.0",
+		"@wordpress/data": "^7.6.0"
 	},
 	"devDependencies": {
 		"@types/wordpress__core-data": "^2.4.5",
