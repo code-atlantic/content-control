@@ -1,0 +1,32 @@
+{
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build:tsc",
+          "build:types"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build:tsc": {
+      "dependsOn": [
+        "^build:tsc"
+      ]
+    },
+    "build:types": {
+      "dependsOn": [
+        "^build:types"
+      ],
+      "outputs": [
+        "{projectRoot}/packages/**/build-types/**",
+        "{projectRoot}/packages/**/build/**",
+        "{projectRoot}/packages/**/tsconfig.tsbuildinfo"
+
+      ]
+    }
+  },
+  "defaultBase": "develop"
+}

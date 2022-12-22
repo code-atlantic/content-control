@@ -21,6 +21,9 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
+	"peerDependencies": {
+		"react": "^17.0.0"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
@@ -28,7 +31,7 @@
 		"react": "^18.2.0"
 	},
 	"dependencies": {
-		"@wordpress/primitives": "^3.21.0"
+		"@wordpress/primitives": "^3.17.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
