@@ -30,11 +30,23 @@
 	"dependencies": {
 		"@content-control/core-data": "*",
 		"@wordpress/core-data": "^5.5.0",
-		"@wordpress/data": "^7.6.0"
+		"@wordpress/data": "7.6.0"
 	},
 	"devDependencies": {
 		"@types/wordpress__core-data": "^2.4.5",
 		"@types/wordpress__data": "^6.0.1"
+	},
+	"overrides": {
+		"@wordpress/babel-preset-default": "7.6.0",
+		"@wordpress/blocks": "11.21.0",
+		"@wordpress/components": "22.1.0",
+		"@wordpress/compose": "5.20.0",
+		"@wordpress/data": "7.6.0",
+		"@wordpress/data-controls": "2.22.0",
+		"@wordpress/element": "4.20.0",
+		"@wordpress/icons": "9.13.0",
+		"@wordpress/primitives": "3.20.0",
+		"@wordpress/rich-text": "5.20.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

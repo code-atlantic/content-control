@@ -35,6 +35,9 @@
 		"@wordpress/components": "^21.2.0",
 		"@wordpress/compose": "^5.17.0",
 		"@wordpress/element": "4.20.0",
+		"@wordpress/components": "22.1.0",
+		"@wordpress/compose": "5.20.0",
+		"@wordpress/element": "4.20.0",
 		"@wordpress/i18n": "^4.19.0",
 		"@wordpress/icons": "9.13.0",
 		"classnames": "^2.3.2",
@@ -43,6 +46,18 @@
 		"react-sortablejs": "^6.1.4",
 		"react-tag-autocomplete": "^6.3.0",
 		"sortablejs": "^1.15.0"
+	},
+	"overrides": {
+		"@wordpress/babel-preset-default": "7.6.0",
+		"@wordpress/blocks": "11.21.0",
+		"@wordpress/components": "22.1.0",
+		"@wordpress/compose": "5.20.0",
+		"@wordpress/data": "7.6.0",
+		"@wordpress/data-controls": "2.22.0",
+		"@wordpress/element": "4.20.0",
+		"@wordpress/icons": "9.13.0",
+		"@wordpress/primitives": "3.20.0",
+		"@wordpress/rich-text": "5.20.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

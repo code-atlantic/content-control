@@ -30,11 +30,12 @@
     "@content-control/core-data": "*",
     "@content-control/utils": "*",
     "@wordpress/base-styles": "^4.10.0",
-    "@wordpress/components": "^21.2.0",
-    "@wordpress/compose": "^5.17.0",
+		"@wordpress/components": "22.1.0",
+		"@wordpress/compose": "5.20.0",
     "@wordpress/core-data": "^5.2.0",
-    "@wordpress/data": "^7.3.0",
 		"@wordpress/element": "4.20.0",
+    "@wordpress/data": "7.6.0",
+		"@wordpress/data-controls": "2.22.0",
     "@wordpress/i18n": "^4.19.0",
 		"@wordpress/icons": "9.13.0",
     "@wordpress/url": "^3.20.0",
@@ -50,6 +51,18 @@
     "@types/lodash": "^4.14.186",
     "@types/react-tag-autocomplete": "^6.3.0"
   },
+	"overrides": {
+		"@wordpress/babel-preset-default": "7.6.0",
+		"@wordpress/blocks": "11.21.0",
+		"@wordpress/components": "22.1.0",
+		"@wordpress/compose": "5.20.0",
+		"@wordpress/data": "7.6.0",
+		"@wordpress/data-controls": "2.22.0",
+		"@wordpress/element": "4.20.0",
+		"@wordpress/icons": "9.13.0",
+		"@wordpress/primitives": "3.20.0",
+		"@wordpress/rich-text": "5.20.0"
+	},
   "scripts": {
     "build:tsc": "tsc",
     "build:types": "tsc --build"
