@@ -1,4 +1,3 @@
-const { get } = require( 'lodash' );
 const path = require( 'path' );
 const CustomTemplatedPathPlugin = require( './packages/custom-templated-path-webpack-plugin' );
 const DependencyExtractionWebpackPlugin = require( './packages/dependency-extraction-webpack-plugin' );
@@ -74,7 +73,7 @@ const config = {
 		),
 		new CustomTemplatedPathPlugin( {
 			modulename( outputPath, data ) {
-				const entryName = get( data, [ 'chunk', 'name' ] );
+				const entryName = data.chunk.name;
 				if ( entryName ) {
 					// Convert the dash-case name to a camel case module name.
 					// For example, 'csv-export' -> 'csvExport'
