@@ -22,7 +22,7 @@
 	"main": "build/index",
 	"types": "build-types",
 	"peerDependencies": {
-		"react": "^17.0.0"
+		"react": "^18.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -31,21 +31,21 @@
 		"@content-control/components": "*",
 		"@content-control/fields": "*",
 		"@content-control/utils": "*",
-		"@wordpress/base-styles": "^4.10.0",
-		"@wordpress/components": "^21.2.0",
-		"@wordpress/compose": "^5.17.0",
-		"@wordpress/element": "^4.17.0",
-		"@wordpress/i18n": "^4.19.0",
-		"@wordpress/icons": "^9.10.0",
+		"@wordpress/base-styles": "^4.14.0",
+		"@wordpress/components": "^23.0.0",
+		"@wordpress/compose": "^6.0.0",
+		"@wordpress/element": "^5.0.0",
+		"@wordpress/i18n": "^4.23.0",
+		"@wordpress/icons": "^9.14.0",
 		"classnames": "^2.3.2",
 		"lodash": "^4.17.21",
 		"nanoid": "^4.0.0",
 		"react-sortablejs": "^6.1.4",
-		"react-tag-autocomplete": "^6.3.0",
 		"sortablejs": "^1.15.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
-		"build:types": "tsc --build"
+		"build:types": "tsc --build",
+		"packages-update": "wp-scripts packages-update"
 	}
 }

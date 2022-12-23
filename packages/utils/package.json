@@ -22,7 +22,7 @@
 	"main": "build/index",
 	"types": "build-types",
 	"peerDependencies": {
-		"react": "^17.0.0"
+		"react": "^18.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -30,6 +30,7 @@
 	"dependencies": {},
 	"scripts": {
 		"build:tsc": "tsc",
-		"build:types": "tsc --build"
+		"build:types": "tsc --build",
+		"packages-update": "wp-scripts packages-update"
 	}
 }

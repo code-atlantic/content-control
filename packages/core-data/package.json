@@ -22,16 +22,16 @@
 	"main": "build/index",
 	"types": "build-types",
 	"peerDependencies": {
-		"react": "^17.0.0"
+		"react": "^18.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
-		"@wordpress/api-fetch": "^6.16.0",
-		"@wordpress/data": "^7.3.0",
-		"@wordpress/data-controls": "^2.19.0",
-		"@wordpress/i18n": "^4.19.0"
+		"@wordpress/api-fetch": "^6.20.0",
+		"@wordpress/data": "^8.0.0",
+		"@wordpress/data-controls": "^2.23.0",
+		"@wordpress/i18n": "^4.23.0"
 	},
 	"devDependencies": {
 		"@types/wordpress__data": "^6.0.1",
@@ -39,6 +39,7 @@
 	},
 	"scripts": {
 		"build:tsc": "tsc",
-		"build:types": "tsc --build"
+		"build:types": "tsc --build",
+		"packages-update": "wp-scripts packages-update"
 	}
 }

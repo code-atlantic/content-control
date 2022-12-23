@@ -37,7 +37,7 @@
     "@code-atlantic/stylelint-config": "^1.1.0",
     "@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
     "@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
-    "@wordpress/scripts": "^24.6.0",
+    "@wordpress/scripts": "^25.0.0",
     "nx": "15.4.0",
     "path": "^0.12.7",
     "wp-pot-cli": "^1.5.0"
@@ -60,7 +60,7 @@
     "lint:pkg-json": "wp-scripts lint-pkg-json",
     "prelint:php": "wp-env run composer \"install --no-interaction\"",
     "lint:php": "wp-env run composer run-script lint",
-    "packages-update": "wp-scripts packages-update",
+    "packages-update": "wp-scripts packages-update && npx nx run-many --target=packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
     "start": "wp-scripts start",
     "start:hot": "wp-scripts start --hot",

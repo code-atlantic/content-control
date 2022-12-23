@@ -21,11 +21,12 @@
 	},
 	"main": "src/index.js",
 	"dependencies": {
-		"@wordpress/dependency-extraction-webpack-plugin": "^4.5.0"
+		"@wordpress/dependency-extraction-webpack-plugin": "^4.6.0"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
-	"devDependencies": {},
-	"scripts": {}
+	"scripts": {
+		"packages-update": "wp-scripts packages-update"
+	}
 }
