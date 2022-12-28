@@ -1,4 +1,4 @@
-import ReactTags from 'react-tag-autocomplete';
+import { ReactTags, ReactTagsAPI } from 'react-tag-autocomplete';
 
 import { store as coreDataStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
@@ -15,22 +15,28 @@ import type {
 	WithOnChange,
 } from '../types';
 
-const ObjectSelectField = ( {
+type ObjectOption = {
+	id?: string | number;
+	slug?: string;
+	name?: string;
+};
+
+const ObjectSelectField = ({
 	value,
 	onChange,
 	...fieldProps
 }: WithOnChange<
 	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
-> ) => {
-	const inputRef = useRef< ReactTags >( null );
+>) => {
+	const inputRef = useRef<ReactTagsAPI>(null);
 	const {
 		entityKind = 'postType',
 		entityType = 'post',
 		// multiple = false,
 	} = fieldProps;
 
-	const [ queryText, setQueryText ] = useState( '' );
-	const [ selected, setSelected ] = useState< Tag[] >( [] );
+	const [queryText, setQueryText] = useState('');
+	const [selected, setSelected] = useState<Tag[]>([]);
 
 	const queryArgs = {
 		search: queryText,
@@ -38,14 +44,14 @@ const ObjectSelectField = ( {
 	};
 
 	const { options } = useSelect(
-		( select ) => ( {
-			options: select( coreDataStore ).getEntityRecords(
+		(select) => ({
+			options: select(coreDataStore).getEntityRecords(
 				entityKind,
 				entityType,
 				queryArgs
-			) as ( Taxonomy< 'view' > | Post< 'view' > )[],
-		} ),
-		[ entityKind, entityType, queryText ]
+			) as (Taxonomy<'view'> | Post<'view'>)[],
+		}),
+		[entityKind, entityType, queryText]
 	);
 
 	// const onSelect = ( chosen: string ) => {
@@ -55,53 +61,43 @@ const ObjectSelectField = ( {
 	/**
 	 * Focus the input when this component is rendered.
 	 */
-	useEffect( () => {
+	useEffect(() => {
 		const firstEl = inputRef.current;
 
-		if ( null !== firstEl ) {
+		if (null !== firstEl) {
 			// ReactTags exposed method, not HTML .focus().
-			// @ts-ignore
-			firstEl.focusInput();
+			firstEl.input.focus();
 		}
-	}, [] );
-
-	type ObjectOption = {
-		id?: string | number;
-		slug?: string;
-		name?: string;
-	};
+	}, []);
 
 	return (
 		<div className="cc-rule-engine-search-box">
 			<ReactTags
-				placeholderText={ __( 'Select a rule', 'content-control' ) }
-				ref={ inputRef }
-				tags={ options.map(
-					( { id, slug, name }: ObjectOption, i ) => ( {
-						id: id ?? slug ?? i,
-						name: name ?? slug ?? '',
-					} )
-				) }
-				suggestions={ options.map(
-					( { id, slug, name }: ObjectOption, i ) => ( {
-						id: id ?? slug ?? i,
-						name: name ?? slug ?? '',
-					} )
-				) }
-				onInput={ setQueryText }
-				onAddition={ ( chosen: Tag ) => {
-					setSelected( [ ...selected, chosen ] );
-				} }
-				onDelete={ ( tagIndex: number ) =>
+				placeholderText={__('Select a rule', 'content-control')}
+				ref={inputRef}
+				selected={options.map(
+					({ id, slug, name }: ObjectOption, i) => ({
+						value: id ?? slug ?? i,
+						label: name ?? slug ?? '',
+					})
+				)}
+				suggestions={options.map(
+					({ id, slug, name }: ObjectOption, i) => ({
+						value: id ?? slug ?? i,
+						label: name ?? slug ?? '',
+					})
+				)}
+				onInput={setQueryText}
+				onAdd={(chosen: Tag) => {
+					setSelected([...selected, chosen]);
+				}}
+				onDelete={(tagIndex: number) =>
 					setSelected(
-						selected.filter(
-							( _: any, i: number ) => i !== tagIndex
-						)
+						selected.filter((_: any, i: number) => i !== tagIndex)
 					)
 				}
-				allowNew={ false }
-				allowBackspace={ true }
-				minQueryLength={ 0 }
+				allowNew={false}
+				allowBackspace={true}
 			/>
 		</div>
 	);
