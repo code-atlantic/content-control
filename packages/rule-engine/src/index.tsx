@@ -19,16 +19,27 @@ declare global {
 	};
 }
 
-type RuleEngineProps = ControlledInputProps< Query > & {
+const { registeredRules } = contentControlRuleEngine;
+
+const builderRules = [...Object.values(registeredRules)];
+
+type RuleEngineProps = ControlledInputProps<Query> & {
 	/** Options to customize the rule engine */
-	options: EngineOptions;
+	options: Omit<EngineOptions, 'rules'> & {
+		rules?: EngineRuleType[];
+	};
 };
 
-const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
+const RuleEngine = ({ value, onChange, options }: RuleEngineProps) => {
 	return (
-		<OptionsProvider options={ options }>
+		<OptionsProvider
+			options={{
+				...options,
+				rules: { ...builderRules, ...(options.rules ?? []) },
+			}}
+		>
 			<div className="cc-rule-engine">
-				<QueryList query={ value } onChange={ onChange } />
+				<QueryList query={value} onChange={onChange} />
 			</div>
 		</OptionsProvider>
 	);

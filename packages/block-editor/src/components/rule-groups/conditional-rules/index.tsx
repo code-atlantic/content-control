@@ -19,8 +19,6 @@ import { useBlockControlsForGroup } from '../../../contexts';
 
 import type { Item, Query, QuerySet } from '@content-control/rule-engine';
 
-const { registeredRules } = contentControlRuleEngine;
-
 export const verbs = {
 	are: __( 'Are', 'content-control' ),
 	arenot: __( 'Are Not', 'content-control' ),
@@ -37,8 +35,6 @@ export const verbs = {
 		__( 'Were Not', 'content-control' ),
 	],
 };
-
-const builderRules = [ ...Object.values( registeredRules ) ];
 
 const anyAllOptions = [
 	{
@@ -322,8 +318,7 @@ const ConditionalRules = () => {
 								notOperand: true,
 								groups: true,
 								nesting: false,
-							},
-							rules: builderRules,
+							}
 						} }
 					/>
 
