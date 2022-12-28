@@ -30,6 +30,7 @@ dist
 
 # Composer
 /vendor/
+/vendor-prefixed/
 
 /yarn-error.log
 
