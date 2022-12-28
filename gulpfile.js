@@ -274,6 +274,7 @@ gulp.task('build', ['prebuild'], function () {
 			'!./readme.md',
 			'!./assets/scripts/src/**',
 			'!./assets/styles/sass/**',
+			'!./assets/styles/**/*.css.map',
 		])
 		.pipe($fn.plumber(plumberErrorHandler))
 		.pipe(gulp.dest('build/' + pkg.name));
