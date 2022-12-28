@@ -9,7 +9,6 @@
         "composer/installers": "~1.0"
     },
     "require-dev": {
-        "brianhenryie/strauss": "^0.12.0",
         "code-atlantic/coding-standards": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "php": ">=7.3",
@@ -47,25 +46,24 @@
             "curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.12.0/strauss.phar"
         ],
         "clean-vendor-prefix-folder": [
-            "rm -rf vendor-prefixed/*"
+            "rm -rf vendor-prefixed/**/*"
         ],
         "post-install-cmd": [
-            "@install-strauss",
+            "@clean-vendor-prefix-folder",
             "@strauss",
             "composer dump-autoload"
         ],
         "post-update-cmd": [
-            "@install-strauss",
+            "@clean-vendor-prefix-folder",
             "@strauss",
             "composer dump-autoload"
         ],
         "release": [
-            "@install-strauss",
             "@strauss",
             "composer dump-autoload --optimize"
         ],
         "strauss": [
-            "@clean-vendor-prefix-folder",
+            "@install-strauss",
             "@php strauss.phar"
         ],
         "test": "phpunit",
