@@ -73,10 +73,33 @@
     "pretest:unit:php": "wp-env start",
     "test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
     "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
-    "release": "npm run build && npm run translate && npm run plugin-zip"
+    "release": "composer install --no-dev && composer dump-autoload --optimize && npm run build && npm run translate && npm run plugin-zip"
   },
   "babel": {},
   "workspaces": [
     "./packages/*"
-  ]
+  ],
+  "files": [
+    "dist",
+    "classes",
+    "assets/images",
+    "assets/scripts/*.js",
+    "assets/styles/*.css",
+    "inc",
+    "languages",
+    "vendor/autoload.php",
+    "vendor/composer/autoload_real.php",
+    "vendor/composer/ClassLoader.php",
+    "vendor/composer/platform_check.php",
+    "vendor/composer/autoload_static.php",
+    "vendor-prefixed",
+    "readme.txt",
+    "index.php",
+    "index.php",
+    "content-control.php",
+    "uninstall.php"
+  ],
+  "overrides": {
+    "@types/wordpress__components": "file:../DefinitelyTyped/types/wordpress__components"
+  }
 }

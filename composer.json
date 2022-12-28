@@ -43,20 +43,30 @@
     "scripts": {
         "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
         "lint": "phpcs --standard=phpcs.xml.dist",
+        "install-strauss": [
+            "curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.12.0/strauss.phar"
+        ],
+        "clean-vendor-prefix-folder": [
+            "rm -rf vendor-prefixed/*"
+        ],
         "post-install-cmd": [
+            "@install-strauss",
             "@strauss",
             "composer dump-autoload"
         ],
         "post-update-cmd": [
+            "@install-strauss",
             "@strauss",
             "composer dump-autoload"
         ],
         "release": [
+            "@install-strauss",
             "@strauss",
             "composer dump-autoload --optimize"
         ],
         "strauss": [
-            "vendor/bin/strauss"
+            "@clean-vendor-prefix-folder",
+            "@php strauss.phar"
         ],
         "test": "phpunit",
         "test:watch": "phpunit-watcher watch < /dev/tty"
