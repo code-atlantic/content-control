@@ -55,7 +55,7 @@ class Shortcodes {
 
 		$classes = implode( ' ', $classes );
 
-		return sprintf( $container, $classes, do_shortcode( $content ), do_shortcode( $atts['message'] ) );
+		return sprintf( $container, esc_attr( $classes ), do_shortcode( $content ), do_shortcode( $atts['message'] ) );
 	}
 
 	/**
