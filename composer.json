@@ -41,9 +41,8 @@
     },
     "prefer-stable": true,
     "scripts": {
-        "strauss": [
-            "vendor/bin/strauss"
-        ],
+        "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
+        "lint": "phpcs --standard=phpcs.xml.dist",
         "post-install-cmd": [
             "@strauss",
             "composer dump-autoload"
@@ -52,13 +51,17 @@
             "@strauss",
             "composer dump-autoload"
         ],
-        "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
-        "lint": "phpcs --standard=phpcs.xml.dist",
+        "release": [
+            "@strauss",
+            "composer dump-autoload --optimize"
+        ],
+        "strauss": [
+            "vendor/bin/strauss"
+        ],
         "test": "phpunit",
         "test:watch": "phpunit-watcher watch < /dev/tty"
     },
     "config": {
-        "optimize-autoloader": false,
         "platform": {
             "php": "7.4"
         },
