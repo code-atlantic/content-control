@@ -41,3 +41,4 @@ lerna-debug.log
 npm-debug.log
 packages/*/lib
 .idea
+strauss.phar
