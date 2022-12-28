@@ -34,7 +34,7 @@
   "devDependencies": {
     "@code-atlantic/browserslist-config": "^1.0.1",
     "@code-atlantic/eslint-plugin": "^1.1.0",
-    "@code-atlantic/stylelint-config": "^1.1.0",
+    "@code-atlantic/stylelint-config": "^1.2.0",
     "@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
     "@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
     "@nrwl/nx-cloud": "^15.0.2",
