@@ -36,27 +36,28 @@ import DeviceRules from './device-rules';
 
 import type { Icon } from '@wordpress/components';
 import type { BlockControlGroups } from '../../types';
+import type { PropsWithChildren, ReactNode } from 'react';
 
-export type RulePanel = {
+export type RulePanel = PropsWithChildren<{
 	label: string;
 	name: BlockControlGroups;
-	icon?: Icon.IconType< {} >;
+	icon?: Icon.IconType<{}>;
 	onSelect: () => void;
 	onDeselect: () => void;
 	resetAllFilter: () => void;
-	items: React.ReactChildren;
-};
+	items?: ReactNode;
+}>;
 
 addFilter(
 	'contentControl.blockRules.rulePanels',
 	'contentControl.core',
 	// TODO Type this properly.
-	( rulePanels = [], parentProps ) => [
+	(rulePanels = [], parentProps) => [
 		...rulePanels,
 		{
 			name: 'conditional',
-			label: __( 'Conditional Rules', 'content-control' ),
-			items: <ConditionalRules { ...parentProps } />,
+			label: __('Conditional Rules', 'content-control'),
+			items: <ConditionalRules {...parentProps} />,
 		},
 	],
 	10
@@ -66,12 +67,12 @@ addFilter(
 	'contentControl.blockRules.rulePanels',
 	'contentControl.core',
 	// TODO Type this properly.
-	( rulePanels = [], parentProps ) => [
+	(rulePanels = [], parentProps) => [
 		...rulePanels,
 		{
 			name: 'device',
-			label: __( 'Device Rules', 'content-control' ),
-			items: <DeviceRules { ...parentProps } />,
+			label: __('Device Rules', 'content-control'),
+			items: <DeviceRules {...parentProps} />,
 		},
 	],
 	10
@@ -81,7 +82,7 @@ addFilter(
 type Props = {};
 
 // TODO This needs to be typed properly.
-const RulesPanel = ( props: Props ) => {
+const RulesPanel = (props: Props) => {
 	const rulePanels = applyFilters(
 		'contentControl.blockRules.rulePanels',
 		[],
@@ -90,10 +91,10 @@ const RulesPanel = ( props: Props ) => {
 
 	return (
 		<SlotFillProvider>
-			{ /** Render filtered panels. */ }
+			{/** Render filtered panels. */}
 			<Fill name="ContentControlBlockRules">
 				// TODO This needs to be typed properly.
-				{ rulePanels.map( ( rulePanel ) => {
+				{rulePanels.map((rulePanel) => {
 					const {
 						name,
 						label,
@@ -103,15 +104,15 @@ const RulesPanel = ( props: Props ) => {
 
 					return (
 						<RuleGroupComponent
-							key={ name }
-							label={ label }
-							icon={ icon }
-							groupId={ name }
+							key={name}
+							label={label}
+							icon={icon}
+							groupId={name}
 						>
-							{ items }
+							{items}
 						</RuleGroupComponent>
 					);
-				} ) }
+				})}
 			</Fill>
 
 			<Slot name="ContentControlBlockRules" />
