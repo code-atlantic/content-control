@@ -3,10 +3,18 @@ import { applyFilters } from '@wordpress/hooks';
 
 import type { BlockInstanceWithControls, BlockWithControls } from '../../types';
 
-const {
-	allowedBlocks = [],
-	excludedBlocks = [ 'core/freeform', 'core/nextpage' ],
-} = contentControlBlockEditor;
+const getAllowedBlocks = () => {
+	return contentControlBlockEditor?.allowedBlocks ?? [];
+};
+
+const getExcludedBlocks = () => {
+	return (
+		contentControlBlockEditor?.excludedBlocks ?? [
+			'core/freeform',
+			'core/nextpage',
+		]
+	);
+};
 
 /**
  * Array of explicitly allowed block types.
@@ -14,7 +22,10 @@ const {
  * @returns {string[]} Array of explicitly allowed block types.
  */
 export const explicitlyAllowedBlocks = (): string[] =>
-	applyFilters( 'contentControl.allowedBlocks', allowedBlocks ) as string[];
+	applyFilters(
+		'contentControl.allowedBlocks',
+		getAllowedBlocks()
+	) as string[];
 
 /**
  * Array of explicitly excluded block types.
@@ -22,7 +33,10 @@ export const explicitlyAllowedBlocks = (): string[] =>
  * @returns {string[]} Array of explicitly excluded block types.
  */
 export const explicitlyExcludedBlocks = (): string[] =>
-	applyFilters( 'contentControl.excludedBlocks', excludedBlocks ) as string[];
+	applyFilters(
+		'contentControl.excludedBlocks',
+		getExcludedBlocks()
+	) as string[];
 
 /**
  * Check if block controls should be enabled for given block type.
@@ -36,14 +50,14 @@ export const blockControlsEnabled = (
 	const { name } = settings;
 
 	// Force compatiblity mode for older gutenberg blocks.
-	if ( typeof settings.attributes === 'undefined' ) {
+	if (typeof settings.attributes === 'undefined') {
 		return false;
 	}
 
 	// If block is explicitly on allow list, return true now.
 	const allowed = explicitlyAllowedBlocks();
 
-	if ( allowed.length && allowed.includes( name ) ) {
+	if (allowed.length && allowed.includes(name)) {
 		return true;
 	}
 
@@ -54,14 +68,14 @@ export const blockControlsEnabled = (
 	 */
 	const excluded = explicitlyExcludedBlocks();
 
-	if ( excluded.length && excluded.includes( name ) ) {
+	if (excluded.length && excluded.includes(name)) {
 		return false;
 	}
 
 	// Enabled by default for all insertable block types. (Temporary).
 	if (
-		hasBlockSupport( name, 'inserter', true ) &&
-		! Object.prototype.hasOwnProperty.call( settings, 'parent' )
+		hasBlockSupport(name, 'inserter', true) &&
+		!Object.prototype.hasOwnProperty.call(settings, 'parent')
 	) {
 		return true;
 	}
@@ -79,13 +93,13 @@ export const blockControlsEnabled = (
 export const blockHasControls = (
 	settings: BlockInstanceWithControls
 ): boolean => {
-	if ( ! blockControlsEnabled( settings ) ) {
+	if (!blockControlsEnabled(settings)) {
 		return false;
 	}
 
 	const { attributes } = settings;
 
-	if ( ! attributes ) {
+	if (!attributes) {
 		return false;
 	}
 
