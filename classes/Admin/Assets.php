@@ -8,7 +8,7 @@
 namespace ContentControl\Admin;
 
 use ContentControl\Base\Controller;
-use ContentControl\Dependencies\Pimple\Exception\UnknownIdentifierException;
+use ContentControl\Vendor\Pimple\Exception\UnknownIdentifierException;
 
 use function ContentControl\plugin;
 
