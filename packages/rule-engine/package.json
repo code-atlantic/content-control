@@ -43,6 +43,9 @@
 		"react-sortablejs": "^6.1.4",
 		"sortablejs": "^1.15.0"
 	},
+	"devDependencies": {
+		"@types/wordpress__components": "^23.0.0"
+	},
 	"scripts": {
 		"build:tsc": "tsc",
 		"build:types": "tsc --build",
