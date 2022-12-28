@@ -5,6 +5,7 @@ interface Props extends Button.ButtonProps {
 	onClick: () => void;
 	children: React.ReactNode;
 	selected: boolean;
+	className?: string;
 }
 
 const TabButton = ( {
