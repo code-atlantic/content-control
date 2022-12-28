@@ -5,8 +5,8 @@ Plugin URI:  https://wordpress.org/plugins/content-control/
 Donate link: https://code-atlantic.com/donate/
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
-Tested up to: 6.0
-Stable tag: 1.1.9
+Tested up to: 6.1.1
+Stable tag: 1.1.10
 Requires PHP: 5.3
 License: GPLv3 or Any Later Version
 
@@ -110,6 +110,10 @@ Bugs can be reported either in our support forum or preferably on the [Content C
 7. Restrict widgets as well.
 
 == Changelog ==
+
+= v1.1.10 - 12/28/2022 =
+
+* Security: Fix unescaped output for CSS classname in the [contentcontrol] shortcode allowing users with the ability to edit posts to inject code into the page.
 
 = v1.1.9 - 09/30/2021 =
 

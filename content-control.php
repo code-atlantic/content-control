@@ -3,7 +3,7 @@
  * Plugin Name: Content Control
  * Plugin URI: https://wordpress.org/plugins/content-control/
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
- * Version: 1.1.9
+ * Version: 1.1.10
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/
  * Text Domain: content-control
@@ -69,7 +69,7 @@ class JP_Content_Control {
 	/**
 	 * @var string
 	 */
-	public static $VER = '1.1.9';
+	public static $VER = '1.1.10';
 
 	/**
 	 * @var string
