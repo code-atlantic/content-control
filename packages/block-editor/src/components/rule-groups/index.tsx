@@ -1,12 +1,13 @@
-import { Fill, SlotFillProvider } from '@wordpress/components';
+import { Fill, SlotFillProvider, withFilters } from '@wordpress/components';
+import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { tablet } from '@wordpress/icons';
 import { Path, SVG } from '@wordpress/primitives';
 
 import RuleGroup from '../rule-group';
+import { RulesInspectorSlot } from '../rules-inspector';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
-import { RulesInspectorSlot } from '../rules-inspector';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -18,28 +19,65 @@ const blockMeta = (
 	</SVG>
 );
 
-const RuleGroups = () => {
+type Props = {};
+
+addFilter(
+	'content-control.BlockControlsEdit',
+	'contentControl.core',
+	(FilteredComponent) => {
+		return (props: Props) => {
+			return (
+				<>
+					<FilteredComponent {...props} />
+					<Fill name="ContentControlBlockRules">
+						<RuleGroup
+							groupId="device"
+							label={__('Device Rules', 'content-control')}
+							icon={tablet}
+						>
+							<DeviceRules />
+						</RuleGroup>
+					</Fill>
+				</>
+			);
+		};
+	},
+	10
+);
+
+addFilter(
+	'content-control.BlockControlsEdit',
+	'contentControl.core',
+	(FilteredComponent) => {
+		return (props: Props) => {
+			return (
+				<>
+					<FilteredComponent {...props} />
+					<Fill name="ContentControlBlockRules">
+						<RuleGroup
+							groupId="conditional"
+							label={__('Conditional Rules', 'content-controls')}
+							icon={blockMeta}
+						>
+							<ConditionalRules />
+						</RuleGroup>
+					</Fill>
+				</>
+			);
+		};
+	},
+	20
+);
+
+const RuleGroups = (props: any) => {
+	const Groups = withFilters('content-control.BlockControlsEdit')(() => (
+		<></>
+	));
+
 	return (
 		<SlotFillProvider>
-			<Fill name="ContentControlBlockRules">
-				<RuleGroup
-					groupId="device"
-					label={ __( 'Device Rules', 'content-control' ) }
-					icon={ tablet }
-				>
-					<DeviceRules />
-				</RuleGroup>
-			</Fill>
-
-			<Fill name="ContentControlBlockRules">
-				<RuleGroup
-					groupId="conditional"
-					label={ __( 'Conditional Rules', 'content-controls' ) }
-					icon={ blockMeta }
-				>
-					<ConditionalRules />
-				</RuleGroup>
-			</Fill>
+			{/** Allow registering panels. */}
+			<Groups {...props} />
 
 			<RulesInspectorSlot />
 		</SlotFillProvider>
