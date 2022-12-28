@@ -22,7 +22,7 @@ const contentControlRequestToExternal = ( request, excludedExternals ) => {
 		const handle = request.substring( CONTENTCONTROL_NAMESPACE.length );
 		const irregularExternalMap = {
 			// Used to map irregular package names to script handles.
-			'block-editor': [ 'contentControl', 'coreData' ],
+			'block-editor': [ 'contentControl', 'blockEditor' ],
 			'core-data': [ 'contentControl', 'coreData' ],
 			'rule-engine': [ 'contentControl', 'ruleEngine' ],
 			'settings-page': [ 'contentControl', 'settingsPage' ],
