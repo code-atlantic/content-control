@@ -174,6 +174,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 				items: newItems,
 			} );
 		},
+		getItem: ( id ) => items.find( ( item ) => item.id === id ),
 		updateItem: ( id, updatedItem ) =>
 			onChange( {
 				...query,

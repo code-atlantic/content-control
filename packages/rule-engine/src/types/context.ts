@@ -6,6 +6,7 @@ export interface QueryContextProps {
 	query: Query;
 	logicalOperator: LogicalOperator;
 	updateOperator: ( updatedOperator: LogicalOperator ) => void;
+	getItem: ( id: string ) => Item | undefined;
 	addItem: ( newItem: Item, after?: Identifier ) => void;
 	updateItem: ( id: string, updatedItem: Item ) => void;
 	removeItem: ( id: string ) => void;
