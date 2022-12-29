@@ -72,7 +72,7 @@ const DefaultGroupOptions = ( { onClose }: Props ) => {
 					icon={ trash }
 					variant={ 'tertiary' }
 					onClick={ () => {
-						setGroupRules( null );
+						setGroupRules( undefined );
 						onClose();
 					} }
 				>
