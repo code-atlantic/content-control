@@ -53,7 +53,7 @@ export const useBlockControlsForGroup = < K extends BlockControlGroups >() => {
 		...groupContext,
 		groupId,
 		groupRules,
-		isOpened: typeof groupRules === 'object',
+		isOpened: typeof groupRules !== 'undefined',
 		groupDefaults: parentContext.getGroupDefaults( groupId ),
 		getGroupRules: () => parentContext.getGroupRules( groupId ),
 		setGroupRules: ( rules: ControlGroups[ K ] ) =>
