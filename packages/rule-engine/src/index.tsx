@@ -15,13 +15,11 @@ declare global {
 	const contentControlRuleEngine: {
 		adminUrl: string;
 		pluginUrl: string;
-		registeredRules: EngineRuleType[];
+		registeredRules: { [ key: EngineRuleType['name'] ]: EngineRuleType };
 	};
 }
 
-const { registeredRules } = contentControlRuleEngine;
-
-const builderRules = [...Object.values(registeredRules)];
+const { registeredRules = {} } = contentControlRuleEngine ?? {};
 
 type RuleEngineProps = ControlledInputProps<Query> & {
 	/** Options to customize the rule engine */
@@ -30,16 +28,19 @@ type RuleEngineProps = ControlledInputProps<Query> & {
 	};
 };
 
-const RuleEngine = ({ value, onChange, options }: RuleEngineProps) => {
+const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 	return (
 		<OptionsProvider
-			options={{
+			options={ {
 				...options,
-				rules: { ...builderRules, ...(options.rules ?? []) },
-			}}
+				rules: [
+					...Object.values( registeredRules ),
+					...( options.rules ?? [] )
+				],
+			} }
 		>
 			<div className="cc-rule-engine">
-				<QueryList query={value} onChange={onChange} />
+				<QueryList query={ value } onChange={ onChange } />
 			</div>
 		</OptionsProvider>
 	);
