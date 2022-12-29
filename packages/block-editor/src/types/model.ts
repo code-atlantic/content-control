@@ -24,8 +24,8 @@ export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
 }
 
 export interface ControlGroups {
-	device?: DeviceBlockControlsGroup | null;
-	conditional?: ConditionalBlockControlsGroup | null;
+	device?: DeviceBlockControlsGroup;
+	conditional?: ConditionalBlockControlsGroup;
 }
 
 export type BlockControlGroups = keyof ControlGroups;
