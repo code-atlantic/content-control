@@ -1,9 +1,10 @@
 import './index.scss';
 
 import { Button } from '@wordpress/components';
-import { dragHandle } from '@wordpress/icons';
+import { copy, dragHandle } from '@wordpress/icons';
 
 import { useQuery } from '../../contexts';
+import { newUUID } from '../../utils';
 
 import type { Identifier } from '../../types';
 
@@ -21,10 +22,22 @@ interface ItemActionsProps {
 }
 
 const ItemActions = ( { id }: ItemActionsProps ) => {
-	const { removeItem } = useQuery();
+	const { removeItem, addItem, getItem } = useQuery();
 
 	return (
 		<div className="cc-condition-editor-item-actions">
+			<Button
+				className="duplicate-item"
+				icon={ copy }
+				iconSize={ 16 }
+				onClick={ () => {
+					const item = getItem( id );
+
+					if ( item )	{
+						addItem( { ...item, id: newUUID() }, id );
+					}
+				} }
+			/>
 			<Button
 				className="delete-item"
 				icon={ deleteIcon }
