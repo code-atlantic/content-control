@@ -191,6 +191,12 @@ const ConditionalRules = () => {
 				}
 			/>
 
+			<h3>
+				{ conditionSets.length > 0
+					? __( 'Active Conditions', 'content-control' )
+					: __( 'No Conditions Yet', 'content-control' ) }
+			</h3>
+
 			{ conditionSets.map( ( set ) => (
 				<Flex key={ set.id }>
 					<FlexItem>
