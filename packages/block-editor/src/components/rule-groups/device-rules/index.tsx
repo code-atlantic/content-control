@@ -26,12 +26,12 @@ const DeviceRules = () => {
 
 	const { hideOn = {} } = currentRules;
 
-	const toggleDeviceRule = ( device: string, hide: boolean ) =>
+	const toggleDeviceRule = ( device: string, isVisible: boolean ) =>
 		setGroupRules( {
 			...currentRules,
 			hideOn: {
 				...hideOn,
-				[ device ]: !! hide,
+				[ device ]: ! isVisible,
 			},
 		} );
 
@@ -44,17 +44,21 @@ const DeviceRules = () => {
 				) }
 			</p>
 			{ Object.entries( screenSizes ).map(
-				( [ deviceKey, { label, icon } ] ) => (
-					<DeviceToggle
-						key={ deviceKey }
-						label={ label }
-						icon={ icon }
-						checked={ hideOn[ deviceKey ] ?? false }
-						onChange={ ( hide ) =>
-							toggleDeviceRule( deviceKey, hide )
-						}
-					/>
-				)
+				( [ deviceKey, { label, icon } ] ) => {
+					const hidden = hideOn[ deviceKey ] ?? false;
+
+					return (
+						<DeviceToggle
+							key={ deviceKey }
+							label={ label }
+							icon={ icon }
+							isVisible={ ! hidden }
+							onChange={ ( isVisible ) =>
+								toggleDeviceRule( deviceKey, isVisible )
+							}
+						/>
+					);
+				}
 			) }
 		</>
 	);
