@@ -30,6 +30,7 @@ export const newSet = ( ruleName: string = '' ): QuerySet => ( {
 	label: '',
 	query: {
 		logicalOperator: 'and',
-		items: [ newGroup( ruleName ) ],
+		items: [],
+		// items: [ newGroup( ruleName ) ],
 	},
 } );
