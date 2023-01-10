@@ -324,7 +324,8 @@ const ConditionalRules = () => {
 								notOperand: true,
 								groups: true,
 								nesting: false,
-							}
+								firstUseScreen: true,
+							},
 						} }
 					/>
 
