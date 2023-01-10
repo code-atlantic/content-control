@@ -40,8 +40,8 @@
     },
     "prefer-stable": true,
     "scripts": {
-        "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",
-        "lint": "phpcs --standard=phpcs.xml.dist",
+        "format": "vendor/bin/phpcbf --standard=.phpcs.xml.dist --report-summary --report-source",
+        "lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
         "install-strauss": [
             "curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.12.0/strauss.phar"
         ],
