@@ -15,15 +15,15 @@ declare global {
 	const contentControlRuleEngine: {
 		adminUrl: string;
 		pluginUrl: string;
-		registeredRules: { [ key: EngineRuleType['name'] ]: EngineRuleType };
+		registeredRules: { [ key: EngineRuleType[ 'name' ] ]: EngineRuleType };
 	};
 }
 
 const { registeredRules = {} } = contentControlRuleEngine ?? {};
 
-type RuleEngineProps = ControlledInputProps<Query> & {
+type RuleEngineProps = ControlledInputProps< Query > & {
 	/** Options to customize the rule engine */
-	options: Omit<EngineOptions, 'rules'> & {
+	options: Omit< EngineOptions, 'rules' > & {
 		rules?: EngineRuleType[];
 	};
 };
@@ -35,7 +35,7 @@ const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 				...options,
 				rules: [
 					...Object.values( registeredRules ),
-					...( options.rules ?? [] )
+					...( options.rules ?? [] ),
 				],
 			} }
 		>
