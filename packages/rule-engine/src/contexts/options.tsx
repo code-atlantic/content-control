@@ -23,11 +23,16 @@ export const OptionsProvider = ( {
 	options = defaultEngineOptions,
 	children,
 }: OptionsProviderProps ) => {
-	const value = {
-		...options,
-	};
 	return (
-		<OptionsContext.Provider value={ value }>
+		<OptionsContext.Provider
+			value={ {
+				...options,
+				features: {
+					...defaultEngineOptions.features,
+					...( options.features ?? {} ),
+				},
+			} }
+		>
 			{ children }
 		</OptionsContext.Provider>
 	);
