@@ -50,14 +50,14 @@ export const blockControlsEnabled = (
 	const { name } = settings;
 
 	// Force compatiblity mode for older gutenberg blocks.
-	if (typeof settings.attributes === 'undefined') {
+	if ( typeof settings.attributes === 'undefined' ) {
 		return false;
 	}
 
 	// If block is explicitly on allow list, return true now.
 	const allowed = explicitlyAllowedBlocks();
 
-	if (allowed.length && allowed.includes(name)) {
+	if ( allowed.length && allowed.includes( name ) ) {
 		return true;
 	}
 
@@ -68,14 +68,14 @@ export const blockControlsEnabled = (
 	 */
 	const excluded = explicitlyExcludedBlocks();
 
-	if (excluded.length && excluded.includes(name)) {
+	if ( excluded.length && excluded.includes( name ) ) {
 		return false;
 	}
 
 	// Enabled by default for all insertable block types. (Temporary).
 	if (
-		hasBlockSupport(name, 'inserter', true) &&
-		!Object.prototype.hasOwnProperty.call(settings, 'parent')
+		hasBlockSupport( name, 'inserter', true ) &&
+		! Object.prototype.hasOwnProperty.call( settings, 'parent' )
 	) {
 		return true;
 	}
@@ -93,13 +93,13 @@ export const blockControlsEnabled = (
 export const blockHasControls = (
 	settings: BlockInstanceWithControls
 ): boolean => {
-	if (!blockControlsEnabled(settings)) {
+	if ( ! blockControlsEnabled( settings ) ) {
 		return false;
 	}
 
 	const { attributes } = settings;
 
-	if (!attributes) {
+	if ( ! attributes ) {
 		return false;
 	}
 

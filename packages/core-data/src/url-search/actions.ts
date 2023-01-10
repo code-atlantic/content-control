@@ -6,7 +6,11 @@ import { ACTION_TYPES } from './constants';
 import { fetchLinkSuggestions } from './controls';
 
 import type { Statuses } from '../constants';
-import type { SearchOptions, URLSearchStore, WPLinkSearchResult } from './types';
+import type {
+	SearchOptions,
+	URLSearchStore,
+	WPLinkSearchResult,
+} from './types';
 
 const { SEARCH_REQUEST, SEARCH_SUCCESS, SEARCH_ERROR, CHANGE_ACTION_STATUS } =
 	ACTION_TYPES;

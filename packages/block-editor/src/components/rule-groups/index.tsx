@@ -24,16 +24,16 @@ type Props = {};
 addFilter(
 	'content-control.BlockControlsEdit',
 	'contentControl.core',
-	(FilteredComponent) => {
-		return (props: Props) => {
+	( FilteredComponent ) => {
+		return ( props: Props ) => {
 			return (
 				<>
-					<FilteredComponent {...props} />
+					<FilteredComponent { ...props } />
 					<Fill name="ContentControlBlockRules">
 						<RuleGroup
 							groupId="device"
-							label={__('Device Rules', 'content-control')}
-							icon={tablet}
+							label={ __( 'Device Rules', 'content-control' ) }
+							icon={ tablet }
 						>
 							<DeviceRules />
 						</RuleGroup>
@@ -48,16 +48,19 @@ addFilter(
 addFilter(
 	'content-control.BlockControlsEdit',
 	'contentControl.core',
-	(FilteredComponent) => {
-		return (props: Props) => {
+	( FilteredComponent ) => {
+		return ( props: Props ) => {
 			return (
 				<>
-					<FilteredComponent {...props} />
+					<FilteredComponent { ...props } />
 					<Fill name="ContentControlBlockRules">
 						<RuleGroup
 							groupId="conditional"
-							label={__('Conditional Rules', 'content-controls')}
-							icon={blockMeta}
+							label={ __(
+								'Conditional Rules',
+								'content-controls'
+							) }
+							icon={ blockMeta }
 						>
 							<ConditionalRules />
 						</RuleGroup>
@@ -69,15 +72,15 @@ addFilter(
 	20
 );
 
-const RuleGroups = (props: any) => {
-	const Groups = withFilters('content-control.BlockControlsEdit')(() => (
+const RuleGroups = ( props: any ) => {
+	const Groups = withFilters( 'content-control.BlockControlsEdit' )( () => (
 		<></>
-	));
+	) );
 
 	return (
 		<SlotFillProvider>
-			{/** Allow registering panels. */}
-			<Groups {...props} />
+			{ /** Allow registering panels. */ }
+			<Groups { ...props } />
 
 			<RulesInspectorSlot />
 		</SlotFillProvider>

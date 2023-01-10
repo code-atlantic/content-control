@@ -33,11 +33,7 @@
 					"properties": {
 						"anyAll": {
 							"type": {
-								"enum": [
-									"any",
-									"all",
-									"none"
-								]
+								"enum": [ "any", "all", "none" ]
 							},
 							"default": "all"
 						},
@@ -63,9 +59,7 @@
 			}
 		}
 	},
-	"required": [
-		"enabled"
-	],
+	"required": [ "enabled" ],
 	"$defs": {
 		"rule": {
 			"type": "object",
@@ -86,11 +80,7 @@
 					"type": "object"
 				}
 			},
-			"required": [
-				"id",
-				"type",
-				"name"
-			]
+			"required": [ "id", "type", "name" ]
 		},
 		"group": {
 			"type": "object",
@@ -108,12 +98,7 @@
 					"$ref": "#/$defs/query"
 				}
 			},
-			"required": [
-				"id",
-				"type",
-				"label",
-				"query"
-			]
+			"required": [ "id", "type", "label", "query" ]
 		},
 		"query": {
 			"type": "object",
@@ -133,10 +118,7 @@
 					]
 				}
 			},
-			"required": [
-				"logicalOperator",
-				"items"
-			]
+			"required": [ "logicalOperator", "items" ]
 		}
 	}
 }

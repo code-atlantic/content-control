@@ -33,7 +33,7 @@ const ItemActions = ( { id }: ItemActionsProps ) => {
 				onClick={ () => {
 					const item = getItem( id );
 
-					if ( item )	{
+					if ( item ) {
 						addItem( { ...item, id: newUUID() }, id );
 					}
 				} }

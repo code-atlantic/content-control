@@ -1,6 +1,10 @@
 import { Status } from '../constants';
 
-import type { URLSearchState, URLSearchStore, WPLinkSearchResult } from './types';
+import type {
+	URLSearchState,
+	URLSearchStore,
+	WPLinkSearchResult,
+} from './types';
 
 /**
  * Get search results for link suggestions.

@@ -21,22 +21,22 @@ type ObjectOption = {
 	name?: string;
 };
 
-const ObjectSelectField = ({
+const ObjectSelectField = ( {
 	value,
 	onChange,
 	...fieldProps
 }: WithOnChange<
 	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
->) => {
-	const inputRef = useRef<ReactTagsAPI>(null);
+> ) => {
+	const inputRef = useRef< ReactTagsAPI >( null );
 	const {
 		entityKind = 'postType',
 		entityType = 'post',
 		// multiple = false,
 	} = fieldProps;
 
-	const [queryText, setQueryText] = useState('');
-	const [selected, setSelected] = useState<Tag[]>([]);
+	const [ queryText, setQueryText ] = useState( '' );
+	const [ selected, setSelected ] = useState< Tag[] >( [] );
 
 	const queryArgs = {
 		search: queryText,
@@ -44,14 +44,14 @@ const ObjectSelectField = ({
 	};
 
 	const { options } = useSelect(
-		(select) => ({
-			options: select(coreDataStore).getEntityRecords(
+		( select ) => ( {
+			options: select( coreDataStore ).getEntityRecords(
 				entityKind,
 				entityType,
 				queryArgs
-			) as (Taxonomy<'view'> | Post<'view'>)[],
-		}),
-		[entityKind, entityType, queryText]
+			) as ( Taxonomy< 'view' > | Post< 'view' > )[],
+		} ),
+		[ entityKind, entityType, queryText ]
 	);
 
 	// const onSelect = ( chosen: string ) => {
@@ -61,43 +61,45 @@ const ObjectSelectField = ({
 	/**
 	 * Focus the input when this component is rendered.
 	 */
-	useEffect(() => {
+	useEffect( () => {
 		const firstEl = inputRef.current;
 
-		if (null !== firstEl) {
+		if ( null !== firstEl ) {
 			// ReactTags exposed method, not HTML .focus().
 			firstEl.input.focus();
 		}
-	}, []);
+	}, [] );
 
 	return (
 		<div className="cc-rule-engine-search-box">
 			<ReactTags
-				placeholderText={__('Select a rule', 'content-control')}
-				ref={inputRef}
-				selected={options.map(
-					({ id, slug, name }: ObjectOption, i) => ({
+				placeholderText={ __( 'Select a rule', 'content-control' ) }
+				ref={ inputRef }
+				selected={ options.map(
+					( { id, slug, name }: ObjectOption, i ) => ( {
 						value: id ?? slug ?? i,
 						label: name ?? slug ?? '',
-					})
-				)}
-				suggestions={options.map(
-					({ id, slug, name }: ObjectOption, i) => ({
+					} )
+				) }
+				suggestions={ options.map(
+					( { id, slug, name }: ObjectOption, i ) => ( {
 						value: id ?? slug ?? i,
 						label: name ?? slug ?? '',
-					})
-				)}
-				onInput={setQueryText}
-				onAdd={(chosen: Tag) => {
-					setSelected([...selected, chosen]);
-				}}
-				onDelete={(tagIndex: number) =>
+					} )
+				) }
+				onInput={ setQueryText }
+				onAdd={ ( chosen: Tag ) => {
+					setSelected( [ ...selected, chosen ] );
+				} }
+				onDelete={ ( tagIndex: number ) =>
 					setSelected(
-						selected.filter((_: any, i: number) => i !== tagIndex)
+						selected.filter(
+							( _: any, i: number ) => i !== tagIndex
+						)
 					)
 				}
-				allowNew={false}
-				allowBackspace={true}
+				allowNew={ false }
+				allowBackspace={ true }
 			/>
 		</div>
 	);
