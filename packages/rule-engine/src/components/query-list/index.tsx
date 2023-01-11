@@ -3,13 +3,10 @@ import './index.scss';
 import classNames from 'classnames';
 import { isEqual } from 'lodash';
 
-import { Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { plus } from '@wordpress/icons';
 
-import { QueryContextProvider, useOptions, useQuery } from '../../contexts';
-import { newGroup, newRule } from '../../utils';
+import { QueryContextProvider, useQuery } from '../../contexts';
 import Item from '../item';
 import Sortablelist from './sortable-list';
 
@@ -19,6 +16,7 @@ import type {
 	QueryContextProps,
 	QueryProps,
 } from '../../types';
+import { QueryListButtons } from './query-buttons';
 
 type Props = QueryProps & {
 	indexs?: number[];
@@ -29,7 +27,6 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 	const { items = [], logicalOperator } = query;
 
 	const parentQueryContext = useQuery();
-	const { features } = useOptions();
 
 	const { setList: setRootList = false } = parentQueryContext;
 
@@ -189,7 +186,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 			} ),
 	};
 
-	const { addItem, setList, updateItem } = queryContext;
+	const { setList, updateItem } = queryContext;
 
 	return (
 		<QueryContextProvider value={ queryContext }>
@@ -216,27 +213,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 				) ) }
 			</Sortablelist>
 
-			<div className="cc-rule-engine-query-list__buttons">
-				<Button
-					icon={ plus }
-					iconSize={ 18 }
-					onClick={ () => addItem( newRule() ) }
-					label={ __( 'Add Rule', 'content-control' ) }
-				>
-					{ __( 'Add Rule', 'content-control' ) }
-				</Button>
-
-				{ ( isRootList || ( ! isRootList && features.nesting ) ) && (
-					<Button
-						icon={ plus }
-						iconSize={ 18 }
-						onClick={ () => addItem( newGroup() ) }
-						label={ __( 'Add Group', 'content-control' ) }
-					>
-						{ __( 'Add Group', 'content-control' ) }
-					</Button>
-				) }
-			</div>
+			<QueryListButtons />
 		</QueryContextProvider>
 	);
 };

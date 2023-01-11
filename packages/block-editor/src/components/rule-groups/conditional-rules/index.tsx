@@ -1,6 +1,5 @@
 import RuleEngine, { newSet } from '@content-control/rule-engine';
 import {
-	// @ts-ignore
 	__experimentalConfirmDialog as ConfirmDialog,
 	Button,
 	Flex,
@@ -16,9 +15,9 @@ import { __, _x } from '@wordpress/i18n';
 import { blockMeta, trash } from '@wordpress/icons';
 
 import { useBlockControlsForGroup } from '../../../contexts';
+import FirstUseScreen from './first-use-screen';
 
 import type { Item, Query, QuerySet } from '@content-control/rule-engine';
-
 export const verbs = {
 	are: __( 'Are', 'content-control' ),
 	arenot: __( 'Are Not', 'content-control' ),
@@ -59,9 +58,11 @@ const ConditionalRules = () => {
 
 	const [ currentSet, updateCurrentSet ] = useState< QuerySet >();
 	const [ setToDelete, confirmDeleteSet ] = useState< QuerySet >();
+	const [ showFirstUse, setShowFirstUse ] = useState( false );
 
 	/** Add new set. */
 	const addSet = () => {
+		setShowFirstUse( true );
 		updateCurrentSet( newSet() );
 	};
 
@@ -220,139 +221,183 @@ const ConditionalRules = () => {
 
 			{ currentSet && (
 				<Modal
-					title={ __(
-						'Content Control -- Conditional Logic',
-						'content-control'
-					) }
-					onRequestClose={ () => updateCurrentSet( undefined ) }
+					title={ __( 'Content Control', 'content-control' ) }
+					onRequestClose={ () => {
+						updateCurrentSet( undefined );
+						setShowFirstUse( false );
+					} }
 					shouldCloseOnClickOutside={ false }
 					style={ { width: '760px' } }
 				>
-					<Flex
-						style={ {
-							marginBottom: 20,
-						} }
-					>
-						<FlexItem
-							style={ {
-								flexGrow: 1,
-								maxWidth: 60,
-							} }
-						>
-							<div
-								style={ {
-									backgroundColor: '#e6f2f9',
-									borderRadius: 100,
-									width: 50,
-									height: 50,
-									padding: 10,
-									paddingLeft: 7,
-									paddingTop: 11,
-									verticalAlign: 'middle',
-									textAlign: 'center',
+					{ showFirstUse && currentSet.query.items.length === 0 ? (
+						<>
+							<FirstUseScreen
+								addItem={ ( newItem ) => {
+									updateCurrentSet( {
+										...currentSet,
+										query: {
+											...currentSet.query,
+											items: [
+												...currentSet.query.items,
+												newItem,
+											],
+										},
+									} );
 								} }
-							>
-								<Icon icon={ blockMeta } size={ 30 } />
-							</div>
-						</FlexItem>
+							/>
 
-						<FlexItem
-							style={ {
-								flexBasis: 'auto',
-								flexGrow: 3,
-							} }
-						>
-							<h3
+							<Flex justify="right">
+								<FlexItem>
+									<Button
+										onClick={ () => {
+											setShowFirstUse( false );
+											updateCurrentSet( undefined );
+										} }
+									>
+										{ __( 'Close', 'content-control' ) }
+									</Button>
+								</FlexItem>
+							</Flex>
+						</>
+					) : (
+						<>
+							<Flex
 								style={ {
-									margin: 0,
-									marginBottom: 5,
+									marginBottom: 20,
 								} }
 							>
-								{ __(
-									'Conditional Logic',
-									'content-control '
-								) }
-							</h3>
-							<p
-								style={ {
-									margin: 0,
-								} }
-							>
-								{ __(
-									'Use the power of conditional logic to control when a block is visible.',
+								<FlexItem
+									style={ {
+										flexGrow: 1,
+										maxWidth: 60,
+									} }
+								>
+									<div
+										style={ {
+											backgroundColor: '#e6f2f9',
+											borderRadius: 100,
+											width: 50,
+											height: 50,
+											padding: 10,
+											paddingLeft: 7,
+											paddingTop: 11,
+											verticalAlign: 'middle',
+											textAlign: 'center',
+										} }
+									>
+										<Icon icon={ blockMeta } size={ 30 } />
+									</div>
+								</FlexItem>
+
+								<FlexItem
+									style={ {
+										flexBasis: 'auto',
+										flexGrow: 3,
+									} }
+								>
+									<h3
+										style={ {
+											margin: 0,
+											marginBottom: 5,
+										} }
+									>
+										{ __(
+											'Conditional Logic',
+											'content-control '
+										) }
+									</h3>
+									<p
+										style={ {
+											margin: 0,
+										} }
+									>
+										{ __(
+											'Use the power of conditional logic to control when a block is visible.',
+											'content-control'
+										) }
+									</p>
+								</FlexItem>
+							</Flex>
+
+							<TextControl
+								label={ __(
+									'Condition set label',
 									'content-control'
 								) }
-							</p>
-						</FlexItem>
-					</Flex>
+								hideLabelFromVision={ true }
+								placeholder={ __(
+									'Condition set label',
+									'content-control'
+								) }
+								value={ currentSet.label }
+								onChange={ ( label ) =>
+									updateCurrentSet( {
+										...currentSet,
+										label,
+									} )
+								}
+							/>
 
-					<TextControl
-						label={ __( 'Condition set label', 'content-control' ) }
-						hideLabelFromVision={ true }
-						placeholder={ __(
-							'Condition set label',
-							'content-control'
-						) }
-						value={ currentSet.label }
-						onChange={ ( label ) =>
-							updateCurrentSet( {
-								...currentSet,
-								label,
-							} )
-						}
-					/>
-
-					{ currentSet.label.length <= 0 && (
-						<Notice status="warning" isDismissible={ false }>
-							{ __(
-								'Enter a label for this set.',
-								'content-control'
+							{ currentSet.label.length <= 0 && (
+								<Notice
+									status="warning"
+									isDismissible={ false }
+								>
+									{ __(
+										'Enter a label for this set.',
+										'content-control'
+									) }
+								</Notice>
 							) }
-						</Notice>
-					) }
 
-					<RuleEngine
-						value={ currentSet.query }
-						onChange={ ( query ) => {
-							updateCurrentSet( {
-								...currentSet,
-								query,
-							} );
-						} }
-						options={ {
-							features: {
-								notOperand: true,
-								groups: true,
-								nesting: false,
-								firstUseScreen: true,
-							},
-						} }
-					/>
-
-					<Flex justify="right">
-						<FlexItem>
-							<Button
-								onClick={ () => updateCurrentSet( undefined ) }
-							>
-								{ __( 'Cancel', 'content-control' ) }
-							</Button>
-						</FlexItem>
-						<FlexItem>
-							<Button
-								disabled={ ! isSetValid() }
-								variant="primary"
-								onClick={ () => {
-									if ( ! isSetValid() ) {
-										return;
-									}
-									updateSet( currentSet );
-									updateCurrentSet( undefined );
+							<RuleEngine
+								value={ currentSet.query }
+								onChange={ ( query ) => {
+									updateCurrentSet( {
+										...currentSet,
+										query,
+									} );
 								} }
-							>
-								{ __( 'Save', 'content-control' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
+								options={ {
+									features: {
+										notOperand: true,
+										groups: true,
+										nesting: false,
+										firstUseScreen: true,
+									},
+								} }
+							/>
+
+							<Flex justify="right">
+								<FlexItem>
+									<Button
+										onClick={ () => {
+											updateCurrentSet( undefined );
+											setShowFirstUse( false );
+										} }
+									>
+										{ __( 'Cancel', 'content-control' ) }
+									</Button>
+								</FlexItem>
+								<FlexItem>
+									<Button
+										disabled={ ! isSetValid() }
+										variant="primary"
+										onClick={ () => {
+											if ( ! isSetValid() ) {
+												return;
+											}
+											updateSet( currentSet );
+											updateCurrentSet( undefined );
+											setShowFirstUse( false );
+										} }
+									>
+										{ __( 'Save', 'content-control' ) }
+									</Button>
+								</FlexItem>
+							</Flex>
+						</>
+					) }
 				</Modal>
 			) }
 		</>

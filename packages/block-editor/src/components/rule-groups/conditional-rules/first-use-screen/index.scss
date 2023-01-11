@@ -1,0 +1,57 @@
+.first-use-screen {
+	max-width: 600px;
+	margin: 0 auto;
+
+	.first-use__flex-horizontal {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 1.5em;
+		margin: 48px 0;
+
+		> * {
+			flex: 1;
+			vertical-align: middle;
+		}
+	}
+}
+
+.first-use-screen__text {
+	color: #1e1e1e;
+	> strong {
+		text-transform: uppercase;
+	}
+
+	> h2 {
+		margin: 0.5em 0;
+		font-size: 24px;
+	}
+
+	> p {
+		color: #757575;
+	}
+}
+
+.first-use-screen__add-group,
+.first-use-screen__add-rule {
+	border: 1px solid #ddd;
+	padding: 24px;
+
+	h3 {
+		margin: 0 0 16px;
+	}
+
+	p {
+		min-height: 4.5em;
+		margin: 0 0 16px;
+	}
+
+	button.components-button {
+		margin: 0;
+		padding: 0;
+
+		svg {
+			margin-right: 0;
+		}
+	}
+}

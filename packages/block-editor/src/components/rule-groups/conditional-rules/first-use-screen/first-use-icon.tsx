@@ -1,4 +1,4 @@
-const FirstUse = () => (
+const FirstUseSVG = () => (
 	<svg
 		width="230"
 		height="231"
@@ -372,4 +372,4 @@ const FirstUse = () => (
 	</svg>
 );
 
-export default FirstUse;
+export default FirstUseSVG;

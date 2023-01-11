@@ -48,5 +48,6 @@ const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 
 export default RuleEngine;
 
+export * from './contexts';
 export * from './utils';
 export * from './types';

@@ -18,8 +18,6 @@ export interface EngineFeatures {
 	groups?: boolean;
 	/** Enables rule group nesting */
 	nesting?: boolean;
-	/** Enables the first use explainer screen */
-	firstUseScreen?: boolean;
 }
 
 /**
