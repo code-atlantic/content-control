@@ -63,22 +63,7 @@ export const getDefaultConditionBlockControls =
 			'contentControl.blockControls.defaultConditionBlockControls',
 			{
 				anyAll: 'any',
-				conditionSets: [
-					{
-						id: newUUID(),
-						label: __( 'User Logged In', 'content-control' ),
-						query: {
-							logicalOperator: 'and',
-							items: [
-								{
-									id: newUUID(),
-									type: 'rule',
-									name: 'user_is_logged_in',
-								},
-							],
-						},
-					},
-				],
+				conditionSets: [],
 			}
 		) as ConditionalBlockControlsGroup;
 	};
