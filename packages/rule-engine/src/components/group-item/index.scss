@@ -2,7 +2,6 @@
 @import "../../styles/mixins.scss";
 
 .cc-rule-engine-item-wrapper--group {
-	@include flexColumn();
 	padding: $spacing 0;
 
 	/**
@@ -10,28 +9,24 @@
 	 */
 	&:first-child {
 		padding-top: 0;
-		> .cc-rule-engine-logical-operator {
-			display: none;
-		}
 	}
 
-	.cc-rule-engine-group {
-		padding: $spacing;
+	> .cc-rule-engine-group {
 		margin-top: $spacing;
 		position: relative;
-
-		background-color: rgba(#1a191b, 0.02);
-		border: 1px solid #ddd;
-		border-radius: 4px;
 
 		.cc-rule-engine-item-list {
 			min-height: calc($spacing / 2);
 
 			.cc-rule-engine-item-wrapper--rule {
-				background-color: transparent;
-				border: none;
+				@include flexRow();
 				padding: 0;
-				margin: 0 0 $spacing;
+
+				.cc-rule-engine-rule {
+					margin: 0 0 $spacing;
+					background-color: transparent;
+					border: none;
+				}
 
 				&:last-child {
 					margin-bottom: 0;
@@ -49,6 +44,7 @@
 }
 
 .cc-rule-engine-group {
+	// Disable animation for group items while its being dragged.
 	.is-chosen & .cc-rule-engine-item-list {
 		animation-name: none;
 	}

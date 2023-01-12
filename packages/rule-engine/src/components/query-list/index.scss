@@ -75,15 +75,6 @@
 					}
 				}
 			}
-
-			&--rule {
-				> .cc-rule-engine-logical-operator {
-					&:before,
-					&:after {
-						display: none;
-					}
-				}
-			}
 		}
 	}
 }
