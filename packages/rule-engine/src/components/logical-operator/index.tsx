@@ -5,30 +5,23 @@ import classNames from 'classnames';
 import { SelectControl } from '@wordpress/components';
 import { __, _x } from '@wordpress/i18n';
 
-import type {
-	ControlledInputProps,
-	LogicalOperator as LogicalOperatorType,
-} from '../../types';
+import { useQuery } from '../../contexts';
 
-type LogicalOperatorProps = ControlledInputProps< LogicalOperatorType >;
+const LogicalOperator = () => {
+	const { logicalOperator, updateOperator } = useQuery();
 
-const LogicalOperator = ( { value, onChange }: LogicalOperatorProps ) => {
 	return (
 		<div
 			className={ classNames( [
 				'cc-rule-engine-logical-operator',
-				value,
+				logicalOperator,
 			] ) }
 		>
-			<div className="cc-rule-engine-logical-operator__if">
-				{ __( 'If', 'content-control' ) }
-			</div>
-
 			<div className="cc-rule-engine-logical-operator__control">
 				<SelectControl
 					label={ __( 'Choose logical operator', 'content-control' ) }
-					value={ value }
-					onChange={ onChange }
+					value={ logicalOperator }
+					onChange={ updateOperator }
 					options={ [
 						{
 							label: _x(

@@ -8,15 +8,13 @@ import { useQuery } from '../../contexts';
 import { newRule } from '../../utils';
 import ItemActions from '../item/actions';
 
-import type { QueryContextProps } from '../../types';
-
 type Props = {
 	id: string;
 	children: React.ReactNode;
 };
 
 const Wrapper = ( { id, children }: Props ) => {
-	const { addItem }: QueryContextProps = useQuery();
+	const { addItem } = useQuery();
 
 	return (
 		<div
@@ -25,6 +23,10 @@ const Wrapper = ( { id, children }: Props ) => {
 				'cc-rule-engine-rule',
 			] ) }
 		>
+			<div className="if-text-column">
+				{ __( 'If', 'content-control' ) }
+			</div>
+
 			<div className="controls-column">
 				<div className="editable-area">{ children }</div>
 			</div>

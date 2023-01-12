@@ -15,7 +15,7 @@ interface Props extends ItemProps< GroupItemType | RuleItemType > {
 }
 
 const Item = ( { index, value: item, ...itemProps }: Props ) => {
-	const { logicalOperator, updateOperator, indexs } = useQuery();
+	const { indexs } = useQuery();
 	const isGroup = 'group' === item.type;
 
 	return (
@@ -27,10 +27,7 @@ const Item = ( { index, value: item, ...itemProps }: Props ) => {
 				isGroup && item.query.items.length && 'has-child-items',
 			] ) }
 		>
-			<LogicalOperator
-				value={ logicalOperator }
-				onChange={ updateOperator }
-			/>
+			<LogicalOperator />
 
 			{ isGroup ? (
 				<GroupItem
