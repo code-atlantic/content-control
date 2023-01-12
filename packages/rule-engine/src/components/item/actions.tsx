@@ -6,7 +6,7 @@ import { copy, dragHandle } from '@wordpress/icons';
 import { useQuery } from '../../contexts';
 import { newUUID } from '../../utils';
 
-import type { Identifier } from '../../types';
+import type { Identifier, Item } from '../../types';
 
 const deleteIcon = (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 13">
@@ -21,6 +21,21 @@ interface ItemActionsProps {
 	id: Identifier;
 }
 
+const deepCloneItem = ( item: Item ): Item => {
+	if ( 'group' === item.type ) {
+		return {
+			...item,
+			id: newUUID(),
+			query: {
+				...item.query,
+				items: item.query.items.map( deepCloneItem ),
+			},
+		};
+	}
+
+	return { ...item, id: newUUID() };
+};
+
 const ItemActions = ( { id }: ItemActionsProps ) => {
 	const { removeItem, addItem, getItem } = useQuery();
 
@@ -34,7 +49,7 @@ const ItemActions = ( { id }: ItemActionsProps ) => {
 					const item = getItem( id );
 
 					if ( item ) {
-						addItem( { ...item, id: newUUID() }, id );
+						addItem( deepCloneItem( item ), id );
 					}
 				} }
 			/>
