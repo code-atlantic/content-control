@@ -3,7 +3,7 @@ import './index.scss';
 import classNames from 'classnames';
 import { isEqual } from 'lodash';
 
-import { useState } from '@wordpress/element';
+import { useControlledState } from '@content-control/components';
 import { __ } from '@wordpress/i18n';
 
 import { QueryContextProvider, useQuery } from '../../contexts';
@@ -22,16 +22,22 @@ type Props = QueryProps & {
 	indexs?: number[];
 };
 
+// TODO Move isDragging/setIsDragging to context.
+// TODO Move setList/setRootList to context.
+
 const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
-	const [ isDragging, setIsDragging ] = useState( false );
 	const { items = [], logicalOperator } = query;
 
 	const parentQueryContext = useQuery();
 
 	const { setList: setRootList = false } = parentQueryContext;
 
-	// Determine if this is the root query.
-	const isRootList = false === setRootList;
+	// Using controlled state allows the root list to control the isDragging state.
+	const [ isDragging, setIsDragging ] = useControlledState< boolean >(
+		parentQueryContext.isDragging,
+		false,
+		parentQueryContext.setIsDragging
+	);
 
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
