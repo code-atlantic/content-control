@@ -1,4 +1,3 @@
-import { newUUID } from '@content-control/rule-engine';
 import { createContext, useContext } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
