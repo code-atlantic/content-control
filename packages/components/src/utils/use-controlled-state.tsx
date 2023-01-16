@@ -1,9 +1,9 @@
 import { useCallback, useRef, useState } from '@wordpress/element';
 
 export default function useControlledState< T >(
-	value: T | undefined,
+	value: T,
 	defaultValue: T,
-	onChange?: ( value: T, ...args: any[] ) => void
+	onChange: ( value: T, ...args: any[] ) => void
 ): [ T, ( value: T, ...args: any[] ) => void ] {
 	const [ stateValue, setStateValue ] = useState( value || defaultValue );
 	const ref = useRef( value !== undefined );
