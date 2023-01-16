@@ -22,9 +22,6 @@ type Props = QueryProps & {
 	indexs?: number[];
 };
 
-// TODO Move isDragging/setIsDragging to context.
-// TODO Move setList/setRootList to context.
-
 const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 	const { items = [], logicalOperator } = query;
 
@@ -35,46 +32,37 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 
 	// Using controlled state allows the root list to control the isDragging state.
 	const [ isDragging, setIsDragging ] = useControlledState< boolean >(
-		parentQueryContext.isDragging,
+		parentQueryContext.isDragging, // Undefined for root list.
 		false,
-		parentQueryContext.setIsDragging
+		parentQueryContext.setIsDragging // Undefined for root list.
 	);
 
-	const setRootList: QueryContextProps[ 'setRootList' ] =
-		typeof parentQueryContext.setRootList !== 'undefined'
-			? parentQueryContext.setRootList
-			: ( newList ) => {
-					/**
-					 * The root list can accept a functional state action.
-					 * Check for that and call it with current items if needed.
-					 * This will be rootList in setList for non root query context.
-					 */
-					const _newList =
-						typeof newList !== 'function'
-							? newList
-							: // Root list passes in current state to updaters.
-							  newList( items );
+	const setRootList: QueryContextProps[ 'setRootList' ] = isRoot
+		? ( newList ) => {
+				/**
+				 * The root list can accept a functional state action.
+				 * Check for that and call it with current items if needed.
+				 */
+				const _newList =
+					typeof newList !== 'function'
+						? newList
+						: // Root list passes in current state to updaters.
+						  newList( items );
 
-					// !! The list is managed by parent state, returning
-					// !! here breaks things such as items not being removed
-					// !! from lists on drag to another list.
-					// !! Leaving this here as a reminder.
-					//if ( isEqual( items, _newList ) ) {
-					// return; // !! Don't Do This !!
-					//}
+				// ! Warning, this is a bad idea. It results in changes not saving.
+				// ! if ( isEqual( items, _newList ) ) {
+				// * Prevents saving state during dragging as a suitable replacement.
+				if ( isDragging ) {
+					return;
+				}
 
-					// ** Don't save state changes while dragging.
-					if ( isDragging ) {
-						return;
-					}
+				onChange( {
+					...query,
+					items: _newList,
+				} );
+		  }
+		: parentQueryContext.setRootList;
 
-					console.log( 'setRootListSucceeded', _newList );
-
-					onChange( {
-						...query,
-						items: _newList,
-					} );
-			  };
 	/**
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
@@ -86,112 +74,70 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 		setIsDragging,
 		logicalOperator,
 		query,
-		setRootList: isRoot
-			? ( newList ) => {
-					/**
-					 * The root list can accept a functional state action.
-					 * Check for that and call it with current items if needed.
-					 * This will be rootList in setList for non root query context.
-					 */
-					const _newList =
-						typeof newList !== 'function'
-							? newList
-							: // Root list passes in current state to updaters.
-							  newList( items );
-
-					// !! The list is managed by parent state, returning
-					// !! here breaks things such as items not being removed
-					// !! from lists on drag to another list.
-					// !! Leaving this here as a reminder.
-					//if ( isEqual( items, _newList ) ) {
-					// return; // !! Don't Do This !!
-					//}
-
-					// ** This is a suitable replacement, it prevents saving
-					// **  state during drag operations which can trigger several
-					// ** state changes.
-					if ( isDragging ) {
-						return;
-					}
-
-					onChange( {
-						...query,
-						items: _newList,
-					} );
-			  }
-			: parentQueryContext.setRootList,
-
+		setRootList,
 		/**
 		 * The root setList method calls the onChange method directly.
 		 * Nested lists will then call setRootList and pass a SetStateFunctional
 		 * that modifies the rootList based on the current list indexs list.
-		 *
-		 * @param {ItemType[]} newList Array of current lists items.
 		 */
-		setList: ( newList ) =>
-			setRootList( ( rootList ) => {
-				// Clone root list.
-				const rootListCopy = [ ...rootList ];
-				// Clone indexs to current list.
-				const parentIndexs = [ ...indexs ];
+		setList: ( newList ) => {
+			if ( isDragging ) {
+				return;
+			}
 
-				// Remove this lists index from cloned indexs.
-				const currentListIndex = parentIndexs.pop() ?? 0;
-
-				// This is the root list.
-				if ( isRoot ) {
-					return rootList;
+			if ( isRoot ) {
+				if ( ! isEqual( items, newList ) ) {
+					setRootList( newList );
 				}
+			} else {
+				setRootList( ( rootList ) => {
+					// Clone root list.
+					const newRootList = [ ...rootList ];
 
-				if ( isDragging ) {
-					return rootList;
-				}
+					// Clone indexs to current list.
+					const parentIndexs = [ ...indexs ];
 
-				/**
-				 * Get reference to latest array in nested structure.
-				 *
-				 * This clever function loops over each parent indexs,
-				 * starting at the root, returning a reference to the
-				 * last & current nested list within the data structure.
-				 *
-				 * The accumulator start value is the entire root tree.
-				 *
-				 * Effectively drilling down from root -> current
-				 *
-				 * Return reference to child list for each parent index.
-				 */
-				const closestParentList = parentIndexs.reduce( ( arr, i ) => {
-					const nextParentGroup = arr[ i ] as GroupItem;
+					// Remove this lists index from cloned indexs.
+					const currentListIndex = parentIndexs.pop() ?? 0;
 
-					if ( ! ( 'query' in nextParentGroup ) ) {
-						// Reference to child list for each parent index.
-						throw "Item's parent is not a group!";
-					}
-					return nextParentGroup.query.items;
-				}, rootListCopy );
+					/**
+					 * Get reference to latest array in nested structure.
+					 *
+					 * This clever function loops over each parent indexs,
+					 * starting at the root, returning a reference to the
+					 * last & current nested list within the data structure.
+					 *
+					 * The accumulator start value is the entire root tree.
+					 *
+					 * Effectively drilling down from root -> current
+					 *
+					 * Return reference to child list for each parent index.
+					 */
+					const directParentList = parentIndexs.reduce(
+						( arr, i ) => {
+							const nextParentGroup = arr[ i ] as GroupItem;
+							return nextParentGroup.query.items;
+						},
+						newRootList
+					);
 
-				// Get reference to current list from the parent list reference.
-				const closestParentGroup =
-					closestParentList[ currentListIndex ];
+					// Get reference to current list from the parent list reference.
+					const closestParentGroup = directParentList[
+						currentListIndex
+					] as GroupItem;
 
-				if ( 'query' in closestParentGroup ) {
-					const _newList =
-						typeof newList === 'function'
-							? newList( rootList )
-							: newList;
 					// Prevent saving state if items are equal.
-					if ( isEqual( closestParentGroup.query.items, _newList ) ) {
-						return rootList;
+					if (
+						! isEqual( closestParentGroup.query.items, newList )
+					) {
+						// Replaced referenced items list with updated list.
+						closestParentGroup.query.items = newList;
 					}
 
-					// Replaced referenced items list with updated list.
-					closestParentGroup.query.items = _newList;
-				} else {
-					throw "Item's parent is not a group!";
-				}
-
-				return rootListCopy;
-			} ),
+					return newRootList;
+				} );
+			}
+		},
 		updateOperator: ( updatedOperator ) =>
 			onChange( {
 				...query,
