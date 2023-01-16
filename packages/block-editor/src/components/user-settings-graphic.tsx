@@ -1,4 +1,4 @@
-const FirstUseSVG = () => (
+const UserSettingsGraphic = () => (
 	<svg
 		width="230"
 		height="231"
@@ -372,4 +372,4 @@ const FirstUseSVG = () => (
 	</svg>
 );
 
-export default FirstUseSVG;
+export default UserSettingsGraphic;

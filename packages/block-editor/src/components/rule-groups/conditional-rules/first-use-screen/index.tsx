@@ -5,7 +5,7 @@ import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { plus } from '@wordpress/icons';
 
-import { default as FirstUseIcon } from './first-use-icon';
+import FirstUseIcon from '../../../user-settings-graphic';
 
 type Props = {
 	addItem: ( newItem: Item ) => void;
