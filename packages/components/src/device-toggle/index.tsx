@@ -6,11 +6,11 @@ import { noop } from '@content-control/utils';
 import { Icon, ToggleControl, Tooltip } from '@wordpress/components';
 import { _x, sprintf } from '@wordpress/i18n';
 
-import type { IconProps } from '@wordpress/components';
+import type { Icon as IconType } from '@wordpress/components';
 
 type Props = {
 	label: string;
-	icon: IconProps.Icon;
+	icon?: IconType.IconType< any > | undefined;
 	isVisible: boolean;
 	onChange?: ( checked: boolean ) => void;
 };

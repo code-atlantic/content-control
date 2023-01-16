@@ -51,7 +51,7 @@ const DeviceRules = () => {
 						<DeviceToggle
 							key={ deviceKey }
 							label={ label }
-							icon={ icon }
+							icon={ icon ?? mobile }
 							isVisible={ ! hidden }
 							onChange={ ( isVisible ) =>
 								toggleDeviceRule( deviceKey, isVisible )
