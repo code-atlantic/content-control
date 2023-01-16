@@ -7,12 +7,14 @@ import {
 	MenuItem,
 	Modal,
 	Notice,
+	Spinner,
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { upload } from '@wordpress/icons';
+import { link, upload } from '@wordpress/icons';
+import UserSettingsGraphic from '../user-settings-graphic';
 
 type Props = {
 	className?: string;
@@ -20,6 +22,9 @@ type Props = {
 	onSave: ( values: string, merge: boolean ) => void;
 	onFinish: () => void;
 } & Pick< Button.Props, 'icon' >;
+
+export const documenationUrl =
+	'https://code-atlantic.com/products/content-control/';
 
 const PasteMenuItem = ( {
 	className,
@@ -30,7 +35,7 @@ const PasteMenuItem = ( {
 }: Props ) => {
 	const defaults = {
 		modalOpen: false,
-		noticeVisible: false,
+		isSaving: false,
 		data: {
 			text: '',
 			merge: false,
@@ -40,14 +45,14 @@ const PasteMenuItem = ( {
 	const [ state, setState ] = useState( defaults );
 	const timeoutId = useRef< ReturnType< typeof setTimeout > >();
 
-	const { modalOpen, noticeVisible, data } = state;
+	const { modalOpen, isSaving, data } = state;
 
 	const save = () => {
 		onSave( data.text, data.merge );
 
 		setState( {
 			...state,
-			noticeVisible: true,
+			isSaving: true,
 		} );
 
 		timeoutId.current = setTimeout( () => {
@@ -101,7 +106,7 @@ const PasteMenuItem = ( {
 			{ modalOpen && (
 				<Modal
 					title={ __(
-						'Content Control -- Conditional Logic',
+						'Content Control Settings Import',
 						'content-control'
 					) }
 					onRequestClose={ () =>
@@ -111,80 +116,106 @@ const PasteMenuItem = ( {
 						} )
 					}
 					shouldCloseOnClickOutside={ false }
-					style={ { width: '760px' } }
+					style={ { width: '680px' } }
+					className="cc__rule-group-paste-modal"
 				>
-					<TextControl
-						label={ __(
-							'Paste settings string',
-							'content-control'
-						) }
-						value={ data.text }
-						onChange={ ( text ) =>
-							setState( {
-								...state,
-								data: {
-									...data,
-									text,
-								},
-							} )
-						}
-					/>
+					<div className="flex-horizontal">
+						<div>
+							<UserSettingsGraphic />
+						</div>
 
-					<ToggleControl
-						label={ __(
-							'Merge with existing?',
-							'content-control'
-						) }
-						checked={ data.merge }
-						onChange={ ( merge ) =>
-							setState( {
-								...state,
-								data: {
-									...data,
-									merge,
-								},
-							} )
-						}
-					/>
+						<div>
+							<h3>
+								{ __( 'Settings Import', 'content-control' ) }
+							</h3>
 
-					{ noticeVisible && (
-						<Notice status="success">
-							{ __(
-								'Settings successfully applied.',
-								'content-control'
-							) }
-						</Notice>
-					) }
+							<p>
+								{ __(
+									'Paste your settings string below to import them for this block.',
+									'content-control'
+								) }
+							</p>
 
-					<Flex justify="right">
-						<FlexItem>
-							<Button
-								onClick={ () =>
+							<TextControl
+								label={ __(
+									'Paste settings string',
+									'content-control'
+								) }
+								hideLabelFromVision={ true }
+								placeholder={ __(
+									'Paste settings string here...',
+									'content-control'
+								) }
+								value={ data.text }
+								onChange={ ( text ) =>
 									setState( {
 										...state,
-										modalOpen: false,
+										data: {
+											...data,
+											text,
+										},
 									} )
 								}
-							>
-								{ __( 'Cancel', 'content-control' ) }
-							</Button>
-						</FlexItem>
-						<FlexItem>
-							<Button
-								disabled={ ! isValid() }
-								variant="primary"
-								onClick={ () => {
-									if ( ! isValid() ) {
-										return;
-									}
+							/>
 
-									save();
-								} }
-							>
-								{ __( 'Confirm', 'content-control' ) }
-							</Button>
-						</FlexItem>
-					</Flex>
+							<ToggleControl
+								label={ __(
+									'Merge with existing settings?',
+									'content-control'
+								) }
+								help={ __(
+									'If unchecked, existing settings will be replaced.',
+									'content-control'
+								) }
+								checked={ data.merge }
+								onChange={ ( merge ) =>
+									setState( {
+										...state,
+										data: {
+											...data,
+											merge,
+										},
+									} )
+								}
+							/>
+						</div>
+					</div>
+
+					<div className="modal-actions">
+						<Button
+							onClick={ () =>
+								setState( {
+									...state,
+									modalOpen: false,
+								} )
+							}
+						>
+							{ __( 'Cancel', 'content-control' ) }
+						</Button>
+
+						<Button
+							disabled={ ! isValid() || isSaving }
+							variant="primary"
+							onClick={ () => {
+								if ( ! isValid() ) {
+									return;
+								}
+
+								save();
+							} }
+						>
+							{ isSaving && <Spinner /> }
+							{ __( 'Import Settings', 'content-control' ) }
+						</Button>
+
+						<Button
+							text={ __( 'Documentation', 'content-control' ) }
+							href={ documenationUrl }
+							target="_blank"
+							icon={ link }
+							iconSize={ 20 }
+						/>
+					</div>
 				</Modal>
 			) }
 		</>

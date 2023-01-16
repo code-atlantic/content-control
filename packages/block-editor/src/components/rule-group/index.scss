@@ -2,6 +2,11 @@
 @import "~@wordpress/base-styles/mixins";
 @import "~@wordpress/base-styles/colors";
 
+$gap: 16px;
+$gap2: $gap * 2;
+$gap3: $gap * 3;
+$gap4: $gap * 4;
+
 .cc__rules-group {
 	padding: $grid-unit-20;
 	border-top: $border-width solid $gray-200;
@@ -9,6 +14,59 @@
 	// Compensate for padding that was there when rules-panel is hidden.
 	&:first-child {
 		margin-top: $grid-unit-20;
+	}
+}
+
+.cc__rule-group-paste-modal {
+	.components-modal__content {
+		margin-top: 60px;
+	}
+
+	.flex-horizontal {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-evenly;
+		margin-bottom: $gap;
+		gap: $gap3;
+
+		svg {
+			max-width: 200px;
+		}
+
+		h3 {
+			font-size: 1.8em;
+		}
+
+		> div > * {
+			margin: 0 0 16px;
+		}
+	}
+
+	.modal-actions {
+		position: absolute;
+		height: $gap4;
+		box-sizing: border-box;
+		display: flex;
+		justify-content: right;
+		gap: $gap2;
+		padding: 0 $gap2;
+		align-items: center;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-top: 1px solid #c3c4c7;
+
+		> :last-child {
+			position: absolute;
+			left: $gap2;
+
+			svg {
+				margin-right: 3px;
+				fill: #fff;
+				stroke: green;
+			}
+		}
 	}
 }
 
