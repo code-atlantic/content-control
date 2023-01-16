@@ -13,6 +13,6 @@ export interface QueryContextProps {
 	indexs: number[];
 	isDragging: boolean;
 	setIsDragging: ( isDragging: boolean ) => void;
-	setRootList?: ( currentList: SetListFunctional< Item > ) => void;
+	setRootList: ( currentList: SetListFunctional< Item > ) => void;
 	setList: ( currentList: SetListFunctional< Item > ) => void;
 }
