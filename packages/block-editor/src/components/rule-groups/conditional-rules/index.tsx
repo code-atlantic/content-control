@@ -1,5 +1,6 @@
 import RuleEngine, { newSet } from '@content-control/rule-engine';
 import {
+	// @ts-ignore
 	__experimentalConfirmDialog as ConfirmDialog,
 	Button,
 	Flex,
