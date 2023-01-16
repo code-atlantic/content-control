@@ -5,24 +5,25 @@ import { useQuery } from '../../contexts';
 import { sortableConfig } from './sortable-options';
 
 import type { ReactNode } from 'react';
-import type { BaseItem, SetListFunctional } from '../../types';
+import type { ReactSortableProps } from 'react-sortablejs';
+import type { BaseItem } from '../../types';
 
-const SortableList = < T extends BaseItem >( {
+const SortableList = < I extends BaseItem >( {
 	list,
 	className,
 	children,
 	setList,
 	...additionalConfig
 }: {
-	list: T[];
-	setList: ( newState: SetListFunctional< T > ) => void;
+	list: I[];
+	setList: ReactSortableProps< I >[ 'setList' ];
 	className: ClassNameArg;
 	children?: ReactNode;
 } ): JSX.Element => {
 	const { setIsDragging } = useQuery();
 
 	return (
-		<ReactSortable< T >
+		<ReactSortable< I >
 			className={ classNames( [
 				'cc-rule-engine-item-list',
 				className,

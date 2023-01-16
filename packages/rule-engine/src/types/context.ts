@@ -14,5 +14,5 @@ export interface QueryContextProps {
 	isDragging: boolean;
 	setIsDragging: ( isDragging: boolean ) => void;
 	setRootList: ( currentList: SetListFunctional< Item > ) => void;
-	setList: ( currentList: SetListFunctional< Item > ) => void;
+	setList: ( currentList: Item[] ) => void;
 }
