@@ -2,11 +2,12 @@ import './index.scss';
 
 import classNames from 'classnames';
 
+import { TextControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+
 import { ItemActions, QueryList } from '../';
-import LabelControl from './label-control';
 
 import type { GroupItem as GroupItemType, ItemProps } from '../../types';
-
 type Props = ItemProps< GroupItemType > & {
 	indexs: number[];
 };
@@ -33,9 +34,14 @@ const GroupItem = ( { onChange, value: groupProps, indexs = [] }: Props ) => {
 		>
 			<ItemActions { ...groupProps } />
 
-			<LabelControl
-				value={ groupProps.label }
+			<TextControl
+				className="cc-rule-engine-group-label"
+				value={
+					groupProps.label || __( 'Rule Group', 'content-control' )
+				}
 				onChange={ ( label: string ) => updateGroup( { label } ) }
+				label={ __( 'Name', 'content-control' ) }
+				placeholder={ __( 'Group label', 'content-control' ) }
 			/>
 
 			<QueryList
