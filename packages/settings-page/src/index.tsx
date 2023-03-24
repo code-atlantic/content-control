@@ -6,7 +6,7 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
 import { registry } from '@content-control/data';
 import { RegistryProvider } from '@wordpress/data';
-import { render, StrictMode } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 
 import App from './App';
 

@@ -2,11 +2,8 @@ import classnames from 'classnames';
 
 import {
 	Button,
-	Flex,
-	FlexItem,
 	MenuItem,
 	Modal,
-	Notice,
 	Spinner,
 	TextControl,
 	ToggleControl,
