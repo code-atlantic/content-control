@@ -41,17 +41,6 @@ const ListFilters = () => {
 		[ restrictions ]
 	);
 
-	// If the current status tab has no results, switch to all.
-	useEffect( () => {
-		const count = filters.status
-			? activeStatusCounts?.[ filters.status ]
-			: undefined;
-
-		if ( ! count || count <= 0 ) {
-			setFilters( { status: 'all' } );
-		}
-	}, [ activeStatusCounts ] );
-
 	/**
 	 * Checks if Status button should be visible.
 	 *
