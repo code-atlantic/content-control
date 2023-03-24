@@ -18,7 +18,12 @@ const statusOptionLabels: Record< RestrictionStatuses, string > = {
 };
 
 const ListFilters = () => {
-	const { filters = {}, setFilters, restrictions = [] } = useList();
+	const {
+		filters = {},
+		setFilters,
+		restrictions = [],
+		bulkSelection = [],
+	} = useList();
 
 	const filtersBtnRef = useRef< HTMLButtonElement >();
 
@@ -55,6 +60,11 @@ const ListFilters = () => {
 	 */
 	const isStatusActive = ( s: RestrictionStatuses ): boolean =>
 		activeStatusCounts?.[ s ] > 0;
+
+
+	if ( bulkSelection.length > 0 ) {
+		return null;
+	}
 
 	return (
 		<Dropdown
