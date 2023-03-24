@@ -15,6 +15,7 @@ type Props< T extends TableItemBase > = {
 	columns: {
 		[ key: string ]: React.ReactNode | ( () => React.ReactNode );
 	};
+	rowClasses?: ( item: T ) => Argument;
 	renderCell: ( col: string, item: T ) => React.ReactNode | string | number;
 	sortableColumns: string[];
 	idCol?: string;
@@ -45,6 +46,7 @@ const ListTable = < T extends TableItemBase >( {
 	columns,
 	sortableColumns = [],
 	idCol = 'id',
+	rowClasses = ( item ) => [ `item-${item.id}`,  ],
 	renderCell = ( col, item ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
@@ -195,7 +197,7 @@ const ListTable = < T extends TableItemBase >( {
 			<tbody>
 				{ sortedItems.length ? (
 					sortedItems.map( ( item ) => (
-						<tr key={ item.id }>
+						<tr key={ item.id } className={ classNames( rowClasses( item ) ) }>
 							{ Object.entries( cols ).map( ( [ col ] ) => {
 								const isIdCol = col === idCol;
 
