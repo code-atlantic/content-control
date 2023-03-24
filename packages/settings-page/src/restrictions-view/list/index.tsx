@@ -10,8 +10,8 @@ import {
 	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import { __, _n } from '@wordpress/i18n';
 import { info, search, trash } from '@wordpress/icons';
 
 import { ListConsumer, ListProvider } from '../context';
@@ -25,8 +25,6 @@ import type { Restriction } from '@content-control/core-data';
 const List = () => {
 	// Get the shared method for setting editor Id & query params.
 	const { setEditorId } = useEditor();
-
-	// const [ searchText, setSearchText ] = useState( '' );
 
 	const [ confirmDialogue, setConfirmDialogue ] = useState< {
 		message: string;
@@ -122,7 +120,10 @@ const List = () => {
 								} }
 								sortableColumns={ [ 'title' ] }
 								rowClasses={ ( restriction ) => {
-									return [ `restriction-${ restriction.id }`, `status-${ restriction.status }` ];
+									return [
+										`restriction-${ restriction.id }`,
+										`status-${ restriction.status }`,
+									];
 								} }
 								renderCell={ (
 									col:
@@ -158,7 +159,10 @@ const List = () => {
 										case 'status':
 											return isTrash ? (
 												<Icon
-													aria-label={ __( 'In Trash', 'content-control' ) }
+													aria-label={ __(
+														'In Trash',
+														'content-control'
+													) }
 													icon={ trash }
 													size={ 20 }
 												/>

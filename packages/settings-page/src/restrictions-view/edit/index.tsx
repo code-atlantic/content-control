@@ -52,6 +52,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		createRestriction,
 		updateRestriction,
 		clearEditorData,
+		addNotice,
 	} = useDispatch( restrictionsStore );
 
 	// If the editor isn't active, return empty.
@@ -93,6 +94,22 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		}
 
 		onSave( values );
+
+		addNotice( {
+			id: 'restriction-saved',
+			type: 'success',
+			message: sprintf(
+				// translators: %s: restriction title.
+				__(
+					'Restriction "%s" saved successfully.',
+					'content-control'
+				),
+				values.title
+			),
+			closeDelay: 3000,
+		} );
+
+		closeEditor();
 	}
 
 	/**

@@ -11,7 +11,7 @@ import {
 	Icon,
 	NavigableMenu,
 } from '@wordpress/components';
-import { useRegistry, useSelect } from '@wordpress/data';
+import { useDispatch, useRegistry, useSelect } from '@wordpress/data';
 import { useRef, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import {
@@ -46,6 +46,8 @@ const ListBulkActions = () => {
 		} ),
 		[]
 	);
+
+	const { addNotice } = useDispatch( restrictionsStore );
 
 	const [ confirmDialogue, setConfirmDialogue ] = useState< {
 		message: string;
@@ -139,6 +141,8 @@ const ListBulkActions = () => {
 								// This will only rerender the components once.
 								// @ts-ignore not yet typed in WP.
 								registry.batch( () => {
+									const count = bulkSelection.length;
+
 									bulkSelection.forEach( ( id ) => {
 										const restriction =
 											getRestriction( id );
@@ -151,6 +155,22 @@ const ListBulkActions = () => {
 										}
 									} );
 									setBulkSelection( [] );
+
+									addNotice( {
+										id: 'bulk-enable',
+										type: 'success',
+										message: sprintf(
+											// translators: 1. number of items
+											_n(
+												'%d restriction enabled.',
+												'%d restrictions enabled.',
+												count,
+												'content-control'
+											),
+											count
+										),
+										closeDelay: 3000,
+									} );
 								} );
 							} }
 						/>
@@ -161,6 +181,8 @@ const ListBulkActions = () => {
 								// This will only rerender the components once.
 								// @ts-ignore not yet typed in WP.
 								registry.batch( () => {
+									const count = bulkSelection.length;
+
 									bulkSelection.forEach( ( id ) => {
 										const restriction =
 											getRestriction( id );
@@ -173,6 +195,21 @@ const ListBulkActions = () => {
 										}
 									} );
 									setBulkSelection( [] );
+
+									addNotice( {
+										id: 'bulk-disable',
+										type: 'success',
+										message: sprintf(
+											// translators: 1. number of items
+											_n(
+												'%d restriction disabled.',
+												'%d restrictions disabled.',
+												count
+											),
+											count
+										),
+										closeDelay: 3000,
+									} );
 								} );
 							} }
 						/>
@@ -196,10 +233,27 @@ const ListBulkActions = () => {
 										// This will only rerender the components once.
 										// @ts-ignore not yet typed in WP.
 										registry.batch( () => {
+											const count = bulkSelection.length;
+
 											bulkSelection.forEach( ( id ) =>
 												deleteRestriction( id )
 											);
 											setBulkSelection( [] );
+
+											addNotice( {
+												id: 'bulk-trash',
+												type: 'success',
+												message: sprintf(
+													// translators: 1. number of items
+													_n(
+														'%d restriction moved to trash.',
+														'%d restrictions moved to trash.',
+														count
+													),
+													count
+												),
+												closeDelay: 3000,
+											} );
 										} );
 									},
 								} );
@@ -227,10 +281,27 @@ const ListBulkActions = () => {
 										// This will only rerender the components once.
 										// @ts-ignore not yet typed in WP.
 										registry.batch( () => {
+											const count = bulkSelection.length;
+
 											bulkSelection.forEach( ( id ) =>
 												deleteRestriction( id, true )
 											);
 											setBulkSelection( [] );
+
+											addNotice( {
+												id: 'bulk-delete',
+												type: 'success',
+												message: sprintf(
+													// translators: 1. number of items
+													_n(
+														'%d restriction deleted.',
+														'%d restrictions deleted.',
+														count
+													),
+													count
+												),
+												closeDelay: 3000,
+											} );
 										} );
 									},
 								} );
