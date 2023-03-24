@@ -40,13 +40,13 @@
     "@wordpress/url": "^3.30.0",
     "classnames": "^2.3.2",
     "lodash": "^4.17.21",
-    "react-tag-autocomplete": "^7.0.0-rc.1"
+    "react-tag-autocomplete": "^7.0.0-rc.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@types/wordpress__components": "^23.0.0",
-    "@types/wordpress__compose": "^4.0.1",
-    "@types/wordpress__data": "^6.0.1"
+    "@types/wordpress__components": "^23.0.1",
+    "@types/wordpress__compose": "^6.0.1",
+    "@types/wordpress__data": "^6.0.2"
   },
   "scripts": {
     "build:tsc": "tsc",

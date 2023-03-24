@@ -34,7 +34,7 @@
 		"@wordpress/i18n": "^4.29.0"
 	},
 	"devDependencies": {
-		"@types/wordpress__data": "^6.0.1",
+		"@types/wordpress__data": "^6.0.2",
 		"@types/wordpress__data-controls": "^2.2.0"
 	},
 	"scripts": {
