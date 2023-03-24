@@ -143,6 +143,10 @@ const List = () => {
 										case 'enabled':
 											return (
 												<ToggleControl
+													aria-label={ __(
+														'Enable or disable the restriction',
+														'content-control'
+													) }
 													checked={ isPublish }
 													disabled={ isTrash }
 													onChange={ ( checked ) => {
