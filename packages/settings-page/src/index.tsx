@@ -27,9 +27,17 @@ declare global {
 	};
 }
 
-export const init = () =>
-	render(
-		<StrictMode>
+
+export const init = () => {
+
+	const root = document.getElementById( 'content-control-root-container' )
+
+	if ( ! root ) {
+		return;
+	}
+
+	createRoot( root ).render(
+		// <StrictMode>
 			<BrowserRouter>
 				<QueryParamProvider adapter={ ReactRouter6Adapter }>
 					<RegistryProvider value={ registry }>
@@ -37,6 +45,6 @@ export const init = () =>
 					</RegistryProvider>
 				</QueryParamProvider>
 			</BrowserRouter>
-		</StrictMode>,
-		document.getElementById( 'content-control-root-container' )
+		// </StrictMode>
 	);
+}
