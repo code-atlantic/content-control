@@ -8,6 +8,7 @@ import { ACTION_TYPES, restrictionDefaults, STORE_NAME } from './constants';
 import { getResourcePath } from './utils';
 
 import type {
+	AppNotice,
 	EditorId,
 	Restriction,
 	RestrictionsState,
@@ -19,6 +20,9 @@ const {
 	DELETE,
 	UPDATE,
 	HYDRATE,
+	ADD_NOTICE,
+	CLEAR_NOTICE,
+	CLEAR_NOTICES,
 	CHANGE_ACTION_STATUS,
 	EDITOR_CHANGE_ID,
 	EDITOR_CLEAR_DATA,
@@ -48,6 +52,45 @@ export const changeActionStatus = (
 		actionName,
 		status,
 		message,
+	};
+};
+
+/**
+ * Add notice to the editor.
+ *
+ * @param {AppNotice} notice Notice to display.
+ *
+ * @return {Object} Action object.
+ */
+export const addNotice = ( notice: AppNotice ) => {
+	return {
+		type: ADD_NOTICE,
+		notice,
+	};
+};
+
+/**
+ * Clear notice from the editor.
+ *
+ * @param {AppNotice[ 'id' ]} noticeId Id of the notice to clear.
+ *
+ * @return {Object} Action object.
+ */
+export const clearNotice = ( noticeId: AppNotice[ 'id' ] ) => {
+	return {
+		type: CLEAR_NOTICE,
+		noticeId,
+	};
+};
+
+/**
+ * Clear all notices from the editor.
+ *
+ * @return {Object} Action object.
+ */
+export const clearNotices = () => {
+	return {
+		type: CLEAR_NOTICES,
 	};
 };
 

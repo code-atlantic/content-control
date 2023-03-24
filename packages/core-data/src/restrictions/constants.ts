@@ -1,4 +1,4 @@
-import type { Restriction, RestrictionsState } from './types';
+import type { AppNotice, Restriction, RestrictionsState } from './types';
 
 export const STORE_NAME = 'content-control/restrictions';
 
@@ -7,6 +7,9 @@ export const ACTION_TYPES = {
 	UPDATE: 'UPDATE',
 	DELETE: 'DELETE',
 	HYDRATE: 'HYDRATE',
+	ADD_NOTICE: 'ADD_NOTICE',
+	CLEAR_NOTICE: 'CLEAR_NOTICE',
+	CLEAR_NOTICES: 'CLEAR_NOTICES',
 	EDITOR_CHANGE_ID: 'EDITOR_CHANGE_ID',
 	EDITOR_CLEAR_DATA: 'EDITOR_CLEAR_DATA',
 	EDITOR_UPDATE_VALUES: 'EDITOR_UPDATE_VALUES',
@@ -17,6 +20,14 @@ export const ACTION_TYPES = {
 export const initialState: RestrictionsState = {
 	restrictions: [],
 	editor: {},
+	notices: [],
+};
+
+export const noticeDefaults: AppNotice = {
+	id: '',
+	message: '',
+	type: 'info',
+	isDismissible: true,
 };
 
 export const restrictionDefaults: Restriction = {

@@ -1,11 +1,22 @@
 import { Status } from '../constants';
 
 import type {
+	AppNotice,
 	EditorId,
 	Restriction,
 	RestrictionsState,
 	RestrictionsStore,
 } from './types';
+
+/**
+ * Get notices.
+ *
+ * @param {RestrictionsState} state Current state.
+ *
+ * @return {AppNotice[]} Notices.
+ */
+export const getNotices = ( state: RestrictionsState ): AppNotice[] =>
+	state.notices || [];
 
 /**
  * Get all restrictions.

@@ -1,5 +1,4 @@
 // import type { Query } from '@content-control/rule-engine';
-
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
 export type EditorId = 'new' | number | undefined;
@@ -28,12 +27,21 @@ export interface Restriction {
 
 export type RestrictionStatuses = Restriction[ 'status' ] | 'all' | string;
 
+export type AppNotice = {
+	id: string;
+	message: string;
+	type: 'success' | 'error' | 'warning' | 'info';
+	isDismissible?: boolean;
+	closeDelay?: number;
+};
+
 export type RestrictionsState = {
 	restrictions: Restriction[];
 	editor: {
 		id?: EditorId;
 		values?: Restriction;
 	};
+	notices: AppNotice[];
 	// Boilerplate
 	dispatchStatus?: {
 		[ Property in RestrictionsStore[ 'ActionNames' ] ]?: {

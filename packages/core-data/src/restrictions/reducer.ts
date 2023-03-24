@@ -1,6 +1,7 @@
 import { ACTION_TYPES, initialState } from './constants';
 
 import type {
+	AppNotice,
 	Restriction,
 	RestrictionsState,
 	RestrictionsStore,
@@ -12,6 +13,9 @@ const {
 	DELETE,
 	UPDATE,
 	HYDRATE,
+	ADD_NOTICE,
+	CLEAR_NOTICE,
+	CLEAR_NOTICES,
 	CHANGE_ACTION_STATUS,
 	EDITOR_CHANGE_ID,
 	EDITOR_CLEAR_DATA,
@@ -30,6 +34,8 @@ type ActionPayloadTypes = {
 	actionName: RestrictionsStore[ 'ActionNames' ];
 	status: RestrictionStatuses;
 	message: string;
+	notice: AppNotice;
+	noticeId: AppNotice[ 'id' ];
 };
 
 const reducer = (
@@ -45,6 +51,8 @@ const reducer = (
 		actionName,
 		status,
 		message,
+		notice,
+		noticeId,
 	}: ActionPayloadTypes
 ) => {
 	switch ( type ) {
@@ -74,6 +82,28 @@ const reducer = (
 			return {
 				...state,
 				restrictions: incomingRestrictions,
+			};
+
+		case ADD_NOTICE:
+			return {
+				...state,
+				notices: [ ...state.notices.filter(
+					( {id } ) => id !== notice.id
+				), notice ],
+			};
+
+		case CLEAR_NOTICE:
+			return {
+				...state,
+				notices: state.notices.filter(
+					( {id } ) => id !== noticeId
+				),
+			};
+
+		case CLEAR_NOTICES:
+			return {
+				...state,
+				notices: [],
 			};
 
 		case RESTRICTIONS_FETCH_ERROR:
