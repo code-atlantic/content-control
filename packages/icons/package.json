@@ -28,7 +28,7 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@wordpress/primitives": "^3.21.0"
+		"@wordpress/primitives": "^3.27.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

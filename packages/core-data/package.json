@@ -28,10 +28,10 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@wordpress/api-fetch": "^6.20.0",
-		"@wordpress/data": "^8.0.0",
-		"@wordpress/data-controls": "^2.23.0",
-		"@wordpress/i18n": "^4.23.0"
+		"@wordpress/api-fetch": "^6.26.0",
+		"@wordpress/data": "^8.6.0",
+		"@wordpress/data-controls": "^2.29.0",
+		"@wordpress/i18n": "^4.29.0"
 	},
 	"devDependencies": {
 		"@types/wordpress__data": "^6.0.1",
