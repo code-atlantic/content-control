@@ -106,7 +106,7 @@ const List = () => {
 											</span>
 										</Tooltip>
 									),
-									title: __( 'Title', 'content-control' ),
+									title: __( 'Name', 'content-control' ),
 									description: __(
 										'Description',
 										'content-control'
