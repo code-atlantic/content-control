@@ -12,7 +12,7 @@ import {
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, _n } from '@wordpress/i18n';
-import { info, search } from '@wordpress/icons';
+import { info, search, trash } from '@wordpress/icons';
 
 import { ListConsumer, ListProvider } from '../context';
 import useEditor from '../use-editor';
@@ -117,9 +117,13 @@ const List = () => {
 										'Restricted to',
 										'content-control'
 									),
+									status: __( 'Status', 'content-control' ),
 									roles: __( 'Roles', 'content-control' ),
 								} }
 								sortableColumns={ [ 'title' ] }
+								rowClasses={ ( restriction ) => {
+									return [ `restriction-${ restriction.id }`, `status-${ restriction.status }` ];
+								} }
 								renderCell={ (
 									col:
 										| string
@@ -130,14 +134,16 @@ const List = () => {
 										| keyof Restriction[ 'settings' ],
 									restriction
 								) => {
+									const status = restriction.status;
+									const isTrash = status === 'trash';
+									const isPublish = status === 'publish';
+
 									switch ( col ) {
 										case 'enabled':
 											return (
 												<ToggleControl
-													checked={
-														restriction.status ===
-														'publish'
-													}
+													checked={ isPublish }
+													disabled={ isTrash }
 													onChange={ ( checked ) => {
 														updateRestriction( {
 															...restriction,
@@ -148,9 +154,29 @@ const List = () => {
 													} }
 												/>
 											);
+
+										case 'status':
+											return isTrash ? (
+												<Icon
+													aria-label={ __( 'In Trash', 'content-control' ) }
+													icon={ trash }
+													size={ 20 }
+												/>
+											) : (
+												<span>
+													{ isPublish
+														? __(
+																'Enabled',
+																'content-control'
+														  )
+														: __(
+																'Disabled',
+																'content-control'
+														  ) }
+												</span>
+											);
+
 										case 'title': {
-											const isTrash =
-												restriction.status === 'trash';
 											return (
 												<>
 													<Button
@@ -256,6 +282,7 @@ const List = () => {
 												</>
 											);
 										}
+
 										case 'restrictedTo':
 											return restriction.settings.who ===
 												'logged_in' ? (

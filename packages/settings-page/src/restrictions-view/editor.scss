@@ -407,6 +407,10 @@ $gap4: $gap * 4;
 				}
 			}
 		}
+		&.column-status {
+			vertical-align: middle;
+			text-align: center;
+		}
 	}
 
 	tbody {
@@ -443,6 +447,47 @@ $gap4: $gap * 4;
 						background-color: transparent;
 						color: #344054;
 						font-weight: 500;
+					}
+				}
+			}
+		}
+
+		tr {
+			&.status-publish {
+				.column-status {
+					color: #00a32a;
+				}
+			}
+
+			&.status-draft {
+				.column-status {
+					color: #a30000;
+				}
+			}
+
+			&.status-trash {
+				background-color: rgba(163, 0, 0, 0.05);
+
+				.column-enabled {
+					.components-form-toggle {
+						.components-form-toggle__track {
+							color: #a30000;
+							border-color: #a30000;
+						}
+						.components-form-toggle__thumb {
+							color: #a30000;
+							border-color: #a30000;
+						}
+					}
+				}
+
+				.column-title .components-button {
+					color: #a30000;
+				}
+
+				.column-status {
+					svg {
+						fill: #a30000;
 					}
 				}
 			}
