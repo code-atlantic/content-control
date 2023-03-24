@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import Edit from './edit';
 import Header from './header';
 import List from './list';
+import Notices from './notices';
 
 /**
  * Generates the Restrictions tab component & sub-app.
@@ -20,6 +21,7 @@ const RestrictionsView = () => {
 
 	return (
 		<div className="restriction-list">
+			<Notices />
 			<Header />
 			<List />
 			{ isEditorActive && <Edit /> }
