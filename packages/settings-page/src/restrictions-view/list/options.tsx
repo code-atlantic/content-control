@@ -94,7 +94,7 @@ const ListOptions = () => {
 					icon={ moreVertical }
 				/>
 			) }
-			renderContent={ () => (
+			renderContent={ ( { onClose } ) => (
 				<NavigableMenu orientation="vertical">
 					<FormFileUpload
 						icon={ upload }
@@ -108,7 +108,10 @@ const ListOptions = () => {
 								event.currentTarget.files?.[ i ]
 									.text()
 									.then( handleUpload );
+
 							}
+
+							onClose();
 						} }
 					/>
 					<Button
