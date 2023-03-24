@@ -6,15 +6,75 @@ import {
 	FormFileUpload,
 	NavigableMenu,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { sprintf, _n, __ } from '@wordpress/i18n';
 import { bug, moreVertical, upload } from '@wordpress/icons';
+import { restrictionsStore } from '@content-control/core-data';
+import { useDispatch } from '@wordpress/data';
+
+import type { Restriction } from '@content-control/core-data';
 
 const ListOptions = () => {
+	// Get action dispatchers.
+	const { createRestriction, addNotice } = useDispatch( restrictionsStore );
+
 	const handleUpload = ( uploadData: string ) => {
 		const data = JSON.parse( uploadData );
-		// Temporary placeholder for import handling.
-		// eslint-disable-next-line no-alert
-		alert( `Found ${ data?.restrictions?.length } items.` );
+
+		if ( ! data?.restrictions?.length ) {
+			return;
+		}
+
+		let errorCount = 0;
+
+		data.restrictions.forEach( ( restriction: Restriction ) => {
+			try {
+				// Create a restriction from the imported data, setting the status to draft.
+				createRestriction( { ...restriction, status: 'draft' } );
+			} catch ( error ) {
+				errorCount++;
+			}
+		} );
+
+		if ( errorCount ) {
+			addNotice( {
+				id: 'content-control-import-error',
+				type: 'error',
+				// translators: %d is the number of restrictions that failed to import.
+				message: sprintf(
+					_n(
+						'%d Restriction failed to import.',
+						'%d Restrictions failed to import.',
+						errorCount,
+						'content-control'
+					),
+					errorCount
+				),
+				isDismissible: true,
+			} );
+		}
+
+		if ( errorCount === data?.restrictions?.length ) {
+			return;
+		}
+
+		const successfullyAdded = data?.restrictions?.length - errorCount;
+
+		addNotice( {
+			id: 'content-control-import-success',
+			type: 'success',
+			// translators: %d is the number of restrictions imported.
+			message: sprintf(
+				_n(
+					'%d Restriction imported successfully.',
+					'%d Restrictions imported successfully.',
+					successfullyAdded,
+					'content-control'
+				),
+				successfullyAdded
+			),
+			isDismissible: true,
+			closeDelay: 5000,
+		} );
 	};
 
 	return (
