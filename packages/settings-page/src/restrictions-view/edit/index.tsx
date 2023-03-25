@@ -17,7 +17,7 @@ import GeneralTab from './general';
 import ProtectionTab from './protection';
 
 export const documenationUrl =
-	'https://code-atlantic.com/products/content-control/';
+	'https://contentcontrolpro.com/documentation/restrictions/';
 
 import type { Restriction } from '@content-control/core-data';
 import type { TabComponent } from '../../types';
