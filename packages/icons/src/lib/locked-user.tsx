@@ -4,7 +4,7 @@
 import { SVG, Path, G, Defs, Rect } from '@wordpress/primitives';
 
 const lockedUser = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="none">
+	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="none" className='cc-icon cc-icon--locked-user'>
 		<G clipPath="url(#clip0_203_600)">
 			<Path
 				d="M11.5 13C8.676 13 6.171 13.638 4.525 14.193C3.31 14.604 2.5 15.749 2.5 17.032V21C2.5 21 10.458 21 10.5 21"

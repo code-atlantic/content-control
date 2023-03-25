@@ -4,7 +4,7 @@
 import { SVG, Path } from '@wordpress/primitives';
 
 const incognito = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none">
+	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 22" fill="none" className='cc-icon cc-icon--incognito'>
 		<Path
 			d="M15.5 21C17.433 21 19 19.433 19 17.5C19 15.567 17.433 14 15.5 14C13.567 14 12 15.567 12 17.5C12 19.433 13.567 21 15.5 21Z"
 			// stroke="#fff"

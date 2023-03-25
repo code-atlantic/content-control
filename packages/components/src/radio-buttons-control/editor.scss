@@ -9,8 +9,12 @@
 			.components-icon,
 			svg {
 				margin-right: 10px;
-				fill: transparent;
+
 				stroke: currentColor;
+
+				&.cc-icon {
+					fill: transparent;
+				}
 			}
 		}
 	}

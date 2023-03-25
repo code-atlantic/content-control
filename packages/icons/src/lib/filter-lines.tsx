@@ -4,7 +4,7 @@
 import { SVG, Path } from '@wordpress/primitives';
 
 const filterLines = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className='cc-icon cc-icon--filter-lines'>
 		<Path
 			d="M6.5 12H16.5M4 7H19M9 17H14"
 			stroke="#1A191B"

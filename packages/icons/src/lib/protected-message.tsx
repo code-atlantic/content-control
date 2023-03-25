@@ -4,7 +4,7 @@
 import { SVG, Path, Rect } from '@wordpress/primitives';
 
 const protectedMessage = (
-	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="none">
+	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="none" className='cc-icon cc-icon--protected-message'>
 		<Path
 			d="M19.5 21H7.5L3.5 23V12C3.5 11.4696 3.71071 10.9609 4.08579 10.5858C4.46086 10.2107 4.96957 10 5.5 10H19.5C20.0304 10 20.5391 10.2107 20.9142 10.5858C21.2893 10.9609 21.5 11.4696 21.5 12V19C21.5 19.5304 21.2893 20.0391 20.9142 20.4142C20.5391 20.7893 20.0304 21 19.5 21Z"
 			strokeWidth="2"
