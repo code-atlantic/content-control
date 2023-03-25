@@ -49,10 +49,11 @@ class Options {
 	 * @return array settings
 	 */
 	public function get_all() {
-		$settings = get_option( $this->prefix . 'settings', [] );
+		$settings = get_option( $this->prefix . 'settings' );
 
 		if ( ! is_array( $settings ) ) {
 			$settings = \ContentControl\get_default_settings();
+			update_option( $this->prefix . 'settings', $settings );
 		}
 
 		return apply_filters( $this->prefix . 'get_options', $settings );

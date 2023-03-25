@@ -13,6 +13,12 @@ export const ACTION_TYPES = {
 	BLOCK_TYPES_FETCH_ERROR: 'BLOCK_TYPES_FETCH_ERROR',
 };
 
+/**
+ * Default settings.
+ *
+ * NOTE: These should match the defaults in PHP.
+ * Update get_default_settings function.
+ */
 export const settingsDefaults: Settings = {
 	excludedBlocks: [],
 	urlOverrides: {},
