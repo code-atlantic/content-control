@@ -17,13 +17,13 @@ export const whoOptions: {
 	{
 		value: 'logged_in',
 		label: __( 'Logged In Users', 'content-control' ),
-		icon: incognito,
+		icon: lockedUser,
 		// iconSize: 18,
 	},
 	{
 		value: 'logged_out',
 		label: __( 'Logged Out Users', 'content-control' ),
-		icon: lockedUser,
+		icon: incognito,
 		// iconSize: 18,
 	},
 ];
