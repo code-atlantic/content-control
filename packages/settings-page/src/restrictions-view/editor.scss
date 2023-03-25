@@ -49,6 +49,25 @@ $gap4: $gap * 4;
 		border-bottom: 1px solid #c3c4c7;
 	}
 
+	.restriction-enabled-toggle {
+		position: absolute;
+		top: 24px;
+		right: 80px;
+		z-index: 10;
+
+		.components-h-stack {
+			direction: rtl;
+		}
+
+		&.disabled label {
+			color: #a30000;
+		}
+
+		&.enabled label {
+			color: #00a32a;
+		}
+	}
+
 	.modal-actions {
 		position: absolute;
 		height: $gap4;

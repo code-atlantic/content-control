@@ -1,5 +1,11 @@
 import { restrictionsStore } from '@content-control/core-data';
-import { Button, Modal, Spinner, TabPanel } from '@wordpress/components';
+import {
+	Button,
+	Modal,
+	Spinner,
+	TabPanel,
+	ToggleControl,
+} from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
@@ -15,6 +21,7 @@ export const documenationUrl =
 
 import type { Restriction } from '@content-control/core-data';
 import type { TabComponent } from '../../types';
+import classNames from 'classnames';
 
 export type EditProps = {
 	onSave?: ( values: Restriction ) => void;
@@ -100,10 +107,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			type: 'success',
 			message: sprintf(
 				// translators: %s: restriction title.
-				__(
-					'Restriction "%s" saved successfully.',
-					'content-control'
-				),
+				__( 'Restriction "%s" saved successfully.', 'content-control' ),
 				values.title
 			),
 			closeDelay: 3000,
@@ -193,6 +197,27 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			onRequestClose={ () => closeEditor() }
 			shouldCloseOnClickOutside={ false }
 		>
+			<div className={
+				classNames( [
+					"restriction-enabled-toggle",
+					values.status === 'publish' ? 'enabled' : 'disabled',
+				] )
+			}>
+				<ToggleControl
+					label={
+						values.status === 'publish'
+							? __( 'Enabled', 'content-control' )
+							: __( 'Disabled', 'content-control' )
+					}
+					checked={ values.status === 'publish' }
+					onChange={ ( checked ) =>
+						updateValues( {
+							...values,
+							status: checked ? 'publish' : 'draft',
+						} )
+					}
+				/>
+			</div>
 			<TabPanel
 				orientation="vertical"
 				initialTabName={ tab }
