@@ -114,11 +114,11 @@ const ListOptions = () => {
 							onClose();
 						} }
 					/>
-					<Button
+					{/* <Button
 						icon={ bug }
 						text={ __( 'Troubleshoot', 'content-control' ) }
 						onClick={ () => {} }
-					/>
+					/> */}
 				</NavigableMenu>
 			) }
 		/>
