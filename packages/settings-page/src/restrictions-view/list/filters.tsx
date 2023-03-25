@@ -1,13 +1,18 @@
 import './filters.scss';
 
-import { filterLines } from '@content-control/icons';
-import { Button, Dropdown, SelectControl } from '@wordpress/components';
-import { useEffect, useMemo, useRef } from '@wordpress/element';
+import { Button, Icon, Popover, RadioControl } from '@wordpress/components';
+import { useMemo, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 import { useList } from '../context';
 
 import type { RestrictionStatuses } from '@content-control/core-data';
+import classNames from 'classnames';
+import { chevronDown, chevronUp } from '@wordpress/icons';
+import { MulticheckField } from '@content-control/fields';
+
+/* Global Var Imports */
+const { userRoles } = contentControlSettingsPage;
 
 const statusOptionLabels: Record< RestrictionStatuses, string > = {
 	all: __( 'All', 'content-control' ),
@@ -21,16 +26,23 @@ const ListFilters = () => {
 	const {
 		filters = {},
 		setFilters,
-		restrictions = [],
 		bulkSelection = [],
+		filteredRestrictions = [],
 	} = useList();
 
-	const filtersBtnRef = useRef< HTMLButtonElement >();
+	const [ visibleFilterControl, setVisibleFilterControl ] =
+		useState< string >( '' );
+
+	const filterButtonRefs = useRef< Record< string, HTMLButtonElement > >(
+		{}
+	);
 
 	// List of unique statuses from all items.
 	const activeStatusCounts = useMemo(
 		() =>
-			restrictions.reduce< Record< RestrictionStatuses, number > >(
+			filteredRestrictions.reduce<
+				Record< RestrictionStatuses, number >
+			>(
 				( s, r ) => {
 					s[ r.status ] = ( s[ r.status ] ?? 0 ) + 1;
 					s.all++;
@@ -38,7 +50,7 @@ const ListFilters = () => {
 				},
 				{ all: 0 }
 			),
-		[ restrictions ]
+		[ filteredRestrictions ]
 	);
 
 	/**
@@ -50,66 +62,176 @@ const ListFilters = () => {
 	const isStatusActive = ( s: RestrictionStatuses ): boolean =>
 		activeStatusCounts?.[ s ] > 0;
 
-
 	if ( bulkSelection.length > 0 ) {
 		return null;
 	}
 
-	return (
-		<Dropdown
-			className="list-table-filters"
-			contentClassName="list-table-filters__popover"
-			position="bottom left"
-			focusOnMount="firstElement"
-			// @ts-ignore this is not typed in WP yet.
-			popoverProps={ { noArrow: false } }
-			renderToggle={ ( { isOpen, onToggle } ) => (
+	const FilterControl = ( { name, label, currentSelection, children } ) => {
+		const visible = visibleFilterControl === name;
+
+		return (
+			<div
+				className={ classNames( [
+					`list-table-filter list-table-filter--${ name }`,
+					visible ? 'is-active' : '',
+				] ) }
+			>
 				<Button
-					className="popover-toggle"
-					ref={ ( ref: HTMLButtonElement ) => {
-						filtersBtnRef.current = ref;
+					className="filter-button"
+					onClick={ () =>
+						setVisibleFilterControl( visible ? '' : name )
+					}
+					ref={ ( el ) => {
+						filterButtonRefs.current[ name ] = el;
 					} }
-					variant="secondary"
-					onClick={ onToggle }
-					aria-expanded={ isOpen }
-					icon={ filterLines }
-					iconSize={ 20 }
-					text={ __( 'Filters', 'content-control' ) }
+				>
+					<span className="filter-label">{ label }:</span>&nbsp;
+					<span className="filter-selection">
+						{ currentSelection }
+					</span>
+					<Icon
+						className="filter-icon"
+						icon={ visible ? chevronUp : chevronDown }
+					/>
+				</Button>
+				{ visible && (
+					<Popover
+						className="filter-popover"
+						getAnchorRect={ () =>
+							filterButtonRefs.current[
+								name
+							].getBoundingClientRect()
+						}
+						onClose={ () => setVisibleFilterControl( '' ) }
+						position="bottom right"
+						onFocusOutside={ () => setVisibleFilterControl( '' ) }
+					>
+						{ children }
+					</Popover>
+				) }
+			</div>
+		);
+	};
+
+	const filterRoles =
+		filters?.roles === '' ? [] : filters?.roles?.trim().split( ',' ) ?? [];
+
+	const whoOptions = [
+		{
+			label: __( 'All', 'content-control' ),
+			value: '',
+		},
+		{
+			label: __( 'Logged In', 'content-control' ),
+			value: 'logged_in',
+		},
+		{
+			label: __( 'Logged Out', 'content-control' ),
+			value: 'logged_out',
+		},
+	];
+
+	return (
+		<div className="list-table-filters">
+			<FilterControl
+				name="role"
+				label={ __( 'Role', 'content-control' ) }
+				currentSelection={ ( () => {
+					switch ( filterRoles.length ) {
+						case 0:
+							return __( 'All', 'content-control' );
+						case 1:
+							return userRoles[ filterRoles[ 0 ] ];
+						case 2:
+							return filterRoles
+								.map( ( role ) => userRoles[ role ] ?? '' )
+								.join( ', ' );
+						default:
+							return (
+								filterRoles
+									.slice( 0, 1 )
+									.map( ( role ) => userRoles[ role ] ?? '' )
+									.join( ', ' ) +
+								` +${ filterRoles.length - 1 } more`
+							);
+					}
+				} )() }
+			>
+				<MulticheckField
+					label={ __( 'Role', 'content-control' ) }
+					value={ filterRoles }
+					options={ Object.entries( userRoles ).map(
+						( [ value, label ] ) => ( {
+							value,
+							label,
+						} )
+					) }
+					onChange={ ( selection ) => {
+						setFilters( {
+							roles: selection.join( ',' ),
+						} );
+
+						setVisibleFilterControl( '' );
+					} }
+					type={ 'multicheck' }
+					id={ '' }
 				/>
-			) }
-			renderContent={ () => (
-				<>
-					<div className="list-filters-popover-title">
-						{ __( 'Filter restrictions', 'content-control' ) }
-					</div>
-					<div className="list-table-available-filters">
-						<SelectControl
-							label={ __( 'Status', 'content-control' ) }
-							value={ filters.status }
-							options={ Object.entries( statusOptionLabels )
-								// Filter statuses with 0 items.
-								.filter( ( [ value ] ) =>
-									isStatusActive( value )
-								)
-								// Map statuses to options.
-								.map( ( [ value, label ] ) => {
-									return {
-										label: `${ label } (${
-											activeStatusCounts[ value ] ?? 0
-										})`,
-										value,
-									};
-								} ) }
-							onChange={ ( s ) =>
-								setFilters( {
-									status: s,
-								} )
-							}
-						/>
-					</div>
-				</>
-			) }
-		/>
+			</FilterControl>
+
+			<FilterControl
+				name="who"
+				label={ __( 'Restricted To', 'content-control' ) }
+				currentSelection={
+					whoOptions.find(
+						( r ) => r.value === filters?.restrictedTo
+					)?.label ?? ''
+				}
+			>
+				<RadioControl
+					label={ __( 'Restricted To', 'content-control' ) }
+					selected={ filters?.restrictedTo ?? '' }
+					options={ whoOptions }
+					onChange={ ( s ) => {
+						setFilters( {
+							restrictedTo: s,
+						} );
+
+						setVisibleFilterControl( '' );
+					} }
+				/>
+			</FilterControl>
+
+			<FilterControl
+				name="status"
+				label={ __( 'Status', 'content-control' ) }
+				currentSelection={ statusOptionLabels[ filters?.status ?? '' ] }
+			>
+				<RadioControl
+					label={ __( 'Status', 'content-control' ) }
+					hideLabelFromVision={ true }
+					selected={ filters?.status ?? '' }
+					options={ Object.entries( statusOptionLabels )
+						// Filter statuses with 0 items.
+						.filter( ( [ value ] ) => isStatusActive( value ) )
+						// Map statuses to options.
+						.map( ( [ value, label ] ) => {
+							return {
+								label: `${ label } (${
+									activeStatusCounts[ value ] ?? 0
+								})`,
+								value,
+							};
+						} ) }
+					onChange={ ( s ) => {
+						setFilters( {
+							status: s,
+						} );
+
+						setVisibleFilterControl( '' );
+					} }
+				/>
+			</FilterControl>
+		</div>
 	);
 };
 

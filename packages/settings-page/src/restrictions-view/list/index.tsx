@@ -1,5 +1,5 @@
 import { ConfirmDialogue, ListTable } from '@content-control/components';
-import { incognito, lockedUser } from '@content-control/icons';
+import { filterLines, incognito, lockedUser } from '@content-control/icons';
 import { noop } from '@content-control/utils';
 import {
 	Button,
@@ -25,6 +25,8 @@ import type { Restriction } from '@content-control/core-data';
 const List = () => {
 	// Get the shared method for setting editor Id & query params.
 	const { setEditorId } = useEditor();
+
+	const [ showFilters, setShowFilters ] = useState< boolean >( false );
 
 	const [ confirmDialogue, setConfirmDialogue ] = useState< {
 		message: string;
@@ -81,9 +83,36 @@ const List = () => {
 								</div>
 
 								<ListBulkActions />
-								<ListFilters />
+
+								{ bulkSelection.length === 0 && (
+									<Button
+										className="filters-toggle"
+										variant="secondary"
+										onClick={ () => {
+											setShowFilters( ! showFilters );
+										} }
+										aria-expanded={ showFilters }
+										icon={ filterLines }
+										iconSize={ 20 }
+										text={
+											! showFilters
+												? __(
+														'Filters',
+														'content-control'
+												  )
+												: __(
+														'Hide Filters',
+														'content-control'
+												  )
+										}
+									/>
+								) }
+
 								<ListOptions />
 							</div>
+
+							{ showFilters && <ListFilters /> }
+
 							<ListTable
 								selectedItems={ bulkSelection }
 								onSelectItems={ ( newSelection ) =>

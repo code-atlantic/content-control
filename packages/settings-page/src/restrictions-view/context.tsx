@@ -16,8 +16,10 @@ import type {
 } from '@content-control/core-data';
 
 type Filters = {
+	roles?: string;
 	status?: string;
 	searchText?: string;
+	restrictedTo?: string;
 };
 
 type ListContext = {
@@ -45,8 +47,10 @@ const defaultContext: ListContext = {
 	isLoading: false,
 	isDeleting: false,
 	filters: {
+		roles: '',
 		status: 'all',
 		searchText: '',
+		restrictedTo: '',
 	},
 	setFilters: noop,
 };
@@ -65,8 +69,10 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 
 	// Allow initiating the editor directly from a url.
 	const [ filters, setFilters ] = useQueryParams( {
+		roles: withDefault( StringParam, '' ),
 		status: withDefault( StringParam, 'all' ),
 		searchText: withDefault( StringParam, '' ),
+		restrictedTo: withDefault( StringParam, '' ),
 	} );
 
 	// Quick helper to reset all query params.
@@ -93,27 +99,42 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 		useDispatch( restrictionsStore );
 
 	// Filtered list of restrictions for the current status filter.
-	const filteredRestrictions = useMemo(
-		() =>
-			restrictions
-				.filter( ( r ) =>
-					filters.status === 'all'
-						? true
-						: filters.status === r.status
-				)
-				.filter(
-					( r ) =>
-						! filters.searchText ||
-						! filters.searchText.length ||
-						r.title
-							.toLowerCase()
-							.indexOf( filters.searchText.toLowerCase() ) >= 0 ||
-						r.description
-							.toLowerCase()
-							.indexOf( filters.searchText.toLowerCase() ) >= 0
-				),
-		[ restrictions, filters ]
-	);
+	const filteredRestrictions = useMemo( () => {
+		const filterRoles =
+			filters?.roles === ''
+				? []
+				: filters?.roles?.trim().split( ',' ) ?? [];
+
+		return restrictions
+			.filter( ( r ) =>
+				! filterRoles.length
+					? true
+					: filterRoles.some( ( role ) =>
+							r.settings.roles?.includes( role )
+					  )
+			)
+			.filter( ( r ) => {
+				console.log( r.settings.who, filters.restrictedTo );
+
+				return filters.restrictedTo === ''
+					? true
+					: r.settings.who === filters.restrictedTo;
+			} )
+			.filter( ( r ) =>
+				filters.status === 'all' ? true : filters.status === r.status
+			)
+			.filter(
+				( r ) =>
+					! filters.searchText ||
+					! filters.searchText.length ||
+					r.title
+						.toLowerCase()
+						.indexOf( filters.searchText.toLowerCase() ) >= 0 ||
+					r.description
+						.toLowerCase()
+						.indexOf( filters.searchText.toLowerCase() ) >= 0
+			);
+	}, [ restrictions, filters ] );
 
 	return (
 		<Provider
