@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import { settingsStore } from '@content-control/core-data';
 import { block as blockIcon } from '@content-control/icons';
 import {
+	Button,
+	Flex,
 	Icon,
 	Notice,
 	TextControl,
@@ -113,6 +115,63 @@ const BlockManagerTab = () => {
 							value={ searchText }
 							onChange={ setSearchText }
 						/>
+						<Flex justify="space-around">
+							<Button
+								variant="link"
+								onClick={ () => {
+									const blocksToEnable = filteredBlockTypes
+										.map( ( block ) => block.name )
+										.filter(
+											( blockName ) =>
+												isBlockDisabled( blockName ) &&
+												excludedBlocks.includes(
+													blockName
+												)
+										);
+
+									updateSettings( {
+										excludedBlocks: excludedBlocks.filter(
+											( blockName ) =>
+												! blocksToEnable.includes(
+													blockName
+												)
+										),
+									} );
+								} }
+							>
+								{ __( 'Enable All', 'content-control' ) }
+							</Button>
+							<Button
+								variant="link"
+								onClick={ () => {
+									const blocksToDisable = filteredBlockTypes
+										.map( ( block ) => block.name )
+										.filter(
+											( blockName ) =>
+												! isBlockDisabled(
+													blockName
+												) &&
+												! excludedBlocks.includes(
+													blockName
+												)
+										);
+
+									updateSettings( {
+										excludedBlocks: [
+											...excludedBlocks.filter(
+												( blockName ) =>
+													! blocksToDisable.includes(
+														blockName
+													)
+											),
+											...blocksToDisable,
+										],
+									} );
+								} }
+							>
+								{ __( 'Disable All', 'content-control' ) }
+							</Button>
+						</Flex>
 					</div>
 				</header>
 
