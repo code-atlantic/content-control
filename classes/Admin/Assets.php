@@ -36,6 +36,12 @@ class Assets extends Controller {
 	 * @return array
 	 */
 	public function get_packages() {
+		$permissions = plugin()->get_permissions();
+
+		foreach ( $permissions as $permission => $cap ) {
+			$permissions[ $permission ] = current_user_can( $cap );
+		}
+
 		$packages = [
 			'block-editor'  => [
 				'handle'   => 'content-control-block-editor',
@@ -50,6 +56,7 @@ class Assets extends Controller {
 						'core/nextpage',
 						'core/freeform',
 					],
+					'permissions'    => $permissions,
 				],
 			],
 			'components'    => [
