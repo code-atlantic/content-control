@@ -19,8 +19,7 @@ const Section = ( { title, icon, children }: Props ) => {
 						</span>
 					) }
 					<span className="panel-title">{ title }</span>
-					{ /** If we decide to add panel actions, create SlotFill, then each section's inner components can use the Fills */ }{ ' ' }
-					*/
+					{ /** If we decide to add panel actions, create SlotFill, then each section's inner components can use the Fills */ }
 				</div>
 				<PanelBody>{ children }</PanelBody>
 			</Panel>
