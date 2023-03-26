@@ -11,6 +11,13 @@ declare global {
 		advancedMode: boolean;
 		allowedBlocks: string[];
 		excludedBlocks: string[];
+		permissions: {
+			manage_settings: boolean;
+			edit_restrictions: boolean;
+			view_block_controls: boolean;
+			edit_block_controls: boolean;
+			[key: string]: boolean;
+		};
 	};
 }
 
