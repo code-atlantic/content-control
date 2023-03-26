@@ -24,7 +24,7 @@ import {
 	useState,
 } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { edit, globe, keyboardReturn } from '@wordpress/icons';
+import { edit, globe, keyboardReturn, link } from '@wordpress/icons';
 
 import LinkSuggestion from './suggestion';
 
@@ -269,7 +269,8 @@ const URLControl = (
 				} );
 			} else {
 				selectSuggestion( {
-					...value,
+					title: __( 'Custom URL', 'content-control' ),
+					type: 'URL',
 					url: query,
 				} );
 			}
@@ -356,6 +357,10 @@ const URLControl = (
 							ref={ inputWrapperRef }
 						>
 							<div className="url-control">
+								<Icon
+									icon={ link }
+									className="url-control__input-icon"
+								/>
 								<input
 									id={ inputId }
 									className="url-control__input"
@@ -394,7 +399,11 @@ const URLControl = (
 										iconSize={ 30 }
 										onClick={ () =>
 											selectSuggestion( {
-												...value,
+												title: __(
+													'Custom URL',
+													'content-control'
+												),
+												type: 'URL',
 												url: query,
 											} )
 										}
@@ -470,7 +479,11 @@ const URLControl = (
 												}
 												onSelect={ () =>
 													selectSuggestion( {
-														...value,
+														title: __(
+															'Custom URL',
+															'content-control'
+														),
+														type: 'URL',
 														url: query,
 													} )
 												}

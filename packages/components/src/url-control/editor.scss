@@ -7,11 +7,22 @@
 		.url-control {
 			position: relative;
 
+			.url-control__input-icon {
+				position: absolute;
+				top: 50%;
+				left: 9px;
+				transform: translateY(-50%);
+				color: #1E1E1E;
+				pointer-events: none;
+			}
+
 			.url-control__input {
 				display: block;
 				width: 100%;
 				min-height: 50px;
 				font-size: 1.2em;
+				// padding: 9px 9px 9px 30px;
+				padding-left: 36px;
 			}
 
 			.url-control__actions {
