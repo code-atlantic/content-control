@@ -7,7 +7,7 @@ import {
 	NavigableMenu,
 } from '@wordpress/components';
 import { sprintf, _n, __ } from '@wordpress/i18n';
-import { bug, moreVertical, upload } from '@wordpress/icons';
+import { moreVertical, upload } from '@wordpress/icons';
 import { restrictionsStore } from '@content-control/core-data';
 import { useDispatch } from '@wordpress/data';
 
