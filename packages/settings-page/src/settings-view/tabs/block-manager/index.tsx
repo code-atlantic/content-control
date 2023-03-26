@@ -3,7 +3,7 @@ import './editor.scss';
 import classNames from 'classnames';
 
 import { settingsStore } from '@content-control/core-data';
-import { block as blockIcon } from '@content-control/icons';
+import { block as blockIcon, blockManager as blockManagerIcon } from '@content-control/icons';
 import {
 	Button,
 	Flex,
@@ -92,7 +92,7 @@ const BlockManagerTab = () => {
 	return (
 		<Section
 			title={ __( 'Block Manager', 'content-control' ) }
-			icon={ blockIcon }
+			icon={ blockManagerIcon }
 		>
 			<>
 				<header>
