@@ -1,25 +1,14 @@
-import {
-	Button,
-	Icon,
-	Panel,
-	PanelBody,
-	ToggleControl,
-} from '@wordpress/components';
-import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
-import { moreVertical } from '@wordpress/icons';
+import { Icon, Panel, PanelBody } from '@wordpress/components';
+import { _x, __ } from '@wordpress/i18n';
 
 type Props = {
 	title: string;
 	icon?: Icon.BaseProps< typeof Icon >[ 'icon' ];
 	children: React.ReactNode;
-	enabled?: boolean;
 	extraActions?: [];
 };
 
-const Section = ( { title, icon, enabled, children }: Props ) => {
-	const [ showDropdown, toggleDropdown ] = useState( false );
-
+const Section = ( { title, icon, children }: Props ) => {
 	return (
 		<>
 			<Panel className="settings-section-panel">
@@ -30,19 +19,8 @@ const Section = ( { title, icon, enabled, children }: Props ) => {
 						</span>
 					) }
 					<span className="panel-title">{ title }</span>
-
-					<div className="panel-actions">
-						<ToggleControl
-							checked={ enabled }
-							onChange={ () => {} }
-						/>
-
-						<Button
-							label={ __( 'Panel Options', 'content-control' ) }
-							icon={ moreVertical }
-							onClick={ () => toggleDropdown( ! showDropdown ) }
-						/>
-					</div>
+					{ /** If we decide to add panel actions, create SlotFill, then each section's inner components can use the Fills */ }{ ' ' }
+					*/
 				</div>
 				<PanelBody>{ children }</PanelBody>
 			</Panel>
