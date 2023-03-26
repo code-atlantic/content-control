@@ -1,3 +1,5 @@
+import "./editor.scss";
+
 export { default as block } from './block';
 export { default as blockManager } from './block-manager';
 export { default as customRedirect } from './custom-redirect';

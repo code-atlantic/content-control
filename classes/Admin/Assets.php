@@ -77,6 +77,7 @@ class Assets extends Controller {
 			],
 			'icons'         => [
 				'handle' => 'content-control-icons',
+				'styles' => true,
 			],
 			'rule-engine'   => [
 				'handle'   => 'content-control-rule-engine',
