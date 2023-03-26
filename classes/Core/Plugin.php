@@ -234,7 +234,7 @@ class Plugin {
 		if ( ! empty( $user_permisions ) ) {
 			foreach ( $user_permisions as $cap => $user_permission ) {
 				if ( ! empty( $user_permission ) ) {
-					$permissions[ $cap ] = $user_permission['permission'];
+					$permissions[ $cap ] = $user_permission;
 				}
 			}
 		}
