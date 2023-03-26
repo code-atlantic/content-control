@@ -18,6 +18,13 @@ import { blockControlsEnabled } from './utils';
 import type { BlockEditProps } from '@wordpress/blocks';
 import type { BlockInstanceWithControls } from '../../types';
 
+const {
+	permissions: {
+		edit_block_controls: userCanEditControls,
+		view_block_controls: userCanViewControls,
+	},
+} = contentControlBlockEditor;
+
 /**
  * Add block controls on block inspector sidebar.
  *
@@ -63,6 +70,11 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			setBlockControls: setControls,
 		};
 
+		// Check if user has permission to view the block controls via WP user permissions.
+		if ( ! userCanViewControls && ! userCanEditControls ) {
+			return <BlockEdit { ...props } />;
+		}
+
 		return (
 			<>
 				<BlockEdit { ...props } />
@@ -74,6 +86,9 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 									'cc__block-controls',
 									enabled
 										? 'cc__block-controls--enabled'
+										: null,
+									! userCanEditControls
+										? 'cc__block-controls__rules-panels--view-only'
 										: null,
 								] ) }
 							>

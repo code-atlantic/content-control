@@ -26,6 +26,15 @@
 			padding-bottom: 0;
 		}
 	}
+
+	&.cc__block-controls__rules-panels--view-only {
+		.cc__block-controls__top-panel,
+		.cc__block-controls__rules-panels {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+
+	}
 }
 
 .cc__block-controls__toggle-enabled {
