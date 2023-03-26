@@ -7,21 +7,18 @@ export type DeviceMediaQuerySettings = {
 	breakpoint: number;
 };
 
-export type PermissionValue = { cap: string; other?: string };
+export type PermissionValue = string | false;
 
 export type Settings = {
 	excludedBlocks: string[];
 	permissions: {
 		// Block Controls
-		viewBlockControls: PermissionValue;
-		editBlockControls: PermissionValue;
+		view_block_controls: PermissionValue;
+		edit_block_controls: PermissionValue;
 		// Restrictions
-		addRestriction: PermissionValue;
-		deleteRestriction: PermissionValue;
-		editRestriction: PermissionValue;
+		edit_restrictions: PermissionValue;
 		// Settings
-		viewSettings: PermissionValue;
-		manageSettings: PermissionValue;
+		manage_settings: PermissionValue;
 		// Extendable
 		[ key: string ]: PermissionValue;
 	};

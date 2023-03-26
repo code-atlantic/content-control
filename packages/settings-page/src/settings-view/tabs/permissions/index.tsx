@@ -1,8 +1,13 @@
 import { permissions as permissionsIcon } from '@content-control/icons';
-import { Notice, SelectControl, TextControl } from '@wordpress/components';
+import {
+	ComboboxControl,
+	Notice,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
 import { useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
-import { __ } from '@wordpress/i18n';
+import { sprintf, __ } from '@wordpress/i18n';
 
 import Section from '../../section';
 import useSettings from '../../use-settings';
@@ -10,6 +15,33 @@ import useSettings from '../../use-settings';
 import type { PermissionValue } from '@content-control/core-data';
 
 const { rolesAndCaps } = contentControlSettingsPage;
+
+const getRolesAndCapsOptions = ( () => {
+	const rolesAndCapsList: { label: string; value: string }[] = [];
+
+	Object.entries( rolesAndCaps ).forEach( ( [ value, { name: label } ] ) => {
+		if (
+			typeof rolesAndCapsList.find( ( role ) => role.value === value ) ===
+			'undefined'
+		) {
+			rolesAndCapsList.push( { label, value } );
+		}
+	} );
+
+	Object.values( rolesAndCaps ).forEach( ( { capabilities } ) => {
+		Object.keys( capabilities ).forEach( ( cap ) => {
+			if (
+				typeof rolesAndCapsList.find(
+					( { value } ) => cap === value
+				) === 'undefined'
+			) {
+				rolesAndCapsList.push( { label: cap, value: cap } );
+			}
+		} );
+	} );
+
+	return rolesAndCapsList;
+} )();
 
 const PermissionsTab = () => {
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
@@ -19,84 +51,40 @@ const PermissionsTab = () => {
 		name: string;
 		label: string;
 		description?: string;
-	}[] = applyFilters( 'contentControl.generalSettingsTabSections', [
+		default: string;
+	}[] = applyFilters( 'contentControl.pluginPermissionLabels', [
 		{
-			name: 'viewBlockControls',
+			name: 'view_block_controls',
 			label: __( 'View Block Controls', 'content-control' ),
+			default: 'edit_posts',
 		},
 		{
-			name: 'editBlockControls',
+			name: 'edit_block_controls',
 			label: __( 'Edit Block Controls', 'content-control' ),
+			default: 'edit_posts',
 		},
 		// Restrictions
 		{
-			name: 'addRestriction',
-			label: __( 'Add Restriction', 'content-control' ),
-		},
-		{
-			name: 'deleteRestriction',
-			label: __( 'Delete Restriction', 'content-control' ),
-		},
-		{
-			name: 'editRestriction',
+			name: 'edit_restrictions',
 			label: __( 'Edit Restriction', 'content-control' ),
+			default: 'manage_options',
 		},
 		// Settings
 		{
-			name: 'viewSettings',
-			label: __( 'View Settings', 'content-control' ),
-		},
-		{
-			name: 'manageSettings',
+			name: 'manage_settings',
 			label: __( 'Manage Settings', 'content-control' ),
+			default: 'manage_options',
 		},
-	] ) as { name: string; label: string }[];
-
-	const roles = useMemo( () => {
-		const list: { label: string; value: string }[] = [];
-
-		Object.entries( rolesAndCaps ).forEach(
-			( [ value, { name: label } ] ) => {
-				if (
-					typeof list.find( ( role ) => role.value === value ) ===
-					'undefined'
-				) {
-					list.push( { label, value } );
-				}
-			}
-		);
-
-		return list;
-	}, [] );
-
-	const caps = useMemo( () => {
-		const list: { label: string; value: string }[] = [];
-
-		Object.values( rolesAndCaps ).forEach( ( { capabilities } ) => {
-			Object.keys( capabilities ).forEach( ( cap ) => {
-				if (
-					typeof list.find( ( { value } ) => cap === value ) ===
-					'undefined'
-				) {
-					list.push( { label: cap, value: cap } );
-				}
-			} );
-		} );
-
-		return list;
-	}, [] );
+	] ) as { name: string; label: string; default: string }[];
 
 	const updatePermission = (
 		name: string,
-		newValues: Partial< PermissionValue >
+		newValue: Partial< PermissionValue >
 	) => {
 		updateSettings( {
 			permissions: {
 				...settings.permissions,
-				[ name ]: {
-					...settings.permissions?.[ name ],
-					...newValues,
-				},
+				[ name ]: newValue,
 			},
 		} );
 	};
@@ -114,96 +102,101 @@ const PermissionsTab = () => {
 					) }
 				</Notice>
 
-				{ pluginPermissions.map( ( { name, label, description } ) => {
-					const { cap, other = '' } =
-						settings?.permissions?.[ name ] ?? {};
+				{ pluginPermissions.map(
+					( { name, label, description, default: defaultCap } ) => {
+						const cap = settings?.permissions?.[ name ];
 
-					return (
-						<div key={ name } className="field-group">
-							<div className="field-group__label">
-								<h3>{ label }</h3>
-								{ description && <p>{ description }</p> }
-							</div>
+						const capInList = useMemo(
+							() =>
+								typeof getRolesAndCapsOptions.find(
+									( { value } ) => value === cap
+								) !== 'undefined',
+							[ cap ]
+						);
 
-							<div className="field-group__controls">
-								<SelectControl
-									label={ __(
-										'Restrict this action to users with the role or capability',
-										'content-control'
-									) }
-									value={ cap }
-									onChange={ ( newCap ) =>
-										updatePermission( name, {
-											cap: newCap,
-											other:
-												newCap === 'other'
-													? cap
-													: undefined,
-										} )
-									}
-								>
-									<optgroup
-										label={ __(
-											'Roles',
-											'content-control'
+						const isCustom = cap && ! capInList;
+
+						return (
+							<div key={ name } className="field-group">
+								<div className="field-group__label">
+									<h3>{ label }</h3>
+									{ description && <p>{ description }</p> }
+								</div>
+
+								<div className="field-group__controls">
+									<ToggleControl
+										label={ sprintf(
+											__(
+												/* translators: %s: default capability */
+												'Override the default (%s)',
+												'content-control'
+											),
+											defaultCap
 										) }
-									>
-										{ roles.map(
-											( { label: rLabel, value } ) => (
-												<option
-													key={ value }
-													value={ value }
-												>
-													{ rLabel }
-												</option>
+										checked={ !! cap }
+										onChange={ ( checked ) =>
+											updatePermission(
+												name,
+												checked ? defaultCap : false
 											)
-										) }
-									</optgroup>
-									<optgroup
-										label={ __(
-											'Capabilities',
-											'content-control'
-										) }
-									>
-										{ caps.map(
-											( { label: cLabel, value } ) => (
-												<option
-													key={ value }
-													value={ value }
-												>
-													{ cLabel }
-												</option>
-											)
-										) }
-									</optgroup>
-
-									<option value="other">
-										{ __( 'Other', 'content-control' ) }
-									</option>
-								</SelectControl>
-
-								{ cap === 'other' && (
-									<TextControl
-										label={ __(
-											'Enter custom role or cap here',
-											'content-control'
-										) }
-										help={ __(
-											'Be certain you know what you are doing, this can prevent you from accessing the given feature.',
-											'content-control'
-										) }
-										value={ other }
-										onChange={ ( newOther ) =>
-											updatePermission( name, {
-												other: newOther,
-											} )
 										}
 									/>
-								) }
+
+									{ cap && (
+										<ComboboxControl
+											aria-label={ __(
+												'Choose the role or cap to use',
+												'content-control'
+											) }
+											value={
+												isCustom
+													? 'other'
+													: cap ?? defaultCap
+											}
+											onChange={ ( newCap ) =>
+												updatePermission(
+													name,
+													newCap === 'other'
+														? 'custom_cap'
+														: newCap ?? defaultCap
+												)
+											}
+											options={ [
+												...getRolesAndCapsOptions,
+												{
+													label: __(
+														'Other (custom)',
+														'content-control'
+													),
+													value: 'other',
+												},
+											] }
+										/>
+									) }
+									{ isCustom && (
+										<TextControl
+											label={ __(
+												'Enter custom role or cap here',
+												'content-control'
+											) }
+											help={ __(
+												'Be certain you know what you are doing, this can prevent you from accessing the given feature.',
+												'content-control'
+											) }
+											value={ cap }
+											onChange={ ( newOther ) =>
+												updatePermission(
+													name,
+													newOther
+												)
+											}
+										/>
+									) }
+								</div>
 							</div>
-						</div>
-					);
-				} ) }
+						);
+					}
+				) }
 			</>
 		</Section>
 	);

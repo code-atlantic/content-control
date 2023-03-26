@@ -39,7 +39,6 @@ class Restrictions extends Controller {
 			'show_ui'             => false,
 			'show_in_rest'        => true,
 			'rest_base'           => 'restrictions',
-			// 'rest_controller_class' => '\ContentControl\RestAPI\RestrictionsController',
 			'rest_namespace'      => 'content-control/v2',
 			'has_archive'         => false,
 			'show_in_menu'        => false,
@@ -53,6 +52,12 @@ class Restrictions extends Controller {
 			'query_var'           => false,
 			'supports'            => [ 'title' ],
 			'show_in_graphql'     => false,
+			'capabilities'        => [
+				'create_posts' => plugin()->get_permission( 'edit_restrictions' ),
+				'edit_posts'   => plugin()->get_permission( 'edit_restrictions' ),
+				'delete_posts' => plugin()->get_permission( 'edit_restrictions' ),
+			],
+
 		];
 
 		register_post_type( 'cc_restriction', $args );
@@ -95,6 +100,9 @@ class Restrictions extends Controller {
 			'update_callback' => function ( $value, $object ) {
 				// Update the field/meta value.
 				update_post_meta( $object->ID, 'restriction_settings', $value );
+			},
+			'permission_callback' => function () {
+				return current_user_can( plugin()->get_permission( 'edit_restrictions' ) );
 			},
 		] );
 	}

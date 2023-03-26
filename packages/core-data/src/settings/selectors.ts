@@ -92,13 +92,9 @@ export const getReqPermission = < T extends keyof Settings[ 'permissions' ] >(
 
 	const defaultPermission = 'manage_options';
 
-	const permission = permissions[ cap ] ?? { cap: defaultPermission };
+	const permission = permissions[ cap ];
 
-	if ( permission.cap === 'other' ) {
-		return permission.other ? permission.other : defaultPermission;
-	}
-
-	return permission.cap ?? defaultPermission;
+	return typeof permission === 'string' ? permission : defaultPermission;
 };
 
 /**

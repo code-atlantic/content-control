@@ -221,4 +221,37 @@ class Plugin {
 		return $this->container->get( $id );
 	}
 
+	/**
+	 * Get plugin permissions.
+	 *
+	 * @return array Array of permissions.
+	 */
+	public function get_permissions() {
+		$permissions = \ContentControl\get_default_permissions();
+
+		$user_permisions = $this->get( 'options' )->get( 'permissions', [] );
+
+		if ( ! empty( $user_permisions ) ) {
+			foreach ( $user_permisions as $cap => $user_permission ) {
+				if ( ! empty( $user_permission ) ) {
+					$permissions[ $cap ] = $user_permission['permission'];
+				}
+			}
+		}
+
+		return $permissions;
+	}
+
+	/**
+	 * Get plugin permission for capability.
+	 *
+	 * @param string $cap Permission key.
+	 *
+	 * @return string User role or cap required.
+	 */
+	public function get_permission( $cap ) {
+		$permissions = $this->get_permissions();
+
+		return isset( $permissions[ $cap ] ) ? $permissions[ $cap ] : 'manage_options';
+	}
 }

@@ -24,15 +24,12 @@ export const settingsDefaults: Settings = {
 	urlOverrides: {},
 	permissions: {
 		// Block Controls
-		viewBlockControls: { cap: 'manage_options' },
-		editBlockControls: { cap: 'manage_options' },
+		view_block_controls: 'edit_posts',
+		edit_block_controls: 'edit_posts',
 		// Restrictions
-		addRestriction: { cap: 'manage_options' },
-		deleteRestriction: { cap: 'manage_options' },
-		editRestriction: { cap: 'manage_options' },
+		edit_restrictions: 'manage_options',
 		// Settings
-		viewSettings: { cap: 'manage_options' },
-		manageSettings: { cap: 'manage_options' },
+		manage_settings: 'manage_options',
 	},
 	mediaQueries: {
 		mobile: {
