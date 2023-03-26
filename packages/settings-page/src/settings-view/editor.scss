@@ -1,4 +1,10 @@
 .cc-settings-page {
+	.cc-settings-view {
+		&.permission-denied {
+			text-align: center;
+		}
+	}
+
 	.cc-settings-view__header {
 		.header-top-bar {
 			display: flex;

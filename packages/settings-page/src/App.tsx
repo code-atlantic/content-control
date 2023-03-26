@@ -14,12 +14,20 @@ import UpgradeView from './upgrade-view';
 
 import type { TabComponent } from './types';
 
+const {
+	permissions: {
+		manage_settings: userCanManageSettings,
+		edit_restrictions: userCanEditRestrictions,
+	},
+} = contentControlSettingsPage;
+
 const App = () => {
 	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
 
-	// Generated filtered list of admin views.
-	const views: TabComponent[] = applyFilters( 'contentControl.adminViews', [
-		{
+	let views: TabComponent[] = [];
+
+	if ( userCanEditRestrictions ) {
+		views.push( {
 			name: 'restrictions',
 			title: __( 'Restrictions', 'content-control' ),
 			className: 'restrictions',
@@ -32,8 +40,11 @@ const App = () => {
 				'content-control'
 			),
 			comp: RestrictionsView,
-		},
-		{
+		} );
+	}
+
+	if ( userCanManageSettings ) {
+		views.push( {
 			name: 'settings',
 			title: __( 'Settings', 'content-control' ),
 			className: 'settings',
@@ -43,7 +54,12 @@ const App = () => {
 			),
 			heading: __( 'Plugin Settings', 'content-control' ),
 			comp: SettingsView,
-		},
+		} );
+	}
+
+	// Generated filtered list of admin views.
+	views = applyFilters( 'contentControl.adminViews', [
+		...views,
 		{
 			name: 'upgrade',
 			className: 'upgrade',

@@ -528,6 +528,10 @@ $gap4: $gap * 4;
 			fill: #000;
 		}
 	}
+
+	&.permission-denied {
+		text-align: center;
+	}
 }
 
 .list-table-status-filters {

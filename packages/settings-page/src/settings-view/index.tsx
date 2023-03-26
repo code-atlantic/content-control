@@ -14,7 +14,10 @@ import PermissionsTab from './tabs/permissions';
 
 import type { TabComponent } from '../types';
 
-const { pluginUrl } = contentControlSettingsPage;
+const {
+	pluginUrl,
+	permissions: { manage_settings: userCanManageSettings },
+} = contentControlSettingsPage;
 
 const SettingsView = () => {
 	const [ { tab = 'general' }, setParams ] = useQueryParams( {
@@ -98,6 +101,23 @@ const SettingsView = () => {
 
 	const { title, comp: Component } =
 		tabs.find( ( t ) => t.name === tab ) ?? {};
+
+	// If the user doesn't have the manage_settings permission, show a message.
+	if ( ! userCanManageSettings ) {
+		return (
+			<div className="cc-settings-view permission-denied">
+				<h3>{ __( 'Permission Denied', 'content-control' ) }</h3>
+				<p>
+					<strong>
+						{ __(
+							'You do not have permission to access this page.',
+							'content-control'
+						) }
+					</strong>
+				</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className={ classNames( [ 'cc-settings-view', `tab-${ tab }` ] ) }>

@@ -105,6 +105,12 @@ class Settings extends Controller {
 		wp_enqueue_script( $handle, plugin()->get_url( 'dist/settings-page.js' ), array_merge( $meta['dependencies'], [ 'wp-api' ] ), $meta['version'], true );
 		wp_enqueue_style( $handle, plugin()->get_url( 'dist/settings-page.css' ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
 
+		$permissions = plugin()->get_permissions();
+
+		foreach ( $permissions as $permission => $cap ) {
+			$permissions[ $permission ] = current_user_can( $cap );
+		}
+
 		wp_localize_script( $handle, 'contentControlSettingsPage',
 			[
 				'pluginUrl'    => plugin( 'url' ),
@@ -113,6 +119,7 @@ class Settings extends Controller {
 				'userRoles'    => \ContentControl\Rules\allowed_user_roles(),
 				'rolesAndCaps' => wp_roles()->roles,
 				'version'      => plugin( 'version' ),
+				'permissions'  => $permissions,
 			]
 		);
 

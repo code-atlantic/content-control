@@ -23,14 +23,19 @@ declare global {
 				capabilities: { [ key: string ]: boolean };
 			};
 		};
+		permissions: {
+			manage_settings: boolean;
+			edit_restrictions: boolean;
+			view_block_controls: boolean;
+			edit_block_controls: boolean;
+			[ key: string ]: boolean;
+		};
 		version: string;
 	};
 }
 
-
 export const init = () => {
-
-	const root = document.getElementById( 'content-control-root-container' )
+	const root = document.getElementById( 'content-control-root-container' );
 
 	if ( ! root ) {
 		return;
@@ -38,13 +43,13 @@ export const init = () => {
 
 	createRoot( root ).render(
 		// <StrictMode>
-			<BrowserRouter>
-				<QueryParamProvider adapter={ ReactRouter6Adapter }>
-					<RegistryProvider value={ registry }>
-						<App />
-					</RegistryProvider>
-				</QueryParamProvider>
-			</BrowserRouter>
+		<BrowserRouter>
+			<QueryParamProvider adapter={ ReactRouter6Adapter }>
+				<RegistryProvider value={ registry }>
+					<App />
+				</RegistryProvider>
+			</QueryParamProvider>
+		</BrowserRouter>
 		// </StrictMode>
 	);
-}
+};
