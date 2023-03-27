@@ -1,10 +1,6 @@
 import { StringParam, useQueryParam } from 'use-query-params';
 
-import {
-	Button,
-	Spinner,
-	TabPanel,
-} from '@wordpress/components';
+import { Button, Spinner, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import useSettings from './use-settings';
@@ -42,7 +38,17 @@ const Header = ( { tabs }: Props ) => {
 				className="tabs"
 				orientation="horizontal"
 				initialTabName={ tab !== null ? tab : undefined }
-				onSelect={ ( tabName: string ) => setTab( tabName ) }
+				onSelect={ ( tabName: string ) => {
+					const currentTab = tabs.find( ( t ) => t.name === tabName );
+
+					if ( currentTab?.onClick ) {
+						if ( false === currentTab.onClick() ) {
+							return;
+						}
+					}
+
+					setTab( tabName );
+				} }
 				tabs={ tabs }
 			>
 				{ () => <></> }

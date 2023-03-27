@@ -5,4 +5,5 @@ export type TabComponent = {
 	pageTitle: string;
 	heading: string;
 	comp?: () => JSX.Element;
+	onClick?: () => void | false;
 };
