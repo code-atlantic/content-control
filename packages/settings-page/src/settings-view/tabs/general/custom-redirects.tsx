@@ -1,5 +1,5 @@
 import { URLControl } from '@content-control/components';
-import { Notice, ToggleControl } from '@wordpress/components';
+import { Icon, Notice, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import useSettings from '../../use-settings';
@@ -16,30 +16,28 @@ const CustomRedirects = () => {
 		{
 			name: 'login',
 			label: __( 'Customize Login URL', 'content-control' ),
-			description:
-				'Purus ut feugiat mattis tortor risus, eget diamdictum interdum.',
+			description: '',
 		},
 		{
 			name: 'registration',
 			label: __( 'Customize Registration URL', 'content-control' ),
-			description:
-				'Purus ut feugiat mattis tortor risus, eget diamdictum interdum.',
+			description: '',
 		},
 		{
 			name: 'recovery',
 			label: __( 'Customize Recovery URL', 'content-control' ),
-			description:
-				'Purus ut feugiat mattis tortor risus, eget diamdictum interdum.',
+			description: '',
 		},
 	];
 
 	return (
 		<>
 			<Notice status="warning" isDismissible={ false }>
-				{ __(
-					'Note: Overriding these URLs can sometimes cause issues with other plugins, please test after setting.',
-					'content-control'
-				) }
+				<Icon icon="warning" />{ ' ' }
+					{ __(
+						'Note: Overriding these URLs can sometimes cause issues with other plugins, please test after setting.',
+						'content-control'
+					) }
 			</Notice>
 
 			{ urlOverrideConfig.map( ( { name, label, description } ) => (
