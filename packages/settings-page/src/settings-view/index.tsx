@@ -3,16 +3,16 @@ import './editor.scss';
 import classNames from 'classnames';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Button } from '@wordpress/components';
+import { Button, Flex, FlexItem } from '@wordpress/components';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 import Header from './header';
-import BlockManagerTab from './tabs/block-manager';
+import BlockControlsTab from './tabs/block-controls';
 import GeneralTab from './tabs/general';
-import PermissionsTab from './tabs/permissions';
 
 import type { TabComponent } from '../types';
+import Section from './section';
 
 const {
 	pluginUrl,
@@ -35,18 +35,20 @@ const SettingsView = () => {
 				comp: GeneralTab,
 			},
 			{
-				name: 'permissions',
-				title: __( 'Permissions', 'content-control' ),
-				comp: PermissionsTab,
-			},
-			{
-				name: 'block-manager',
-				title: __( 'Block Manager', 'content-control' ),
-				comp: BlockManagerTab,
+				name: 'block-controls',
+				title: __( 'Block Controls', 'content-control' ),
+				comp: BlockControlsTab,
 			},
 			{
 				name: 'preset-manager',
-				title: __( 'Preset Manager', 'content-control' ),
+				title: (
+					<>
+						{ __( 'Preset Manager', 'content-control' ) }
+						<span className="branding-pro-tag">
+							{ __( 'Pro', 'content-control' ) }
+						</span>
+					</>
+				),
 				comp: () => (
 					<div className="preset-manager-preview">
 						<img
@@ -91,11 +93,52 @@ const SettingsView = () => {
 			// 	title: __( 'Advanced Options', 'content-control' ),
 			// 	comp: () => <BlockManagerTab { ...componentProps } />,
 			// },
-			// {
-			// 	name: 'licensing',
-			// 	title: __( 'Licensing', 'content-control' ),
-			// 	comp: () => <BlockManagerTab { ...componentProps } />,
-			// },
+			{
+				name: 'licensing',
+				title: __( 'Licensing', 'content-control' ),
+				comp: () => (
+					<Section title="Content Control Pro">
+						<Flex>
+							<FlexItem>
+								<Flex
+									direction="column"
+									align="center"
+									justify="center"
+								>
+									<h3>
+										{ __(
+											'Coming Soon!',
+											'content-control'
+										) }
+									</h3>
+									<p>
+										{ __(
+											'Content Control Pro will be available soon. Sign up for our newsletter to be notified when it is released.',
+											'content-control'
+										) }
+									</p>
+									<Button
+										variant="primary"
+										href="https://contentcontrolplugin.com/newsletter/"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ __( 'Sign Up', 'content-control' ) }
+									</Button>
+								</Flex>
+							</FlexItem>
+							<FlexItem>
+								<img
+									src={ `${ pluginUrl }assets/images/pro-preview.svg` }
+								/>
+								<h3>
+									{ __( 'Pro Features:', 'content-control' ) }
+								</h3>
+							</FlexItem>
+						</Flex>
+					</Section>
+				),
+			},
 		]
 	) as TabComponent[];
 

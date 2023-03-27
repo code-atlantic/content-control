@@ -1,33 +1,35 @@
-import type { IconProps } from '@wordpress/icons/build-types/icon';
-
-import { customRedirect, permissions as permissionsIcon } from '@content-control/icons';
+import {
+	blockManager as blockManagerIcon,
+	monitor,
+} from '@content-control/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 import Section from '../../section';
-import CustomRedirects from './custom-redirects';
-import PermissionsSection from './permissions';
+import BlockManager from './block-manager';
+import DeviceMediaQueries from './device-media-queries';
 
 import type { TabComponent } from '../../../types';
+import type { IconProps } from '@wordpress/icons/build-types/icon';
 
-const GeneralTab = () => {
+const BlockControlsTab = () => {
 	// Filtered & mappable list of TabComponent definitions.
 	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 	const sections: SectionList = applyFilters(
 		'contentControl.generalSettingsTabSections',
 		[
 			{
-				name: 'redirects',
-				title: __( 'Custom Redirects', 'content-control' ),
-				icon: customRedirect,
-				comp: CustomRedirects,
+				name: 'media-queries',
+				title: __( 'Device & Media Queries', 'content-control' ),
+				icon: monitor,
+				comp: DeviceMediaQueries,
 			},
 			{
-				name: 'permissions',
-				title: __( 'Permissions', 'content-control' ),
-				icon: permissionsIcon,
-				comp: PermissionsSection,
-			}
+				name: 'block-manger',
+				title: __( 'Block Manager', 'content-control' ),
+				icon: blockManagerIcon,
+				comp: BlockManager,
+			},
 		]
 	) as SectionList;
 
@@ -42,4 +44,4 @@ const GeneralTab = () => {
 	);
 };
 
-export default GeneralTab;
+export default BlockControlsTab;

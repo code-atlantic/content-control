@@ -21,7 +21,7 @@ import { search } from '@wordpress/icons';
 import Section from '../../section';
 import useSettings from '../../use-settings';
 
-const BlockManagerTab = () => {
+const BlockControlsTab = () => {
 	const {
 		settings: { excludedBlocks = [] },
 		stageUnsavedChanges: updateSettings,
@@ -100,7 +100,7 @@ const BlockManagerTab = () => {
 						<h3>{ __( 'Available Blocks', 'content-control' ) }</h3>
 						<p>
 							{ __(
-								'Enable Content Control on the selected blocks.',
+								'Control which blocks controls will be available for.',
 								'content-control'
 							) }
 						</p>
@@ -244,4 +244,4 @@ const BlockManagerTab = () => {
 	);
 };
 
-export default BlockManagerTab;
+export default BlockControlsTab;
