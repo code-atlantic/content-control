@@ -1,6 +1,7 @@
-import type { IconProps } from '@wordpress/icons/build-types/icon';
-
-import { customRedirect, permissions as permissionsIcon } from '@content-control/icons';
+import {
+	customRedirect,
+	permissions as permissionsIcon,
+} from '@content-control/icons';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
@@ -8,6 +9,7 @@ import Section from '../../section';
 import CustomRedirects from './custom-redirects';
 import PermissionsSection from './permissions';
 
+import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type { TabComponent } from '../../../types';
 
 const GeneralTab = () => {
@@ -24,10 +26,10 @@ const GeneralTab = () => {
 			},
 			{
 				name: 'permissions',
-				title: __( 'Permissions', 'content-control' ),
+				title: __( 'Plugin Permissions', 'content-control' ),
 				icon: permissionsIcon,
 				comp: PermissionsSection,
-			}
+			},
 		]
 	) as SectionList;
 

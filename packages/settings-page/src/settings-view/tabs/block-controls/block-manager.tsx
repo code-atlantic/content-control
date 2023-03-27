@@ -3,7 +3,9 @@ import './editor.scss';
 import classNames from 'classnames';
 
 import { settingsStore } from '@content-control/core-data';
-import { block as blockIcon, blockManager as blockManagerIcon } from '@content-control/icons';
+import {
+	block as blockIcon,
+} from '@content-control/icons';
 import {
 	Button,
 	Flex,
@@ -18,7 +20,6 @@ import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { search } from '@wordpress/icons';
 
-import Section from '../../section';
 import useSettings from '../../use-settings';
 
 const BlockControlsTab = () => {
@@ -90,157 +91,145 @@ const BlockControlsTab = () => {
 	}, [ knownBlockTypes, searchText ] );
 
 	return (
-		<Section
-			title={ __( 'Block Manager', 'content-control' ) }
-			icon={ blockManagerIcon }
-		>
-			<>
-				<header>
-					<div className="block-info">
-						<h3>{ __( 'Available Blocks', 'content-control' ) }</h3>
-						<p>
-							{ __(
-								'Control which blocks controls will be available for.',
-								'content-control'
-							) }
-						</p>
-					</div>
-					<div className="block-search">
-						<Icon icon={ search } />
-						<TextControl
-							placeholder={ __(
-								'Search Blocks…',
-								'content-control'
-							) }
-							value={ searchText }
-							onChange={ setSearchText }
-						/>
-						<Flex justify="space-around">
-							<Button
-								variant="link"
-								onClick={ () => {
-									const blocksToEnable = filteredBlockTypes
-										.map( ( block ) => block.name )
-										.filter(
-											( blockName ) =>
-												isBlockDisabled( blockName ) &&
-												excludedBlocks.includes(
-													blockName
-												)
-										);
+		<>
+			<header>
+				<div className="block-info">
+					<h3>{ __( 'Available Blocks', 'content-control' ) }</h3>
+					<p>
+						{ __(
+							'Control which blocks controls will be available for.',
+							'content-control'
+						) }
+					</p>
+				</div>
+				<div className="block-search">
+					<Icon icon={ search } />
+					<TextControl
+						placeholder={ __(
+							'Search Blocks…',
+							'content-control'
+						) }
+						value={ searchText }
+						onChange={ setSearchText }
+					/>
+					<Flex justify="space-around">
+						<Button
+							variant="link"
+							onClick={ () => {
+								const blocksToEnable = filteredBlockTypes
+									.map( ( block ) => block.name )
+									.filter(
+										( blockName ) =>
+											isBlockDisabled( blockName ) &&
+											excludedBlocks.includes( blockName )
+									);
 
-									updateSettings( {
-										excludedBlocks: excludedBlocks.filter(
+								updateSettings( {
+									excludedBlocks: excludedBlocks.filter(
+										( blockName ) =>
+											! blocksToEnable.includes(
+												blockName
+											)
+									),
+								} );
+							} }
+						>
+							{ __( 'Enable All', 'content-control' ) }
+						</Button>
+						<Button
+							variant="link"
+							onClick={ () => {
+								const blocksToDisable = filteredBlockTypes
+									.map( ( block ) => block.name )
+									.filter(
+										( blockName ) =>
+											! isBlockDisabled( blockName ) &&
+											! excludedBlocks.includes(
+												blockName
+											)
+									);
+
+								updateSettings( {
+									excludedBlocks: [
+										...excludedBlocks.filter(
 											( blockName ) =>
-												! blocksToEnable.includes(
+												! blocksToDisable.includes(
 													blockName
 												)
 										),
-									} );
-								} }
-							>
-								{ __( 'Enable All', 'content-control' ) }
-							</Button>
-							<Button
-								variant="link"
-								onClick={ () => {
-									const blocksToDisable = filteredBlockTypes
-										.map( ( block ) => block.name )
-										.filter(
-											( blockName ) =>
-												! isBlockDisabled(
-													blockName
-												) &&
-												! excludedBlocks.includes(
-													blockName
-												)
-										);
-
-									updateSettings( {
-										excludedBlocks: [
-											...excludedBlocks.filter(
-												( blockName ) =>
-													! blocksToDisable.includes(
-														blockName
-													)
-											),
-											...blocksToDisable,
-										],
-									} );
-								} }
-							>
-								{ __( 'Disable All', 'content-control' ) }
-							</Button>
-						</Flex>
-					</div>
-				</header>
-
-				<div className="block-list">
-					{ blockTypes.length > 0 ? (
-						filteredBlockTypes.map(
-							( { name, title, description } ) => {
-								const disabled = isBlockDisabled( name );
-
-								return (
-									<div
-										key={ name }
-										className={ classNames(
-											'block-list-item',
-											disabled && 'is-disabled'
-										) }
-									>
-										<div className="block-icon">
-											<Icon
-												icon={ blockIcon }
-												size={ 30 }
-											/>
-										</div>
-										<div className="block-info">
-											<h4 className="block-name">
-												{ title }
-											</h4>
-											{ description && (
-												<p className="block-description">
-													{ description }
-												</p>
-											) }
-										</div>
-
-										<div className="block-toggle">
-											<ToggleControl
-												label={
-													! disabled
-														? __(
-																'Enabled',
-																'content-control'
-														  )
-														: __(
-																'Disabled',
-																'content-control'
-														  )
-												}
-												hideLabelFromVision={ true }
-												checked={ ! disabled }
-												onChange={ () =>
-													toggleBlockDisabled( name )
-												}
-											/>
-										</div>
-									</div>
-								);
-							}
-						)
-					) : (
-						<Notice status="warning" isDismissible={ false }>
-							{ __(
-								'If there are no blocks shown when you load this page, you may need to open the editor for a few different pages & posts to index the list of block types.',
-								'content-control'
-							) }
-						</Notice>
-					) }
+										...blocksToDisable,
+									],
+								} );
+							} }
+						>
+							{ __( 'Disable All', 'content-control' ) }
+						</Button>
+					</Flex>
 				</div>
-			</>
-		</Section>
+			</header>
+
+			<div className="block-list">
+				{ blockTypes.length > 0 ? (
+					filteredBlockTypes.map(
+						( { name, title, description } ) => {
+							const disabled = isBlockDisabled( name );
+
+							return (
+								<div
+									key={ name }
+									className={ classNames(
+										'block-list-item',
+										disabled && 'is-disabled'
+									) }
+								>
+									<div className="block-icon">
+										<Icon icon={ blockIcon } size={ 30 } />
+									</div>
+									<div className="block-info">
+										<h4 className="block-name">
+											{ title }
+										</h4>
+										{ description && (
+											<p className="block-description">
+												{ description }
+											</p>
+										) }
+									</div>
+
+									<div className="block-toggle">
+										<ToggleControl
+											label={
+												! disabled
+													? __(
+															'Enabled',
+															'content-control'
+													  )
+													: __(
+															'Disabled',
+															'content-control'
+													  )
+											}
+											hideLabelFromVision={ true }
+											checked={ ! disabled }
+											onChange={ () =>
+												toggleBlockDisabled( name )
+											}
+										/>
+									</div>
+								</div>
+							);
+						}
+					)
+				) : (
+					<Notice status="warning" isDismissible={ false }>
+						{ __(
+							'If there are no blocks shown when you load this page, you may need to open the editor for a few different pages & posts to index the list of block types.',
+							'content-control'
+						) }
+					</Notice>
+				) }
+			</div>
+		</>
 	);
 };
 

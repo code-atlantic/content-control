@@ -56,23 +56,39 @@ const PermissionsTab = () => {
 			name: 'view_block_controls',
 			label: __( 'View Block Controls', 'content-control' ),
 			default: 'edit_posts',
+			description: __(
+				'Choose who can view block controls in the block editor. These users will see the settings created by others.',
+				'content-control'
+			),
 		},
 		{
 			name: 'edit_block_controls',
 			label: __( 'Edit Block Controls', 'content-control' ),
 			default: 'edit_posts',
+			description: __(
+				'Choose who can edit block controls in the block editor. Users with this role can add or edit controls on blocks.',
+				'content-control'
+			),
 		},
 		// Restrictions
 		{
 			name: 'edit_restrictions',
 			label: __( 'Edit Restriction', 'content-control' ),
 			default: 'manage_options',
+			description: __(
+				'Choose who can manage global restrictions. These users can create, edit, and delete restrictions.',
+				'content-control'
+			),
 		},
 		// Settings
 		{
 			name: 'manage_settings',
 			label: __( 'Manage Settings', 'content-control' ),
 			default: 'manage_options',
+			description: __(
+				'Choose who can manage the plugin settings. These users will see the settings page and can change the plugin settings.',
+				'content-control'
+			),
 		},
 	] ) as { name: string; label: string; default: string }[];
 

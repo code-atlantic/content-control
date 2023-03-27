@@ -16,17 +16,18 @@ const CustomRedirects = () => {
 		{
 			name: 'login',
 			label: __( 'Customize Login URL', 'content-control' ),
-			description: '',
+			description: 'Allows you to override the default login url.',
 		},
 		{
 			name: 'registration',
 			label: __( 'Customize Registration URL', 'content-control' ),
-			description: '',
+			description: 'Allows you to override the default registration url.',
 		},
 		{
 			name: 'recovery',
 			label: __( 'Customize Recovery URL', 'content-control' ),
-			description: '',
+			description:
+				'Allows you to override the default password recovery url.',
 		},
 	];
 
@@ -34,10 +35,10 @@ const CustomRedirects = () => {
 		<>
 			<Notice status="warning" isDismissible={ false }>
 				<Icon icon="warning" />{ ' ' }
-					{ __(
-						'Note: Overriding these URLs can sometimes cause issues with other plugins, please test after setting.',
-						'content-control'
-					) }
+				{ __(
+					'Note: Overriding these URLs can sometimes cause issues with other plugins, please test after setting.',
+					'content-control'
+				) }
 			</Notice>
 
 			{ urlOverrideConfig.map( ( { name, label, description } ) => (
