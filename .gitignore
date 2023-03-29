@@ -43,3 +43,4 @@ packages/*/lib
 .idea
 strauss.phar
 *.zip
+.DS_Store
