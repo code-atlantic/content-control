@@ -21,13 +21,13 @@ function get_all_plugin_options() {
  *
  * Looks to see if the specified setting exists, returns default if not
  *
- * @param string $key Option key.
- * @param bool   $default Default value.
+ * @param string     $key Option key.
+ * @param mixed|bool $default_value Default value.
  *
  * @return mixed|void
  */
-function get_option( $key, $default = false ) {
-	return plugin( 'options' )->get( $key, $default );
+function get_option( $key, $default_value = false ) {
+	return plugin( 'options' )->get( $key, $default_value );
 }
 
 /**

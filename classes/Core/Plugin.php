@@ -12,17 +12,13 @@ namespace ContentControl\Core;
 use ContentControl\Base\Container;
 use ContentControl\Core\Options;
 use ContentControl\Interfaces\Controller;
-use ContentControl\RestAPI;
-use ContentControl\BlockEditor;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Plugin
  *
- * @package ContentControl
- *
- * @property  \ContentControl\Core\Options $options
+ * @package ContentControl\Core
  */
 class Plugin {
 
@@ -73,7 +69,7 @@ class Plugin {
 			$data = $this->process_version_data_migration( $data );
 		}
 
-		if ( version_compare( $data['version'], $version, '<' ) ) {
+		if ( version_compare( $data['version'], (string) $version, '<' ) ) {
 			// Allow processing of small core upgrades.
 			do_action( 'content_control_update_version', $data['version'] );
 
@@ -138,6 +134,11 @@ class Plugin {
 		$this->container['plugin'] = $this;
 
 		/**
+		 * Attach our container to the global.
+		 */
+		$GLOBALS['content_control'] = $this->container;
+
+		/**
 		 * Attach utility functions.
 		 */
 		$this->container['get_path'] = [ $this, 'get_path' ];
@@ -153,7 +154,7 @@ class Plugin {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
 
-		$this->container['rules'] = function ( $c ) {
+		$this->container['rules'] = function () {
 			return new \ContentControl\Rules();
 		};
 
