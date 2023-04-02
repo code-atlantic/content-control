@@ -32,7 +32,7 @@ const useLicense = () => {
 	const isLicenseActive = 'valid' === licenseStatus?.license;
 
 	// Check if the license is deactivated.
-	const isLicenseDeactivated = [ 'deactivated', 'site_inactive' ].includes(
+	const isLicenseDeactivated = [ 'deactivated', 'site_inactive', 'inactive' ].includes(
 		licenseStatus?.license ?? ''
 	);
 
