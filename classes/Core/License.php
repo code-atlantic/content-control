@@ -68,8 +68,18 @@ class License {
 	 * Register hooks.
 	 */
 	public function register_hooks() {
+		add_action( 'init', [ $this, 'autoregister' ] );
 		add_action( 'content_control_license_status_check', [ $this, 'refresh_license_status' ] );
 		add_action( 'admin_init', [ $this, 'schedule_crons' ] );
+	}
+
+	/**
+	 * Autoregister license.
+	 */
+	public function autoregister() {
+		if ( defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && ! empty( \CONTENT_CONTROL_LICENSE_KEY ) && '' === $this->get_license_key() ) {
+				$this->activate_license( \CONTENT_CONTROL_LICENSE_KEY );
+		}
 	}
 
 	/**
