@@ -20,10 +20,12 @@ namespace PHPSTORM_META;
   * NOTE: applies specifically to using the Plugin getter directly.
   * Example Usage: $events = pum_Scheduling_plugin()->get( 'events' );
   */
-override( \ContentControl\Core\Plugin::get(), map( [
+override( \ContentControl\Core\Plugin::get(0), map( [
   // Controllers.
-  'options'    => \ContentControl\Core\Options::class,
-  'rules'    => \ContentControl\Rules::class,
+  '' => '@',
+  'options' => \ContentControl\Core\Options::class,
+  'license' => \ContentControl\Core\License::class,
+  'rules'   => \ContentControl\Rules::class,
 ] ) );
 
  /**
@@ -32,6 +34,8 @@ override( \ContentControl\Core\Plugin::get(), map( [
   */
 override ( \ContentControl\plugin(0), map( [
   // Controllers.
-  'options'    => \ContentControl\Core\Options::class,
-  'rules'    => \ContentControl\Rules::class,
+  '' => '@',
+  'options' => \ContentControl\Core\Options::class,
+  'license' => \ContentControl\Core\License::class,
+  'rules'   => \ContentControl\Rules::class,
 ] ) );
