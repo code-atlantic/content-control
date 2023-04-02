@@ -32,9 +32,11 @@ const useLicense = () => {
 	const isLicenseActive = 'valid' === licenseStatus?.license;
 
 	// Check if the license is deactivated.
-	const isLicenseDeactivated = [ 'deactivated', 'site_inactive', 'inactive' ].includes(
-		licenseStatus?.license ?? ''
-	);
+	const isLicenseDeactivated = [
+		'deactivated',
+		'site_inactive',
+		'inactive',
+	].includes( licenseStatus?.license ?? '' );
 
 	// Check if the license is invalid.
 	const isLicenseInvalid = [ 'invalid', 'failed' ].includes(
@@ -48,11 +50,16 @@ const useLicense = () => {
 
 	// Check if the license is expired.
 	const isLicenseExpired =
-		isLicenseInvalid && 'expired' === licenseStatus?.error;
+		'expired' === licenseStatus?.license ||
+		( [ 'invalid', 'failed' ].includes( licenseStatus?.license ?? '' ) &&
+			'expired' === licenseStatus?.error );
 
 	// Check if the license is disabled.
 	const isLicneseDisabled =
-		isLicenseInvalid && 'disabled' === licenseStatus?.error;
+		'disabled' === licenseStatus?.license ||
+		( isLicenseInvalid && 'disabled' === licenseStatus?.error );
+
+	const isLicenseOverQuota = 'no_activations_left' === licenseStatus?.error;
 
 	// Check if there is an error.
 	const hasError = !! licenseStatus?.error;
@@ -67,7 +74,8 @@ const useLicense = () => {
 		isLicenseActive ||
 		isLicenseDeactivated ||
 		isLicenseExpired ||
-		isLicneseDisabled;
+		isLicneseDisabled ||
+		isLicenseOverQuota;
 
 	// Create a helper function to get the current license status.
 	const getLicenseStatusName = () => {
@@ -105,6 +113,7 @@ const useLicense = () => {
 		isLicenseExpired,
 		isLicenseInvalid,
 		isLicneseDisabled,
+		isLicenseOverQuota,
 		isGeneralError,
 		hasError,
 	};
