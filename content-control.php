@@ -30,8 +30,6 @@ function get_plugin_config() {
 		'slug'          => 'content-control',
 		'version'       => '1.1.9',
 		'option_prefix' => 'content_control',
-		// EDD Product ID for Software Licensing.
-		'edd_id'        => null,
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
 		'fullname'      => \__( 'Content Control', 'content-control' ),
