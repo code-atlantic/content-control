@@ -1,0 +1,1 @@
+export { default as useLicense } from './use-license';
