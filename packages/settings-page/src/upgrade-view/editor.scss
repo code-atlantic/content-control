@@ -1,0 +1,73 @@
+.content-control-license-controls {
+	display: flex;
+	align-items: left;
+    gap: 2px;
+    margin-bottom: 10px;
+
+	> * {
+		margin-top: auto;
+	}
+
+	.components-base-control__field {
+		margin-bottom: 0;
+
+		.components-text-control__input {
+			height: 36px;
+            min-width: 200px;
+		}
+	}
+
+	.components-spinner {
+		width: 24px;
+		height: 24px;
+		// margin: 0;
+	}
+
+	.activate-license {
+		color: green;
+	}
+
+	.deactivate-license {
+		color: darkorange;
+	}
+
+	.remove-license {
+		// background-color: red;
+		color: red;
+	}
+
+	&--active {
+		.activate-license {
+			display: none;
+		}
+	}
+
+	&--expired {
+		.activate-license {
+			display: none;
+		}
+	}
+
+	&--missing {
+		.deactivate-license,
+		.check-license-status,
+		.remove-license {
+			display: none;
+		}
+	}
+
+	&--deactivated {
+		.deactivate-license {
+			display: none;
+		}
+	}
+
+	&--disabled {
+	}
+
+	&--error {
+	}
+
+	&--unknown {
+	}
+}

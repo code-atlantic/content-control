@@ -1,54 +1,40 @@
-import { Button, Flex, FlexItem } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { key } from '@wordpress/icons';
+import { applyFilters } from '@wordpress/hooks';
+import { Button, Flex, FlexItem } from '@wordpress/components';
+
 import Section from '../settings-view/section';
+
+import LicenseSection from './license';
+
+import type { IconProps } from '@wordpress/icons/build-types/icon';
+import type { TabComponent } from '../types';
 
 const { pluginUrl } = contentControlSettingsPage;
 
 const UpgradeView = () => {
+	// Filtered & mappable list of TabComponent definitions.
+	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+	const sections: SectionList = applyFilters(
+		'contentControl.generalSettingsTabSections',
+		[
+			{
+				name: 'license',
+				title: __( 'Content Control Pro License', 'content-control' ),
+				icon: key,
+				comp: LicenseSection,
+			},
+		]
+	) as SectionList;
+
 	return (
-		<Section title="Content Control Pro">
-			<Flex>
-				<FlexItem>
-					<Flex direction="column" align="center" justify="center">
-						<h3>{ __( 'Coming Soon!', 'content-control' ) }</h3>
-						<p>
-							{ __(
-								'Content Control Pro will be available soon. Sign up for our newsletter to be notified when it is released.',
-								'content-control'
-							) }
-						</p>
-						<Button
-							variant="primary"
-							href="https://contentcontrolplugin.com/"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							{ __( 'Learn More', 'content-control' ) }
-						</Button>
-					</Flex>
-				</FlexItem>
-				<FlexItem>
-					<img
-						src={ `${ pluginUrl }assets/images/pro-preview.svg` }
-					/>
-					<h3>{ __( 'Pro Features:', 'content-control' ) }</h3>
-					<ul>
-						<li>
-							{ __(
-								'Customize the block controls',
-								'content-control'
-							) }
-						</li>
-						<li>
-							{ __(
-								'Customize the block toolbar',
-								'content-control'
-							) }
-						</li>
-					</ul>
-				</FlexItem>
-			</Flex>
-		</Section>
+		<>
+			{ sections.map( ( { name, title, icon, comp: Component } ) => (
+				<Section key={ name } title={ title } icon={ icon }>
+					{ Component ? <Component /> : title }
+				</Section>
+			) ) }
+		</>
 	);
 };
 
