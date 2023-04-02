@@ -114,8 +114,6 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 					  )
 			)
 			.filter( ( r ) => {
-				console.log( r.settings.who, filters.restrictedTo );
-
 				return filters.restrictedTo === ''
 					? true
 					: r.settings.who === filters.restrictedTo;
