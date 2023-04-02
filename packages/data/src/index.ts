@@ -3,6 +3,7 @@ import { createRegistry } from '@wordpress/data';
 
 import {
 	restrictionsStore,
+	licenseStore,
 	settingsStore,
 	urlSearchStore,
 } from '@content-control/core-data';
@@ -25,6 +26,7 @@ declare module '@wordpress/data' {
 const registry = createRegistry( {} );
 
 registry.register( coreStore );
+registry.register( licenseStore );
 registry.register( settingsStore );
 registry.register( restrictionsStore );
 registry.register( urlSearchStore );
