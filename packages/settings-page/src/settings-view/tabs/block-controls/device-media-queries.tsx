@@ -9,7 +9,7 @@ import {
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-import useSettings from '../../use-settings';
+import { useSettings } from '@content-control/core-data';
 
 interface RegisteredMediaQuery {
 	id: 'mobile' | 'tablet' | 'desktop';

@@ -2,7 +2,7 @@ import { URLControl } from '@content-control/components';
 import { Icon, Notice, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-import useSettings from '../../use-settings';
+import { useSettings } from '@content-control/core-data';
 
 import type { URLOverrideTypes } from '@content-control/core-data';
 

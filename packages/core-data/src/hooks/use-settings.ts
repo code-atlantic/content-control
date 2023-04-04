@@ -1,7 +1,7 @@
-import { settingsStore } from '@content-control/core-data';
+import { settingsStore } from '../settings/index';
 import { useDispatch, useSelect } from '@wordpress/data';
 
-import type { Settings } from '@content-control/core-data';
+import type { Settings } from '../settings/types';
 
 const useSettings = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.

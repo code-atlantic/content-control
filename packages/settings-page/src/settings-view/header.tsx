@@ -1,9 +1,9 @@
 import { StringParam, useQueryParam } from 'use-query-params';
 
-import { Button, Spinner, TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { Button, Spinner, TabPanel } from '@wordpress/components';
 
-import useSettings from './use-settings';
+import { useSettings } from '@content-control/core-data';
 
 import type { TabComponent } from '../types';
 

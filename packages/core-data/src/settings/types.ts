@@ -42,6 +42,10 @@ export type Settings = {
 			breakpoint: number;
 		};
 	};
+	updates: {
+		autoUpdate: boolean;
+		enableBetas: boolean;
+	};
 };
 
 export type SettingsState = {

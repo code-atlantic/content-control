@@ -9,7 +9,7 @@ import { useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { sprintf, __ } from '@wordpress/i18n';
 
-import useSettings from '../../use-settings';
+import { useSettings } from '@content-control/core-data';
 
 import type { PermissionValue } from '@content-control/core-data';
 

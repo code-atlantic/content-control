@@ -2,10 +2,8 @@ import './editor.scss';
 
 import classNames from 'classnames';
 
-import { settingsStore } from '@content-control/core-data';
-import {
-	block as blockIcon,
-} from '@content-control/icons';
+import { settingsStore, useSettings } from '@content-control/core-data';
+import { block as blockIcon } from '@content-control/icons';
 import {
 	Button,
 	Flex,
@@ -19,8 +17,6 @@ import { useMemo, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { search } from '@wordpress/icons';
-
-import useSettings from '../../use-settings';
 
 const BlockControlsTab = () => {
 	const {

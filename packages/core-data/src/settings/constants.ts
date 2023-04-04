@@ -45,6 +45,10 @@ export const settingsDefaults: Settings = {
 			breakpoint: 1440,
 		},
 	},
+	updates: {
+		autoUpdate: false,
+		enableBetas: false,
+	},
 };
 
 export const initialState: SettingsState = {
