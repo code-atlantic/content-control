@@ -301,7 +301,7 @@ class License extends WP_REST_Controller {
 	/**
 	 * Check update settings permissions.
 	 *
-	 * @return WP_Error|bool
+	 * @return bool
 	 */
 	public function manage_license_permissions() {
 		return current_user_can( 'manage_options' ) || current_user_can( 'activate_plugins' );
