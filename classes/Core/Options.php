@@ -65,14 +65,37 @@ class Options {
 	 * Looks to see if the specified setting exists, returns default if not
 	 *
 	 * @param string $key Option key.
-	 * @param bool   $default Default value.
+	 * @param bool   $default_value Default value.
 	 *
 	 * @return mixed|void
 	 */
-	public function get( $key = '', $default = false ) {
-		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default;
+	public function get( $key = '', $default_value = false ) {
+		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default_value;
 
-		return apply_filters( $this->prefix . 'get_option', $value, $key, $default );
+		return apply_filters( $this->prefix . 'get_option', $value, $key, $default_value );
+	}
+
+	/**
+	 * Get an option using a dot notation key.
+	 *
+	 * @param string $key Option key in dot notation.
+	 * @param bool   $default_value Default value.
+	 *
+	 * @return mixed|void
+	 */
+	public function get_notation( $key = '', $default_value = false ) {
+		$keys = explode( '.', $key );
+		$data = $this->get_all();
+
+		foreach ( $keys as $key ) {
+			if ( ! isset( $data[ $key ] ) ) {
+				return $default_value;
+			}
+
+			$data = $data[ $key ];
+		}
+
+		return $data;
 	}
 
 	/**
