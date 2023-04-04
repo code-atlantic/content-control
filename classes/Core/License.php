@@ -12,7 +12,7 @@ namespace ContentControl\Core;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Shortcodes
+ * License management.
  *
  * @package ContentControl
  */
@@ -250,7 +250,7 @@ class License {
 			'edd_action'  => 'check_license',
 			'license'     => $this->get_license_key(),
 			'item_id'     => self::ID,
-			'item_name'   => rawurlencode( 'Content Control' ),
+			'item_name'   => rawurlencode( 'Content Control Pro' ),
 			'url'         => home_url(),
 			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production',
 		];
