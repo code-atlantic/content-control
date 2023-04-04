@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { key } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
-import { Button, Flex, FlexItem } from '@wordpress/components';
 
 import Section from '../settings-view/section';
 
@@ -10,7 +9,7 @@ import LicenseSection from './license';
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type { TabComponent } from '../types';
 
-const { pluginUrl } = contentControlSettingsPage;
+// const { pluginUrl } = contentControlSettingsPage;
 
 const UpgradeView = () => {
 	// Filtered & mappable list of TabComponent definitions.

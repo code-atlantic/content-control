@@ -154,7 +154,7 @@ const LicenseTab = () => {
 							? // first 3 and last 5 should be unmasked.
 							  value.replace(
 									/^(.{3})(.*)(.{5})$/,
-									( match, p1, p2, p3 ) =>
+									( _match, p1, p2, p3 ) =>
 										p1 + p2.replace( /./g, '*' ) + p3
 							  )
 							: value
