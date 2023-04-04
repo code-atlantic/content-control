@@ -23,8 +23,9 @@ namespace PHPSTORM_META;
 override( \ContentControl\Core\Plugin::get(0), map( [
   // Controllers.
   '' => '@',
-  'options' => \ContentControl\Core\Options::class,
+  'connect' => \ContentControl\Core\Connect::class,
   'license' => \ContentControl\Core\License::class,
+  'options' => \ContentControl\Core\Options::class,
   'rules'   => \ContentControl\Rules::class,
 ] ) );
 
@@ -35,7 +36,8 @@ override( \ContentControl\Core\Plugin::get(0), map( [
 override ( \ContentControl\plugin(0), map( [
   // Controllers.
   '' => '@',
-  'options' => \ContentControl\Core\Options::class,
+  'connect' => \ContentControl\Core\Connect::class,
   'license' => \ContentControl\Core\License::class,
+  'options' => \ContentControl\Core\Options::class,
   'rules'   => \ContentControl\Rules::class,
 ] ) );

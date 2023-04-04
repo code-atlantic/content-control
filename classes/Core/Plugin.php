@@ -158,6 +158,7 @@ class Plugin {
 			return new \ContentControl\Rules();
 		};
 
+		$this->container['connect'] = new \ContentControl\Core\Connect( $this->container );
 		$this->container['license'] = new \ContentControl\Core\License( $this->container );
 	}
 

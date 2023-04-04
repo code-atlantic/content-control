@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Content Control
- * Plugin URI: https://wordpress.org/plugins/content-control/
+ * Plugin URI: https://contentcontrolplugin.com/
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
  * Version: 1.1.10
  * Author: Code Atlantic
@@ -36,8 +36,10 @@ function get_plugin_config() {
 		'min_php_ver'   => '5.6.0',
 		'min_wp_ver'    => '5.6.0',
 		'file'          => __FILE__,
+		'basename'      => \plugin_basename( __FILE__ ),
 		'url'           => \plugin_dir_url( __FILE__ ),
 		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
+		'api_url'       => 'https://contentcontrolplugin.com/',
 	];
 }
 
