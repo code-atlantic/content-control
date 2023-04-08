@@ -1,8 +1,8 @@
 .content-control-license-controls {
 	display: flex;
 	align-items: left;
-    gap: 2px;
-    margin-bottom: 10px;
+	gap: 2px;
+	margin-bottom: 10px;
 
 	> * {
 		margin-top: auto;
@@ -13,7 +13,7 @@
 
 		.components-text-control__input {
 			height: 36px;
-            min-width: 200px;
+			min-width: 200px;
 		}
 	}
 
@@ -69,5 +69,20 @@
 	}
 
 	&--unknown {
+	}
+}
+
+.content-control-license-connect-notice {
+	font-size: 1.2em;
+
+	.components-popover__content {
+		min-width: max-content;
+		padding: 2em 3em;
+		margin-top: -10vh;
+
+		p {
+			font-size: 1em;
+			margin: 0;
+		}
 	}
 }

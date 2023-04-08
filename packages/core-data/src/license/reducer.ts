@@ -1,10 +1,11 @@
 import { ACTION_TYPES } from './constants';
 
-import type { License, LicenseState, LicenseStore } from './types';
+import type { License, LicenseConnect, LicenseState, LicenseStore } from './types';
 import type { Statuses } from '../constants';
 
 const {
 	ACTIVATE_LICENSE,
+	CONNECT_SITE,
 	DEACTIVATE_LICENSE,
 	REMOVE_LICENSE,
 	UPDATE_LICENSE_KEY,
@@ -19,6 +20,7 @@ interface ActionPayloadTypes {
 	license: License;
 	licenseKey: License[ 'key' ];
 	licenseStatus: License[ 'status' ];
+	connectInfo: LicenseConnect;
 	// Boilerplate.
 	actionName: LicenseStore[ 'ActionNames' ];
 	status: Statuses;
@@ -32,6 +34,7 @@ const reducer = (
 		license,
 		licenseKey,
 		licenseStatus,
+		connectInfo,
 		// Boilerplate
 		actionName,
 		status,
@@ -48,6 +51,16 @@ const reducer = (
 					...state.license,
 					status: licenseStatus,
 				},
+			};
+
+		case CONNECT_SITE:
+			return {
+				...state,
+				license: {
+					...state.license,
+					status: licenseStatus,
+				},
+				connectInfo,
 			};
 
 		case UPDATE_LICENSE_KEY:

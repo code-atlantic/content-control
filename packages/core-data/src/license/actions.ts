@@ -8,11 +8,18 @@ import { getResourcePath } from './utils';
 
 import type { Statuses } from '../constants';
 
-import type { License, LicenseKey, LicenseStore } from './types';
+import type {
+	License,
+	LicenseStatusResponse,
+	LicenseActivationResponse,
+	LicenseKey,
+	LicenseStore,
+} from './types';
 import { resolveSelect } from '@wordpress/data';
 
 const {
 	ACTIVATE_LICENSE,
+	CONNECT_SITE,
 	DEACTIVATE_LICENSE,
 	UPDATE_LICENSE_KEY,
 	REMOVE_LICENSE,
@@ -59,19 +66,32 @@ export function* activateLicense( licenseKey?: LicenseKey ) {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
-		const result: LicenseKey = yield fetch( getResourcePath( 'activate' ), {
-			method: 'POST',
-			body: { licenseKey },
-		} );
+		const result: LicenseActivationResponse = yield fetch(
+			getResourcePath( 'activate' ),
+			{
+				method: 'POST',
+				body: { licenseKey },
+			}
+		);
 
 		if ( result ) {
+			const { status, connectInfo } = result;
+
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
 
+			if ( connectInfo !== undefined ) {
+				return {
+					type: CONNECT_SITE,
+					licenseStatus: status,
+					connectInfo,
+				};
+			}
+
 			return {
 				type: ACTIVATE_LICENSE,
-				licenseStatus: result,
+				licenseStatus: status,
 			};
 		}
 
@@ -107,7 +127,7 @@ export function* deactivateLicense() {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
-		const result: LicenseKey = yield fetch(
+		const result: LicenseStatusResponse = yield fetch(
 			getResourcePath( 'deactivate' ),
 			{
 				method: 'POST',
@@ -121,7 +141,7 @@ export function* deactivateLicense() {
 
 			return {
 				type: DEACTIVATE_LICENSE,
-				licenseStatus: result,
+				licenseStatus: result.status,
 			};
 		}
 
@@ -157,9 +177,12 @@ export function* checkLicenseStatus() {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
-		const result: LicenseKey = yield fetch( getResourcePath( 'status' ), {
-			method: 'POST',
-		} );
+		const result: LicenseStatusResponse = yield fetch(
+			getResourcePath( 'status' ),
+			{
+				method: 'POST',
+			}
+		);
 
 		if ( result ) {
 			// thing was successfully updated so return the action object that will
@@ -168,7 +191,7 @@ export function* checkLicenseStatus() {
 
 			return {
 				type: CHECK_LICENSE_STATUS,
-				licenseStatus: result,
+				licenseStatus: result.status,
 			};
 		}
 
@@ -218,7 +241,7 @@ export function* updateLicenseKey( licenseKey: LicenseKey ) {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
-		const result: LicenseKey = yield fetch( getResourcePath(), {
+		const result: LicenseStatusResponse = yield fetch( getResourcePath(), {
 			method: 'POST',
 			body: { licenseKey },
 		} );
@@ -231,7 +254,7 @@ export function* updateLicenseKey( licenseKey: LicenseKey ) {
 			return {
 				type: UPDATE_LICENSE_KEY,
 				licenseKey,
-				licenseStatus: result,
+				licenseStatus: result.status,
 			};
 		}
 
@@ -267,7 +290,7 @@ export function* removeLicense() {
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
 
-		const result: LicenseKey = yield fetch( getResourcePath(), {
+		const result: boolean = yield fetch( getResourcePath(), {
 			method: 'DELETE',
 		} );
 

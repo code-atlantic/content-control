@@ -193,9 +193,17 @@ class License extends WP_REST_Controller {
 
 			plugin( 'license' )->update_license_key( $license_key );
 
-			$license_status = plugin( 'license' )->activate_license();
+			$license_status = plugin( 'license' )->activate_license( $license_key );
 
-			return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+			$response = [
+				'status ' => $this->clean_license_status( $license_status ),
+			];
+
+			if ( ! plugin()->is_pro_installed() ) {
+				$response['connectInfo'] = plugin( 'connect' )->get_connect_info( $license_key );
+			}
+
+			return new WP_REST_Response( $response, 200 );
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license key could not be saved.', 'content-control' );
 
@@ -235,7 +243,15 @@ class License extends WP_REST_Controller {
 		try {
 			$license_status = plugin( 'license' )->activate_license( $license_key );
 
-			return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+			$response = [
+				'status ' => $this->clean_license_status( $license_status ),
+			];
+
+			if ( ! plugin()->is_pro_installed() ) {
+				$response['connectInfo'] = plugin( 'connect' )->get_connect_info( plugin( 'license' )->get_license_key() );
+			}
+
+			return new WP_REST_Response( $response, 200 );
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license could not be activated.', 'content-control' );
 
@@ -256,7 +272,7 @@ class License extends WP_REST_Controller {
 		try {
 			$license_status = plugin( 'license' )->deactivate_license();
 
-			return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+			return new WP_REST_Response( $this->clean_license_status( [ 'status' => $license_status ] ), 200 );
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license could not be deactivated.', 'content-control' );
 
@@ -277,7 +293,7 @@ class License extends WP_REST_Controller {
 		$license_status = plugin( 'license' )->get_license_status();
 
 		if ( $license_status ) {
-			return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+			return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );
 		} else {
 			return new WP_Error( '404', __( 'Something went wrong.', 'content-control' ), [ 'status' => 404 ] );
 		}
@@ -292,7 +308,7 @@ class License extends WP_REST_Controller {
 		$license_status = plugin( 'license' )->refresh_license_status();
 
 		if ( $license_status ) {
-			return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+			return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );
 		} else {
 			return new WP_Error( '404', __( 'Something went wrong.', 'content-control' ), [ 'status' => 404 ] );
 		}

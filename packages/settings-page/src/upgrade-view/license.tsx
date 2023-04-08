@@ -2,7 +2,7 @@ import './editor.scss';
 
 import classNames from 'classnames';
 import { __, sprintf } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { check, linkOff, trash, update } from '@wordpress/icons';
 import {
 	Button,
@@ -10,16 +10,17 @@ import {
 	TextControl,
 	Spinner,
 	Icon,
+	Popover,
 } from '@wordpress/components';
 
 import { LicenseKey, useLicense } from '@content-control/core-data';
 
 const LicenseTab = () => {
 	const {
+		connectInfo,
 		licenseKey,
 		licenseStatus,
 		isSaving,
-		updateLicenseKey,
 		activateLicense,
 		deactivateLicense,
 		checkLicenseStatus,
@@ -38,7 +39,41 @@ const LicenseTab = () => {
 	const { expires, error_message } = licenseStatus;
 	const [ value, setValue ] = useState< LicenseKey >( licenseKey );
 
+	const connectPopup = useRef< Window | null >( null );
+	const [ showConnectNotice, setShowConnectNotice ] = useState( false );
+
 	const keyHasChanged = value !== licenseKey;
+
+	useEffect( () => {
+		if ( typeof connectInfo === 'undefined' ) {
+			connectPopup.current?.close();
+			connectPopup.current = null;
+			return;
+		}
+
+		setShowConnectNotice( true );
+
+		// Open a new sized window to connect to the license store.
+		connectPopup.current = window.open(
+			connectInfo.url,
+			'content-control-license-connect',
+			'width=800,height=600'
+		);
+
+		// Listen for the popup to close and check the license status.
+		const interval = setInterval( () => {
+			if ( connectPopup.current?.closed ) {
+				clearInterval( interval );
+				checkLicenseStatus();
+				setShowConnectNotice( false );
+
+				// Wait a second for the license status to update and then reload the page.
+				// setTimeout( () => {
+				// 	window.location.reload();
+				// }, 1000 );
+			}
+		}, 1000 );
+	}, [ connectInfo ] );
 
 	// Listen for changes from the license store and update the local state.
 	useEffect( () => {
@@ -140,6 +175,19 @@ const LicenseTab = () => {
 
 	return (
 		<>
+			{ showConnectNotice && (
+				<Popover
+					className="content-control-license-connect-notice"
+					position="middle center"
+				>
+					<p>
+						{ __(
+							'Please wait while we connect to the license store...',
+							'content-control'
+						) }
+					</p>
+				</Popover>
+			) }
 			<div
 				className={ classNames( [
 					'content-control-license-controls',
@@ -168,7 +216,7 @@ const LicenseTab = () => {
 						const pastedText =
 							event.clipboardData.getData( 'text' );
 						if ( ! isSaving ) {
-							updateLicenseKey( pastedText );
+							activateLicense( pastedText );
 							setValue( pastedText );
 						}
 					} }

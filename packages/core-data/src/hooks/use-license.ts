@@ -3,19 +3,23 @@ import { useDispatch, useSelect } from '@wordpress/data';
 
 const useLicense = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
-	const { licenseKey, licenseStatus, isSaving } = useSelect( ( select ) => {
-		const storeSelect = select( licenseStore );
-		return {
-			licenseKey: storeSelect.getLicenseKey(),
-			licenseStatus: storeSelect.getLicenseStatus(),
-			isSaving:
-				storeSelect.isDispatching( 'activateLicense' ) ||
-				storeSelect.isDispatching( 'deactivateLicense' ) ||
-				storeSelect.isDispatching( 'checkLicenseStatus' ) ||
-				storeSelect.isDispatching( 'updateLicenseKey' ) ||
-				storeSelect.isDispatching( 'removeLicense' ),
-		};
-	}, [] );
+	const { connectInfo, licenseKey, licenseStatus, isSaving } = useSelect(
+		( select ) => {
+			const storeSelect = select( licenseStore );
+			return {
+				connectInfo: storeSelect.getConnectInfo(),
+				licenseKey: storeSelect.getLicenseKey(),
+				licenseStatus: storeSelect.getLicenseStatus(),
+				isSaving:
+					storeSelect.isDispatching( 'activateLicense' ) ||
+					storeSelect.isDispatching( 'deactivateLicense' ) ||
+					storeSelect.isDispatching( 'checkLicenseStatus' ) ||
+					storeSelect.isDispatching( 'updateLicenseKey' ) ||
+					storeSelect.isDispatching( 'removeLicense' ),
+			};
+		},
+		[]
+	);
 
 	// Grab needed action dispatchers.
 	const {
@@ -97,6 +101,7 @@ const useLicense = () => {
 	};
 
 	return {
+		connectInfo,
 		licenseKey,
 		licenseStatus,
 		activateLicense,
