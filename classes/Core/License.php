@@ -328,6 +328,12 @@ class License {
 
 		$this->update_license_status( $license_status );
 
+		if ( $this->is_license_active() ) {
+			if ( ! get_option( 'content_control_pro_activation_date', false ) ) {
+				update_option( 'content_control_pro_activation_date', time() );
+			}
+		}
+
 		return $this->get_license_status();
 	}
 
