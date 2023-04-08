@@ -258,4 +258,24 @@ class Plugin {
 
 		return isset( $permissions[ $cap ] ) ? $permissions[ $cap ] : 'manage_options';
 	}
+
+	/**
+	 * Check if this is pro version.
+	 *
+	 * @return boolean
+	 */
+	public function is_pro() {
+		$is_pro = $this->get( 'is_pro' );
+
+		return isset( $is_pro ) ? $is_pro : false;
+	}
+
+	/**
+	 * Check if pro version is installed.
+	 *
+	 * @return boolean
+	 */
+	public function is_pro_installed() {
+		return file_exists( WP_PLUGIN_DIR . '/content-control-pro/content-control-pro.php' );
+	}
 }
