@@ -85,6 +85,17 @@ class Connect {
 	}
 
 	/**
+	 * Get the current nonce.
+	 *
+	 * @param string $token Token.
+	 *
+	 * @return string|false
+	 */
+	public function get_nonce_name( $token ) {
+		return self::NONCE_OPTION_NAME . '_' . $token;
+	}
+
+	/**
 	 * Get header Authorization
 	 *
 	 * @return string
@@ -148,7 +159,7 @@ class Connect {
 	 */
 	public function get_connect_info( $license_key ) {
 		$token    = $this->generate_token();
-		$nonce    = wp_create_nonce( self::NONCE_OPTION_NAME );
+		$nonce    = wp_create_nonce( $this->get_nonce_name( $token ) );
 		$webhook  = admin_url( 'admin-ajax.php' );
 		$redirect = add_query_arg(
 			[
@@ -240,13 +251,14 @@ class Connect {
 	 * Verify the nonce.
 	 */
 	public function verify_nonce() {
+		$token = $this->get_access_token();
 		$nonce = $this->get_request_nonce();
 
 		if ( ! $nonce ) {
 			$this->kill_connection( self::ERROR_NONCE, 'Missing nonce' );
 		}
 
-		if ( ! wp_verify_nonce( $nonce, self::NONCE_OPTION_NAME ) ) {
+		if ( ! wp_verify_nonce( $nonce, $this->get_nonce_name( $token ) ) ) {
 			$this->kill_connection( self::ERROR_NONCE, 'Invalid nonce' );
 		}
 	}
