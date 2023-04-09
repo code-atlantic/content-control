@@ -20,24 +20,54 @@ namespace PHPSTORM_META;
   * NOTE: applies specifically to using the Plugin getter directly.
   * Example Usage: $events = pum_Scheduling_plugin()->get( 'events' );
   */
-override( \ContentControl\Core\Plugin::get(0), map( [
-  // Controllers.
-  '' => '@',
-  'connect' => \ContentControl\Core\Connect::class,
-  'license' => \ContentControl\Core\License::class,
-  'options' => \ContentControl\Core\Options::class,
-  'rules'   => \ContentControl\Rules::class,
-] ) );
+  override( \ContentControl\Core\Plugin::get(0), map( [
+    // Controllers.
+    '' => '@',
+    'connect' => \ContentControl\Core\Connect::class,
+    'license' => \ContentControl\Core\License::class,
+    'options' => \ContentControl\Core\Options::class,
+    'rules'   => \ContentControl\Rules::class,
+    'upgrader'   => \ContentControl\Core\Upgrader::class,
+  ] ) );
 
  /**
   * NOTE: applies specifically to using the global getter function.
   * Example Usage: $events = pum_scheduling( 'events' );
   */
-override ( \ContentControl\plugin(0), map( [
+  override ( \ContentControl\plugin(0), map( [
+    // Controllers.
+    '' => '@',
+    'connect' => \ContentControl\Core\Connect::class,
+    'license' => \ContentControl\Core\License::class,
+    'options' => \ContentControl\Core\Options::class,
+    'rules'   => \ContentControl\Rules::class,
+    'upgrader'   => \ContentControl\Core\Upgrader::class,
+  ] ) );
+
+  /**
+  * NOTE: applies specifically to using the global getter function.
+  * Example Usage: $events = pum_scheduling( 'events' );
+  */
+  override ( \ContentControl\Base\Container::get(0), map( [
+    // Controllers.
+    '' => '@',
+    'connect' => \ContentControl\Core\Connect::class,
+    'license' => \ContentControl\Core\License::class,
+    'options' => \ContentControl\Core\Options::class,
+    'rules'   => \ContentControl\Rules::class,
+    'upgrader'   => \ContentControl\Core\Upgrader::class,
+  ] ) );
+
+    /**
+  * NOTE: applies specifically to using the global getter function.
+  * Example Usage: $events = pum_scheduling( 'events' );
+  */
+override ( \ContentControl\Base\Container::offsetGet(0), map( [
   // Controllers.
   '' => '@',
   'connect' => \ContentControl\Core\Connect::class,
   'license' => \ContentControl\Core\License::class,
   'options' => \ContentControl\Core\Options::class,
   'rules'   => \ContentControl\Rules::class,
+  'upgrader'   => \ContentControl\Core\Upgrader::class,
 ] ) );
