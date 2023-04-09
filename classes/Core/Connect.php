@@ -10,6 +10,7 @@
 namespace ContentControl\Core;
 
 use function ContentControl\plugin;
+use function ContentControl\Base\Container;
 use function request_filesystem_credentials;
 
 defined( 'ABSPATH' ) || exit;
@@ -39,14 +40,14 @@ class Connect {
 	/**
 	 * Container.
 	 *
-	 * @var Container
+	 * @var \ContentControl\Base\Container
 	 */
 	private $c;
 
 	/**
 	 * Initialize license management.
 	 *
-	 * @param Container $c Container.
+	 * @param \ContentControl\Base\Container $c Container.
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
@@ -368,7 +369,7 @@ class Connect {
 	 */
 	public function get_webhook_args() {
 		$args = [
-			// phpcs:disable WordPre∏ss.Security.NonceVerification.Recommended
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			'file'  => ! empty( $_REQUEST['file'] ) ? esc_url_raw( wp_unslash( $_REQUEST['file'] ) ) : '',
 			'type'  => ! empty( $_REQUEST['type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['type'] ) ) : 'plugin',
 			'slug'  => ! empty( $_REQUEST['slug'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['slug'] ) ) : '',
@@ -411,12 +412,11 @@ class Connect {
 	public function process_webhook() {
 		// 1. Validate the connection is secure & from the API server.
 		$this->validate_connection();
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 		$error = esc_html__( 'There was an error while installing an upgrade. Please download the plugin from contentcontrolplugin.com and install it manually.', 'content-control' );
 
 		// 2. Get the webhook data.
-		$file_args = $this->get_webhook_args();
+		$args = $this->get_webhook_args();
 
 		// 3. Delete the token to prevent abuse.
 		if ( ! self::DEBUG_MODE ) {
@@ -428,102 +428,44 @@ class Connect {
 			wp_send_json_error( $error );
 		}
 
-		switch ( $file_args['type'] ) {
+		// Set the current screen to avoid undefined notices.
+		set_current_screen( 'settings_page_content-control-settings' );
+
+		switch ( $args['type'] ) {
 			case 'plugin':
-				$plugin_file = "{$file_args['slug']}/{$file_args['slug']}.php";
-				if ( is_plugin_active( $plugin_file ) ) {
-				// if ( ! $file_args['force'] && is_plugin_active( $plugin_file ) ) {
-						wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
-				}
-
-				// Set the current screen to avoid undefined notices.
-				set_current_screen( 'settings_page_content-control-settings' );
-
-				// if ( ! $file_args['force'] ) {
-					// Verify plugin not installed.
-					$active = activate_plugin( $plugin_file, '', false, true );
-
-				if ( ! is_wp_error( $active ) ) {
-					wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
-				}
-				// }
-
-				$this->install_plugin( $file_args );
+				$this->install_plugin( $args );
 				break;
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
 	 * Install a plugin.
 	 *
-	 * @param array $file_args The file args.
+	 * @param array $args The file args.
 	 * @return void
 	 */
-	public function install_plugin( $file_args ) {
-		$error = esc_html__( 'There was an error while installing an upgrade. Please download the plugin from contentcontrolplugin.com and install it manually.', 'content-control' );
-
-		// Prepare variables.
-		$url = esc_url_raw(
-			add_query_arg(
-				[
-					'page' => 'content-control-settings',
-					'view' => 'upgrade',
-				],
-				admin_url( 'options-general.php' )
-			)
-		);
-
-		if ( ! function_exists( 'request_filesystem_credentials' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/file.php';
+	public function install_plugin( $args ) {
+		// If not forcing, and already active, return success.
+		if ( ! $args['force'] && is_plugin_active( "{$args['slug']}/{$args['slug']}.php" ) ) {
+			wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
 		}
 
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		// Get the upgrader.
+		$upgrader = $this->c->get( 'upgrader' );
+
+		// Install the plugin. (if installed already, this will replace it using upgrade).
+		$installed = $upgrader->install_plugin( $args['file'] );
+
+		if ( ! is_wp_error( $installed ) ) {
+			wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
 		}
 
-		$creds = request_filesystem_credentials( $url, '', false, false, null );
+		$error = $installed->get_error_message();
 
-		// Check for file system permissions.
-		if ( false === $creds || ! WP_Filesystem( $creds ) ) {
-			wp_send_json_error(
-				esc_html__( 'There was an error while installing an upgrade. Please check file system permissions and try again. Also, you can download the plugin from contentcontrolplugin.com and install it manually.', 'content-control' )
-			);
+		if ( empty( $error ) ) {
+			$error = esc_html__( 'There was an error while installing an upgrade. Please download the plugin from contentcontrolplugin.com and install it manually.', 'content-control' );
 		}
 
-		/**
-		 * We do not need any extra credentials if we have gotten this far, so let's install the plugin.
-		 */
-
-		// Do not allow WordPress to search/download translations, as this will break JS output.
-		remove_action( 'upgrader_process_complete', [ 'Language_Pack_Upgrader', 'async_upgrade' ], 20 );
-
-		// Get silent installer.
-		$installer = new \ContentControl\Admin\Installers\PluginSilentUpgrader( new \ContentControl\Admin\Installers\Install_Skin() );
-
-		// Error check.
-		if ( ! method_exists( $installer, 'install' ) ) {
-			wp_send_json_error( esc_html( $error ) );
-		}
-
-		$installer->install($file_args['file']); // phpcs:ignore
-
-		// Flush the cache and return the newly installed plugin basename.
-		wp_cache_flush();
-
-		$plugin_basename = $installer->plugin_info();
-
-		if ( $plugin_basename ) {
-			// Activate the plugin silently.
-			$activated = activate_plugin( $plugin_basename, '', false, true );
-
-			if ( ! is_wp_error( $activated ) ) {
-				wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
-			}
-
-			$error = esc_html__( 'Content Control Pro was installed, but needs to be activated on the Plugins page inside your WordPress admin.', 'content-control' );
-		}
-
-		wp_send_json_error( $error );
+		wp_send_json_error( $installed->get_error_message() );
 	}
 }
