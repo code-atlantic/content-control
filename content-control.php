@@ -21,6 +21,8 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
+// define( 'CONTENT_CONTROL_LOGGING', true );
+
 /**
  * Define plugin's global configuration.
  */
@@ -40,6 +42,7 @@ function get_plugin_config() {
 		'url'           => \plugin_dir_url( __FILE__ ),
 		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
 		'api_url'       => 'https://contentcontrolplugin.com/',
+		'is_pro'        => false,
 	];
 }
 
