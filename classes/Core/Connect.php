@@ -97,6 +97,20 @@ class Connect {
 	}
 
 	/**
+	 * Log a message to the debug log if enabled.
+	 *
+	 * Here to prevent constant conditional checks for the debug mode.
+	 *
+	 * @param string $message Message.
+	 * @param string $type    Type.
+	 */
+	public function debug_log( $message, $type = 'INFO' ) {
+		if ( self::DEBUG_MODE ) {
+			plugin( 'logging' )->log( "Core\Connect.$type: $message" );
+		}
+	}
+
+	/**
 	 * Get header Authorization
 	 *
 	 * @return string
@@ -185,6 +199,10 @@ class Connect {
 			self::API_URL
 		);
 
+		$this->debug_log( 'Generated new connection.' );
+		$this->debug_log( 'Token: ' . $token );
+		$this->debug_log( 'Nonce: ' . $nonce );
+
 		return [
 			'url'      => $url,
 			'back_url' => add_query_arg(
@@ -204,6 +222,8 @@ class Connect {
 	 * @param string $message Error message.
 	 */
 	public function kill_connection( $error_no = self::ERROR_REFERRER, $message = false ) {
+		$this->debug_log( "Killing connection with error ($error_no) message: " . $message, 'ERROR' );
+
 		wp_die( esc_html( self::DEBUG_MODE && $message ? $message : __( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' ) ), esc_attr( $error_no ), [ 'response' => 403 ] );
 	}
 
@@ -244,6 +264,7 @@ class Connect {
 		];
 
 		if ( ! in_array( $referer_host, $allowed_hosts, true ) ) {
+			$this->debug_log( 'Referrer mismatch: ' . $referer_host, 'DEBUG' );
 			$this->kill_connection( self::ERROR_REFERRER, 'Referrer doesn\'t match' );
 		}
 	}
@@ -260,6 +281,7 @@ class Connect {
 		}
 
 		if ( ! wp_verify_nonce( $nonce, $this->get_nonce_name( $token ) ) ) {
+			$this->debug_log( 'Nonce mismatch: ' . $nonce, 'DEBUG' );
 			$this->kill_connection( self::ERROR_NONCE, 'Invalid nonce' );
 		}
 	}
@@ -280,6 +302,7 @@ class Connect {
 
 		// Verify hashes match.
 		if ( ! hash_equals( $token, $auth_token ) ) {
+			$this->debug_log( 'Token mismatch: ' . $auth_token, 'DEBUG' );
 			$this->kill_connection( self::ERROR_AUTHENTICATION, 'Invalid authentiction' );
 		}
 	}
@@ -310,6 +333,9 @@ class Connect {
 		// Generate the hash binary.
 		$hash = hash_hmac( 'sha256', $data, $token, true );
 
+		$this->debug_log( 'Hash: ' . $hash, 'DEBUG' );
+		$this->debug_log( 'Data: ' . $data, 'DEBUG' );
+
 		// Encode the hash in base64 to make it URL safe.
 		return base64_encode( $hash ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 	}
@@ -332,6 +358,7 @@ class Connect {
 
 		// Compare the expected signature to the received signature.
 		if ( ! hash_equals( $expected_signature, $signature ) ) {
+			$this->debug_log( "Signature mismatch: \r\n - Webhook: " . $signature . "\r\n - Calculated: " . $expected_signature, 'DEBUG' );
 			$this->kill_connection( self::ERROR_SIGNATURE, 'Invalid signature' );
 		}
 	}
@@ -342,6 +369,7 @@ class Connect {
 	 * @return void
 	 */
 	public function validate_connection() {
+		$this->debug_log( 'Validating connection...', 'DEBUG' );
 		$this->verify_user_agent();
 		// If production, verify the referrer.
 		if ( 'production' === wp_get_environment_type() ) {
@@ -350,6 +378,7 @@ class Connect {
 		$this->verify_nonce();
 		$this->verify_authentication();
 		$this->verify_signature();
+		$this->debug_log( 'Connection validated', 'DEBUG' );
 	}
 
 	/**
@@ -420,11 +449,13 @@ class Connect {
 
 		// 3. Delete the token to prevent abuse.
 		if ( ! self::DEBUG_MODE ) {
+			$this->debug_log( 'Deleting token', 'DEBUG' );
 			delete_option( self::TOKEN_OPTION_NAME );
 		}
 
 		// 4. Validate license key.
 		if ( ! plugin( 'license' )->is_license_active() ) {
+			$this->debug_log( 'License not active', 'DEBUG' );
 			wp_send_json_error( $error );
 		}
 
@@ -445,8 +476,11 @@ class Connect {
 	 * @return void
 	 */
 	public function install_plugin( $args ) {
+		$this->debug_log( 'Installing plugin...', 'DEBUG' );
+
 		// If not forcing, and already active, return success.
 		if ( ! $args['force'] && is_plugin_active( "{$args['slug']}/{$args['slug']}.php" ) ) {
+			$this->debug_log( 'Plugin already installed & active.', 'DEBUG' );
 			wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
 		}
 
@@ -457,15 +491,20 @@ class Connect {
 		$installed = $upgrader->install_plugin( $args['file'] );
 
 		if ( ! is_wp_error( $installed ) ) {
+			$this->debug_log( 'Plugin installed & activated successfully.', 'DEBUG' );
 			wp_send_json_success( esc_html__( 'Plugin installed & activated.', 'content-control' ) );
 		}
 
-		$error = $installed->get_error_message();
+		switch ( $installed->get_error_code() ) {
+			default:
+				$error = $installed->get_error_message();
+		}
 
 		if ( empty( $error ) ) {
 			$error = esc_html__( 'There was an error while installing an upgrade. Please download the plugin from contentcontrolplugin.com and install it manually.', 'content-control' );
 		}
 
+		$this->debug_log( 'Plugin install failed: ' . $error, 'DEBUG' );
 		wp_send_json_error( $installed->get_error_message() );
 	}
 }

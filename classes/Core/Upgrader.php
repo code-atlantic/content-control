@@ -8,6 +8,7 @@
 namespace ContentControl\Core;
 
 use \ContentControl\Base\Container;
+use function ContentControl\plugin;
 
 /**
  * Undocumented class
@@ -56,6 +57,20 @@ class Upgrader {
 	}
 
 	/**
+	 * Log a message to the debug log if enabled.
+	 *
+	 * Here to prevent constant conditional checks for the debug mode.
+	 *
+	 * @param string $message Message.
+	 * @param string $type    Type.
+	 */
+	public function debug_log( $message, $type = 'INFO' ) {
+		if ( defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING ) {
+			$this->c->get( 'logging' )->log( "Core\Upgrader.$type: $message" );
+		}
+	}
+
+	/**
 	 * Get credentials for the current request.
 	 *
 	 * @return array|bool
@@ -75,6 +90,7 @@ class Upgrader {
 		$creds = request_filesystem_credentials( $url, '', false, false, null );
 
 		if ( false === $creds || ! WP_Filesystem( $creds ) ) {
+			$this->debug_log( 'Unable to get filesystem credentials.', 'ERROR' );
 			return false;
 		}
 
@@ -89,15 +105,18 @@ class Upgrader {
 	 */
 	public function activate_plugin( $plugin_basename ) {
 		if ( ! $plugin_basename || empty( $plugin_basename ) ) {
-			return new \WP_Error( 'content_control_plugin_basename', __( 'Unable to activate plugin.', 'content-control' ) );
+			return new \WP_Error( 'content_control_plugin_basename', __( 'Plugin basename empty.', 'content-control' ) );
 		}
 
 		// Activate the plugin silently.
 		$activated = activate_plugin( $plugin_basename, '', false, true );
 
 		if ( ! is_wp_error( $activated ) ) {
+			$this->debug_log( 'Plugin failed to activate: ' . $activated->get_error_message() );
 			return $activated;
 		}
+
+		$this->debug_log( 'Plugin activated: ' . $plugin_basename );
 
 		return true;
 	}
@@ -127,12 +146,16 @@ class Upgrader {
 
 		// Error check.
 		if ( ! method_exists( $installer, 'install' ) ) {
-			return new \WP_Error( 'content_control_upgrader', __( 'Unable to install plugin.', 'content-control' ) );
+			return new \WP_Error( 'content_control_upgrader', __( 'Upgrader missing install method.', 'content-control' ) );
 		}
+
+		$this->debug_log( 'Installing plugin from file: ' . $file );
 
 		$plugin = $installer->install( $file );
 
 		if ( is_wp_error( $plugin ) && 'folder_exists' === $plugin->get_error_code() ) {
+			$this->debug_log( 'Plugin already exists, upgrading instead.' );
+
 			// Plugin already exists, upgrade it.
 			$plugin_basename = $installer->plugin_info();
 
@@ -140,15 +163,34 @@ class Upgrader {
 			add_filter( 'pre_site_transient_update_plugins', function ( $current ) use ( $file, $plugin_basename ) {
 				if ( isset( $current->response[ $plugin_basename ] ) ) {
 					$current->response[ $plugin_basename ]->package = $file;
+				} else {
+					$current->response[ $plugin_basename ] = (object) [
+						'id'          => '0',
+						'slug'        => $plugin_basename,
+						'new_version' => '0',
+						'url'         => '',
+						'package'     => $file,
+					];
 				}
 
+				$this->debug_log( 'Filtering update_plugins transient to replace package with file.' );
+				$this->debug_log( 'Current: ' . print_r( $current->response[ $plugin_basename ], true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
 				return $current;
 			}, 10, 1 );
 
-			return $installer->upgrade( $file );
+			$this->debug_log( 'Upgrading plugin.' );
+			$upgraded = $installer->upgrade( $file );
+
+			if ( is_wp_error( $upgraded ) ) {
+				$this->debug_log( 'Error upgrading plugin: ' . $upgraded->get_error_message(), 'ERROR' );
+				return $upgraded;
+			}
+
+			return $upgraded;
 		}
 
 		if ( is_wp_error( $plugin ) ) {
+			$this->debug_log( 'Error installing plugin: ' . $plugin->get_error_message(), 'ERROR' );
 			return $plugin;
 		}
 
@@ -157,49 +199,8 @@ class Upgrader {
 
 		$plugin_basename = $installer->plugin_info();
 
-		return $this->activate_plugin( $plugin_basename );
-	}
-
-	/**
-	 * Upgrade a plugin.
-	 *
-	 * @param string $plugin_basename The plugin basename.
-	 * @param string $file            The plugin file.
-	 *
-	 * @return bool|\WP_Error
-	 */
-	public function upgrade_plugin( $plugin_basename, $file ) {
-		// Load required files.
-		$this->maybe_load_required_files();
-
-		// Check for file system permissions.
-		if ( false === $this->get_fs_creds() ) {
-			return new \WP_Error( 'content_control_fs_creds', __( 'Unable to get filesystem credentials.', 'content-control' ) );
-		}
-
-		// Do not allow WordPress to search/download translations, as this will break JS output.
-		remove_action( 'upgrader_process_complete', [ 'Language_Pack_Upgrader', 'async_upgrade' ], 20 );
-
-		// Filter the plugin upgrade download URL.
-		add_filter( 'upgrader_pre_download', [ $this, 'filter_plugin_download_url' ], 10, 3 );
-
-		$upgrader = new \ContentControl\Admin\Installers\PluginSilentUpgrader( new \ContentControl\Admin\Installers\Install_Skin() );
-
-		// Error check.
-		if ( ! method_exists( $upgrader, 'upgrade' ) ) {
-			return new \WP_Error( 'content_control_upgrader', __( 'Unable to upgrade plugin.', 'content-control' ) );
-		}
-
-		$plugin = $upgrader->upgrade( $file );
-
-		if ( is_wp_error( $plugin ) ) {
-			return $plugin;
-		}
-
-		// Flush the cache and return the newly installed plugin basename.
-		wp_cache_flush();
+		$this->debug_log( 'Plugin installed: ' . $plugin_basename );
 
 		return $this->activate_plugin( $plugin_basename );
 	}
-
 }
