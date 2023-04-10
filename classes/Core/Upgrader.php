@@ -111,7 +111,7 @@ class Upgrader {
 		// Activate the plugin silently.
 		$activated = activate_plugin( $plugin_basename, '', false, true );
 
-		if ( ! is_wp_error( $activated ) ) {
+		if ( is_wp_error( $activated ) ) {
 			$this->debug_log( 'Plugin failed to activate: ' . $activated->get_error_message() );
 			return $activated;
 		}
@@ -151,7 +151,9 @@ class Upgrader {
 
 		$this->debug_log( 'Installing plugin from file: ' . $file );
 
-		$plugin = $installer->install( $file );
+		$plugin = $installer->install( $file, [
+			'overwrite_package' => true,
+		] );
 
 		if ( is_wp_error( $plugin ) && 'folder_exists' === $plugin->get_error_code() ) {
 			$this->debug_log( 'Plugin already exists, upgrading instead.' );

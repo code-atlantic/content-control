@@ -29,7 +29,7 @@ class Logging {
 	 *
 	 * @var bool
 	 */
-	private $is_writable = false;
+	private $is_writable;
 
 	/**
 	 * Log file name.
@@ -66,10 +66,6 @@ class Logging {
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
-
-		if ( ! $this->enabled() ) {
-			return;
-		}
 
 		$this->init();
 
@@ -109,8 +105,8 @@ class Logging {
 	 * @param string $path A path to append to end of upload directory URL.
 	 * @return bool|string The uploads directory URL or false on failure
 	 */
-	public static function get_upload_dir_url( $path = '' ) {
-		$upload_dir = self::get_upload_dir();
+	public function get_upload_dir_url( $path = '' ) {
+		$upload_dir = $this->get_upload_dir();
 		if ( false !== $upload_dir && isset( $upload_dir['baseurl'] ) ) {
 			$url = preg_replace( '/^https?:/', '', $upload_dir['baseurl'] );
 			if ( null === $url ) {
@@ -131,7 +127,7 @@ class Logging {
 	 * @return bool
 	 */
 	public function enabled() {
-		return $this->is_writable() && defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING;
+		return defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING && $this->is_writable();
 	}
 
 	/**
@@ -172,7 +168,7 @@ class Logging {
 			return $this->is_writable;
 		}
 
-		$this->is_writable = false !== $this->fs && 'direct' === $this->fs()->method;
+		$this->is_writable = false !== $this->fs() && 'direct' === $this->fs()->method;
 
 		$upload_dir = $this->get_upload_dir();
 

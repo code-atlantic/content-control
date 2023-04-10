@@ -160,13 +160,10 @@ class Plugin {
 
 		$this->container['connect'] = new \ContentControl\Core\Connect( $this->container );
 		$this->container['license'] = new \ContentControl\Core\License( $this->container );
+		$this->container['logging'] = new \ContentControl\Core\Logging( $this->container );
 
 		$this->container['upgrader'] = function( $c ) {
 			return new \ContentControl\Core\Upgrader( $c );
-		};
-
-		$this->container['logging'] = function( $c ) {
-			return new \ContentControl\Core\Logging( $c );
 		};
 	}
 

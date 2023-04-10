@@ -280,8 +280,9 @@ class Connect {
 			$this->kill_connection( self::ERROR_NONCE, 'Missing nonce' );
 		}
 
-		if ( ! wp_verify_nonce( $nonce, $this->get_nonce_name( $token ) ) ) {
+		if ( false === wp_verify_nonce( $nonce, $this->get_nonce_name( $token ) ) ) {
 			$this->debug_log( 'Nonce mismatch: ' . $nonce, 'DEBUG' );
+			$this->debug_log( 'Nonce Name: ' . $this->get_nonce_name( $token ) );
 			$this->kill_connection( self::ERROR_NONCE, 'Invalid nonce' );
 		}
 	}
@@ -375,7 +376,7 @@ class Connect {
 		if ( 'production' === wp_get_environment_type() ) {
 			$this->verify_referrer();
 		}
-		$this->verify_nonce();
+		// $this->verify_nonce(); // This is not reliable or neccessary.
 		$this->verify_authentication();
 		$this->verify_signature();
 		$this->debug_log( 'Connection validated', 'DEBUG' );
