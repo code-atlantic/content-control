@@ -15,6 +15,7 @@ declare global {
 	const contentControlSettingsPage: {
 		adminUrl: string;
 		pluginUrl: string;
+		logUrl: string | false;
 		userRoles: { [ key: string ]: string };
 		restBase: string;
 		rolesAndCaps: {

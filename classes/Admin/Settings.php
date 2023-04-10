@@ -117,6 +117,7 @@ class Settings extends Controller {
 				'adminUrl'     => admin_url(),
 				'restBase'     => 'content-control/v2',
 				'userRoles'    => \ContentControl\Rules\allowed_user_roles(),
+				'logUrl'       => current_user_can( 'manage_options' ) ? plugin( 'logging' )->get_file_url() : false,
 				'rolesAndCaps' => wp_roles()->roles,
 				'version'      => plugin( 'version' ),
 				'permissions'  => $permissions,
