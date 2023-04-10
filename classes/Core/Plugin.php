@@ -164,6 +164,10 @@ class Plugin {
 		$this->container['upgrader'] = function( $c ) {
 			return new \ContentControl\Core\Upgrader( $c );
 		};
+
+		$this->container['logging'] = function( $c ) {
+			return new \ContentControl\Core\Logging( $c );
+		};
 	}
 
 	/**
