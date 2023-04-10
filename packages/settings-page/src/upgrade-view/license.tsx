@@ -68,9 +68,9 @@ const LicenseTab = () => {
 				setShowConnectNotice( false );
 
 				// Wait a second for the license status to update and then reload the page.
-				// setTimeout( () => {
-				// 	window.location.reload();
-				// }, 1000 );
+				setTimeout( () => {
+					window.location.reload();
+				}, 1000 );
 			}
 		}, 1000 );
 	}, [ connectInfo ] );
