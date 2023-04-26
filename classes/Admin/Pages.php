@@ -16,7 +16,7 @@ class Pages {
 	 *
 	 */
 	public static function init() {
-		add_action( 'admin_menu', [ __CLASS__, 'register_pages' ], 999 );
+		// add_action( 'admin_menu', [ __CLASS__, 'register_pages' ], 999 );
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Pages {
 	public static function register_pages() {
 		global $content_control_settings_page;
 
-		$content_control_settings_page = add_options_page( __( 'Content Control', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'cc-settings', [
+		$content_control_settings_page = add_options_page( __( 'Content Control Pro', 'content-control' ), __( 'Content Control', 'content-control' ), 'manage_options', 'cc-settings', [
 			'\\ContentControl\Admin\Settings2',
 			'page',
 		] );
