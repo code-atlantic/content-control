@@ -57,7 +57,7 @@ const LicenseTab = () => {
 		connectPopup.current = window.open(
 			connectInfo.url,
 			'content-control-license-connect',
-			'width=800,height=600'
+			'width=580,height=600'
 		);
 
 		// Listen for the popup to close and check the license status.
