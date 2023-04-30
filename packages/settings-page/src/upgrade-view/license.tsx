@@ -1,9 +1,9 @@
 import './editor.scss';
 
 import classNames from 'classnames';
+import { trash } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
 import { useEffect, useRef, useState } from '@wordpress/element';
-import { check, linkOff, trash, update } from '@wordpress/icons';
 import {
 	Button,
 	ButtonGroup,
@@ -12,8 +12,10 @@ import {
 	Icon,
 	Popover,
 } from '@wordpress/components';
-
 import { LicenseKey, useLicense } from '@content-control/core-data';
+
+import UpgradeFeatures from './upgrade-features';
+
 
 const LicenseTab = () => {
 	const {
@@ -38,6 +40,7 @@ const LicenseTab = () => {
 
 	const { expires, error_message } = licenseStatus;
 	const [ value, setValue ] = useState< LicenseKey >( licenseKey );
+	const [ isActivating, setIsActivating ] = useState( false );
 
 	const connectPopup = useRef< Window | null >( null );
 	const [ showConnectNotice, setShowConnectNotice ] = useState( false );
@@ -81,6 +84,12 @@ const LicenseTab = () => {
 			setValue( licenseKey );
 		}
 	}, [ licenseKey ] );
+
+	useEffect( () => {
+		if ( isActivating && ! isSaving ) {
+			setIsActivating( false );
+		}
+	}, [ isSaving ] );
 
 	const statusMessage = () => {
 		if ( isLicenseMissing ) {
@@ -139,7 +148,7 @@ const LicenseTab = () => {
 		if ( isLicenseDeactivated ) {
 			// The license key is deactivated.
 			return __(
-				'Your license key is currently deactivated. Click the ✔ above to activate now.',
+				'Your license key is currently deactivated. Click the button above to activate now.',
 				'content-control'
 			);
 		}
@@ -188,66 +197,131 @@ const LicenseTab = () => {
 					</p>
 				</Popover>
 			) }
-			<div
-				className={ classNames( [
-					'content-control-license-controls',
-					'content-control-license-controls--' +
-						getLicenseStatusName(),
-				] ) }
-			>
-				<TextControl
-					label={ __( 'License Key', 'content-control' ) }
-					value={
-						isLicenseKeyValid
-							? // first 3 and last 5 should be unmasked.
-							  value.replace(
-									/^(.{3})(.*)(.{5})$/,
-									( _match, p1, p2, p3 ) =>
-										p1 + p2.replace( /./g, '*' ) + p3
+
+			<div className="content-control__upgrade-notice">
+				<h3 className="upgrade-notice__title">
+					{ __(
+						'Enter your Content Control License Key',
+						'content-control'
+					) }
+				</h3>
+
+				<p
+					className="upgrade-notice__description"
+					dangerouslySetInnerHTML={ {
+						__html: ! isLicenseActive
+							? __(
+									'You are currently using Content Control Lite — no license key required. Enjoy! <span>😄</span>',
+									'content-control'
 							  )
-							: value
-					}
-					maxLength={ 32 }
-					width={ 500 }
-					onChange={ setValue }
-					readOnly={ isLicenseKeyValid }
-					onPaste={ ( event ) => {
-						event.preventDefault();
-						const pastedText =
-							event.clipboardData.getData( 'text' );
-						if ( ! isSaving ) {
-							activateLicense( pastedText );
-							setValue( pastedText );
-						}
+							: __(
+									'You are currently using Content Control Pro. Thanks for supporting us! <span>😄</span>',
+									'content-control'
+							  ),
 					} }
 				/>
-				<ButtonGroup>
-					<Button
-						className="activate-license"
-						variant={ buttonVariant }
-						onClick={ () => {
-							activateLicense(
-								isLicenseMissing ? value : undefined
-							);
-						} }
-						disabled={
-							( isSaving || ! keyHasChanged ) &&
-							! isLicenseDeactivated
+
+				{ <UpgradeFeatures /> }
+
+				<p
+					dangerouslySetInnerHTML={ {
+						__html: sprintf(
+							__(
+								'Enter your license key below to activate %sContent Control Pro%s!',
+								'content-control'
+							),
+							'<strong>',
+							'</strong>'
+						),
+					} }
+				/>
+				<div
+					className={ classNames( [
+						'content-control-license-controls',
+						'content-control-license-controls--' +
+							getLicenseStatusName(),
+					] ) }
+				>
+					<TextControl
+						label={ __(
+							'Enter your license key.',
+							'content-control'
+						) }
+						hideLabelFromVision={ true }
+						placeholder={ __(
+							'Paste or enter your license key here.',
+							'content-control'
+						) }
+						value={
+							isLicenseKeyValid
+								? // first 3 and last 5 should be unmasked.
+								  value.replace(
+										/^(.{3})(.*)(.{5})$/,
+										( _match, p1, p2, p3 ) =>
+											p1 + p2.replace( /./g, '*' ) + p3
+								  )
+								: value
 						}
-						title={ __( 'Activate', 'content-control' ) }
-					>
-						<Icon icon={ check } />
-					</Button>
-					<Button
-						className="deactivate-license"
-						variant={ buttonVariant }
-						onClick={ () => deactivateLicense() }
-						disabled={ isSaving || ! isLicenseActive }
-						title={ __( 'Deactivate', 'content-control' ) }
-					>
-						<Icon icon={ linkOff } />
-					</Button>
-					<Button
+						maxLength={ 32 }
+						width={ 500 }
+						onChange={ setValue }
+						readOnly={ isActivating || isLicenseKeyValid }
+						onPaste={ ( event ) => {
+							event.preventDefault();
+							const pastedText =
+								event.clipboardData.getData( 'text' );
+							if ( ! isSaving ) {
+								setIsActivating( true );
+								activateLicense( pastedText );
+								setValue( pastedText );
+							}
+						} }
+					/>
+					<ButtonGroup>
+						<Button
+							className="activate-license"
+							variant={ 'primary' }
+							onClick={ () => {
+								setIsActivating( true );
+								activateLicense(
+									isLicenseMissing ? value : undefined
+								);
+							} }
+							disabled={
+								( isSaving || ! keyHasChanged ) &&
+								! isLicenseDeactivated
+							}
+							title={ __( 'Activate', 'content-control' ) }
+						>
+							{ ! isActivating ? (
+								<span>
+									{ __( 'Activate', 'content-control' ) }
+								</span>
+							) : (
+								<>
+									<span>
+										{ __(
+											'Activating...',
+											'content-control'
+										) }
+									</span>
+									<Spinner />
+								</>
+							) }
+						</Button>
+						<Button
+							className="deactivate-license"
+							variant={ buttonVariant }
+							onClick={ () => deactivateLicense() }
+							disabled={ isSaving || ! isLicenseActive }
+							title={ __( 'Deactivate', 'content-control' ) }
+						>
+							{ /* <Icon icon={ linkOff } /> */ }
+							<span>
+								{ __( 'Deactivate', 'content-control' ) }
+							</span>
+						</Button>
+						{ /* <Button
 						className="check-license-status"
 						variant={ buttonVariant }
 						onClick={ () => checkLicenseStatus() }
@@ -255,23 +329,26 @@ const LicenseTab = () => {
 						title={ __( 'Check Status', 'content-control' ) }
 					>
 						<Icon icon={ update } />
-					</Button>
-					<Button
-						className="remove-license"
-						variant={ buttonVariant }
-						onClick={ () => removeLicense() }
-						disabled={ isSaving || ! isLicenseKeyValid }
-						title={ __( 'Remove', 'content-control' ) }
-					>
-						<Icon icon={ trash } />
-					</Button>
-					{ isSaving && <Spinner /> }
-				</ButtonGroup>
+					</Button> */ }
+						<Button
+							className="remove-license"
+							variant="tertiary"
+							isDestructive={ true }
+							onClick={ () => removeLicense() }
+							disabled={ isSaving || ! isLicenseKeyValid }
+							title={ __( 'Delete', 'content-control' ) }
+						>
+							<Icon icon={ trash } />
+							<span>{ __( 'Delete', 'content-control' ) }</span>
+						</Button>
+					</ButtonGroup>
+				</div>
+				<div
+					className="content-control-license-status"
+					dangerouslySetInnerHTML={ { __html: statusMessage() } }
+				/>
 			</div>
-			<div
-				className="content-control-license-status"
-				dangerouslySetInnerHTML={ { __html: statusMessage() } }
-			/>
+
 			{ /* <pre>{ JSON.stringify( licenseStatus, null, 2 ) }</pre> */ }
 		</>
 	);

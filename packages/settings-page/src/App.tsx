@@ -13,6 +13,7 @@ import SettingsView from './settings-view';
 import UpgradeView from './upgrade-view';
 
 import type { TabComponent } from './types';
+import { useLicense } from '@content-control/core-data';
 
 const {
 	permissions: {
@@ -22,6 +23,7 @@ const {
 } = contentControlSettingsPage;
 
 const App = () => {
+	const { isLicenseActive } = useLicense();
 	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
 
 	let views: TabComponent[] = [];
@@ -66,7 +68,9 @@ const App = () => {
 			title: (
 				<>
 					<Icon size={ 20 } icon={ upgrade } />
-					{ __( 'Upgrade to Pro', 'content-control' ) }
+					{ ! isLicenseActive
+						? __( 'Upgrade to Pro', 'content-control' )
+						: __( 'License Status', 'content-control' ) }{ ' ' }
 				</>
 			),
 			pageTitle: __(

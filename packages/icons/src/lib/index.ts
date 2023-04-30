@@ -6,6 +6,7 @@ export { default as customRedirect } from './custom-redirect';
 export { default as checkAll } from './check-all';
 export { default as incognito } from './incognito';
 export { default as filterLines } from './filter-lines';
+export { default as licenseKey } from './license-key';
 export { default as lockedUser } from './locked-user';
 export { default as monitor } from './monitor';
 export { default as permissions } from './permissions';

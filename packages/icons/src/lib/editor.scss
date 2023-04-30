@@ -45,6 +45,12 @@
 		}
 	}
 
+	&--license-key {
+		path {
+			stroke: currentColor;
+		}
+	}
+
 	&--locked-user {
 		path {
 			stroke: currentColor;

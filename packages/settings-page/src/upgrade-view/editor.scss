@@ -1,19 +1,121 @@
+.license-status-bubble {
+	background-color: #00A32A;
+	color: #fff;
+	border-radius: 100px;
+	line-height: 1.5em;
+	display: inline-block;
+	margin-left: 12px;
+	padding: 0 8px;
+}
+
+.content-control__upgrade-notice {
+	max-width: 600px;
+
+	.upgrade-notice__title {
+		margin: 0;
+	}
+
+	.upgrade-notice__description {
+		font-size: 14px;
+		font-weight: 400;
+		margin: 0 0 8px;
+
+		> span {
+			font-size: 23px;
+			vertical-align: middle;
+		}
+	}
+
+	.upgrade-features {
+		background: rgba(0, 124, 186, 0.1);
+		border-radius: 3px;
+		padding: 24px;
+		margin: 0 0 16px;
+
+		> * {
+			font-size: 14px;
+			color: #344054;
+		}
+
+		p {
+			font-weight: 500;
+			margin: 0 0 8px;
+
+			a {
+				font-weight: 700;
+			}
+		}
+
+		ul {
+			margin: 0;
+			li {
+				margin-bottom: 4px;
+				line-height: 1;
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				ul {
+					margin-top: 4px;
+					padding-left: 2em;
+				}
+
+				font-weight: 300;
+
+				strong {
+					font-weight: 400;
+				}
+
+				svg {
+					margin: -2px 5px -2px 0;
+
+					path {
+						fill: #007cba;
+					}
+				}
+
+				> * {
+					vertical-align: middle;
+				}
+			}
+		}
+	}
+}
+
 .content-control-license-controls {
+	max-width: 600px;
 	display: flex;
 	align-items: left;
-	gap: 2px;
+	gap: 12px;
 	margin-bottom: 10px;
+	justify-content: space-between;
+
+	.components-base-control {
+		flex: 1;
+	}
 
 	> * {
+		// Fixes vertical aligntments of buttons.
 		margin-top: auto;
+	}
+
+	.components-base-control__label {
+		span {
+			font-weight: 400;
+		}
+
+		strong {
+			font-weight: 700;
+		}
 	}
 
 	.components-base-control__field {
 		margin-bottom: 0;
 
 		.components-text-control__input {
-			height: 36px;
+			height: 42px;
 			min-width: 200px;
+			border-radius: 3px;
 		}
 	}
 
@@ -23,17 +125,58 @@
 		// margin: 0;
 	}
 
+	.components-button-group {
+		min-width: max-content;
+		display: flex;
+		gap: 10px;
+
+		.components-button {
+			height: 42px;
+			padding: 0 2em;
+			border-radius: 3px;
+			vertical-align: middle;
+			box-shadow: none;
+			border: 1px solid #d0d5dd;
+
+			// margin: 0;
+
+			.components-spinner {
+				margin: 0 0 0 10px;
+				width: 1.25em;
+				height: 1.25em;
+			}
+
+			&:disabled {
+				opacity: 0.5;
+			}
+		}
+	}
+
 	.activate-license {
-		color: green;
+		border-color: currentColor;
+		box-shadow: none;
+		span {
+			color: #fff;
+		}
+
+		&:disabled {
+			span {
+				color: #fff;
+			}
+		}
 	}
 
 	.deactivate-license {
-		color: darkorange;
+		color: #1e1e1e;
+
+		&:hover span {
+			color: darkorange;
+		}
 	}
 
 	.remove-license {
 		// background-color: red;
-		color: red;
+		// color: red;
 	}
 
 	&--active {

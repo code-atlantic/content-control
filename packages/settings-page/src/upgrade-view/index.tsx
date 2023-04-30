@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { key } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
+import { licenseKey } from '@content-control/icons';
+import { useLicense } from '@content-control/core-data';
 
 import Section from '../settings-view/section';
 
@@ -12,6 +13,8 @@ import type { TabComponent } from '../types';
 // const { pluginUrl } = contentControlSettingsPage;
 
 const UpgradeView = () => {
+	const { isLicenseActive } = useLicense();
+
 	// Filtered & mappable list of TabComponent definitions.
 	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 	const sections: SectionList = applyFilters(
@@ -19,8 +22,17 @@ const UpgradeView = () => {
 		[
 			{
 				name: 'license',
-				title: __( 'Content Control Pro License', 'content-control' ),
-				icon: key,
+				title: (
+					<>
+						{ __( 'Pro Licensing', 'content-control' ) }
+						{ isLicenseActive && (
+							<span className="license-status-bubble">
+								{ __( 'Activated', 'content-control' ) }
+							</span>
+						) }
+					</>
+				),
+				icon: licenseKey,
 				comp: LicenseSection,
 			},
 		]
