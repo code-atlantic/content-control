@@ -196,7 +196,7 @@ class License extends WP_REST_Controller {
 			$license_status = plugin( 'license' )->activate_license( $license_key );
 
 			$response = [
-				'status ' => $this->clean_license_status( $license_status ),
+				'status' => $this->clean_license_status( $license_status ),
 			];
 
 			if ( ! plugin()->is_pro_installed() ) {
@@ -244,7 +244,7 @@ class License extends WP_REST_Controller {
 			$license_status = plugin( 'license' )->activate_license( $license_key );
 
 			$response = [
-				'status ' => $this->clean_license_status( $license_status ),
+				'status' => $this->clean_license_status( $license_status ),
 			];
 
 			if ( ! plugin()->is_pro_installed() ) {
