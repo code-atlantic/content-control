@@ -3,12 +3,6 @@ import { __ } from '@wordpress/i18n';
 
 import type { EditTabProps } from '.';
 
-/* Global Var Imports */
-const { registeredRules } = contentControlRuleEngine;
-
-/** Filter rules for this context */
-const restrictionRules = [ ...Object.values( registeredRules ) ];
-
 const ContentTab = ( { values, updateSettings }: EditTabProps ) => {
 	return (
 		<div className="content-tab">
@@ -37,7 +31,10 @@ const ContentTab = ( { values, updateSettings }: EditTabProps ) => {
 						notOperand: true,
 						groups: true,
 					},
-					rules: restrictionRules,
+					rulesFilter: ( rule ) => {
+						// Skip user rules for this editor.
+						return ['user'].indexOf(rule.context) === -1;
+					},
 				} }
 			/>
 		</div>
