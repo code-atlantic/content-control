@@ -1,14 +1,17 @@
 import type { FieldProps } from '@content-control/fields';
+import type { RuleItem } from './model';
 
 export type EngineField = FieldProps;
 
 export interface EngineRuleType {
 	name: string;
 	label: string;
+	context: string;
 	category: string;
 	format: string;
 	fields?: EngineField[];
 	verbs?: [ string, string ];
+	frontend?: boolean;
 }
 
 export interface EngineFeatures {
@@ -28,4 +31,11 @@ export interface EngineOptions {
 	features: EngineFeatures;
 	/** List of rules the builder can use */
 	rules: EngineRuleType[];
+	/** Rules Filter */
+	rulesFilter?: ( rule: EngineRuleType ) => boolean;
+	/** Formatters */
+	formatRuleText?: (
+		rule: EngineRuleType,
+		values: Partial< RuleItem >
+	) => string;
 }

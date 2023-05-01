@@ -21,10 +21,10 @@ import {
 import { __ } from '@wordpress/i18n';
 import { arrowDown, arrowUp } from '@wordpress/icons';
 
-import { useRules } from '../../contexts';
+import { useOptions, useRules } from '../../contexts';
 /** Temporary WP Imports */
 import TextHighlight from './highlight';
-import { makeRuleText } from './utils';
+import { defaultForamatRuleText } from '../../utils';
 
 import type { EngineRuleType, RuleItem } from '../../types';
 
@@ -44,33 +44,36 @@ type State = {
 	popoverOpen: boolean;
 };
 
-const rulesToOptions = ( rules: EngineRuleType[] ) =>
-	rules.reduce< Suggestion[] >( ( options, rule ) => {
+const rulesToOptions = ( rules: EngineRuleType[] ) => {
+	const { formatRuleText = defaultForamatRuleText } = useOptions();
+
+	return rules.reduce< Suggestion[] >( ( options, rule ) => {
 		const { name, verbs = [ '', '' ] } = rule;
 
 		if ( Array.isArray( verbs ) && verbs.length ) {
 			[ 0, 1 ].forEach( ( i ) => {
 				options.push( {
 					id: name,
-					label: makeRuleText( rule, !! i ),
+					label: formatRuleText( rule, { notOperand: !! i } ),
 					notOperand: !! i,
 				} );
 			} );
 		} else {
 			options.push( {
 				id: name,
-				label: makeRuleText( rule, false ),
+				label: formatRuleText( rule, { notOperand: false } ),
 				notOperand: false,
 			} );
 			options.push( {
 				id: name,
-				label: makeRuleText( rule, true ),
+				label: formatRuleText( rule, { notOperand: true } ),
 				notOperand: true,
 			} );
 		}
 
 		return options;
 	}, [] );
+};
 
 const Finder = (
 	{ onSelect = noop }: Props,

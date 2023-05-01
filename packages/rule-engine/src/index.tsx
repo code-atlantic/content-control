@@ -29,14 +29,13 @@ type RuleEngineProps = ControlledInputProps< Query > & {
 };
 
 const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
+	const rules = options?.rules ?? Object.values( registeredRules );
+
 	return (
 		<OptionsProvider
 			options={ {
 				...options,
-				rules: [
-					...Object.values( registeredRules ),
-					...( options.rules ?? [] ),
-				],
+				rules,
 			} }
 		>
 			<div className="cc-rule-engine">
@@ -48,6 +47,7 @@ const RuleEngine = ( { value, onChange, options }: RuleEngineProps ) => {
 
 export default RuleEngine;
 
+export * from './components';
 export * from './contexts';
 export * from './utils';
 export * from './types';

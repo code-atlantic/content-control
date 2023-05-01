@@ -1,6 +1,6 @@
 import { Field } from '@content-control/fields';
 
-import { makeRuleText } from './utils';
+import { defaultForamatRuleText } from '../../utils';
 
 import type { FieldProps } from '@content-control/fields';
 
@@ -10,12 +10,15 @@ import type {
 	ItemProps,
 	RuleItem,
 } from '../../types';
+import { useOptions } from '../../contexts';
 
 type Props = ItemProps< RuleItem > & {
 	ruleDef: EngineRuleType;
 };
 
 const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
+	const { formatRuleText = defaultForamatRuleText } = useOptions();
+
 	const { notOperand = false, options: ruleOptions = {} } = ruleProps;
 
 	const { fields = [] } = ruleDef ?? {};
@@ -38,7 +41,7 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 			},
 		} );
 
-	const ruleText = makeRuleText( ruleDef, notOperand );
+	const ruleText = formatRuleText( ruleDef, ruleProps );
 
 	return (
 		<>

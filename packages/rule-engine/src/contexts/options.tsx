@@ -41,11 +41,16 @@ export const OptionsProvider = ( {
 const useOptions = () => {
 	const context = useContext( OptionsContext );
 
+	const { rules = [], rulesFilter = () => true } = context;
+
 	if ( context === undefined ) {
 		throw new Error( 'useOptions must be used within OptionsContext' );
 	}
 
-	return context;
+	return {
+		...context,
+		rules: rules.filter( rulesFilter ),
+	};
 };
 
 export default useOptions;
