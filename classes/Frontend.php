@@ -22,9 +22,19 @@ class Frontend extends Controller {
 	 * Initialize Hooks & Filters
 	 */
 	public function init() {
+		$controllers = [
+			'Frontend\Widgets' => new Frontend\Widgets( $this->container ),
+		];
+
+		foreach ( $controllers as $controller ) {
+			if ( $controller instanceof Controller ) {
+				$controller->init();
+			}
+		}
+
+		// TODO - Refactor for release.
 		new Frontend\Posts();
 		new Frontend\Feeds();
-		new Frontend\Widgets();
 		new Frontend\Restrictions();
 
 		if ( is_admin() ) {

@@ -16,6 +16,7 @@ const packages = {
 	'rule-engine': 'packages/rule-engine',
 	'settings-page': 'packages/settings-page',
 	utils: 'packages/utils',
+	'widget-editor': 'packages/widget-editor',
 };
 
 const config = {

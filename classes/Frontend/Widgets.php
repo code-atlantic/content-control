@@ -8,24 +8,23 @@
 
 namespace ContentControl\Frontend;
 
-use function ContentControl\get_plugin_option;
-
 defined( 'ABSPATH' ) || exit;
 
-use ContentControl\Helpers;
-use ContentControl\Widget;
 use ContentControl\Is;
+use ContentControl\Helpers;
+use ContentControl\Base\Controller;
 
+use function ContentControl\Widgets\get_options as get_widget_options;
 
 /**
  * Class ContentControl\Frontend\Widgets
  */
-class Widgets {
+class Widgets extends Controller {
 
 	/**
-	 * Initialize Widgets
+	 * Initialize Widgets Frontend.
 	 */
-	public function __construct() {
+	public function init() {
 		add_action( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
 	}
 
@@ -42,12 +41,12 @@ class Widgets {
 		}
 
 		foreach ( $widget_areas as $widget_area => $widgets ) {
-			if ( ! empty( $widgets ) && 'wp_inactive_widgets' != $widget_area ) {
+			if ( ! empty( $widgets ) && 'wp_inactive_widgets' !== $widget_area ) {
 				foreach ( $widgets as $position => $widget_id ) {
-					$options = \ContentControl\Widget::get_options( $widget_id );
+					$options = get_widget_options( $widget_id );
 
 					// If not accessible then exclude this item.
-					$exclude = ! \ContentControl\Is::accessible( $options['which_users'], $options['roles'], 'widget' );
+					$exclude = ! Is::accessible( $options['which_users'], $options['roles'], 'widget' );
 
 					$exclude = apply_filters( 'content_control_should_exclude_widget', $exclude, $options, $widget_id );
 

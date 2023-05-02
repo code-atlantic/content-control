@@ -13,3 +13,4 @@ require_once 'functions/deprecated.php';
 require_once 'functions/install.php';
 require_once 'functions/options.php';
 require_once 'functions/rules.php';
+require_once 'functions/widgets.php';

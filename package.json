@@ -29,7 +29,8 @@
     "@content-control/icons": "file:./packages/icons",
     "@content-control/rule-engine": "file:./packages/rule-engine",
     "@content-control/settings-page": "file:./packages/settings-page",
-    "@content-control/utils": "file:./packages/utils"
+    "@content-control/utils": "file:./packages/utils",
+    "@content-control/widget-editor": "file:./packages/widget-editor"
   },
   "devDependencies": {
     "@code-atlantic/browserslist-config": "^1.0.1",
