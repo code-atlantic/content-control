@@ -20,29 +20,15 @@ defined( 'ABSPATH' ) || exit;
  */
 class Admin extends Controller {
 
+	/**
+	 * Initialize admin controller.
+	 *
+	 * @return void
+	 */
 	public function init() {
-		Admin\Ajax::init();
-		Admin\Pages::init();
-
-		Admin\Settings\Restrictions::init();
-
-		// Admin Widget Editor
-		Admin\Widget\Settings::init();
-
-		Admin\Settings2::init(
-			__( 'Content Control Settings', 'content-control' ),
-			[
-				'restrictions' => __( 'Restrictions', 'content-control' ),
-				'general'      => __( 'General', 'content-control' ),
-			]
-		);
-
-		// Admin Review Requests
-		Admin\Reviews::init();
-
 		$controllers = [
-			'Admin\Assets'   => new Admin\Assets( $this->container ),
-			'Admin\Settings' => new Admin\Settings( $this->container ),
+			'Admin\Settings'     => new Admin\Settings( $this->container ),
+			'Admin\WidgetEditor' => new Admin\WidgetEditor( $this->container ),
 		];
 
 		foreach ( $controllers as $controller ) {
@@ -50,6 +36,12 @@ class Admin extends Controller {
 				$controller->init();
 			}
 		}
+
+		// TODO - Refactor for release.
+		Admin\Ajax::init();
+		Admin\Settings\Restrictions::init();
+		// Admin Review Requests
+		Admin\Reviews::init();
 	}
 
 

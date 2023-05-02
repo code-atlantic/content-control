@@ -177,6 +177,7 @@ class Plugin {
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
+			'Assets'       => new \ContentControl\Assets( $this ),
 			'Restrictions' => new \ContentControl\Restrictions( $this ),
 			'Admin'        => new \ContentControl\Admin( $this ),
 			'RestAPI'      => new \ContentControl\RestAPI( $this ),
