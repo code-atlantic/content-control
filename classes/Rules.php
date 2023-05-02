@@ -32,23 +32,8 @@ class Rules {
 	 * @return void
 	 */
 	public function init() {
-		$rules = $this->get_built_in_rules();
-
-		$old_rules = \ContentControl\Conditions::instance()->get_conditions();
-
-		if ( ! empty( $old_rules ) ) {
-			$old_rules = $this->parse_old_rules( $old_rules );
-
-			foreach ( $old_rules as $key => $rule ) {
-				if ( ! isset( $rules[ $key ] ) ) {
-					$rules[ $key ] = $rule;
-				}
-			}
-		}
-
-		foreach ( $rules as $rule ) {
-			$this->register_rule( $rule );
-		}
+		$this->register_built_in_rules();
+		$this->register_deprecated_rules();
 	}
 
 	/**
@@ -70,7 +55,7 @@ class Rules {
 			if ( array_key_exists( $index, $this->data ) ) {
 				$i = 0;
 				do {
-					$i++;
+					++$i;
 					$index = $rule['name'] . '-' . $i;
 				} while ( array_key_exists( $index, $this->data ) );
 			}
@@ -87,7 +72,7 @@ class Rules {
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
-		return true;
+		return ! empty( $rule ) && true;
 	}
 
 	/**
@@ -146,14 +131,35 @@ class Rules {
 	/**
 	 * Get a list of built in rules.
 	 *
+	 * @return void
+	 */
+	private function register_built_in_rules() {
+		$verbs = $this->get_verbs();
+
+		$rules = array_merge(
+			$this->get_user_rules(),
+			$this->get_general_content_rules(),
+			$this->get_post_type_rules(),
+			$this->get_taxonomy_rules()
+		);
+
+		foreach ( $rules as $rule ) {
+			$this->register_rule( $rule );
+		}
+	}
+
+	/**
+	 * Get a list of user rules.
+	 *
 	 * @return array
 	 */
-	private function get_built_in_rules() {
+	public function get_user_rules() {
 		$verbs = $this->get_verbs();
 		return [
 			'user_is_logged_in' => [
 				'name'     => 'user_is_logged_in',
 				'label'    => __( 'Logged In', 'content-control' ),
+				'context'  => [ 'user' ],
 				'category' => __( 'User', 'content-control' ),
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
@@ -163,6 +169,7 @@ class Rules {
 			'user_has_role'     => [
 				'name'     => 'user_has_role',
 				'label'    => __( 'Role(s)', 'content-control' ),
+				'context'  => [ 'user' ],
 				'category' => __( 'User', 'content-control' ),
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['has'], $verbs['doesnothave'] ],
@@ -182,6 +189,290 @@ class Rules {
 	}
 
 	/**
+	 * Get a list of general content rules.
+	 *
+	 * @return array
+	 */
+	public function get_general_content_rules() {
+		$rules = [];
+		$verbs = $this->get_verbs();
+
+		$rules['content_is_front_page'] = [
+			'name'     => 'content_is_front_page',
+			'label'    => __( 'The Home Page', 'content-control' ),
+			'context'  => [ 'content' ],
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'callback' => 'is_front_page',
+		];
+
+		$rules['content_is_blog_index'] = [
+			'name'     => 'content_is_blog_index',
+			'label'    => __( 'The Blog Index', 'content-control' ),
+			'context'  => [ 'content', 'posttype:post' ],
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'callback' => 'is_home',
+		];
+
+		$rules['content_is_search_results'] = [
+			'name'     => 'content_is_search_results',
+			'label'    => __( 'A Search Result Page', 'content-control' ),
+			'context'  => [ 'content', 'search' ],
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'callback' => 'is_search',
+		];
+
+		$rules['content_is_404_page'] = [
+			'name'     => 'content_is_404_page',
+			'label'    => __( 'A 404 Error Page', 'content-control' ),
+			'context'  => [ 'content', '404' ],
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'callback' => 'is_404',
+		];
+
+		return $rules;
+	}
+
+	/**
+	 * Get a list of WP post type rules.
+	 *
+	 * @return array
+	 */
+	public function get_post_type_rules() {
+		$verbs = $this->get_verbs();
+
+		$rules      = [];
+		$post_types = get_post_types( [ 'public' => true ], 'objects' );
+
+		foreach ( $post_types as $name => $post_type ) {
+			$type_rules = [];
+
+			if ( $post_type->has_archive ) {
+				$type_rules[ "content_is_{$name}_archive" ] = [
+					'name'  => "content_is_{$name}_archive",
+					/* translators: %s: Post type singular name */
+					'label' => sprintf( __( 'A %s Archive', 'content-control' ), $post_type->labels->singular_name ),
+				];
+			}
+
+			$type_rules[ "content_is_{$name}" ] = [
+				'name'  => "content_is_{$name}",
+				/* translators: %s: Post type singular name */
+				'label' => sprintf( __( 'A %s', 'content-control' ), $post_type->labels->singular_name ),
+			];
+
+			$type_rules[ "content_is_selected_{$name}" ] = [
+				'name'   => "content_is_selected_{$name}",
+				/* translators: %s: Post type singular name */
+				'label'  => sprintf( __( 'A Selected %s', 'content-control' ), $post_type->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Post type plurals name */
+						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+						'type'        => 'postselect',
+						'post_type'   => $name,
+						'multiple'    => true,
+						'as_array'    => true,
+						'std'         => [],
+					],
+				],
+			];
+
+			$type_rules[ "content_is_{$name}_with_id" ] = [
+				'name'   => "content_is_{$name}_with_id",
+				/* translators: %s: Post type singular name */
+				'label'  => sprintf( __( 'A %s with ID', 'content-control' ), $post_type->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Post type singular name */
+						'placeholder' => sprintf( __( '%s IDs: 128, 129', 'content-control' ), strtolower( $post_type->labels->name ) ),
+						'type'        => 'text',
+					],
+				],
+			];
+
+			if ( is_post_type_hierarchical( $name ) ) {
+				$type_rules[ "content_is_child_of_{$name}" ] = [
+					'name'   => "content_is_child_of_{$name}",
+					/* translators: %s: Post type plural name */
+					'label'  => sprintf( __( 'A Child of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields' => [
+						'selected' => [
+							/* translators: %s: Post type plural name */
+							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+							'type'        => 'postselect',
+							'post_type'   => $name,
+							'multiple'    => true,
+							'as_array'    => true,
+						],
+					],
+				];
+
+				$type_rules[ "content_is_ancestor_of_{$name}" ] = [
+					'name'   => "content_is_ancestor_of_{$name}",
+					/* translators: %s: Post type plural name */
+					'label'  => sprintf( __( 'An Ancestor of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields' => [
+						'selected' => [
+							/* translators: %s: Post type plural name */
+							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+							'type'        => 'postselect',
+							'post_type'   => $name,
+							'multiple'    => true,
+							'as_array'    => true,
+						],
+					],
+				];
+			}
+
+			$templates = wp_get_theme()->get_page_templates();
+
+			if ( 'page' === $name && ! empty( $templates ) ) {
+				$type_rules[ "content_is_{$name}_with_template" ] = [
+					'name'   => "content_is_{$name}_with_template",
+					/* translators: %s: Post type singular name */
+					'label'  => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
+					'fields' => [
+						'selected' => [
+							'type'     => 'select',
+							'select2'  => true,
+							'multiple' => true,
+							'as_array' => true,
+							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
+						],
+					],
+				];
+			}
+
+			foreach ( $type_rules as $rule ) {
+				// Merge defaults.
+				$type_rules[ $rule['name'] ] = wp_parse_args( $rule, [
+					'category' => __( 'Content', 'content-control' ),
+					'context'  => [ 'content', "posttype:{$name}" ],
+					'format'   => '{category} {verb} {label}',
+					'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+					'fields'   => [],
+					'callback' => [ '\\ContentControl\RuleCallbacks', 'post_type' ],
+				] );
+			}
+
+			// Merge type rules & type tax rules.
+			$rules = array_merge( $rules, $type_rules, $this->get_post_type_tax_rules( $name ) );
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Generate post type taxonomy rules.
+	 *
+	 * @param string $name Post type name.
+	 *
+	 * @return array
+	 */
+	public function get_post_type_tax_rules( $name ) {
+		$verbs = $this->get_verbs();
+
+		$post_type  = get_post_type_object( $name );
+		$taxonomies = get_object_taxonomies( $name, 'object' );
+		$rules      = [];
+
+		foreach ( $taxonomies as $tax_name => $taxonomy ) {
+			$rules[ "content_is_{$name}_with_{$tax_name}" ] = [
+				'name'     => "content_is_{$name}_with_{$tax_name}",
+				/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
+				'label'    => sprintf( _x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ), $post_type->labels->singular_name, $taxonomy->labels->singular_name ),
+				'context'  => [ 'content', "posttype:{$name}", "taxonomy:{$tax_name}" ],
+				'category' => __( 'Content', 'content-control' ),
+				'format'   => '{category} {verb} {label}',
+				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+				'fields'   => [
+					'selected' => [
+						/* translators: %s: Taxonomy singular name */
+						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'type'        => 'taxonomyselect',
+						'taxonomy'    => $tax_name,
+						'multiple'    => true,
+						'as_array'    => true,
+						'options'     => [],
+					],
+				],
+				'callback' => [ '\\ContentControl\RuleCallbacks', 'post_type_tax' ],
+			];
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Generates conditions for all public taxonomies.
+	 *
+	 * @return array
+	 */
+	public function get_taxonomy_rules() {
+		$rules      = [];
+		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+		$verbs      = $this->get_verbs();
+
+		foreach ( $taxonomies as $tax_name => $taxonomy ) {
+			$tax_defaults = [
+				'category' => __( 'Content', 'content-control' ),
+				'context'  => [ 'content', "taxonomy:{$tax_name}" ],
+				'format'   => '{category} {verb} {label}',
+				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+				'fields'   => [],
+				'callback' => [ '\\ContentControl\RuleCallbacks', 'taxonomy' ],
+			];
+
+			$rules[ "content_is_{$tax_name}_archive" ] = wp_parse_args( [
+				'name'  => "content_is_{$tax_name}_archive",
+				/* translators: %s: Taxonomy plural name */
+				'label' => sprintf( _x( 'A %s Archive', 'condition: taxonomy plural label ie. A Category Archive', 'content-control' ), $taxonomy->labels->name ),
+			], $tax_defaults );
+
+			$rules[ "content_is_selected_tax_{$tax_name}" ] = wp_parse_args( [
+				'name'   => "content_is_selected_tax_{$tax_name}",
+				/* translators: %s: Taxonomy plural name */
+				'label'  => sprintf( _x( 'A Selected %s', 'condition: taxonomy plural label ie. A Selected Category', 'content-control' ), $taxonomy->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Taxonomy plural name */
+						'placeholder' => sprintf( _x( 'Select %s.', 'condition: taxonomy plural label ie. Select Categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'type'        => 'taxonomyselect',
+						'taxonomy'    => $tax_name,
+						'multiple'    => true,
+						'as_array'    => true,
+					],
+				],
+			], $tax_defaults );
+
+			$rules[ "content_is_tax_{$tax_name}_with_id" ] = wp_parse_args( [
+				'name'   => "content_is_tax_{$tax_name}_with_id",
+				/* translators: %s: Taxonomy plural name */
+				'label'  => sprintf( _x( 'A %s with ID', 'condition: taxonomy plural label ie. A Category with ID: Selected', 'content-control' ), $taxonomy->labels->name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Taxonomy plural name */
+						'placeholder' => sprintf( _x( '%s IDs: 128, 129', 'condition: taxonomy plural label ie. Category IDs', 'content-control' ), strtolower( $taxonomy->labels->singular_name ) ),
+						'type'        => 'text',
+					],
+				],
+			], $tax_defaults );
+		}
+
+		return $rules;
+	}
+
+
+
+	/**
 	 * Get an array of rule default values.
 	 *
 	 * @return array Array of rule default values.
@@ -191,9 +482,10 @@ class Rules {
 		return [
 			'name'     => '',
 			'label'    => '',
-			'category' => '',
+			'context'  => '',
+			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
-			'verbs'    => null,
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'fields'   => [],
 			'callback' => null,
 			'frontend' => false,
@@ -201,20 +493,36 @@ class Rules {
 	}
 
 	/**
-	 * Get an array of old rule default values.
+	 * Register & remap deprecated conditions to rules.
 	 *
-	 * @return array Array of old rule default values.
+	 * @return void
 	 */
-	private function get_old_rule_defaults() {
-		return [
-			'id'       => '',
-			'callback' => null,
-			'group'    => '',
-			'name'     => '',
-			'priority' => 10,
-			'fields'   => [],
-			'advanced' => false,
-		];
+	public function register_deprecated_rules() {
+		$old_rules = apply_filters( 'jp_cc_registered_conditions', [] );
+
+		if ( ! empty( $old_rules ) ) {
+			$old_rules = $this->parse_old_rules( $old_rules );
+
+			foreach ( $old_rules as $rule ) {
+				$this->register_rule( $rule );
+			}
+		}
+	}
+
+	/**
+	 * Parse rules that are still registered using the older deprecated methods.
+	 *
+	 * @param array $old_rules Array of old rules to manipulate.
+	 * @return array
+	 */
+	public function parse_old_rules( $old_rules ) {
+		$new_rules = [];
+
+		foreach ( $old_rules as $key => $old_rule ) {
+			$new_rules[ $key ] = $this->remap_old_rule( $old_rule );
+		}
+
+		return $new_rules;
 	}
 
 	/**
@@ -252,19 +560,20 @@ class Rules {
 	}
 
 	/**
-	 * Parse rules that are still registered using the older deprecated methods.
+	 * Get an array of old rule default values.
 	 *
-	 * @param array $old_rules Array of old rules to manipulate.
-	 * @return array
+	 * @return array Array of old rule default values.
 	 */
-	public function parse_old_rules( $old_rules ) {
-		$new_rules = [];
-
-		foreach ( $old_rules as $key => $old_rule ) {
-			$new_rules[ $key ] = $this->remap_old_rule( $old_rule );
-		}
-
-		return $new_rules;
+	private function get_old_rule_defaults() {
+		return [
+			'id'       => '',
+			'callback' => null,
+			'group'    => '',
+			'name'     => '',
+			'priority' => 10,
+			'fields'   => [],
+			'advanced' => false,
+		];
 	}
 
 }
