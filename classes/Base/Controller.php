@@ -19,7 +19,7 @@ abstract class Controller implements \ContentControl\Interfaces\Controller {
 	/**
 	 * Plugin Container.
 	 *
-	 * @var \ContentControl\Core\Plugin;
+	 * @var \ContentControl\Core\Plugin
 	 */
 	public $container;
 

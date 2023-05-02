@@ -19,7 +19,7 @@ type Props = ItemProps< RuleItem > & {
 const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 	const { formatRuleText = defaultForamatRuleText } = useOptions();
 
-	const { notOperand = false, options: ruleOptions = {} } = ruleProps;
+	const { options: ruleOptions = {} } = ruleProps;
 
 	const { fields = [] } = ruleDef ?? {};
 
