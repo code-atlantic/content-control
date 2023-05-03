@@ -39,8 +39,7 @@ class Admin extends Controller {
 
 		// TODO - Refactor for release.
 		Admin\Ajax::init();
-		Admin\Settings\Restrictions::init();
-		// Admin Review Requests
+		// Admin Review Requests.
 		Admin\Reviews::init();
 	}
 
