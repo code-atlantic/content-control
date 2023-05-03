@@ -8,7 +8,7 @@
  * @copyright (c) 2023 Code Atlantic LLC
  */
 
-namespace ContentControl\Admin;
+namespace ContentControl\Controllers\Admin;
 
 use ContentControl\Base\Controller;
 

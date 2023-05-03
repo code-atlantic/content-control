@@ -7,9 +7,12 @@
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\Controllers;
 
 use ContentControl\Base\Controller;
+use ContentControl\Controllers\Admin\Reviews;
+use ContentControl\Controllers\Admin\SettingsPage;
+use ContentControl\Controllers\Admin\WidgetEditor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,8 +30,9 @@ class Admin extends Controller {
 	 */
 	public function init() {
 		$controllers = [
-			'Admin\Settings'     => new Admin\SettingsPage( $this->container ),
-			'Admin\WidgetEditor' => new Admin\WidgetEditor( $this->container ),
+			'Admin\Reviews'      => new Reviews( $this->container ),
+			'Admin\Settings'     => new SettingsPage( $this->container ),
+			'Admin\WidgetEditor' => new WidgetEditor( $this->container ),
 		];
 
 		foreach ( $controllers as $controller ) {
@@ -36,11 +40,6 @@ class Admin extends Controller {
 				$controller->init();
 			}
 		}
-
-		// TODO - Refactor for release.
-		// Admin Review Requests.
-		Admin\Reviews::init();
 	}
-
 
 }

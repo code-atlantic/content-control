@@ -5,11 +5,9 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Admin;
+namespace ContentControl\Controllers\Admin;
 
 use ContentControl\Base\Controller;
-
-use function ContentControl\Rules\allowed_user_roles;
 
 defined( 'ABSPATH' ) || exit;
 

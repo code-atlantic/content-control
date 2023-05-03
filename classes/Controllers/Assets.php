@@ -6,7 +6,7 @@
  * @copyright (c) 2023 Code Atlantic LLC.
  */
 
-namespace ContentControl;
+namespace ContentControl\Controllers;
 
 use ContentControl\Base\Controller;
 

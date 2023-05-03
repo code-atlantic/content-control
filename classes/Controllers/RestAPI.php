@@ -6,7 +6,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\Controllers;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,9 +27,9 @@ class RestAPI extends Controller {
 	 * Register Rest API routes.
 	 */
 	public function register_routes() {
-		( new RestAPI\BlockTypes() )->register_routes();
-		( new RestAPI\License() )->register_routes();
-		( new RestAPI\ObjectSearch() )->register_routes();
-		( new RestAPI\Settings() )->register_routes();
+		( new \ContentControl\RestAPI\BlockTypes() )->register_routes();
+		( new \ContentControl\RestAPI\License() )->register_routes();
+		( new \ContentControl\RestAPI\ObjectSearch() )->register_routes();
+		( new \ContentControl\RestAPI\Settings() )->register_routes();
 	}
 }

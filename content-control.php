@@ -21,8 +21,6 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
-// define( 'CONTENT_CONTROL_LOGGING', true );
-
 /**
  * Define plugin's global configuration.
  */

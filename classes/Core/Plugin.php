@@ -177,11 +177,11 @@ class Plugin {
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
-			'Assets'       => new \ContentControl\Assets( $this ),
+			'Assets'       => new \ContentControl\Controllers\Assets( $this ),
 			'Restrictions' => new \ContentControl\Restrictions( $this ),
-			'Admin'        => new \ContentControl\Admin( $this ),
-			'RestAPI'      => new \ContentControl\RestAPI( $this ),
-			'BlockEditor'  => new \ContentControl\BlockEditor( $this ),
+			'Admin'        => new \ContentControl\Controllers\Admin( $this ),
+			'RestAPI'      => new \ContentControl\Controllers\RestAPI( $this ),
+			'BlockEditor'  => new \ContentControl\Controllers\BlockEditor( $this ),
 			'Frontend'     => new \ContentControl\Frontend( $this ),
 		];
 
@@ -241,6 +241,7 @@ class Plugin {
 	public function get_option( $key, $default_value = false ) {
 		return $this->get( 'options' )->get( $key, $default_value );
 	}
+
 
 	/**
 	 * Get plugin permissions.
