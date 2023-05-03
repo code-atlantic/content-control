@@ -181,9 +181,6 @@ class Plugin {
 	private function initiate_controllers() {
 		$this->define_paths();
 
-		// Old.
-		new \ContentControl\Shortcodes();
-
 		$controllers = [
 			'PostTypes'   => new \ContentControl\Controllers\PostTypes( $this ),
 			'Assets'      => new \ContentControl\Controllers\Assets( $this ),
@@ -191,6 +188,7 @@ class Plugin {
 			'RestAPI'     => new \ContentControl\Controllers\RestAPI( $this ),
 			'BlockEditor' => new \ContentControl\Controllers\BlockEditor( $this ),
 			'Frontend'    => new \ContentControl\Controllers\Frontend( $this ),
+			'Shortcodes'  => new \ContentControl\Controllers\Shortcodes( $this ),
 		];
 
 		foreach ( $controllers as $controller ) {

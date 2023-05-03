@@ -1,13 +1,16 @@
 <?php
 /**
- * Shortcode registration.
+ * Shortcode setup.
  *
- * @copyright (c) 2021, Code Atlantic LLC.
- *
+ * @copyright (c) 2023, Code Atlantic LLC.
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\Controllers;
+
+use ContentControl\Base\Controller;
+
+use ContentControl\Utilities\Is;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,12 +19,12 @@ defined( 'ABSPATH' ) || exit;
  *
  * @package ContentControl
  */
-class Shortcodes {
+class Shortcodes extends Controller {
 
 	/**
 	 * Initialize Widgets
 	 */
-	public function __construct() {
+	public function init() {
 		add_shortcode( 'content_control', [ $this, 'content_control' ] );
 	}
 
@@ -38,7 +41,7 @@ class Shortcodes {
 			'logged_out' => null,
 			'roles'      => [],
 			'class'      => '',
-			'message'    => Options::get( 'default_denial_message', '' ),
+			'message'    => $this->container->get_option( 'default_denial_message', '' ),
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
 		$who = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
@@ -47,12 +50,18 @@ class Shortcodes {
 		$roles = array_map( 'trim', $roles );
 
 		$classes   = ! is_array( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
+		$classes[] = 'content-control-container';
+		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
 		if ( Is::accessible( $who, $roles, 'shortcode' ) ) {
+			$classes[] = 'content-control-accessible';
+			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';
 			$container = '<div class="%1$s">%2$s</div>';
 		} else {
+			$classes[] = 'content-control-not-accessible';
+			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-not-accessible';
 			$container = '<div class="%1$s">%3$s</div>';
 		}
@@ -65,7 +74,7 @@ class Shortcodes {
 	/**
 	 * Takes empty attributes and sets them to true.
 	 *
-	 * @param array $atts
+	 * @param array $atts Array of shortcode attributes.
 	 *
 	 * @return mixed
 	 */

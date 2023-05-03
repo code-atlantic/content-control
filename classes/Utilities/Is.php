@@ -1,7 +1,12 @@
 <?php
+/**
+ * Conditional helper utilities.
+ *
+ * @copyright (c) 2023, Code Atlantic LLC.
+ * @package ContentControl
+ */
 
-
-namespace ContentControl;
+namespace ContentControl\Utilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,10 +18,10 @@ defined( 'ABSPATH' ) || exit;
 class Is {
 
 	/**
+	 * Check if a content is accessible to current user.
 	 *
-	 *
-	 * @param string $who
-	 * @param array  $roles
+	 * @param string $who logged_in or logged_out.
+	 * @param array  $roles array of roles to check.
 	 * @param array  $args context and other args to pass to the filters, generic for now so it could be extended later.
 	 *
 	 * @return bool
@@ -77,6 +82,14 @@ class Is {
 		return ! $exclude;
 	}
 
+	/**
+	 * Check if a content is blocked to current user.
+	 *
+	 * @param string $who logged_in or logged_out.
+	 * @param array  $roles array of roles to check.
+	 * @param array  $args context and other args to pass to the filters, generic for now so it could be extended later.
+	 * @return boolean
+	 */
 	public static function access_blocked( $who = '', $roles = [], $args = [] ) {
 		return ! static::accessible( $who, $roles, $args );
 	}
