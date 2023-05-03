@@ -5,7 +5,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\RuleEngine;
 
 /**
  * Rules registry

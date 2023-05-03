@@ -1,6 +1,13 @@
 <?php
+/**
+ * Rule engine handler.
+ *
+ * @package ContentControl\RuleEngine
+ */
 
 namespace ContentControl\RuleEngine;
+
+use ContentControl\RuleEngine\Models\Set;
 
 /**
  * Handler for rule engine.

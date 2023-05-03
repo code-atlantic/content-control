@@ -155,7 +155,8 @@ class Plugin {
 		};
 
 		$this->container['rules'] = function () {
-			return new \ContentControl\Rules();
+			return new \ContentControl\RuleEngine\Rules();
+		};
 		};
 
 		$this->container['connect'] = new \ContentControl\Core\Connect( $this->container );

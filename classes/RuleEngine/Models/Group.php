@@ -1,6 +1,12 @@
 <?php
+/**
+ * Rule engine group model.
+ *
+ * @package ContentControl\RuleEngine
+ * @subpackage Models
+ */
 
-namespace ContentControl\RuleEngine;
+namespace ContentControl\RuleEngine\Models;
 
 /**
  * Handler for condition groups.
@@ -65,8 +71,14 @@ class Group extends Item {
 		return $this->query->check_rules();
 	}
 
+	/**
+	 * Check this groups rules.
+	 *
+	 * @return bool
+	 */
 	public function return_check() {
 		// ??
+		return true;
 	}
 
 }

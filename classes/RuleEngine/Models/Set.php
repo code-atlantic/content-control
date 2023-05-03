@@ -1,6 +1,12 @@
 <?php
+/**
+ * Rule engine set model.
+ *
+ * @package ContentControl\RuleEngine
+ * @subpackage Models
+ */
 
-namespace ContentControl\RuleEngine;
+namespace ContentControl\RuleEngine\Models;
 
 /**
  * Handler for condition sets.

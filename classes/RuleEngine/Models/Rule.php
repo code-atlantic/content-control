@@ -1,6 +1,12 @@
 <?php
+/**
+ * Rule engine rule model.
+ *
+ * @package ContentControl\RuleEngine
+ * @subpackage Models
+ */
 
-namespace ContentControl\RuleEngine;
+namespace ContentControl\RuleEngine\Models;
 
 use ContentControl\Vendor\Pimple\Exception\UnknownIdentifierException;
 
@@ -45,6 +51,8 @@ class Rule extends Item {
 	 * Build a rule.
 	 *
 	 * @param array $rule Rule data.
+	 *
+	 * @throws \Exception If rule not found.
 	 */
 	public function __construct( $rule ) {
 		$rule = wp_parse_args( $rule, [
@@ -103,8 +111,14 @@ class Rule extends Item {
 		return $this->not_operand ? ! $check : $check;
 	}
 
+	/**
+	 * Check the results of this rule.
+	 *
+	 * @return bool
+	 */
 	public function return_check() {
 		// ??
+		return true;
 	}
 
 	/**

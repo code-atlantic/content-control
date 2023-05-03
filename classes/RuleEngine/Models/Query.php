@@ -1,6 +1,12 @@
 <?php
+/**
+ * Rule engine query model.
+ *
+ * @package ContentControl\RuleEngine
+ * @subpackage Models
+ */
 
-namespace ContentControl\RuleEngine;
+namespace ContentControl\RuleEngine\Models;
 
 /**
  * Handler for condition queries.

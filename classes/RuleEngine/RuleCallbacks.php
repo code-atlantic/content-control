@@ -6,7 +6,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\RuleEngine;
 
 defined( 'ABSPATH' ) || exit;
 
