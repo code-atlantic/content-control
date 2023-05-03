@@ -3,11 +3,11 @@
  * PluginSilentUpgraderSkin class.
  *
  * @package ContentControl
- * @subpackage Admin\Installers
+ * @subpackage Installers
  * @since 2.0.0
  */
 
-namespace ContentControl\Admin\Installers;
+namespace ContentControl\Installers;
 
 /** \WP_Upgrader_Skin class */
 require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader-skin.php';

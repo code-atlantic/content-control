@@ -140,7 +140,7 @@ class Upgrader {
 		// Do not allow WordPress to search/download translations, as this will break JS output.
 		remove_action( 'upgrader_process_complete', [ 'Language_Pack_Upgrader', 'async_upgrade' ], 20 );
 
-		$installer = new \ContentControl\Admin\Installers\PluginSilentUpgrader( new \ContentControl\Admin\Installers\Install_Skin() );
+		$installer = new \ContentControl\Installers\PluginSilentUpgrader( new \ContentControl\Installers\Install_Skin() );
 
 		// 1. Check if the plugin exists already, if so upgrade it.
 

@@ -3,11 +3,11 @@
  * PluginSilentUpgrader class.
  *
  * @package ContentControl
- * @subpackage Admin\Installers
+ * @subpackage Installers
  * @since 2.0.0
  */
 
-namespace ContentControl\Admin\Installers;
+namespace ContentControl\Installers;
 
 use WP_Error;
 use WP_Upgrader;
