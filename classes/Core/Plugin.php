@@ -38,7 +38,7 @@ class Plugin {
 		$this->container = new Container( $config );
 		$this->register_general_services();
 		$this->register_plugin_services();
-		$this->initiate_components();
+		$this->initiate_controllers();
 
 		$this->check_version();
 
@@ -154,36 +154,43 @@ class Plugin {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
 
-		$this->container['rules'] = function () {
-			return new \ContentControl\RuleEngine\Rules();
-		};
+		$this->container['connect'] = function ( $c ) {
+			return new \ContentControl\Core\Connect( $c );
 		};
 
-		$this->container['connect'] = new \ContentControl\Core\Connect( $this->container );
-		$this->container['license'] = new \ContentControl\Core\License( $this->container );
-		$this->container['logging'] = new \ContentControl\Core\Logging( $this->container );
+		$this->container['license'] = function ( $c ) {
+			return new \ContentControl\Core\License( $c );
+		};
+
+		$this->container['logging'] = function ( $c ) {
+			return new \ContentControl\Core\Logging( $c );
+		};
 
 		$this->container['upgrader'] = function( $c ) {
 			return new \ContentControl\Core\Upgrader( $c );
+		};
+
+		$this->container['rules'] = function () {
+			return new \ContentControl\RuleEngine\Rules();
 		};
 	}
 
 	/**
 	 * Initiate internal components.
 	 */
-	private function initiate_components() {
+	private function initiate_controllers() {
 		$this->define_paths();
 
 		// Old.
 		new \ContentControl\Shortcodes();
 
 		$controllers = [
-			'Assets'       => new \ContentControl\Controllers\Assets( $this ),
-			'Restrictions' => new \ContentControl\Restrictions( $this ),
-			'Admin'        => new \ContentControl\Controllers\Admin( $this ),
-			'RestAPI'      => new \ContentControl\Controllers\RestAPI( $this ),
-			'BlockEditor'  => new \ContentControl\Controllers\BlockEditor( $this ),
-			'Frontend'     => new \ContentControl\Controllers\Frontend( $this ),
+			'PostTypes'   => new \ContentControl\Controllers\PostTypes( $this ),
+			'Assets'      => new \ContentControl\Controllers\Assets( $this ),
+			'Admin'       => new \ContentControl\Controllers\Admin( $this ),
+			'RestAPI'     => new \ContentControl\Controllers\RestAPI( $this ),
+			'BlockEditor' => new \ContentControl\Controllers\BlockEditor( $this ),
+			'Frontend'    => new \ContentControl\Controllers\Frontend( $this ),
 		];
 
 		foreach ( $controllers as $controller ) {
@@ -242,7 +249,6 @@ class Plugin {
 	public function get_option( $key, $default_value = false ) {
 		return $this->get( 'options' )->get( $key, $default_value );
 	}
-
 
 	/**
 	 * Get plugin permissions.
