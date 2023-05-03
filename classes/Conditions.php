@@ -349,7 +349,7 @@ class Conditions {
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
 						'as_array'    => true,
-						'options'     => $this->preload_posts ? Helpers::taxonomy_selectlist( $tax_name ) : [],
+						'options'     => $this->preload_posts ? $this->taxonomy_selectlist( $tax_name ) : [],
 					],
 				],
 				'callback' => [ '\\ContentControl\Condition_Callbacks', 'post_type_tax' ],
@@ -442,6 +442,54 @@ class Conditions {
 		$conditions = apply_filters( 'jp_cc_registered_conditions', $conditions );
 
 		$this->add_conditions( $conditions );
+	}
+
+
+	public static function taxonomy_selectlist( $taxonomies = [], $args = [], $include_total = false ) {
+		if ( empty( $taxonomies ) ) {
+			$taxonomies = [ 'category' ];
+		}
+
+		$args = wp_parse_args( $args, [
+			'hide_empty' => false,
+			'number'     => 10,
+			'search'     => '',
+			'include'    => null,
+			'offset'     => 0,
+			'page'       => null,
+		] );
+
+		if ( $args['page'] ) {
+			$args['offset'] = ( $args['page'] - 1 ) * $args['number'];
+		}
+
+		// Query Caching.
+		static $queries = [];
+
+		$key = md5( serialize( $args ) );
+
+		if ( ! isset( $queries[ $key ] ) ) {
+			$terms = [];
+
+			foreach ( get_terms( $taxonomies, $args ) as $term ) {
+				$terms[ $term->name ] = $term->term_id;
+			}
+
+			$total_args = $args;
+			unset( $total_args['number'] );
+			unset( $total_args['offset'] );
+
+			$results = [
+				'items'       => $terms,
+				'total_count' => $include_total ? wp_count_terms( $taxonomies, $total_args ) : null,
+			];
+
+			$queries[ $key ] = $results;
+		} else {
+			$results = $queries[ $key ];
+		}
+
+		return ! $include_total ? $results['items'] : $results;
 	}
 
 }

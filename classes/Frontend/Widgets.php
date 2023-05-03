@@ -11,8 +11,9 @@ namespace ContentControl\Frontend;
 defined( 'ABSPATH' ) || exit;
 
 use ContentControl\Is;
-use ContentControl\Helpers;
 use ContentControl\Base\Controller;
+
+use WP_Customize_Manager;
 
 use function ContentControl\Widgets\get_options as get_widget_options;
 
@@ -36,7 +37,7 @@ class Widgets extends Controller {
 	 * @return array The modified $widget_area array.
 	 */
 	public function exclude_widgets( $widget_areas ) {
-		if ( is_admin() || Helpers::is_customize_preview() ) {
+		if ( is_admin() || $this->is_customize_preview() ) {
 			return $widget_areas;
 		}
 
@@ -59,6 +60,17 @@ class Widgets extends Controller {
 		}
 
 		return $widget_areas;
+	}
+
+	/**
+	 * Is customizer.
+	 *
+	 * @return boolean
+	 */
+	public function is_customize_preview() {
+		global $wp_customize;
+
+		return ( $wp_customize instanceof WP_Customize_Manager ) && $wp_customize->is_preview();
 	}
 
 }
