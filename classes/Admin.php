@@ -27,7 +27,7 @@ class Admin extends Controller {
 	 */
 	public function init() {
 		$controllers = [
-			'Admin\Settings'     => new Admin\Settings( $this->container ),
+			'Admin\Settings'     => new Admin\SettingsPage( $this->container ),
 			'Admin\WidgetEditor' => new Admin\WidgetEditor( $this->container ),
 		];
 

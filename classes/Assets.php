@@ -10,7 +10,7 @@ namespace ContentControl;
 
 use ContentControl\Base\Controller;
 
-use function ContentControl\plugin;
+use function ContentControl\Rules\allowed_user_roles;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,7 +37,7 @@ class Assets extends Controller {
 	 * @return array
 	 */
 	public function get_packages() {
-		$permissions = plugin()->get_permissions();
+		$permissions = $this->container->get_permissions();
 
 		foreach ( $permissions as $permission => $cap ) {
 			$permissions[ $permission ] = current_user_can( $cap );
@@ -50,8 +50,8 @@ class Assets extends Controller {
 				'varsName' => 'contentControlBlockEditor',
 				'vars'     => [
 					'adminUrl'       => admin_url(),
-					'pluginUrl'      => plugin()->get_url(),
-					'advancedMode'   => \ContentControl\get_option( 'advancedMode' ),
+					'pluginUrl'      => $this->container->get_url(),
+					'advancedMode'   => $this->container->get_option( 'advanced_mode', false ),
 					'allowedBlocks'  => [],
 					'excludedBlocks' => [
 						'core/nextpage',
@@ -85,13 +85,24 @@ class Assets extends Controller {
 				'varsName' => 'contentControlRuleEngine',
 				'vars'     => [
 					'adminUrl'        => admin_url(),
-					'registeredRules' => plugin( 'rules' )->get_block_editor_rules(),
+					'registeredRules' => $this->container->get( 'rules' )->get_block_editor_rules(),
 				],
 				'styles'   => true,
 			],
 			'settings-page' => [
-				'handle' => 'content-control-settings-page',
-				'styles' => true,
+				'handle'   => 'content-control-settings-page',
+				'varsName' => 'contentControlSettingsPage',
+				'vars'     => [
+					'pluginUrl'    => $this->container->get( 'url' ),
+					'adminUrl'     => admin_url(),
+					'restBase'     => 'content-control/v2',
+					'userRoles'    => allowed_user_roles(),
+					'logUrl'       => current_user_can( 'manage_options' ) ? $this->container->get( 'logging' )->get_file_url() : false,
+					'rolesAndCaps' => wp_roles()->roles,
+					'version'      => $this->container->get( 'version' ),
+					'permissions'  => $permissions,
+				],
+				'styles'   => true,
 			],
 			'utils'         => [
 				'handle' => 'content-control-utils',
@@ -117,15 +128,22 @@ class Assets extends Controller {
 
 			$js_deps = isset( $package_data['deps'] ) ? $package_data['deps'] : [];
 
-			wp_register_script( $handle, plugin()->get_url( "dist/$package.js" ), array_merge( $meta['dependencies'], $js_deps ), $meta['version'], true );
+			wp_register_script( $handle, $this->container->get_url( "dist/$package.js" ), array_merge( $meta['dependencies'], $js_deps ), $meta['version'], true );
 
 			if ( isset( $package_data['styles'] ) && $package_data['styles'] ) {
-				wp_register_style( $handle, plugin()->get_url( "dist/$package.css" ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
+				wp_register_style( $handle, $this->container->get_url( "dist/$package.css" ), [ 'wp-components', 'wp-block-editor', 'dashicons' ], $meta['version'] );
 			}
 
 			if ( isset( $package_data['varsName'] ) && ! empty( $package_data['vars'] ) ) {
 				wp_localize_script( $handle, $package_data['varsName'], $package_data['vars'] );
 			}
+
+			/**
+			 * May be extended to wp_set_script_translations( 'my-handle', 'my-domain',
+			 * plugin_dir_path( MY_PLUGIN ) . 'languages' ) ). For details see
+			 * https://make.wordpress.org/core/2018/11/09/new-javascript-i18n-support-in-wordpress/
+			 */
+			wp_set_script_translations( $handle, 'content-control' );
 		}
 	}
 
@@ -151,10 +169,10 @@ class Assets extends Controller {
 	 * @return array
 	 */
 	public function get_asset_meta( $package ) {
-		$meta_path = "dist/$package.asset.php";
-		return file_exists( plugin( 'path' ) . $meta_path ) ? require plugin( 'path' ) . $meta_path : [
+		$meta_path = $this->container->get_path( "dist/$package.asset.php" );
+		return file_exists( $meta_path ) ? require $meta_path : [
 			'dependencies' => [],
-			'version'      => plugin( 'version' ),
+			'version'      => $this->container->get( 'version' ),
 		];
 	}
 

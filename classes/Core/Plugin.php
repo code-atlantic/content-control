@@ -232,6 +232,17 @@ class Plugin {
 	}
 
 	/**
+	 * Get plugin option.
+	 *
+	 * @param string  $key Option key.
+	 * @param boolean $default_value Default value.
+	 * @return mixed
+	 */
+	public function get_option( $key, $default_value = false ) {
+		return $this->get( 'options' )->get( $key, $default_value );
+	}
+
+	/**
 	 * Get plugin permissions.
 	 *
 	 * @return array Array of permissions.
