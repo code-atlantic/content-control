@@ -29,10 +29,16 @@ class Reviews extends Controller {
 	 * @var boolean|array
 	 */
 	private $debug = false;
-	// private $debug = [
-	// 	'group' => 'time_installed',
-	// 	'code'  => 'one_week',
-	// ];
+
+	/**
+	 * Debug trigger.
+	 *
+	 * @var array
+	 */
+	private $debug_trigger = [
+		'group' => 'time_installed',
+		'code'  => 'one_week',
+	];
 
 	/**
 	 * Tracking API Endpoint.
@@ -127,8 +133,8 @@ class Reviews extends Controller {
 	public function get_trigger_group() {
 		static $selected;
 
-		if ( false !== $this->debug ) {
-			return isset( $this->debug['group'] ) ? $this->debug['group'] : 'time_installed';
+		if ( $this->debug ) {
+			return isset( $this->debug_trigger['group'] ) ? $this->debug_trigger['group'] : 'time_installed';
 		}
 
 		if ( ! isset( $selected ) ) {
@@ -162,7 +168,7 @@ class Reviews extends Controller {
 		static $selected;
 
 		if ( $this->debug ) {
-			return isset( $this->debug['code'] ) ? $this->debug['code'] : 'one_week';
+			return isset( $this->debug_trigger['code'] ) ? $this->debug_trigger['code'] : 'one_week';
 		}
 
 		if ( ! isset( $selected ) ) {
@@ -222,10 +228,6 @@ class Reviews extends Controller {
 	 */
 	public function dismissed_triggers() {
 		$user_id = get_current_user_id();
-
-		if ( $this->debug ) {
-			return [];
-		}
 
 		$dismissed_triggers = get_user_meta( $user_id, '_content_control_reviews_dismissed_triggers', true );
 
@@ -477,11 +479,15 @@ class Reviews extends Controller {
 	 * @return bool
 	 */
 	public function hide_notices() {
+		if ( $this->debug ) {
+			return false;
+		}
+
 		$code = $this->get_trigger_code();
 
 		$conditions = [
-			! $this->debug && $this->already_did(),
-			! $this->debug && $this->last_dismissed() && strtotime( $this->last_dismissed() . ' +2 weeks' ) > time(),
+			$this->already_did(),
+			$this->last_dismissed() && strtotime( $this->last_dismissed() . ' +2 weeks' ) > time(),
 			empty( $code ),
 		];
 
