@@ -2,11 +2,11 @@
 /**
  * Frontend general setup.
  *
- * @copyright (c) 2021, Code Atlantic LLC.
+ * @copyright (c) 2023, Code Atlantic LLC.
  * @package ContentControl
  */
 
-namespace ContentControl;
+namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
 use ContentControl\RuleEngine\Handler;
@@ -16,27 +16,12 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class Frontend
  */
-class Frontend extends Controller {
+class Blocks extends Controller {
 
 	/**
 	 * Initialize Hooks & Filters
 	 */
 	public function init() {
-		$controllers = [
-			'Frontend\Widgets' => new Frontend\Widgets( $this->container ),
-		];
-
-		foreach ( $controllers as $controller ) {
-			if ( $controller instanceof Controller ) {
-				$controller->init();
-			}
-		}
-
-		// TODO - Refactor for release.
-		new Frontend\Posts();
-		new Frontend\Feeds();
-		new Frontend\Restrictions();
-
 		if ( is_admin() ) {
 			return;
 		}
