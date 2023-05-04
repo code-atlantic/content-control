@@ -1,6 +1,39 @@
 // import type { Query } from '@content-control/rule-engine';
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
+/* temporary to prevent cyclical dependencies. */
+interface BaseItem {
+	id: string;
+	type: string;
+	// These are for React SortableJS.
+	selected?: boolean;
+	chosen?: boolean;
+	filtered?: boolean;
+}
+
+interface Query {
+	logicalOperator: 'and' | 'or';
+	items: Item[];
+}
+
+interface RuleItem extends BaseItem {
+	type: 'rule';
+	name: string;
+	options?: {
+		[ key: string ]: any;
+	};
+	notOperand?: boolean;
+}
+
+interface GroupItem extends BaseItem {
+	type: 'group';
+	label: string;
+	query: Query;
+}
+
+type Item = RuleItem | GroupItem;
+/* end temporary */
+
 export type EditorId = 'new' | number | undefined;
 
 export interface RestrictionSettings {
@@ -12,7 +45,7 @@ export interface RestrictionSettings {
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
-	// conditions: Query;
+	conditions: Query;
 	[ key: string ]: any;
 }
 
