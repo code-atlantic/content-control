@@ -36,8 +36,7 @@ class Plugin {
 	 */
 	public function __construct( $config ) {
 		$this->container = new Container( $config );
-		$this->register_general_services();
-		$this->register_plugin_services();
+		$this->register_services();
 		$this->initiate_controllers();
 
 		$this->check_version();
@@ -127,7 +126,7 @@ class Plugin {
 	/**
 	 * Add default services to our Container
 	 */
-	public function register_general_services() {
+	public function register_services() {
 		/**
 		 * Self reference for deep DI lookup.
 		 */
@@ -138,18 +137,6 @@ class Plugin {
 		 */
 		$GLOBALS['content_control'] = $this->container;
 
-		/**
-		 * Attach utility functions.
-		 */
-		$this->container['get_path'] = [ $this, 'get_path' ];
-		$this->container['get_url']  = [ $this, 'get_url' ];
-	}
-
-	/**
-	 * Add default services to our Container
-	 */
-	public function register_plugin_services() {
-		// Initiate various controllers.
 		$this->container['options'] = function( $c ) {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
@@ -202,6 +189,12 @@ class Plugin {
 	 * Initiate internal paths.
 	 */
 	private function define_paths() {
+		/**
+		 * Attach utility functions.
+		 */
+		$this->container['get_path'] = [ $this, 'get_path' ];
+		$this->container['get_url']  = [ $this, 'get_url' ];
+
 		// Define paths.
 		$this->container['dist_path'] = $this->get_path( 'dist' ) . '/';
 	}
