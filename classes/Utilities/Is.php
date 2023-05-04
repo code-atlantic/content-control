@@ -77,7 +77,7 @@ class Is {
 				// Do nothing if the who value does not match logged_in or logged_out.
 		}
 
-		$exclude = apply_filters( 'jp_cc_is_accessible', $exclude, $who, $roles, $args );
+		$exclude = apply_filters( 'content_control_is_accessible', $exclude, $who, $roles, $args );
 
 		return ! $exclude;
 	}

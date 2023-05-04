@@ -102,7 +102,7 @@ class Rules {
 	public function get_block_editor_rules() {
 		$rules = $this->get_rules();
 
-		return apply_filters( 'contctrl_block_editor_rules', $rules );
+		return apply_filters( 'content_control_rule_engine_rules', $rules );
 	}
 
 	/**
@@ -498,7 +498,7 @@ class Rules {
 	 * @return void
 	 */
 	public function register_deprecated_rules() {
-		$old_rules = apply_filters( 'jp_cc_registered_conditions', [] );
+		$old_rules = apply_filters( 'content_control_old_conditions', [] );
 
 		if ( ! empty( $old_rules ) ) {
 			$old_rules = $this->parse_old_rules( $old_rules );

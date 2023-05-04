@@ -10,7 +10,7 @@ namespace ContentControl\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 
-use ContentControl\Is;
+use ContentControl\Utilities\Is;
 use ContentControl\Base\Controller;
 
 use WP_Customize_Manager;
