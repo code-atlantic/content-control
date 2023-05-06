@@ -2,16 +2,16 @@
 /**
  * Rule engine set model.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  * @subpackage Models
  */
 
-namespace ContentControl\RuleEngine\Models;
+namespace ContentControl\Models\RuleEngine;
 
 /**
  * Handler for condition sets.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  */
 class Set {
 

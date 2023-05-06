@@ -2,11 +2,11 @@
 /**
  * Rule engine rule model.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  * @subpackage Models
  */
 
-namespace ContentControl\RuleEngine\Models;
+namespace ContentControl\Models\RuleEngine;
 
 use ContentControl\Vendor\Pimple\Exception\UnknownIdentifierException;
 
@@ -15,7 +15,7 @@ use function ContentControl\plugin;
 /**
  * Handler for condition rules.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  */
 class Rule extends Item {
 

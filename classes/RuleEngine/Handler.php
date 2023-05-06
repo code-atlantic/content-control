@@ -7,7 +7,7 @@
 
 namespace ContentControl\RuleEngine;
 
-use ContentControl\RuleEngine\Models\Set;
+use ContentControl\Models\RuleEngine\Set;
 
 /**
  * Handler for rule engine.

@@ -2,16 +2,16 @@
 /**
  * Rule engine group model.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  * @subpackage Models
  */
 
-namespace ContentControl\RuleEngine\Models;
+namespace ContentControl\Models\RuleEngine;
 
 /**
  * Handler for condition groups.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  */
 class Group extends Item {
 

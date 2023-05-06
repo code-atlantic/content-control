@@ -2,16 +2,16 @@
 /**
  * Rule engine item model.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  * @subpackage Models
  */
 
-namespace ContentControl\RuleEngine\Models;
+namespace ContentControl\Models\RuleEngine;
 
 /**
  * Handler for condition items.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  */
 abstract class Item {
 

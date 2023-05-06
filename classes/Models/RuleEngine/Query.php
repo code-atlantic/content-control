@@ -2,16 +2,16 @@
 /**
  * Rule engine query model.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  * @subpackage Models
  */
 
-namespace ContentControl\RuleEngine\Models;
+namespace ContentControl\Models\RuleEngine;
 
 /**
  * Handler for condition queries.
  *
- * @package ContentControl\RuleEngine
+ * @package ContentControl
  */
 class Query {
 
