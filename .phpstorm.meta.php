@@ -22,13 +22,14 @@ namespace PHPSTORM_META;
   */
   override( \ContentControl\Core\Plugin::get(0), map( [
     // Controllers.
-    '' => '@',
-    'connect' => \ContentControl\Core\Connect::class,
-    'license' => \ContentControl\Core\License::class,
-    'logging' => \ContentControl\Core\Logging::class,
-    'options' => \ContentControl\Core\Options::class,
-    'rules'   => \ContentControl\Rules::class,
-    'upgrader'   => \ContentControl\Core\Upgrader::class,
+    ''             => '@',
+    'connect'      => \ContentControl\Core\Connect::class,
+    'license'      => \ContentControl\Core\License::class,
+    'logging'      => \ContentControl\Core\Logging::class,
+    'options'      => \ContentControl\Core\Options::class,
+    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'rules'        => \ContentControl\RuleEngine\Rules::class,
+    'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
 
  /**
@@ -38,12 +39,13 @@ namespace PHPSTORM_META;
   override ( \ContentControl\plugin(0), map( [
     // Controllers.
     '' => '@',
-    'connect' => \ContentControl\Core\Connect::class,
-    'license' => \ContentControl\Core\License::class,
-    'logging' => \ContentControl\Core\Logging::class,
-    'options' => \ContentControl\Core\Options::class,
-    'rules'   => \ContentControl\Rules::class,
-    'upgrader'   => \ContentControl\Core\Upgrader::class,
+    'connect'      => \ContentControl\Core\Connect::class,
+    'license'      => \ContentControl\Core\License::class,
+    'logging'      => \ContentControl\Core\Logging::class,
+    'options'      => \ContentControl\Core\Options::class,
+    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'rules'        => \ContentControl\RuleEngine\Rules::class,
+    'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
 
   /**
@@ -53,12 +55,13 @@ namespace PHPSTORM_META;
   override ( \ContentControl\Base\Container::get(0), map( [
     // Controllers.
     '' => '@',
-    'connect' => \ContentControl\Core\Connect::class,
-    'license' => \ContentControl\Core\License::class,
-    'logging' => \ContentControl\Core\Logging::class,
-    'options' => \ContentControl\Core\Options::class,
-    'rules'   => \ContentControl\Rules::class,
-    'upgrader'   => \ContentControl\Core\Upgrader::class,
+    'connect'      => \ContentControl\Core\Connect::class,
+    'license'      => \ContentControl\Core\License::class,
+    'logging'      => \ContentControl\Core\Logging::class,
+    'options'      => \ContentControl\Core\Options::class,
+    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'rules'        => \ContentControl\RuleEngine\Rules::class,
+    'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
 
     /**
@@ -68,10 +71,11 @@ namespace PHPSTORM_META;
 override ( \ContentControl\Base\Container::offsetGet(0), map( [
   // Controllers.
   '' => '@',
-  'connect' => \ContentControl\Core\Connect::class,
-  'license' => \ContentControl\Core\License::class,
-  'logging' => \ContentControl\Core\Logging::class,
-  'options' => \ContentControl\Core\Options::class,
-  'rules'   => \ContentControl\Rules::class,
-  'upgrader'   => \ContentControl\Core\Upgrader::class,
+  'connect'      => \ContentControl\Core\Connect::class,
+  'license'      => \ContentControl\Core\License::class,
+  'logging'      => \ContentControl\Core\Logging::class,
+  'options'      => \ContentControl\Core\Options::class,
+  'upgrader'     => \ContentControl\Core\Upgrader::class,
+  'rules'        => \ContentControl\RuleEngine\Rules::class,
+  'restrictions' => \ContentControl\Services\Restrictions::class,
 ] ) );

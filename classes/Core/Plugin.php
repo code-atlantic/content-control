@@ -160,6 +160,10 @@ class Plugin {
 		$this->container['rules'] = function () {
 			return new \ContentControl\RuleEngine\Rules();
 		};
+
+		$this->container['restrictions'] = function () {
+			return new \ContentControl\Services\Restrictions();
+		};
 	}
 
 	/**
