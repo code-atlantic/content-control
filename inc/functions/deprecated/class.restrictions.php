@@ -21,27 +21,13 @@ class Restrictions {
 
 	public static $protected_posts = [];
 
+	/**
+	 * Method to get the protected post content.
+	 *
+	 * @return string
+	 */
 	public static function restricted_content() {
-		$restrictions = Options::get( 'restrictions' );
-
-		$restriced_content = false;
-
-		if ( ! $restrictions || empty( $restrictions ) ) {
-			return $restriced_content;
-		}
-
-		foreach ( $restrictions as $restriction ) {
-			if ( static::content_match( $restriction ) ) {
-				$roles = ! empty( $restriction['roles'] ) ? $restriction['roles'] : [];
-
-				if ( Is::access_blocked( $restriction['who'], $roles, [ 'context' => 'content_restrictions' ] ) ) {
-					$restriced_content = $restriction;
-				}
-				break;
-			}
-		}
-
-		return $restriced_content;
+		return plugin( 'restrictions' )->restricted_content();
 	}
 
 }
