@@ -112,16 +112,6 @@ class Rule extends Item {
 	}
 
 	/**
-	 * Check the results of this rule.
-	 *
-	 * @return bool
-	 */
-	public function return_check() {
-		// ??
-		return true;
-	}
-
-	/**
 	 * Check if this rule's callback is based in JS rather than PHP.
 	 *
 	 * @return bool
@@ -134,5 +124,44 @@ class Rule extends Item {
 		}
 
 		return ! isset( $definition['callback'] );
+	}
+
+	/**
+	 * Return the rule check as boolean or null if the rule is JS based.
+	 *
+	 * @return bool|null
+	 */
+	public function get_check() {
+		if ( $this->is_js_rule() ) {
+			return null;
+		}
+
+		return $this->check_rule();
+	}
+
+	/**
+	 * Return the rule check as an array of information.
+	 *
+	 * Useful for debugging.
+	 *
+	 * @return array|null
+	 */
+	public function get_check_info() {
+		if ( $this->is_js_rule() ) {
+			return null;
+		}
+
+		$definition = $this->get_rule_definition();
+
+		$check = call_user_func( $definition['callback'], $this->options );
+
+		return [
+			'result' => $check,
+			'id'     => $this->id,
+			'rule'   => $this->name,
+			'not'    => $this->not_operand,
+			'args'   => $this->options,
+			'def'    => $definition,
+		];
 	}
 }

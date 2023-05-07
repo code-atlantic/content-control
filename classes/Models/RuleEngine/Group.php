@@ -76,9 +76,19 @@ class Group extends Item {
 	 *
 	 * @return bool
 	 */
-	public function return_check() {
-		// ??
-		return true;
+	public function get_checks() {
+		return $this->query->get_checks();
+	}
+
+	/**
+	 * Return the rule check as an array of information.
+	 *
+	 * Useful for debugging.
+	 *
+	 * @return array
+	 */
+	public function get_check_info() {
+		return $this->query->get_check_info();
 	}
 
 }

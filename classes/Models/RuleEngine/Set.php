@@ -54,24 +54,6 @@ class Set {
 	}
 
 	/**
-	 * Reduces all checks to a single boolean.
-	 *
-	 * @return boolean
-	 */
-	public function check() {
-		return false;
-	}
-
-	/**
-	 * Get the check array for further post processing.
-	 *
-	 * @return array Array of check values.
-	 */
-	public function get_check() {
-		return [];
-	}
-
-	/**
 	 * Check if this set has JS based rules.
 	 *
 	 * @return bool
@@ -87,5 +69,25 @@ class Set {
 	 */
 	public function check_rules() {
 		return $this->query->check_rules();
+	}
+
+	/**
+	 * Get the check array for further post processing.
+	 *
+	 * @return array Array of check values.
+	 */
+	public function get_checks() {
+		return $this->query->get_checks();
+	}
+
+	/**
+	 * Return the checks as an array of information.
+	 *
+	 * Useful for debugging.
+	 *
+	 * @return array
+	 */
+	public function get_check_info() {
+		return $this->query->get_check_info();
 	}
 }

@@ -82,14 +82,72 @@ class Query {
 
 		foreach ( $this->items as $item ) {
 			if ( $item instanceof Rule ) {
-				$checks[] = $item->check_rule();
+				$result = $item->check_rule();
 			} elseif ( $item instanceof Group ) {
-				$checks[] = $item->check_rules();
+				$result = $item->check_rules();
+			}
+
+			$checks[] = $result;
+
+			// Bail early if we can.
+			if (
+				// If we have a true result and are using `or`.
+				( true === $result && 'or' === $this->logical_operator ) ||
+				// If we have a false result and are using `and`.
+				( false === $result && 'and' === $this->logical_operator )
+			) {
+				break;
 			}
 		}
 
-		return 'or' === $this->logical_operator
-			? in_array( true, $checks, true )
-			: ! in_array( false, $checks, true );
+		/*
+		 * This method ignores null values (JS conditions),
+		 * if changed, null needs to be accounted for.
+		 */
+		if ( 'or' === $this->logical_operator ) {
+			// If any values are true or null, return true.
+			return in_array( true, $checks, true ) || in_array( null, $checks, true );
+		} else {
+			// If any values are false, return false.
+			return ! in_array( false, $checks, true );
+		}
+	}
+
+	/**
+	 * Return the checks as an array.
+	 *
+	 * Useful for debugging or passing to JS.
+	 *
+	 * @return (bool|null)[]
+	 */
+	public function get_checks() {
+		$checks = [];
+
+		foreach ( $this->items as $item ) {
+			if ( $item instanceof Rule ) {
+				$checks[] = $item->get_check();
+			} elseif ( $item instanceof Group ) {
+				$checks[] = $item->get_checks();
+			}
+		}
+
+		return $checks;
+	}
+
+	/**
+	 * Return the checks as an array of information.
+	 *
+	 * Useful for debugging.
+	 *
+	 * @return array
+	 */
+	public function get_check_info() {
+		$checks = [];
+
+		foreach ( $this->items as $key => $item ) {
+			$checks[ $key ] = $item->get_check_info();
+		}
+
+		return $checks;
 	}
 }

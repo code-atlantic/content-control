@@ -21,4 +21,13 @@ abstract class Item {
 	 * @var string
 	 */
 	public $id;
+
+	/**
+	 * Return the checks as an array of information.
+	 *
+	 * Useful for debugging.
+	 *
+	 * @return array
+	 */
+	abstract public function get_check_info();
 }
