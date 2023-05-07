@@ -14,10 +14,13 @@ use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once './deprecated/class.is.php';
+require_once './deprecated/class.restrictions.php';
+
 /**
  * Class JP_Content_Control
  *
- * @deprecated 2.0.0
+ * @deprecated 2.0.0 Use \ContentControl\Plugin instead.
  */
 class JP_Content_Control {}
 
@@ -64,9 +67,9 @@ add_filter( 'content_control_user_roles', function ( $roles ) {
 	return $roles;
 }, 9 );
 
-add_filter( 'content_control_is_accessible', function ( $exclude, $who, $roles, $args ) {
+add_filter( 'content_control_restriction_applies_to_user', function ( $restriction_applies, $restriction, $context ) {
 	if ( has_filter( 'jp_cc_is_accessible' ) ) {
-		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_is_accessible', '2.0.0', 'filter:content_control_is_accessible' );
+		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_is_accessible', '2.0.0', 'filter:content_control_restriction_applies_to_user' );
 		/**
 		 * Filter if content is accessible.
 		 *
@@ -77,10 +80,10 @@ add_filter( 'content_control_is_accessible', function ( $exclude, $who, $roles, 
 		 * @param array $roles Roles being checked.
 		 * @param array $args context and other args to pass to the filters, generic for now so it could be extended later.
 		 */
-		return apply_filters( 'jp_cc_is_accessible', $exclude, $who, $roles, $args );
+		return apply_filters( 'jp_cc_is_accessible', $restriction_applies, $restriction['who'], $restriction['roles'], [ 'context' => $context ] );
 	}
 
-	return $exclude;
+	return $restriction_applies;
 }, 9, 4);
 
 add_filter( 'content_control_restricted_message', function ( $message ) {
