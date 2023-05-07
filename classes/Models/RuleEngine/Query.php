@@ -89,7 +89,7 @@ class Query {
 
 			$checks[] = $result;
 
-			// Bail early if we can.
+			// Bail as early as we can.
 			if (
 				// If we have a true result and are using `or`.
 				( true === $result && 'or' === $this->logical_operator ) ||
