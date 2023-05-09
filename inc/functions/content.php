@@ -50,3 +50,30 @@ function excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong><blockquote
 
 	return wpautop( $the_excerpt );
 }
+
+
+
+if ( ! function_exists( 'get_current_page_url' ) ) {
+	/**
+	 * Get the current page URL.
+	 *
+	 * @return string
+	 */
+	function get_current_page_url() {
+		global $wp;
+		/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
+		return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+		/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
+	}
+}
+
+if ( ! function_exists( 'the_current_page_url' ) ) {
+	/**
+	 * Output the current page URL
+	 *
+	 * @return void
+	 */
+	function the_current_page_url() {
+		echo esc_url_raw( get_current_page_url() );
+	}
+}
