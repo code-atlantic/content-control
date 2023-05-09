@@ -51,6 +51,26 @@ function excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong><blockquote
 	return wpautop( $the_excerpt );
 }
 
+/**
+ * Filter feed post content when needed.
+ *
+ * @param string                             $content Content to display.
+ * @param \ContentControl\Models\Restriction $restriction Restriction object.
+ *
+ * @return string
+ */
+function append_post_excerpts( $content, $restriction ) {
+	global $post;
+
+	if ( $restriction->show_excerpts() ) {
+		$excerpt_length = apply_filters( 'content_control/excerpt_length', 50 );
+
+		$excerpt = excerpt_by_id( $post, $excerpt_length );
+		$content = $excerpt . $content;
+	}
+
+	return $content;
+}
 
 
 if ( ! function_exists( 'get_current_page_url' ) ) {
