@@ -130,3 +130,19 @@ function get_restricted_content_message( $post_id = null ) {
 
 	return $restriction->get_message();
 }
+
+/**
+ * Check if protection methods should be disabled.
+ *
+ * Generally used to bypass protections when using page editors.
+ *
+ * @return bool
+ */
+function protection_is_disabled() {
+	$checks = [
+		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
+		did_action( 'elementor/loaded' ) && class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance ) && isset( \Elementor\Plugin::$instance->preview ) && method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode' ) && \Elementor\Plugin::$instance->preview->is_preview_mode(),
+	];
+
+	return in_array( true, $checks, true );
+}
