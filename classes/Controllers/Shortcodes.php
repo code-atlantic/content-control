@@ -10,7 +10,7 @@ namespace ContentControl\Controllers;
 
 use ContentControl\Base\Controller;
 
-use ContentControl\Utilities\Is;
+use function ContentControl\user_meets_requirements;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -54,7 +54,7 @@ class Shortcodes extends Controller {
 		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
-		if ( Is::accessible( $who, $roles, 'shortcode' ) ) {
+		if ( user_meets_requirements( $who, $roles ) ) {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';
