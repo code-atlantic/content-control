@@ -56,12 +56,12 @@ class Frontend extends Controller {
 	 */
 	public function hooks() {
 		add_filter( 'content_control/feed_restricted_message', [ $this, 'append_post_excerpts' ], 10, 2 );
-		add_filter( 'content_control/feed_restricted_message', [ $this, 'wpautop' ], 10 );
-		add_filter( 'content_control/feed_restricted_message', [ $this, 'do_shortcode' ], 10 );
+		add_filter( 'content_control/feed_restricted_message', 'wpautop', 10 );
+		add_filter( 'content_control/feed_restricted_message', 'do_shortcode', 10 );
 
 		add_filter( 'content_control/post_restricted_message', [ $this, 'append_post_excerpts' ], 10, 2 );
-		add_filter( 'content_control/post_restricted_message', [ $this, 'wpautop' ], 10 );
-		add_filter( 'content_control/post_restricted_message', [ $this, 'do_shortcode' ], 10 );
+		add_filter( 'content_control/post_restricted_message', 'wpautop', 10 );
+		add_filter( 'content_control/post_restricted_message', 'do_shortcode', 10 );
 	}
 
 	/**
@@ -83,16 +83,6 @@ class Frontend extends Controller {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Process shortcodes.
-	 *
-	 * @param string $content Content to process.
-	 * @return string
-	 */
-	public function process_shortcodes( $content ) {
-		return do_shortcode( $content );
 	}
 
 }
