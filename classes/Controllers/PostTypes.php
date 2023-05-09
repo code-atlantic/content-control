@@ -62,9 +62,9 @@ class PostTypes extends Controller {
 			'supports'            => [ 'title' ],
 			'show_in_graphql'     => false,
 			'capabilities'        => [
-				'create_posts' => plugin()->get_permission( 'edit_restrictions' ),
-				'edit_posts'   => plugin()->get_permission( 'edit_restrictions' ),
-				'delete_posts' => plugin()->get_permission( 'edit_restrictions' ),
+				'create_posts' => $this->container->get_permission( 'edit_restrictions' ),
+				'edit_posts'   => $this->container->get_permission( 'edit_restrictions' ),
+				'delete_posts' => $this->container->get_permission( 'edit_restrictions' ),
 			],
 
 		];
@@ -79,39 +79,39 @@ class PostTypes extends Controller {
 	 */
 	public function register_rest_fields() {
 		register_rest_field( 'cc_restriction', 'title', [
-			'get_callback'    => function ( $object ) {
-				return get_the_title( $object['id'] );
+			'get_callback'    => function ( $obj ) {
+				return get_the_title( $obj['id'] );
 			},
-			'update_callback' => function ( $value, $object ) {
+			'update_callback' => function ( $value, $obj ) {
 				wp_update_post( [
-					'ID'         => $object->ID,
+					'ID'         => $obj->ID,
 					'post_title' => sanitize_text_field( $value ),
 				] );
 			},
 		] );
 
 		register_rest_field( 'cc_restriction', 'description', [
-			'get_callback'    => function ( $object ) {
-				return get_the_excerpt( $object['id'] );
+			'get_callback'    => function ( $obj ) {
+				return get_the_excerpt( $obj['id'] );
 			},
-			'update_callback' => function ( $value, $object ) {
+			'update_callback' => function ( $value, $obj ) {
 				wp_update_post( [
-					'ID'           => $object->ID,
+					'ID'           => $obj->ID,
 					'post_excerpt' => sanitize_text_field( $value ),
 				] );
 			},
 		] );
 
 		register_rest_field( 'cc_restriction', 'settings', [
-			'get_callback'        => function ( $object ) {
-				return get_post_meta( $object['id'], 'restriction_settings', true );
+			'get_callback'        => function ( $obj ) {
+				return get_post_meta( $obj['id'], 'restriction_settings', true );
 			},
-			'update_callback'     => function ( $value, $object ) {
+			'update_callback'     => function ( $value, $obj ) {
 				// Update the field/meta value.
-				update_post_meta( $object->ID, 'restriction_settings', $value );
+				update_post_meta( $obj->ID, 'restriction_settings', $value );
 			},
 			'permission_callback' => function () {
-				return current_user_can( plugin()->get_permission( 'edit_restrictions' ) );
+				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
 		] );
 	}
