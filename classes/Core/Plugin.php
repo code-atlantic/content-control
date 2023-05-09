@@ -30,12 +30,23 @@ class Plugin {
 	public $container;
 
 	/**
+	 * Array of controllers.
+	 *
+	 * Useful to unhook actions/filters from global space.
+	 *
+	 * @var Container
+	 */
+	public $controllers = [];
+
+	/**
 	 * Initiate the plugin.
 	 *
 	 * @param array $config Configuration variables passed from main plugin file.
 	 */
 	public function __construct( $config ) {
-		$this->container = new Container( $config );
+		$this->container   = new Container( $config );
+		$this->controllers = new Container();
+
 		$this->register_services();
 		$this->initiate_controllers();
 
@@ -172,7 +183,7 @@ class Plugin {
 	private function initiate_controllers() {
 		$this->define_paths();
 
-		$controllers = [
+		$this->register_controllers( [
 			'PostTypes'   => new \ContentControl\Controllers\PostTypes( $this ),
 			'Assets'      => new \ContentControl\Controllers\Assets( $this ),
 			'Admin'       => new \ContentControl\Controllers\Admin( $this ),
@@ -180,11 +191,20 @@ class Plugin {
 			'BlockEditor' => new \ContentControl\Controllers\BlockEditor( $this ),
 			'Frontend'    => new \ContentControl\Controllers\Frontend( $this ),
 			'Shortcodes'  => new \ContentControl\Controllers\Shortcodes( $this ),
-		];
+		] );
+	}
 
-		foreach ( $controllers as $controller ) {
+	/**
+	 * Register controllers.
+	 *
+	 * @param array $controllers Array of controllers.
+	 * @return void
+	 */
+	public function register_controllers( $controllers = [] ) {
+		foreach ( $controllers as $name => $controller ) {
 			if ( $controller instanceof Controller ) {
 				$controller->init();
+				$this->controllers->set( $name, $controller );
 			}
 		}
 	}
@@ -231,7 +251,23 @@ class Plugin {
 	 * @return mixed Current value of the item.
 	 */
 	public function get( $id ) {
+		if ( ! $this->container->offsetExists( $id ) ) {
+			return $this->controllers->get( $id );
+		}
+
 		return $this->container->get( $id );
+	}
+
+	/**
+	 * Set item in container
+	 *
+	 * @param string $id Key for the item.
+	 * @param mixed  $value Value to set.
+	 *
+	 * @return void
+	 */
+	public function set( $id, $value ) {
+		$this->container->set( $id, $value );
 	}
 
 	/**

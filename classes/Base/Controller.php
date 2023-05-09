@@ -33,11 +33,4 @@ abstract class Controller implements \ContentControl\Interfaces\Controller {
 		$this->container = $container;
 	}
 
-	/**
-	 * Initialize the controllers actions/ilters.
-	 *
-	 * @return void
-	 */
-	abstract public function init();
-
 }

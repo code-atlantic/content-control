@@ -29,17 +29,11 @@ class Admin extends Controller {
 	 * @return void
 	 */
 	public function init() {
-		$controllers = [
+		$this->container->register_controllers( [
 			'Admin\Reviews'      => new Reviews( $this->container ),
 			'Admin\Settings'     => new SettingsPage( $this->container ),
 			'Admin\WidgetEditor' => new WidgetEditor( $this->container ),
-		];
-
-		foreach ( $controllers as $controller ) {
-			if ( $controller instanceof Controller ) {
-				$controller->init();
-			}
-		}
+		] );
 	}
 
 }
