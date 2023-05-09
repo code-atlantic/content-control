@@ -134,6 +134,11 @@ class Restrictions {
 	public function get_applicable_restriction() {
 		$restrictions = $this->get_restrictions();
 
+		// Cache the post if restricted.
+		// if ( is_singular() && ! is_archive() ) {
+			// $this->protected_posts[ $post->ID ] = $restriction;
+		// }
+
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
 				if ( $restriction->check_rules() ) {

@@ -13,10 +13,10 @@ use ContentControl\RuleEngine\Handler;
 
 use ContentControl\Controllers\Frontend\Blocks;
 use ContentControl\Controllers\Frontend\Feeds;
+use ContentControl\Controllers\Frontend\Posts;
 use ContentControl\Controllers\Frontend\Redirects;
 use ContentControl\Controllers\Frontend\Widgets;
 
-use ContentControl\Frontend\Posts;
 use ContentControl\Frontend\Restrictions;
 
 defined( 'ABSPATH' ) || exit;
@@ -30,9 +30,12 @@ class Frontend extends Controller {
 	 * Initialize Hooks & Filters
 	 */
 	public function init() {
+		new Restrictions();
+
 		$controllers = [
 			'Frontend\Blocks'    => new Blocks( $this->container ),
 			'Frontend\Feeds'     => new Feeds( $this->container ),
+			'Frontend\Posts'     => new Posts( $this->container ),
 			'Frontend\Redirects' => new Redirects( $this->container ),
 			'Frontend\Widgets'   => new Widgets( $this->container ),
 		];
@@ -44,8 +47,6 @@ class Frontend extends Controller {
 		}
 
 		$this->hooks();
-		new Posts();
-		new Restrictions();
 	}
 
 	/**
@@ -94,14 +95,4 @@ class Frontend extends Controller {
 		return do_shortcode( $content );
 	}
 
-
-	/**
-	 * Process shortcodes.
-	 *
-	 * @param string $content Content to process.
-	 * @return string
-	 */
-	public function wpautop( $content ) {
-		return do_shortcode( $content );
-	}
 }
