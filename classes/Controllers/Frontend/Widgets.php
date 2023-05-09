@@ -14,6 +14,7 @@ use ContentControl\Base\Controller;
 
 use WP_Customize_Manager;
 
+use function ContentControl\user_meets_requirements;
 use function ContentControl\Widgets\get_options as get_widget_options;
 
 /**
@@ -48,7 +49,7 @@ class Widgets extends Controller {
 					// If not accessible then exclude this item.
 					$exclude = apply_filters(
 						'content_control/should_exclude_widget',
-						! \ContentControl\user_meets_requirements( $options['which_users'], $options['roles'] ),
+						! user_meets_requirements( $options['which_users'], $options['roles'] ),
 						$options,
 						$widget_id
 					);
