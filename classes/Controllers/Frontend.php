@@ -13,7 +13,9 @@ use ContentControl\RuleEngine\Handler;
 
 use ContentControl\Controllers\Frontend\Blocks;
 use ContentControl\Controllers\Frontend\Feeds;
+use ContentControl\Controllers\Frontend\Redirects;
 use ContentControl\Controllers\Frontend\Widgets;
+
 use ContentControl\Frontend\Posts;
 use ContentControl\Frontend\Restrictions;
 
@@ -29,9 +31,10 @@ class Frontend extends Controller {
 	 */
 	public function init() {
 		$controllers = [
-			'Frontend\Blocks'  => new Blocks( $this->container ),
-			'Frontend\Feeds'   => new Feeds( $this->container ),
-			'Frontend\Widgets' => new Widgets( $this->container ),
+			'Frontend\Blocks'    => new Blocks( $this->container ),
+			'Frontend\Feeds'     => new Feeds( $this->container ),
+			'Frontend\Redirects' => new Redirects( $this->container ),
+			'Frontend\Widgets'   => new Widgets( $this->container ),
 		];
 
 		foreach ( $controllers as $controller ) {
@@ -52,7 +55,12 @@ class Frontend extends Controller {
 	 */
 	public function hooks() {
 		add_filter( 'content_control/feed_restricted_message', [ $this, 'append_post_excerpts' ], 10, 2 );
-		add_filter( 'content_control/feed_restricted_message', [ $this, 'process_shortcodes' ], 10, 2 );
+		add_filter( 'content_control/feed_restricted_message', [ $this, 'wpautop' ], 10 );
+		add_filter( 'content_control/feed_restricted_message', [ $this, 'do_shortcode' ], 10 );
+
+		add_filter( 'content_control/post_restricted_message', [ $this, 'append_post_excerpts' ], 10, 2 );
+		add_filter( 'content_control/post_restricted_message', [ $this, 'wpautop' ], 10 );
+		add_filter( 'content_control/post_restricted_message', [ $this, 'do_shortcode' ], 10 );
 	}
 
 	/**
@@ -83,6 +91,17 @@ class Frontend extends Controller {
 	 * @return string
 	 */
 	public function process_shortcodes( $content ) {
+		return do_shortcode( $content );
+	}
+
+
+	/**
+	 * Process shortcodes.
+	 *
+	 * @param string $content Content to process.
+	 * @return string
+	 */
+	public function wpautop( $content ) {
 		return do_shortcode( $content );
 	}
 }
