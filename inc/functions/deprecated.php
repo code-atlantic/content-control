@@ -14,8 +14,8 @@ use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
-require_once './deprecated/class.is.php';
-require_once './deprecated/class.restrictions.php';
+require_once 'deprecated/class.is.php';
+require_once 'deprecated/class.restrictions.php';
 
 /**
  * Class JP_Content_Control
