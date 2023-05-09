@@ -427,7 +427,6 @@ class Reviews extends Controller {
 		</style>
 
 		<div class="notice notice-success is-dismissible content-control-notice">
-
 			<p>
 				<img class="logo" src="<?php echo esc_attr( plugin()->get_url( 'assets/images/icon-128x128.png' ) ); ?>" />
 				<strong>
@@ -503,22 +502,6 @@ class Reviews extends Controller {
 		$user_id = get_current_user_id();
 
 		return get_user_meta( $user_id, '_content_control_reviews_last_dismissed', true );
-	}
-
-	/**
-	 * Sort array by priority value
-	 *
-	 * @param array $a First array to compare.
-	 * @param array $b Second array to compare.
-	 *
-	 * @return int
-	 */
-	public function sort_by_priority( $a, $b ) {
-		if ( ! isset( $a['pri'] ) || ! isset( $b['pri'] ) || $a['pri'] === $b['pri'] ) {
-			return 0;
-		}
-
-		return ( $a['pri'] < $b['pri'] ) ? - 1 : 1;
 	}
 
 	/**
