@@ -132,6 +132,40 @@ class Version2 {
 	 * @return array
 	 */
 	public function remap_conditions_to_rules( $conditions ) {
+		$old_rules = [
+			'{$post_type}_index'         => [],
+			'{$post_type}_all'           => [],
+			'{$post_type}_selected'      => [
+				'selected' => [],
+			],
+			'{$post_type}_ID'            => [
+				'selected' => '',
+			],
+			'{$post_type}_children'      => [
+				'selected' => [],
+			],
+			'{$post_type}_ancestors'     => [
+				'selected' => '',
+			],
+			'{$post_type}_template'      => [
+				'selected' => [],
+			],
+			'{$post_type}_w_{$tax_name}' => [
+				'selected' => [],
+			],
+			'tax_{$tax_name}_all'        => [],
+			'tax_{$tax_name}_selected'   => [
+				'selected' => [],
+			],
+			'tax_{$tax_name}_ID'         => [
+				'selected' => '',
+			],
+			'is_front_page'              => [],
+			'is_home'                    => [],
+			'is_search'                  => [],
+			'is_404'                     => [],
+		];
+
 		return $conditions;
 	}
 
