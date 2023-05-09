@@ -9,6 +9,7 @@
 namespace ContentControl\Services;
 
 use \ContentControl\Models\Restriction;
+use \ContentControl\Models\RuleEngine\Query;
 
 use function ContentControl\plugin;
 
@@ -20,15 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class Restrictions {
 
 	/**
-	 * Array of post IDs that have been checked and the results.
-	 *
-	 * [restriction_id] => [
-	 *      [post_id] => true|false
-	 * ]
+	 * Cache to prevent rechechs & queries.
 	 *
 	 * @var array
 	 */
-	public $check_caches = [];
+	private $cache = [];
 
 	/**
 	 * Get a list of all restrictions.
@@ -106,166 +103,81 @@ class Restrictions {
 		return false;
 	}
 
-
-	/**
-	 * Check if restriction applies to current user.
-	 *
-	 * @param int|string|Restriction $restriction Restriction ID, slug or object.
-	 * @param string                 $context     Context to check restriction against.
-	 * @return boolean
-	 */
-	public function does_restriction_apply_to_user( $restriction, $context ) {
-		// Get restriction object.
-		$restriction = $this->get_restriction( $restriction );
-
-		$restriction_applies = false !== $restriction ?
-				$restriction->applies_to_current_user( $context ) :
-				false;
-
-		return apply_filters(
-			'content_control_restriction_applies_to_user',
-			$restriction_applies,
-			$restriction,
-			$context
-		);
-	}
-
-	/**
-	 * Check if given post is restricted by given restriction.
-	 *
-	 * @param Restriction|int|string $restriction_id Restriction.
-	 * @param string                 $context     Context to check restriction against.
-	 * @param int                    $post_id     Post ID.
-	 *
-	 * @return boolean
-	 */
-	public function is_restriction_applicable( $restriction_id, $context, $post_id = null ) {
-		global $post;
-
-		$restriction = $this->get_restriction( $restriction_id );
-
-		if ( ! $restriction ) {
-			return false;
-		}
-
-		if ( $post_id > 0 ) {
-			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-			$post = get_post( $post_id );
-			setup_postdata( $post );
-		}
-
-		$restriction_applies = $restriction->check_rules();
-
-		if ( $post_id > 0 ) {
-			// Reset global post object.
-			wp_reset_postdata();
-		}
-
-		return apply_filters(
-			'content_control_restriction_applies_to_user',
-			$restriction_applies,
-			$restriction,
-			$context,
-			$post_id
-		);
-	}
-
 	/**
 	 * Get all applicable restrictions for the current post.
 	 *
-	 * @param int|null $post_id Post ID.
+	 * Careful, this could be very unperformant if you have a lot of restrictions.
+	 *
 	 * @return array
 	 */
-	public function get_applicable_restrictions( $post_id = null ) {
+	public function get_all_applicable_restrictions() {
 		$restrictions = $this->get_restrictions();
 
 		if ( ! empty( $restrictions ) ) {
-			$restrictions = array_filter(
-				$restrictions,
-				function( $restriction ) use ( $post_id ) {
-					return $this->is_restriction_applicable( $restriction, $post_id );
+			foreach ( $restrictions as $key => $restriction ) {
+				if ( ! $restriction->check_rules() ) {
+					unset( $restrictions[ $key ] );
 				}
-			);
+			}
 		}
 
 		return $restrictions;
 	}
 
 	/**
-	 * Check if post has applicable restrictions.
+	 * Get the first applicable restriction for the current post.
 	 *
-	 * @param int|null $post_id Post ID.
-	 * @return boolean
-	 */
-	public function has_applicable_restrictions( $post_id = null ) {
-		$restrictions = $this->get_applicable_restrictions( $post_id );
-
-		return ! empty( $restrictions );
-	}
-
-	public function get_restricted_content( $restriction ) {
-		// TODO FILL THIS IN< BUT FIRST ADD Restriction model class for each instance.
-		// REFACTOR AS NEEDED
-		// TODO LEFT OFF HERE!!@
-	}
-
-
-
-
-	/**
-	 * Protected post array
+	 * Performant version that breaks on first applicable restriction. Sorted by priority.
 	 *
-	 * @var array
+	 * @return Restriction|false
 	 */
-	public $protected_posts = [];
+	public function get_applicable_restriction() {
+		$restrictions = $this->get_restrictions();
 
-	/**
-	 * Get rules for a specific post ID.
-	 *
-	 * @param int $post_id Post ID.
-	 * @return array|false;
-	 */
-	public function get_rules( $post_id ) {
-		return isset( $this->protected_posts[ $post_id ] ) ? $this->protected_posts[ $post_id ] : false;
-	}
-
-	/**
-	 * Get restricted content.
-	 *
-	 * @return array|false
-	 */
-	public function restricted_content() {
-		$restrictions = \ContentControl\get_option( 'restrictions' );
-
-		$restriced_content = false;
-
-		if ( ! $restrictions || empty( $restrictions ) ) {
-			return $restriced_content;
-		}
-
-		foreach ( $restrictions as $restriction ) {
-			if ( $this->is_restriction_applicable( $restriction ) ) {
-				if ( $this->does_restriction_apply_to_user( $restriction ) ) {
-					$restriced_content = $restriction;
+		if ( ! empty( $restrictions ) ) {
+			foreach ( $restrictions as $restriction ) {
+				if ( $restriction->check_rules() ) {
+					return $restriction;
 				}
-				break;
 			}
 		}
 
-		return $restriced_content;
+		return false;
 	}
 
 	/**
-	 * Get current url.
+	 * Check if post has applicable restrictions.
 	 *
-	 * @return string
+	 * @return boolean
 	 */
-	public function current_url() {
-		/* phpcs:disable  WordPress.Security.ValidatedSanitizedInput.InputNotValidated */
-		$protocol = ( ! empty( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) || 443 === $_SERVER['SERVER_PORT'] ? 'https://' : 'http://';
+	public function has_applicable_restrictions() {
+		return false !== $this->get_applicable_restriction();
+	}
 
-		return $protocol . sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) );
-		/* phpcs:enable  WordPress.Security.ValidatedSanitizedInput.InputNotValidated */
+	/**
+	 * Check restriction rules match the current post content.
+	 *
+	 * @param Restriction|int|string $restriction_id Restriction.
+	 *
+	 * @return boolean
+	 */
+	public function rules_match_the_content( $restriction_id ) {
+		$restriction = $this->get_restriction( $restriction_id );
+
+		return false === $restriction ? false : $restriction->check_rules();
+	}
+
+	/**
+	 * Check if user meets requirements for given restriction.
+	 *
+	 * @param int|string|Restriction $restriction Restriction ID, slug or object.
+	 *
+	 * @return boolean
+	 */
+	public function user_meets_requirements( $restriction ) {
+		$restriction = $this->get_restriction( $restriction );
+
+		return false === $restriction ? false : $restriction->user_meets_requirements();
 	}
 
 }
