@@ -102,9 +102,9 @@ add_filter( 'content_control_restricted_message', function ( $message ) {
 	return $message;
 }, 9 );
 
-add_filter( 'content_control_should_exclude_widget', function ( $should_exclude ) {
+add_filter( 'content_control/should_exclude_widget', function ( $should_exclude ) {
 	if ( has_filter( 'jp_cc_should_exclude_widget' ) ) {
-		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_should_exclude_widget', '2.0.0', 'filter:content_control_should_exclude_widget' );
+		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_should_exclude_widget', '2.0.0', 'filter:content_control/should_exclude_widget' );
 		/**
 		 * Filter if the widget should be excluded.
 		 *
@@ -118,9 +118,9 @@ add_filter( 'content_control_should_exclude_widget', function ( $should_exclude 
 	return $should_exclude;
 }, 9 );
 
-add_filter( 'content_control_excerpt_length', function ( $length = 50 ) {
+add_filter( 'content_control/excerpt_length', function ( $length = 50 ) {
 	if ( has_filter( 'jp_cc_filter_excerpt_length' ) ) {
-		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_filter_excerpt_length', '2.0.0', 'filter:content_control_excerpt_length' );
+		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_filter_excerpt_length', '2.0.0', 'filter:content_control/excerpt_length' );
 		/**
 		 * Filter the excerpt length.
 		 *
