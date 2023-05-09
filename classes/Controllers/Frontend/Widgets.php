@@ -6,11 +6,10 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Frontend;
+namespace ContentControl\Controllers\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 
-use ContentControl\Utilities\Is;
 use ContentControl\Base\Controller;
 
 use WP_Customize_Manager;
@@ -47,9 +46,12 @@ class Widgets extends Controller {
 					$options = get_widget_options( $widget_id );
 
 					// If not accessible then exclude this item.
-					$exclude = ! Is::accessible( $options['which_users'], $options['roles'], 'widget' );
-
-					$exclude = apply_filters( 'content_control_should_exclude_widget', $exclude, $options, $widget_id );
+					$exclude = apply_filters(
+						'content_control/should_exclude_widget',
+						! \ContentControl\user_meets_requirements( $options['which_users'], $options['roles'] ),
+						$options,
+						$widget_id
+					);
 
 					// unset non-visible item.
 					if ( $exclude ) {

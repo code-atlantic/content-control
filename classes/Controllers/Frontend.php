@@ -13,7 +13,7 @@ use ContentControl\RuleEngine\Handler;
 
 use ContentControl\Controllers\Frontend\Blocks;
 use ContentControl\Controllers\Frontend\Feeds;
-use ContentControl\Frontend\Widgets;
+use ContentControl\Controllers\Frontend\Widgets;
 use ContentControl\Frontend\Posts;
 use ContentControl\Frontend\Restrictions;
 
