@@ -17,8 +17,6 @@ use ContentControl\Controllers\Frontend\Posts;
 use ContentControl\Controllers\Frontend\Redirects;
 use ContentControl\Controllers\Frontend\Widgets;
 
-use ContentControl\Frontend\Restrictions;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -30,8 +28,6 @@ class Frontend extends Controller {
 	 * Initialize Hooks & Filters
 	 */
 	public function init() {
-		new Restrictions();
-
 		$controllers = [
 			'Frontend\Blocks'    => new Blocks( $this->container ),
 			'Frontend\Feeds'     => new Feeds( $this->container ),
