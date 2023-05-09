@@ -21,13 +21,6 @@ defined( 'ABSPATH' ) || exit;
 class Feeds extends Controller {
 
 	/**
-	 * Reference to the restrictions service.
-	 *
-	 * @var \ContentControl\Services\Restrictions
-	 */
-	public $restrictions;
-
-	/**
 	 * Initiate functionality.
 	 */
 	public function init() {
@@ -51,10 +44,12 @@ class Feeds extends Controller {
 			return $content;
 		}
 
+		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
+
 		return apply_filters(
 			'content_control/feed_restricted_message',
-			get_restricted_content_message(),
-			$this->container->get( 'restrictions' )->get_applicable_restriction()
+			$restriction->get_message(),
+			$restriction
 		);
 	}
 
