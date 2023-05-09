@@ -7,7 +7,7 @@ Tags: access, content, content restriction,  permission, private,  restrict, res
 Requires at least: 3.5.0
 Tested up to: 6.1.1
 Stable tag: 1.1.10
-Requires PHP: 5.3
+Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
 Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
