@@ -2,7 +2,7 @@
 
 namespace JP\CC;
 
-use function ContentControl\plugin;
+// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,10 +27,7 @@ class Is {
 	 * @deprecated 2.0.0
 	 */
 	public static function accessible( $who = '', $roles = [], $context = '' ) {
-		return ! plugin( 'restrictions' )->does_restriction_apply_to_user( [
-			'who'   => $who,
-			'roles' => $roles,
-		], $context );
+		return \ContentControl\user_meets_requirements( $who, $roles );
 	}
 
 	/**
@@ -45,10 +42,7 @@ class Is {
 	 * @deprecated 2.0.0
 	 */
 	public static function restricted( $who = '', $roles = [], $context = '' ) {
-		return plugin( 'restrictions' )->check_restriction_against_user( [
-			'who'   => $who,
-			'roles' => $roles,
-		], $context );
+		return ! \ContentControl\user_meets_requirements( $who, $roles );
 	}
 
 }
