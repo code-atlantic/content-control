@@ -10,45 +10,36 @@
 namespace ContentControl;
 
 /**
- * Get excerpt by post.
+ * Get post excerpt or <!--more--> tag content for a post.
  *
- * @param int|object $post Post to get excerpt for.
- * @param integer    $length Length.
- * @param string     $tags Allowed html tags.
- * @param string     $extra Appended more text string...
- * @return string|false
+ * This differs from get_the_excerpt in that it will return the content
+ * before the <!--more--> tag if it exists, but not generate an excerpt
+ * from the_contnet. It also doesn't filter the content.
+ *
+ * @param int|WP_Post|null $post_id Post ID or object. Defaults to global $post.
+ * @return string
  */
-function excerpt_by_id( $post, $length = 50, $tags = '<a><em><strong><blockquote><ul><ol><li><p>', $extra = ' . . .' ) {
-	if ( is_int( $post ) ) {
-		// get the post object of the passed ID.
-		$post = get_post( $post );
-	} elseif ( ! is_object( $post ) ) {
-		return false;
+function get_excerpt_by_id( $post_id = null ) {
+	$post = get_post( $post_id );
+
+	$excerpt = '';
+
+	if ( $post ) {
+		if ( has_excerpt( $post ) ) {
+			// Use the excerpt if it's set.
+			$excerpt = $post->post_excerpt;
+		} else {
+			// Otherwise, use the content before the 'more' tag.
+			$content       = $post->post_content;
+			$more_position = strpos( $content, '<!--more-->' );
+			if ( false !== $more_position ) {
+				// If there's a 'more' tag, return everything before it.
+				$excerpt = substr( $content, 0, $more_position );
+			}
+		}
 	}
 
-	$more = false;
-
-	if ( has_excerpt( $post->ID ) ) {
-		$the_excerpt = $post->post_excerpt;
-	} elseif ( strstr( $post->post_content, '<!--more-->' ) ) {
-		$more        = true;
-		$length      = strpos( $post->post_content, '<!--more-->' );
-		$the_excerpt = $post->post_content;
-	} else {
-		$the_excerpt = $post->post_content;
-	}
-
-	if ( $more ) {
-		$the_excerpt = strip_shortcodes( strip_tags( stripslashes( substr( $the_excerpt, 0, $length ) ), $tags ) );
-	} else {
-		$the_excerpt   = strip_shortcodes( strip_tags( stripslashes( $the_excerpt ), $tags ) );
-		$the_excerpt   = preg_split( '/\b/', $the_excerpt, $length * 2 + 1 );
-		$excerpt_waste = array_pop( $the_excerpt );
-		$the_excerpt   = implode( $the_excerpt );
-		$the_excerpt  .= $extra;
-	}
-
-	return wpautop( $the_excerpt );
+	return $excerpt;
 }
 
 /**
@@ -63,37 +54,38 @@ function append_post_excerpts( $content, $restriction ) {
 	global $post;
 
 	if ( $restriction->show_excerpts() ) {
-		$excerpt_length = apply_filters( 'content_control/excerpt_length', 50 );
 
-		$excerpt = excerpt_by_id( $post, $excerpt_length );
-		$content = $excerpt . $content;
+		// Get unfiltered excerpt.
+		$excerpt = get_excerpt_by_id( $post );
+
+		if ( ! empty( $excerpt ) ) {
+			$tags = apply_filters(
+				'content_control/excerpt_allowed_tags',
+				'<a><em><strong><blockquote><ul><ol><li><p>'
+			);
+
+			// Strip tags from excerpt.
+			$excerpt = wp_kses( $excerpt, $tags );
+
+			// Wrap excerpt in div with class.
+			$excerpt = '<div class="cc-content-excerpt">' . $excerpt . '</div>';
+
+			// Prepend excerpt to content.
+			$content = $excerpt . $content;
+		}
 	}
 
 	return $content;
 }
 
-
-if ( ! function_exists( 'get_current_page_url' ) ) {
-	/**
-	 * Get the current page URL.
-	 *
-	 * @return string
-	 */
-	function get_current_page_url() {
-		global $wp;
-		/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
-		return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
-		/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
-	}
-}
-
-if ( ! function_exists( 'the_current_page_url' ) ) {
-	/**
-	 * Output the current page URL
-	 *
-	 * @return void
-	 */
-	function the_current_page_url() {
-		echo esc_url_raw( get_current_page_url() );
-	}
+/**
+ * Get the current page URL.
+ *
+ * @return string
+ */
+function get_current_page_url() {
+	global $wp;
+	/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
+	return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+	/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
 }
