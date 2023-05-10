@@ -22,7 +22,9 @@ defined( 'ABSPATH' ) || exit;
 function setup_post( $post_id = null ) {
 	global $post;
 
-	$overload_post = $post_id > 0 && ( ! $post || $post_id !== $post->ID );
+	$overload_post = isset( $post_id ) &&
+		( is_object( $post_id ) && $post_id->ID !== $post->ID ) ||
+		( is_int( $post_id ) && $post_id !== $post->ID );
 
 	if ( $overload_post ) {
         // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
