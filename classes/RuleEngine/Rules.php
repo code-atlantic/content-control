@@ -204,7 +204,10 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => 'is_front_page',
+			'callback' => function () {
+				// Checks to make sure we are not in a sub-query.
+				return is_front_page() && is_main_query() && ! in_the_loop();
+			},
 		];
 
 		$rules['content_is_blog_index'] = [
@@ -214,7 +217,10 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => 'is_home',
+			'callback' => function () {
+				// Checks to make sure we are not in a sub-query.
+				return is_home() && is_main_query() && ! in_the_loop();
+			},
 		];
 
 		$rules['content_is_search_results'] = [
