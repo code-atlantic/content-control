@@ -168,6 +168,9 @@ class Blocks extends Controller {
 			return $block_content;
 		}
 
+		// Enqueue the styles.
+		wp_enqueue_style( 'content-control-block-styles' );
+
 		$class_name = implode( ' ', $classes );
 
 		/** Mimicing WP Cores usage in https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-includes/block-supports/elements.php#L32 */

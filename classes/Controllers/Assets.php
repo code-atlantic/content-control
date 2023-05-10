@@ -122,6 +122,9 @@ class Assets extends Controller {
 	public function register_scripts() {
 		$packages = $this->get_packages();
 
+		// Register front end block styles.
+		wp_register_style( 'content-control-block-styles', $this->container->get_url( 'dist/style-block-editor.css' ), [], $this->container->get( 'version' ) );
+
 		foreach ( $packages as $package => $package_data ) {
 			$handle = $package_data['handle'];
 			$meta   = $this->get_asset_meta( $package );
