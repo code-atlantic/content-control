@@ -102,6 +102,15 @@ class Restriction {
 	public $show_excerpts;
 
 	/**
+	 * Restriction Settings: Custom Message.
+	 *
+	 * @deprecated version 2.0.0 Use post_content instead.
+	 *
+	 * @var string
+	 */
+	public $custom_message;
+
+	/**
 	 * Restriction Settings: Conditions.
 	 *
 	 * @var array
@@ -121,19 +130,9 @@ class Restriction {
 	 * @param \WP_Post $restriction Restriction data.
 	 */
 	public function __construct( $restriction ) {
-		$settings = get_post_meta( $restriction->ID, 'restriction_settings', true );
-
-		$properties = array_merge(
+		$settings = wp_parse_args(
+			get_post_meta( $restriction->ID, 'restriction_settings', true ),
 			[
-				'id'          => $restriction->ID,
-				'slug'        => $restriction->post_name,
-				'title'       => $restriction->post_title,
-				'status'      => $restriction->post_status,
-				// We set this late.. on first use.
-				'description' => null,
-				'message'     => null,
-			],
-			wp_parse_args( $settings, [
 				'who'              => 'logged_in',
 				'roles'            => [],
 				'protectionMethod' => 'redirect',
@@ -146,7 +145,26 @@ class Restriction {
 					'logicalOperator' => 'and',
 					'items'           => [],
 				],
-			] )
+			]
+		);
+
+		// Convert keys to snake_case using camel_case_to_snake_case().
+		$settings = array_combine(
+			array_map( 'ContentControl\camel_case_to_snake_case', array_keys( $settings ) ),
+			array_values( $settings )
+		);
+
+		$properties = array_merge(
+			[
+				'id'          => $restriction->ID,
+				'slug'        => $restriction->post_name,
+				'title'       => $restriction->post_title,
+				'status'      => $restriction->post_status,
+				// We set this late.. on first use.
+				'description' => null,
+				'message'     => null,
+			],
+			$settings
 		);
 
 		foreach ( $properties as $key => $value ) {
@@ -210,11 +228,17 @@ class Restriction {
 	 */
 	public function get_message() {
 		if ( ! isset( $this->message ) ) {
-			$this->message = get_the_content( null, false, $this->id );
+			$message = get_the_content( null, false, $this->id );
 
-			if ( empty( $this->message ) ) {
-				$this->message = __( 'This content is restricted.', 'content-control' );
+			if ( empty( $message ) ) {
+				$message = $this->custom_message;
 			}
+
+			if ( empty( $message ) ) {
+				$message = __( 'This content is restricted.', 'content-control' );
+			}
+
+			$this->message = $message;
 		}
 
 		return $this->message;
