@@ -53,3 +53,14 @@ if ( ! function_exists( 'is_rest' ) ) {
 		return strpos( $current_url['path'] ?? '/', $rest_url['path'], 0 ) === 0;
 	}
 }
+
+/**
+ * Change camelCase to snake_case.
+ *
+ * @param string $str String to convert.
+ *
+ * @return string Converted string.
+ */
+function camel_case_to_snake_case( $str ) {
+	return strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $str ) );
+}
