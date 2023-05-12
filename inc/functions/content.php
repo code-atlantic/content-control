@@ -79,6 +79,29 @@ function append_post_excerpts( $content, $restriction ) {
 }
 
 /**
+ * Apply content filters for the_content without our own again.
+ *
+ * @param string $content Content to display.
+ *
+ * @return string
+ */
+function the_content_filters( $content ) {
+	return apply_filters( 'the_content', $content );
+}
+
+/**
+ * Apply get_the_excerpt fitlers without our own again.
+ *
+ * @param string $excerpt Excerpt to display.
+ *
+ * @return string
+ */
+function the_excerpt_filters( $excerpt ) {
+	global $post;
+	return apply_filters( 'get_the_excerpt', $excerpt, $post );
+}
+
+/**
  * Get the current page URL.
  *
  * @return string
