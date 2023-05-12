@@ -38,8 +38,6 @@ class Redirects extends Controller {
 			return;
 		}
 
-		global $post;
-
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
 		if ( ! $restriction || 'redirect' !== $restriction->protection_method ) {
