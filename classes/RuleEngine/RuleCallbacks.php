@@ -17,6 +17,24 @@ defined( 'ABSPATH' ) || exit;
 class RuleCallbacks {
 
 	/**
+	 * Check if this is the home page.
+	 *
+	 * @return bool
+	 */
+	public static function is_home_page() {
+		return is_front_page() && is_main_query() && ! in_the_loop();
+	}
+
+	/**
+	 * Check if this is the home page.
+	 *
+	 * @return bool
+	 */
+	public static function is_blog_index() {
+		return is_home() && is_main_query() && ! in_the_loop();
+	}
+
+	/**
 	 * Checks if this is one of the selected post_type items.
 	 *
 	 * @param array $rule The rule options.

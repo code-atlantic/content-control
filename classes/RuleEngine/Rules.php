@@ -204,10 +204,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => function () {
-				// Checks to make sure we are not in a sub-query.
-				return is_front_page() && is_main_query() && ! in_the_loop();
-			},
+			'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'is_home_page' ],
 		];
 
 		$rules['content_is_blog_index'] = [
@@ -217,10 +214,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => function () {
-				// Checks to make sure we are not in a sub-query.
-				return is_home() && is_main_query() && ! in_the_loop();
-			},
+			'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'is_blog_index' ],
 		];
 
 		$rules['content_is_search_results'] = [
@@ -365,7 +359,7 @@ class Rules {
 					'format'   => '{category} {verb} {label}',
 					'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 					'fields'   => [],
-					'callback' => [ '\\ContentControl\RuleCallbacks', 'post_type' ],
+					'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type' ],
 				] );
 			}
 
@@ -410,7 +404,7 @@ class Rules {
 						'options'     => [],
 					],
 				],
-				'callback' => [ '\\ContentControl\RuleCallbacks', 'post_type_tax' ],
+				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type_tax' ],
 			];
 		}
 
@@ -434,7 +428,7 @@ class Rules {
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'fields'   => [],
-				'callback' => [ '\\ContentControl\RuleCallbacks', 'taxonomy' ],
+				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'taxonomy' ],
 			];
 
 			$rules[ "content_is_{$tax_name}_archive" ] = wp_parse_args( [
