@@ -125,6 +125,13 @@ class Restriction {
 	public $query;
 
 	/**
+	 * User meets requirements.
+	 *
+	 * @var bool
+	 */
+	private $user_meets_requirements;
+
+	/**
 	 * Build a restriction.
 	 *
 	 * @param \WP_Post $restriction Restriction data.
@@ -198,10 +205,14 @@ class Restriction {
 	 * @return bool
 	 */
 	public function user_meets_requirements() {
-		$who   = ! empty( $this->who ) ? $this->who : '';
-		$roles = ! empty( $this->roles ) ? $this->roles : [];
+		if ( ! isset( $this->user_meets_requirements ) ) {
+			$who   = ! empty( $this->who ) ? $this->who : '';
+			$roles = ! empty( $this->roles ) ? $this->roles : [];
 
-		return \ContentControl\user_meets_requirements( $who, $roles );
+			$this->user_meets_requirements = \ContentControl\user_meets_requirements( $who, $roles );
+		}
+
+		return $this->user_meets_requirements;
 	}
 
 	/**
