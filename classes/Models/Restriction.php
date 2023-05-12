@@ -205,14 +205,10 @@ class Restriction {
 	 * @return bool
 	 */
 	public function user_meets_requirements() {
-		if ( ! isset( $this->user_meets_requirements ) ) {
-			$who   = ! empty( $this->who ) ? $this->who : '';
-			$roles = ! empty( $this->roles ) ? $this->roles : [];
+		$who   = ! empty( $this->who ) ? $this->who : '';
+		$roles = ! empty( $this->roles ) ? $this->roles : [];
 
-			$this->user_meets_requirements = \ContentControl\user_meets_requirements( $who, $roles );
-		}
-
-		return $this->user_meets_requirements;
+		return \ContentControl\user_meets_requirements( $who, $roles );
 	}
 
 	/**

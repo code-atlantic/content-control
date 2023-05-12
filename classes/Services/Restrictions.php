@@ -66,9 +66,7 @@ class Restrictions {
 	 * @return Restriction|false
 	 */
 	public function get_restriction( $restriction ) {
-
-		// If restriction is already an object, return it.
-		if ( is_object( $restriction ) && isset( $restriction->id ) ) {
+		if ( $restriction instanceof Restriction ) {
 			return $restriction;
 		}
 
@@ -129,47 +127,46 @@ class Restrictions {
 	 *
 	 * Performant version that breaks on first applicable restriction. Sorted by priority.
 	 *
+	 * cached internally.
+	 *
 	 * @return Restriction|false
 	 */
 	public function get_applicable_restriction() {
-		$restrictions = $this->get_restrictions();
+		global $wp_query;
+		static $cache = [];
 
-		// Cache the post if restricted.
-		// if ( is_singular() && ! is_archive() ) {
-			// $this->protected_posts[ $post->ID ] = $restriction;
-		// }
+		// Generate cache key from hasing $wp_query.
+		$cache_key = md5( wp_json_encode( $wp_query ) );
+
+		if ( isset( $cache[ $cache_key ] ) ) {
+			return $cache[ $cache_key ];
+		}
+
+		$cache[ $cache_key ] = false;
+
+		$restrictions = $this->get_restrictions();
 
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
 				if ( $restriction->check_rules() ) {
-					return $restriction;
+					$cache[ $cache_key ] = $restriction;
+					break;
 				}
 			}
 		}
 
-		return false;
+		return $cache[ $cache_key ];
 	}
 
 	/**
 	 * Check if post has applicable restrictions.
 	 *
+	 * Cached via get_applicable_restriction().
+	 *
 	 * @return boolean
 	 */
 	public function has_applicable_restrictions() {
 		return false !== $this->get_applicable_restriction();
-	}
-
-	/**
-	 * Check restriction rules match the current post content.
-	 *
-	 * @param Restriction|int|string $restriction_id Restriction.
-	 *
-	 * @return boolean
-	 */
-	public function rules_match_the_content( $restriction_id ) {
-		$restriction = $this->get_restriction( $restriction_id );
-
-		return false === $restriction ? false : $restriction->check_rules();
 	}
 
 	/**
@@ -182,7 +179,22 @@ class Restrictions {
 	public function user_meets_requirements( $restriction ) {
 		$restriction = $this->get_restriction( $restriction );
 
-		return false === $restriction ? false : $restriction->user_meets_requirements();
+		if ( false === $restriction ) {
+			return false;
+		}
+
+		static $cache = [];
+		$cache_key    = $restriction->id;
+
+		// Check cache.
+		if ( isset( $cache[ $cache_key ] ) ) {
+			return $cache[ $cache_key ];
+		}
+
+		// Check if user meets requirements.
+		$cache[ $cache_key ] = $restriction->user_meets_requirements();
+
+		return $cache[ $cache_key ];
 	}
 
 }
