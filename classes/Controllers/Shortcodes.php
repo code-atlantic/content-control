@@ -44,17 +44,18 @@ class Shortcodes extends Controller {
 			'message'    => $this->container->get_option( 'default_denial_message', '' ),
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
-		$who = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
+		$user_status = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
 
-		$roles = ! is_array( $atts['roles'] ) ? explode( ',', $atts['roles'] ) : $atts['roles'];
-		$roles = array_map( 'trim', $roles );
+		$user_roles = ! is_array( $atts['roles'] ) ? explode( ',', $atts['roles'] ) : $atts['roles'];
+		$user_roles = array_map( 'trim', $user_roles );
 
 		$classes   = ! is_array( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
 		$classes[] = 'content-control-container';
 		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
-		if ( user_meets_requirements( $who, $roles ) ) {
+		// TODO Add support for role_match (any/exclude).
+		if ( user_meets_requirements( $user_status, $user_roles ) ) {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';

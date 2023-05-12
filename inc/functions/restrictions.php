@@ -14,32 +14,34 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Check if user meets requirements.
  *
- * @param string       $status logged_in or logged_out.
- * @param array|string $roles array of roles to check.
+ * @param string       $user_status logged_in or logged_out.
+ * @param array|string $user_roles array of roles to check.
+ * @param string       $role_match any|match|exclude.
+ *
  * @return bool True if user meets requirements, false if not.
  */
-function user_meets_requirements( $status, $roles = [] ) {
-	if ( empty( $status ) ) {
+function user_meets_requirements( $user_status, $user_roles = [], $role_match = 'match' ) {
+	if ( empty( $user_status ) ) {
 		// Always default to protecting content.
 		return false;
 	}
 
 	// If roles is string, convert to array.
-	if ( is_string( $roles ) ) {
-		$roles = strpos( $roles, ',' ) !== false ? array_map(
+	if ( is_string( $user_roles ) ) {
+		$user_roles = strpos( $user_roles, ',' ) !== false ? array_map(
 			'trim',
-			explode( ',', $roles )
-		) : [ $roles ];
+			explode( ',', $user_roles )
+		) : [ $user_roles ];
 	}
 
 	// If roles is array of keyed roles, convert to array of roles[].
-	if ( is_string( key( $roles ) ) ) {
-		$roles = array_keys( $roles );
+	if ( is_string( key( $user_roles ) ) ) {
+		$user_roles = array_keys( $user_roles );
 	}
 
 	$logged_in = is_user_logged_in();
 
-	switch ( $status ) {
+	switch ( $user_status ) {
 		case 'logged_in':
 			// If not logged in, return false.
 			if ( ! $logged_in ) {
@@ -47,19 +49,22 @@ function user_meets_requirements( $status, $roles = [] ) {
 			}
 
 			// If we got this far, we're logged in.
-			if ( empty( $roles ) ) {
+			if ( 'any' === $role_match || empty( $user_roles ) ) {
 				return true;
 			}
 
-			// Checks all roles, any match will return true.
-			foreach ( $roles as $role ) {
+			// true for match, false for exclude.
+			$match_value = 'match' === $role_match ? true : false;
+
+			// Checks all roles, any match will return.
+			foreach ( $user_roles as $role ) {
 				if ( current_user_can( $role ) ) {
-					return true;
+					return $match_value;
 				}
 			}
 
 			// If we got this far, we're logged in but don't have the required role.
-			return false;
+			return ! $match_value;
 
 		case 'logged_out':
 			return ! $logged_in;

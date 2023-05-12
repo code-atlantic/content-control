@@ -27,7 +27,7 @@ class Is {
 	 * @deprecated 2.0.0
 	 */
 	public static function accessible( $who = '', $roles = [], $context = '' ) {
-		return \ContentControl\user_meets_requirements( $who, $roles );
+		return \ContentControl\user_meets_requirements( $who, $roles, 'match' );
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Is {
 	 * @deprecated 2.0.0
 	 */
 	public static function restricted( $who = '', $roles = [], $context = '' ) {
-		return ! \ContentControl\user_meets_requirements( $who, $roles );
+		return ! \ContentControl\user_meets_requirements( $who, $roles, 'match' );
 	}
 
 }
