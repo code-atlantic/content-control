@@ -22,6 +22,9 @@
 
 	&.cc__block-controls--enabled {
 		// Compensate for extra padding at the bottom when rules-panel is open.
+
+		z-index: 100;
+		position: relative;
 		.components-panel__body {
 			padding-bottom: 0;
 		}
@@ -33,7 +36,6 @@
 			opacity: 0.5;
 			pointer-events: none;
 		}
-
 	}
 }
 
