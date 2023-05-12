@@ -124,6 +124,16 @@ $gap4: $gap * 4;
 				padding: 1em;
 			}
 		}
+
+		.is-large {
+			.components-select-control__input {
+				padding: 1em;
+				font-size: 13px;
+				line-height: normal;
+				min-height: 30px;
+				height: auto;
+			}
+		}
 	}
 
 	.components-base-control__label,
@@ -219,6 +229,12 @@ $gap4: $gap * 4;
 				min-height: auto;
 			}
 
+			.components-base-control__field {
+				margin-bottom: $gap2;
+			}
+		}
+
+		.roleMatch-field {
 			.components-base-control__field {
 				margin-bottom: $gap2;
 			}

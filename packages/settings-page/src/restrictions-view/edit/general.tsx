@@ -76,6 +76,7 @@ const GeneralTab = ( {
 					updateSettings( { userStatus: newUserStatus } )
 				}
 				options={ userStatusOptions }
+				className="userStatus-field"
 			/>
 
 			{ 'logged_in' === settings.userStatus && (
@@ -100,6 +101,7 @@ const GeneralTab = ( {
 						onChange={ ( newRoleMatch ) =>
 							updateSettings( { roleMatch: newRoleMatch } )
 						}
+						className="is-large roleMatch-field"
 					/>
 
 					{ 'any' !== settings.roleMatch && (
@@ -114,7 +116,7 @@ const GeneralTab = ( {
 								'Search roles…',
 								'content-control'
 							) }
-							className="is-large"
+							className="is-large userRoles-field"
 							value={ cleanedRoles }
 							onChange={ ( roles ) =>
 								updateSettings( { userRoles: roles } )
