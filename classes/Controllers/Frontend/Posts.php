@@ -42,6 +42,12 @@ class Posts extends Controller {
 	 * @return string
 	 */
 	public function the_content( $content ) {
+		$filter_name = 'content_control/post_restricted_content';
+
+		if ( doing_filter( $filter_name ) ) {
+			return $content;
+		}
+
 		global $post;
 
 		if ( doing_filter( 'get_the_excerpt' ) ) {
@@ -64,7 +70,7 @@ class Posts extends Controller {
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
 		return apply_filters(
-			'content_control/post_restricted_content',
+			$filter_name,
 			$restriction->get_message(),
 			$restriction
 		);
@@ -79,6 +85,11 @@ class Posts extends Controller {
 	 * @return string
 	 */
 	public function get_the_excerpt( $post_excerpt, $post ) {
+		$filter_name = 'content_control/post_restricted_excerpt';
+
+		if ( doing_filter( $filter_name ) ) {
+			return $post_excerpt;
+		}
 
 		// If this isn't a post type that can be restricted, bail.
 		if ( ! $post || ! is_object( $post ) || $post->ID <= 0 ) {
@@ -96,7 +107,7 @@ class Posts extends Controller {
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
 		return apply_filters(
-			'content_control/post_restricted_excerpt',
+			$filter_name,
 			$restriction->get_message(),
 			$restriction
 		);

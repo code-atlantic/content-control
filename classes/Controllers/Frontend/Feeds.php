@@ -40,6 +40,12 @@ class Feeds extends Controller {
 	 * @return string
 	 */
 	public function filter_feed_post_content( $content ) {
+		$filter_name = 'content_control/feed_restricted_message';
+
+		if ( doing_filter( $filter_name ) ) {
+			return $content;
+		}
+
 		if ( ! is_feed() || ! content_is_restricted() ) {
 			return $content;
 		}
@@ -47,7 +53,7 @@ class Feeds extends Controller {
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
 		return apply_filters(
-			'content_control/feed_restricted_message',
+			$filter_name,
 			$restriction->get_message(),
 			$restriction
 		);
