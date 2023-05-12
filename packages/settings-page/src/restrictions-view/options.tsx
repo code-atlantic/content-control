@@ -9,8 +9,8 @@ import { home, link, login } from '@wordpress/icons';
 
 import type { Restriction } from '@content-control/core-data';
 
-export const whoOptions: {
-	value: Restriction[ 'who' ];
+export const userStatusOptions: {
+	value: Restriction[ 'settings' ][ 'userStatus' ];
 	label: string;
 	[ key: string ]: any;
 }[] = [

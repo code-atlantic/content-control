@@ -36,8 +36,9 @@ export const restrictionDefaults: Restriction = {
 	description: '',
 	status: 'draft',
 	settings: {
-		who: 'logged_in',
-		roles: [],
+		userStatus: 'logged_in',
+		roleMatch: 'any',
+		userRoles: [],
 		protectionMethod: 'redirect',
 		redirectType: 'login',
 		redirectUrl: '',

@@ -3,11 +3,16 @@ import {
 	SearchableMulticheckControl,
 } from '@content-control/components';
 import { clamp } from '@content-control/utils';
-import { Notice, TextareaControl, TextControl } from '@wordpress/components';
+import {
+	Notice,
+	SelectControl,
+	TextareaControl,
+	TextControl,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { search } from '@wordpress/icons';
 
-import { whoOptions } from '../options';
+import { userStatusOptions } from '../options';
 
 import type { EditTabProps } from '.';
 
@@ -25,10 +30,10 @@ const GeneralTab = ( {
 	// ** It may be that if we have dedicated migration routine this can be removed.
 	let cleanedRoles: string[] = [];
 
-	if ( Array.isArray( settings.roles ) ) {
-		cleanedRoles = settings.roles;
-	} else if ( typeof settings.roles === 'object' ) {
-		cleanedRoles = Object.entries( settings.roles ).map(
+	if ( Array.isArray( settings.userRoles ) ) {
+		cleanedRoles = settings.userRoles;
+	} else if ( typeof settings.userRoles === 'object' ) {
+		cleanedRoles = Object.entries( settings.userRoles ).map(
 			( [ value ] ) => value
 		);
 	}
@@ -66,29 +71,63 @@ const GeneralTab = ( {
 
 			<RadioButtonControl
 				label={ __( 'Who can see this content?', 'content-control' ) }
-				value={ settings.who }
-				onChange={ ( who ) => updateSettings( { who } ) }
-				options={ whoOptions }
+				value={ settings.userStatus }
+				onChange={ ( newUserStatus ) =>
+					updateSettings( { userStatus: newUserStatus } )
+				}
+				options={ userStatusOptions }
 			/>
 
-			{ 'logged_in' === settings.who && (
-				<SearchableMulticheckControl
-					label={ __(
-						'Who can see this content?',
-						'content-control'
+			{ 'logged_in' === settings.userStatus && (
+				<>
+					<SelectControl
+						label={ __( 'User Role', 'content-control' ) }
+						value={ settings.roleMatch ?? 'any' }
+						options={ [
+							{
+								label: __( 'Any', 'content-control' ),
+								value: 'any',
+							},
+							{
+								label: __( 'Matching', 'content-control' ),
+								value: 'match',
+							},
+							{
+								label: __( 'Excluding', 'content-control' ),
+								value: 'exclude',
+							},
+						] }
+						onChange={ ( newRoleMatch ) =>
+							updateSettings( { roleMatch: newRoleMatch } )
+						}
+					/>
+
+					{ 'any' !== settings.roleMatch && (
+						<SearchableMulticheckControl
+							label={
+								'exclude' === settings.roleMatch
+									? __( 'Excluded Roles', 'content-control' )
+									: __( 'Chosen Roles', 'content-control' )
+							}
+							searchIcon={ search }
+							placeholder={ __(
+								'Search roles…',
+								'content-control'
+							) }
+							className="is-large"
+							value={ cleanedRoles }
+							onChange={ ( roles ) =>
+								updateSettings( { userRoles: roles } )
+							}
+							options={ Object.entries( userRoles ).map(
+								( [ value, label ] ) => ( {
+									value,
+									label,
+								} )
+							) }
+						/>
 					) }
-					searchIcon={ search }
-					placeholder={ __( 'Search roles…', 'content-control' ) }
-					className="is-large"
-					value={ cleanedRoles }
-					onChange={ ( roles ) => updateSettings( { roles } ) }
-					options={ Object.entries( userRoles ).map(
-						( [ value, label ] ) => ( {
-							value,
-							label,
-						} )
-					) }
-				/>
+				</>
 			) }
 		</div>
 	);

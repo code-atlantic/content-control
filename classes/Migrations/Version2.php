@@ -96,6 +96,10 @@ class Version2 {
 		}
 	}
 
+	public function migrate_widgets() {
+		// Do the option keys stay the same? If so probably need to do nothing.
+	}
+
 	/**
 	 * Migrate restrictions from options to post type.
 	 *
@@ -120,6 +124,12 @@ class Version2 {
 			'override_default_message' => false,
 			'show_excerpts'            => false,
 			'protection_method'        => 'redirect',
+		];
+
+		$remap = [
+			'who'       => 'userStatus',
+			'roles'     => 'userRoles',
+			'roleMatch' => 'match', // TODO 'any' if roles is empty.
 		];
 
 		// TODO - Replace post_content with custom_message, or default global message.

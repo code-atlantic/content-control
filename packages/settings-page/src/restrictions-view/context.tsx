@@ -110,13 +110,13 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 				! filterRoles.length
 					? true
 					: filterRoles.some( ( role ) =>
-							r.settings.roles?.includes( role )
+							r.settings.userRoles?.includes( role )
 					  )
 			)
 			.filter( ( r ) => {
 				return filters.restrictedTo === ''
 					? true
-					: r.settings.who === filters.restrictedTo;
+					: r.settings.userStatus === filters.restrictedTo;
 			} )
 			.filter( ( r ) =>
 				filters.status === 'all' ? true : filters.status === r.status

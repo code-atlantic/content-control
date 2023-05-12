@@ -37,8 +37,9 @@ type Item = RuleItem | GroupItem;
 export type EditorId = 'new' | number | undefined;
 
 export interface RestrictionSettings {
-	who: 'logged_in' | 'logged_out';
-	roles: string[];
+	userStatus: 'logged_in' | 'logged_out';
+	roleMatch: 'any' | 'match' | 'exclude';
+	userRoles: string[];
 	protectionMethod: 'redirect' | 'message';
 	redirectType: 'login' | 'home' | 'custom';
 	redirectUrl: string;

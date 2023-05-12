@@ -10,7 +10,7 @@ import {
 	ToggleControl,
 	Tooltip,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, _n } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { info, search, trash } from '@wordpress/icons';
 
@@ -321,8 +321,8 @@ const List = () => {
 										}
 
 										case 'restrictedTo':
-											return restriction.settings.who ===
-												'logged_in' ? (
+											return restriction.settings
+												.userStatus === 'logged_in' ? (
 												<Flex>
 													<Icon
 														icon={ lockedUser }
@@ -351,12 +351,16 @@ const List = () => {
 											);
 
 										case 'roles': {
-											const { roles, who } =
-												restriction.settings;
+											const {
+												userRoles,
+												userStatus,
+												roleMatch = 'any',
+											} = restriction.settings;
 
 											if (
-												who === 'logged_out' ||
-												roles.length === 0
+												userStatus === 'logged_out' ||
+												roleMatch === 'any' ||
+												userRoles.length === 0
 											) {
 												return (
 													<Flex>
@@ -372,7 +376,14 @@ const List = () => {
 
 											return (
 												<Flex>
-													{ roles
+													{ roleMatch === 'exclude' &&
+														_n(
+															'Exclude:',
+															'Excludes:',
+															userRoles.length,
+															'content-control'
+														) }
+													{ userRoles
 														.slice( 0, 2 )
 														.map(
 															(
@@ -385,10 +396,10 @@ const List = () => {
 																</span>
 															)
 														) }
-													{ roles.length > 2 && (
+													{ userRoles.length > 2 && (
 														<span className="remaining">
 															{ '+' +
-																( roles.length -
+																( userRoles.length -
 																	2 ) }
 														</span>
 													) }

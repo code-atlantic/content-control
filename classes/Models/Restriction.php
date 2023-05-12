@@ -62,16 +62,41 @@ class Restriction {
 	/**
 	 * Restriction Setting: Who can see this.
 	 *
+	 * @deprecated 2.0.0 Use user_status instead.
+	 *
 	 * @var string
 	 */
 	public $who;
 
 	/**
+	 * Restriction Setting: Required user status.
+	 *
+	 * @var string
+	 */
+	public $user_status;
+
+	/**
 	 * Restriction Setting: Which roles.
+	 *
+	 * @deprecated 2.0.0 Use user_roles instead.
 	 *
 	 * @var array
 	 */
 	public $roles;
+
+	/**
+	 * Restriction Setting: Chosen user roles.
+	 *
+	 * @var array
+	 */
+	public $user_roles;
+
+	/**
+	 * Restriction Setting: Role match method.
+	 *
+	 * @var string
+	 */
+	public $role_match;
 
 	/**
 	 * Restriction Setting: Protection method.
@@ -140,8 +165,9 @@ class Restriction {
 		$settings = wp_parse_args(
 			get_post_meta( $restriction->ID, 'restriction_settings', true ),
 			[
-				'who'              => 'logged_in',
-				'roles'            => [],
+				'userStatus'       => 'logged_in',
+				'userRoles'        => [],
+				'roleMatch'        => 'any',
 				'protectionMethod' => 'redirect',
 				'redirectType'     => 'login',
 				'redirectUrl'      => '',
@@ -205,10 +231,7 @@ class Restriction {
 	 * @return bool
 	 */
 	public function user_meets_requirements() {
-		$who   = ! empty( $this->who ) ? $this->who : '';
-		$roles = ! empty( $this->roles ) ? $this->roles : [];
-
-		return \ContentControl\user_meets_requirements( $who, $roles );
+		return \ContentControl\user_meets_requirements( $this->user_status, $this->user_roles, $this->role_match );
 	}
 
 	/**
@@ -273,8 +296,8 @@ class Restriction {
 			'description'      => $this->get_description(),
 			'message'          => $this->get_message(),
 			'status'           => $this->status,
-			'who'              => $this->who,
-			'roles'            => $this->roles,
+			'userStatus'       => $this->userStatus,
+			'userRoles'        => $this->userRoles,
 			'protectionMethod' => $this->protection_method,
 			'redirectType'     => $this->redirect_type,
 			'redirectUrl'      => $this->redirect_url,
@@ -296,8 +319,8 @@ class Restriction {
 			'description'       => $this->get_description(),
 			'message'           => $this->get_message(),
 			'status'            => $this->status,
-			'who'               => $this->who,
-			'roles'             => $this->roles,
+			'who'               => $this->user_status,
+			'roles'             => $this->user_roles,
 			'protection_method' => $this->protection_method,
 			'redirect_type'     => $this->redirect_type,
 			'redirect_url'      => $this->redirect_url,
