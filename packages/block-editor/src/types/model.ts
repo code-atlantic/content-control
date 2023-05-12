@@ -18,6 +18,12 @@ export interface DeviceBlockControlsGroup extends BlockControlsGroupBase {
 	};
 }
 
+export interface UserBlockControlsGroup extends BlockControlsGroupBase {
+	userStatus: 'logged_in' | 'logged_out';
+	roleMatch: 'any' | 'match' | 'exclude';
+	userRoles: string[];
+}
+
 export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
 	anyAll: 'any' | 'all' | 'none';
 	conditionSets: QuerySet[];
@@ -25,6 +31,7 @@ export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
 
 export interface ControlGroups {
 	device?: DeviceBlockControlsGroup;
+	user?: UserBlockControlsGroup;
 	conditional?: ConditionalBlockControlsGroup;
 }
 

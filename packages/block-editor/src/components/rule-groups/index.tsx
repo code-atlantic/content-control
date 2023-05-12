@@ -8,6 +8,9 @@ import RuleGroup from '../rule-group';
 import { RulesInspectorSlot } from '../rules-inspector';
 import ConditionalRules from './conditional-rules';
 import DeviceRules from './device-rules';
+import UserRules from './user-rules';
+
+import { lockedUser } from '@content-control/icons';
 
 const blockMeta = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -55,6 +58,30 @@ addFilter(
 					<FilteredComponent { ...props } />
 					<Fill name="ContentControlBlockRules">
 						<RuleGroup
+							groupId="user"
+							label={ __( 'User Rules', 'content-controls' ) }
+							icon={ lockedUser }
+						>
+							<UserRules />
+						</RuleGroup>
+					</Fill>
+				</>
+			);
+		};
+	},
+	20
+);
+
+addFilter(
+	'content-control.BlockControlsEdit',
+	'contentControl.core',
+	( FilteredComponent ) => {
+		return ( props: Props ) => {
+			return (
+				<>
+					<FilteredComponent { ...props } />
+					<Fill name="ContentControlBlockRules">
+						<RuleGroup
 							groupId="conditional"
 							label={ __(
 								'Conditional Rules',
@@ -69,7 +96,7 @@ addFilter(
 			);
 		};
 	},
-	20
+	30
 );
 
 const RuleGroups = ( props: any ) => {

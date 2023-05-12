@@ -8,6 +8,7 @@ import type {
 	ConditionalBlockControlsGroup,
 	ControlGroups,
 	DeviceBlockControlsGroup,
+	UserBlockControlsGroup,
 	NonNullableFields,
 } from '../types';
 
@@ -26,6 +27,7 @@ export function getDefaultBlockControls< B extends true | false >(
 			enabled: false,
 			rules: {
 				device: getDefaultDeviceBlockControls(),
+				user: getDefaultUserBlockControls(),
 				conditional: getDefaultConditionBlockControls(),
 			},
 		}
@@ -54,6 +56,17 @@ export const getDefaultDeviceBlockControls = (): DeviceBlockControlsGroup => {
 			},
 		}
 	) as DeviceBlockControlsGroup;
+};
+
+export const getDefaultUserBlockControls = (): UserBlockControlsGroup => {
+	return applyFilters(
+		'contentControl.blockControls.defaultUserBlockControls',
+		{
+			userStatus: 'logged_in',
+			roleMatch: 'any',
+			userRoles: [],
+		}
+	) as UserBlockControlsGroup;
 };
 
 export const getDefaultConditionBlockControls =

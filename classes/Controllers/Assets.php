@@ -53,6 +53,7 @@ class Assets extends Controller {
 					'pluginUrl'      => $this->container->get_url(),
 					'advancedMode'   => $this->container->get_option( 'advanced_mode', false ),
 					'allowedBlocks'  => [],
+					'userRoles'      => allowed_user_roles(),
 					'excludedBlocks' => [
 						'core/nextpage',
 						'core/freeform',

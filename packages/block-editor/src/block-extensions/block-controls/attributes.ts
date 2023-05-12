@@ -74,6 +74,23 @@ const controlAttributes = ( settings: object ): object => {
 									},
 								},
 							},
+							user: {
+								type: 'object',
+								properties: {
+									userStatus: {
+										type: 'string',
+									},
+									userRoles: {
+										type: 'array',
+										items: {
+											type: 'string',
+										},
+									},
+									rolesMatch: {
+										type: 'string',
+									},
+								},
+							},
 							conditional: {
 								type: 'object',
 								properties: {

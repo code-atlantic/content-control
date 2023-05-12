@@ -89,8 +89,20 @@ class Blocks extends Controller {
 		}
 
 		$rules = wp_parse_args( $controls['rules'], [
+			'user'        => null,
 			'conditional' => null,
 		] );
+
+		// Check User Rules.
+		if ( $rules['user'] ) {
+			$user_status = ! empty( $rules['user']['userStatus'] ) ? $rules['user']['userStatus'] : false;
+			$role_match  = ! empty( $rules['user']['ruleMatch'] ) ? $rules['user']['ruleMatch'] : 'any';
+			$user_roles  = ! empty( $rules['user']['userRoles'] ) ? $rules['user']['userRoles'] : [];
+
+			if ( ! \ContentControl\user_meets_requirements( $user_status, $user_roles, $role_match ) ) {
+				return '';
+			}
+		}
 
 		if ( $rules['conditional'] ) {
 			$handler = new Handler( $rules['conditional']['conditionSets'], $rules['conditional']['anyAll'] );
