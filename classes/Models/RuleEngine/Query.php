@@ -80,6 +80,10 @@ class Query {
 	public function check_rules() {
 		$checks = [];
 
+		if ( empty( $this->items ) ) {
+			return true;
+		}
+
 		foreach ( $this->items as $item ) {
 			if ( $item instanceof Rule ) {
 				$result = $item->check_rule();

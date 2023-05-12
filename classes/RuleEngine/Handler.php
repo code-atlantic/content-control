@@ -69,7 +69,24 @@ class Handler {
 		$checks = [];
 
 		foreach ( $this->sets as $set ) {
-			$checks[] = $set->check_rules();
+			$check = $set->check_rules();
+			// We try to bail early, but just in case we'll add it to the array.
+			$checks[] = $check;
+
+			// Bail early if we're checking for all and found one that failed.
+			if ( 'all' === $this->any_all_none && false === $check ) {
+				return false;
+			}
+
+			// Bail early if we're checking for any and found one.
+			if ( 'any' === $this->any_all_none && true === $check ) {
+				return true;
+			}
+
+			// Bail early if we're checking for none and found one.
+			if ( 'none' === $this->any_all_none && true === $check ) {
+				return false;
+			}
 		}
 
 		switch ( $this->any_all_none ) {

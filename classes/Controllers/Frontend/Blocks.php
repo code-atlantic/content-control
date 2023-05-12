@@ -104,7 +104,7 @@ class Blocks extends Controller {
 			}
 		}
 
-		if ( $rules['conditional'] ) {
+		if ( $rules['conditional'] && ! empty( $rules['conditional']['conditionSets'] ) ) {
 			$handler = new Handler( $rules['conditional']['conditionSets'], $rules['conditional']['anyAll'] );
 
 			$check = $handler->check_rules();
