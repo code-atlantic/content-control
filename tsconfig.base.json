@@ -25,7 +25,6 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"importsNotUsedAsValues": "error",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		/* Module Resolution Options */
