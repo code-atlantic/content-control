@@ -16,7 +16,8 @@ import {
 	TextField,
 } from './';
 
-import type { FieldPropsWithOnChange } from '../types';
+import type { FieldProps, FieldPropsWithOnChange } from '../types';
+import { parseFieldProps } from './utils';
 
 const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 	const { type } = fieldProps;
@@ -66,7 +67,7 @@ const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 };
 
 const Field = ( props: FieldPropsWithOnChange ) => {
-	const { type, className } = props;
+	const { type, className, onChange } = props;
 
 	return (
 		<div
@@ -76,7 +77,12 @@ const Field = ( props: FieldPropsWithOnChange ) => {
 				className,
 			] ) }
 		>
-			<FieldComponent { ...props } />
+			{ /*
+			// @ts-ignore */ }
+			<FieldComponent
+				onChange={ onChange }
+				{ ...parseFieldProps( props ) }
+			/>
 		</div>
 	);
 };

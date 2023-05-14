@@ -21,7 +21,12 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 
 	const { options: ruleOptions = {} } = ruleProps;
 
-	const { fields = [] } = ruleDef ?? {};
+	const { fields = {} } = ruleDef ?? {};
+
+	const editorFields = Object.entries( fields ).map( ( [ id, field ] ) => ( {
+		...field,
+		id,
+	} ) );
 
 	/**
 	 * Update a single option.
@@ -47,22 +52,24 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 		<>
 			{ ruleText }
 
-			{ fields.length > 0 && (
+			{ editorFields.length > 0 && (
 				<div className="rule-fields">
-					{ fields.map( < F extends FieldProps >( field: F ) => {
-						const { id } = field;
+					{ editorFields.map(
+						< F extends FieldProps >( field: F ) => {
+							const { id } = field;
 
-						return (
-							<Field
-								key={ id }
-								{ ...field }
-								value={ ruleOptions[ id ] }
-								onChange={ ( newValue: F[ 'value' ] ) =>
-									updateOption( id, newValue )
-								}
-							/>
-						);
-					} ) }
+							return (
+								<Field
+									key={ id }
+									{ ...field }
+									value={ ruleOptions[ id ] }
+									onChange={ ( newValue: F[ 'value' ] ) =>
+										updateOption( id, newValue )
+									}
+								/>
+							);
+						}
+					) }
 				</div>
 			) }
 		</>

@@ -33,6 +33,8 @@ export const oldFieldDefaults = {
 	options: [],
 	object_type: null,
 	object_key: null,
+	post_type: null,
+	taxonomy: null,
 	std: null,
 	min: 0,
 	max: 50,
@@ -184,20 +186,34 @@ export const parseOldArgsToProps = (
 
 		case 'objectselect':
 		case 'postselect':
-		case 'taxonomyselect': {
-			const entityKind =
-				fieldProps.type === 'taxonomyselect' ? 'taxonomy' : 'postType';
+		case 'taxonomyselect':
+			fieldProps.type = 'objectselect';
+			// @ts-ignore
+			fieldProps.multiple = args?.multiple ?? false;
+			// @ts-ignore
+			fieldProps.placeholder = args?.placeholder ?? '';
+
+			let entityKind = 'postType';
+			let entityType = '';
+
+			if ( args.type === 'postselect' ) {
+				entityKind = 'postType';
+				entityType = args?.post_type ?? 'post';
+			} else if ( args.type === 'taxonomyselect' ) {
+				entityKind = 'taxonomy';
+				entityType = args?.taxonomy ?? 'category';
+			} else {
+				// @ts-ignore
+				entityKind = args?.post_type ? 'postType' : 'taxonomy';
+				// @ts-ignore
+				entityType = args?.post_type ?? args?.taxonomy;
+			}
 
 			return {
 				...fieldProps,
 				entityKind,
-				entityType: '',
-				...( fieldProps.type === args.type && {
-					entityKind: args?.object_type ?? entityKind,
-					entityType: args?.post_type ?? args?.taxonomy,
-				} ),
+				entityType,
 			};
-		}
 
 		case 'textarea':
 			return {
@@ -347,7 +363,9 @@ export function isOldFieldType( props: any ): boolean {
 		cast &&
 		typeof cast === 'object' &&
 		// @ts-ignore It exists.
-		typeof cast?.std !== 'undefined'
+		( typeof cast?.std !== 'undefined' ||
+			typeof cast?.taxonomy !== 'undefined' ||
+			typeof cast?.post_type !== 'undefined' )
 	) {
 		return true;
 	}

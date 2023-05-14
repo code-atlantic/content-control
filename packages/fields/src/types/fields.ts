@@ -96,6 +96,7 @@ export interface NumberFieldProps extends InputFieldProps< number > {
 
 export interface ObjectSelectFieldProps extends FieldBaseProps {
 	type: 'objectselect' | 'postselect' | 'taxonomyselect';
+	placeholder?: string;
 	value?: number | number[];
 	multiple?: boolean;
 	entityKind: string;

@@ -131,20 +131,20 @@ export interface OldSelect2Field extends Omit< OldSelectField, 'type' > {
 
 export interface OldObjectSelectField extends Omit< OldSelect2Field, 'type' > {
 	type: 'objectselect' | 'postselect' | 'taxonomyselect';
-	object_type: 'post' | 'taxonomy';
+	object_type?: 'post' | 'taxonomy';
 	post_type?: string;
 	taxonomy?: string;
 }
 
 export interface OldPostSelectField extends OldObjectSelectField {
 	type: 'postselect';
-	object_type: 'post';
+	object_type?: 'post';
 	post_type: string;
 }
 
 export interface OldTaxnomySelectField extends OldObjectSelectField {
 	type: 'taxonomyselect';
-	object_type: 'taxonomy';
+	object_type?: 'taxonomy';
 	taxonomy: string;
 }
 
