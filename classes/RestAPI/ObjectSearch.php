@@ -43,6 +43,48 @@ class ObjectSearch extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'object_search' ],
 					'permission_callback' => '__return_true', // Read only, so anyone can view.
+					'args'                => [
+						'nonce'      => [
+							'description' => __( 'Nonce', 'content-control' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'hash'       => [
+							'description' => __( 'Hash', 'content-control' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'entityKind' => [
+							'description' => __( 'Object kind, (postType, taxonomy)', 'content-control' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'entityType' => [
+							'description' => __( 'Object type (post, category)', 'content-control' ),
+							'type'        => 'string',
+							'required'    => true,
+						],
+						'paged'      => [
+							'description' => __( 'Page number', 'content-control' ),
+							'type'        => 'integer',
+							'required'    => false,
+						],
+						's'          => [
+							'description' => __( 'Search term', 'content-control' ),
+							'type'        => 'string',
+							'required'    => false,
+						],
+						'include'    => [
+							'description' => __( 'Include IDs', 'content-control' ),
+							'type'        => 'string',
+							'required'    => false,
+						],
+						'exclude'    => [
+							'description' => __( 'Exclude IDs', 'content-control' ),
+							'type'        => 'string',
+							'required'    => false,
+						],
+					],
 				],
 			]
 		);
@@ -51,29 +93,36 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get block type list.
 	 *
+	 * @param \WP_REST_Request $request Request object.
+	 *
 	 * @return WP_Error|WP_REST_Response
 	 */
-	public function object_search() {
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_REQUEST['nonce'] ) ), 'content_control_object_search_nonce' ) ) {
+	public function object_search( $request ) {
+		$nonce  = $request->get_param( 'nonce' );
+		$params = $request->get_params();
+
+		if ( ! isset( $nonce ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $nonce ) ), 'content_control_object_search_nonce' ) ) {
 			wp_send_json_error();
 		}
 
 		$results = [
-			'items'       => [],
-			'total_count' => 0,
+			'hash'       => $request->get_param( 'hash' ),
+			'items'      => [],
+			'totalCount' => 0,
 		];
 
-		$object_type = isset( $_REQUEST['object_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['object_type'] ) ) : '';
-		$include     = ! empty( $_REQUEST['include'] ) ? wp_parse_id_list( wp_unslash( $_REQUEST['include'] ) ) : [];
-		$exclude     = ! empty( $_REQUEST['exclude'] ) ? wp_parse_id_list( wp_unslash( $_REQUEST['exclude'] ) ) : [];
+		$object_kind = isset( $params['entityKind'] ) ? sanitize_text_field( wp_unslash( $params['entityKind'] ) ) : '';
+		$object_type = isset( $params['entityType'] ) ? sanitize_text_field( wp_unslash( $params['entityType'] ) ) : '';
+		$include     = ! empty( $params['include'] ) ? wp_parse_id_list( wp_unslash( $params['include'] ) ) : [];
+		$exclude     = ! empty( $params['exclude'] ) ? wp_parse_id_list( wp_unslash( $params['exclude'] ) ) : [];
 
 		if ( ! empty( $include ) ) {
 			$exclude = array_merge( $include, $exclude );
 		}
 
-		switch ( $object_type ) {
+		switch ( $object_kind ) {
 			case 'post_type':
-				$post_type = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['object_key'] ) ) : 'post';
+				$post_type = ! empty( $object_type ) ? $object_type : 'post';
 
 				if ( ! empty( $include ) ) {
 					$include_query = $this->post_type_selectlist_query(
@@ -92,14 +141,14 @@ class ObjectSearch extends WP_REST_Controller {
 						];
 					}
 
-					$results['total_count'] += (int) $include_query['total_count'];
+					$results['totalCount'] += (int) $include_query['totalCount'];
 				}
 
 				$query = $this->post_type_selectlist_query(
 					$post_type,
 					[
-						's'              => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : null,
-						'paged'          => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+						's'              => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
+						'paged'          => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
 						'post__not_in'   => $exclude,
 						'posts_per_page' => 10,
 					],
@@ -113,11 +162,11 @@ class ObjectSearch extends WP_REST_Controller {
 					];
 				}
 
-				$results['total_count'] += (int) $query['total_count'];
+				$results['totalCount'] += (int) $query['totalCount'];
 				break;
 
 			case 'taxonomy':
-				$taxonomy = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['object_key'] ) ) : 'category';
+				$taxonomy = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : 'category';
 
 				if ( ! empty( $include ) ) {
 					$include_query = $this->taxonomy_selectlist_query(
@@ -136,14 +185,14 @@ class ObjectSearch extends WP_REST_Controller {
 						];
 					}
 
-					$results['total_count'] += (int) $include_query['total_count'];
+					$results['totalCount'] += (int) $include_query['totalCount'];
 				}
 
 				$query = $this->taxonomy_selectlist_query(
 					$taxonomy,
 					[
-						'search'  => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : null,
-						'paged'   => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+						'search'  => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
+						'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
 						'exclude' => $exclude,
 						'number'  => 10,
 					],
@@ -157,14 +206,14 @@ class ObjectSearch extends WP_REST_Controller {
 					];
 				}
 
-				$results['total_count'] += (int) $query['total_count'];
+				$results['totalCount'] += (int) $query['totalCount'];
 				break;
 			case 'user':
 				if ( ! current_user_can( 'list_users' ) ) {
 					wp_send_json_error();
 				}
 
-				$user_role = ! empty( $_REQUEST['object_key'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['object_key'] ) ) : null;
+				$user_role = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : null;
 
 				if ( ! empty( $include ) ) {
 					$include_query = $this->user_selectlist_query(
@@ -183,14 +232,14 @@ class ObjectSearch extends WP_REST_Controller {
 						];
 					}
 
-					$results['total_count'] += (int) $include_query['total_count'];
+					$results['totalCount'] += (int) $include_query['totalCount'];
 				}
 
 				$query = $this->user_selectlist_query(
 					[
 						'role'    => $user_role,
-						'search'  => ! empty( $_REQUEST['s'] ) ? '*' . sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) . '*' : null,
-						'paged'   => ! empty( $_REQUEST['paged'] ) ? absint( $_REQUEST['paged'] ) : null,
+						'search'  => ! empty( $params['s'] ) ? '*' . sanitize_text_field( wp_unslash( $params['s'] ) ) . '*' : null,
+						'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
 						'exclude' => $exclude,
 						'number'  => 10,
 					],
@@ -204,7 +253,7 @@ class ObjectSearch extends WP_REST_Controller {
 					];
 				}
 
-				$results['total_count'] += (int) $query['total_count'];
+				$results['totalCount'] += (int) $query['totalCount'];
 				break;
 		}
 
@@ -263,8 +312,8 @@ class ObjectSearch extends WP_REST_Controller {
 			}
 
 			$results = [
-				'items'       => $posts,
-				'total_count' => $query->found_posts,
+				'items'      => $posts,
+				'totalCount' => $query->found_posts,
 			];
 
 			$queries[ $key ] = $results;
@@ -321,8 +370,8 @@ class ObjectSearch extends WP_REST_Controller {
 			unset( $total_args['offset'] );
 
 			$results = [
-				'items'       => $terms,
-				'total_count' => $include_total ? get_terms( $total_args ) : null,
+				'items'      => $terms,
+				'totalCount' => $include_total ? get_terms( $total_args ) : null,
 			];
 
 			$queries[ $key ] = $results;
@@ -364,8 +413,8 @@ class ObjectSearch extends WP_REST_Controller {
 			}
 
 			$results = [
-				'items'       => $users,
-				'total_count' => $query->get_total(),
+				'items'      => $users,
+				'totalCount' => $query->get_total(),
 			];
 
 			$queries[ $key ] = $results;
