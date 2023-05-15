@@ -3,13 +3,17 @@ import type { RuleItem } from './model';
 
 export type EngineField = FieldProps;
 
+type EngineFieldRecord< T extends EngineField > = {
+	[ K in T[ 'id' ] ]: T;
+};
+
 export interface EngineRuleType {
 	name: string;
 	label: string;
 	context: string;
 	category: string;
 	format: string;
-	fields?: EngineField[];
+	fields?: EngineFieldRecord< EngineField >;
 	verbs?: [ string, string ];
 	frontend?: boolean;
 }

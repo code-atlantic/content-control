@@ -54,13 +54,17 @@ const useRules = () => {
 	 */
 	const getRuleOptionDefaults = (
 		ruleName: string
-	): Record< string, any | undefined > =>
-		getRule( ruleName )?.fields?.reduce( ( defaults, field ) => {
+	): Record< string, any | undefined > => {
+		const rule = getRule( ruleName );
+		const { fields = {} } = rule ?? {};
+
+		return Object.values( fields ).reduce( ( defaults, field ) => {
 			return {
 				...defaults,
 				[ field.id ]: field.default ?? undefined,
 			};
-		}, {} ) ?? {};
+		}, {} );
+	};
 
 	type findRulesProps = {
 		category: string;
