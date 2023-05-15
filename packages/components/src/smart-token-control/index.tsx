@@ -1,6 +1,5 @@
 import classNames, { Argument as classNamesArg } from 'classnames';
 
-import { clamp, noop } from '@content-control/utils';
 import {
 	Button,
 	KeyboardShortcuts,
@@ -9,8 +8,11 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useInstanceId } from '@wordpress/compose';
-import { arrowDown, arrowUp, close } from '@wordpress/icons';
+import { close } from '@wordpress/icons';
 import { forwardRef, useEffect, useRef, useState } from '@wordpress/element';
+import { clamp, noop } from '@content-control/utils';
+
+import './editor.scss';
 
 type Props = {
 	value: string[];
@@ -18,10 +20,26 @@ type Props = {
 	label?: string | JSX.Element;
 	placeholder?: string;
 	className?: classNamesArg;
+	classes?: {
+		container?: string;
+		popover?: string;
+		inputContainer?: string;
+		tokens?: string;
+		token?: string;
+		tokenLabel?: string;
+		tokenRemove?: string;
+		textInput?: string;
+		toggleSuggestions?: string;
+		suggestions?: string;
+		suggestion?: string;
+	};
+	multiple?: boolean;
 	suggestions: string[];
-	renderToken?: ( token: string ) => JSX.Element;
-	renderSuggestion?: ( suggestion: string ) => JSX.Element;
+	renderToken?: ( token: string ) => JSX.Element | string;
+	renderSuggestion?: ( suggestion: string ) => JSX.Element | string;
 	onInputChange?: ( value: string ) => void;
+	openOnFocus?: boolean;
+	tokenOnComma?: boolean;
 	messages?: {
 		searchTokens?: string;
 		noSuggestions?: string;
@@ -36,16 +54,35 @@ type State = {
 	popoverOpen: boolean;
 };
 
+const defaultClasses: Required< Props[ 'classes' ] > = {
+	container: 'component-smart-token-control',
+	popover: 'component-smart-token-control__suggestions-popover',
+	inputContainer: 'component-smart-token-control__input',
+	tokens: 'component-smart-token-control__tokens',
+	token: 'component-smart-token-control__token',
+	tokenLabel: 'component-smart-token-control__token-label',
+	tokenRemove: 'component-smart-token-control__token-remove',
+	textInput: 'component-smart-token-control__text-input',
+	toggleSuggestions: 'component-smart-token-control__toggle',
+	suggestions: 'component-smart-token-control__suggestions',
+	suggestion: 'component-smart-token-control__suggestion',
+};
+
 const SmartTokenControl = (
 	{
 		value,
 		onChange,
 		label = __( 'Items', 'content-control' ),
 		placeholder = __( 'Enter a value', 'content-control' ),
+		openOnFocus = false,
+		openOnClick = false,
 		className,
+		tokenOnComma = false,
+		classes = defaultClasses,
 		renderToken = ( token ) => <>{ token }</>,
 		renderSuggestion = ( suggestion ) => <>{ suggestion }</>,
 		onInputChange = noop,
+		multiple = false,
 		suggestions,
 		messages = {
 			searchTokens: __( 'Search', 'content-control' ),
@@ -55,6 +92,8 @@ const SmartTokenControl = (
 	}: Props,
 	ref: React.MutableRefObject< Element | null >
 ) => {
+	const elClasses = { ...defaultClasses, ...classes };
+
 	const minQueryLength = 1;
 	const wrapperRef = useRef< Element | null >( null );
 	const inputRef = useRef< HTMLInputElement >( null );
@@ -77,8 +116,16 @@ const SmartTokenControl = (
 		} );
 
 	const selectSuggestion = ( suggestion: string ) => {
-		const newTokens = [ ...value, suggestion ];
-		onChange( newTokens );
+		if ( ! multiple ) {
+			onChange( [ suggestion ] );
+			return;
+		}
+
+		if ( value.includes( suggestion ) ) {
+			return;
+		}
+
+		onChange( [ ...value, suggestion ] );
 	};
 
 	const maxSelectionIndex = suggestions.length;
@@ -110,7 +157,8 @@ const SmartTokenControl = (
 	}, [ selectedSuggestion, popoverOpen ] );
 
 	const keyboardShortcuts = {
-		up: () =>
+		up: ( event: KeyboardEvent ) => {
+			event.preventDefault();
 			setState( {
 				...state,
 				// W3 Aria says to open the popover if query text is empty on up keypress.
@@ -126,8 +174,10 @@ const SmartTokenControl = (
 					0,
 					maxSelectionIndex
 				),
-			} ),
-		down: () => {
+			} );
+		},
+		down: ( event: KeyboardEvent ) => {
+			event.preventDefault();
 			setState( {
 				...state,
 				// W3 Aria says to open the popover if query text is empty on up keypress.
@@ -172,14 +222,33 @@ const SmartTokenControl = (
 				popoverOpen: false,
 			} );
 		},
+		// Generate a token from the input text on comma.
+		',': ( event: KeyboardEvent ) => {
+			if ( ! tokenOnComma ) {
+				return;
+			}
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			if ( inputText.length === 0 ) {
+				return;
+			}
+
+			onChange( [ ...value, inputText ] );
+			setState( {
+				...state,
+				inputText: '',
+			} );
+		},
 	};
 
 	return (
 		<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
 			<div
-				id={ `component-smart-token-control-${ id }` }
+				id={ `component-smart-token-control-${ id }-wrapper` }
 				className={ classNames( [
-					'component-smart-token-control',
+					elClasses.container,
 					isFocused && 'is-focused',
 					className,
 				] ) }
@@ -189,46 +258,56 @@ const SmartTokenControl = (
 						ref.current = _ref;
 					}
 				} }
-				onFocus={ () =>
-					setState( {
-						...state,
-						isFocused: true,
-						popoverOpen: inputText.length >= minQueryLength,
-					} )
-				}
-				onBlur={ () =>
+				onBlur={ ( event: FocusEventInit ) => {
+					// If the blur event is coming from the popover, don't close it.
+					if ( event.relatedTarget ) {
+						const popover = event.relatedTarget as HTMLElement;
+						if ( popover.classList.contains( elClasses.popover ) ) {
+							return;
+						}
+					}
+
 					setState( {
 						...state,
 						isFocused: false,
 						popoverOpen: false,
-					} )
-				}
+					} );
+				} }
 			>
-				<BaseControl label={ label }>
-					<div className="component-smart-token-control__input">
-						{ value.map( ( token ) => (
-							<div
-								className="component-smart-token-control__token"
-								key={ token }
-							>
-								<div className="component-smart-token-control__token-label">
-									{ renderToken( token ) }
+				<BaseControl
+					id={ `component-smart-token-control-${ id }` }
+					label={ label }
+				>
+					<div className={ elClasses.inputContainer }>
+						<div className={ elClasses.tokens }>
+							{ value.map( ( token ) => (
+								<div
+									className={ elClasses.token }
+									key={ token }
+								>
+									<div className={ elClasses.tokenLabel }>
+										{ renderToken( token ) }
+									</div>
+									<Button
+										className={ elClasses.tokenRemove }
+										onClick={ () => {
+											onChange(
+												value.filter(
+													( t ) => t !== token
+												)
+											);
+										} }
+										icon={ close }
+										label={ messages.removeToken }
+									/>
 								</div>
-								<Button
-									className="component-smart-token-control__token-remove"
-									onClick={ () => {
-										onChange(
-											value.filter( ( t ) => t !== token )
-										);
-									} }
-									icon={ close }
-									label={ messages.removeToken }
-								/>
-							</div>
-						) ) }
+							) ) }
+						</div>
 						<input
+							className={ elClasses.textInput }
 							type="text"
 							placeholder={ placeholder }
+							disabled={ ! multiple && value.length > 0 }
 							ref={ inputRef }
 							value={ inputText ?? '' }
 							onChange={ ( event ) => {
@@ -247,32 +326,62 @@ const SmartTokenControl = (
 							aria-expanded={ popoverOpen }
 							aria-controls={ `${ id }-listbox` }
 							aria-activedescendant={ `sug-${ currentIndex }` }
-						/>
-
-						<Button
-							icon={ popoverOpen ? arrowUp : arrowDown }
-							tabIndex={ -1 }
-							aria-controls={ `${ id }-listbox` }
-							aria-expanded={ popoverOpen }
-							onClick={ () =>
+							onFocus={ () => {
 								setState( {
 									...state,
-									popoverOpen: ! popoverOpen,
-								} )
-							}
-							label={ messages.searchTokens }
+									isFocused: true,
+									popoverOpen:
+										inputText.length >= minQueryLength,
+								} );
+							} }
+							onClick={ () => {
+								if ( ! popoverOpen ) {
+									setState( {
+										...state,
+										popoverOpen: suggestions.length > 0,
+									} );
+								}
+							} }
+							onBlur={ ( event: FocusEventInit ) => {
+								// If the blur event is coming from the popover, don't close it.
+								if ( event.relatedTarget ) {
+									const popover =
+										event.relatedTarget as HTMLElement;
+									if (
+										popover.classList.contains(
+											elClasses.popover
+										)
+									) {
+										return;
+									}
+								}
+
+								setState( {
+									...state,
+									isFocused: false,
+									popoverOpen: false,
+								} );
+							} }
 						/>
 					</div>
 				</BaseControl>
 				{ popoverOpen && (
-					<div className="component-smart-token-control__suggestions">
+					<div
+						className={ elClasses.suggestions }
+						style={ {
+							// Allows the popover to assume full width.
+							position: 'relative',
+							width: inputRef.current?.clientWidth,
+						} }
+					>
 						<Popover
 							focusOnMount={ false }
 							onClose={ () => setSelectedSuggestion( -1 ) }
 							position="bottom right"
-							// @ts-ignore This exists, just not typed in wp-core.
-							anchor={ wrapperRef.current }
-							className="component-smart-token-control__suggestions-popover"
+							getAnchorRect={ () =>
+								inputRef.current?.getBoundingClientRect()
+							}
+							className={ elClasses.popover }
 						>
 							{ suggestions.length ? (
 								suggestions.map( ( suggestion, i ) => (
@@ -280,8 +389,11 @@ const SmartTokenControl = (
 										key={ i }
 										id={ `sug-${ i }` }
 										className={ classNames( [
-											'component-smart-token-control__suggestion',
-											i === currentIndex && 'is-selected',
+											elClasses.suggestion,
+											i === currentIndex &&
+												'is-currently-highlighted',
+											value.includes( suggestion ) &&
+												'is-selected',
 										] ) }
 										ref={
 											i === currentIndex
@@ -291,7 +403,13 @@ const SmartTokenControl = (
 										onFocus={ () => {
 											setSelectedSuggestion( i );
 										} }
-										onMouseDown={ () => {
+										onMouseDown={ ( event ) => {
+											event.preventDefault();
+											if (
+												value.includes( suggestion )
+											) {
+												return;
+											}
 											selectSuggestion(
 												suggestions[ i ]
 											);
