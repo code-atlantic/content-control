@@ -38,7 +38,6 @@ type Props = {
 	renderToken?: ( token: string ) => JSX.Element | string;
 	renderSuggestion?: ( suggestion: string ) => JSX.Element | string;
 	onInputChange?: ( value: string ) => void;
-	openOnFocus?: boolean;
 	tokenOnComma?: boolean;
 	messages?: {
 		searchTokens?: string;
@@ -74,8 +73,6 @@ const SmartTokenControl = (
 		onChange,
 		label = __( 'Items', 'content-control' ),
 		placeholder = __( 'Enter a value', 'content-control' ),
-		openOnFocus = false,
-		openOnClick = false,
 		className,
 		tokenOnComma = false,
 		classes = defaultClasses,
