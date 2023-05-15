@@ -197,12 +197,12 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			onRequestClose={ () => closeEditor() }
 			shouldCloseOnClickOutside={ false }
 		>
-			<div className={
-				classNames( [
-					"restriction-enabled-toggle",
+			<div
+				className={ classNames( [
+					'restriction-enabled-toggle',
 					values.status === 'publish' ? 'enabled' : 'disabled',
-				] )
-			}>
+				] ) }
+			>
 				<ToggleControl
 					label={
 						values.status === 'publish'
