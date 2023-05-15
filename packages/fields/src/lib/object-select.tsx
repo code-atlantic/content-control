@@ -1,12 +1,11 @@
-import { ReactTags, ReactTagsAPI } from 'react-tag-autocomplete';
-
-import { store as coreDataStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import { useEffect, useRef, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { useState } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
+import { useDebounce } from '@wordpress/compose';
+import { store as coreDataStore } from '@wordpress/core-data';
+import { SmartTokenControl } from '@content-control/components';
 
 import type { Post, Taxonomy } from '@wordpress/core-data';
-import type { Tag } from 'react-tag-autocomplete';
 
 import type {
 	ObjectSelectFieldProps,
@@ -15,92 +14,143 @@ import type {
 	WithOnChange,
 } from '../types';
 
-type ObjectOption = {
-	id?: string | number;
-	slug?: string;
-	name?: string;
-};
+interface ObjectOption extends Post< 'edit' >, Taxonomy< 'edit' > {}
 
 const ObjectSelectField = ( {
+	label,
 	value,
 	onChange,
-	...fieldProps
+	entityKind = 'postType',
+	entityType = 'post',
+	multiple = false,
 }: WithOnChange<
 	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
 > ) => {
-	const inputRef = useRef< ReactTagsAPI >( null );
-	const {
-		entityKind = 'postType',
-		entityType = 'post',
-		// multiple = false,
-	} = fieldProps;
-
 	const [ queryText, setQueryText ] = useState( '' );
-	const [ selected, setSelected ] = useState< Tag[] >( [] );
+
+	const updateQueryText = useDebounce( ( text: string ) => {
+		setQueryText( text );
+	}, 300 );
 
 	const queryArgs = {
 		search: queryText,
 		per_page: 10,
 	};
 
-	const { options } = useSelect(
+	const { prefill = [] } = useSelect(
 		( select ) => ( {
-			options: select( coreDataStore ).getEntityRecords(
+			// @ts-ignore
+			prefill: select( coreDataStore ).getEntityRecords(
 				entityKind,
 				entityType,
-				queryArgs
-			) as ( Taxonomy< 'view' > | Post< 'view' > )[],
+				{
+					context: 'view',
+					include: value,
+					per_page: -1,
+				}
+			) as ObjectOption[],
 		} ),
-		[ entityKind, entityType, queryText ]
+		[ value ]
 	);
 
-	// const onSelect = ( chosen: string ) => {
-	// 	setSelected( [ ...selected, chosen ] );
-	// };
+	const { suggestions = [] } = useSelect(
+		( select ) => ( {
+			// @ts-ignore
+			suggestions: select( coreDataStore ).getEntityRecords(
+				entityKind,
+				entityType,
+				{
+					context: 'view',
+					...queryArgs,
+				}
+			) as ObjectOption[],
+		} ),
+		[ queryText ]
+	);
 
-	/**
-	 * Focus the input when this component is rendered.
-	 */
-	useEffect( () => {
-		const firstEl = inputRef.current;
+	const findSuggestion = ( id: number | string ) => {
+		const findSuggestion =
+			suggestions &&
+			suggestions.find(
+				( suggestion ) => suggestion.id.toString() === id.toString()
+			);
 
-		if ( null !== firstEl ) {
-			// ReactTags exposed method, not HTML .focus().
-			firstEl.input.focus();
+		if ( findSuggestion ) {
+			return findSuggestion;
 		}
-	}, [] );
+
+		return (
+			prefill &&
+			prefill.find(
+				( suggestion ) => suggestion.id.toString() === id.toString()
+			)
+		);
+	};
+
+	const values = ( () => {
+		if ( ! value ) {
+			return [];
+		}
+
+		return typeof value === 'number' || typeof value === 'string'
+			? [ value ]
+			: value;
+	} )();
 
 	return (
-		<div className="cc-rule-engine-search-box">
-			<ReactTags
-				placeholderText={ __( 'Select a rule', 'content-control' ) }
-				ref={ inputRef }
-				selected={ options.map(
-					( { id, slug, name }: ObjectOption, i ) => ( {
-						value: id ?? slug ?? i,
-						label: name ?? slug ?? '',
-					} )
-				) }
-				suggestions={ options.map(
-					( { id, slug, name }: ObjectOption, i ) => ( {
-						value: id ?? slug ?? i,
-						label: name ?? slug ?? '',
-					} )
-				) }
-				onInput={ setQueryText }
-				onAdd={ ( chosen: Tag ) => {
-					setSelected( [ ...selected, chosen ] );
-				} }
-				onDelete={ ( tagIndex: number ) =>
-					setSelected(
-						selected.filter(
-							( _: any, i: number ) => i !== tagIndex
-						)
-					)
-				}
-				allowNew={ false }
-				allowBackspace={ true }
-			/>
+		<div className="cc-object-search-field">
+			<>
+				<SmartTokenControl
+					label={ label }
+					multiple={ multiple }
+					placeholder={ sprintf(
+						__( 'Select %s(s)', 'content-control' ),
+						entityType.replace( /_/g, ' ' ).toLowerCase()
+					) }
+					tokenOnComma={ true }
+					value={ values.map( ( v ) => v.toString() ) }
+					onInputChange={ updateQueryText }
+					onChange={ ( newValue ) => {
+						onChange(
+							newValue
+								.map( ( v ) => parseInt( v, 10 ) )
+								.filter( ( v ) => ! isNaN( v ) )
+						);
+					} }
+					renderToken={ ( token ) => {
+						const suggestion = findSuggestion( token );
+
+						if ( ! suggestion ) {
+							return token;
+						}
+
+						return 'postType' === entityKind
+							? suggestion.title.rendered
+							: suggestion.name;
+					} }
+					renderSuggestion={ ( item ) => {
+						const suggestion = findSuggestion( item );
+
+						if ( ! suggestion ) {
+							return item;
+						}
+						return (
+							<>
+								{ 'postType' === entityKind
+									? suggestion.title.rendered
+									: suggestion.name }
+							</>
+						);
+					} }
+					suggestions={
+						suggestions
+							? suggestions.map( ( option ) => {
+									return option?.id.toString() ?? false;
+							  } )
+							: []
+					}
+				/>
+			</>
 		</div>
 	);
 };

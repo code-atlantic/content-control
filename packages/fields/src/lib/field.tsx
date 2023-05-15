@@ -16,7 +16,7 @@ import {
 	TextField,
 } from './';
 
-import type { FieldProps, FieldPropsWithOnChange } from '../types';
+import type { FieldPropsWithOnChange } from '../types';
 import { parseFieldProps } from './utils';
 
 const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
