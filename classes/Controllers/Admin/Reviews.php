@@ -435,18 +435,7 @@ class Reviews extends Controller {
 					echo $trigger['message'];
 					?>
 					<br />
-					<?php
-
-					$names = [
-						'<a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>',
-					];
-
-					shuffle( $names );
-
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo '~ ' . implode( ' & ', $names );
-
-					?>
+					~ <a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>
 				</strong>
 			</p>
 			<ul>
