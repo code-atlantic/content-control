@@ -56,14 +56,19 @@ const useRules = () => {
 		ruleName: string
 	): Record< string, any | undefined > => {
 		const rule = getRule( ruleName );
-		const { fields = {} } = rule ?? {};
+		const { modifiers = {} } = rule ?? {};
+		const defaults = {};
 
-		return Object.values( fields ).reduce( ( defaults, field ) => {
-			return {
-				...defaults,
-				[ field.id ]: field.default ?? undefined,
-			};
-		}, {} );
+		Object.entries( modifiers ).forEach( ( [ , { fields = {} } ] ) => {
+			Object.values( fields ).reduce( ( defaults, field ) => {
+				return {
+					...defaults,
+					[ field.id ]: field.default ?? undefined,
+				};
+			}, defaults );
+		} );
+
+		return defaults;
 	};
 
 	type findRulesProps = {

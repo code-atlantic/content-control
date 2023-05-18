@@ -19,6 +19,7 @@ interface Query {
 interface RuleItem extends BaseItem {
 	type: 'rule';
 	name: string;
+	modifier: string;
 	options?: {
 		[ key: string ]: any;
 	};

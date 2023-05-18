@@ -12,6 +12,7 @@ export const newRule = ( name: string = '' ): RuleItem => ( {
 	id: newUUID(),
 	type: 'rule',
 	name,
+	modifier: 'default',
 	options: {},
 	notOperand: false,
 } );

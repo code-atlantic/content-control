@@ -139,7 +139,8 @@ class Rules {
 		$rules = array_merge(
 			$this->get_user_rules(),
 			$this->get_general_content_rules(),
-			$this->get_post_type_rules()
+			$this->get_post_type_rules(),
+			$this->get_taxonomy_rules()
 		);
 
 		foreach ( $rules as $rule ) {
@@ -245,56 +246,33 @@ class Rules {
 	 * @return array
 	 */
 	public function get_post_type_rules() {
-		$verbs          = $this->get_verbs();
-		$rules          = [];
-		$post_type_list = [];
-		$taxonomy_list  = [];
+		$verbs = $this->get_verbs();
 
-		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+		$rules      = [];
 		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 
-		/*
-		Archive Modifiers:
-		x For {%postType} ['Any'|%s]
-		x For {%taxonomy} ['Any'|%s]
-		- For Author ['any'|%s]
-		- For Date ['any',%date]
-		- For Year [%s]
-		- For Month [%s]
-		- For Day [%s]
-		*/
-		$archive_modifiers = [
-			'none' => [
-				'label' => __( 'Any', 'content-control' ),
-			],
-		];
-
 		foreach ( $post_types as $name => $post_type ) {
-			$post_type_list[ $name ] = $post_type->labels->name;
-
 			/*
-			Post Modifiers:
 			x ['All Posts',%s] (show All Posts tag in field when none selected).
 			x With Specific ID
 			x With Parent [%s]
 			x With Ancestor [%s]
 			x With Template [%s]
-			x With {%taxnomy} [%s]
+			- With {%taxnomy} [%s]
 			- With Author [%s]
 			? With Status (Published, Draft, etc.) [%s]
 			- With Comment Status (Open, Closed) [%s]
 			- With Ping Status (Open, Closed) [%s]
-			x With a Password
+			- With a Password
 			*/
-			$post_modifiers = [];
 
-			$post_modifiers['none'] = [
+			$modifiers['none'] = [
 				'label'  => '',
 				'fields' => [
 					'selected' => [
 						/* translators: %s: Post type plurals name */
 						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
-						'type'        => 'objectselect',
+						'type'        => 'object_select',
 						'entityKind'  => 'postType',
 						'entityType'  => $name,
 						'multiple'    => true,
@@ -303,13 +281,13 @@ class Rules {
 			];
 
 			if ( is_post_type_hierarchical( $name ) ) {
-				$post_modifiers['with_parent'] = [
+				$modifiers['with_parent'] = [
 					'label'  => __( 'With Parent', 'content-control' ),
 					'fields' => [
 						'selected' => [
 							/* translators: %s: Post type singular name */
 							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
-							'type'        => 'objectselect',
+							'type'        => 'object_select',
 							'entityKind'  => 'postType',
 							'entityType'  => $name,
 							'multiple'    => true,
@@ -317,13 +295,13 @@ class Rules {
 					],
 				];
 
-				$post_modifiers['with_ancestor'] = [
+				$modifiers['with_ancestor'] = [
 					'label'  => __( 'With Ancestor', 'content-control' ),
 					'fields' => [
 						'selected' => [
 							/* translators: %s: Post type singular name */
 							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
-							'type'        => 'objectselect',
+							'type'        => 'object_select',
 							'entityKind'  => 'postType',
 							'entityType'  => $name,
 							'multiple'    => true,
@@ -332,16 +310,30 @@ class Rules {
 				];
 			}
 
+			$modifiers['with_author'] = [
+				'label'  => __( 'With Author', 'content-control' ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Post type singular name */
+						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
+						'type'        => 'object_select',
+						'entityKind'  => 'postType',
+						'entityType'  => $name,
+						'multiple'    => true,
+					],
+				],
+			];
+
 			$templates = wp_get_theme()->get_page_templates();
 
 			if ( 'page' === $name && count( $templates ) ) {
-				$post_modifiers['with_template'] = [
+				$modifiers['with_template'] = [
 					'label'  => __( 'With Template', 'content-control' ),
 					'fields' => [
 						'selected' => [
 							/* translators: %s: Post type singular name */
 							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->singular_name ) ),
-							'type'        => 'tokenselect',
+							'type'        => 'token_select',
 							'multiple'    => true,
 							'options'     => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
 						],
@@ -349,89 +341,238 @@ class Rules {
 				];
 			}
 
-			// If supports password, add password modifier.
-			if ( post_type_supports( $name, 'passwords' ) ) {
-				$post_modifiers['with_password'] = [
-					'label' => __( 'With Password', 'content-control' ),
-				];
-			}
-
-			$post_type_taxonomies = get_object_taxonomies( $name, 'object' );
-
-			foreach ( $post_type_taxonomies as $tax_name => $taxonomy ) {
-				$post_modifiers[ "with_{$tax_name}" ] = [
-					/* translators: %s: Taxonomy singular name */
-					'label'  => sprintf( __( 'With %s', 'content-control' ), $taxonomy->labels->singular_name ),
-					'fields' => [
-						'selected' => [
-							/* translators: %s: Taxonomy singular name */
-							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $taxonomy->labels->singular_name ) ),
-							'type'        => 'objectselect',
-							'entityKind'  => 'taxonomy',
-							'entityType'  => $tax_name,
-							'multiple'    => true,
-						],
-					],
-				];
-			}
-
-			$rules[ "post_type_{$name}" ] = [
+			$rule = [
 				'name'      => "post_type_{$name}",
 				/* translators: %s: Post type singular name */
 				'label'     => sprintf( __( 'A %s', 'content-control' ), $post_type->labels->singular_name ),
 				'category'  => __( 'Content', 'content-control' ),
 				'context'   => [ 'content', "posttype:{$name}" ],
-				'format'    => '{category} {verb} {label} {modifier}',
+				'format'    => '{category} {verb} {label} {modifiers}',
 				'verbs'     => [ $verbs['is'], $verbs['isnot'] ],
-				'modifiers' => apply_filters( 'content_control/rule_engine_post_rule_modifiers', $post_modifiers, $post_type ),
+				'modifiers' => apply_filters( 'content_control/rule_engine_post_rule_modifiers', $modifiers, $post_type ),
 				'callback'  => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type' ],
 			];
-		}
 
-		foreach ( $taxonomies as $tax_name => $taxonomy ) {
-			$taxonomy_list[ $tax_name ] = $taxonomy->labels->singular_name;
-		}
+			continue;
+			$type_rules = [];
 
-		$archive_modifiers['for_post_type'] = [
-			'label'  => __( 'For Post Type', 'content-control' ),
-			'fields' => [
-				'selected' => [
-					/* translators: %s: Taxonomy singular name */
-					'placeholder' => __( 'Select Post Type', 'content-control' ),
-					'type'        => 'tokenselect',
-					'options'     => $post_type_list,
-					'multiple'    => true,
+			if ( $post_type->has_archive ) {
+				$type_rules[ "content_is_{$name}_archive" ] = [
+					'name'  => "content_is_{$name}_archive",
+					/* translators: %s: Post type singular name */
+					'label' => sprintf( __( 'A %s Archive', 'content-control' ), $post_type->labels->singular_name ),
+				];
+			}
+
+			$type_rules[ "content_is_{$name}" ] = [
+				'name'  => "content_is_{$name}",
+				/* translators: %s: Post type singular name */
+				'label' => sprintf( __( 'A %s', 'content-control' ), $post_type->labels->singular_name ),
+			];
+
+			$type_rules[ "content_is_selected_{$name}" ] = [
+				'name'   => "content_is_selected_{$name}",
+				/* translators: %s: Post type singular name */
+				'label'  => sprintf( __( 'A Selected %s', 'content-control' ), $post_type->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Post type plurals name */
+						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+						'type'        => 'postselect',
+						'post_type'   => $name,
+						'multiple'    => true,
+						'as_array'    => true,
+						'std'         => [],
+					],
 				],
-			],
-		];
+			];
 
-		$archive_modifiers['for_taxonomy'] = [
-			'label'  => __( 'For Taxonomy', 'content-control' ),
-			'fields' => [
-				'selected' => [
-					/* translators: %s: Taxonomy singular name */
-					'placeholder' => __( 'Select Taxonomy', 'content-control' ),
-					'type'        => 'tokenselect',
-					'options'     => $taxonomy_list,
-					'multiple'    => true,
+			$type_rules[ "content_is_{$name}_with_id" ] = [
+				'name'   => "content_is_{$name}_with_id",
+				/* translators: %s: Post type singular name */
+				'label'  => sprintf( __( 'A %s with ID', 'content-control' ), $post_type->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Post type singular name */
+						'placeholder' => sprintf( __( '%s IDs: 128, 129', 'content-control' ), strtolower( $post_type->labels->name ) ),
+						'type'        => 'text',
+					],
 				],
-			],
-		];
+			];
 
-		$rules['post_archive'] = [
-			'name'      => 'post_archive',
-			/* translators: %s: Post type singular name */
-			'label'     => sprintf( __( 'A %s', 'content-control' ), $taxonomy->labels->singular_name ),
-			'category'  => __( 'Content', 'content-control' ),
-			'context'   => [ 'content', "taxonomy:{$tax_name}" ],
-			'format'    => '{category} {verb} {label} {modifiers}',
-			'verbs'     => [ $verbs['is'], $verbs['isnot'] ],
-			'modifiers' => apply_filters( 'content_control/rule_engine_post_archive_modifiers', $archive_modifiers, $taxonomy ),
-			'callback'  => [ '\ContentControl\RuleEngine\RuleCallbacks', 'taxonomy' ],
-		];
+			if ( is_post_type_hierarchical( $name ) ) {
+				$type_rules[ "content_is_child_of_{$name}" ] = [
+					'name'   => "content_is_child_of_{$name}",
+					/* translators: %s: Post type plural name */
+					'label'  => sprintf( __( 'A Child of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields' => [
+						'selected' => [
+							/* translators: %s: Post type plural name */
+							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+							'type'        => 'postselect',
+							'post_type'   => $name,
+							'multiple'    => true,
+							'as_array'    => true,
+						],
+					],
+				];
+
+				$type_rules[ "content_is_ancestor_of_{$name}" ] = [
+					'name'   => "content_is_ancestor_of_{$name}",
+					/* translators: %s: Post type plural name */
+					'label'  => sprintf( __( 'An Ancestor of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields' => [
+						'selected' => [
+							/* translators: %s: Post type plural name */
+							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+							'type'        => 'postselect',
+							'post_type'   => $name,
+							'multiple'    => true,
+							'as_array'    => true,
+						],
+					],
+				];
+			}
+
+			$templates = wp_get_theme()->get_page_templates();
+
+			if ( 'page' === $name && ! empty( $templates ) ) {
+				$type_rules[ "content_is_{$name}_with_template" ] = [
+					'name'   => "content_is_{$name}_with_template",
+					/* translators: %s: Post type singular name */
+					'label'  => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
+					'fields' => [
+						'selected' => [
+							'type'     => 'select',
+							'select2'  => true,
+							'multiple' => true,
+							'as_array' => true,
+							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
+						],
+					],
+				];
+			}
+
+			foreach ( $type_rules as $rule ) {
+				// Merge defaults.
+				$type_rules[ $rule['name'] ] = wp_parse_args( $rule, [
+					'category'  => __( 'Content', 'content-control' ),
+					'context'   => [ 'content', "posttype:{$name}" ],
+					'format'    => '{category} {verb} {label}',
+					'verbs'     => [ $verbs['is'], $verbs['isnot'] ],
+					'modifiers' => [],
+					'callback'  => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type' ],
+				] );
+			}
+
+			// Merge type rules & type tax rules.
+			$rules = array_merge( $rules, $type_rules, $this->get_post_type_tax_rules( $name ) );
+		}
 
 		return $rules;
 	}
+
+	/**
+	 * Generate post type taxonomy rules.
+	 *
+	 * @param string $name Post type name.
+	 *
+	 * @return array
+	 */
+	public function get_post_type_tax_rules( $name ) {
+		$verbs = $this->get_verbs();
+
+		$post_type  = get_post_type_object( $name );
+		$taxonomies = get_object_taxonomies( $name, 'object' );
+		$rules      = [];
+
+		foreach ( $taxonomies as $tax_name => $taxonomy ) {
+			$rules[ "content_is_{$name}_with_{$tax_name}" ] = [
+				'name'     => "content_is_{$name}_with_{$tax_name}",
+				/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
+				'label'    => sprintf( _x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ), $post_type->labels->singular_name, $taxonomy->labels->singular_name ),
+				'context'  => [ 'content', "posttype:{$name}", "taxonomy:{$tax_name}" ],
+				'category' => __( 'Content', 'content-control' ),
+				'format'   => '{category} {verb} {label}',
+				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+				'fields'   => [
+					'selected' => [
+						/* translators: %s: Taxonomy singular name */
+						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'type'        => 'taxonomyselect',
+						'taxonomy'    => $tax_name,
+						'multiple'    => true,
+						'as_array'    => true,
+						'options'     => [],
+					],
+				],
+				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type_tax' ],
+			];
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Generates conditions for all public taxonomies.
+	 *
+	 * @return array
+	 */
+	public function get_taxonomy_rules() {
+		$rules      = [];
+		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+		$verbs      = $this->get_verbs();
+
+		foreach ( $taxonomies as $tax_name => $taxonomy ) {
+			$tax_defaults = [
+				'category' => __( 'Content', 'content-control' ),
+				'context'  => [ 'content', "taxonomy:{$tax_name}" ],
+				'format'   => '{category} {verb} {label}',
+				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+				'fields'   => [],
+				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'taxonomy' ],
+			];
+
+			$rules[ "content_is_{$tax_name}_archive" ] = wp_parse_args( [
+				'name'  => "content_is_{$tax_name}_archive",
+				/* translators: %s: Taxonomy plural name */
+				'label' => sprintf( _x( 'A %s Archive', 'condition: taxonomy plural label ie. A Category Archive', 'content-control' ), $taxonomy->labels->name ),
+			], $tax_defaults );
+
+			$rules[ "content_is_selected_tax_{$tax_name}" ] = wp_parse_args( [
+				'name'   => "content_is_selected_tax_{$tax_name}",
+				/* translators: %s: Taxonomy plural name */
+				'label'  => sprintf( _x( 'A Selected %s', 'condition: taxonomy plural label ie. A Selected Category', 'content-control' ), $taxonomy->labels->singular_name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Taxonomy plural name */
+						'placeholder' => sprintf( _x( 'Select %s.', 'condition: taxonomy plural label ie. Select Categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'type'        => 'taxonomyselect',
+						'taxonomy'    => $tax_name,
+						'multiple'    => true,
+						'as_array'    => true,
+					],
+				],
+			], $tax_defaults );
+
+			$rules[ "content_is_tax_{$tax_name}_with_id" ] = wp_parse_args( [
+				'name'   => "content_is_tax_{$tax_name}_with_id",
+				/* translators: %s: Taxonomy plural name */
+				'label'  => sprintf( _x( 'A %s with ID', 'condition: taxonomy plural label ie. A Category with ID: Selected', 'content-control' ), $taxonomy->labels->name ),
+				'fields' => [
+					'selected' => [
+						/* translators: %s: Taxonomy plural name */
+						'placeholder' => sprintf( _x( '%s IDs: 128, 129', 'condition: taxonomy plural label ie. Category IDs', 'content-control' ), strtolower( $taxonomy->labels->singular_name ) ),
+						'type'        => 'text',
+					],
+				],
+			], $tax_defaults );
+		}
+
+		return $rules;
+	}
+
+
 
 	/**
 	 * Get an array of rule default values.
@@ -441,15 +582,15 @@ class Rules {
 	public function get_rule_defaults() {
 		$verbs = $this->get_verbs();
 		return [
-			'name'      => '',
-			'label'     => '',
-			'context'   => '',
-			'category'  => __( 'Content', 'content-control' ),
-			'format'    => '{category} {verb} {label} {modifier}',
-			'verbs'     => [ $verbs['is'], $verbs['isnot'] ],
-			'modifiers' => [],
-			'callback'  => null,
-			'frontend'  => false,
+			'name'     => '',
+			'label'    => '',
+			'context'  => '',
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'fields'   => [],
+			'callback' => null,
+			'frontend' => false,
 		];
 	}
 

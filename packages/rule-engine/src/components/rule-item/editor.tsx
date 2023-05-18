@@ -21,7 +21,11 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 
 	const { options: ruleOptions = {} } = ruleProps;
 
-	const { fields = {} } = ruleDef ?? {};
+	const { modifiers = {} } = ruleDef ?? {};
+
+	const modifier = modifiers[ ruleProps.modifier ] ?? {};
+
+	const { fields = {} } = modifier;
 
 	const editorFields = Object.entries( fields ).map( ( [ id, field ] ) => ( {
 		...field,

@@ -1,36 +1,26 @@
 import './finder.scss';
 
 import classNames from 'classnames';
-import { clamp } from 'lodash';
 
 import { noop } from '@content-control/utils';
-import {
-	Button,
-	KeyboardShortcuts,
-	Popover,
-	TextControl,
-} from '@wordpress/components';
-import { useInstanceId } from '@wordpress/compose';
-import {
-	forwardRef,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from '@wordpress/element';
+import { forwardRef, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { arrowDown, arrowUp } from '@wordpress/icons';
 
 import { useOptions, useRules } from '../../contexts';
 /** Temporary WP Imports */
-import TextHighlight from './highlight';
 import { defaultForamatRuleText } from '../../utils';
 
 import type { EngineRuleType, RuleItem } from '../../types';
+import { SmartTokenControl } from '@content-control/components/src';
 
 const { adminUrl } = contentControlRuleEngine;
 
 type Props = { onSelect: ( ruleItem: Partial< RuleItem > ) => void };
+
+type Token = {
+	type: string;
+	value: string;
+};
 
 type Suggestion = {
 	id: string;
@@ -38,107 +28,142 @@ type Suggestion = {
 	notOperand: boolean;
 };
 type State = {
-	queryText: string;
+	inputText: string;
 	isFocused: boolean;
 	selectedSuggestion: number;
 	popoverOpen: boolean;
-};
-
-const rulesToOptions = ( rules: EngineRuleType[] ) => {
-	const { formatRuleText = defaultForamatRuleText } = useOptions();
-
-	return rules.reduce< Suggestion[] >( ( options, rule ) => {
-		const { name, verbs = [ '', '' ] } = rule;
-
-		if ( Array.isArray( verbs ) && verbs.length ) {
-			[ 0, 1 ].forEach( ( i ) => {
-				options.push( {
-					id: name,
-					label: formatRuleText( rule, { notOperand: !! i } ),
-					notOperand: !! i,
-				} );
-			} );
-		} else {
-			options.push( {
-				id: name,
-				label: formatRuleText( rule, { notOperand: false } ),
-				notOperand: false,
-			} );
-			options.push( {
-				id: name,
-				label: formatRuleText( rule, { notOperand: true } ),
-				notOperand: true,
-			} );
-		}
-
-		return options;
-	}, [] );
+	tokens: Token[];
 };
 
 const Finder = (
 	{ onSelect = noop }: Props,
 	ref: React.MutableRefObject< Element | null >
 ) => {
-	const minQueryLength = 1;
-	const wrapperRef = useRef< Element | null >( null );
 	const inputRef = useRef< HTMLInputElement >( null );
-	const id = useInstanceId( Finder );
-	const selectedRef = useRef< HTMLDivElement | null >( null );
 	const { getRules } = useRules();
 
 	const [ state, setState ] = useState< State >( {
-		queryText: '',
+		inputText: '',
 		isFocused: false,
 		selectedSuggestion: -1,
 		popoverOpen: false,
+		tokens: [],
 	} );
 
-	const { queryText, isFocused, selectedSuggestion, popoverOpen } = state;
-	const maxSuggestions = queryText.length ? 10 : undefined;
+	const rules = getRules();
 
-	const setSelectedSuggestion = ( i: number ) =>
+	const { tokens } = state;
+
+	const getToken = ( type: string ) =>
+		tokens.find( ( token ) => token.type === type );
+
+	const getTokenValue = ( token: Token ) => {
+		return typeof token === 'string' ? token : token.value;
+	};
+
+	const categorySelected = getToken( 'category' )?.value ?? false;
+	const operatorSelected = getToken( 'operator' )?.value ?? false;
+	const ruleSelected = getToken( 'rule' )?.value ?? false;
+	// const modifierSelected = getToken( 'modifier' )?.value ?? false;
+
+	const tokenArrangement = __(
+		'category operator rule modifier',
+		'content-control'
+	).split( ' ' );
+
+	const sortedTokens = tokenArrangement
+		.map( ( type ) => getToken( type ) )
+		.filter( Boolean ) as Token[];
+
+	// The token that should be chosen next.
+	const nextTokenType = tokenArrangement.find(
+		( tokenType ) => getToken( tokenType ) === undefined
+	);
+
+	const getSuggestions = (): string[] => {
+		switch ( nextTokenType ) {
+			default:
+			case 'category':
+				// Return a list of categories.
+				return rules.reduce( ( categories, { category } ) => {
+					if ( ! categories.includes( category ) ) {
+						categories.push( category );
+					}
+
+					return categories;
+				}, [] as string[] );
+			case 'operator':
+				return rules
+					.filter( ( { category } ) => category === categorySelected )
+					.reduce( ( operators, { verbs = [] } ) => {
+						if ( ! Array.isArray( verbs ) ) {
+							return operators;
+						}
+
+						for ( const verb of verbs ) {
+							if ( ! operators.includes( verb ) ) {
+								operators.push( verb );
+							}
+						}
+
+						return operators;
+					}, [] as string[] );
+			case 'rule':
+				return rules
+					.filter(
+						( { category, verbs } ) =>
+							category === categorySelected &&
+							verbs?.includes(
+								operatorSelected ? operatorSelected : ''
+							)
+					)
+					.map( ( { name } ) => name );
+			case 'modifier':
+				// We have a rule already, just return the modifier keys.
+				const rule = rules.find(
+					( { name } ) => name === ruleSelected
+				);
+				const modifiers = rule?.modifiers
+					? Object.entries( rule?.modifiers )
+					: [];
+
+				return modifiers.map( ( [ modifier ] ) => modifier );
+		}
+	};
+
+	const updateTokens = ( tokens: Token[] ) => {
 		setState( {
 			...state,
-			selectedSuggestion: i,
-		} );
-
-	const selectRule = ( i: number ) => {
-		onSelect( {
-			name: suggestions[ i ].id,
-			notOperand: suggestions[ i ].notOperand,
+			tokens,
+			inputText: '',
 		} );
 	};
 
-	const queryTerms = queryText.split( ' ' );
+	const renderToken = ( token: Token ) => {
+		const tokenValue = getTokenValue( token );
 
-	const ruleOptions = rulesToOptions( getRules() );
-	const suggestions = useMemo(
-		() =>
-			ruleOptions.filter( ( suggestion ) => {
-				return (
-					// Fills an array of true/false for each query term.
-					[
-						...queryTerms.map(
-							( term ) =>
-								suggestion.label
-									.trim()
-									.toLowerCase()
-									.indexOf( term.trim().toLowerCase() ) >= 0
-						),
-					].indexOf( false ) === -1
-				);
-			} ),
-		[ queryText ]
-	).slice( 0, maxSuggestions );
+		switch ( token.type ) {
+			case 'category':
+				// Categories come already in readable text.
+				return <span>{ tokenValue }</span>;
+			case 'operator':
+				// Verbs come already in readable text.
+				return <span>{ tokenValue }</span>;
+			case 'rule':
+				const rule = rules.find( ( { name } ) => name === tokenValue );
 
-	const upsellIndex = suggestions.length;
-	const maxSelectionIndex = upsellIndex;
+				// Get the rule label.
+				return <span>{ rule?.label }</span>;
+			case 'modifier':
+				const { modifiers = {} } =
+					rules.find( ( { name } ) => name === ruleSelected ) ?? {};
+				return <span>{ modifiers[ token.value ]?.label }</span>;
+			default:
+				return <span>{ token.value }</span>;
+		}
+	};
 
-	// Check if selectedSuggestion is higher than list length.
-	// If it is higher, set it to 0 as they have new query results.
-	// This prevents an extra state change.
-	const currentIndex =
-		selectedSuggestion > upsellIndex ? 0 : selectedSuggestion;
+	const suggestions = getSuggestions();
 
 	const viewUpsell = () =>
 		window.open(
@@ -155,239 +180,69 @@ const Finder = (
 		}
 	}, [] );
 
-	/**
-	 * Ensure selected suggestion is visible in a scrollable list.
-	 */
-	useEffect( () => {
-		setTimeout( () => {
-			if ( selectedRef.current ) {
-				selectedRef.current.scrollIntoView();
-			}
-		}, 25 );
-	}, [ selectedSuggestion, popoverOpen ] );
-
-	const keyboardShortcuts = {
-		up: () =>
-			setState( {
-				...state,
-				// W3 Aria says to open the popover if query text is empty on up keypress.
-				popoverOpen:
-					queryText.length === 0 && ! popoverOpen
-						? true
-						: popoverOpen,
-				// When at the top, skip to the last rule that isn't the upsell.
-				selectedSuggestion: clamp(
-					currentIndex - 1 >= 0 ? currentIndex - 1 : upsellIndex,
-					0,
-					maxSelectionIndex
-				),
-			} ),
-		down: () => {
-			setState( {
-				...state,
-				// W3 Aria says to open the popover if query text is empty on up keypress.
-				popoverOpen:
-					queryText.length === 0 && ! popoverOpen
-						? true
-						: popoverOpen,
-				// When at the top, skip to the last rule that isn't the upsell.
-				selectedSuggestion: clamp(
-					currentIndex + 1 <= maxSelectionIndex
-						? currentIndex + 1
-						: 0,
-					0,
-					maxSelectionIndex
-				),
-			} );
-		},
-		// Show popover.
-		'alt+down': () =>
-			setState( {
-				...state,
-				popoverOpen: true,
-			} ),
-		// If selected suggestion, choose it, otherwise close popover.
-		enter: () => {
-			if ( selectedSuggestion === -1 ) {
-				return setState( {
-					...state,
-					popoverOpen: false,
-				} );
-			}
-			if ( currentIndex !== upsellIndex ) {
-				selectRule( currentIndex );
-			} else {
-				viewUpsell();
-			}
-		},
-		// Close the popover.
-		escape: ( event: KeyboardEvent ) => {
-			event.preventDefault();
-			event.stopPropagation();
-			setState( {
-				...state,
-				selectedSuggestion: -1,
-				popoverOpen: false,
-			} );
-		},
-	};
-
 	return (
-		<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
-			<div
-				id={ `cc-rule-engine-search-${ id }` }
-				className={ classNames( [
-					'cc-rule-engine-search',
-					isFocused && 'is-focused',
-				] ) }
-				ref={ ( _ref ) => {
-					wrapperRef.current = _ref;
-					if ( ref ) {
-						ref.current = _ref;
-					}
-				} }
-				onFocus={ () =>
-					setState( {
-						...state,
-						isFocused: true,
-						popoverOpen: queryText.length >= minQueryLength,
-					} )
-				}
-				onBlur={ () =>
-					setState( {
-						...state,
-						isFocused: false,
-						popoverOpen: false,
-					} )
-				}
-			>
-				<div className="cc-rule-engine-search__input">
-					<TextControl
-						value={ queryText ?? '' }
-						onChange={ ( text ) =>
-							setState( {
-								...state,
-								queryText: text,
-								popoverOpen: text.length >= minQueryLength,
-							} )
-						}
-						placeholder={ __(
-							'Search for a rule',
-							'content-control'
-						) }
-						ref={ inputRef }
-						onClick={ () =>
-							setState( {
-								...state,
-								popoverOpen: ! popoverOpen,
-							} )
-						}
-						autoComplete="off"
-						aria-autocomplete="list"
-						aria-expanded={ popoverOpen }
-						aria-controls={ `${ id }-listbox` }
-						aria-activedescendant={ `sug-${ currentIndex }` }
-					/>
+		<SmartTokenControl< Token >
+			ref={ inputRef }
+			placeholder={ __( 'Search for a rule', 'content-control' ) }
+			value={ sortedTokens }
+			multiple={ true }
+			onChange={ updateTokens }
+			onInputChange={ ( value ) => {
+				setState( {
+					...state,
+					inputText: value,
+				} );
+			} }
+			saveTransform={ ( token: string ) => {
+				return {
+					value: token,
+					type: nextTokenType ?? 'category',
+				};
+			} }
+			renderToken={ renderToken }
+			renderSuggestion={ ( suggestion: string ) => {
+				let text = suggestion;
 
-					<Button
-						icon={ popoverOpen ? arrowUp : arrowDown }
-						tabIndex={ -1 }
-						aria-controls={ `${ id }-listbox` }
-						aria-expanded={ popoverOpen }
-						onClick={ () =>
-							setState( {
-								...state,
-								popoverOpen: ! popoverOpen,
-							} )
-						}
-						label={ __( 'Rules', 'content-control' ) }
-					/>
-				</div>
-
-				{ popoverOpen && (
-					<div className="cc-rule-engine-search__suggestions">
-						<Popover
-							focusOnMount={ false }
-							onClose={ () => setSelectedSuggestion( -1 ) }
-							position="bottom right"
-							// @ts-ignore This exists, just not typed in wp-core.
-							anchor={ wrapperRef.current }
-							className="cc-rule-engine-search__suggestions-popover"
+				if ( 'upsell' === suggestion ) {
+					return (
+						<span
+							className={ classNames( [ 'is-upsell' ] ) }
+							onMouseDown={ () => {
+								viewUpsell();
+							} }
 						>
-							{ suggestions.length ? (
-								suggestions.map( ( suggestion, i ) => (
-									<div
-										key={ i }
-										id={ `sug-${ i }` }
-										className={ classNames( [
-											'cc-rule-engine-search__suggestion',
-											i === currentIndex && 'is-selected',
-										] ) }
-										ref={
-											i === currentIndex
-												? selectedRef
-												: undefined
-										}
-										onFocus={ () => {
-											setSelectedSuggestion( i );
-										} }
-										onMouseDown={ () => {
-											selectRule( i );
-										} }
-										role="option"
-										tabIndex={ i }
-										aria-selected={ i === currentIndex }
-									>
-										<TextHighlight
-											text={ suggestion.label }
-											highlight={ queryTerms }
-										/>
-									</div>
-								) )
-							) : (
-								<div>
-									{ __(
-										'No results found',
-										'content-control'
-									) }
-								</div>
-							) }
+							<strong>
+								{ __(
+									'Need more rules types?',
+									'content-control'
+								) }
+							</strong>
+						</span>
+					);
+				}
 
-							<div
-								id={ `sug-${ upsellIndex }` }
-								className={ classNames( [
-									'cc-rule-engine-search__suggestion',
-									'is-upsell',
-									upsellIndex === currentIndex &&
-										'is-selected',
-								] ) }
-								ref={
-									upsellIndex === currentIndex
-										? selectedRef
-										: undefined
-								}
-								onFocus={ () => {
-									setSelectedSuggestion( upsellIndex );
-								} }
-								onMouseDown={ () => {
-									viewUpsell();
-								} }
-								role="option"
-								tabIndex={ upsellIndex }
-								aria-selected={ upsellIndex === currentIndex }
-							>
-								<strong>
-									{ __(
-										'Need more rules types?',
-										'content-control'
-									) }
-								</strong>
-							</div>
-						</Popover>
-					</div>
-				) }
-			</div>
-		</KeyboardShortcuts>
+				switch ( nextTokenType ) {
+					default:
+					case 'category':
+					case 'operator':
+						text = suggestion;
+						break;
+					case 'rule':
+						text =
+							rules.find( ( { name } ) => name === suggestion )
+								?.label ?? suggestion;
+						break;
+					case 'modifier':
+						text =
+							rules.find( ( { name } ) => name === ruleSelected )
+								?.modifiers[ suggestion ]?.label ?? suggestion;
+						break;
+				}
+
+				return <span>{ text }</span>;
+			} }
+			suggestions={ getSuggestions() }
+		/>
 	);
 };
 

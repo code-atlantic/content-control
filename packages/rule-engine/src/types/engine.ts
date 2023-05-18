@@ -7,13 +7,18 @@ type EngineFieldRecord< T extends EngineField > = {
 	[ K in T[ 'id' ] ]: T;
 };
 
+export interface EngineRuleModifier {
+	label: string;
+	fields?: EngineFieldRecord< EngineField >;
+}
+
 export interface EngineRuleType {
 	name: string;
 	label: string;
-	context: string;
+	context: string | string[];
 	category: string;
 	format: string;
-	fields?: EngineFieldRecord< EngineField >;
+	modifiers: Record< string, EngineRuleModifier >;
 	verbs?: [ string, string ];
 	frontend?: boolean;
 }
