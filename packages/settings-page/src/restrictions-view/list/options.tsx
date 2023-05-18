@@ -81,9 +81,9 @@ const ListOptions = () => {
 		<Dropdown
 			className="list-table-options-menu"
 			contentClassName="list-table-options-menu__popover"
+			// @ts-ignore this does function correctly, not yet typed in WP.
 			placement="bottom left"
 			focusOnMount="firstElement"
-			// @ts-ignore this does function correctly, not yet typed in WP.
 			popoverProps={ { noArrow: false } }
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
@@ -108,17 +108,16 @@ const ListOptions = () => {
 								event.currentTarget.files?.[ i ]
 									.text()
 									.then( handleUpload );
-
 							}
 
 							onClose();
 						} }
 					/>
-					{/* <Button
+					{ /* <Button
 						icon={ bug }
 						text={ __( 'Troubleshoot', 'content-control' ) }
 						onClick={ () => {} }
-					/> */}
+					/> */ }
 				</NavigableMenu>
 			) }
 		/>

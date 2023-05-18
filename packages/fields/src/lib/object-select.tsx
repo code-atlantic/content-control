@@ -108,15 +108,19 @@ const ObjectSelectField = ( {
 	return (
 		<div className="cc-object-search-field">
 			<SmartTokenControl
-				label={ sprintf(
-					__( '%s(s)', 'content-control' ),
-					entityType
-						.replace( /_/g, ' ' )
-						// uppercase first letter.
-						.charAt( 0 )
-						.toUpperCase() +
-						entityType.replace( /_/g, ' ' ).slice( 1 )
-				) }
+				label={
+					label
+						? label
+						: sprintf(
+								__( '%s(s)', 'content-control' ),
+								entityType
+									.replace( /_/g, ' ' )
+									// uppercase first letter.
+									.charAt( 0 )
+									.toUpperCase() +
+									entityType.replace( /_/g, ' ' ).slice( 1 )
+						  )
+				}
 				multiple={ multiple }
 				placeholder={ sprintf(
 					__( 'Select %s(s)', 'content-control' ),
