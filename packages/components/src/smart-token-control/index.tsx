@@ -13,10 +13,18 @@ import { forwardRef, useEffect, useRef, useState } from '@wordpress/element';
 import { clamp, noop } from '@content-control/utils';
 
 import './editor.scss';
+import { ForwardedRef } from 'react';
 
-type Props = {
-	value: string[];
-	onChange: ( value: string[] ) => void;
+type Token =
+	| string
+	| {
+			value: string;
+			[ key: string ]: any;
+	  };
+
+type Props< T extends Token = Token > = {
+	value: T[];
+	onChange: ( value: T[] ) => void;
 	label?: string | JSX.Element;
 	placeholder?: string;
 	className?: classNamesArg;
@@ -35,10 +43,28 @@ type Props = {
 	};
 	multiple?: boolean;
 	suggestions: string[];
-	renderToken?: ( token: string ) => JSX.Element | string;
+	renderToken?: ( token: T ) => JSX.Element | string;
+	/**
+	 * Render a suggestion.
+	 * @param {string} suggestion suggestion to be rendered
+	 * @returns {JSX.Element | string}
+	 */
 	renderSuggestion?: ( suggestion: string ) => JSX.Element | string;
+	/**
+	 * Transform the value before adding it to the value array and calling onChange.
+	 * @param {string} value string to be transformed
+	 * @returns {Token}
+	 */
+	saveTransform?: ( value: string ) => T;
+	/**
+	 * When the search input changes.
+	 * @param {string} value selected suggestion
+	 * @returns {void}
+	 */
 	onInputChange?: ( value: string ) => void;
+	hideLabelFromVision?: boolean;
 	tokenOnComma?: boolean;
+	extraKeyboardShortcuts?: KeyboardShortcuts.BaseProps[ 'shortcuts' ];
 	messages?: {
 		searchTokens?: string;
 		noSuggestions?: string;
@@ -67,7 +93,7 @@ const defaultClasses: Required< Props[ 'classes' ] > = {
 	suggestion: 'component-smart-token-control__suggestion',
 };
 
-const SmartTokenControl = (
+const SmartTokenControl = < T extends Token = string >(
 	{
 		value,
 		onChange,
@@ -76,9 +102,14 @@ const SmartTokenControl = (
 		className,
 		tokenOnComma = false,
 		classes = defaultClasses,
-		renderToken = ( token ) => <>{ token }</>,
-		renderSuggestion = ( suggestion ) => <>{ suggestion }</>,
+		renderToken = ( token ) => (
+			<>{ typeof token === 'string' ? token : token.item }</>
+		),
+		renderSuggestion = ( suggestion: string ) => <>{ suggestion }</>,
 		onInputChange = noop,
+		saveTransform = ( value: string ) => value as T,
+		hideLabelFromVision = false,
+		extraKeyboardShortcuts = {},
 		multiple = false,
 		suggestions,
 		messages = {
@@ -86,15 +117,15 @@ const SmartTokenControl = (
 			noSuggestions: __( 'No suggestions', 'content-control' ),
 			removeToken: __( 'Remove token', 'content-control' ),
 		},
-	}: Props,
-	ref: React.MutableRefObject< Element | null >
+	}: Props< T >,
+	ref: ForwardedRef< Element >
 ) => {
 	const elClasses = { ...defaultClasses, ...classes };
 
 	const minQueryLength = 1;
+	const id = useInstanceId( SmartTokenControl );
 	const wrapperRef = useRef< Element | null >( null );
 	const inputRef = useRef< HTMLInputElement >( null );
-	const id = useInstanceId( SmartTokenControl );
 	const selectedRef = useRef< HTMLDivElement | null >( null );
 
 	const [ state, setState ] = useState< State >( {
@@ -106,24 +137,104 @@ const SmartTokenControl = (
 
 	const { inputText, isFocused, selectedSuggestion, popoverOpen } = state;
 
+	/**
+	 * Get value from token.
+	 *
+	 * @param {Token} token token to get value from
+	 * @returns {string} value of token
+	 */
+	function getTokenValue( token: Token ): string {
+		if ( 'object' === typeof token ) {
+			return token.value;
+		}
+
+		return token;
+	}
+
+	/**
+	 * Check if value contains token.
+	 *
+	 * @param {Token} token token to check
+	 * @returns {boolean} true if value contains token
+	 */
+	function valueContainsToken( token: Token ): boolean {
+		return value.some( ( item ) => {
+			return getTokenValue( token ) === getTokenValue( item );
+		} );
+	}
+
+	/**
+	 * Add new tokens to value.
+	 *
+	 * @param {string[]} tokens tokens to add
+	 */
+	function addNewTokens( tokens: string[] ) {
+		const tokensToAdd = [
+			...new Set(
+				tokens
+					.map( saveTransform )
+					.filter( Boolean )
+					.filter( ( token ) => ! valueContainsToken( token ) )
+			),
+		];
+
+		if ( tokensToAdd.length > 0 ) {
+			onChange( [ ...value, ...tokensToAdd ] );
+		}
+	}
+
+	/**
+	 * Add a new token to value.
+	 *
+	 * @param {string} token token to add
+	 */
+	function addNewToken( token: string ) {
+		addNewTokens( [ token ] );
+
+		setState( {
+			...state,
+			inputText: '',
+		} );
+	}
+
+	/**
+	 * Delete a token from value.
+	 *
+	 * @param {Token} token token to delete
+	 */
+	function deleteToken( token: Token ) {
+		onChange(
+			value.filter( ( item ) => {
+				return getTokenValue( item ) !== getTokenValue( token );
+			} )
+		);
+	}
+
+	/**
+	 * Update the input text.
+	 *
+	 * @param {string} text new input text
+	 */
+	const udpateInputText = ( text: string ) => {
+		setState( {
+			...state,
+			inputText: text,
+			popoverOpen: text.length >= minQueryLength,
+		} );
+
+		onInputChange( text );
+	};
+
+	/**
+	 * Set the selected suggestion.
+	 *
+	 * @param {number} i index of selected suggestion
+	 */
 	const setSelectedSuggestion = ( i: number ) =>
 		setState( {
 			...state,
 			selectedSuggestion: i,
 		} );
-
-	const selectSuggestion = ( suggestion: string ) => {
-		if ( ! multiple ) {
-			onChange( [ suggestion ] );
-			return;
-		}
-
-		if ( value.includes( suggestion ) ) {
-			return;
-		}
-
-		onChange( [ ...value, suggestion ] );
-	};
 
 	const maxSelectionIndex = suggestions.length;
 
@@ -132,15 +243,6 @@ const SmartTokenControl = (
 	// This prevents an extra state change.
 	const currentIndex =
 		selectedSuggestion > maxSelectionIndex ? 0 : selectedSuggestion;
-
-	/**
-	 * Focus the input when this component is rendered.
-	 */
-	useEffect( () => {
-		if ( inputRef.current ) {
-			inputRef.current.focus();
-		}
-	}, [] );
 
 	/**
 	 * Ensure selected suggestion is visible in a scrollable list.
@@ -177,7 +279,7 @@ const SmartTokenControl = (
 			event.preventDefault();
 			setState( {
 				...state,
-				// W3 Aria says to open the popover if query text is empty on up keypress.
+				// W3 Aria says to open the popover if query text is empty on down keypress.
 				popoverOpen:
 					inputText.length === 0 && ! popoverOpen
 						? true
@@ -207,7 +309,7 @@ const SmartTokenControl = (
 				} );
 			}
 
-			selectSuggestion( suggestions[ currentIndex ] );
+			addNewToken( suggestions[ currentIndex ] );
 		},
 		// Close the popover.
 		escape: ( event: KeyboardEvent ) => {
@@ -226,18 +328,14 @@ const SmartTokenControl = (
 			}
 
 			event.preventDefault();
-			event.stopPropagation();
 
 			if ( inputText.length === 0 ) {
 				return;
 			}
 
-			onChange( [ ...value, inputText ] );
-			setState( {
-				...state,
-				inputText: '',
-			} );
+			addNewToken( inputText );
 		},
+		...extraKeyboardShortcuts,
 	};
 
 	return (
@@ -251,7 +349,7 @@ const SmartTokenControl = (
 				] ) }
 				ref={ ( _ref ) => {
 					wrapperRef.current = _ref;
-					if ( ref ) {
+					if ( ref && typeof ref === 'object' ) {
 						ref.current = _ref;
 					}
 				} }
@@ -274,50 +372,37 @@ const SmartTokenControl = (
 				<BaseControl
 					id={ `component-smart-token-control-${ id }` }
 					label={ label }
+					hideLabelFromVision={ hideLabelFromVision }
 				>
 					<div className={ elClasses.inputContainer }>
 						<div className={ elClasses.tokens }>
 							{ value.map( ( token ) => (
 								<div
 									className={ elClasses.token }
-									key={ token }
+									key={ getTokenValue( token ) }
 								>
 									<div className={ elClasses.tokenLabel }>
 										{ renderToken( token ) }
 									</div>
 									<Button
 										className={ elClasses.tokenRemove }
-										onClick={ () => {
-											onChange(
-												value.filter(
-													( t ) => t !== token
-												)
-											);
-										} }
-										icon={ close }
 										label={ messages.removeToken }
+										icon={ close }
+										onClick={ () => deleteToken( token ) }
 									/>
 								</div>
 							) ) }
 						</div>
 						<input
-							className={ elClasses.textInput }
 							type="text"
+							className={ elClasses.textInput }
 							placeholder={ placeholder }
 							disabled={ ! multiple && value.length > 0 }
 							ref={ inputRef }
 							value={ inputText ?? '' }
-							onChange={ ( event ) => {
-								setState( {
-									...state,
-									inputText: event.target.value,
-									popoverOpen:
-										event.target.value.length >=
-										minQueryLength,
-								} );
-
-								onInputChange( event.target.value );
-							} }
+							onChange={ ( event ) =>
+								udpateInputText( event.target.value )
+							}
 							autoComplete="off"
 							aria-autocomplete="list"
 							aria-expanded={ popoverOpen }
@@ -341,16 +426,15 @@ const SmartTokenControl = (
 							} }
 							onBlur={ ( event: FocusEventInit ) => {
 								// If the blur event is coming from the popover, don't close it.
-								if ( event.relatedTarget ) {
-									const popover =
-										event.relatedTarget as HTMLElement;
-									if (
-										popover.classList.contains(
-											elClasses.popover
-										)
-									) {
-										return;
-									}
+								const popover =
+									event.relatedTarget as HTMLElement;
+								if (
+									popover &&
+									popover.classList.contains(
+										elClasses.popover
+									)
+								) {
+									return;
 								}
 
 								setState( {
@@ -389,7 +473,7 @@ const SmartTokenControl = (
 											elClasses.suggestion,
 											i === currentIndex &&
 												'is-currently-highlighted',
-											value.includes( suggestion ) &&
+											valueContainsToken( suggestion ) &&
 												'is-selected',
 										] ) }
 										ref={
@@ -402,14 +486,7 @@ const SmartTokenControl = (
 										} }
 										onMouseDown={ ( event ) => {
 											event.preventDefault();
-											if (
-												value.includes( suggestion )
-											) {
-												return;
-											}
-											selectSuggestion(
-												suggestions[ i ]
-											);
+											addNewToken( suggestions[ i ] );
 										} }
 										role="option"
 										tabIndex={ i }
@@ -429,8 +506,6 @@ const SmartTokenControl = (
 	);
 };
 
-const componentWithForward = forwardRef(
-	// @ts-ignore
-	SmartTokenControl
-) as typeof SmartTokenControl;
-export default componentWithForward;
+export default forwardRef( SmartTokenControl ) as < T extends Token = string >(
+	p: Props< T > & { ref?: ForwardedRef< Element > }
+) => React.ReactElement;
