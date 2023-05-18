@@ -11,3 +11,4 @@ export { default as RangeSliderField } from './rangeslider';
 export { default as SelectField } from './select';
 export { default as TextAreaField } from './textarea';
 export { default as TextField } from './text';
+export { default as TokenSelectField } from './token-select';

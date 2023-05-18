@@ -146,6 +146,16 @@ export interface TextareaFieldProps extends InputFieldProps< string > {
 	allowHtml?: boolean;
 }
 
+export interface TokenSelectFieldProps extends FieldBaseProps {
+	type: 'tokenselect';
+	value: string[];
+	placeholder?: string;
+	options: {
+		[ key: string ]: string;
+	};
+	multiple?: boolean;
+}
+
 /**
  * Discrimated union of all valid known FieldProps definitions.
  */
@@ -165,7 +175,8 @@ export type FieldProps =
 	| RangesliderFieldProps
 	| SelectFieldProps
 	| TextFieldProps
-	| TextareaFieldProps;
+	| TextareaFieldProps
+	| TokenSelectFieldProps;
 
 /**
  * Union of FieldProps with typed onChange prop.
@@ -204,7 +215,8 @@ export type IntermediaryFieldProps =
 	| AtLeast< RangesliderFieldProps, MinFieldProps >
 	| AtLeast< SelectFieldProps, MinFieldProps | 'options' >
 	| AtLeast< TextFieldProps, MinFieldProps >
-	| AtLeast< TextareaFieldProps, MinFieldProps >;
+	| AtLeast< TextareaFieldProps, MinFieldProps >
+	| AtLeast< TokenSelectFieldProps, MinFieldProps | 'options' >;
 
 export type FieldPropsMap = {
 	checkbox: CheckboxFieldProps;
@@ -226,4 +238,5 @@ export type FieldPropsMap = {
 	taxonomyselect: TaxonomySelectFieldProps;
 	text: TextFieldProps;
 	textarea: TextareaFieldProps;
+	tokenselect: TokenSelectFieldProps;
 };

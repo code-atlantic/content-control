@@ -14,6 +14,7 @@ import {
 	SelectField,
 	TextAreaField,
 	TextField,
+	TokenSelectField,
 } from './';
 
 import type { FieldPropsWithOnChange } from '../types';
@@ -48,11 +49,12 @@ const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 		case 'phone':
 		case 'hidden':
 		case 'text':
-		case 'password': {
+		case 'password':
 			return <TextField { ...fieldProps } />;
-		}
 		case 'textarea':
 			return <TextAreaField { ...fieldProps } />;
+		case 'tokenselect':
+			return <TokenSelectField { ...fieldProps } />;
 	}
 
 	return (

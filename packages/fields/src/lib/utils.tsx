@@ -155,6 +155,13 @@ export const parseOldArgsToProps = (
 				...fieldProps,
 			};
 
+		case 'tokenselect':
+			return {
+				value: [],
+				options: {},
+				...fieldProps,
+			};
+
 		case 'number':
 		case 'rangeslider':
 			return {
@@ -427,6 +434,14 @@ export const parseFieldProps = (
 				...fieldProps,
 				entityKind: fieldProps.entityKind ?? '',
 			};
+
+		case 'tokenselect':
+			return {
+				...fieldProps,
+				value: fieldProps.value ?? [],
+				options: fieldProps.options ?? [],
+			};
+
 		case 'radio':
 			return {
 				...fieldProps,

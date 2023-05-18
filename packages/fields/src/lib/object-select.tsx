@@ -97,60 +97,66 @@ const ObjectSelectField = ( {
 			: value;
 	} )();
 
+	const getTokenValue = ( token: string | { value: string } ) => {
+		if ( typeof token === 'object' ) {
+			return token.value;
+		}
+
+		return token;
+	};
+
 	return (
 		<div className="cc-object-search-field">
-			<>
-				<SmartTokenControl
-					label={ label }
-					multiple={ multiple }
-					placeholder={ sprintf(
-						__( 'Select %s(s)', 'content-control' ),
-						entityType.replace( /_/g, ' ' ).toLowerCase()
-					) }
-					tokenOnComma={ true }
-					value={ values.map( ( v ) => v.toString() ) }
-					onInputChange={ updateQueryText }
-					onChange={ ( newValue ) => {
-						onChange(
-							newValue
-								.map( ( v ) => parseInt( v, 10 ) )
-								.filter( ( v ) => ! isNaN( v ) )
-						);
-					} }
-					renderToken={ ( token ) => {
-						const suggestion = findSuggestion( token );
+			<SmartTokenControl
+				label={ label }
+				multiple={ multiple }
+				placeholder={ sprintf(
+					__( 'Select %s(s)', 'content-control' ),
+					entityType.replace( /_/g, ' ' ).toLowerCase()
+				) }
+				tokenOnComma={ true }
+				value={ values.map( ( v ) => v.toString() ) }
+				onInputChange={ updateQueryText }
+				onChange={ ( newValue ) => {
+					onChange(
+						newValue
+							.map( ( v ) => parseInt( getTokenValue( v ), 10 ) )
+							.filter( ( v ) => ! isNaN( v ) )
+					);
+				} }
+				renderToken={ ( token ) => {
+					const suggestion = findSuggestion( getTokenValue( token ) );
 
-						if ( ! suggestion ) {
-							return token;
-						}
-
-						return 'postType' === entityKind
-							? suggestion.title.rendered
-							: suggestion.name;
-					} }
-					renderSuggestion={ ( item ) => {
-						const suggestion = findSuggestion( item );
-
-						if ( ! suggestion ) {
-							return item;
-						}
-						return (
-							<>
-								{ 'postType' === entityKind
-									? suggestion.title.rendered
-									: suggestion.name }
-							</>
-						);
-					} }
-					suggestions={
-						suggestions
-							? suggestions.map( ( option ) => {
-									return option?.id.toString() ?? false;
-							  } )
-							: []
+					if ( ! suggestion ) {
+						return getTokenValue( token );
 					}
-				/>
-			</>
+
+					return 'postType' === entityKind
+						? suggestion.title.rendered
+						: suggestion.name;
+				} }
+				renderSuggestion={ ( item ) => {
+					const suggestion = findSuggestion( item );
+
+					if ( ! suggestion ) {
+						return item;
+					}
+					return (
+						<>
+							{ 'postType' === entityKind
+								? suggestion.title.rendered
+								: suggestion.name }
+						</>
+					);
+				} }
+				suggestions={
+					suggestions
+						? suggestions.map( ( option ) => {
+								return option?.id.toString() ?? false;
+						  } )
+						: []
+				}
+			/>
 		</div>
 	);
 };
