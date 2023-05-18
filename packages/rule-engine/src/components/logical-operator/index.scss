@@ -6,7 +6,20 @@
 		font-size: 1.225em;
 	}
 
-	.components-base-control__field {
-		margin: 0;
+	.components-base-control {
+		.components-base-control__field {
+			margin: 0;
+
+			select.components-select-control__input {
+				font-weight: bold;
+				font-size: 13px;
+				color: #007cba;
+				text-transform: uppercase;
+			}
+
+			.components-input-control__backdrop {
+				border-color: #dddddd;
+			}
+		}
 	}
 }
