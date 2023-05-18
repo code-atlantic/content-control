@@ -1,6 +1,7 @@
-import classNames, { Argument as ClassNameArg } from 'classnames';
 import { ReactSortable } from 'react-sortablejs';
+import classNames, { Argument as ClassNameArg } from 'classnames';
 
+import { flushSync } from '@wordpress/element';
 import { useOptions, useQuery } from '../../contexts';
 import { sortableConfig } from './sortable-options';
 
@@ -32,7 +33,15 @@ const SortableList = < I extends BaseItem >( {
 				className,
 			] ) }
 			list={ list }
-			setList={ setList }
+			setList={ ( newSteps, sortable, store ) => {
+				if ( sortable ) {
+					// flushSync required for this to work in React 18
+					flushSync( () => setList( newSteps, sortable, store ) );
+				} else {
+					// called from component constructor, where flushSync throws error
+					setList( newSteps, sortable, store );
+				}
+			} }
 			onChoose={ () => {
 				setIsDragging( true );
 			} }
