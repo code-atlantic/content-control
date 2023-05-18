@@ -33,7 +33,11 @@ const ContentTab = ( { values, updateSettings }: EditTabProps ) => {
 					},
 					rulesFilter: ( rule ) => {
 						// Skip user rules for this editor.
-						return ['user'].indexOf(rule.context) === -1;
+						if ( Array.isArray( rule.context ) ) {
+							return ! rule.context.includes( 'user' );
+						}
+
+						return [ 'user' ].indexOf( rule.context ) === -1;
 					},
 				} }
 			/>
