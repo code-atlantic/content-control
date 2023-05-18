@@ -81,7 +81,7 @@ const ListOptions = () => {
 		<Dropdown
 			className="list-table-options-menu"
 			contentClassName="list-table-options-menu__popover"
-			position="bottom left"
+			placement="bottom left"
 			focusOnMount="firstElement"
 			// @ts-ignore this does function correctly, not yet typed in WP.
 			popoverProps={ { noArrow: false } }

@@ -69,7 +69,7 @@ const ListBulkActions = () => {
 			<Dropdown
 				className="list-table-bulk-actions"
 				contentClassName="list-table-bulk-actions__popover"
-				position="bottom left"
+				placement="bottom left"
 				focusOnMount="firstElement"
 				// @ts-ignore this is not typed in WP yet.
 				popoverProps={ { noArrow: false } }
