@@ -8,7 +8,6 @@
 namespace ContentControl\Core;
 
 use \ContentControl\Base\Container;
-use function ContentControl\plugin;
 
 /**
  * Undocumented class
