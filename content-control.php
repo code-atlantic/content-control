@@ -3,7 +3,7 @@
  * Plugin Name: Content Control
  * Plugin URI: https://contentcontrolplugin.com/
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
- * Version: 1.1.10
+ * Version: 2.0.0-beta
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/
  * Donate link: https://code-atlantic.com/donate
@@ -14,7 +14,7 @@
  *
  * @package     Content Control
  * @author       Code Atlantic
- * @copyright  Copyright (c) 2022, Code Atlantic LLC.
+ * @copyright  Copyright (c) 2023, Code Atlantic LLC.
  */
 
 namespace ContentControl;
@@ -28,7 +28,7 @@ function get_plugin_config() {
 	return [
 		'name'          => \__( 'Content Control', 'content-control' ),
 		'slug'          => 'content-control',
-		'version'       => '1.1.9',
+		'version'       => '2.0.0-beta',
 		'option_prefix' => 'content_control',
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
