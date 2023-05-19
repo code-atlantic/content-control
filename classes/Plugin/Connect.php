@@ -7,7 +7,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 use function ContentControl\plugin;
 use function ContentControl\Base\Container;
@@ -106,7 +106,7 @@ class Connect {
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
 		if ( self::DEBUG_MODE ) {
-			plugin( 'logging' )->log( "Core\Connect.$type: $message" );
+			plugin( 'logging' )->log( "Plugin\Connect.$type: $message" );
 		}
 	}
 

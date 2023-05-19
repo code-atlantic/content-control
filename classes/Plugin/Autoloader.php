@@ -2,10 +2,10 @@
 /**
  * Includes the composer Autoloader used for packages and classes in the classes/ directory.
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 defined( 'ABSPATH' ) || exit;
 

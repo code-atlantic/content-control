@@ -7,7 +7,7 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 defined( 'ABSPATH' ) || exit;
 

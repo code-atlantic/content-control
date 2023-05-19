@@ -7,10 +7,10 @@
  * @package ContentControl
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 use ContentControl\Base\Container;
-use ContentControl\Core\Options;
+use ContentControl\Plugin\Options;
 use ContentControl\Interfaces\Controller;
 
 defined( 'ABSPATH' ) || exit;
@@ -18,9 +18,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class Plugin
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
-class Plugin {
+class Core {
 
 	/**
 	 * Exposed container.
@@ -153,19 +153,19 @@ class Plugin {
 		};
 
 		$this->container['connect'] = function ( $c ) {
-			return new \ContentControl\Core\Connect( $c );
+			return new \ContentControl\Plugin\Connect( $c );
 		};
 
 		$this->container['license'] = function ( $c ) {
-			return new \ContentControl\Core\License( $c );
+			return new \ContentControl\Plugin\License( $c );
 		};
 
 		$this->container['logging'] = function ( $c ) {
-			return new \ContentControl\Core\Logging( $c );
+			return new \ContentControl\Plugin\Logging( $c );
 		};
 
 		$this->container['upgrader'] = function( $c ) {
-			return new \ContentControl\Core\Upgrader( $c );
+			return new \ContentControl\Plugin\Upgrader( $c );
 		};
 
 		$this->container['rules'] = function () {

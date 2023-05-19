@@ -4,7 +4,7 @@
  *
  * NOTE: VS Code can use this file as well when the PHP Intelliphense extension is installed to provide autocompletion.
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
 
 namespace PHPSTORM_META;
@@ -20,14 +20,14 @@ namespace PHPSTORM_META;
   * NOTE: applies specifically to using the Plugin getter directly.
   * Example Usage: $events = pum_Scheduling_plugin()->get( 'events' );
   */
-  override( \ContentControl\Core\Plugin::get(0), map( [
+  override( \ContentControl\Plugin\Core::get(0), map( [
     // Controllers.
     ''             => '@',
-    'connect'      => \ContentControl\Core\Connect::class,
-    'license'      => \ContentControl\Core\License::class,
-    'logging'      => \ContentControl\Core\Logging::class,
-    'options'      => \ContentControl\Core\Options::class,
-    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'connect'      => \ContentControl\Plugin\Connect::class,
+    'license'      => \ContentControl\Plugin\License::class,
+    'logging'      => \ContentControl\Plugin\Logging::class,
+    'options'      => \ContentControl\Plugin\Options::class,
+    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
@@ -39,11 +39,11 @@ namespace PHPSTORM_META;
   override ( \ContentControl\plugin(0), map( [
     // Controllers.
     '' => '@',
-    'connect'      => \ContentControl\Core\Connect::class,
-    'license'      => \ContentControl\Core\License::class,
-    'logging'      => \ContentControl\Core\Logging::class,
-    'options'      => \ContentControl\Core\Options::class,
-    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'connect'      => \ContentControl\Plugin\Connect::class,
+    'license'      => \ContentControl\Plugin\License::class,
+    'logging'      => \ContentControl\Plugin\Logging::class,
+    'options'      => \ContentControl\Plugin\Options::class,
+    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
@@ -55,11 +55,11 @@ namespace PHPSTORM_META;
   override ( \ContentControl\Base\Container::get(0), map( [
     // Controllers.
     '' => '@',
-    'connect'      => \ContentControl\Core\Connect::class,
-    'license'      => \ContentControl\Core\License::class,
-    'logging'      => \ContentControl\Core\Logging::class,
-    'options'      => \ContentControl\Core\Options::class,
-    'upgrader'     => \ContentControl\Core\Upgrader::class,
+    'connect'      => \ContentControl\Plugin\Connect::class,
+    'license'      => \ContentControl\Plugin\License::class,
+    'logging'      => \ContentControl\Plugin\Logging::class,
+    'options'      => \ContentControl\Plugin\Options::class,
+    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
   ] ) );
@@ -71,11 +71,11 @@ namespace PHPSTORM_META;
 override ( \ContentControl\Base\Container::offsetGet(0), map( [
   // Controllers.
   '' => '@',
-  'connect'      => \ContentControl\Core\Connect::class,
-  'license'      => \ContentControl\Core\License::class,
-  'logging'      => \ContentControl\Core\Logging::class,
-  'options'      => \ContentControl\Core\Options::class,
-  'upgrader'     => \ContentControl\Core\Upgrader::class,
+  'connect'      => \ContentControl\Plugin\Connect::class,
+  'license'      => \ContentControl\Plugin\License::class,
+  'logging'      => \ContentControl\Plugin\Logging::class,
+  'options'      => \ContentControl\Plugin\Options::class,
+  'upgrader'     => \ContentControl\Plugin\Upgrader::class,
   'rules'        => \ContentControl\RuleEngine\Rules::class,
   'restrictions' => \ContentControl\Services\Restrictions::class,
 ] ) );

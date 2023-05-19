@@ -19,14 +19,14 @@ abstract class Controller implements \ContentControl\Interfaces\Controller {
 	/**
 	 * Plugin Container.
 	 *
-	 * @var \ContentControl\Core\Plugin
+	 * @var \ContentControl\Plugin\Core
 	 */
 	public $container;
 
 	/**
 	 * Initialize based on dependency injection principles.
 	 *
-	 * @param \ContentControl\Core\Plugin $container Plugin container.
+	 * @param \ContentControl\Plugin\Core $container Plugin container.
 	 * @return void
 	 */
 	public function __construct( $container ) {

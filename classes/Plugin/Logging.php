@@ -2,10 +2,10 @@
 /**
  * Logging class.
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 /**
  * Logging class.

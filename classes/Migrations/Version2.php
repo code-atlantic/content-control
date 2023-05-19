@@ -2,7 +2,7 @@
 /**
  * Content Control Migrations
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
 
 namespace ContentControl\Migrations;

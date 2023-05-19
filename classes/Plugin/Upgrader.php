@@ -2,10 +2,10 @@
 /**
  * Content Control Upgrades
  *
- * @package ContentControl\Core
+ * @package ContentControl\Plugin
  */
 
-namespace ContentControl\Core;
+namespace ContentControl\Plugin;
 
 use \ContentControl\Base\Container;
 
@@ -65,7 +65,7 @@ class Upgrader {
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
 		if ( defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING ) {
-			$this->c->get( 'logging' )->log( "Core\Upgrader.$type: $message" );
+			$this->c->get( 'logging' )->log( "Plugin\Upgrader.$type: $message" );
 		}
 	}
 

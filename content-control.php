@@ -64,9 +64,9 @@ function config( $key = null ) {
 /**
  * Register autoloader.
  */
-require_once __DIR__ . '/classes/Core/Autoloader.php';
+require_once __DIR__ . '/classes/Plugin/Autoloader.php';
 
-if ( ! Core\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
+if ( ! Plugin\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
 	return;
 }
 
@@ -76,7 +76,7 @@ if ( ! Core\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
 function check_prerequisites() {
 
 	// 1.a Check Prerequisites.
-	$prerequisites = new \ContentControl\Core\Prerequisites( [
+	$prerequisites = new \ContentControl\Plugin\Prerequisites( [
 		[
 			// a. PHP Min Version.
 			'type'    => 'php',
@@ -112,14 +112,14 @@ add_action( 'plugins_loaded', function () {
  *
  * This kicks it all off, loads functions and initiates the plugins main class.
  *
- * @return \ContentControl\Core\Plugin
+ * @return \ContentControl\Plugin\Core
  */
 function plugin_instance() {
 	static $plugin;
 
-	if ( ! $plugin instanceof \ContentControl\Core\Plugin ) {
+	if ( ! $plugin instanceof \ContentControl\Plugin\Core ) {
 		require_once __DIR__ . '/inc/functions.php';
-		$plugin = new Core\Plugin( get_plugin_config() );
+		$plugin = new Plugin\Core( get_plugin_config() );
 	}
 
 	return $plugin;
@@ -131,7 +131,7 @@ function plugin_instance() {
  * @see \ContentControl\plugin_instance
  *
  * @param string|null $service_or_config Key of service or config to fetch.
- * @return \ContentControl\Core\Plugin|mixed
+ * @return \ContentControl\Plugin\Core|mixed
  */
 function plugin( $service_or_config = null ) {
 	if ( ! isset( $service_or_config ) ) {
@@ -141,6 +141,6 @@ function plugin( $service_or_config = null ) {
 	return plugin_instance()->get( $service_or_config );
 }
 
-\register_activation_hook( __FILE__, '\ContentControl\Core\Install::activate_plugin' );
-\register_deactivation_hook( __FILE__, '\ContentControl\Core\Install::deactivate_plugin' );
-\register_uninstall_hook( __FILE__, '\ContentControl\Core\Install::uninstall_plugin' );
+\register_activation_hook( __FILE__, '\ContentControl\Plugin\Install::activate_plugin' );
+\register_deactivation_hook( __FILE__, '\ContentControl\Plugin\Install::deactivate_plugin' );
+\register_uninstall_hook( __FILE__, '\ContentControl\Plugin\Install::uninstall_plugin' );
