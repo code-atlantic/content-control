@@ -22,7 +22,20 @@ class RuleCallbacks {
 	 * @return bool
 	 */
 	public static function is_home_page() {
-		return is_front_page() && is_main_query() && ! in_the_loop();
+		$checks = [
+			is_front_page(),
+			is_main_query(),
+		];
+
+		if ( 'content_control_should_hide_block' === current_filter() ) {
+			// Checking block visibility, in the loop.
+			$checks[] = in_the_loop();
+		} else {
+			// Checking current page, globally, not in the loop.
+			$checks[] = ! in_the_loop();
+		}
+
+		return ! in_array( false, $checks, true );
 	}
 
 	/**
