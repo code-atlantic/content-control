@@ -5,7 +5,6 @@ import { __ } from '@wordpress/i18n';
 import type {
 	BlockControlGroups,
 	BlockControls,
-	ConditionalBlockControlsGroup,
 	ControlGroups,
 	DeviceBlockControlsGroup,
 	UserBlockControlsGroup,
@@ -28,7 +27,6 @@ export function getDefaultBlockControls< B extends true | false >(
 			rules: {
 				device: getDefaultDeviceBlockControls(),
 				user: getDefaultUserBlockControls(),
-				conditional: getDefaultConditionBlockControls(),
 			},
 		}
 	) as B extends true
@@ -68,17 +66,6 @@ export const getDefaultUserBlockControls = (): UserBlockControlsGroup => {
 		}
 	) as UserBlockControlsGroup;
 };
-
-export const getDefaultConditionBlockControls =
-	(): ConditionalBlockControlsGroup => {
-		return applyFilters(
-			'contentControl.blockControls.defaultConditionBlockControls',
-			{
-				anyAll: 'any',
-				conditionSets: [],
-			}
-		) as ConditionalBlockControlsGroup;
-	};
 
 export type BlockControlsContextType = {
 	blockControls: BlockControls;

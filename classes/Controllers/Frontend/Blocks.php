@@ -9,7 +9,6 @@
 namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
-use ContentControl\RuleEngine\Handler;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,6 +27,7 @@ class Blocks extends Controller {
 
 		add_filter( 'pre_render_block', [ $this, 'pre_render_block' ], 10, 3 );
 		add_filter( 'render_block', [ $this, 'render_block' ], 10, 2 );
+		add_filter( 'content_control_should_hide_block', [ $this, 'block_user_rules' ], 10, 2 );
 	}
 
 	/**
@@ -88,35 +88,50 @@ class Blocks extends Controller {
 			return $pre_render;
 		}
 
-		$rules = wp_parse_args( $controls['rules'], [
-			'user'        => null,
-			'conditional' => null,
-		] );
+		/**
+		 * Filter whether to hide the block.
+		 *
+		 * @param bool  $should_hide Whether the block should be hidden.
+		 * @param array $rules  Rules to check.
+		 * @param array $parsed_block  The block being rendered.
+		 * @return bool
+		 */
+		$should_hide = apply_filters(
+			'content_control_should_hide_block',
+			false,
+			$controls['rules'],
+			$parsed_block
+		);
 
-		// Check User Rules.
-		if ( $rules['user'] ) {
-			$user_status = ! empty( $rules['user']['userStatus'] ) ? $rules['user']['userStatus'] : false;
-			$role_match  = ! empty( $rules['user']['ruleMatch'] ) ? $rules['user']['ruleMatch'] : 'any';
-			$user_roles  = ! empty( $rules['user']['userRoles'] ) ? $rules['user']['userRoles'] : [];
-
-			if ( ! \ContentControl\user_meets_requirements( $user_status, $user_roles, $role_match ) ) {
-				return '';
-			}
-		}
-
-		if ( $rules['conditional'] && ! empty( $rules['conditional']['conditionSets'] ) ) {
-			$handler = new Handler( $rules['conditional']['conditionSets'], $rules['conditional']['anyAll'] );
-
-			$check = $handler->check_rules();
-
-			if ( ! $handler->check_rules() ) {
-				return '';
-			}
-		}
-
-		return $pre_render;
+		return $should_hide ? '' : $pre_render;
 	}
 
+	/**
+	 * Check block rules to see if it should be hidden from user.
+	 *
+	 * @param bool  $should_hide Whether the block should be hidden.
+	 * @param array $rules  Rules to check.
+	 * @return bool
+	 */
+	public function block_user_rules( $should_hide, $rules ) {
+		$rules = wp_parse_args( $rules, [
+			'user' => null,
+		] );
+
+		if ( null === $rules['user'] || true === $should_hide ) {
+			return $should_hide;
+		}
+
+		$user_status = ! empty( $rules['user']['userStatus'] ) ? $rules['user']['userStatus'] : false;
+		$role_match  = ! empty( $rules['user']['ruleMatch'] ) ? $rules['user']['ruleMatch'] : 'any';
+		$user_roles  = ! empty( $rules['user']['userRoles'] ) ? $rules['user']['userRoles'] : [];
+
+		if ( ! \ContentControl\user_meets_requirements( $user_status, $user_roles, $role_match ) ) {
+			return true;
+		}
+
+		return $should_hide;
+	}
 
 	/**
 	 * Get any classes to be added to the outer block element.

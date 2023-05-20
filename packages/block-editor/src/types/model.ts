@@ -1,4 +1,3 @@
-import type { QuerySet } from '@content-control/rule-engine';
 import type { Icon } from '@wordpress/components';
 
 export type DeviceScreenSize = {
@@ -24,15 +23,9 @@ export interface UserBlockControlsGroup extends BlockControlsGroupBase {
 	userRoles: string[];
 }
 
-export interface ConditionalBlockControlsGroup extends BlockControlsGroupBase {
-	anyAll: 'any' | 'all' | 'none';
-	conditionSets: QuerySet[];
-}
-
 export interface ControlGroups {
 	device?: DeviceBlockControlsGroup;
 	user?: UserBlockControlsGroup;
-	conditional?: ConditionalBlockControlsGroup;
 }
 
 export type BlockControlGroups = keyof ControlGroups;

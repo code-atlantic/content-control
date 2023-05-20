@@ -48,12 +48,11 @@ class FrontendTest extends WP_UnitTestCase {
 				'contentControls' => [
 					'enabled' => true,
 					'rules'   => [
-						'device'       => [
+						'device' => [
 							'onMobile'  => true,
 							'onTablet'  => false,
 							'onDesktop' => false,
 						],
-						'conditionals' => null,
 					],
 				],
 			],
@@ -86,14 +85,13 @@ class FrontendTest extends WP_UnitTestCase {
 				'contentControls' => [
 					'enabled' => true,
 					'rules'   => [
-						'device'       => [
+						'device' => [
 							'hideOn' => [
 								'mobile'  => true,
 								'tablet'  => false,
 								'desktop' => false,
 							],
 						],
-						'conditionals' => null,
 					],
 				],
 			],

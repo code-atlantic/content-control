@@ -91,29 +91,6 @@ const controlAttributes = ( settings: object ): object => {
 									},
 								},
 							},
-							conditional: {
-								type: 'object',
-								properties: {
-									anyAll: {
-										type: {
-											enum: [ 'any', 'all', 'none' ],
-										},
-										default: 'all',
-									},
-									conditionSets: {
-										type: 'array',
-										items: {
-											type: 'object',
-											properties: {
-												id: { type: 'string' },
-												type: {
-													enum: [ 'rule', 'group' ],
-												},
-											},
-										},
-									},
-								},
-							},
 						},
 					},
 				},
