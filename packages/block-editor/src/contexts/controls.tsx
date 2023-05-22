@@ -20,6 +20,13 @@ export function getDefaultBlockControls< B extends true | false >(
 			rules: NonNullableFields< BlockControls[ 'rules' ] >;
 	  }
 	: BlockControls {
+	/**
+	 * Filter the default block controls.
+	 *
+	 * @param {BlockControls} defaults The default block controls.
+	 *
+	 * @return {BlockControls} The filtered default block controls.
+	 */
 	const defaults = applyFilters(
 		'contentControl.blockControls.defaultBlockControls',
 		{
@@ -44,6 +51,13 @@ export function getDefaultBlockControls< B extends true | false >(
 }
 
 export const getDefaultDeviceBlockControls = (): DeviceBlockControlsGroup => {
+	/**
+	 * Filter the default device block controls.
+	 *
+	 * @param {DeviceBlockControlsGroup} defaults The default device block controls.
+	 *
+	 * @return {DeviceBlockControlsGroup} The filtered default device block controls.
+	 */
 	return applyFilters(
 		'contentControl.blockControls.defaultDeviceBlockControls',
 		{
@@ -57,6 +71,13 @@ export const getDefaultDeviceBlockControls = (): DeviceBlockControlsGroup => {
 };
 
 export const getDefaultUserBlockControls = (): UserBlockControlsGroup => {
+	/**
+	 * Filter the default user block controls.
+	 *
+	 * @param {UserBlockControlsGroup} defaults The default user block controls.
+	 *
+	 * @return {UserBlockControlsGroup} The filtered default user block controls.
+	 */
 	return applyFilters(
 		'contentControl.blockControls.defaultUserBlockControls',
 		{
@@ -161,6 +182,13 @@ export const useBlockControls = () => {
 		updateGroupRules,
 	};
 
+	/**
+	 * Filter the block controls context.
+	 *
+	 * @param {BlockControlsContextType} blockControlsContext The block controls context.
+	 *
+	 * @return {BlockControlsContextType} The filtered block controls context.
+	 */
 	return applyFilters(
 		'contentControl.blockControlsContext',
 		blockControlsContext

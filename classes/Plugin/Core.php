@@ -81,6 +81,14 @@ class Core {
 
 		if ( version_compare( $data['version'], (string) $version, '<' ) ) {
 			// Allow processing of small core upgrades.
+
+			/**
+			 * Fires when the plugin version is updated.
+			 *
+			 * Note: Old version is still available in options.
+			 *
+			 * @param string $version The new version.
+			 */
 			do_action( 'content_control_update_version', $data['version'] );
 
 			// Save Upgraded From option.

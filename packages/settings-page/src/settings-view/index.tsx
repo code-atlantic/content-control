@@ -23,7 +23,13 @@ const SettingsView = () => {
 		view: StringParam,
 	} );
 
-	// Filtered & mappable list of TabComponent definitions.
+	/**
+	 * Filter the tabs that are shown on the settings page.
+	 *
+	 * @param {TabComponent[]} tabs The tabs that are shown on the settings page.
+	 *
+	 * @return {TabComponent[]} The filtered tabs.
+	 */
 	const tabs: TabComponent[] = applyFilters(
 		'contentControl.settingsPageTabs',
 		[

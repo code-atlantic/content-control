@@ -12,6 +12,13 @@ const DeviceRules = () => {
 
 	const currentRules = groupRules ?? groupDefaults;
 
+	/**
+	 * Filter the screen sizes available for device rules.
+	 *
+	 * @param {DeviceScreenSizes} screenSizes The screen sizes available for device rules.
+	 *
+	 * @return {DeviceScreenSizes} The filtered screen sizes.
+	 */
 	const screenSizes = applyFilters(
 		'contentControl.blockControls.screenSizes',
 		{

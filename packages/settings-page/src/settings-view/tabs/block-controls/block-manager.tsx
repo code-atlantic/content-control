@@ -46,6 +46,13 @@ const BlockControlsTab = () => {
 				  [ ...excludedBlocks, blockName ],
 		} );
 
+	/**
+	 * Filter the list of known block types.
+	 *
+	 * @param {typeof knownBlockTypes} knownBlockTypes The list of known block types.
+	 *
+	 * @return {typeof knownBlockTypes} The filtered list of known block types.
+	 */
 	const blockTypes = applyFilters(
 		'contentControl.knownBlockTypes',
 		knownBlockTypes

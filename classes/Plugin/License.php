@@ -173,6 +173,12 @@ class License {
 
 		$this->udpate_license_data( $license_data );
 
+		/**
+		 * Fires when license key is changed.
+		 *
+		 * @param string $key License key.
+		 * @param string $old_key Old license key.
+		 */
 		\do_action( 'content_control_license_key_changed', $key, $old_key );
 	}
 
@@ -194,6 +200,12 @@ class License {
 
 		$this->udpate_license_data( $license_data );
 
+		/**
+		 * Fires when license status is updated.
+		 *
+		 * @param array $license_status License status data.
+		 * @param array $previous_status Previous license status data.
+		 */
 		\do_action( 'content_control_license_status_updated', $license_status, $previous_status );
 	}
 

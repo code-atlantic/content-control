@@ -44,6 +44,14 @@ const addAttributes = (
  * @return {Object} attributes Modified settings.
  */
 const controlAttributes = ( settings: object ): object => {
+	/**
+	 * Filter the control attributes.
+	 *
+	 * @param {Object} attributes Attributes for the block.
+	 * @param {Object} settings Settings for the block.
+	 *
+	 * @return {Object} Modified attributes.
+	 */
 	return applyFilters(
 		'contentControl.blockControls.controlAttributes',
 		{

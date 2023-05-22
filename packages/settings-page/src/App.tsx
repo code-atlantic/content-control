@@ -62,7 +62,13 @@ const App = () => {
 		} );
 	}
 
-	// Generated filtered list of admin views.
+	/**
+	 * Filter the list of views.
+	 *
+	 * @param {TabComponent[]} views List of views.
+	 *
+	 * @return {TabComponent[]} Filtered list of views.
+	 */
 	views = applyFilters( 'contentControl.adminViews', [
 		...views,
 		{

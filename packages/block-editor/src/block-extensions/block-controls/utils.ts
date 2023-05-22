@@ -22,6 +22,13 @@ const getExcludedBlocks = () => {
  * @returns {string[]} Array of explicitly allowed block types.
  */
 export const explicitlyAllowedBlocks = (): string[] =>
+	/**
+	 * Filter the explicitly allowed block types.
+	 *
+	 * @param {string[]} allowedBlocks Array of explicitly allowed block types.
+	 *
+	 * @return {string[]} Array of explicitly allowed block types.
+	 */
 	applyFilters(
 		'contentControl.allowedBlocks',
 		getAllowedBlocks()
@@ -33,6 +40,13 @@ export const explicitlyAllowedBlocks = (): string[] =>
  * @returns {string[]} Array of explicitly excluded block types.
  */
 export const explicitlyExcludedBlocks = (): string[] =>
+	/**
+	 * Filter the explicitly excluded block types.
+	 *
+	 * @param {string[]} excludedBlocks Array of explicitly excluded block types.
+	 *
+	 * @return {string[]} Array of explicitly excluded block types.
+	 */
 	applyFilters(
 		'contentControl.excludedBlocks',
 		getExcludedBlocks()

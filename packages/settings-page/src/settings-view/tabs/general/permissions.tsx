@@ -45,7 +45,13 @@ const getRolesAndCapsOptions = ( () => {
 const PermissionsTab = () => {
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 
-	// Filtered & mappable list of TabComponent definitions.
+	/**
+	 * Filterable list of plugin permission setting fields.
+	 *
+	 * @param {Object[]} pluginPermissions List of plugin permission setting fields.
+	 *
+	 * @return {Object[]} Filtered list of plugin permission setting fields.
+	 */
 	const pluginPermissions: {
 		name: string;
 		label: string;

@@ -48,6 +48,14 @@ addFilter(
 const GeneralTab = () => {
 	// Filtered & mappable list of TabComponent definitions.
 	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+
+	/**
+	 * Filter the list of sections on the "General" tab.
+	 *
+	 * @param {SectionList} sections List of sections.
+	 *
+	 * @return {SectionList} Filtered list of sections.
+	 */
 	const sections: SectionList = applyFilters(
 		'contentControl.settingsTabSections.general',
 		[]

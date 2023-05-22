@@ -21,9 +21,15 @@ export const ACTION_TYPES = {
  * NOTE: These should match the defaults in PHP.
  * Update get_default_settings function.
  */
-export const settingsDefaults: Settings = applyFilters(
-	'content-control.settings.defaults',
-	{
+export const settingsDefaults: Settings =
+	/**
+	 * Filter the default settings.
+	 *
+	 * @param {Settings} settings Default settings.
+	 *
+	 * @return {Settings} Default settings.
+	 */
+	applyFilters( 'content-control.settings.defaults', {
 		excludedBlocks: [],
 		permissions: {
 			// Block Controls
@@ -48,8 +54,7 @@ export const settingsDefaults: Settings = applyFilters(
 				breakpoint: 1440,
 			},
 		},
-	}
-) as Settings;
+	} ) as Settings;
 
 export const initialState: SettingsState = {
 	settings: settingsDefaults,

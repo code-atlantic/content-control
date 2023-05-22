@@ -164,7 +164,13 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		onClose,
 	};
 
-	// Filtered & mappable list of TabComponent definitions.
+	/**
+	 * Define the tabs to show in the editor.
+	 *
+	 * @param {TabComponent[]} tabs Array of tab components.
+	 *
+	 * @return {TabComponent[]} Array of tab components.
+	 */
 	const tabs: TabComponent[] = applyFilters(
 		'contentControl.restrictionEditorTabs',
 		[

@@ -26,7 +26,13 @@ const DeviceMediaQueries = () => {
 
 	const { settings, stageUnsavedChanges: updateSettings } = useSettings();
 
-	// Filtered & mappable list of TabComponent definitions.
+	/**
+	 * Filtered & mappable list of TabComponent definitions.
+	 *
+	 * @param {RegisteredMediaQuery[]} mediaQueries List of media query definitions.
+	 *
+	 * @return {RegisteredMediaQuery[]} Filtered list of media query definitions.
+	 */
 	const mediaQueries: RegisteredMediaQuery[] = applyFilters(
 		'contentControl.customMediaQueries',
 		[
