@@ -1,7 +1,5 @@
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
-export type URLOverrideTypes = 'login' | 'registration' | 'recovery';
-
 export type DeviceMediaQuerySettings = {
 	override: boolean;
 	breakpoint: number;
@@ -9,7 +7,7 @@ export type DeviceMediaQuerySettings = {
 
 export type PermissionValue = string | false;
 
-export type Settings = {
+export interface Settings {
 	excludedBlocks: string[];
 	permissions: {
 		// Block Controls
@@ -21,12 +19,6 @@ export type Settings = {
 		manage_settings: PermissionValue;
 		// Extendable
 		[ key: string ]: PermissionValue;
-	};
-	urlOverrides: {
-		[ Property in URLOverrideTypes ]?: {
-			enabled: boolean;
-			url: string;
-		};
 	};
 	mediaQueries: {
 		mobile: {
@@ -42,11 +34,7 @@ export type Settings = {
 			breakpoint: number;
 		};
 	};
-	updates: {
-		autoUpdate: boolean;
-		enableBetas: boolean;
-	};
-};
+}
 
 export type SettingsState = {
 	settings: Settings;

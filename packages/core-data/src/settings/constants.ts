@@ -1,3 +1,5 @@
+import { applyFilters } from '@wordpress/hooks';
+
 import type { Settings, SettingsState } from './types';
 
 export const STORE_NAME = 'content-control/settings';
@@ -19,37 +21,35 @@ export const ACTION_TYPES = {
  * NOTE: These should match the defaults in PHP.
  * Update get_default_settings function.
  */
-export const settingsDefaults: Settings = {
-	excludedBlocks: [],
-	urlOverrides: {},
-	permissions: {
-		// Block Controls
-		view_block_controls: 'edit_posts',
-		edit_block_controls: 'edit_posts',
-		// Restrictions
-		edit_restrictions: 'manage_options',
-		// Settings
-		manage_settings: 'manage_options',
-	},
-	mediaQueries: {
-		mobile: {
-			override: false,
-			breakpoint: 640,
+export const settingsDefaults: Settings = applyFilters(
+	'content-control.settings.defaults',
+	{
+		excludedBlocks: [],
+		permissions: {
+			// Block Controls
+			view_block_controls: 'edit_posts',
+			edit_block_controls: 'edit_posts',
+			// Restrictions
+			edit_restrictions: 'manage_options',
+			// Settings
+			manage_settings: 'manage_options',
 		},
-		tablet: {
-			override: false,
-			breakpoint: 920,
+		mediaQueries: {
+			mobile: {
+				override: false,
+				breakpoint: 640,
+			},
+			tablet: {
+				override: false,
+				breakpoint: 920,
+			},
+			desktop: {
+				override: false,
+				breakpoint: 1440,
+			},
 		},
-		desktop: {
-			override: false,
-			breakpoint: 1440,
-		},
-	},
-	updates: {
-		autoUpdate: false,
-		enableBetas: false,
-	},
-};
+	}
+) as Settings;
 
 export const initialState: SettingsState = {
 	settings: settingsDefaults,
