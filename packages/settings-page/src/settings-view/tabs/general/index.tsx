@@ -1,12 +1,8 @@
-import {
-	customRedirect,
-	permissions as permissionsIcon,
-} from '@content-control/icons';
-import { applyFilters } from '@wordpress/hooks';
+import { permissions as permissionsIcon } from '@content-control/icons';
+import { applyFilters, addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 import Section from '../../section';
-import CustomRedirects from './custom-redirects';
 import PermissionsSection from './permissions';
 import LogViewer from './log-viewer';
 
@@ -15,31 +11,46 @@ import type { TabComponent } from '../../../types';
 
 const { logUrl = false } = contentControlSettingsPage;
 
-const GeneralTab = () => {
-	// Filtered & mappable list of TabComponent definitions.
-	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
-	const sections: SectionList = applyFilters(
-		'contentControl.generalSettingsTabSections',
-		[
-			{
-				name: 'redirects',
-				title: __( 'Custom Redirects', 'content-control' ),
-				icon: customRedirect,
-				comp: CustomRedirects,
-			},
+addFilter(
+	'contentControl.settingsTabSections.general',
+	'content-control/general-settings/permissions-options',
+	( sections: { [ key: string ]: any }[] ) => {
+		return [
+			...sections,
 			{
 				name: 'permissions',
 				title: __( 'Plugin Permissions', 'content-control' ),
 				icon: permissionsIcon,
 				comp: PermissionsSection,
 			},
+		];
+	},
+	10
+);
+
+addFilter(
+	'contentControl.settingsTabSections.general',
+	'content-control/general-settings/log-viewer',
+	( sections: { [ key: string ]: any }[] ) => {
+		return [
+			...sections,
 			logUrl !== false && {
 				name: 'log',
 				title: __( 'Log Viewer', 'content-control' ),
 				icon: 'editor-code',
 				comp: LogViewer,
 			},
-		]
+		];
+	},
+	50
+);
+
+const GeneralTab = () => {
+	// Filtered & mappable list of TabComponent definitions.
+	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+	const sections: SectionList = applyFilters(
+		'contentControl.settingsTabSections.general',
+		[]
 	) as SectionList;
 
 	return (
