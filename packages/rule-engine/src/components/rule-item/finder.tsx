@@ -209,10 +209,14 @@ const Finder = (
 		// If selected suggestion, choose it, otherwise close popover.
 		enter: () => {
 			if ( selectedSuggestion === -1 ) {
-				return setState( {
-					...state,
-					popoverOpen: false,
-				} );
+				if ( queryText.length === 0 ) {
+					return setState( {
+						...state,
+						popoverOpen: false,
+					} );
+				} else {
+					selectRule( 0 );
+				}
 			}
 			if ( currentIndex !== upsellIndex ) {
 				selectRule( currentIndex );
