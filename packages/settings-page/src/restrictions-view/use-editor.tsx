@@ -35,14 +35,12 @@ const useEditor = () => {
 	} );
 
 	// Quick helper to reset all query params.
-	const clearEditorParams = () => {
-		console.log( queryParams.tab );
+	const clearEditorParams = () =>
 		setQueryParams( {
 			add: undefined,
 			edit: undefined,
 			tab: undefined,
 		} );
-	};
 
 	// Extract params with usable names.
 	const { edit, add, tab } = queryParams;
