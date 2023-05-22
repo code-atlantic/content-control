@@ -38,17 +38,18 @@ class Shortcodes extends Controller {
 	 */
 	public function content_control( $atts, $content = '' ) {
 		$atts = shortcode_atts( [
-			'status'         => 'logged_in', // 'logged_in' or 'logged_out
-			'allowed_roles'  => [],
-			'excluded_roles' => [],
+			'status'         => null, // 'logged_in' or 'logged_out
+			'allowed_roles'  => null,
+			'excluded_roles' => null,
 			'class'          => '',
 			'message'        => $this->container->get_option( 'default_denial_message', '' ),
 			// Deprecated.
 			'logged_out'     => null, // @deprecated 2.0.0
-			'roles'          => [], // @deprecated 2.0.0
+			'roles'          => '', // @deprecated 2.0.0
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
-		if ( isset( $atts['logged_out]'] ) && (bool) $atts['logged_out'] ) {
+		// Handle old args.
+		if ( null === $atts['status'] && isset( $atts['logged_out]'] ) && (bool) $atts['logged_out'] ) {
 			// @deprecated 2.0.0
 			$atts['status'] = 'logged_out';
 			unset( $atts['logged_out'] );
@@ -60,18 +61,18 @@ class Shortcodes extends Controller {
 			unset( $atts['roles'] );
 		}
 
-		if ( ! is_array( $atts['allowed_roles'] ) ) {
+		if ( isset( $atts['allowed_roles'] ) && ! is_array( $atts['allowed_roles'] ) ) {
 			$atts['allowed_roles'] = explode( ',', $atts['allowed_roles'] );
 		}
 
-		if ( ! is_array( $atts['excluded_roles'] ) ) {
+		if ( isset( $atts['excluded_roles'] ) && ! is_array( $atts['excluded_roles'] ) ) {
 			$atts['excluded_roles'] = explode( ',', $atts['excluded_roles'] );
 		}
 
-		if ( ! empty( $atts['excluded_roles'] ) ) {
+		if ( is_array( $atts['excluded_roles'] ) && count( $atts['excluded_roles'] ) ) {
 			$user_roles = array_map( 'trim', $atts['excluded_roles'] );
 			$match_type = 'exclude';
-		} elseif ( ! empty( $atts['allowed_roles'] ) ) {
+		} elseif ( is_array( $atts['allowed_roles'] ) && count( $atts['allowed_roles'] ) ) {
 			$user_roles = array_map( 'trim', $atts['allowed_roles'] );
 			$match_type = 'match';
 		} else {
