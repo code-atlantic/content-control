@@ -1,25 +1,25 @@
 import { __ } from '@wordpress/i18n';
-import { applyFilters } from '@wordpress/hooks';
+import { applyFilters, addFilter } from '@wordpress/hooks';
 import { licenseKey } from '@content-control/icons';
 import { useLicense } from '@content-control/core-data';
 
-import Section from '../settings-view/section';
+import Section from '../../section';
 
 import LicenseSection from './license';
 
 import type { IconProps } from '@wordpress/icons/build-types/icon';
-import type { TabComponent } from '../types';
+import type { TabComponent } from '../../../types';
 
 // const { pluginUrl } = contentControlSettingsPage;
 
-const UpgradeView = () => {
-	const { isLicenseActive } = useLicense();
+addFilter(
+	'contentControl.settingsTabSections.upgrade',
+	'content-control/general-settings/license-options',
+	( sections: { [ key: string ]: any }[] ) => {
+		const { isLicenseActive } = useLicense();
 
-	// Filtered & mappable list of TabComponent definitions.
-	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
-	const sections: SectionList = applyFilters(
-		'contentControl.generalSettingsTabSections',
-		[
+		return [
+			...sections,
 			{
 				name: 'license',
 				title: (
@@ -35,7 +35,17 @@ const UpgradeView = () => {
 				icon: licenseKey,
 				comp: LicenseSection,
 			},
-		]
+		];
+	},
+	10
+);
+
+const UpgradeView = () => {
+	// Filtered & mappable list of TabComponent definitions.
+	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+	const sections: SectionList = applyFilters(
+		'contentControl.settingsTabSections.upgrade',
+		[]
 	) as SectionList;
 
 	return (

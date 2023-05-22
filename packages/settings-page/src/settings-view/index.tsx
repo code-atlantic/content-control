@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
 import Header from './header';
 import BlockControlsTab from './tabs/block-controls';
 import GeneralTab from './tabs/general';
+import UpgradeTab from './tabs/upgrade';
 
 import type { TabComponent } from '../types';
 
@@ -17,7 +18,7 @@ const {
 } = contentControlSettingsPage;
 
 const SettingsView = () => {
-	const [ { tab = 'general' }, setParams ] = useQueryParams( {
+	const [ { tab = 'general' } ] = useQueryParams( {
 		tab: StringParam,
 		view: StringParam,
 	} );
@@ -37,16 +38,9 @@ const SettingsView = () => {
 				comp: BlockControlsTab,
 			},
 			{
-				name: 'licensing',
+				name: 'license-and-updates',
 				title: __( 'Licensing', 'content-control' ),
-				onClick: () => {
-					setParams( {
-						tab: undefined,
-						view: 'upgrade',
-					} );
-
-					return false;
-				},
+				comp: UpgradeTab,
 			},
 		]
 	) as TabComponent[];

@@ -104,7 +104,20 @@ const Header = ( { tabs }: Props ) => {
 					className="tabs"
 					orientation="horizontal"
 					selected={ view !== null ? view : undefined }
-					onSelect={ ( tabName: string ) => changeView( tabName ) }
+					onSelect={ ( tabName: string ) => {
+						const currentTab = tabs.find(
+							( t ) => t.name === tabName
+						);
+
+						if ( currentTab?.onClick ) {
+							// Allow short circuiting of tab change.
+							if ( false === currentTab.onClick() ) {
+								return;
+							}
+						}
+
+						changeView( tabName );
+					} }
 					tabs={ tabs }
 				/>
 				<Button

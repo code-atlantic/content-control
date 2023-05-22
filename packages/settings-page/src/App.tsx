@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { StringParam, useQueryParam } from 'use-query-params';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { upgrade } from '@content-control/icons';
 import { Icon, Popover } from '@wordpress/components';
@@ -10,7 +10,6 @@ import { __ } from '@wordpress/i18n';
 import Header from './header';
 import RestrictionsView from './restrictions-view';
 import SettingsView from './settings-view';
-import UpgradeView from './upgrade-view';
 
 import type { TabComponent } from './types';
 import { useLicense } from '@content-control/core-data';
@@ -24,7 +23,11 @@ const {
 
 const App = () => {
 	const { isLicenseActive } = useLicense();
-	const [ view = 'restrictions' ] = useQueryParam( 'view', StringParam );
+
+	const [ { view = 'restrictions' }, setParams ] = useQueryParams( {
+		tab: StringParam,
+		view: StringParam,
+	} );
 
 	let views: TabComponent[] = [];
 
@@ -81,7 +84,15 @@ const App = () => {
 				'Content Control - Upgrade to Pro',
 				'content-control'
 			),
-			comp: UpgradeView,
+			onClick: () => {
+				setParams( {
+					view: 'settings',
+					tab: 'license-and-updates',
+				} );
+
+				// Return false prevents tab component from rendering.
+				return false;
+			},
 		},
 	] ) as TabComponent[];
 
