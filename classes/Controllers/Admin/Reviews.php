@@ -271,13 +271,21 @@ class Reviews extends Controller {
 		if ( ! isset( $triggers ) ) {
 			$link = 'https://wordpress.org/support/plugin/content-control/reviews/?rate=5#rate-response';
 
-			// Translators: %s is replaced with the number of days.
-			$time_message = __( 'Hi there! You\'ve been using the Content Control plugin on your site for %s now - We hope it\'s been helpful. If you\'re enjoying the plugin, would you mind rating it 5-stars to help spread the word?', 'content-control' );
+			// Translators: 1. emoji, 2. html tag, 3. html tag, 4. the number of days, 5. html tag, 6. html tag.
+			$time_message = __( 'Hi there! %1$s You\'ve been using the %2$sContent Control%3$s plugin on your site for %4$s now - We hope it\'s been helpful. If you\'re enjoying the plugin, would you mind rating it %5$s5-stars%6$s to help spread the word?', 'content-control' );
 			$triggers     = [
 				'time_installed' => [
 					'triggers' => [
 						'one_week'     => [
-							'message'    => sprintf( $time_message, __( '1 week', 'content-control' ) ),
+							'message'    => sprintf(
+								$time_message,
+								'👋',
+								'<strong>',
+								'</strong>',
+								__( '1 week', 'content-control' ),
+								'<span class="five-stars" title="',
+								'"></span>'
+							),
 							'conditions' => [
 								strtotime( $this->installed_on() . ' +1 week' ) < time(),
 							],
@@ -285,7 +293,15 @@ class Reviews extends Controller {
 							'pri'        => 10,
 						],
 						'one_month'    => [
-							'message'    => sprintf( $time_message, __( '1 month', 'content-control' ) ),
+							'message'    => sprintf(
+								$time_message,
+								'👋',
+								'<strong>',
+								'</strong>',
+								__( '1 month', 'content-control' ),
+								'<span class="five-stars" title="',
+								'"></span>'
+							),
 							'conditions' => [
 								strtotime( $this->installed_on() . ' +1 month' ) < time(),
 							],
@@ -293,7 +309,15 @@ class Reviews extends Controller {
 							'pri'        => 20,
 						],
 						'three_months' => [
-							'message'    => sprintf( $time_message, __( '3 months', 'content-control' ) ),
+							'message'    => sprintf(
+								$time_message,
+								'👋',
+								'<strong>',
+								'</strong>',
+								__( '3 months', 'content-control' ),
+								'<span class="five-stars" title="',
+								'"></span>'
+							),
 							'conditions' => [
 								strtotime( $this->installed_on() . ' +3 months' ) < time(),
 							],
@@ -413,48 +437,85 @@ class Reviews extends Controller {
 		</script>
 
 		<style>
-			.content-control-notice p {
-				margin-bottom: 0;
+			.content-control-notice {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				padding: 8px;
+				margin-top: 16px;
+				margin-bottom: 16px;
 			}
 
-			.content-control-notice img.logo {
-				float: right;
-				margin-left: 10px;
-				width: 75px;
-				padding: 0.25em;
-				border: 1px solid #ccc;
+			.content-control-notice .notice-logo {
+				flex: 0 0 110px;
+				max-width: 110px;
+			}
+
+			.content-control-notice .notice-content {
+				flex-grow: 1;
+			}
+
+			.content-control-notice p {
+				margin-bottom: 0;
+				max-width: 800px;
+			}
+
+			.content-control-notice .review-actions {
+				margin-top: 10px;
+				margin-bottom: 0;
+				padding-left: 0;
+				list-style: none;
+
+				display: flex;
+				gap: 16px;
+				align-items: center;
+			}
+			.content-control-notice .review-actions li {
+
+			}
+
+			.content-control-notice .five-stars {}
+
+			.content-control-notice .five-stars::before {
+				content: "★★★★★";
+				color: #f0ad4e;
 			}
 		</style>
 
 		<div class="notice notice-success is-dismissible content-control-notice">
-			<p>
-				<img class="logo" src="<?php echo esc_attr( plugin()->get_url( 'assets/images/icon-128x128.png' ) ); ?>" />
-				<strong>
+
+			<div class="notice-logo">
+				<img class="logo" width="110" src="<?php echo esc_attr( plugin()->get_url( 'assets/images/illustration-check.svg' ) ); ?>" />
+			</div>
+
+			<div class="notice-content">
+				<p>
 					<?php
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $trigger['message'];
 					?>
-					<br />
 					~ <a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>
-				</strong>
-			</p>
-			<ul>
-				<li>
-					<a class="content-control-dismiss" target="_blank" href="<?php echo esc_attr( $trigger['link'] ); ?>>" data-reason="am_now">
-						<strong><?php esc_html_e( 'Ok, you deserve it', 'content-control' ); ?></strong>
-					</a>
-				</li>
-				<li>
-					<a href="#" class="content-control-dismiss" data-reason="maybe_later">
-						<?php esc_html_e( 'Nope, maybe later', 'content-control' ); ?>
-					</a>
-				</li>
-				<li>
-					<a href="#" class="content-control-dismiss" data-reason="already_did">
-						<?php esc_html_e( 'I already did', 'content-control' ); ?>
-					</a>
-				</li>
-			</ul>
+				</p>
+				<ul class="review-actions">
+					<li>😁
+						<a class="content-control-dismiss" target="_blank" href="<?php echo esc_attr( $trigger['link'] ); ?>" data-reason="am_now">
+							<strong><?php esc_html_e( 'Ok, you deserve it', 'content-control' ); ?></strong>
+						</a>
+					</li>
+					<li>
+						🤔
+						<a href="#" class="content-control-dismiss" data-reason="maybe_later">
+							<?php esc_html_e( 'Maybe later, okay?', 'content-control' ); ?>
+						</a>
+					</li>
+					<li>🙌
+						<a href="#" class="content-control-dismiss" data-reason="already_did">
+							<?php esc_html_e( 'I already did', 'content-control' ); ?>
+						</a>
+					</li>
+				</ul>
+
+			</div>
 
 		</div>
 
