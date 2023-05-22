@@ -16,6 +16,13 @@ function allowed_user_roles() {
 	static $roles;
 
 	if ( ! isset( $roles ) ) {
+		/**
+		 * Filter the allowed user roles.
+		 *
+		 * @param array $roles
+		 *
+		 * @return array
+		 */
 		$roles = apply_filters( 'content_control_user_roles', wp_roles()->get_names() );
 
 		if ( ! is_array( $roles ) || empty( $roles ) ) {

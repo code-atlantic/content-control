@@ -59,6 +59,13 @@ function append_post_excerpts( $content, $restriction ) {
 		$excerpt = get_excerpt_by_id( $post );
 
 		if ( ! empty( $excerpt ) ) {
+			/**
+			 * Filter the allowed tags for excerpts.
+			 *
+			 * @param string $tags Allowed tags.
+			 *
+			 * @return string
+			 */
 			$tags = apply_filters(
 				'content_control/excerpt_allowed_tags',
 				'<a><em><strong><blockquote><ul><ol><li><p>'

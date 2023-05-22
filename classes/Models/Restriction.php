@@ -248,7 +248,7 @@ class Restriction {
 			}
 		}
 
-		return apply_filters( 'content_control_restriction_description', $this->description, $this );
+		return $this->description;
 	}
 
 	/**
@@ -296,8 +296,8 @@ class Restriction {
 			'description'      => $this->get_description(),
 			'message'          => $this->get_message(),
 			'status'           => $this->status,
-			'userStatus'       => $this->userStatus,
-			'userRoles'        => $this->userRoles,
+			'userStatus'       => $this->user_status,
+			'userRoles'        => $this->user_roles,
 			'protectionMethod' => $this->protection_method,
 			'redirectType'     => $this->redirect_type,
 			'redirectUrl'      => $this->redirect_url,

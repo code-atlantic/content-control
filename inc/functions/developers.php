@@ -62,6 +62,14 @@ function content_has_restrictions( $post_id = null ) {
 	// Clear post if we overloaded it.
 	clear_post( $overload_post );
 
+	/**
+	 * Filter whether content has restrictions.
+	 *
+	 * @param bool $has_restrictions Whether content has restrictions.
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 */
 	return (bool) apply_filters( 'content_control/content_has_restriction', $has_restrictions, $post_id );
 }
 
@@ -101,6 +109,14 @@ function user_can_view_content( $post_id = null ) {
 	// Clear post if we overloaded it.
 	clear_post( $overload_post );
 
+	/**
+	 * Filter whether user can view content.
+	 *
+	 * @param bool $can_view Whether user can view content.
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 */
 	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id );
 }
 
@@ -114,6 +130,14 @@ function user_can_view_content( $post_id = null ) {
 function content_is_restricted( $post_id = null ) {
 	$is_restricted = content_has_restrictions( $post_id ) && ! user_can_view_content( $post_id );
 
+	/**
+	 * Filter whether content is restricted.
+	 *
+	 * @param bool $is_restricted Whether content is restricted.
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 */
 	return (bool) apply_filters( 'content_control/content_is_restricted', $is_restricted, $post_id );
 }
 

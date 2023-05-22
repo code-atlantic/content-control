@@ -47,6 +47,16 @@ class Widgets extends Controller {
 					$options = get_widget_options( $widget_id );
 
 					// If not accessible then exclude this item.
+
+					/**
+					 * Filter whether to exclude a widget.
+					 *
+					 * @param bool   $exclude   Whether to exclude the widget.
+					 * @param array  $options   Widget options.
+					 * @param string $widget_id Widget ID.
+					 *
+					 * @return bool
+					 */
 					$exclude = apply_filters(
 						'content_control/should_exclude_widget',
 						! user_meets_requirements( $options['which_users'], $options['roles'] ),

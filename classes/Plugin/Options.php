@@ -56,6 +56,13 @@ class Options {
 			update_option( $this->prefix . 'settings', $settings );
 		}
 
+		/**
+		 * Filter the settings.
+		 *
+		 * @param array $settings Settings.
+		 *
+		 * @return array
+		 */
 		return apply_filters( $this->prefix . 'get_options', $settings );
 	}
 
@@ -72,6 +79,14 @@ class Options {
 	public function get( $key = '', $default_value = false ) {
 		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default_value;
 
+		/**
+		 * Filter the option.
+		 *
+		 * @param mixed $value Option value.
+		 * @param string $key Option key.
+		 *
+		 * @return mixed
+		 */
 		return apply_filters( $this->prefix . 'get_option', $value, $key, $default_value );
 	}
 
@@ -128,7 +143,14 @@ class Options {
 		// First let's grab the current settings.
 		$options = $this->get_all();
 
-		// Let's let devs alter that value coming in.
+		/**
+		 * Filter the new option value.
+		 *
+		 * @param mixed $value Option value.
+		 * @param string $key Option key.
+		 *
+		 * @return mixed
+		 */
 		$value = apply_filters( $this->prefix . 'update_option', $value, $key );
 
 		// Next let's try to update the value.
@@ -164,6 +186,14 @@ class Options {
 				unset( $options[ $key ] );
 			}
 
+			/**
+			 * Filter the new option value.
+			 *
+			 * @param mixed $value Option value.
+			 * @param string $key Option key.
+			 *
+			 * @return mixed
+			 */
 			$value = apply_filters( $this->prefix . 'update_option', $value, $key );
 
 			// Next let's try to update the value.

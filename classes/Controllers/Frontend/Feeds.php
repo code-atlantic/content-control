@@ -52,6 +52,14 @@ class Feeds extends Controller {
 
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
+		/**
+		 * Filter the message to display when a feed is restricted.
+		 *
+		 * @param string $message     Message to display.
+		 * @param object $restriction Restriction object.
+		 *
+		 * @return string
+		 */
 		return apply_filters(
 			$filter_name,
 			$restriction->get_message(),

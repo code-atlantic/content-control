@@ -102,6 +102,13 @@ class Rules {
 	public function get_block_editor_rules() {
 		$rules = $this->get_rules();
 
+		/**
+		 * Filter the rules.
+		 *
+		 * @param array $rules Rules.
+		 *
+		 * @return array
+		 */
 		return apply_filters( 'content_control_rule_engine_rules', $rules );
 	}
 
@@ -498,6 +505,15 @@ class Rules {
 	 * @return void
 	 */
 	public function register_deprecated_rules() {
+		/**
+		 * Filters the old conditions to be registered as rules.
+		 *
+		 * @deprecated 2.0.0
+		 *
+		 * @param array $old_rules Array of old rules to manipulate.
+		 *
+		 * @return array
+		 */
 		$old_rules = apply_filters( 'content_control_old_conditions', [] );
 
 		if ( ! empty( $old_rules ) ) {
