@@ -38,24 +38,61 @@ class Shortcodes extends Controller {
 	 */
 	public function content_control( $atts, $content = '' ) {
 		$atts = shortcode_atts( [
-			'logged_out' => null,
-			'roles'      => [],
-			'class'      => '',
-			'message'    => $this->container->get_option( 'default_denial_message', '' ),
+			'status'         => 'logged_in', // 'logged_in' or 'logged_out
+			'allowed_roles'  => [],
+			'excluded_roles' => [],
+			'class'          => '',
+			'message'        => $this->container->get_option( 'default_denial_message', '' ),
+			// Deprecated.
+			'logged_out'     => null, // @deprecated 2.0.0
+			'roles'          => [], // @deprecated 2.0.0
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
-		$user_status = isset( $atts['logged_out'] ) ? 'logged_out' : 'logged_in';
+		if ( isset( $atts['logged_out]'] ) && (bool) $atts['logged_out'] ) {
+			// @deprecated 2.0.0
+			$atts['status'] = 'logged_out';
+			unset( $atts['logged_out'] );
+		}
 
-		$user_roles = ! is_array( $atts['roles'] ) ? explode( ',', $atts['roles'] ) : $atts['roles'];
-		$user_roles = array_map( 'trim', $user_roles );
+		if ( isset( $atts['roles'] ) && ! empty( $atts['roles'] ) ) {
+			// @deprecated 2.0.
+			$atts['allowed_roles'] = $atts['roles'];
+			unset( $atts['roles'] );
+		}
 
-		$classes   = ! is_array( $atts['class'] ) ? explode( ' ', $atts['class'] ) : $atts['class'];
+		if ( ! is_array( $atts['allowed_roles'] ) ) {
+			$atts['allowed_roles'] = explode( ',', $atts['allowed_roles'] );
+		}
+
+		if ( ! is_array( $atts['excluded_roles'] ) ) {
+			$atts['excluded_roles'] = explode( ',', $atts['excluded_roles'] );
+		}
+
+		if ( ! empty( $atts['excluded_roles'] ) ) {
+			$user_roles = array_map( 'trim', $atts['excluded_roles'] );
+			$match_type = 'exclude';
+		} elseif ( ! empty( $atts['allowed_roles'] ) ) {
+			$user_roles = array_map( 'trim', $atts['allowed_roles'] );
+			$match_type = 'match';
+		} else {
+			$user_roles = [];
+			$match_type = 'any';
+		}
+
+		$user_status = $atts['status'];
+		$user_roles  = array_map( 'trim', $atts['roles'] );
+
+		$classes = $atts['class'];
+
+		if ( ! is_array( $classes ) ) {
+			$classes = explode( ' ', $classes );
+		}
+
 		$classes[] = 'content-control-container';
 		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
-		// TODO Add support for role_match (any/exclude).
-		if ( user_meets_requirements( $user_status, $user_roles ) ) {
+		if ( user_meets_requirements( $user_status, $user_roles, $match_type ) ) {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';
@@ -73,7 +110,9 @@ class Shortcodes extends Controller {
 	}
 
 	/**
-	 * Takes empty attributes and sets them to true.
+	 * Takes set but empty attributes and sets them to true.
+	 *
+	 * These are typically valueless boolean attributes.
 	 *
 	 * @param array $atts Array of shortcode attributes.
 	 *
