@@ -46,7 +46,7 @@ export const restrictionDefaults: Restriction = {
 		overrideMessage: false,
 		customMessage: '',
 		conditions: {
-			logicalOperator: 'and',
+			logicalOperator: 'or',
 			items: [],
 		},
 	},

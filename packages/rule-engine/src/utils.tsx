@@ -21,7 +21,7 @@ export const newGroup = ( ruleName: string = '' ): GroupItem => ( {
 	type: 'group',
 	label: '',
 	query: {
-		logicalOperator: 'and',
+		logicalOperator: 'or',
 		items: [ { ...newRule( ruleName ) } ],
 	},
 } );
@@ -30,7 +30,7 @@ export const newSet = ( ruleName: string = '' ): QuerySet => ( {
 	id: newUUID(),
 	label: '',
 	query: {
-		logicalOperator: 'and',
+		logicalOperator: 'or',
 		items: ruleName.length ? [ newGroup( ruleName ) ] : [],
 	},
 } );
