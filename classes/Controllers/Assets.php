@@ -139,6 +139,7 @@ class Assets extends Controller {
 			}
 
 			if ( isset( $package_data['varsName'] ) && ! empty( $package_data['vars'] ) ) {
+				$localized_vars = apply_filters( "content_control_{$package}_localized_vars", $package_data['vars'] );
 				wp_localize_script( $handle, $package_data['varsName'], $package_data['vars'] );
 			}
 
