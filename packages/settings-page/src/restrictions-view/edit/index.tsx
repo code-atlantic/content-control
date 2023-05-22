@@ -6,10 +6,11 @@ import {
 	TabPanel,
 	ToggleControl,
 } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { applyFilters } from '@wordpress/hooks';
-import { __, sprintf } from '@wordpress/i18n';
 import { link } from '@wordpress/icons';
+import { __, sprintf } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import useEditor from '../use-editor';
 import ContentTab from './content';
@@ -37,7 +38,7 @@ export type EditTabProps = EditProps & {
 const noop = () => {};
 
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
-	const { tab, setTab } = useEditor();
+	const { tab, setTab, clearEditorParams } = useEditor();
 
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { editorId, isEditorActive, values, isSaving } = useSelect(
@@ -61,6 +62,10 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		clearEditorData,
 		addNotice,
 	} = useDispatch( restrictionsStore );
+
+	useEffect( () => {
+		return clearEditorParams;
+	}, [] );
 
 	// If the editor isn't active, return empty.
 	if ( ! isEditorActive ) {

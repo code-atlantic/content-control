@@ -31,18 +31,24 @@ const useEditor = () => {
 	const [ queryParams, setQueryParams ] = useQueryParams( {
 		edit: NumberParam,
 		add: BooleanParam,
-		tab: withDefault( StringParam, 'general' ),
+		tab: StringParam,
 	} );
 
 	// Quick helper to reset all query params.
-	const clearEditorParams = () =>
-		setQueryParams( { add: undefined, edit: undefined, tab: undefined } );
+	const clearEditorParams = () => {
+		console.log( queryParams.tab );
+		setQueryParams( {
+			add: undefined,
+			edit: undefined,
+			tab: undefined,
+		} );
+	};
 
 	// Extract params with usable names.
 	const { edit, add, tab } = queryParams;
 
 	// Clear params on component removal.
-	useEffect( () => () => clearEditorParams(), [] );
+	// useEffect( () => () => clearEditorParams(), [] );
 
 	// Sync url param changes for editor ID to the editor.
 	useEffect( () => {
@@ -86,6 +92,7 @@ const useEditor = () => {
 		tab,
 		setTab: ( newTab: string ) => setQueryParams( { tab: newTab } ),
 		setEditorId,
+		clearEditorParams,
 	};
 };
 
