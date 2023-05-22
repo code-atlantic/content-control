@@ -123,7 +123,7 @@ const Header = ( { tabs }: Props ) => {
 				<Button
 					variant="link"
 					icon={ lifesaver }
-					href="#"
+					href="https://contentcontrolplugin.com/support/"
 					target="_blank"
 					className="components-tab-panel__tabs-item support-link"
 				>

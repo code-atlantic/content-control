@@ -164,8 +164,8 @@ const DeviceMediaQueries = () => {
 								onClick={ ( event ) => {
 									event.preventDefault();
 									setParams( {
-										tab: undefined,
-										view: 'upgrade',
+										tab: 'license-and-updates',
+										view: 'settings',
 									} );
 								} }
 								text={ __( 'Learn more…', 'content-control' ) }
