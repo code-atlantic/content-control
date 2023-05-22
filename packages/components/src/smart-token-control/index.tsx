@@ -97,7 +97,7 @@ const SmartTokenControl = < T extends Token = string >(
 	{
 		value,
 		onChange,
-		label = __( 'Items', 'content-control' ),
+		label,
 		placeholder = __( 'Enter a value', 'content-control' ),
 		className,
 		tokenOnComma = false,
