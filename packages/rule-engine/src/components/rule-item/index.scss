@@ -18,15 +18,31 @@
 		}
 
 		.controls-column {
-			background-color: #fff;
-			border: 1px solid #ddd;
-			padding: calc($spacing / 2);
+			flex-grow: 1;
 
 			.editable-area {
-				@include flexRow(4px);
+				@include flexRow(20px);
+				background-color: #fff;
+				border: 1px solid #ddd;
+				padding: calc($spacing / 2);
+				width: fit-content;
+
+				.rule-label {
+					width: fit-content;
+					white-space: nowrap;
+				}
+
+				.rule-fields {
+					flex-grow: auto;
+				}
+
+				.components-base-control__field {
+					margin-bottom: 0;
+				}
 
 				.components-button {
 					padding: 0;
+					height: 30px;
 				}
 			}
 

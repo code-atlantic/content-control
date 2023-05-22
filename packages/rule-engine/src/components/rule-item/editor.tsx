@@ -50,7 +50,7 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 
 	return (
 		<>
-			{ ruleText }
+			<div className="rule-label">{ ruleText }</div>
 
 			{ editorFields.length > 0 && (
 				<div className="rule-fields">

@@ -10,7 +10,7 @@
 	display: flex;
 
 	.components-base-control__field {
-		margin-bottom: 0;
+		margin-bottom: 0 !important;
 
 		.components-text-control__input {
 			border-color: transparent;
