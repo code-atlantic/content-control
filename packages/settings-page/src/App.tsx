@@ -123,6 +123,8 @@ const App = () => {
 			<div className="cc-settings-page__content">
 				<ViewComponent />
 			</div>
+			{ /*
+			// @ts-ignore */ }
 			<Popover.Slot />
 		</div>
 	);

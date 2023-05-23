@@ -4,13 +4,13 @@ import { __ } from '@wordpress/i18n';
 import useBlockControls from './controls';
 
 import type { BlockControlGroups, ControlGroups } from '../types';
-import type { Icon } from '@wordpress/components';
+import type { IconType } from '@wordpress/components';
 
 export type BlockControlGroupsContextType<
 	K extends BlockControlGroups = any
 > = {
 	groupId: K;
-	icon: Icon.IconType< any >;
+	icon: IconType;
 	label: string;
 };
 

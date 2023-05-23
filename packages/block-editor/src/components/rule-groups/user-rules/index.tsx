@@ -46,7 +46,7 @@ const UserRules = () => {
 				onChange={ ( newUserStatus ) =>
 					setGroupRules( {
 						...currentRules,
-						userStatus: newUserStatus,
+						userStatus: newUserStatus as 'logged_in' | 'logged_out',
 					} )
 				}
 			/>
@@ -73,7 +73,10 @@ const UserRules = () => {
 						onChange={ ( newRoleMatch ) =>
 							setGroupRules( {
 								...currentRules,
-								roleMatch: newRoleMatch,
+								roleMatch: newRoleMatch as
+									| 'any'
+									| 'match'
+									| 'exclude',
 							} )
 						}
 					/>

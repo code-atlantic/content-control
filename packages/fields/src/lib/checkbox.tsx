@@ -1,4 +1,8 @@
-import { CheckboxControl, FormToggle } from '@wordpress/components';
+import {
+	BaseControl,
+	CheckboxControl,
+	FormToggle,
+} from '@wordpress/components';
 
 import type { CheckboxFieldProps, WithOnChange } from '../types';
 
@@ -22,13 +26,13 @@ const CheckboxField = ( {
 	}
 
 	return (
-		<FormToggle
-			// Neccessary to fix TS errors for now.
-			label={ ( <>{ label }</> ).toString() }
-			checked={ value }
-			onChange={ () => onChange( ! value ) }
-			{ ...fieldProps }
-		/>
+		<BaseControl label={ label }>
+			<FormToggle
+				checked={ value }
+				onChange={ () => onChange( ! value ) }
+				{ ...fieldProps }
+			/>
+		</BaseControl>
 	);
 };
 

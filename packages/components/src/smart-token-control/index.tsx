@@ -13,7 +13,9 @@ import { forwardRef, useEffect, useRef, useState } from '@wordpress/element';
 import { clamp, noop } from '@content-control/utils';
 
 import './editor.scss';
-import { ForwardedRef } from 'react';
+
+import type { ForwardedRef } from 'react';
+import type { KeyboardShortcutsProps } from '@wordpress/components/build-types/keyboard-shortcuts/types';
 
 type Token =
 	| string
@@ -64,7 +66,7 @@ type Props< T extends Token = Token > = {
 	onInputChange?: ( value: string ) => void;
 	hideLabelFromVision?: boolean;
 	tokenOnComma?: boolean;
-	extraKeyboardShortcuts?: KeyboardShortcuts.BaseProps[ 'shortcuts' ];
+	extraKeyboardShortcuts?: KeyboardShortcutsProps[ 'shortcuts' ];
 	messages?: {
 		searchTokens?: string;
 		noSuggestions?: string;
@@ -459,6 +461,7 @@ const SmartTokenControl = < T extends Token = string >(
 							focusOnMount={ false }
 							onClose={ () => setSelectedSuggestion( -1 ) }
 							position="bottom right"
+							// @ts-ignore
 							getAnchorRect={ () =>
 								inputRef.current?.getBoundingClientRect()
 							}

@@ -136,7 +136,7 @@ export interface SelectFieldProps extends SelectFieldBaseProps {
 }
 
 export interface TextFieldProps extends InputFieldProps< string > {
-	type: 'text' | 'email' | 'phone' | 'password';
+	type: 'text' | 'email' | 'tel' | 'password';
 }
 
 export interface TextareaFieldProps extends InputFieldProps< string > {

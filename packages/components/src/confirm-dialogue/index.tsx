@@ -1,4 +1,5 @@
 import { Button, Flex, Modal } from '@wordpress/components';
+import { ModalProps } from '@wordpress/components/build-types/modal/types';
 import { __ } from '@wordpress/i18n';
 
 type Props = {
@@ -6,7 +7,7 @@ type Props = {
 	callback?: () => void;
 	onClose: () => void;
 	isDestructive?: boolean;
-} & Partial< Modal.Props >;
+} & Partial< ModalProps >;
 
 const ConfirmDialogue = ( {
 	message,

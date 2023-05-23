@@ -1,4 +1,8 @@
-import { CheckboxControl, FormToggle } from '@wordpress/components';
+import {
+	BaseControl,
+	CheckboxControl,
+	FormToggle,
+} from '@wordpress/components';
 
 import { parseFieldOptions } from './utils';
 
@@ -45,12 +49,13 @@ const MulticheckField = ( {
 					);
 				}
 				return (
-					<FormToggle
-						key={ optValue }
-						label={ optLabel }
-						checked={ isChecked }
-						onChange={ toggleOption }
-					/>
+					<BaseControl label={ optLabel }>
+						<FormToggle
+							key={ optValue }
+							checked={ isChecked }
+							onChange={ toggleOption }
+						/>
+					</BaseControl>
 				);
 			} ) }
 		</>

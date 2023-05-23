@@ -21,7 +21,9 @@ const LogicalOperator = () => {
 				<SelectControl
 					label={ __( 'Choose logical operator', 'content-control' ) }
 					value={ logicalOperator }
-					onChange={ updateOperator }
+					onChange={ ( newValue ) =>
+						updateOperator( newValue as 'and' | 'or' )
+					}
 					options={ [
 						{
 							label: _x(

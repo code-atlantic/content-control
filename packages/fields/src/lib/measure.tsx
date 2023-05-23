@@ -32,14 +32,15 @@ const MeasureField = ( {
 		<UnitControl
 			{ ...fieldProps }
 			value={ value }
-			onChange={ ( newNumber: number ) =>
+			onChange={ ( newNumber: string = '0' ) =>
 				setState( { ...state, number: newNumber } )
 			}
 			disableUnits={ unitsArray.length === 0 }
 			units={ unitsArray }
-			onUnitChange={ ( newUnit: string ) =>
+			onUnitChange={ ( newUnit: string = '' ) =>
 				setState( { ...state, unit: newUnit } )
 			}
+			// @ts-ignore
 			__nextHasNoMarginBottom={ true }
 		/>
 	);

@@ -11,13 +11,12 @@ const RangeSliderField = ( {
 
 	return (
 		<RangeControl
-			{ ...fieldProps }
+			// { ...fieldProps }
 			value={ value ?? initialPosition }
-			onChange={ onChange }
-			/* @ts-ignore - This exists in package but is not fully typed. */
+			onChange={ ( newValue = 0 ) => onChange( newValue ) }
 			withInputField={ true }
 			__nextHasNoMarginBottom={ true }
-			type={ step ? 'stepper' : 'slider' }
+			type={ step ? 'stepper' : undefined }
 		/>
 	);
 };

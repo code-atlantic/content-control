@@ -1,8 +1,8 @@
-import type { Icon } from '@wordpress/components';
+import type { IconType } from '@wordpress/components';
 
 export type DeviceScreenSize = {
 	label: string;
-	icon?: Icon.IconType< any >;
+	icon?: IconType;
 };
 
 export type DeviceScreenSizes = {

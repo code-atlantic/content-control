@@ -4,13 +4,14 @@ import classnames, { Argument as classNamesArg } from 'classnames';
 
 import { BaseControl, Button } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import { ButtonProps } from '@wordpress/components/build-types/button/types';
 
 type Props< T extends string | number = string | number > = {
 	value: T;
 	onChange: ( value: T ) => void;
 	label?: string | JSX.Element;
 	className?: classNamesArg;
-	options: ( Partial< Button.Props > & {
+	options: ( Partial< ButtonProps > & {
 		value: T;
 		label: string | JSX.Element;
 	} )[];
@@ -50,7 +51,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 					( {
 						label: optLabel,
 						value: optValue,
-						...buttonProps
+						// ...buttonProps
 					} ) => (
 						<Button
 							key={ optValue }
@@ -58,7 +59,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 								optValue === value ? 'primary' : 'secondary'
 							}
 							onClick={ () => onChange( optValue ) }
-							{ ...buttonProps }
+							// { ...buttonProps }
 						>
 							{ optLabel }
 						</Button>

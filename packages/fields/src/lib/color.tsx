@@ -23,11 +23,16 @@ const ColorField = ( {
 			<ColorPicker
 				{ ...fieldProps }
 				color={ value }
-				onChangeComplete={ ( color ) => onChange( color.hex ) }
+				onChangeComplete={ ( color ) =>
+					// @ts-ignore
+					onChange( color?.hex ?? color )
+				}
 			/>
 			<ColorPalette
 				value={ value }
-				onChange={ onChange }
+				onChange={ ( newValue ) => {
+					onChange( newValue ?? '' );
+				} }
 				colors={ colors }
 				clearable={ true }
 			/>

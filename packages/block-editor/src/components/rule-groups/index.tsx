@@ -69,9 +69,9 @@ const RuleGroups = ( props: any ) => {
 	 * @param {React.Component} FilteredComponent The component to filter.
 	 * @return {React.Component} The filtered component.
 	 */
-	const Groups = withFilters< any >( 'contentControl.blockControls.edit' )(
-		() => <></>
-	);
+	const Groups = withFilters( 'contentControl.blockControls.edit' )( () => (
+		<></>
+	) );
 
 	return (
 		<SlotFillProvider>

@@ -12,8 +12,8 @@ const RadioField = ( {
 	return (
 		<RadioControl
 			{ ...fieldProps }
-			selected={ value }
-			options={ options }
+			selected={ value?.toString() }
+			options={ options as { value: string; label: string }[] }
 			onChange={ onChange }
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */
 			__nextHasNoMarginBottom={ true }

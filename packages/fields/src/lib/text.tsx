@@ -9,9 +9,10 @@ const TextField = ( {
 	...fieldProps
 }: WithOnChange< TextFieldProps > | WithOnChange< HiddenFieldProps > ) => {
 	return (
+		// @ts-ignore
 		<TextControl
 			{ ...fieldProps }
-			type={ type }
+			type={ type !== 'hidden' ? type : undefined }
 			value={ value ?? '' }
 			onChange={ onChange }
 			/* @ts-ignore - This exists on all controls, but is not fully typed. */

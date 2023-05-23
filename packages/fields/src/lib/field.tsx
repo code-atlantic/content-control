@@ -46,7 +46,7 @@ const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 		case 'number':
 			return <NumberField { ...fieldProps } />;
 		case 'email':
-		case 'phone':
+		case 'tel':
 		case 'hidden':
 		case 'text':
 		case 'password':

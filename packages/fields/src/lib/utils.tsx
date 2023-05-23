@@ -119,7 +119,7 @@ export const parseOldArgsToProps = (
 
 		case 'text':
 		case 'email':
-		case 'phone':
+		case 'tel':
 		case 'password':
 		default:
 			return {
@@ -456,7 +456,7 @@ export const parseFieldProps = (
 			};
 		default:
 		case 'email':
-		case 'phone':
+		case 'tel':
 		case 'hidden':
 		case 'text':
 		case 'password':

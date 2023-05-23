@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	ExternalLink,
+	Icon,
 	Panel,
 	PanelBody,
 	PanelRow,
@@ -98,7 +99,9 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 											'Content Controls',
 											'content-control'
 										) }
-										icon="welcome-view-site"
+										icon={
+											<Icon icon="welcome-view-site" />
+										}
 									>
 										<div className="cc__block-controls__top-panel">
 											<PanelRow>

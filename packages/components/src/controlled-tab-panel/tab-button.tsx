@@ -1,12 +1,13 @@
 import { Button } from '@wordpress/components';
+import type { ButtonProps } from '@wordpress/components/build-types/button/types';
 
-interface Props extends Button.ButtonProps {
+type Props = ButtonProps & {
 	tabId: string;
 	onClick: () => void;
 	children: React.ReactNode;
 	selected: boolean;
 	className?: string;
-}
+};
 
 const TabButton = ( {
 	tabId,

@@ -416,6 +416,7 @@ const URLControl = (
 									focusOnMount={ false }
 									onClose={ () => setFocusedSuggestion( -1 ) }
 									position="bottom right"
+									// @ts-ignore
 									getAnchorRect={ () =>
 										inputWrapperRef.current?.getBoundingClientRect()
 									}

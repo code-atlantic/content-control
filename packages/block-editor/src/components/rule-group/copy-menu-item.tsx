@@ -1,10 +1,12 @@
 import classnames from 'classnames';
 
-import { Button, MenuItem, Spinner } from '@wordpress/components';
-import { useCopyToClipboard } from '@wordpress/compose';
-import { useEffect, useRef, useState } from '@wordpress/element';
 import { __, _x } from '@wordpress/i18n';
 import { check, copy } from '@wordpress/icons';
+import { useCopyToClipboard } from '@wordpress/compose';
+import { MenuItem, Spinner } from '@wordpress/components';
+import { useEffect, useRef, useState } from '@wordpress/element';
+
+import type { ButtonProps } from '@wordpress/components/build-types/button/types';
 
 type Props = {
 	text: string;
@@ -12,7 +14,7 @@ type Props = {
 	children?: React.ReactNode;
 	onCopy: () => void;
 	onFinish: () => void;
-} & Pick< Button.Props, 'icon' >;
+} & Pick< ButtonProps, 'icon' >;
 
 const CopyMenuItem = ( {
 	className,

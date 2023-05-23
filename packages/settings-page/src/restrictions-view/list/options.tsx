@@ -98,6 +98,7 @@ const ListOptions = () => {
 				<NavigableMenu orientation="vertical">
 					<FormFileUpload
 						icon={ upload }
+						// @ts-ignore this does function correctly, not yet typed in WP.
 						text={ __( 'Import', 'content-control' ) }
 						accept="text/json"
 						onChange={ ( event ) => {

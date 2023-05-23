@@ -13,12 +13,14 @@ import { __ } from '@wordpress/i18n';
 import { link, upload } from '@wordpress/icons';
 import UserSettingsGraphic from '../user-settings-graphic';
 
+import type { ButtonProps } from '@wordpress/components/build-types/button/types';
+
 type Props = {
 	className?: string;
 	children?: React.ReactNode;
 	onSave: ( values: string, merge: boolean ) => void;
 	onFinish: () => void;
-} & Pick< Button.Props, 'icon' >;
+} & Pick< ButtonProps, 'icon' >;
 
 export const documenationUrl =
 	'https://code-atlantic.com/products/content-control/';

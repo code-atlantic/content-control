@@ -8,8 +8,9 @@ import {
 } from '../../contexts';
 import RuleGroupHeader from './header';
 
-import type { Icon } from '@wordpress/components';
 import type { BlockControlGroups } from '../../types';
+
+import type { IconType } from '@wordpress/components';
 
 const RuleGroupWrapper = ( { children }: React.PropsWithChildren< {} > ) => {
 	const { groupId, isOpened } = useBlockControlsForGroup();
@@ -33,7 +34,7 @@ const RuleGroupWrapper = ( { children }: React.PropsWithChildren< {} > ) => {
 type RuleGroupProps = React.PropsWithChildren< {
 	label: string;
 	groupId: BlockControlGroups;
-	icon: Icon.IconType< any >;
+	icon: IconType;
 } >;
 
 /**

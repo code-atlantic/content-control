@@ -54,6 +54,7 @@ const GeneralTab = ( {
 
 			<TextareaControl
 				rows={ descriptionRows }
+				// @ts-ignore
 				scrolling={ descriptionRows > 5 ? 'auto' : 'no' }
 				label={ __( 'Restriction description', 'content-control' ) }
 				hideLabelFromVision={ true }
@@ -99,7 +100,12 @@ const GeneralTab = ( {
 							},
 						] }
 						onChange={ ( newRoleMatch ) =>
-							updateSettings( { roleMatch: newRoleMatch } )
+							updateSettings( {
+								roleMatch: newRoleMatch as
+									| 'any'
+									| 'match'
+									| 'exclude',
+							} )
 						}
 						className="is-large roleMatch-field"
 					/>

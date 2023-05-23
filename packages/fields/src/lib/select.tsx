@@ -64,6 +64,7 @@ const SelectField = ( {
 	const options = fieldProps.options ?? {};
 
 	return (
+		// @ts-ignore
 		<SelectControl
 			{ ...fieldProps }
 			multiple={ multiple }

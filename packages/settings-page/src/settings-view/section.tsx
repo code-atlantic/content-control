@@ -1,9 +1,9 @@
-import { Icon, Panel, PanelBody } from '@wordpress/components';
+import { Icon, IconType, Panel, PanelBody } from '@wordpress/components';
 import { _x, __ } from '@wordpress/i18n';
 
 type Props = {
 	title: string;
-	icon?: Icon.BaseProps< typeof Icon >[ 'icon' ];
+	icon?: IconType;
 	children: React.ReactNode;
 	extraActions?: [];
 };

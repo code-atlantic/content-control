@@ -14,7 +14,10 @@ const NumberField = ( {
 		<NumberControl
 			{ ...fieldProps }
 			value={ value }
-			onChange={ onChange }
+			onChange={ ( newValue = '0' ) =>
+				onChange( parseInt( newValue, 10 ) )
+			}
+			// @ts-ignore
 			__nextHasNoMarginBottom={ true }
 		/>
 	);

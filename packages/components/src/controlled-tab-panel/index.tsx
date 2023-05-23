@@ -44,7 +44,7 @@ const TabPanel = ( {
 		onSelect?.( tabKey );
 	};
 
-	const onNavigate = ( _childIndex: number, child: HTMLButtonElement ) => {
+	const onNavigate = ( _childIndex: number, child: HTMLElement ) => {
 		child.click();
 	};
 

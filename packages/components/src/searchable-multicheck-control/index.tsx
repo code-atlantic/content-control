@@ -7,6 +7,7 @@ import {
 	Button,
 	CheckboxControl,
 	Icon,
+	IconType,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
@@ -16,7 +17,7 @@ import { chevronDown, chevronUp } from '@wordpress/icons';
 type Props< T extends string | number > = {
 	label?: string | React.ReactNode;
 	placeholder: string;
-	searchIcon?: Icon.Props< {} >[ 'icon' ] | undefined;
+	searchIcon?: IconType | undefined;
 	value: T[];
 	options: { label: string; value: T; keywords?: string }[];
 	onChange: ( value: T[] ) => void;

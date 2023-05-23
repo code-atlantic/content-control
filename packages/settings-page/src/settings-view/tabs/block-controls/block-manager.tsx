@@ -212,6 +212,7 @@ const BlockControlsTab = () => {
 															'content-control'
 													  )
 											}
+											// @ts-ignore
 											hideLabelFromVision={ true }
 											checked={ ! disabled }
 											onChange={ () =>

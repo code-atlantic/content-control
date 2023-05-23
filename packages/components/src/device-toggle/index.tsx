@@ -3,14 +3,12 @@ import './index.scss';
 import classNames from 'classnames';
 
 import { noop } from '@content-control/utils';
-import { Icon, ToggleControl, Tooltip } from '@wordpress/components';
+import { Icon, IconType, ToggleControl, Tooltip } from '@wordpress/components';
 import { _x, sprintf } from '@wordpress/i18n';
-
-import type { Icon as IconType } from '@wordpress/components';
 
 type Props = {
 	label: string;
-	icon?: IconType.IconType< any > | undefined;
+	icon?: IconType | undefined;
 	isVisible: boolean;
 	onChange?: ( checked: boolean ) => void;
 };
@@ -53,6 +51,7 @@ const DeviceToggle = ( { label, icon, isVisible, onChange = noop }: Props ) => {
 							className="cc__component-device-toggle__control-input"
 							checked={ isVisible }
 							onChange={ onToggle }
+							// @ts-ignore
 							hideLabelFromVision={ true }
 							aria-label={ toggleLabel }
 							label={ sprintf(
