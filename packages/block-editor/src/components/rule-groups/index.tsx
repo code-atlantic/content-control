@@ -1,14 +1,13 @@
-import { Fill, SlotFillProvider, withFilters } from '@wordpress/components';
-import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { tablet } from '@wordpress/icons';
+import { addFilter } from '@wordpress/hooks';
+import { SlotFillProvider, withFilters } from '@wordpress/components';
+import { lockedUser } from '@content-control/icons';
 
 import RuleGroup from '../rule-group';
-import { RulesInspectorSlot } from '../rules-inspector';
-import DeviceRules from './device-rules';
 import UserRules from './user-rules';
-
-import { lockedUser } from '@content-control/icons';
+import DeviceRules from './device-rules';
+import { RulesInspectorSlot, RulesInspector } from '../rules-inspector';
 
 type Props = {};
 
@@ -20,7 +19,7 @@ addFilter(
 			return (
 				<>
 					<FilteredComponent { ...props } />
-					<Fill name="ContentControlBlockRules">
+					<RulesInspector>
 						<RuleGroup
 							groupId="device"
 							label={ __( 'Device Rules', 'content-control' ) }
@@ -28,7 +27,7 @@ addFilter(
 						>
 							<DeviceRules />
 						</RuleGroup>
-					</Fill>
+					</RulesInspector>
 				</>
 			);
 		};
@@ -44,7 +43,7 @@ addFilter(
 			return (
 				<>
 					<FilteredComponent { ...props } />
-					<Fill name="ContentControlBlockRules">
+					<RulesInspector>
 						<RuleGroup
 							groupId="user"
 							label={ __( 'User Rules', 'content-controls' ) }
@@ -52,7 +51,7 @@ addFilter(
 						>
 							<UserRules />
 						</RuleGroup>
-					</Fill>
+					</RulesInspector>
 				</>
 			);
 		};
@@ -61,9 +60,18 @@ addFilter(
 );
 
 const RuleGroups = ( props: any ) => {
-	const Groups = withFilters( 'content-control.BlockControlsEdit' )( () => (
-		<></>
-	) );
+	/**
+	 * This filter allows other plugins to register their own rule groups,
+	 * and control the order in which they appear.
+	 *
+	 * Returns a React component that renders the rule groups.
+	 *
+	 * @param {React.Component} FilteredComponent The component to filter.
+	 * @return {React.Component} The filtered component.
+	 */
+	const Groups = withFilters< any >( 'content-control.BlockControlsEdit' )(
+		() => <></>
+	);
 
 	return (
 		<SlotFillProvider>
