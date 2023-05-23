@@ -109,7 +109,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		return apply_filters( 'content_control_rule_engine_rules', $rules );
+		return apply_filters( 'content_control/rule_engine_rules', $rules );
 	}
 
 	/**
@@ -514,7 +514,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		$old_rules = apply_filters( 'content_control_old_conditions', [] );
+		$old_rules = apply_filters( 'content_control/old_conditions', [] );
 
 		if ( ! empty( $old_rules ) ) {
 			$old_rules = $this->parse_old_rules( $old_rules );

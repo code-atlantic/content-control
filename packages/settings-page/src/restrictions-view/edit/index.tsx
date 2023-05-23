@@ -172,7 +172,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	 * @return {TabComponent[]} Array of tab components.
 	 */
 	const tabs: TabComponent[] = applyFilters(
-		'contentControl.restrictionEditorTabs',
+		'contentControl.restrictionEditor.tabs',
 		[
 			{
 				name: 'general',

@@ -13,7 +13,7 @@ import type { TabComponent } from '../../../types';
 // const { pluginUrl } = contentControlSettingsPage;
 
 addFilter(
-	'contentControl.settingsTabSections.upgrade',
+	'contentControl.settingsPage.upgradeSections',
 	'content-control/general-settings/license-options',
 	( sections: { [ key: string ]: any }[] ) => {
 		const { isLicenseActive } = useLicense();
@@ -51,7 +51,7 @@ const UpgradeView = () => {
 	 * @return {SectionList} Filtered list of sections.
 	 */
 	const sections: SectionList = applyFilters(
-		'contentControl.settingsTabSections.upgrade',
+		'contentControl.settingsPage.upgradeSections',
 		[]
 	) as SectionList;
 

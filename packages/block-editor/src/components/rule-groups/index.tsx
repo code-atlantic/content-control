@@ -12,7 +12,7 @@ import { RulesInspectorSlot, RulesInspector } from '../rules-inspector';
 type Props = {};
 
 addFilter(
-	'content-control.BlockControlsEdit',
+	'contentControl.blockControls.edit',
 	'content-control/block-controls-rule-groups/device-rules',
 	( FilteredComponent ) => {
 		return ( props: Props ) => {
@@ -36,7 +36,7 @@ addFilter(
 );
 
 addFilter(
-	'content-control.BlockControlsEdit',
+	'contentControl.blockControls.edit',
 	'content-control/block-controls-rule-groups/user-rules',
 	( FilteredComponent ) => {
 		return ( props: Props ) => {
@@ -69,7 +69,7 @@ const RuleGroups = ( props: any ) => {
 	 * @param {React.Component} FilteredComponent The component to filter.
 	 * @return {React.Component} The filtered component.
 	 */
-	const Groups = withFilters< any >( 'content-control.BlockControlsEdit' )(
+	const Groups = withFilters< any >( 'contentControl.blockControls.edit' )(
 		() => <></>
 	);
 

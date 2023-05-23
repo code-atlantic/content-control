@@ -89,7 +89,7 @@ class Core {
 			 *
 			 * @param string $version The new version.
 			 */
-			do_action( 'content_control_update_version', $data['version'] );
+			do_action( 'content_control/update_version', $data['version'] );
 
 			// Save Upgraded From option.
 			$data['upgraded_from'] = $data['version'];

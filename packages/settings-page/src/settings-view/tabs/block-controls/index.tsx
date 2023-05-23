@@ -24,7 +24,7 @@ const BlockControlsTab = () => {
 	 * @return {SectionList} Filtered list of sections.
 	 */
 	const sections: SectionList = applyFilters(
-		'contentControl.settingsTabSections.blockControls',
+		'contentControl.settingsPage.blockControlSections',
 		[
 			{
 				name: 'media-queries',

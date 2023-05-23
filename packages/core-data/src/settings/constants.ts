@@ -29,7 +29,7 @@ export const settingsDefaults: Settings =
 	 *
 	 * @return {Settings} Default settings.
 	 */
-	applyFilters( 'content-control.settings.defaults', {
+	applyFilters( 'contentControl.defaultSettings', {
 		excludedBlocks: [],
 		permissions: {
 			// Block Controls

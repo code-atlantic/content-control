@@ -27,7 +27,7 @@ class RuleCallbacks {
 			is_main_query(),
 		];
 
-		if ( 'content_control_should_hide_block' === current_filter() ) {
+		if ( 'content_control/should_hide_block' === current_filter() ) {
 			// Checking block visibility, in the loop.
 			$checks[] = in_the_loop();
 		} else {

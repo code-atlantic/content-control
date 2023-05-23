@@ -31,7 +31,7 @@ const SettingsView = () => {
 	 * @return {TabComponent[]} The filtered tabs.
 	 */
 	const tabs: TabComponent[] = applyFilters(
-		'contentControl.settingsPageTabs',
+		'contentControl.settingsPage.tabs',
 		[
 			{
 				name: 'general',

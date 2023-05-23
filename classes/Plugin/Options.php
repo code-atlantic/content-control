@@ -24,6 +24,13 @@ class Options {
 	public $prefix;
 
 	/**
+	 * Action namespace.
+	 *
+	 * @var string
+	 */
+	public $namespace;
+
+	/**
 	 * Keeps static copy of the options during runtime.
 	 *
 	 * @var null|array
@@ -37,8 +44,9 @@ class Options {
 	 */
 	public function __construct( $prefix = 'content_control' ) {
 		// Set the prefix on init.
-		$this->prefix = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
-		$this->data   = $this->get_all();
+		$this->prefix    = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
+		$this->namespace = ! empty( $prefix ) ? trim( $prefix, '_/' ) . '/' : '';
+		$this->data      = $this->get_all();
 	}
 
 	/**
@@ -63,7 +71,7 @@ class Options {
 		 *
 		 * @return array
 		 */
-		return apply_filters( $this->prefix . 'get_options', $settings );
+		return apply_filters( $this->namespace . 'get_options', $settings );
 	}
 
 	/**
@@ -87,7 +95,7 @@ class Options {
 		 *
 		 * @return mixed
 		 */
-		return apply_filters( $this->prefix . 'get_option', $value, $key, $default_value );
+		return apply_filters( $this->namespace . 'get_option', $value, $key, $default_value );
 	}
 
 	/**
@@ -151,7 +159,7 @@ class Options {
 		 *
 		 * @return mixed
 		 */
-		$value = apply_filters( $this->prefix . 'update_option', $value, $key );
+		$value = apply_filters( $this->namespace . 'update_option', $value, $key );
 
 		// Next let's try to update the value.
 		$options[ $key ] = $value;
@@ -194,7 +202,7 @@ class Options {
 			 *
 			 * @return mixed
 			 */
-			$value = apply_filters( $this->prefix . 'update_option', $value, $key );
+			$value = apply_filters( $this->namespace . 'update_option', $value, $key );
 
 			// Next let's try to update the value.
 			$options[ $key ] = $value;

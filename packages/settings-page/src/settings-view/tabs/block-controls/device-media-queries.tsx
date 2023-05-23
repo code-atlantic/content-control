@@ -34,7 +34,7 @@ const DeviceMediaQueries = () => {
 	 * @return {RegisteredMediaQuery[]} Filtered list of media query definitions.
 	 */
 	const mediaQueries: RegisteredMediaQuery[] = applyFilters(
-		'contentControl.customMediaQueries',
+		'contentControl.settingsPage.customMediaQueries',
 		[
 			{
 				id: 'mobile',

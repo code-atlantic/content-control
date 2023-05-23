@@ -30,7 +30,7 @@ export const explicitlyAllowedBlocks = (): string[] =>
 	 * @return {string[]} Array of explicitly allowed block types.
 	 */
 	applyFilters(
-		'contentControl.allowedBlocks',
+		'contentControl.blockEditor.allowedBlocks',
 		getAllowedBlocks()
 	) as string[];
 
@@ -48,7 +48,7 @@ export const explicitlyExcludedBlocks = (): string[] =>
 	 * @return {string[]} Array of explicitly excluded block types.
 	 */
 	applyFilters(
-		'contentControl.excludedBlocks',
+		'contentControl.blockEditor.excludedBlocks',
 		getExcludedBlocks()
 	) as string[];
 

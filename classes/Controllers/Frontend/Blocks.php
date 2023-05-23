@@ -27,7 +27,7 @@ class Blocks extends Controller {
 
 		add_filter( 'pre_render_block', [ $this, 'pre_render_block' ], 10, 3 );
 		add_filter( 'render_block', [ $this, 'render_block' ], 10, 2 );
-		add_filter( 'content_control_should_hide_block', [ $this, 'block_user_rules' ], 10, 2 );
+		add_filter( 'content_control/should_hide_block', [ $this, 'block_user_rules' ], 10, 2 );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Blocks extends Controller {
 		 * @return bool
 		 */
 		$should_hide = apply_filters(
-			'content_control_should_hide_block',
+			'content_control/should_hide_block',
 			false,
 			$controls['rules'],
 			$parsed_block
@@ -174,7 +174,7 @@ class Blocks extends Controller {
 		 *
 		 * @return string[]
 		 */
-		$classes = apply_filters( 'content_control_get_block_control_classes', $classes, $block );
+		$classes = apply_filters( 'content_control/get_block_control_classes', $classes, $block );
 
 		return array_unique( $classes );
 	}

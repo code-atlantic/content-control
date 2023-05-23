@@ -57,7 +57,7 @@ const PermissionsTab = () => {
 		label: string;
 		description?: string;
 		default: string;
-	}[] = applyFilters( 'contentControl.pluginPermissionLabels', [
+	}[] = applyFilters( 'contentControl.settingsPage.pluginPermissionLabels', [
 		{
 			name: 'view_block_controls',
 			label: __( 'View Block Controls', 'content-control' ),

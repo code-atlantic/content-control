@@ -12,7 +12,7 @@ import type { TabComponent } from '../../../types';
 const { logUrl = false } = contentControlSettingsPage;
 
 addFilter(
-	'contentControl.settingsTabSections.general',
+	'contentControl.settingsPage.generalSections',
 	'content-control/general-settings/permissions-options',
 	( sections: { [ key: string ]: any }[] ) => {
 		return [
@@ -29,7 +29,7 @@ addFilter(
 );
 
 addFilter(
-	'contentControl.settingsTabSections.general',
+	'contentControl.settingsPage.generalSections',
 	'content-control/general-settings/log-viewer',
 	( sections: { [ key: string ]: any }[] ) => {
 		return [
@@ -57,7 +57,7 @@ const GeneralTab = () => {
 	 * @return {SectionList} Filtered list of sections.
 	 */
 	const sections: SectionList = applyFilters(
-		'contentControl.settingsTabSections.general',
+		'contentControl.settingsPage.generalSections',
 		[]
 	) as SectionList;
 

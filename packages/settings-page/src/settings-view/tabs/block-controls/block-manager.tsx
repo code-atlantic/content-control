@@ -54,7 +54,7 @@ const BlockControlsTab = () => {
 	 * @return {typeof knownBlockTypes} The filtered list of known block types.
 	 */
 	const blockTypes = applyFilters(
-		'contentControl.knownBlockTypes',
+		'contentControl.settingsPage.knownBlockTypes',
 		knownBlockTypes
 	) as typeof knownBlockTypes;
 

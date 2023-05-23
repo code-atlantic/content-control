@@ -190,7 +190,7 @@ export const useBlockControls = () => {
 	 * @return {BlockControlsContextType} The filtered block controls context.
 	 */
 	return applyFilters(
-		'contentControl.blockControlsContext',
+		'contentControl.blockControls.context',
 		blockControlsContext
 	) as typeof blockControlsContext;
 };
