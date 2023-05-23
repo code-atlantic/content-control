@@ -3,7 +3,6 @@ import {
 	NumberParam,
 	StringParam,
 	useQueryParams,
-	withDefault,
 } from 'use-query-params';
 
 import { restrictionsStore } from '@content-control/core-data';
