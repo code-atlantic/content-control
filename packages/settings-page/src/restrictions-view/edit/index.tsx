@@ -231,7 +231,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			</div>
 			<TabPanel
 				orientation="vertical"
-				initialTabName={ tab }
+				initialTabName={ tab ?? 'general' }
 				onSelect={ setTab }
 				tabs={ tabs }
 				className="editor-tabs"
