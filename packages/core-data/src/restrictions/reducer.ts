@@ -87,17 +87,16 @@ const reducer = (
 		case ADD_NOTICE:
 			return {
 				...state,
-				notices: [ ...state.notices.filter(
-					( {id } ) => id !== notice.id
-				), notice ],
+				notices: [
+					...state.notices.filter( ( { id } ) => id !== notice.id ),
+					notice,
+				],
 			};
 
 		case CLEAR_NOTICE:
 			return {
 				...state,
-				notices: state.notices.filter(
-					( {id } ) => id !== noticeId
-				),
+				notices: state.notices.filter( ( { id } ) => id !== noticeId ),
 			};
 
 		case CLEAR_NOTICES:

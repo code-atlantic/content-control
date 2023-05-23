@@ -1,6 +1,11 @@
 import { ACTION_TYPES } from './constants';
 
-import type { License, LicenseConnect, LicenseState, LicenseStore } from './types';
+import type {
+	License,
+	LicenseConnect,
+	LicenseState,
+	LicenseStore,
+} from './types';
 import type { Statuses } from '../constants';
 
 const {

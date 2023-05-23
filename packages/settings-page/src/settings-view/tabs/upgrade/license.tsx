@@ -16,7 +16,6 @@ import { LicenseKey, useLicense } from '@content-control/core-data';
 
 import UpgradeFeatures from './upgrade-features';
 
-
 const LicenseTab = () => {
 	const {
 		connectInfo,

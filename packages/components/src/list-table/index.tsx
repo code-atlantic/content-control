@@ -46,7 +46,7 @@ const ListTable = < T extends TableItemBase >( {
 	columns,
 	sortableColumns = [],
 	idCol = 'id',
-	rowClasses = ( item ) => [ `item-${item.id}`,  ],
+	rowClasses = ( item ) => [ `item-${ item.id }` ],
 	renderCell = ( col, item ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
@@ -197,7 +197,10 @@ const ListTable = < T extends TableItemBase >( {
 			<tbody>
 				{ sortedItems.length ? (
 					sortedItems.map( ( item ) => (
-						<tr key={ item.id } className={ classNames( rowClasses( item ) ) }>
+						<tr
+							key={ item.id }
+							className={ classNames( rowClasses( item ) ) }
+						>
 							{ Object.entries( cols ).map( ( [ col ] ) => {
 								const isIdCol = col === idCol;
 

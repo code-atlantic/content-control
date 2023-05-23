@@ -5,4 +5,4 @@ export const enum Status {
 	Success = 'SUCCESS',
 }
 
-export type Statuses = typeof Status[ keyof typeof Status ];
+export type Statuses = ( typeof Status )[ keyof typeof Status ];

@@ -41,7 +41,7 @@ export const TextHighlight = ( props: TextHighlightProps ) => {
 	// Convert single string to array, trim thim & filters empty|null values.
 	const trimmedHighlightText = (
 		! Array.isArray( highlight ) ? [ highlight ] : highlight
-	 )
+	)
 		// Trim each highlight.
 		.map( ( h ) => h.trim() )
 		// Filter out empty | null items.

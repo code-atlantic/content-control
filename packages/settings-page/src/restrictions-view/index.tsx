@@ -28,9 +28,7 @@ const RestrictionsView = () => {
 		return (
 			<div className="restriction-list permission-denied">
 				<Notices />
-				<h3>
-					{ __( 'Permission Denied', 'content-control' ) }
-				</h3>
+				<h3>{ __( 'Permission Denied', 'content-control' ) }</h3>
 				<p>
 					<strong>
 						{ __(

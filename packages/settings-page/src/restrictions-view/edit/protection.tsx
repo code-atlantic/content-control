@@ -29,7 +29,10 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 			</p>
 
 			<RadioButtonControl
-				label={ __( 'How do you want to protect your content?', 'content-control' ) }
+				label={ __(
+					'How do you want to protect your content?',
+					'content-control'
+				) }
 				value={ settings.protectionMethod }
 				onChange={ ( protectionMethod ) =>
 					updateSettings( { protectionMethod } )
