@@ -17,6 +17,11 @@ defined( 'ABSPATH' ) || exit;
  */
 class Restrictions {
 
+	/**
+	 * Protected posts.
+	 *
+	 * @var array
+	 */
 	public static $protected_posts = [];
 
 	/**

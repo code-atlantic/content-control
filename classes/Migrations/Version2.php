@@ -96,6 +96,11 @@ class Version2 {
 		}
 	}
 
+	/**
+	 * Migrate widgets.
+	 *
+	 * @return void
+	 */
 	public function migrate_widgets() {
 		// Do the option keys stay the same? If so probably need to do nothing.
 	}

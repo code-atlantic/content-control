@@ -1,7 +1,20 @@
 <?php
+/**
+ * Frontend tests.
+ *
+ * @package ContentControl
+ */
 
+/**
+ * FrontendTest class.
+ */
 class FrontendTest extends WP_UnitTestCase {
 
+	/**
+	 * Test if block controls are enabled.
+	 *
+	 * @return void
+	 */
 	public function testHasBlockControls() {
 		$test_attribute_sets = [
 			[
@@ -42,6 +55,11 @@ class FrontendTest extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * Test if block controls are retrieved correctly.
+	 *
+	 * @return void
+	 */
 	public function testGetBlockControls() {
 		$test_block = [
 			'attrs' => [
@@ -58,7 +76,7 @@ class FrontendTest extends WP_UnitTestCase {
 			],
 		];
 
-		$frontend = new \ContentControl\Frontend( [] );
+		$frontend = new \ContentControl\Controllers\Frontend( [] );
 
 		$controls = $frontend->get_block_controls( $test_block );
 

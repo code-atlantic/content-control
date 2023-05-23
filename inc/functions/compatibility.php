@@ -10,14 +10,14 @@ namespace ContentControl;
 /**
  * Checks whether function is disabled.
  *
- * @param string $function Name of the function.
+ * @param string $func Name of the function.
  *
  * @return bool Whether or not function is disabled.
  */
-function is_func_disabled( $function ) {
+function is_func_disabled( $func ) {
 	$disabled = explode( ',', ini_get( 'disable_functions' ) );
 
-	return in_array( $function, $disabled, true );
+	return in_array( $func, $disabled, true );
 }
 
 if ( ! function_exists( 'is_rest' ) ) {
@@ -35,22 +35,26 @@ if ( ! function_exists( 'is_rest' ) ) {
 	 * @author matzeeable
 	 */
 	function is_rest() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
 				|| isset( $_GET['rest_route'] ) // (#2)
-						&& strpos( $_GET['rest_route'], '/', 0 ) === 0 ) {
+						&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) {
 				return true;
 		}
 
 		// (#3)
 		global $wp_rewrite;
-		if ( $wp_rewrite === null ) {
+		if ( null === $wp_rewrite ) {
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			$wp_rewrite = new \WP_Rewrite();
 		}
 
 		// (#4)
 		$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
 		$current_url = wp_parse_url( add_query_arg( [] ) );
-		return strpos( $current_url['path'] ?? '/', $rest_url['path'], 0 ) === 0;
+		return strpos( $current_url['path'] ? $current_url['path'] : '/', $rest_url['path'], 0 ) === 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 }
 

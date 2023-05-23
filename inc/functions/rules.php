@@ -36,7 +36,7 @@ function allowed_user_roles() {
 /**
  * Checks if a user has one of the selected roles.
  *
- * @param array $condition
+ * @param array $condition Condition.
  *
  * @return bool
  */

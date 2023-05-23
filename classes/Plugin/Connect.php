@@ -271,6 +271,8 @@ class Connect {
 
 	/**
 	 * Verify the nonce.
+	 *
+	 * @deprecated 2.0.0 Don't use, it doesn't work as its a separate server making request.
 	 */
 	public function verify_nonce() {
 		$token = $this->get_access_token();
@@ -376,7 +378,6 @@ class Connect {
 		if ( 'production' === wp_get_environment_type() ) {
 			$this->verify_referrer();
 		}
-		// $this->verify_nonce(); // This is not reliable or neccessary.
 		$this->verify_authentication();
 		$this->verify_signature();
 		$this->debug_log( 'Connection validated', 'DEBUG' );

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Deprecated Is class.
+ *
+ * @copyright (c) 2023, Code Atlantic LLC.
+ * @package ContentControl
+ */
 
 namespace JP\CC;
 

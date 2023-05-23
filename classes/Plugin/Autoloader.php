@@ -25,7 +25,8 @@ class Autoloader {
 	 *
 	 * If the autoloader is not present, let's log the failure and display a nice admin notice.
 	 *
-	 *  @param string $plugin_name Plugin name for error messaging.
+	 * @param string $name Plugin name for error messaging.
+	 * @param string $path Path to the plugin.
 	 *
 	 * @return boolean
 	 */

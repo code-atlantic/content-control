@@ -3,10 +3,13 @@
 	<description>Sniffs for WordPress plugins</description>
 
 	<file>.</file>
-	<exclude-pattern type="relative">^/dist/*</exclude-pattern>
-	<exclude-pattern type="relative">^/build/*</exclude-pattern>
-	<exclude-pattern type="relative">^/packages/*</exclude-pattern>
-	<exclude-pattern type="relative">^/vendor/*</exclude-pattern>
+	<exclude-pattern type="relative">classes/Installers/*</exclude-pattern>
+	<exclude-pattern type="relative">dist</exclude-pattern>
+	<exclude-pattern type="relative">build</exclude-pattern>
+	<exclude-pattern type="relative">packages</exclude-pattern>
+	<exclude-pattern type="relative">tests</exclude-pattern>
+	<exclude-pattern type="relative">vendor</exclude-pattern>
+	<exclude-pattern type="relative">vendor-prefixed</exclude-pattern>
 
 	<arg name="extensions" value="php"/>
 	<!-- Show progress and sniff codes in all reports -->
