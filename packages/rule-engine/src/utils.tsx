@@ -1,7 +1,14 @@
 import { customAlphabet } from 'nanoid';
 import { __, sprintf } from '@wordpress/i18n';
 
-import type { GroupItem, QuerySet, RuleItem, EngineRuleType } from './types';
+import type {
+	GroupItem,
+	QuerySet,
+	RuleItem,
+	EngineRuleType,
+	Item,
+	Query,
+} from './types';
 
 export const newUUID = customAlphabet(
 	'abcdefghijklmnopqrstuvwxyz0123456789',
@@ -88,4 +95,28 @@ export const defaultForamatRuleText = (
 		hasVerbs ? verbs[ ! notOperand ? 0 : 1 ] : null,
 		label
 	);
+};
+
+export const removeEmptyItems = ( query: Query ): Query => {
+	const { items, ...rest } = query;
+	return {
+		...rest,
+		items: items
+			.map( ( item ) => {
+				if ( 'group' === item.type ) {
+					// Build a new item, recursively removing empty items.
+					const newGroup = {
+						...item,
+						query: removeEmptyItems( item.query ),
+					};
+
+					// If the new group has no items, return null.
+					return newGroup.query.items.length ? newGroup : null;
+				}
+
+				// If the rule has a name, return it.
+				return item.name ? item : null;
+			} )
+			.filter( ( item ) => item !== null ) as Item[],
+	};
 };

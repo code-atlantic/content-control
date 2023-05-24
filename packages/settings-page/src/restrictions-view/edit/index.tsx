@@ -12,6 +12,8 @@ import { useEffect } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { useDispatch, useSelect } from '@wordpress/data';
 
+import { removeEmptyItems } from '@content-control/rule-engine';
+
 import useEditor from '../use-editor';
 import ContentTab from './content';
 import GeneralTab from './general';
@@ -23,8 +25,6 @@ export const documenationUrl =
 import type { Restriction } from '@content-control/core-data';
 import type { TabComponent } from '../../types';
 import classNames from 'classnames';
-
-import type { Item } from '@content-control/rule-engine';
 
 export type EditProps = {
 	onSave?: ( values: Restriction ) => void;
@@ -91,34 +91,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		);
 	}
 
-	const removeEmptyItems = ( items: Item[] ): Item[] => {
-		return items
-			.map( ( item ) => {
-				if ( 'group' === item.type ) {
-					// Build a new item, recursively removing empty items.
-					const {
-						query: { items: groupItems, ...queryRest },
-						...rest
-					} = item;
-
-					const newGroup = {
-						...rest,
-						query: {
-							...queryRest,
-							items: removeEmptyItems( groupItems ),
-						},
-					};
-
-					// If the new group has no items, return null.
-					return newGroup.query.items.length ? newGroup : null;
-				}
-
-				// If the rule has a name, return it.
-				return item.name ? item : null;
-			} )
-			.filter( ( item ) => item !== null ) as Item[];
-	};
-
 	/**
 	 * Trigger the correct save action.
 	 */
@@ -133,10 +105,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			...values,
 			settings: {
 				...values.settings,
-				conditions: {
-					...values.settings.conditions,
-					items: removeEmptyItems( values.settings.conditions.items ),
-				},
+				conditions: removeEmptyItems( values.settings.conditions ),
 			},
 		};
 
