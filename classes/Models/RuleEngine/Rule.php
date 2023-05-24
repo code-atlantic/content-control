@@ -8,9 +8,8 @@
 
 namespace ContentControl\Models\RuleEngine;
 
-use ContentControl\Vendor\Pimple\Exception\UnknownIdentifierException;
-
 use function ContentControl\plugin;
+use function ContentControl\Rules\current_rule;
 
 /**
  * Handler for condition rules.
@@ -20,7 +19,7 @@ use function ContentControl\plugin;
 class Rule extends Item {
 
 	/**
-	 * Rule id.
+	 * Unique Hash ID.
 	 *
 	 * @var string
 	 */
@@ -69,6 +68,14 @@ class Rule extends Item {
 	 * @var array
 	 */
 	public $definition;
+
+	/**
+	 * Rule is deprecated.
+	 *
+	 * @var boolean
+	 */
+	public $deprecated = false;
+
 	/**
 	 * Build a rule.
 	 *
@@ -84,6 +91,10 @@ class Rule extends Item {
 			'options'    => [],
 			'extras'     => [],
 		]);
+
+		if ( isset( $rule['deprecated'] ) ) {
+			$this->deprecated = $rule['deprecated'];
+		}
 
 		$name = $rule['name'];
 
