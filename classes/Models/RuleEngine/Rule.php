@@ -48,6 +48,15 @@ class Rule extends Item {
 	public $not_operand;
 
 	/**
+	 * Rule extras.
+	 *
+	 * Such as post type or taxnomy like meta.
+	 *
+	 * @var array
+	 */
+	public $extras = [];
+
+	/**
 	 * Build a rule.
 	 *
 	 * @param array $rule Rule data.
@@ -60,6 +69,7 @@ class Rule extends Item {
 			'name'       => '',
 			'notOperand' => false,
 			'options'    => [],
+			'extras'     => [],
 		]);
 
 		$name = $rule['name'];
@@ -69,10 +79,8 @@ class Rule extends Item {
 			throw new \Exception( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
 		}
 
-		$this->id          = $rule['id'];
-		$this->name        = $name;
-		$this->not_operand = $rule['notOperand'];
-		$this->options     = $this->parse_options( $rule['options'] );
+		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
+		$this->extras        = array_merge( $extras, $rule['extras'] );
 	}
 
 	/**

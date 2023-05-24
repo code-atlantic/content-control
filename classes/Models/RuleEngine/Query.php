@@ -8,6 +8,8 @@
 
 namespace ContentControl\Models\RuleEngine;
 
+use function ContentControl\Rules\current_query;
+
 /**
  * Handler for condition queries.
  *
