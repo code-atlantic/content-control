@@ -4074,12 +4074,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "fca9d9ef2dcd042658ccb9df16552f5048e7bb04"
+                "reference": "203b168d7d107cf9c5b878947bf15c2945b297a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/fca9d9ef2dcd042658ccb9df16552f5048e7bb04",
-                "reference": "fca9d9ef2dcd042658ccb9df16552f5048e7bb04",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/203b168d7d107cf9c5b878947bf15c2945b297a3",
+                "reference": "203b168d7d107cf9c5b878947bf15c2945b297a3",
                 "shasum": ""
             },
             "require": {
@@ -4123,7 +4123,7 @@
                 "source": "https://github.com/WordPress/WordPress-Coding-Standards",
                 "wiki": "https://github.com/WordPress/WordPress-Coding-Standards/wiki"
             },
-            "time": "2023-05-01T08:34:06+00:00"
+            "time": "2023-05-23T06:36:37+00:00"
         },
         {
             "name": "yoast/phpunit-polyfills",
