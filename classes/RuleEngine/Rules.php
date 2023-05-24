@@ -191,9 +191,8 @@ class Rules {
 				'category' => __( 'User', 'content-control' ),
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-				'callback' => 'is_user_logged_in',
+				'callback' => '\is_user_logged_in',
 			],
-
 			'user_has_role'     => [
 				'name'     => 'user_has_role',
 				'label'    => __( 'Role(s)', 'content-control' ),
@@ -202,16 +201,14 @@ class Rules {
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['has'], $verbs['doesnothave'] ],
 				'fields'   => [
-					[
-						'type'     => 'multicheck',
-						'id'       => 'roles',
+					'roles' => [
 						'label'    => __( 'Role(s)', 'content-control' ),
-						'default'  => [ 'administrator' ],
+						'type'     => 'tokenselect',
 						'multiple' => true,
 						'options'  => wp_roles()->get_names(),
 					],
 				],
-				'callback' => '\\ContentControl\\Rules\\user_has_role',
+				'callback' => '\ContentControl\Rules\user_has_role',
 			],
 		];
 	}
@@ -232,7 +229,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'is_home_page' ],
+			'callback' => '\ContentControl\Rules\content_is_home_page',
 		];
 
 		$rules['content_is_blog_index'] = [
@@ -242,7 +239,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'is_blog_index' ],
+			'callback' => '\ContentControl\Rules\content_is_blog_index',
 		];
 
 		$rules['content_is_search_results'] = [
@@ -252,7 +249,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => 'is_search',
+			'callback' => '\is_search',
 		];
 
 		$rules['content_is_404_page'] = [
@@ -262,7 +259,7 @@ class Rules {
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
-			'callback' => 'is_404',
+			'callback' => '\is_404',
 		];
 
 		return $rules;
@@ -284,79 +281,81 @@ class Rules {
 
 			if ( $post_type->has_archive ) {
 				$type_rules[ "content_is_{$name}_archive" ] = [
-					'name'  => "content_is_{$name}_archive",
+					'name'     => "content_is_{$name}_archive",
 					/* translators: %s: Post type singular name */
-					'label' => sprintf( __( 'A %s Archive', 'content-control' ), $post_type->labels->singular_name ),
+					'label'    => sprintf( __( 'A %s Archive', 'content-control' ), $post_type->labels->singular_name ),
+					'callback' => '\ContentControl\Rules\content_is_post_type_archive',
 				];
 			}
 
 			$type_rules[ "content_is_{$name}" ] = [
-				'name'  => "content_is_{$name}",
+				'name'     => "content_is_{$name}",
 				/* translators: %s: Post type singular name */
-				'label' => sprintf( __( 'A %s', 'content-control' ), $post_type->labels->singular_name ),
+				'label'    => sprintf( __( 'A %s', 'content-control' ), $post_type->labels->singular_name ),
+				'callback' => '\ContentControl\Rules\content_is_post_type',
 			];
 
 			$type_rules[ "content_is_selected_{$name}" ] = [
-				'name'   => "content_is_selected_{$name}",
+				'name'     => "content_is_selected_{$name}",
 				/* translators: %s: Post type singular name */
-				'label'  => sprintf( __( 'A Selected %s', 'content-control' ), $post_type->labels->singular_name ),
-				'fields' => [
+				'label'    => sprintf( __( 'A Selected %s', 'content-control' ), $post_type->labels->singular_name ),
+				'fields'   => [
 					'selected' => [
 						/* translators: %s: Post type plurals name */
 						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
 						'type'        => 'postselect',
 						'post_type'   => $name,
 						'multiple'    => true,
-						'as_array'    => true,
-						'std'         => [],
 					],
 				],
+				'callback' => '\ContentControl\Rules\content_is_selected_post',
 			];
 
 			$type_rules[ "content_is_{$name}_with_id" ] = [
-				'name'   => "content_is_{$name}_with_id",
+				'name'     => "content_is_{$name}_with_id",
 				/* translators: %s: Post type singular name */
-				'label'  => sprintf( __( 'A %s with ID', 'content-control' ), $post_type->labels->singular_name ),
-				'fields' => [
+				'label'    => sprintf( __( 'A %s with ID', 'content-control' ), $post_type->labels->singular_name ),
+				'fields'   => [
 					'selected' => [
 						/* translators: %s: Post type singular name */
 						'placeholder' => sprintf( __( '%s IDs: 128, 129', 'content-control' ), strtolower( $post_type->labels->name ) ),
 						'type'        => 'text',
 					],
 				],
+				'callback' => '\ContentControl\Rules\content_is_selected_post',
 			];
 
 			if ( is_post_type_hierarchical( $name ) ) {
 				$type_rules[ "content_is_child_of_{$name}" ] = [
-					'name'   => "content_is_child_of_{$name}",
+					'name'     => "content_is_child_of_{$name}",
 					/* translators: %s: Post type plural name */
-					'label'  => sprintf( __( 'A Child of Selected %s', 'content-control' ), $post_type->labels->name ),
-					'fields' => [
+					'label'    => sprintf( __( 'A Child of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields'   => [
 						'selected' => [
 							/* translators: %s: Post type plural name */
 							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
-							'as_array'    => true,
 						],
 					],
+					'callback' => '\ContentControl\Rules\content_is_child_of_post',
 				];
 
 				$type_rules[ "content_is_ancestor_of_{$name}" ] = [
-					'name'   => "content_is_ancestor_of_{$name}",
+					'name'     => "content_is_ancestor_of_{$name}",
 					/* translators: %s: Post type plural name */
-					'label'  => sprintf( __( 'An Ancestor of Selected %s', 'content-control' ), $post_type->labels->name ),
-					'fields' => [
+					'label'    => sprintf( __( 'An Ancestor of Selected %s', 'content-control' ), $post_type->labels->name ),
+					'fields'   => [
 						'selected' => [
 							/* translators: %s: Post type plural name */
 							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
-							'as_array'    => true,
 						],
 					],
+					'callback' => '\ContentControl\Rules\content_is_ancestor_of_post',
 				];
 			}
 
@@ -364,18 +363,17 @@ class Rules {
 
 			if ( 'page' === $name && ! empty( $templates ) ) {
 				$type_rules[ "content_is_{$name}_with_template" ] = [
-					'name'   => "content_is_{$name}_with_template",
+					'name'     => "content_is_{$name}_with_template",
 					/* translators: %s: Post type singular name */
-					'label'  => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
-					'fields' => [
+					'label'    => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
+					'fields'   => [
 						'selected' => [
-							'type'     => 'select',
-							'select2'  => true,
+							'type'     => 'tokenselect',
 							'multiple' => true,
-							'as_array' => true,
 							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
 						],
 					],
+					'callback' => '\ContentControl\Rules\content_is_ancestor_of_post',
 				];
 			}
 
@@ -387,7 +385,9 @@ class Rules {
 					'format'   => '{category} {verb} {label}',
 					'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 					'fields'   => [],
-					'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type' ],
+					'extras'   => [
+						'post_type' => $name,
+					],
 				] );
 			}
 
@@ -428,11 +428,13 @@ class Rules {
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
-						'as_array'    => true,
-						'options'     => [],
 					],
 				],
-				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'post_type_tax' ],
+				'extras'   => [
+					'post_type' => $name,
+					'taxonomy'  => $tax_name,
+				],
+				'callback' => '\ContentControl\Rules\content_is_post_with_tax_term',
 			];
 		}
 
@@ -456,49 +458,51 @@ class Rules {
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'fields'   => [],
-				'callback' => [ '\ContentControl\RuleEngine\RuleCallbacks', 'taxonomy' ],
+				'extras'   => [
+					'taxonomy' => $tax_name,
+				],
 			];
 
 			$rules[ "content_is_{$tax_name}_archive" ] = wp_parse_args( [
-				'name'  => "content_is_{$tax_name}_archive",
+				'name'     => "content_is_{$tax_name}_archive",
 				/* translators: %s: Taxonomy plural name */
-				'label' => sprintf( _x( 'A %s Archive', 'condition: taxonomy plural label ie. A Category Archive', 'content-control' ), $taxonomy->labels->name ),
+				'label'    => sprintf( _x( 'A %s Archive', 'condition: taxonomy plural label ie. A Category Archive', 'content-control' ), $taxonomy->labels->singular_name ),
+				'callback' => '\ContentControl\Rules\content_is_taxonomy_archive',
 			], $tax_defaults );
 
 			$rules[ "content_is_selected_tax_{$tax_name}" ] = wp_parse_args( [
-				'name'   => "content_is_selected_tax_{$tax_name}",
+				'name'     => "content_is_selected_tax_{$tax_name}",
 				/* translators: %s: Taxonomy plural name */
-				'label'  => sprintf( _x( 'A Selected %s', 'condition: taxonomy plural label ie. A Selected Category', 'content-control' ), $taxonomy->labels->singular_name ),
-				'fields' => [
+				'label'    => sprintf( _x( 'A Selected %s', 'condition: taxonomy plural label ie. A Selected Category', 'content-control' ), $taxonomy->labels->singular_name ),
+				'fields'   => [
 					'selected' => [
 						/* translators: %s: Taxonomy plural name */
 						'placeholder' => sprintf( _x( 'Select %s.', 'condition: taxonomy plural label ie. Select Categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
-						'as_array'    => true,
 					],
 				],
+				'callback' => '\ContentControl\Rules\content_is_selected_term',
 			], $tax_defaults );
 
 			$rules[ "content_is_tax_{$tax_name}_with_id" ] = wp_parse_args( [
-				'name'   => "content_is_tax_{$tax_name}_with_id",
+				'name'     => "content_is_tax_{$tax_name}_with_id",
 				/* translators: %s: Taxonomy plural name */
-				'label'  => sprintf( _x( 'A %s with ID', 'condition: taxonomy plural label ie. A Category with ID: Selected', 'content-control' ), $taxonomy->labels->name ),
-				'fields' => [
+				'label'    => sprintf( _x( 'A %s with ID', 'condition: taxonomy plural label ie. A Category with ID: Selected', 'content-control' ), $taxonomy->labels->name ),
+				'fields'   => [
 					'selected' => [
 						/* translators: %s: Taxonomy plural name */
 						'placeholder' => sprintf( _x( '%s IDs: 128, 129', 'condition: taxonomy plural label ie. Category IDs', 'content-control' ), strtolower( $taxonomy->labels->singular_name ) ),
 						'type'        => 'text',
 					],
 				],
+				'callback' => '\ContentControl\Rules\content_is_selected_term',
 			], $tax_defaults );
 		}
 
 		return $rules;
 	}
-
-
 
 	/**
 	 * Get an array of rule default values.
@@ -510,7 +514,7 @@ class Rules {
 		return [
 			'name'     => '',
 			'label'    => '',
-			'context'  => '',
+			'context'  => [],
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
@@ -541,6 +545,7 @@ class Rules {
 			$old_rules = $this->parse_old_rules( $old_rules );
 
 			foreach ( $old_rules as $rule ) {
+				$rule['deprecated'] = true;
 				$this->register_rule( $rule );
 			}
 		}
