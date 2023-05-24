@@ -20,10 +20,31 @@ class Rules {
 	public $data = [];
 
 	/**
+	 * Current global rule instance.
+	 *
+	 * @var Rule
+	 */
+	public $current_rule = null;
+
+	/**
 	 * Rules constructor.
 	 */
 	public function __construct() {
 		$this->init();
+	}
+
+	/**
+	 * Get the current global rule instance.
+	 *
+	 * @param Rule|null|false $rule Rule instance to set.
+	 * @return Rule|null
+	 */
+	public function current_rule( $rule = false ) {
+		if ( false === $rule ) {
+			return $this->current_rule;
+		}
+
+		$this->current_rule = $rule;
 	}
 
 	/**

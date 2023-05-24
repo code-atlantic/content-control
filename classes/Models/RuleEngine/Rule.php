@@ -57,6 +57,19 @@ class Rule extends Item {
 	public $extras = [];
 
 	/**
+	 * Rule is frontend only.
+	 *
+	 * @var boolean
+	 */
+	public $frontend_only = false;
+
+	/**
+	 * Rule definition.
+	 *
+	 * @var array
+	 */
+	public $definition;
+	/**
 	 * Build a rule.
 	 *
 	 * @param array $rule Rule data.
@@ -74,12 +87,20 @@ class Rule extends Item {
 
 		$name = $rule['name'];
 
-		if ( ! plugin( 'rules' )->get_rule( $name ) ) {
+		$this->definition = plugin( 'rules' )->get_rule( $name );
+
+		if ( ! $this->definition ) {
 			/* translators: 1. Rule name. */
 			throw new \Exception( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
 		}
 
 		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
+
+		$this->id            = $rule['id'];
+		$this->name          = $name;
+		$this->not_operand   = $rule['notOperand'];
+		$this->frontend_only = isset( $this->definition['frontend'] ) ? $this->definition['frontend'] : false;
+		$this->options       = $this->parse_options( $rule['options'] );
 		$this->extras        = array_merge( $extras, $rule['extras'] );
 	}
 
@@ -94,15 +115,6 @@ class Rule extends Item {
 	}
 
 	/**
-	 * Get rule definition.
-	 *
-	 * @return array|null Rule definition or null.
-	 */
-	public function get_rule_definition() {
-		return plugin( 'rules' )->get_rule( $this->name );
-	}
-
-	/**
 	 * Check the results of this rule.
 	 *
 	 * @return bool
@@ -112,11 +124,55 @@ class Rule extends Item {
 			return true;
 		}
 
-		$definition = $this->get_rule_definition();
-
-		$check = call_user_func( $definition['callback'], $this->options );
+		$check = $this->run_check();
 
 		return $this->not_operand ? ! $check : $check;
+	}
+
+	/**
+	 * Check the results of this rule.
+	 *
+	 * @return bool True if rule passes, false if not.
+	 *
+	 * @throws \Exception If rule callback is not callable.
+	 */
+	private function run_check() {
+		$callback = isset( $this->definition['callback'] ) ? $this->definition['callback'] : null;
+
+		if ( ! $callback ) {
+			/* translators: 1. Rule name. */
+			throw new \Exception( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) );
+		}
+
+		if ( ! is_callable( $callback ) ) {
+			/* translators: 1. Rule name. 2. Callback name. */
+			throw new \Exception( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) );
+		}
+
+		// Set global current rule so it can be easily accessed.
+		current_rule( $this );
+
+		if ( $this->deprecated ) {
+			$settings = [
+				'target'   => $this->name,
+				'settings' => $this->options,
+			];
+
+			// Old rules had the settings passed as the first argument.
+			$check = call_user_func( $callback, $settings );
+		} else {
+			/**
+			 * All rule options can be accessed via the global.
+			 *
+			 * @see \ContentControl\Rules\current_rule()
+			 */
+			$check = call_user_func( $callback );
+		}
+
+		// Clear global current rule.
+		current_rule( null );
+
+		return $check;
 	}
 
 	/**
@@ -125,13 +181,7 @@ class Rule extends Item {
 	 * @return bool
 	 */
 	public function is_js_rule() {
-		$definition = $this->get_rule_definition();
-
-		if ( ! $definition ) {
-			return false;
-		}
-
-		return ! isset( $definition['callback'] );
+		return $this->frontend_only;
 	}
 
 	/**
@@ -144,7 +194,7 @@ class Rule extends Item {
 			return null;
 		}
 
-		return $this->check_rule();
+		return $this->run_check();
 	}
 
 	/**
@@ -159,17 +209,13 @@ class Rule extends Item {
 			return null;
 		}
 
-		$definition = $this->get_rule_definition();
-
-		$check = call_user_func( $definition['callback'], $this->options );
-
 		return [
-			'result' => $check,
+			'result' => $this->run_check(),
 			'id'     => $this->id,
 			'rule'   => $this->name,
 			'not'    => $this->not_operand,
 			'args'   => $this->options,
-			'def'    => $definition,
+			'def'    => $this->definition,
 		];
 	}
 }

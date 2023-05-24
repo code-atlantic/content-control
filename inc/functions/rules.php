@@ -7,6 +7,93 @@
 
 namespace ContentControl\Rules;
 
+use \ContentControl\Models\RuleEngine\Rule;
+use function ContentControl\plugin;
+
+/**
+ * Get or set the current rule (globaly accessible).
+ *
+ * @param Rule|null|false $rule Rule object.
+ * @return Rule|null
+ */
+function current_rule( $rule = false ) {
+	return plugin( 'rules' )->current_rule( $rule );
+}
+
+/**
+ * Get the current rule ID.
+ *
+ * @return string
+ */
+function get_rule_id() {
+	$rule = current_rule();
+
+	return $rule ? $rule->id : '';
+}
+
+/**
+ * Get the current rule name.
+ *
+ * @return string
+ */
+function get_rule_name() {
+	$rule = current_rule();
+
+	return $rule ? $rule->name : '';
+}
+
+/**
+ * Get the current rule options.
+ *
+ * @param array $defaults Default options.
+ *
+ * @return array
+ */
+function get_rule_options( $defaults = [] ) {
+	$rule = current_rule();
+
+	$options = $rule ? $rule->options : [];
+
+	return wp_parse_args( $options, $defaults );
+}
+
+/**
+ * Get the current rule extras.
+ *
+ * @return array
+ */
+function get_rule_extras() {
+	$rule = current_rule();
+
+	return $rule ? $rule->extras : [];
+}
+
+/**
+ * Get the current rule option.
+ *
+ * @param string $key Option key.
+ * @param mixed  $default_value Default value.
+ * @return mixed
+ */
+function get_rule_option( $key, $default_value = false ) {
+	$options = get_rule_options();
+
+	return isset( $options[ $key ] ) ? $options[ $key ] : $default_value;
+}
+
+/**
+ * Get the current rule extra.
+ *
+ * @param string $key Extra key.
+ * @param mixed  $default_value Default value.
+ * @return mixed
+ */
+function get_rule_extra( $key, $default_value = false ) {
+	$extras = get_rule_extras();
+
+	return isset( $extras[ $key ] ) ? $extras[ $key ] : $default_value;
+}
+
 /**
  * Gets a filterable array of the allowed user roles.
  *
@@ -34,36 +121,12 @@ function allowed_user_roles() {
 }
 
 /**
- * Checks if a user has one of the selected roles.
+ * Checks if the current post is a post type.
  *
- * @param array $condition Condition.
- *
- * @return bool
+ * @param string $post_type Post type slug.
+ * @return boolean
  */
-function user_has_role( $condition = [] ) {
-	if ( ! is_user_logged_in() ) {
-		return false;
-	} elseif ( empty( $condition['settings']['selected'] ) ) {
-		return true;
-	}
-
-	$selected = $condition['settings']['selected'];
-
-	// Get Enabled Roles to check for.
-	$user_roles     = array_keys( allowed_user_roles() );
-	$required_roles = array_intersect( $user_roles, $selected );
-
-	if ( empty( $required_roles ) ) {
-		return true;
-	}
-
-	$check = false;
-	foreach ( $required_roles as $role ) {
-		if ( current_user_can( $role ) ) {
-			$check = true;
-			break;
-		}
-	}
-
-	return $check;
+function is_post_type( $post_type ) {
+	global $post;
+	return is_object( $post ) && ( is_singular( $post_type ) || $post->post_type === $post_type );
 }
