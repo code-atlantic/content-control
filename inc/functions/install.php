@@ -55,14 +55,12 @@ function get_default_settings() {
 	return [
 		'restrictions'           => [],
 		'default_denial_message' => '',
-		'overload_login_url'     => false,
-		'overload_register_url'  => false,
-		'overload_recovery_url'  => false,
 
 		// New Settings.
 		'excludedBlocks'         => [],
 		'urlOverrides'           => [],
 		'permissions'            => [],
 		'mediaQueries'           => get_default_media_queries(),
+		'defaultDenialMessage'   => '',
 	];
 }

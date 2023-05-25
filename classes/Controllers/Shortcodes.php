@@ -42,7 +42,7 @@ class Shortcodes extends Controller {
 			'allowed_roles'  => null,
 			'excluded_roles' => null,
 			'class'          => '',
-			'message'        => $this->container->get_option( 'default_denial_message', '' ),
+			'message'        => $this->container->get_option( 'defaultDenialMessage', '' ),
 			// Deprecated.
 			'logged_out'     => null, // @deprecated 2.0.0
 			'roles'          => '', // @deprecated 2.0.0

@@ -62,6 +62,9 @@ class Version2 {
 		if ( ! empty( $settings['restrictions'] ) ) {
 			$this->migrate_restrictions( $settings['restrictions'] );
 		}
+
+		// TODO
+		// - Remap default_denial_message to defaultDenialMessage.
 	}
 
 	/**
