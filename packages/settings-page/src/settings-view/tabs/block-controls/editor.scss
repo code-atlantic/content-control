@@ -1,4 +1,4 @@
-.cc-settings-view.tab-block-controls {
+.settings-section-panel--block-manager {
 	header {
 		display: flex;
 		border-bottom: 1px solid #eaecf0;
@@ -21,6 +21,8 @@
 
 	.block-list {
 		width: 100%;
+		max-height: 450px;
+		overflow-y: auto;
 
 		.block-list-item {
 			display: flex;
