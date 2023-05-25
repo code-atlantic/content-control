@@ -22,8 +22,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class Connect {
 
-	const CLIENT_ID = 'FOInK68CICnx6uxOQtF2HWa5q3I3csVJ6bcZ8oeI';
-
 	const API_URL    = 'https://upgrade.contentcontrolplugin.com/';
 	const DEBUG_MODE = false;
 
