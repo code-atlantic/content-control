@@ -23,6 +23,7 @@ class PostTypes extends Controller {
 	public function init() {
 		add_action( 'init', [ $this, 'register_post_type' ] );
 		add_action( 'init', [ $this, 'register_rest_fields' ] );
+		add_action( 'save_post_cc_restriction', [ $this, 'save_post' ], 10, 3 );
 	}
 
 	/**
@@ -114,5 +115,22 @@ class PostTypes extends Controller {
 				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
 		] );
+	}
+
+	/**
+	 * Add data version meta to new restrictions.
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 *
+	 * @return void
+	 */
+	public function save_post( $post_id, $post, $update ) {
+		if ( $update ) {
+			return;
+		}
+
+		add_post_meta( $post_id, 'data_version', 1 );
 	}
 }
