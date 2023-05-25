@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0da6e2cbfa133b59d34e3bd6eabc9eb0",
+    "content-hash": "a79b8424f4356e5de71be0d593e4285b",
     "packages": [
         {
             "name": "composer/installers",
@@ -256,6 +256,59 @@
                 "source": "https://github.com/php-fig/container/tree/2.0.2"
             },
             "time": "2021-11-05T16:47:00+00:00"
+        },
+        {
+            "name": "trustedlogin/client",
+            "version": "v1.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/trustedlogin/client.git",
+                "reference": "3f234b6c7f9c7564316dd3c8aa55fda76cfce040"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/trustedlogin/client/zipball/3f234b6c7f9c7564316dd3c8aa55fda76cfce040",
+                "reference": "3f234b6c7f9c7564316dd3c8aa55fda76cfce040",
+                "shasum": ""
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3.0",
+                "yoast/phpunit-polyfills": "^1.0"
+            },
+            "bin": [
+                "bin/build-sass"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TrustedLogin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "TrustedLogin",
+                    "email": "support@trustedlogin.com",
+                    "homepage": "https://www.trustedlogin.com"
+                }
+            ],
+            "description": "Easily and securely log in to your customers sites when providing support.",
+            "homepage": "https://www.trustedlogin.com",
+            "keywords": [
+                "login",
+                "security",
+                "support"
+            ],
+            "support": {
+                "issues": "https://github.com/trustedlogin/client/issues",
+                "source": "https://github.com/trustedlogin/client/tree/v1.5.1"
+            },
+            "time": "2023-04-18T20:55:08+00:00"
         }
     ],
     "packages-dev": [
@@ -1661,6 +1714,86 @@
             },
             "abandoned": true,
             "time": "2018-08-09T05:50:03+00:00"
+        },
+        {
+            "name": "scssphp/scssphp",
+            "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scssphp/scssphp.git",
+                "reference": "33749d12c2569bb24071f94e9af828662dabb068"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/33749d12c2569bb24071f94e9af828662dabb068",
+                "reference": "33749d12c2569bb24071f94e9af828662dabb068",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4",
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.3 || ^9.4",
+                "sass/sass-spec": "*",
+                "squizlabs/php_codesniffer": "~3.5",
+                "symfony/phpunit-bridge": "^5.1",
+                "thoughtbot/bourbon": "^7.0",
+                "twbs/bootstrap": "~5.0",
+                "twbs/bootstrap4": "4.6.1",
+                "zurb/foundation": "~6.5"
+            },
+            "suggest": {
+                "ext-iconv": "Can be used as fallback when ext-mbstring is not available",
+                "ext-mbstring": "For best performance, mbstring should be installed as it is faster than ext-iconv"
+            },
+            "bin": [
+                "bin/pscss"
+            ],
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "forward-command": false,
+                    "bin-links": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ScssPhp\\ScssPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthon Pang",
+                    "email": "apang@softwaredevelopment.ca",
+                    "homepage": "https://github.com/robocoder"
+                },
+                {
+                    "name": "Cédric Morin",
+                    "email": "cedric@yterium.com",
+                    "homepage": "https://github.com/Cerdic"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP.",
+            "homepage": "http://scssphp.github.io/scssphp/",
+            "keywords": [
+                "css",
+                "less",
+                "sass",
+                "scss",
+                "stylesheet"
+            ],
+            "support": {
+                "issues": "https://github.com/scssphp/scssphp/issues",
+                "source": "https://github.com/scssphp/scssphp/tree/v1.11.0"
+            },
+            "time": "2022-09-02T21:24:55+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

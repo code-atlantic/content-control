@@ -6,14 +6,16 @@
     "minimum-stability": "dev",
     "require": {
         "pimple/pimple": "~3.5",
-        "composer/installers": "~2.2.0"
+        "composer/installers": "~2.2.0",
+        "trustedlogin/client": "*"
     },
     "require-dev": {
         "code-atlantic/coding-standards": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "php": ">=7.3",
         "phpunit/phpunit": "^6.5",
-        "yoast/phpunit-polyfills": "^1.0"
+        "yoast/phpunit-polyfills": "^1.0",
+        "scssphp/scssphp": "*"
     },
     "autoload": {
         "psr-4": {
@@ -31,7 +33,8 @@
             "constant_prefix": "CONTENTCONTROL_",
             "classmap_output": true,
             "packages": [
-                "pimple/pimple"
+                "pimple/pimple",
+                "trustedlogin/client"
             ],
             "delete_vendor_directories": false
         }
@@ -41,7 +44,7 @@
         "format": "vendor/bin/phpcbf --standard=.phpcs.xml.dist --report-summary --report-source",
         "lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
         "install-strauss": [
-            "curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.12.0/strauss.phar"
+            "curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/latest/download/strauss.phar"
         ],
         "clean-vendor-prefix-folder": [
             "rm -rf vendor-prefixed/**/*"
@@ -49,20 +52,29 @@
         "post-install-cmd": [
             "@clean-vendor-prefix-folder",
             "@strauss",
+            "@trustedlogin",
             "composer dump-autoload"
         ],
         "post-update-cmd": [
             "@clean-vendor-prefix-folder",
             "@strauss",
+            "@trustedlogin",
             "composer dump-autoload"
         ],
         "release": [
+            "@clean-vendor-prefix-folder",
             "@strauss",
+            "@trustedlogin",
             "composer dump-autoload --optimize"
         ],
         "strauss": [
             "@install-strauss",
             "@php strauss.phar"
+        ],
+        "trustedlogin": [
+            "@php vendor/bin/build-sass --namespace=content-control",
+            "[ -d 'vendor/scssphp' ] && rm -rf vendor/scssphp || true",
+            "[ -d 'vendor/bin' ] && rm -rf vendor/bin/build-sass && rm -rf vendor/bin/pscss || true"
         ],
         "test": "phpunit",
         "test:watch": "phpunit-watcher watch < /dev/tty"

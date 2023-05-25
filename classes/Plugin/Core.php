@@ -192,13 +192,14 @@ class Core {
 		$this->define_paths();
 
 		$this->register_controllers( [
-			'PostTypes'   => new \ContentControl\Controllers\PostTypes( $this ),
-			'Assets'      => new \ContentControl\Controllers\Assets( $this ),
-			'Admin'       => new \ContentControl\Controllers\Admin( $this ),
-			'RestAPI'     => new \ContentControl\Controllers\RestAPI( $this ),
-			'BlockEditor' => new \ContentControl\Controllers\BlockEditor( $this ),
-			'Frontend'    => new \ContentControl\Controllers\Frontend( $this ),
-			'Shortcodes'  => new \ContentControl\Controllers\Shortcodes( $this ),
+			'PostTypes'    => new \ContentControl\Controllers\PostTypes( $this ),
+			'Assets'       => new \ContentControl\Controllers\Assets( $this ),
+			'Admin'        => new \ContentControl\Controllers\Admin( $this ),
+			'RestAPI'      => new \ContentControl\Controllers\RestAPI( $this ),
+			'BlockEditor'  => new \ContentControl\Controllers\BlockEditor( $this ),
+			'Frontend'     => new \ContentControl\Controllers\Frontend( $this ),
+			'Shortcodes'   => new \ContentControl\Controllers\Shortcodes( $this ),
+			'TrustedLogin' => new \ContentControl\Controllers\TrustedLogin( $this ),
 		] );
 	}
 
