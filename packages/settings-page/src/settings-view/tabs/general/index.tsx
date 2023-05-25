@@ -8,8 +8,26 @@ import LogViewer from './log-viewer';
 
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type { TabComponent } from '../../../types';
+import RestrictionsSection from './restrictions';
 
 const { logUrl = false } = contentControlSettingsPage;
+
+addFilter(
+	'contentControl.settingsPage.generalSections',
+	'content-control/general-settings/restriction-options',
+	( sections: { [ key: string ]: any }[] ) => {
+		return [
+			...sections,
+			{
+				name: 'restrictions',
+				title: __( 'Restriction Settings', 'content-control' ),
+				icon: permissionsIcon,
+				comp: RestrictionsSection,
+			},
+		];
+	},
+	5
+);
 
 addFilter(
 	'contentControl.settingsPage.generalSections',

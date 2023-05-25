@@ -8,6 +8,7 @@ export type DeviceMediaQuerySettings = {
 export type PermissionValue = string | false;
 
 export interface Settings {
+	defaultDenialMessage: string;
 	excludedBlocks: string[];
 	permissions: {
 		// Block Controls

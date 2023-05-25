@@ -30,6 +30,7 @@ export const settingsDefaults: Settings =
 	 * @return {Settings} Default settings.
 	 */
 	applyFilters( 'contentControl.defaultSettings', {
+		defaultDenialMessage: '',
 		excludedBlocks: [],
 		permissions: {
 			// Block Controls
