@@ -37,7 +37,7 @@ addFilter(
 			},
 		];
 	},
-	10
+	5
 );
 
 const UpgradeView = () => {
