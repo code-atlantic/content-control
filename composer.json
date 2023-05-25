@@ -5,16 +5,14 @@
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "require": {
-        "pimple/pimple": "~3.2",
-        "composer/installers": "~1.0"
+        "pimple/pimple": "~3.5",
+        "composer/installers": "~2.2.0"
     },
     "require-dev": {
         "code-atlantic/coding-standards": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "php": ">=7.3",
         "phpunit/phpunit": "^6.5",
-        "sirbrillig/phpcs-variable-analysis": "^2.8",
-        "spatie/phpunit-watcher": "^1.23",
         "yoast/phpunit-polyfills": "^1.0"
     },
     "autoload": {
