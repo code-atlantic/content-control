@@ -22,9 +22,9 @@ addFilter(
 			...sections,
 			{
 				name: 'license',
-				title: (
+				title: __( 'Pro Licensing', 'content-control' ),
+				badge: (
 					<>
-						{ __( 'Pro Licensing', 'content-control' ) }
 						{ isLicenseActive && (
 							<span className="license-status-bubble">
 								{ __( 'Activated', 'content-control' ) }
@@ -57,11 +57,19 @@ const UpgradeView = () => {
 
 	return (
 		<>
-			{ sections.map( ( { name, title, icon, comp: Component } ) => (
-				<Section key={ name } title={ title } icon={ icon }>
-					{ Component ? <Component /> : title }
-				</Section>
-			) ) }
+			{ sections.map(
+				( { name, title, badge, icon, comp: Component } ) => (
+					<Section
+						key={ name }
+						name={ name }
+						badge={ badge }
+						title={ title }
+						icon={ icon }
+					>
+						{ Component ? <Component /> : title }
+					</Section>
+				)
+			) }
 		</>
 	);
 };

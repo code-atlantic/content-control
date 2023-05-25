@@ -44,11 +44,19 @@ const BlockControlsTab = () => {
 
 	return (
 		<>
-			{ sections.map( ( { name, title, icon, comp: Component } ) => (
-				<Section key={ name } title={ title } icon={ icon }>
-					{ Component ? <Component /> : title }
-				</Section>
-			) ) }
+			{ sections.map(
+				( { name, title, badge, icon, comp: Component } ) => (
+					<Section
+						key={ name }
+						name={ name }
+						badge={ badge }
+						title={ title }
+						icon={ icon }
+					>
+						{ Component ? <Component /> : title }
+					</Section>
+				)
+			) }
 		</>
 	);
 };

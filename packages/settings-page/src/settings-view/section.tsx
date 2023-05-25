@@ -1,27 +1,25 @@
 import { Icon, IconType, Panel, PanelBody } from '@wordpress/components';
 import { _x, __ } from '@wordpress/i18n';
+import classNames from 'classnames';
 
 type Props = {
+	name?: string;
 	title: string;
+	badge?: string | JSX.Element;
 	icon?: IconType;
 	children: React.ReactNode;
 	extraActions?: [];
 };
 
-const Section = ( { title, icon, children }: Props ) => {
-	// Modify title to be a className and append.
-	const titleClass = title
-		.toLowerCase()
-		.replace( /[^a-z0-9]+/g, '-' )
-		.replace( /^-|-$/g, '' );
-
-	const titleClassWithPrefix = `settings-section-panel--${ titleClass }`;
-
-	const className = `settings-section-panel ${ titleClassWithPrefix }`;
-
+const Section = ( { name, title, badge, icon, children }: Props ) => {
 	return (
 		<>
-			<Panel className={ className }>
+			<Panel
+				className={ classNames(
+					'settings-section-panel',
+					name ? `settings-section-panel--${ name }` : ''
+				) }
+			>
 				<div className="components-panel__header">
 					{ icon && (
 						<span className="panel-icon">
@@ -29,6 +27,7 @@ const Section = ( { title, icon, children }: Props ) => {
 						</span>
 					) }
 					<span className="panel-title">{ title }</span>
+					{ badge && <span className="panel-badge">{ badge }</span> }
 					{ /** If we decide to add panel actions, create SlotFill, then each section's inner components can use the Fills */ }
 				</div>
 				<PanelBody>{ children }</PanelBody>
