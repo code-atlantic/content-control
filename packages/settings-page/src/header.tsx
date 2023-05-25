@@ -2,11 +2,18 @@ import { StringParam, useQueryParam } from 'use-query-params';
 
 import { ControlledTabPanel } from '@content-control/components';
 import { settingsStore } from '@content-control/core-data';
-import { Button, Flex, Modal } from '@wordpress/components';
+import {
+	Button,
+	DropdownMenu,
+	Flex,
+	MenuGroup,
+	MenuItem,
+	Modal,
+} from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useState, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { lifesaver } from '@wordpress/icons';
+import { lifesaver, login, menu, pages, people, postAuthor } from '@wordpress/icons';
 
 import type { TabComponent } from './types';
 
@@ -14,11 +21,15 @@ type Props = {
 	tabs: TabComponent[];
 };
 
+const { adminUrl } = contentControlSettingsPage;
+
 const Header = ( { tabs }: Props ) => {
 	const [ view = 'restrictions', setView ] = useQueryParam(
 		'view',
 		StringParam
 	);
+
+	const btnRef = useRef< HTMLButtonElement | null >( null );
 
 	/**
 	 * The following section covers notifying users of unsaved changes during
@@ -120,15 +131,71 @@ const Header = ( { tabs }: Props ) => {
 					} }
 					tabs={ tabs }
 				/>
-				<Button
-					variant="link"
+
+				<DropdownMenu
+					label={ __( 'Support', 'content-control' ) }
 					icon={ lifesaver }
-					href="https://contentcontrolplugin.com/support/"
-					target="_blank"
-					className="components-tab-panel__tabs-item support-link"
+					toggleProps={ {
+						as: ( { onClick } ) => (
+							<Button
+								icon={ lifesaver }
+								variant="link"
+								onClick={ onClick }
+								className="components-tab-panel__tabs-item support-link"
+							>
+								<span ref={ btnRef }>
+									{ __( 'Support', 'content-control' ) }
+								</span>
+							</Button>
+						),
+					} }
+					popoverProps={ {
+						noArrow: false,
+						position: 'bottom left',
+						className: 'cc-settings-page__support-menu',
+						getAnchorRect: () =>
+							btnRef.current?.getBoundingClientRect(),
+					} }
 				>
-					{ __( 'Support', 'content-control' ) }
-				</Button>
+					{ ( { onClose } ) => (
+						<>
+							<MenuGroup>
+								<MenuItem
+									icon={ pages }
+									href="https://contentcontrolplugin.com/docs/"
+									target="_blank"
+								>
+									{ __(
+										'View Documentation',
+										'content-control'
+									) }
+								</MenuItem>
+								<MenuItem
+									icon={ people }
+									href="https://contentcontrolplugin.com/support/"
+									target="_blank"
+								>
+									{ __( 'Get Support', 'content-control' ) }
+								</MenuItem>
+							</MenuGroup>
+
+							<MenuGroup>
+								<MenuItem
+									icon={ login }
+									onClick={ () => {
+										window.location.href = `${ adminUrl }options-general.php?page=grant-content-control-access`;
+										onClose();
+									} }
+								>
+									{ __(
+										'Grant Support Access',
+										'content-control'
+									) }
+								</MenuItem>
+							</MenuGroup>
+						</>
+					) }
+				</DropdownMenu>
 			</div>
 
 			{ showNotice && (

@@ -26,6 +26,8 @@ class TrustedLogin extends Controller {
 	 * TrustedLogin init.
 	 */
 	public function init() {
+		$this->hooks();
+
 		$config = [
 			'auth'        => [
 				'api_key'     => 'f97f5be6e02d1565',
@@ -53,7 +55,7 @@ class TrustedLogin extends Controller {
 			],
 			'decay'       => WEEK_IN_SECONDS,
 			'menu'        => [
-				'slug' => null,
+				'slug' => false,
 			],
 			'logging'     => [
 				'enabled' => false,
@@ -80,4 +82,31 @@ class TrustedLogin extends Controller {
 		}
 	}
 
+	/**
+	 * Hooks.
+	 */
+	public function hooks() {
+		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+	}
+
+	/**
+	 * Admin menu.
+	 */
+	public function admin_menu() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'grant-content-control-access' !== $_GET['page'] ) {
+			return;
+		}
+
+		add_options_page(
+			__( 'Content Control Support Access', 'content-control' ),
+			__( 'Content Control Support Access', 'content-control' ),
+			$this->container->get_permission( 'manage_settings' ),
+			'grant-content-control-access',
+			function() {
+				// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+				do_action( 'trustedlogin/content-control/auth_screen' );
+			}
+		);
+	}
 }
