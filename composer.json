@@ -72,9 +72,7 @@
             "@php strauss.phar"
         ],
         "trustedlogin": [
-            "@php vendor/bin/build-sass --namespace=content-control",
-            "[ -d 'vendor/scssphp' ] && rm -rf vendor/scssphp || true",
-            "[ -d 'vendor/bin' ] && rm -rf vendor/bin/build-sass && rm -rf vendor/bin/pscss || true"
+            "@php vendor/bin/build-sass --namespace=content-control"
         ],
         "test": "phpunit",
         "test:watch": "phpunit-watcher watch < /dev/tty"

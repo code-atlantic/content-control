@@ -77,7 +77,7 @@
     "pretest:unit:php": "wp-env start",
     "test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
     "translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
-    "release": "rm -rf vendor && composer install --no-dev && composer dump-autoload --optimize && npm run build && npm run translate && npm run plugin-zip"
+    "release": "composer run release && npm run build && npm run translate && npm run plugin-zip"
   },
   "babel": {},
   "workspaces": [
