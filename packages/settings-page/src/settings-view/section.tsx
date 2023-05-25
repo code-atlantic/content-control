@@ -9,9 +9,19 @@ type Props = {
 };
 
 const Section = ( { title, icon, children }: Props ) => {
+	// Modify title to be a className and append.
+	const titleClass = title
+		.toLowerCase()
+		.replace( /[^a-z0-9]+/g, '-' )
+		.replace( /^-|-$/g, '' );
+
+	const titleClassWithPrefix = `settings-section-panel--${ titleClass }`;
+
+	const className = `settings-section-panel ${ titleClassWithPrefix }`;
+
 	return (
 		<>
-			<Panel className="settings-section-panel">
+			<Panel className={ className }>
 				<div className="components-panel__header">
 					{ icon && (
 						<span className="panel-icon">
