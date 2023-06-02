@@ -5,17 +5,16 @@
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "require": {
-        "pimple/pimple": "~3.5",
         "composer/installers": "~2.2.0",
-        "trustedlogin/client": "*"
+        "pimple/pimple": "~3.5",
+        "trustedlogin/client": "dev-develop"
     },
     "require-dev": {
         "code-atlantic/coding-standards": "dev-develop",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
         "php": ">=7.3",
         "phpunit/phpunit": "^6.5",
-        "yoast/phpunit-polyfills": "^1.0",
-        "scssphp/scssphp": "*"
+        "yoast/phpunit-polyfills": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -31,12 +30,10 @@
             "namespace_prefix": "ContentControl\\Vendor\\",
             "classmap_prefix": "ContentControl_",
             "constant_prefix": "CONTENTCONTROL_",
-            "classmap_output": true,
             "packages": [
                 "pimple/pimple",
                 "trustedlogin/client"
-            ],
-            "delete_vendor_directories": false
+            ]
         }
     },
     "prefer-stable": true,
@@ -52,27 +49,16 @@
         "post-install-cmd": [
             "@clean-vendor-prefix-folder",
             "@strauss",
-            "@trustedlogin",
             "composer dump-autoload"
         ],
         "post-update-cmd": [
             "@clean-vendor-prefix-folder",
             "@strauss",
-            "@trustedlogin",
             "composer dump-autoload"
-        ],
-        "release": [
-            "@clean-vendor-prefix-folder",
-            "@strauss",
-            "@trustedlogin",
-            "composer dump-autoload --optimize"
         ],
         "strauss": [
             "@install-strauss",
             "@php strauss.phar"
-        ],
-        "trustedlogin": [
-            "@php vendor/bin/build-sass --namespace=content-control"
         ],
         "test": "phpunit",
         "test:watch": "phpunit-watcher watch < /dev/tty"

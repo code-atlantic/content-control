@@ -1,3 +1,19 @@
+@import "../../../vendor-prefixed/trustedlogin/client/src/assets/src/variables"; // Variables used in the mixins (all !default)
+@import "../../../vendor-prefixed/trustedlogin/client/src/assets/src/auth"; // Mixins for authentication screen
+@import "../../../vendor-prefixed/trustedlogin/client/src/assets/src/buttons"; // Mixins for buttons
+@import "../../../vendor-prefixed/trustedlogin/client/src/assets/src/global";
+
+// Map path for images.
+$namespace: "content-control";
+$path: "../../../vendor-prefixed/trustedlogin/client/src/assets/";
+
+@include trustedlogin-auth($namespace);
+@include trustedlogin-button($namespace);
+
+.tl-content-control-auth .tl-content-control-auth__logo img {
+	width: 72px;
+}
+
 #wpcontent {
 	padding: 0;
 }

@@ -68,7 +68,7 @@ class TrustedLogin extends Controller {
 			],
 			'paths'       => [
 				'js'  => $this->container->get_url( 'vendor-prefixed/trustedlogin/client/src/assets/trustedlogin.js' ),
-				'css' => $this->container->get_url( 'vendor-prefixed/trustedlogin/client/src/assets/trustedlogin.css' ),
+				'css' => $this->container->get_url( 'dist/settings-page.css' ),
 			],
 		];
 
