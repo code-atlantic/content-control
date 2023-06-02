@@ -96,7 +96,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 								<Panel className="cc__block-controls__main-panel">
 									<PanelBody
 										title={ __(
-											'Content Controls',
+											'Block Controls',
 											'content-control'
 										) }
 										icon={
