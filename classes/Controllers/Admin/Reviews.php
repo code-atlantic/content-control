@@ -104,12 +104,12 @@ class Reviews extends Controller {
 
 			$dismissed_triggers                   = $this->dismissed_triggers();
 			$dismissed_triggers[ $args['group'] ] = $args['pri'];
-			update_user_meta( $user_id, '_content_control_reviews_dismissed_triggers', $dismissed_triggers );
-			update_user_meta( $user_id, '_content_control_reviews_last_dismissed', current_time( 'mysql' ) );
+			update_user_meta( $user_id, 'content_control_reviews_dismissed_triggers', $dismissed_triggers );
+			update_user_meta( $user_id, 'content_control_reviews_last_dismissed', current_time( 'mysql' ) );
 
 			switch ( $args['reason'] ) {
 				case 'maybe_later':
-					update_user_meta( $user_id, '_content_control_reviews_last_dismissed', current_time( 'mysql' ) );
+					update_user_meta( $user_id, 'content_control_reviews_last_dismissed', current_time( 'mysql' ) );
 					break;
 				case 'am_now':
 				case 'already_did':
@@ -229,7 +229,7 @@ class Reviews extends Controller {
 	public function dismissed_triggers() {
 		$user_id = get_current_user_id();
 
-		$dismissed_triggers = get_user_meta( $user_id, '_content_control_reviews_dismissed_triggers', true );
+		$dismissed_triggers = get_user_meta( $user_id, 'content_control_reviews_dismissed_triggers', true );
 
 		if ( ! $dismissed_triggers ) {
 			$dismissed_triggers = [];
@@ -551,7 +551,7 @@ class Reviews extends Controller {
 	public function last_dismissed() {
 		$user_id = get_current_user_id();
 
-		return get_user_meta( $user_id, '_content_control_reviews_last_dismissed', true );
+		return get_user_meta( $user_id, 'content_control_reviews_last_dismissed', true );
 	}
 
 	/**
