@@ -61,14 +61,12 @@ class WidgetEditor extends Controller {
 			'logged_in'  => __( 'Logged In Users', 'content-control' ),
 		];
 
-		$instance = parse_widget_options( $instance ); ?>
+		$instance = parse_widget_options( $instance );
 
+		?>
 		<p class="widget_options-which_users">
-
 			<label for="<?php echo esc_attr( $widget->get_field_id( 'which_users' ) ); ?>">
-
 				<?php esc_html_e( 'Who can see this widget?', 'content-control' ); ?><br />
-
 				<select name="<?php echo esc_attr( $widget->get_field_name( 'which_users' ) ); ?>" id="<?php echo esc_attr( $widget->get_field_id( 'which_users' ) ); ?>" class="widefat">
 					<?php foreach ( $which_users_options as $option => $label ) : ?>
 						<option value="<?php echo esc_attr( $option ); ?>" <?php selected( $option, $instance['which_users'] ); ?>>
@@ -76,24 +74,18 @@ class WidgetEditor extends Controller {
 						</option>
 					<?php endforeach; ?>
 				</select>
-
 			</label>
-
 		</p>
 
 		<p class="widget_options-roles">
-
 			<?php esc_html_e( 'Choose which roles can see this widget', 'content-control' ); ?><br />
-
 			<?php foreach ( $allowed_user_roles as $option => $label ) : ?>
 				<label>
 					<input type="checkbox" name="<?php echo esc_attr( $widget->get_field_name( 'roles' ) ); ?>[]" value="<?php echo esc_attr( $option ); ?>" <?php checked( in_array( $option, $instance['roles'], true ), true ); ?>/>
 					<?php echo esc_html( $label ); ?>
 				</label>
 			<?php endforeach; ?>
-
 		</p>
-
 		<?php
 	}
 
