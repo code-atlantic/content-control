@@ -7,7 +7,7 @@
 
 namespace ContentControl;
 
-require_once 'functions/assets.php';
+require_once 'functions/back-compat.php';
 require_once 'functions/compatibility.php';
 require_once 'functions/content.php';
 require_once 'functions/deprecated.php';

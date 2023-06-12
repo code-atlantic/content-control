@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Checks whether function is disabled.
  *

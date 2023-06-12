@@ -117,3 +117,18 @@ function update_block_types( $incoming_block_types = [] ) {
 
 	\update_option( 'content_control_known_blockTypes', $block_types );
 }
+
+/**
+ * Get default denial message.
+ *
+ * @return string
+ */
+function get_default_denial_message() {
+	if ( \ContentControl\data_version( 'settings' ) === 1 ) {
+		$settings = get_option( 'jp_cc_settings', [] );
+
+		return isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
+	}
+
+	return get_option( 'defaultDenialMessage', '' );
+}

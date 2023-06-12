@@ -38,20 +38,29 @@ class Restrictions {
 		if ( ! isset( $all_restrictions ) ) {
 			$all_restrictions = [];
 
-			// Query restriction post type.
-			$restrictions = get_posts(
-				[
-					'post_type'      => 'cc_restriction',
-					'posts_per_page' => -1,
-					'post_status'    => 'publish',
-					// Order by menu order.
-					'orderby'        => [ 'menu_order', 'date' ],
-					'order'          => 'DESC',
-				]
-			);
+			if ( \ContentControl\data_version( 'restrictions' ) === 1 ) {
+				$restrictions = \ContentControl\get_v1_restrictions();
 
-			foreach ( $restrictions as $restriction ) {
-				$all_restrictions[ $restriction->ID ] = new Restriction( $restriction );
+				foreach ( $restrictions as $key => $restriction ) {
+					$restriction['id']        = $key;
+					$all_restrictions[ $key ] = new Restriction( $restriction );
+				}
+			} else {
+				// Query restriction post type.
+				$restrictions = get_posts(
+					[
+						'post_type'      => 'cc_restriction',
+						'posts_per_page' => -1,
+						'post_status'    => 'publish',
+						// Order by menu order.
+						'orderby'        => [ 'menu_order', 'date' ],
+						'order'          => 'DESC',
+					]
+				);
+
+				foreach ( $restrictions as $restriction ) {
+					$all_restrictions[ $restriction->ID ] = new Restriction( $restriction );
+				}
 			}
 		}
 

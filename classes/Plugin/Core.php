@@ -94,9 +94,6 @@ class Core {
 			// Save Upgraded From option.
 			$data['upgraded_from'] = $data['version'];
 			$data['version']       = $version;
-
-			// Reset JS/CSS assets for regeneration.
-			\ContentControl\reset_assets();
 		}
 
 		if ( $current_data !== $data ) {
