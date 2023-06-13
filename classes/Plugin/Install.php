@@ -9,6 +9,8 @@
 
 namespace ContentControl\Plugin;
 
+use function ContentControl\plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -89,7 +91,20 @@ class Install {
 	 */
 	public static function activate_site() {
 		// Add a temporary option that will fire a hookable action on next load.
-		set_transient( '_content_control_installed', true, 3600 );
+		\set_transient( '_content_control_installed', true, 3600 );
+
+		$version = plugin()->get( 'version' );
+
+		// Add version info.
+		\add_option( 'content_control_version', [
+			'version'         => $version,
+			'upgraded_from'   => null,
+			'initial_version' => $version,
+			'installed_on'    => gmdate( 'Y-m-d H:i:s' ),
+		] );
+
+		// Add data versions if missing.
+		\add_option( 'content_control_data_versioning', \ContentControl\current_data_versions() );
 	}
 
 	/**
