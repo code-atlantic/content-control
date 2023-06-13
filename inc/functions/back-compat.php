@@ -10,44 +10,6 @@ namespace ContentControl;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Get the current data version.
- *
- * @param string $type Type of data to get version for.
- *
- * @return int
- */
-function data_version( $type ) {
-	$versioning = get_option( 'content_control_data_versioning', [] );
-
-	return $versioning[ $type ];
-}
-
-add_action( 'content_control/update_version', __NAMESPACE__ . '\update_version_v2' );
-
-/**
- * Checks if user is upgrading from < 2.0.0.
- *
- * Sets data versioning to 1.
- *
- * @param string $old_version Old version.
- */
-function update_version_v2( $old_version ) {
-	if ( version_compare( $old_version, '2.0.0', '<' ) ) {
-		$versioning = get_option( 'content_control_data_versioning', [] );
-
-		if ( ! isset( $versioning['settings'] ) ) {
-			$versioning['settings'] = 1;
-		}
-
-		if ( ! isset( $versioning['restrictions'] ) ) {
-			$versioning['restrictions'] = 1;
-		}
-
-		update_option( 'content_control_data_versioning', $versioning );
-	}
-}
-
-/**
  * Get v1 restrictions from wp_options.
  *
  * @return array
@@ -154,7 +116,7 @@ function remap_condition_to_rule( $condition ) {
 		$pt_target = explode( '_w_', $target );
 		// First key is the post type.
 		$post_type = array_shift( $pt_target );
-		// Last Key is the taxonomy
+		// Last Key is the taxonomy.
 		$taxonomy = array_pop( $pt_target );
 
 		$rule['name'] = "content_is_{$post_type}_with_{$taxonomy}";

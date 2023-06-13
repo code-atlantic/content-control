@@ -11,6 +11,9 @@ namespace ContentControl\Base;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * HTTP Stream class.
+ */
 class Stream {
 
 	/**
@@ -27,6 +30,11 @@ class Stream {
 	 */
 	const VERSION = '1.0.0';
 
+	/**
+	 * Stream constructor.
+	 *
+	 * @param string $stream_name Stream name.
+	 */
 	public function __construct( $stream_name = 'stream' ) {
 		$this->stream_name = $stream_name;
 	}
@@ -40,11 +48,13 @@ class Stream {
 		// Disable default disconnect checks.
 		ignore_user_abort( true );
 
+		// phpcs:disable WordPress.PHP.IniSet.Risky, WordPress.PHP.NoSilencedErrors.Discouraged
 		@ini_set( 'zlib.output_compression', 0 );
 		@ini_set( 'implicit_flush', 1 );
 		@ini_set( 'log_limit', 8096 );
 		@ob_end_clean();
 		set_time_limit( 0 );
+		// phpcs:enable WordPress.PHP.IniSet.Risky, WordPress.PHP.NoSilencedErrors.Discouraged
 
 		$this->send_headers();
 	}
@@ -59,7 +69,8 @@ class Stream {
 		header( 'Stream-Name: ' . $this->stream_name );
 		header( 'Cache-Control: no-cache' );
 		header( 'Connection: keep-alive' );
-		header( 'X-Accel-Buffering: no' ); // Nginx: unbuffered responses suitable for Comet and HTTP streaming applications
+		// Nginx: unbuffered responses suitable for Comet and HTTP streaming applications.
+		header( 'X-Accel-Buffering: no' );
 	}
 
 	/**
@@ -70,8 +81,8 @@ class Stream {
 	 * @return void
 	 */
 	private function flush_buffers() {
-		// this is for the buffer achieve the minimum size in order to flush data
-		echo str_repeat( ' ', 1024 * 8 ) . PHP_EOL;
+		// This is for the buffer achieve the minimum size in order to flush data.
+		echo esc_js( str_repeat( ' ', 1024 * 8 ) . PHP_EOL );
 		flush();
 		// Neccessary to prevent the stream from flushing too quickly.
 		sleep( 0.25 );
@@ -85,9 +96,9 @@ class Stream {
 	 * @return void
 	 */
 	public function send_data( $data ) {
-		$data = is_string( $data ) ? $data : json_encode( $data );
+		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
 
-		echo "data: {$data}" . PHP_EOL;
+		echo esc_js( "data: {$data}" . PHP_EOL );
 		echo PHP_EOL;
 
 		$this->flush_buffers();
@@ -102,10 +113,10 @@ class Stream {
 	 * @return void
 	 */
 	public function send_event( $event, $data = '' ) {
-		$data = is_string( $data ) ? $data : json_encode( $data );
+		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
 
-		echo "event: {$event}" . PHP_EOL;
-		echo "data: {$data}" . PHP_EOL;
+		echo esc_js( "event: {$event}" . PHP_EOL );
+		echo esc_js( "data: {$data}" . PHP_EOL );
 		echo PHP_EOL;
 
 		$this->flush_buffers();

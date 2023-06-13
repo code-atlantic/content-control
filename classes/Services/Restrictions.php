@@ -38,7 +38,7 @@ class Restrictions {
 		if ( ! isset( $all_restrictions ) ) {
 			$all_restrictions = [];
 
-			if ( \ContentControl\data_version( 'restrictions' ) === 1 ) {
+			if ( \ContentControl\get_data_version( 'restrictions' ) === 1 ) {
 				$restrictions = \ContentControl\get_v1_restrictions();
 
 				foreach ( $restrictions as $key => $restriction ) {

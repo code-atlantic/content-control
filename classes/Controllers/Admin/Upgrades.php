@@ -1,0 +1,382 @@
+<?php
+/**
+ * Upgrades Controller Class.
+ *
+ * @package ContentControl
+ */
+
+namespace ContentControl\Controllers\Admin;
+
+use ContentControl\Base\Controller;
+
+defined( 'ABSPATH' ) || exit;
+
+use function __;
+use function add_filter;
+use function add_action;
+use function esc_html_e;
+use function esc_attr;
+use function get_current_screen;
+use function admin_url;
+use function is_admin;
+use function current_user_can;
+use function get_option;
+use function update_option;
+use function wp_create_nonce;
+use function wp_verify_nonce;
+use function wp_send_json_error;
+use function wp_send_json_success;
+use function wp_unslash;
+
+/**
+ * Upgrades Controller.
+ *
+ * @package ContentControl\Admin
+ */
+class Upgrades extends Controller {
+
+	/**
+	 * Key to save list of upgrades that have been done.
+	 *
+	 * @var string
+	 */
+	const OPTION_KEY = 'content_control_upgrades';
+
+	/**
+	 * Initialize the settings page.
+	 */
+	public function init() {
+		add_action( 'init', [ $this, 'hooks' ] );
+		add_action( 'wp_ajax_content_control_review_action', [ $this, 'ajax_handler' ] );
+		add_filter( 'content_control/settings-page_localized_vars', [ $this, 'localize_vars' ] );
+	}
+
+	/**
+	 * Hook into relevant WP actions.
+	 */
+	public function hooks() {
+		if ( is_admin() && current_user_can( 'manage_options' ) ) {
+			add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+			add_action( 'network_admin_notices', [ $this, 'admin_notices' ] );
+			add_action( 'user_admin_notices', [ $this, 'admin_notices' ] );
+		}
+	}
+
+	/**
+	 * Get a list of all upgrades.
+	 *
+	 * @return string[]
+	 */
+	public function all_upgrades() {
+		return [
+			// Version 2 upgrades.
+			'plugin_meta-2'  => '\ContentControl\Upgrades\PluginMeta_2',
+			'restrictions-2' => '\ContentControl\Upgrades\Restrictions_2',
+			'settings-2'     => '\ContentControl\Upgrades\Settings_2',
+			'user_meta-2'    => '\ContentControl\Upgrades\UserMeta_2',
+		];
+	}
+
+	/**
+	 * Check if there are any upgrades to run.
+	 *
+	 * @return boolean
+	 */
+	public function has_upgrades() {
+		return count( $this->get_required_upgrades() );
+	}
+
+	/**
+	 * Get a list of required upgrades.
+	 *
+	 * Uses a cached list of done upgrades to prevent extra processing.
+	 *
+	 * @return \ContentControl\Base\Upgrade[]
+	 */
+	public function get_required_upgrades() {
+		static $required_upgrades = null;
+
+		if ( null === $required_upgrades ) {
+			$required_upgrades = [];
+
+			$all_upgrades  = $this->all_upgrades();
+			$upgrades_done = get_option( self::OPTION_KEY, [] );
+			$count_done    = count( $upgrades_done );
+
+			foreach ( $all_upgrades as $key => $upgrade_class_name ) {
+				if ( in_array( $key, $upgrades_done, true ) ) {
+					continue;
+				}
+
+				if ( ! class_exists( $upgrade_class_name ) ) {
+					continue;
+				}
+
+				/**
+				 * Upgrade class instance.
+				 *
+				 * @var \ContentControl\Base\Upgrade $upgrade
+				 */
+				$upgrade = new $upgrade_class_name();
+
+				if ( $upgrade->is_required() ) {
+					$required_upgrades[ $key ] = $upgrade;
+				} else {
+					// If its not required, mark it as done.
+					$upgrades_done[] = $key;
+				}
+
+				// Unset the upgrade class to prevent memory leaks.
+				unset( $upgrade );
+			}
+
+			// Sort the required upgrades based on prerequisites.
+			$required_upgrades = $this->sort_upgrades_by_prerequisites( $required_upgrades );
+
+			// Store the list of upgrades that have been done if it has changed.
+			if ( count( $upgrades_done ) > $count_done ) {
+				update_option( self::OPTION_KEY, $upgrades_done );
+			}
+		}
+
+		return $required_upgrades;
+	}
+
+	/**
+	 * Sort upgrades based on prerequisites using a graph-based approach.
+	 *
+	 * @param \ContentControl\Base\Upgrade[] $upgrades List of upgrades to sort.
+	 *
+	 * @return \ContentControl\Base\Upgrade[]
+	 */
+	private function sort_upgrades_by_prerequisites( $upgrades ) {
+		// Build the graph of upgrades and their dependencies.
+		$graph = [];
+		foreach ( $upgrades as $upgrade ) {
+			$graph[ $upgrade::TYPE . '-' . $upgrade::VERSION ] = $upgrade->get_dependencies();
+		}
+
+		// Perform a topological sort on the graph.
+		$sorted = $this->topological_sort( $graph );
+
+		// Rebuild the list of upgrades in the sorted order.
+		foreach ( $sorted as $key => $value ) {
+			$sorted[ $key ] = $upgrades[ $value ];
+		}
+
+		// Return the sorted upgrades.
+		return $sorted;
+	}
+
+	/**
+	 * Perform a topological sort on a graph.
+	 *
+	 * @param array $graph Graph to sort.
+	 *
+	 * @return array
+	 */
+	private function topological_sort( $graph ) {
+		$visited = [];
+		$sorted  = [];
+
+		foreach ( $graph as $node => $dependencies ) {
+			$this->visit_node( $node, $graph, $visited, $sorted );
+		}
+
+		return $sorted;
+	}
+
+	/**
+	 * Visit a node in the graph for topological sort.
+	 *
+	 * @param mixed $node Node to visit.
+	 * @param array $graph Graph to sort.
+	 * @param array $visited List of visited nodes.
+	 * @param array $sorted List of sorted nodes.
+	 */
+	private function visit_node( $node, $graph, &$visited, &$sorted ) {
+		if ( isset( $visited[ $node ] ) ) {
+			// Node already visited, skip.
+			return;
+		}
+
+		$visited[ $node ] = true;
+
+		foreach ( $graph[ $node ] as $dependency ) {
+			$this->visit_node( $dependency, $graph, $visited, $sorted );
+		}
+
+		$sorted[] = $node;
+	}
+
+	/**
+	 * AJAX Handler
+	 */
+	public function ajax_handler() {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
+			wp_send_json_error();
+		}
+
+		if ( ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
+			wp_send_json_error();
+		}
+
+		try {
+			$upgrades = $this->get_required_upgrades();
+
+			$stream = new \ContentControl\Base\Stream( 'upgrades' );
+
+			$stream->start();
+
+			$stream->send_event( 'start', [
+				'message'  => __( 'Starting upgrades...', 'content-control' ),
+				'progress' => 0,
+			] );
+
+			$i = 0;
+
+			while ( ! $stream->should_abort() && ! empty( $upgrades ) ) {
+				++$i;
+
+				$upgrade = array_shift( $upgrades );
+
+				$result = $upgrade->stream_run( $stream );
+
+				if ( is_wp_error( $result ) ) {
+					$stream->send_error( $result );
+					// Ignore falsey values.
+				} elseif ( false !== $result ) {
+					$upgrades_done   = get_option( self::OPTION_KEY, [] );
+					$upgrades_done[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
+					update_option( self::OPTION_KEY, $upgrades_done );
+				}
+
+				$stream->send_event(
+					'progress',
+					[
+						'progress' => $i / count( $upgrades ),
+					]
+				);
+			}
+
+			$stream->send_event( 'complete', [
+				'message'  => __( 'All upgrades have been completed.', 'content-control' ),
+				'progress' => 1,
+			] );
+		} catch ( \Exception $e ) {
+			$stream->send_error( $e );
+		}
+	}
+
+	/**
+	 * Render admin notices if available.
+	 */
+	public function admin_notices() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		if ( ! $this->has_upgrades() ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+
+		if ( 'settings_page_content-control-settings' === $screen->id ) {
+			return;
+		}
+
+		?>
+		<style>
+			.content-control-notice {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				padding: 8px;
+				margin-top: 16px;
+				margin-bottom: 16px;
+			}
+
+			.content-control-notice .notice-logo {
+				flex: 0 0 60px;
+				max-width: 60px;
+				font-size: 60px;
+			}
+
+			.content-control-notice .notice-content {
+				flex-grow: 1;
+			}
+
+			.content-control-notice p {
+				margin-bottom: 0;
+				max-width: 800px;
+			}
+
+			.content-control-notice .notice-actions {
+				margin-top: 10px;
+				margin-bottom: 0;
+				padding-left: 0;
+				list-style: none;
+
+				display: flex;
+				gap: 16px;
+				align-items: center;
+			}
+		</style>
+
+		<div class="notice notice-info content-control-notice">
+			<div class="notice-logo">
+				<img class="logo" width="60" src="<?php echo esc_attr( $this->container->get_url( 'assets/images/illustration-check.svg' ) ); ?>" />
+			</div>
+
+			<div class="notice-content">
+				<p>
+					<strong>
+						<?php esc_html_e( 'Content Control has been updated and needs to run some database upgrades.', 'content-control' ); ?>
+					</strong>
+				</p>
+				<ul class="notice-actions">
+					<li>
+						<a class="content-control-go-to-settings button button-tertiary" href="<?php echo esc_attr( admin_url( 'options-general.php?page=content-control-settings' ) ); ?>" data-reason="am_now">
+							🚨   <?php esc_html_e( 'Upgrade Now', 'content-control' ); ?>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Add localized vars to settings page if there are upgrades to run.
+	 *
+	 * @param array $vars Localized vars.
+	 *
+	 * @return array
+	 */
+	public function localize_vars( $vars ) {
+		$vars['has_upgrades'] = false;
+
+		if ( ! $this->has_upgrades() ) {
+			return $vars;
+		}
+
+		$vars['has_upgrades']  = true;
+		$vars['upgrade_nonce'] = wp_create_nonce( 'content_control_upgrades' );
+		$vars['upgrades']      = [];
+
+		$upgrades = $this->get_required_upgrades();
+
+		foreach ( $this->get_required_upgrades() as $key => $upgrade ) {
+			$vars['upgrades'][ $key ] = [
+				'key'         => $upgrade::TYPE . '-' . $upgrade::VERSION,
+				'label'       => $upgrade->label(),
+				'description' => $upgrade->description(),
+			];
+		}
+
+		return $vars;
+	}
+
+}
