@@ -109,9 +109,10 @@ class Core {
 	 */
 	private function process_version_data_migration( $data ) {
 		$has_old_settings_data = get_option( 'jp_cc_settings', false );
-		$has_new_settings_data = get_option( 'content_control_settings', false );
+		$has_old_install_date  = get_option( 'jp_cc_reviews_installed_on', false );
 
-		if ( false !== $has_old_settings_data ) {
+		// Check if old settings exist.
+		if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {
 			$old_data = [
 				'version'         => '1.1.9',
 				'upgraded_from'   => null,
