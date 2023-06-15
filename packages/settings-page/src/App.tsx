@@ -13,6 +13,7 @@ import SettingsView from './settings-view';
 
 import type { TabComponent } from './types';
 import { useLicense } from '@content-control/core-data';
+import UpgradeView from './upgrades-view';
 
 const {
 	permissions: {
@@ -115,10 +116,12 @@ const App = () => {
 			__( 'Content Control', 'content-control' );
 	}, [ view, views ] );
 
+
 	return (
 		<div
 			className={ classNames( [ 'cc-settings-page', `view-${ view }` ] ) }
 		>
+			<UpgradeView />
 			<Header tabs={ views } />
 			<div className="cc-settings-page__content">
 				<ViewComponent />

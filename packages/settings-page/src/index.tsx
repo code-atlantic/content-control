@@ -18,6 +18,10 @@ declare global {
 		logUrl: string | false;
 		userRoles: { [ key: string ]: string };
 		restBase: string;
+		hasUpgrades?: boolean;
+		upgradeNonce?: string;
+		upgradeUrl?: string;
+		upgrades: [];
 		rolesAndCaps: {
 			[ key: string ]: {
 				name: string;
@@ -41,6 +45,7 @@ export const init = () => {
 	if ( ! root ) {
 		return;
 	}
+
 
 	createRoot( root ).render(
 		// <StrictMode>

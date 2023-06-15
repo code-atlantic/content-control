@@ -34,6 +34,7 @@
 		"@content-control/icons": "*",
 		"@content-control/rule-engine": "*",
 		"@content-control/utils": "*",
+		"@react-nano/use-event-source": "^0.13.0",
 		"@wordpress/components": "^24.0.0",
 		"@wordpress/data": "^9.3.0",
 		"@wordpress/element": "^5.10.0",
