@@ -33,7 +33,7 @@ const LicenseTab = () => {
 		isLicenseMissing,
 		isLicenseExpired,
 		isLicenseOverQuota,
-		isLicneseDisabled,
+		isLicenseDisabled,
 		hasError,
 	} = useLicense();
 
@@ -152,7 +152,7 @@ const LicenseTab = () => {
 			);
 		}
 
-		if ( isLicneseDisabled ) {
+		if ( isLicenseDisabled ) {
 			// The license key has been disabled.
 			return __(
 				'Your license key has been disabled. Please contact support.',

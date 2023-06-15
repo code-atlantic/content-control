@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { lifesaver, login, menu, pages, people, postAuthor } from '@wordpress/icons';
+import { lifesaver, login, pages, people } from '@wordpress/icons';
 
 import type { TabComponent } from './types';
 
