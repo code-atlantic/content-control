@@ -1,29 +1,36 @@
-import { settingsStore } from '../settings/index';
+import { useMemo } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
+import { settingsStore } from '../settings/index';
+
 import type { Settings } from '../settings/types';
+
+const selectSettingsStore = ( select ) => {
+	const storeSelect = select( settingsStore );
+	return {
+		unsavedChanges: storeSelect.getUnsavedChanges(),
+		hasUnsavedChanges: storeSelect.hasUnsavedChanges(),
+		currentSettings: storeSelect.getSettings(),
+		isSaving:
+			storeSelect.isDispatching( 'updateSettings' ) ||
+			storeSelect.isDispatching( 'saveSettings' ),
+	};
+};
 
 const useSettings = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { currentSettings, unsavedChanges, hasUnsavedChanges, isSaving } =
-		useSelect( ( select ) => {
-			const storeSelect = select( settingsStore );
-			return {
-				unsavedChanges: storeSelect.getUnsavedChanges(),
-				hasUnsavedChanges: storeSelect.hasUnsavedChanges(),
-				currentSettings: storeSelect.getSettings(),
-				isSaving:
-					storeSelect.isDispatching( 'updateSettings' ) ||
-					storeSelect.isDispatching( 'saveSettings' ),
-			};
-		}, [] );
+		useSelect( selectSettingsStore, [] );
 
 	// Grab needed action dispatchers.
 	const { updateSettings, saveSettings, stageUnsavedChanges } =
 		useDispatch( settingsStore );
 
 	// Merge current & unsaved changes.
-	const settings = { ...currentSettings, ...unsavedChanges };
+	const settings = useMemo(
+		() => ( { ...currentSettings, ...unsavedChanges } ),
+		[ currentSettings, unsavedChanges ]
+	);
 
 	/**
 	 * Get setting by name.

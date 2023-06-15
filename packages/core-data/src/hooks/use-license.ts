@@ -1,3 +1,4 @@
+import { useMemo } from '@wordpress/element';
 import { licenseStore } from '../license/index';
 import { useDispatch, useSelect } from '@wordpress/data';
 
@@ -59,7 +60,7 @@ const useLicense = () => {
 			'expired' === licenseStatus?.error );
 
 	// Check if the license is disabled.
-	const isLicneseDisabled =
+	const isLicenseDisabled =
 		'disabled' === licenseStatus?.license ||
 		( isLicenseInvalid && 'disabled' === licenseStatus?.error );
 
@@ -74,15 +75,24 @@ const useLicense = () => {
 		licenseStatus?.error ?? ''
 	);
 
-	const isLicenseKeyValid =
-		isLicenseActive ||
-		isLicenseDeactivated ||
-		isLicenseExpired ||
-		isLicneseDisabled ||
-		isLicenseOverQuota;
+	const isLicenseKeyValid = useMemo(
+		() =>
+			isLicenseActive ||
+			isLicenseDeactivated ||
+			isLicenseExpired ||
+			isLicenseDisabled ||
+			isLicenseOverQuota,
+		[
+			isLicenseActive,
+			isLicenseDeactivated,
+			isLicenseExpired,
+			isLicenseDisabled,
+			isLicenseOverQuota,
+		]
+	);
 
 	// Create a helper function to get the current license status.
-	const getLicenseStatusName = () => {
+	const getLicenseStatusName = useMemo( () => {
 		if ( isLicenseActive ) {
 			return 'active';
 		} else if ( isLicenseExpired ) {
@@ -91,14 +101,21 @@ const useLicense = () => {
 			return 'missing';
 		} else if ( isLicenseDeactivated ) {
 			return 'deactivated';
-		} else if ( isLicneseDisabled ) {
+		} else if ( isLicenseDisabled ) {
 			return 'disabled';
 		} else if ( isGeneralError ) {
 			return 'error';
 		} else {
 			return 'unknown';
 		}
-	};
+	}, [
+		isLicenseActive,
+		isLicenseExpired,
+		isLicenseMissing,
+		isLicenseDeactivated,
+		isLicenseDisabled,
+		isGeneralError,
+	] );
 
 	return {
 		connectInfo,
@@ -117,7 +134,7 @@ const useLicense = () => {
 		isLicenseMissing,
 		isLicenseExpired,
 		isLicenseInvalid,
-		isLicneseDisabled,
+		isLicenseDisabled,
 		isLicenseOverQuota,
 		isGeneralError,
 		hasError,
