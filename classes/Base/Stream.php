@@ -71,6 +71,7 @@ class Stream {
 		header( 'Connection: keep-alive' );
 		// Nginx: unbuffered responses suitable for Comet and HTTP streaming applications.
 		header( 'X-Accel-Buffering: no' );
+		$this->flush_buffers();
 	}
 
 	/**
@@ -82,10 +83,16 @@ class Stream {
 	 */
 	private function flush_buffers() {
 		// This is for the buffer achieve the minimum size in order to flush data.
-		echo esc_js( str_repeat( ' ', 1024 * 8 ) . PHP_EOL );
-		flush();
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo str_repeat( ' ', 1024 * 8 ) . PHP_EOL;
+		// TODO This may not be needed with usleep.
+
+		ob_end_flush(); // Strange behaviour, will not work.
+		flush(); // Unless both are called. Some browsers will still cache.
+
 		// Neccessary to prevent the stream from flushing too quickly.
-		sleep( 0.25 );
+		usleep( 1000 );
 	}
 
 	/**
@@ -98,7 +105,8 @@ class Stream {
 	public function send_data( $data ) {
 		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
 
-		echo esc_js( "data: {$data}" . PHP_EOL );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo "data: {$data}" . PHP_EOL;
 		echo PHP_EOL;
 
 		$this->flush_buffers();
@@ -115,8 +123,10 @@ class Stream {
 	public function send_event( $event, $data = '' ) {
 		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
 
-		echo esc_js( "event: {$event}" . PHP_EOL );
-		echo esc_js( "data: {$data}" . PHP_EOL );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo "event: {$event}" . PHP_EOL;
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo "data: {$data}" . PHP_EOL;
 		echo PHP_EOL;
 
 		$this->flush_buffers();
