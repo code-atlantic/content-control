@@ -81,14 +81,13 @@ class Stream {
 	 *
 	 * @return void
 	 */
-	private function flush_buffers() {
+	protected function flush_buffers() {
 		// This is for the buffer achieve the minimum size in order to flush data.
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo str_repeat( ' ', 1024 * 8 ) . PHP_EOL;
 		// TODO This may not be needed with usleep.
 
-		ob_end_flush(); // Strange behaviour, will not work.
 		flush(); // Unless both are called. Some browsers will still cache.
 
 		// Neccessary to prevent the stream from flushing too quickly.
