@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
-import { useMemo, useState } from '@wordpress/element';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 
 import {
 	useEventSource,
@@ -43,6 +43,8 @@ const statusStateDefaults = {
 
 type UpgradeState = {
 	running: boolean;
+	done: boolean;
+	redirectCountdown: number;
 	logs: string[];
 	showLogs: boolean;
 	status: StatusState;
@@ -51,14 +53,19 @@ type UpgradeState = {
 const { hasUpgrades, upgradeNonce, upgradeUrl } = contentControlSettingsPage;
 
 const UpgradeView = () => {
+	const timerRef = useRef< NodeJS.Timeout | null >( null );
+
 	const [ upgradeState, setUpgradeState ] = useState< UpgradeState >( {
 		running: false,
+		done: false,
+		redirectCountdown: -1,
 		logs: [],
 		showLogs: false,
 		status: statusStateDefaults,
 	} );
 
-	const { running, logs, showLogs, status } = upgradeState;
+	const { running, done, redirectCountdown, logs, showLogs, status } =
+		upgradeState;
 
 	const [ eventSource, eventSourceStatus ] = useEventSource(
 		running ? `${ upgradeUrl }&nonce=${ upgradeNonce }` : '',
@@ -94,6 +101,13 @@ const UpgradeView = () => {
 				case 'task:start':
 				case 'task:complete':
 				case 'task:progress':
+					if ( type === 'upgrades:complete' ) {
+						// newState.done = true;
+						// newState.redirectCountdown = 15;
+						// Close the connection when the 'upgrades:complete' event is received
+						eventSource?.close();
+					}
+
 					setUpgradeState( newState );
 					break;
 
@@ -114,11 +128,6 @@ const UpgradeView = () => {
 					console.log( 'Unknown event:', type );
 					break;
 			}
-
-			// Close the connection when the 'upgrades:complete' event is received
-			if ( type === 'upgrades:complete' ) {
-				eventSource?.close();
-			}
 		},
 		[ upgradeState ]
 	);
@@ -131,6 +140,25 @@ const UpgradeView = () => {
 
 	const { progress: completedTaskSteps = NaN, total: totalTaskSteps = NaN } =
 		currentTask || {};
+
+	useEffect( () => {
+		if ( ! running ) {
+			return;
+		}
+
+		if ( done && redirectCountdown >= 0 ) {
+			timerRef.current = setTimeout( () => {
+				if ( 0 === redirectCountdown ) {
+					window.location.reload();
+				} else {
+					setUpgradeState( {
+						...upgradeState,
+						redirectCountdown: redirectCountdown - 1,
+					} );
+				}
+			}, 1000 );
+		}
+	}, [ done, redirectCountdown ] );
 
 	// Calculate the number of tasks that have been completed or are currently running
 	const completedOrRunningTasks = completedTasks + 1;
@@ -209,7 +237,22 @@ const UpgradeView = () => {
 							{ __( 'Upgrade Progress', 'content-control' ) }
 						</h3>
 						<div className="upgrade-progress__task-percentage">
-							{ Math.round( upgradePercentage ) }%
+							{ done ? (
+								<Button
+									onClick={ () => {
+										clearTimeout( timerRef.current ?? 0 );
+										window.location.reload();
+									} }
+									variant="link"
+								>
+									{ `${ __(
+										'Reload',
+										'content-control'
+									) } (${ redirectCountdown })` }
+								</Button>
+							) : (
+								`${ Math.round( upgradePercentage ) }%`
+							) }
 						</div>
 					</div>
 
