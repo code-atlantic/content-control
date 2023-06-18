@@ -116,7 +116,6 @@ const App = () => {
 			__( 'Content Control', 'content-control' );
 	}, [ view, views ] );
 
-
 	return (
 		<div
 			className={ classNames( [ 'cc-settings-page', `view-${ view }` ] ) }

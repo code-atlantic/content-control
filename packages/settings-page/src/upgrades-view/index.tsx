@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
-import { flushSync, useMemo, useReducer, useState } from '@wordpress/element';
 import { Button } from '@wordpress/components';
+import { useMemo, useState } from '@wordpress/element';
 
 import {
 	useEventSource,
@@ -10,6 +10,16 @@ import {
 import './editor.scss';
 import { clamp } from '@content-control/utils';
 import classNames from 'classnames';
+
+type StatusState = {
+	total: number;
+	progress: number;
+	currentTask?: {
+		name: string;
+		total: number;
+		progress: number;
+	};
+};
 
 type SSEvent = {
 	type:
@@ -21,64 +31,37 @@ type SSEvent = {
 		| 'task:complete';
 	data: {
 		message?: string;
-		task?: string;
-		progress?: number;
-		total?: number;
+		status: StatusState;
 	};
 };
 
-type UpgradeStatusState = {
-	progress: number;
-	total: number;
-};
-
-type TaskStatusState = {
-	task: string;
-	progress: number;
-	total: number;
-};
-
-const messageReducer = ( state: SSEvent[], action: SSEvent ) => {
-	return [ ...state, action ];
-};
-
-const UpgradeStatusDefaults = {
-	progress: 0,
+const statusStateDefaults = {
 	total: 1,
-};
-
-const TaskStatusDefaults = {
-	task: '',
 	progress: 0,
-	total: 1,
+	currentTask: undefined,
 };
 
 type UpgradeState = {
-	started: boolean;
+	running: boolean;
 	logs: string[];
 	showLogs: boolean;
-	messages: SSEvent[];
-	upgradeStatus: UpgradeStatusState;
-	taskStatus: TaskStatusState;
+	status: StatusState;
 };
 
 const { hasUpgrades, upgradeNonce, upgradeUrl } = contentControlSettingsPage;
 
 const UpgradeView = () => {
 	const [ upgradeState, setUpgradeState ] = useState< UpgradeState >( {
-		started: false,
+		running: false,
 		logs: [],
 		showLogs: false,
-		messages: [],
-		upgradeStatus: UpgradeStatusDefaults,
-		taskStatus: TaskStatusDefaults,
+		status: statusStateDefaults,
 	} );
 
-	const { started, logs, showLogs, messages, upgradeStatus, taskStatus } =
-		upgradeState;
+	const { running, logs, showLogs, status } = upgradeState;
 
 	const [ eventSource, eventSourceStatus ] = useEventSource(
-		started ? `${ upgradeUrl }&nonce=${ upgradeNonce }` : '',
+		running ? `${ upgradeUrl }&nonce=${ upgradeNonce }` : '',
 		true
 	);
 
@@ -96,94 +79,28 @@ const UpgradeView = () => {
 		( { type, data } ) => {
 			const eventData = JSON.parse( data ) as SSEvent[ 'data' ];
 
-			const {
-				message = '',
-				task = '',
-				progress = 0,
-				total = 1,
-			} = eventData;
+			const { message = '', status } = eventData;
+
+			const newState = {
+				...upgradeState,
+				status,
+				logs: message.length ? [ ...logs, message ] : logs,
+			};
 
 			switch ( type ) {
 				case 'upgrades:start':
-					setUpgradeState( {
-						...upgradeState,
-						upgradeStatus: {
-							...upgradeStatus,
-							total,
-							progress,
-						},
-						logs: [ ...logs, message ],
-					} );
-					break;
-
 				case 'upgrades:progress':
-					setUpgradeState( {
-						...upgradeState,
-						upgradeStatus: {
-							...upgradeStatus,
-							progress,
-						},
-						taskStatus: TaskStatusDefaults,
-
-						logs: [ ...logs, message ],
-					} );
-					break;
-
 				case 'upgrades:complete':
-					setUpgradeState( {
-						...upgradeState,
-						upgradeStatus: {
-							...upgradeStatus,
-							progress: upgradeStatus.total,
-						},
-						taskStatus: TaskStatusDefaults,
-						logs: [ ...logs, message ],
-					} );
-					break;
-
 				case 'task:start':
-					setUpgradeState( {
-						...upgradeState,
-						taskStatus: {
-							...taskStatus,
-							task,
-							progress,
-							total,
-						},
-						logs: [
-							...logs,
-							message.length
-								? message
-								: __( 'Starting: ', 'content-control' ) + task,
-						],
-					} );
-					break;
-
+				case 'task:complete':
 				case 'task:progress':
-					setUpgradeState( {
-						...upgradeState,
-						taskStatus: {
-							...taskStatus,
-							progress,
-						},
-					} );
+					setUpgradeState( newState );
 					break;
 
 				case 'task:error':
 					setUpgradeState( {
-						...upgradeState,
+						...newState,
 						logs: [ ...logs, `ERROR: ${ message }` ],
-					} );
-					break;
-
-				case 'task:complete':
-					setUpgradeState( {
-						...upgradeState,
-						taskStatus: {
-							...taskStatus,
-							progress: taskStatus.total,
-						},
-						logs: [ ...logs, message ],
 					} );
 					break;
 
@@ -195,7 +112,6 @@ const UpgradeView = () => {
 			// Close the connection when the 'upgrades:complete' event is received
 			if ( type === 'upgrades:complete' ) {
 				eventSource?.close();
-				console.log( 'EventSource connection closed.' );
 			}
 		},
 		[ upgradeState ]
@@ -205,39 +121,48 @@ const UpgradeView = () => {
 		return null;
 	}
 
-	const totalTasks = upgradeStatus.total;
-	const completedTasks = upgradeStatus.progress;
+	const { total: totalTasks, progress: completedTasks, currentTask } = status;
+
+	const { progress: completedTaskSteps = NaN, total: totalTaskSteps = NaN } =
+		currentTask || {};
+
+	// Calculate the number of tasks that have been completed or are currently running
 	const completedOrRunningTasks = completedTasks + 1;
-	const uncompletedTasks = totalTasks - completedTasks;
-	const uncompletedAfterCurrentTask = uncompletedTasks - 1;
+	const uncompletedAfterCurrentTask = totalTasks - completedTasks - 1;
 
-	const totalTaskSteps = taskStatus.total;
-	const completedTaskSteps = taskStatus.progress;
+	// Calculate the percentage of the upgrade that is complete
+	const upgradePercentage = clamp(
+		( completedTasks / totalTasks ) * 100,
+		0,
+		100
+	);
 
-	const upgradePercentage = completedTasks / totalTasks;
-	const workingPercentage = completedOrRunningTasks / totalTasks;
+	const workingPercentage = clamp(
+		( completedOrRunningTasks / totalTasks ) * 100,
+		0,
+		100
+	);
+
 	const taskPercentage = completedTaskSteps / totalTaskSteps;
 
-	const workingFillWidth =
-		completedTasks === totalTasks ? 0 : workingPercentage * 100;
-	const completedFillWidth =
-		completedTasks === totalTasks ? 100 : upgradePercentage * 100;
+	// Calculate the leftoffset, max width, and width of the task progress bar
+	const taskLeftOffset = upgradePercentage;
 
-	const taskLeftOffset = useMemo(
-		() => upgradePercentage * 100,
-		[ completedOrRunningTasks, upgradePercentage ]
+	const taskFillMaxWidth = useMemo( () => {
+		const taskRightOffset =
+			( uncompletedAfterCurrentTask / totalTasks ) * 100;
+
+		return 100 - taskLeftOffset - taskRightOffset;
+	}, [ taskLeftOffset, uncompletedAfterCurrentTask, totalTasks ] );
+
+	const taskFillWidth = useMemo(
+		() => ( status.currentTask ? taskPercentage * taskFillMaxWidth : 0 ),
+		[ taskPercentage, taskFillMaxWidth, status.currentTask ]
 	);
-	const taskRightOffset = ( uncompletedAfterCurrentTask / totalTasks ) * 100;
-	const taskFillMaxWidth = 100 - taskLeftOffset - taskRightOffset;
-	const taskFillWidth = taskStatus.task
-		? taskPercentage * taskFillMaxWidth
-		: 0;
-
-	console.log( taskFillWidth );
 
 	return (
 		<div className="content-control-upgrades-panel">
-			{ ! started ? (
+			{ ! running ? (
 				<div className="upgrade-notice">
 					<div className="notice-icon">
 						<img
@@ -264,7 +189,7 @@ const UpgradeView = () => {
 						onClick={ () => {
 							setUpgradeState( {
 								...upgradeState,
-								started: true,
+								running: true,
 							} );
 						} }
 					>
@@ -278,48 +203,30 @@ const UpgradeView = () => {
 							{ __( 'Upgrade Progress', 'content-control' ) }
 						</h3>
 						<div className="upgrade-progress__task-percentage">
-							{ upgradePercentage > 0
-								? Math.round( upgradePercentage * 100 )
-								: 0 }
-							%
+							{ Math.round( upgradePercentage ) }%
 						</div>
 					</div>
-					{ /*
-					{ taskStatus.task && (
-						<div className="upgrade-progress__task-name">
-							{ taskStatus.task }
-						</div>
-					) } */ }
 
 					<div className="upgrade-progress__bar">
 						<div
 							className={ classNames(
 								'upgrade-progress__bar__fill',
 								'upgrade-progress__bar__fill--next',
-								workingPercentage >= 1 ? 'complete' : ''
+								workingPercentage >= 100 ? 'complete' : ''
 							) }
 							style={ {
-								width: `${ clamp(
-									// Set the width of the back fill to the est percentage after the task.
-									workingFillWidth,
-									0,
-									100
-								) }%`,
+								width: `${ workingPercentage }%`,
 							} }
 						/>
 						<div
 							className={ classNames(
 								'upgrade-progress__bar__fill',
 								'upgrade-progress__bar__fill--current',
-								upgradePercentage >= 1 ? 'complete' : ''
+								upgradePercentage >= 100 ? 'complete' : ''
 							) }
 							style={ {
-								width: `${ clamp(
-									// Set the width of the mid fill to the upgrade percentage of the est percentage after the task.
-									completedFillWidth,
-									0,
-									100
-								) }%`,
+								// Set the width of the mid fill to the upgrade percentage of the est percentage after the task.
+								width: `${ upgradePercentage }%`,
 							} }
 						/>
 						<div
@@ -330,13 +237,8 @@ const UpgradeView = () => {
 							) }
 							style={ {
 								left: `${ taskLeftOffset }%`,
-								// right: `${ taskRightOffset }%`,
-								width: `${ clamp(
-									// Set the width of the front fill to the task percentage.
-									taskFillWidth,
-									0,
-									100
-								) }%`,
+								// Set the width of the front fill to the task percentage.
+								width: `${ clamp( taskFillWidth, 0, 100 ) }%`,
 							} }
 						>
 							<div className="task-progress">
