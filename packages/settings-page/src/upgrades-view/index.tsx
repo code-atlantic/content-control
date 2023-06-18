@@ -98,9 +98,15 @@ const UpgradeView = () => {
 					break;
 
 				case 'task:error':
+				case 'error':
+					console.log( 'Error:', message, eventData );
 					setUpgradeState( {
 						...newState,
-						logs: [ ...logs, `ERROR: ${ message }` ],
+						logs: [
+							...logs,
+							`ERROR: ${ message }`,
+							JSON.stringify( eventData ),
+						],
 					} );
 					break;
 
