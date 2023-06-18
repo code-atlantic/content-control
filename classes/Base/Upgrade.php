@@ -33,7 +33,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Stream.
 	 *
-	 * @var \ContentControl\Base\Stream
+	 * @var \ContentControl\Services\UpgradeStream
 	 */
 	public $stream;
 
@@ -97,7 +97,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Run the upgrade.
 	 *
-	 * @param \ContentControl\Base\Stream $stream Stream.
+	 * @param \ContentControl\Services\UpgradeStream $stream Stream.
 	 *
 	 * @return void|WP_Error|false
 	 */
@@ -114,13 +114,22 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Return the stream.
 	 *
-	 * @return \ContentControl\Base\Stream|Object $stream Stream.
+	 * @return \ContentControl\Services\UpgradeStream|Object $stream Stream.
 	 */
 	public function stream() {
+		$noop = function() {};
+
 		return isset( $this->stream ) ? $this->stream : (object) [
-			'send_event' => function() {},
-			'send_error' => function() {},
-			'send_data'  => function() {},
+			'send_event'           => $noop,
+			'send_error'           => $noop,
+			'send_data'            => $noop,
+			'update_status'        => $noop,
+			'update_task_status'   => $noop,
+			'start_upgrades'       => $noop,
+			'complete_upgrades'    => $noop,
+			'start_task'           => $noop,
+			'update_task_progress' => $noop,
+			'complete_task'        => $noop,
 		];
 	}
 
