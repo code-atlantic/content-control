@@ -47,43 +47,32 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		// Get settings (where restrictions were store before).
 		$settings = get_option( 'jp_cc_settings', [] );
 
-		$count = isset( $settings['restrictions'] ) ? count( $settings['restrictions'] ) : 0;
+		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
+		$count        = count( $restrictions );
 
 		if ( $count ) {
-			$stream->send_event(
-				'task:start',
-				[
-					'task'    => 'migrate_restrictions',
-					'total'   => $count,
-					// translators: %d: number of restrictions to migrate.
-					'message' => sprintf( __( 'Migrating %d restrictions', 'content-control' ), $count ),
-				]
+			$stream->start_task(
+				// translators: %d: number of restrictions to migrate.
+				sprintf( __( 'Migrating %d restrictions', 'content-control' ), $count ),
+				$count
 			);
 
-			$restrictions = $settings['restrictions'];
-
-			$i = 0;
+			$progress = 0;
 
 			foreach ( $restrictions as $key => $restriction ) {
 				if ( $this->migrate_restriction( $restriction ) ) {
-					++$i;
+					++$progress;
+					$stream->update_task_progress( $progress );
 
 					// Unset any restrictions that were migrated.
 					unset( $restrictions[ $key ] );
-
-					$stream->send_error(
-						'task:progress',
-						[
-							'task'     => 'migrate_restrictions',
-							'progress' => $i / $count,
-						]
-					);
 				} else {
-					$stream->send_error(
+					$stream->send_event(
 						'task:error',
 						[
-							'task'    => 'migrate_restrictions',
-							'message' => __( 'Failed to migrate restriction.', 'content-control' ),
+							// translators: %s: restriction title.
+							'message'     => sprintf( __( 'Failed to migrate restriction "%s".', 'content-control' ), $restriction['title'] ),
+							'restriction' => $restriction,
 						]
 					);
 				}
@@ -99,21 +88,13 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		// Update the settings with any migrated restrictions removed so they can later be migrated.
 		update_option( 'jp_cc_settings', $settings );
 
-		if ( ! $count || $i === $count ) {
-			$stream->send_event(
-				'task:complete',
-				[
-					'task'     => 'migrate_restrictions',
-					'progress' => $i / $count,
-					// translators: %d: number of restrictions migrated.
-					'message'  => sprintf( __( '%d restrictions migrated', 'content-control' ), $i ),
-				]
-			);
+		if ( ! $count || $progress === $count ) {
+			// translators: %d: number of restrictions migrated.
+			$stream->complete_task( sprintf( __( '%d restrictions migrated', 'content-control' ), $count ) );
 		} else {
-			$stream->send_error(
+			$stream->send_event(
 				'task:error',
 				[
-					'task'    => 'migrate_restrictions',
 					// translators: %d: number of restrictions that failed to migrate.
 					'message' => sprintf( __( 'Failed to migrate %d restrictions.', 'content-control' ), count( $settings['restrictions'] ) ),
 				]

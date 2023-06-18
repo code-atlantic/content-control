@@ -39,13 +39,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 		// Gets a stream or mock stream for sending events.
 		$stream = $this->stream();
 
-		$stream->send_event(
-			'task:start',
-			[
-				'task'    => 'migrate_user_meta',
-				'message' => __( 'Migrating user meta', 'content-control' ),
-			]
-		);
+		$stream->start_task( __( 'Migrating user meta', 'content-control' ) );
 
 		$remapped_keys = [
 			'_jp_cc_reviews_dismissed_triggers' => 'content_control_reviews_dismissed_triggers',
@@ -64,13 +58,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 			);
 		}
 
-		$stream->send_event(
-			'task:complete',
-			[
-				'task'    => 'migrate_user_meta',
-				'message' => __( 'User meta migrated', 'content-control' ),
-			]
-		);
+		$stream->complete_task( __( 'User meta migrated', 'content-control' ) );
 	}
 
 }

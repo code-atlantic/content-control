@@ -52,13 +52,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 		// Gets a stream or mock stream for sending events.
 		$stream = $this->stream();
 
-		$stream->send_event(
-			'task:start',
-			[
-				'task'    => 'migrate_plugin_settings',
-				'message' => __( 'Migrating plugin settings', 'content-control' ),
-			]
-		);
+		$stream->start_task( __( 'Migrating plugin settings', 'content-control' ) );
 
 		$settings               = get_option( 'jp_cc_settings', [] );
 		$default_denial_message = isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
@@ -75,13 +69,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 			delete_option( 'jp_cc_settings' );
 		}
 
-		$stream->send_event(
-			'task:complete',
-			[
-				'task'    => 'migrate_plugin_settings',
-				'message' => __( 'Plugin settings migrated', 'content-control' ),
-			]
-		);
+		$stream->complete_task( __( 'Plugin settings migrated', 'content-control' ) );
 	}
 
 }

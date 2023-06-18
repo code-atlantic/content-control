@@ -40,13 +40,7 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 		// Gets a stream or mock stream for sending events.
 		$stream = $this->stream();
 
-		$stream->send_event(
-			'task:start',
-			[
-				'task'    => 'migrate_plugin_meta',
-				'message' => __( 'Migrating plugin meta', 'content-control' ),
-			]
-		);
+		$stream->start_task( __( 'Migrating plugin meta', 'content-control' ) );
 
 		$remaps = [
 			'jp_cc_reviews_installed_on' => 'content_control_installed_on',
@@ -61,13 +55,7 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 			}
 		}
 
-		$stream->send_event(
-			'task:complete',
-			[
-				'task'    => 'migrate_plugin_meta',
-				'message' => __( 'Plugin meta migrated', 'content-control' ),
-			]
-		);
+		$stream->complete_task( __( 'Plugin meta migrated', 'content-control' ) );
 	}
 
 }

@@ -27,6 +27,7 @@ use function wp_verify_nonce;
 use function wp_send_json_error;
 use function wp_send_json_success;
 use function wp_unslash;
+use function is_wp_error;
 
 /**
  * Upgrades Controller.
@@ -47,7 +48,7 @@ class Upgrades extends Controller {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'hooks' ] );
-		add_action( 'wp_ajax_content_control_review_action', [ $this, 'ajax_handler' ] );
+		add_action( 'wp_ajax_content_control_upgrades', [ $this, 'ajax_handler' ] );
 		add_filter( 'content_control/settings-page_localized_vars', [ $this, 'localize_vars' ] );
 	}
 
@@ -223,47 +224,115 @@ class Upgrades extends Controller {
 		}
 
 		try {
+			$stream   = new \ContentControl\Services\UpgradeStream( 'upgrades' );
 			$upgrades = $this->get_required_upgrades();
+			$count    = count( $upgrades );
 
-			$stream = new \ContentControl\Base\Stream( 'upgrades' );
+			// First do/while loop starts the stream and breaks if connection aborted.
+			do {
+				$stream->start();
+				$stream->start_upgrades( $count, __( 'Upgrades started', 'content-control' ) );
+
+				$failed_upgrades = [];
+
+				// This second while loop runs the upgrades.
+				while ( ! empty( $upgrades ) ) {
+					$upgrade = array_shift( $upgrades );
+
+					$result = $upgrade->stream_run( $stream );
+
+					if ( is_wp_error( $result ) ) {
+						$stream->send_error( $result );
+					} elseif ( false !== $result ) {
+						$this->mark_upgrade_complete( $upgrade );
+					} else {
+						// False means the upgrade failed.
+						$failed_upgrades[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
+					}
+				}
+
+				if ( ! empty( $failed_upgrades ) ) {
+					$stream->send_error( [
+						'message' => __( 'Some upgrades failed to complete.', 'content-control' ),
+						'data'    => $failed_upgrades,
+					] );
+
+					$stream->complete_upgrades( __( 'Upgrades complete with errors.', 'content-control' ) );
+				} else {
+					$stream->complete_upgrades( __( 'Upgrades complete!', 'content-control' ) );
+				}
+			} while ( ! $stream->should_abort() );
+		} catch ( \Exception $e ) {
+			$stream->send_error( $e );
+		}
+	}
+
+	/**
+	 * Mark an upgrade as complete.
+	 *
+	 * @param \ContentControl\Base\Upgrade $upgrade Upgrade to mark as complete.
+	 *
+	 * @return void
+	 */
+	public function mark_upgrade_complete( $upgrade ) {
+		$upgrades_done   = get_option( self::OPTION_KEY, [] );
+		$upgrades_done[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
+		update_option( self::OPTION_KEY, $upgrades_done );
+	}
+
+	/**
+	 * AJAX Handler
+	 */
+	public function ajax_handler_demo() {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
+			wp_send_json_error();
+		}
+
+		if ( ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
+			wp_send_json_error();
+		}
+
+		try {
+			$upgrades = $this->get_required_upgrades();
+			$count    = count( $upgrades ) * 2;
+
+			$stream = new \ContentControl\Services\UpgradeStream( 'upgrades' );
 
 			$stream->start();
 
-			$stream->send_event( 'start', [
-				'message'  => __( 'Starting upgrades...', 'content-control' ),
-				'progress' => 0,
-			] );
+			$count = wp_rand( 3, 10 );
 
-			$i = 0;
+			do {
+				$stream->start_upgrades( $count, __( 'Upgrades started', 'content-control' ) );
 
-			while ( ! $stream->should_abort() && ! empty( $upgrades ) ) {
-				++$i;
+				// test loop of 1000 upgrades.
+				$test_delay = 60000;
+				for ( $i = 0; $i < $count; $i++ ) {
+					usleep( $test_delay );
 
-				$upgrade = array_shift( $upgrades );
+					$task_count = wp_rand( 5, 100 );
 
-				$result = $upgrade->stream_run( $stream );
+					$stream->start_task(
+						__( 'Migrating restrictions', 'content-control' ),
+						$task_count
+					);
 
-				if ( is_wp_error( $result ) ) {
-					$stream->send_error( $result );
-					// Ignore falsey values.
-				} elseif ( false !== $result ) {
-					$upgrades_done   = get_option( self::OPTION_KEY, [] );
-					$upgrades_done[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
-					update_option( self::OPTION_KEY, $upgrades_done );
+					// test loop of 1000 upgrades.
+					for ( $i2 = 0; $i2 < $task_count; $i2++ ) {
+						usleep( $test_delay );
+						$stream->update_task_progress( $i2 + 1 );
+					}
+
+					usleep( $test_delay );
+
+					// translators: %d: number of restrictions migrated.
+					$stream->complete_task( sprintf( __( '%d restrictions migrated', 'content-control' ), $i2 ) );
 				}
+				usleep( $test_delay );
 
-				$stream->send_event(
-					'progress',
-					[
-						'progress' => $i / count( $upgrades ),
-					]
-				);
-			}
-
-			$stream->send_event( 'complete', [
-				'message'  => __( 'All upgrades have been completed.', 'content-control' ),
-				'progress' => 1,
-			] );
+				$stream->complete_upgrades( __( 'Upgrades complete!', 'content-control' ) );
+			} while ( ! $stream->should_abort() && ! empty( $upgrades ) );
 		} catch ( \Exception $e ) {
 			$stream->send_error( $e );
 		}
@@ -356,15 +425,16 @@ class Upgrades extends Controller {
 	 * @return array
 	 */
 	public function localize_vars( $vars ) {
-		$vars['has_upgrades'] = false;
+		$vars['hasUpgrades'] = false;
 
 		if ( ! $this->has_upgrades() ) {
 			return $vars;
 		}
 
-		$vars['has_upgrades']  = true;
-		$vars['upgrade_nonce'] = wp_create_nonce( 'content_control_upgrades' );
-		$vars['upgrades']      = [];
+		$vars['hasUpgrades']  = true;
+		$vars['upgradeNonce'] = wp_create_nonce( 'content_control_upgrades' );
+		$vars['upgradeUrl']   = admin_url( 'admin-ajax.php?action=content_control_upgrades' );
+		$vars['upgrades']     = [];
 
 		$upgrades = $this->get_required_upgrades();
 
