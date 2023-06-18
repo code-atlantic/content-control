@@ -140,7 +140,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * @param int    $task_steps Number of steps in the task.
 	 * @param string $message Message to send.
 	 */
-	public function start_task( $name, $task_steps, $message = null ) {
+	public function start_task( $name, $task_steps = 1, $message = null ) {
 		$this->update_task_status( [
 			'name'     => $name,
 			'progress' => 0,
