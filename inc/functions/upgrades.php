@@ -52,7 +52,7 @@ function set_data_version( $key, $version ) {
 
 	$versioning[ $key ] = $version;
 
-	return update_option( 'content_control_data_versioning', $versioning );
+	return set_data_versions( $versioning );
 }
 
 /**
