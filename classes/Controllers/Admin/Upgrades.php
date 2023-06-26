@@ -41,7 +41,7 @@ class Upgrades extends Controller {
 	 *
 	 * @var string
 	 */
-	const OPTION_KEY = 'content_control_upgrades';
+	const OPTION_KEY = 'content_control_completed_upgrades';
 
 	/**
 	 * Initialize the settings page.
