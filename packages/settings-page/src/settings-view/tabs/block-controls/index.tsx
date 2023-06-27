@@ -34,7 +34,7 @@ const BlockControlsTab = () => {
 			},
 
 			{
-				name: 'block-manger',
+				name: 'block-manager',
 				title: __( 'Block Manager', 'content-control' ),
 				icon: blockManagerIcon,
 				comp: BlockManager,
