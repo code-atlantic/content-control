@@ -53,14 +53,10 @@ function get_default_media_queries() {
  */
 function get_default_settings() {
 	return [
-		'restrictions'           => [],
-		'default_denial_message' => '',
-
-		// New Settings.
-		'excludedBlocks'         => [],
-		'urlOverrides'           => [],
-		'permissions'            => [],
-		'mediaQueries'           => get_default_media_queries(),
-		'defaultDenialMessage'   => '',
+		'defaultDenialMessage' => '',
+		'excludedBlocks'       => [],
+		'urlOverrides'         => [],
+		'permissions'          => [],
+		'mediaQueries'         => get_default_media_queries(),
 	];
 }
