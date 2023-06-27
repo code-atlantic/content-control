@@ -54,10 +54,10 @@ class Assets extends Controller {
 					'advancedMode'   => $this->container->get_option( 'advanced_mode', false ),
 					'allowedBlocks'  => [],
 					'userRoles'      => allowed_user_roles(),
-					'excludedBlocks' => [
+					'excludedBlocks' => array_merge( $this->container->get_option( 'excludedBlocks', [] ), [
 						'core/nextpage',
 						'core/freeform',
-					],
+					] ),
 					'permissions'    => $permissions,
 				],
 			],
