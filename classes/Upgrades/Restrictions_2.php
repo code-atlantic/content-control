@@ -135,7 +135,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			]
 		);
 
-		$user_roles = is_array( $restriction['roles'] ) ? $restriction['roles'] : [];
+		$user_roles = is_array( $restriction['roles'] ) ? array_values( $restriction['roles'] ) : [];
 
 		$settings = [
 			'userStatus'       => $restriction['who'],
