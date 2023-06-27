@@ -81,7 +81,6 @@ class Shortcodes extends Controller {
 		}
 
 		$user_status = $atts['status'];
-		$user_roles  = array_map( 'trim', $atts['roles'] );
 
 		$classes = $atts['class'];
 
