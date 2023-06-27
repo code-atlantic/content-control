@@ -3,11 +3,13 @@ import { TextareaControl } from '@wordpress/components';
 
 const { logUrl = false } = contentControlSettingsPage;
 
+console.log( 'logUrl', logUrl );
+
 const LogViewer = () => {
 	const [ logContent, setLogContent ] = useState( '' );
 
 	useEffect( () => {
-		if ( false === logUrl ) {
+		if ( false === logUrl || ! logUrl.length ) {
 			return;
 		}
 

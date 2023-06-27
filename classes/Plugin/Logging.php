@@ -209,9 +209,13 @@ class Logging {
 	/**
 	 * Retrieves the url to the file
 	 *
-	 * @returns string
+	 * @returns string|bool The url to the file or false on failure
 	 */
 	public function get_file_url() {
+		if ( ! $this->enabled() ) {
+			return false;
+		}
+
 		return $this->get_upload_dir_url( $this->filename );
 	}
 
