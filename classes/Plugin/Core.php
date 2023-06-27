@@ -113,7 +113,7 @@ class Core {
 
 		// Check if old settings exist.
 		if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {
-			$old_data = [
+			$data = [
 				'version'         => '1.1.9',
 				'upgraded_from'   => null,
 				'initial_version' => '1.1.9',
