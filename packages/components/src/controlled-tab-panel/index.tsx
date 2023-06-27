@@ -77,6 +77,8 @@ const TabPanel = ( {
 						selected={ tab.name === selectedTab.name }
 						key={ tab.name }
 						onClick={ () => handleClick( tab.name ) }
+						href={ tab?.href ?? undefined }
+						target={ tab?.target ?? undefined }
 					>
 						{ tab.title }
 					</TabButton>
