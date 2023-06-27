@@ -135,6 +135,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			]
 		);
 
+		// Convert from associative to indexed array.
 		$user_roles = is_array( $restriction['roles'] ) ? array_values( $restriction['roles'] ) : [];
 
 		$settings = [

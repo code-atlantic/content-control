@@ -56,7 +56,7 @@ function remap_conditions_to_query( $old_conditions ) {
 		$query['items'][] = $group;
 	}
 
-	return $conditions;
+	return $query;
 }
 
 /**
@@ -91,6 +91,9 @@ function remap_condition_to_rule( $condition ) {
 	} elseif ( strpos( $target, 'tax_' ) === 0 ) {
 		// Split the target into post type and modifier.
 		$tax_target = explode( '_', $target );
+
+		// Remove the tax_ prefix.
+		array_shift( $tax_target );
 
 		// Modifier should be the last key.
 		$modifier = array_pop( $tax_target );
