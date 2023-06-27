@@ -238,7 +238,7 @@ const LicenseTab = () => {
 					className={ classNames( [
 						'content-control-license-controls',
 						'content-control-license-controls--' +
-							getLicenseStatusName(),
+							getLicenseStatusName,
 					] ) }
 				>
 					<TextControl
