@@ -162,7 +162,7 @@ const Header = ( { tabs }: Props ) => {
 							<MenuGroup>
 								<MenuItem
 									icon={ pages }
-									href="https://contentcontrolplugin.com/docs/"
+									href="https://contentcontrolplugin.com/docs/?utm_campaign=plugin-support&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=view-documentation-link"
 									target="_blank"
 								>
 									{ __(
@@ -172,7 +172,7 @@ const Header = ( { tabs }: Props ) => {
 								</MenuItem>
 								<MenuItem
 									icon={ people }
-									href="https://contentcontrolplugin.com/support/"
+									href="https://contentcontrolplugin.com/support/?utm_campaign=plugin-support&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=get-support-link"
 									target="_blank"
 								>
 									{ __( 'Get Support', 'content-control' ) }

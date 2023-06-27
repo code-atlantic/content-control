@@ -20,7 +20,7 @@ import GeneralTab from './general';
 import ProtectionTab from './protection';
 
 export const documenationUrl =
-	'https://contentcontrolpro.com/documentation/restrictions/';
+	'https://contentcontrolplugin.com/docs/?utm_campaign=documentation&utm_source=restriction-editor&utm_medium=plugin-ui&utm_content=footer-documentation-link';
 
 import type { Restriction } from '@content-control/core-data';
 import type { TabComponent } from '../../types';

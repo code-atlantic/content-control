@@ -39,8 +39,8 @@ class TrustedLogin extends Controller {
 				'display_name' => 'Content Control Support',
 				'logo_url'     => $this->container->get_url( 'assets/images/logo.svg' ),
 				'email'        => 'support+{hash}@contentcontrolplugin.com',
-				'website'      => 'https://contentcontrolplugin.com',
-				'support_url'  => 'https://contentcontrolplugin.com/support/',
+				'website'      => 'https://contentcontrolplugin.com?utm_campaign=grant-access&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=grant-access-title-link',
+				'support_url'  => 'https://contentcontrolplugin.com/support/?utm_campaign=grant-access&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=support-footer-link',
 			],
 			'role'        => 'administrator',
 			'caps'        => [

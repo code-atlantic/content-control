@@ -112,7 +112,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 											</PanelRow>
 
 											<PanelRow>
-												<ExternalLink href="#">
+												<ExternalLink href="https://contentcontrolplugin.com/docs/?utm_campaign=documentation&utm_source=block-editor&utm_medium=plugin-ui&utm_content=block-controls-documentation-link">
 													{ __(
 														'Documentation',
 														'content-control'

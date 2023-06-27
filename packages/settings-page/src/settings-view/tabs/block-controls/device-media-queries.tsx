@@ -165,7 +165,7 @@ const DeviceMediaQueries = () => {
 								onChange={ () => {} }
 							/>
 							<Button
-								href="https://code-atlantic.com/products/content-control/"
+								href="https://contentcontrolplugin.com/pricing/?utm_campaign=pro-features&utm_source=block-controls-tab&utm_medium=plugin-ui&utm_content=advanced-breakpoints-learn-more"
 								variant="link"
 								onClick={ ( event ) => {
 									event.preventDefault();

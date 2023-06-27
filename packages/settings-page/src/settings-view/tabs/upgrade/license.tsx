@@ -98,7 +98,7 @@ const LicenseTab = () => {
 					'Enter your license key to activate. If you do not have a license key, you can <a href="%s" target="_blank">purchase one here</a>.',
 					'content-control'
 				),
-				'https://contentcontrolplugin.com/pricing/?utm_campaign=admin&utm_source=licenses&utm_medium=pricing'
+				'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-field-upgrade-text'
 			);
 		}
 
@@ -126,7 +126,7 @@ const LicenseTab = () => {
 				new Date( expires ).toLocaleDateString(),
 				'https://contentcontrolplugin.com/checkout/?edd_license_key=' +
 					licenseKey +
-					'&utm_campaign=admin&utm_source=licenses&utm_medium=renew'
+					'&utm_campaign=renew-license&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-renew-link'
 			);
 		}
 
@@ -139,8 +139,8 @@ const LicenseTab = () => {
 				),
 				'https://contentcontrolplugin.com/checkout/?edd_license_key=' +
 					licenseKey +
-					'&utm_campaign=admin&utm_source=licenses&utm_medium=upgrade',
-				'https://contentcontrolplugin.com/your-account/?utm_campaign=admin&utm_source=licenses&utm_medium=manage'
+					'&utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-upgrade-link',
+				'https://contentcontrolplugin.com/your-account/?utm_campaign=manage-activations&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-login-link'
 			);
 		}
 

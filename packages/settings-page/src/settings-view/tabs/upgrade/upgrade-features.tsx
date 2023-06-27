@@ -48,7 +48,7 @@ const UpgradeFeatures = () => {
 							'To unlock the following features, <a href="%s" target="_blank">upgrade to Pro</a> and enter your license key below.',
 							'content-control'
 						),
-						'https://contentcontrolplugin.com/pricing/?utm_campaign=admin&utm_source=licenses&utm_medium=pricing'
+						'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-upgrade-text'
 					),
 				} }
 			/>

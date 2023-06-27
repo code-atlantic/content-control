@@ -91,7 +91,7 @@ const App = () => {
 				'Content Control - Upgrade to Pro',
 				'content-control'
 			),
-			href: 'https://contentcontrolplugin.com/pricing/?utm_source=plugin&utm_medium=upgrade-link&utm_campaign=plugin&utm_content=plugin-menu',
+			href: 'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=main-menu-upgrade-button',
 			target: '_blank',
 			onClick: () => {
 				setParams( {
