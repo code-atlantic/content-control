@@ -42,6 +42,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 		$stream->start_task( __( 'Migrating user meta', 'content-control' ) );
 
 		$remapped_keys = [
+			'_jp_cc_reviews_already_did'		=> 'content_control_reviews_already_did',
 			'_jp_cc_reviews_dismissed_triggers' => 'content_control_reviews_dismissed_triggers',
 			'_jp_cc_reviews_last_dismissed'     => 'content_control_reviews_last_dismissed',
 		];
