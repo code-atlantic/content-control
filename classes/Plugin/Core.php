@@ -328,6 +328,24 @@ class Core {
 	 * @return boolean
 	 */
 	public function is_pro_installed() {
-		return class_exists( '\ContentControlPro\Plugin\Core' ) || file_exists( WP_PLUGIN_DIR . '/content-control-pro/content-control-pro.php' );
+		return file_exists( WP_PLUGIN_DIR . '/content-control-pro/content-control-pro.php' );
+	}
+
+	/**
+	 * Check if pro version is active.
+	 *
+	 * @return boolean
+	 */
+	public function is_pro_active() {
+		return $this->is_pro_installed() && class_exists( '\ContentControlPro\Plugin\Core' );
+	}
+
+	/**
+	 * Check if license is active.
+	 *
+	 * @return boolean
+	 */
+	public function is_license_active() {
+		return $this->get( 'license' )->is_license_active();
 	}
 }
