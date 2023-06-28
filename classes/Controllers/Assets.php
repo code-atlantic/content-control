@@ -180,5 +180,4 @@ class Assets extends Controller {
 			'version'      => $this->container->get( 'version' ),
 		];
 	}
-
 }

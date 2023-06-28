@@ -32,5 +32,4 @@ abstract class Controller implements \ContentControl\Interfaces\Controller {
 	public function __construct( $container ) {
 		$this->container = $container;
 	}
-
 }

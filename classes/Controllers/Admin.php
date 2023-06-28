@@ -39,5 +39,4 @@ class Admin extends Controller {
 			'Admin\WidgetEditor'   => new WidgetEditor( $this->container ),
 		] );
 	}
-
 }

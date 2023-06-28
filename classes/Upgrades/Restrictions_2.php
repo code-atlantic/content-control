@@ -16,7 +16,7 @@ use function update_option;
 use function wp_parse_args;
 use function sanitize_url;
 use function wp_insert_post;
-use function \ContentControl\remap_conditions_to_query;
+use function ContentControl\remap_conditions_to_query;
 
 /**
  * Restrictions v2 migration.
@@ -155,5 +155,4 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 
 		return $new_restriction_id > 0 && $added_meta;
 	}
-
 }

@@ -31,8 +31,8 @@ class UserExperience extends Controller {
 	/**
 	 * Render plugin action links.
 	 *
-	 * @param $links
-	 * @param $file
+	 * @param array  $links Existing links.
+	 * @param string $file Plugin file path.
 	 *
 	 * @return mixed
 	 */

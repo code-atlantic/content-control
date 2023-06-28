@@ -285,5 +285,4 @@ class Options {
 
 		return $did_update;
 	}
-
 }

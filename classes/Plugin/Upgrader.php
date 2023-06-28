@@ -7,7 +7,7 @@
 
 namespace ContentControl\Plugin;
 
-use \ContentControl\Base\Container;
+use ContentControl\Base\Container;
 
 /**
  * Undocumented class

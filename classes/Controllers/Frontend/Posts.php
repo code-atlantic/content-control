@@ -128,5 +128,4 @@ class Posts extends Controller {
 			$restriction
 		);
 	}
-
 }

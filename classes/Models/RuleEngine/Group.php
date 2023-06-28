@@ -90,5 +90,4 @@ class Group extends Item {
 	public function get_check_info() {
 		return $this->query->get_check_info();
 	}
-
 }

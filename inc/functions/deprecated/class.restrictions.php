@@ -33,5 +33,4 @@ class Restrictions {
 		$restriction = plugin( 'restrictions' )->get_applicable_restriction();
 		return false !== $restriction ? $restriction->to_v1_array() : false;
 	}
-
 }

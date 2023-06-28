@@ -34,5 +34,4 @@ class BlockEditor extends Controller {
 	public function enqueue_assets() {
 		wp_enqueue_script( 'content-control-block-editor' );
 	}
-
 }

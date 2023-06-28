@@ -11,7 +11,7 @@ namespace ContentControl\Base;
 
 defined( 'ABSPATH' ) || exit;
 
-use \ContentControl\Vendor\Pimple\Container as Base;
+use ContentControl\Vendor\Pimple\Container as Base;
 
 /**
  * Localized container class.

@@ -66,5 +66,4 @@ class Feeds extends Controller {
 			$restriction
 		);
 	}
-
 }

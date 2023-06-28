@@ -184,5 +184,4 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 			'message' => $message ? $message : sprintf( __( 'Completed: %s', 'content-control' ), $task_status['name'] ),
 		] );
 	}
-
 }

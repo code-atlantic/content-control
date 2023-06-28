@@ -448,5 +448,4 @@ class Upgrades extends Controller {
 
 		return $vars;
 	}
-
 }

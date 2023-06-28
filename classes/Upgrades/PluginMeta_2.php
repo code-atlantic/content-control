@@ -57,5 +57,4 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 
 		$stream->complete_task( __( 'Plugin meta migrated', 'content-control' ) );
 	}
-
 }

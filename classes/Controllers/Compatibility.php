@@ -31,5 +31,4 @@ class Compatibility extends Controller {
 			'Compatibility\Elementor' => new Elementor( $this->container ),
 		] );
 	}
-
 }

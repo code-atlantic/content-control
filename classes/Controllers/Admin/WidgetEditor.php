@@ -12,7 +12,7 @@ namespace ContentControl\Controllers\Admin;
 
 use ContentControl\Base\Controller;
 
-use function \ContentControl\Rules\allowed_user_roles;
+use function ContentControl\Rules\allowed_user_roles;
 use function ContentControl\Widgets\parse_options as parse_widget_options;
 
 /**
@@ -130,6 +130,4 @@ class WidgetEditor extends Controller {
 
 		return $instance;
 	}
-
-
 }

@@ -617,5 +617,4 @@ class Rules {
 			'advanced' => false,
 		];
 	}
-
 }

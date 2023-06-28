@@ -53,5 +53,4 @@ class Frontend extends Controller {
 		add_filter( 'content_control/post_restricted_excerpt', '\ContentControl\append_post_excerpts', 9, 2 );
 		add_filter( 'content_control/post_restricted_excerpt', '\ContentControl\the_excerpt_filters', 10 );
 	}
-
 }

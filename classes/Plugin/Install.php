@@ -118,5 +118,4 @@ class Install {
 	 */
 	public static function uninstall_site() {
 	}
-
 }

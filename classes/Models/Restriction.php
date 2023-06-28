@@ -211,6 +211,11 @@ class Restriction {
 		}
 	}
 
+	/**
+	 * Map old v1 restriction to new v2 restriction object.
+	 *
+	 * @param array $restriction Restriction data.
+	 */
 	public function setup_v1_restriction( $restriction ) {
 		$restriction = \wp_parse_args( $restriction, [
 			'title'                    => '',
@@ -339,8 +344,10 @@ class Restriction {
 			'description'      => $this->get_description(),
 			'message'          => $this->get_message(),
 			'status'           => $this->status,
-			'userStatus'       => $this->user_status, // 'logged_in' | 'logged_out';
-			'roleMatch'        => $this->role_match, // 'any' | 'match' | 'exclude'
+			// Options include logged_in, logged_out.
+			'userStatus'       => $this->user_status,
+			// Options include any, match, exclude.
+			'roleMatch'        => $this->role_match,
 			'userRoles'        => $this->user_roles,
 			'protectionMethod' => $this->protection_method,
 			'redirectType'     => $this->redirect_type,
@@ -372,5 +379,4 @@ class Restriction {
 			'conditions'               => $this->conditions,
 		];
 	}
-
 }

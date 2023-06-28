@@ -50,5 +50,4 @@ class Is {
 	public static function restricted( $who = '', $roles = [], $context = '' ) {
 		return ! \ContentControl\user_meets_requirements( $who, $roles, 'match' );
 	}
-
 }

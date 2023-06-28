@@ -7,7 +7,7 @@
 
 namespace ContentControl\Rules;
 
-use \ContentControl\Models\RuleEngine\Rule;
+use ContentControl\Models\RuleEngine\Rule;
 use function ContentControl\plugin;
 
 /**

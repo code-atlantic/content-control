@@ -54,7 +54,7 @@ class Prerequisites {
 						]
 					);
 					break;
-				/* phpcs:ignore WordPress.WP.CapitalPDangit.Misspelled */
+				// phpcs:ignore WordPress.WP.CapitalPDangit.MisspelledInText
 				case 'wordpress':
 				case 'wp':
 					$this->checks[] = wp_parse_args(

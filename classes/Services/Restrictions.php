@@ -8,8 +8,8 @@
 
 namespace ContentControl\Services;
 
-use \ContentControl\Models\Restriction;
-use \ContentControl\Models\RuleEngine\Query;
+use ContentControl\Models\Restriction;
+use ContentControl\Models\RuleEngine\Query;
 
 use function ContentControl\plugin;
 
@@ -205,5 +205,4 @@ class Restrictions {
 
 		return $cache[ $cache_key ];
 	}
-
 }

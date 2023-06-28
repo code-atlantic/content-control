@@ -61,5 +61,4 @@ class SettingsPage extends Controller {
 
 		wp_enqueue_script( 'content-control-settings-page' );
 	}
-
 }

@@ -85,5 +85,4 @@ class Widgets extends Controller {
 
 		return ( $wp_customize instanceof WP_Customize_Manager ) && $wp_customize->is_preview();
 	}
-
 }

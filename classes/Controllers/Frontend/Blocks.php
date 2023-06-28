@@ -205,7 +205,7 @@ class Blocks extends Controller {
 		}
 
 		// Enqueue the styles.
-		// wp_enqueue_style( 'content-control-block-styles' );
+		// wp_enqueue_style( 'content-control-block-styles' );.
 
 		$class_name = implode( ' ', $classes );
 
@@ -319,5 +319,4 @@ CSS;
 		</style>
 		<?php
 	}
-
 }

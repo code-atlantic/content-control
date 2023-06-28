@@ -471,5 +471,4 @@ class License {
 
 		return 'valid' === $license_status['license'];
 	}
-
 }

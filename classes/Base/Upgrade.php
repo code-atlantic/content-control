@@ -132,5 +132,4 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 			'complete_task'        => $noop,
 		];
 	}
-
 }

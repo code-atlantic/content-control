@@ -569,5 +569,4 @@ class Reviews extends Controller {
 
 		return ( $a['pri'] < $b['pri'] ) ? 1 : - 1;
 	}
-
 }

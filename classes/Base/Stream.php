@@ -150,5 +150,4 @@ class Stream {
 	public function should_abort() {
 		return connection_aborted();
 	}
-
 }

@@ -424,5 +424,4 @@ class ObjectSearch extends WP_REST_Controller {
 
 		return ! $include_total ? $results['items'] : $results;
 	}
-
 }
