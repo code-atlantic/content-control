@@ -153,8 +153,11 @@ const Header = ( { tabs }: Props ) => {
 						noArrow: false,
 						position: 'bottom left',
 						className: 'cc-settings-page__support-menu',
-						getAnchorRect: () =>
-							btnRef.current?.getBoundingClientRect(),
+						getAnchorRect:
+							null !== btnRef.current
+								? () =>
+										btnRef.current?.getBoundingClientRect() as DOMRect
+								: undefined,
 					} }
 				>
 					{ ( { onClose } ) => (
