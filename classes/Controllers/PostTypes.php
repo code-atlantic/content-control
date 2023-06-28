@@ -82,14 +82,31 @@ class PostTypes extends Controller {
 	public function register_rest_fields() {
 		register_rest_field( 'cc_restriction', 'title', [
 			'get_callback'    => function ( $obj ) {
-				return get_the_title( $obj['id'] );
+				// remove get_the_title character encoding escape.
+				remove_filter( 'the_title', 'wptexturize' );
+				$title = get_the_title( $obj['id'] );
+				add_filter( 'the_title', 'wptexturize' );
+				return $title;
 			},
 			'update_callback' => function ( $value, $obj ) {
 				wp_update_post( [
 					'ID'         => $obj->ID,
-					'post_title' => sanitize_text_field( $value ),
+					'post_title' => $value,
 				] );
 			},
+			'schema'          => [
+				'type'        => 'string',
+				'arg_options' => [
+					'sanitize_callback' => function ( $value ) {
+						// Make the value safe for storage.
+						return sanitize_text_field( $value );
+					},
+					'validate_callback' => function ( $value ) {
+						// Validate title based on post_title.
+						return is_string( $value );
+					},
+				],
+			],
 		] );
 
 		register_rest_field( 'cc_restriction', 'description', [
@@ -102,6 +119,19 @@ class PostTypes extends Controller {
 					'post_excerpt' => sanitize_text_field( $value ),
 				] );
 			},
+			'schema'          => [
+				'type'        => 'string',
+				'arg_options' => [
+					'sanitize_callback' => function ( $value ) {
+						// Make the value safe for storage.
+						return sanitize_text_field( $value );
+					},
+					'validate_callback' => function ( $value ) {
+						// Validate title based on post_title.
+						return is_string( $value );
+					},
+				],
+			],
 		] );
 
 		register_rest_field( 'cc_restriction', 'settings', [
