@@ -24,6 +24,7 @@ class PostTypes extends Controller {
 		add_action( 'init', [ $this, 'register_post_type' ] );
 		add_action( 'init', [ $this, 'register_rest_fields' ] );
 		add_action( 'save_post_cc_restriction', [ $this, 'save_post' ], 10, 3 );
+		add_filter( 'rest_pre_dispatch', [ $this, 'rest_pre_dispatch' ], 10, 3 );
 	}
 
 	/**
@@ -132,5 +133,39 @@ class PostTypes extends Controller {
 		}
 
 		add_post_meta( $post_id, 'data_version', 1 );
+	}
+
+	/**
+	 * Prevent access to restrictions endpoint.
+	 *
+	 * @param mixed           $result Response to replace the requested version with.
+	 * @param WP_REST_Server  $server Server instance.
+	 * @param WP_REST_Request $request  Request used to generate the response.
+	 * @return mixed
+	 */
+	public function rest_pre_dispatch( $result, $server, $request ) {
+		// Get the route being requested.
+		$route = $request->get_route();
+
+		// Only proceed if we're creating a user.
+		if ( false === strpos( $route, '/content-control/v2/restrictions' ) ) {
+			return $result;
+		}
+
+		$current_user_can = current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
+
+		// Prevent discovery of the endpoints data from unauthorized users.
+		if ( ! $current_user_can ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Access to this endpoint requires authorization.', 'content-control' ),
+				[
+					'status' => rest_authorization_required_code(),
+				]
+			);
+		}
+
+		// Return data to the client to parse.
+		return $result;
 	}
 }
