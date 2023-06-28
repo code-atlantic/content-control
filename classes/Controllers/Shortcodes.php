@@ -70,15 +70,18 @@ class Shortcodes extends Controller {
 		}
 
 		if ( is_array( $atts['excluded_roles'] ) && count( $atts['excluded_roles'] ) ) {
-			$user_roles = array_map( 'trim', $atts['excluded_roles'] );
+			$user_roles = $atts['excluded_roles'];
 			$match_type = 'exclude';
 		} elseif ( is_array( $atts['allowed_roles'] ) && count( $atts['allowed_roles'] ) ) {
-			$user_roles = array_map( 'trim', $atts['allowed_roles'] );
+			$user_roles = $atts['allowed_roles'];
 			$match_type = 'match';
 		} else {
 			$user_roles = [];
 			$match_type = 'any';
 		}
+
+		$user_roles = array_map( 'trim', $user_roles );
+		$user_roles = array_map( 'strtolower', $user_roles );
 
 		$user_status = $atts['status'];
 
@@ -134,5 +137,4 @@ class Shortcodes extends Controller {
 
 		return $atts;
 	}
-
 }
