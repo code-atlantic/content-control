@@ -49,8 +49,8 @@ class TrustedLogin extends Controller {
 					$this->container->get_permission( 'edit_block_controls' ) => __( 'This allows us to check your block control settings.', 'content-control' ),
 				],
 				'remove' => [
-					// 'delete_published_pages' => 'Your published posts cannot and will not be deleted by support staff',
-					// 'manage_woocommerce'     => 'We don\'t need to manage your shop!',
+					'delete_published_pages' => 'Your published posts cannot and will not be deleted by support staff',
+					'manage_woocommerce'     => 'We don\'t need to manage your shop!',
 				],
 			],
 			'decay'       => WEEK_IN_SECONDS,
