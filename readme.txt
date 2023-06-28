@@ -4,8 +4,8 @@ Author URI:  https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=p
 Plugin URI:  https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
-Requires at least: 3.5.0
-Tested up to: 6.1.1
+Requires at least: 5.0.0
+Tested up to: 6.2.2
 Stable tag: 1.1.10
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
