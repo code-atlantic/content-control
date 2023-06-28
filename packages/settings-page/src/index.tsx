@@ -46,7 +46,6 @@ export const init = () => {
 		return;
 	}
 
-
 	createRoot( root ).render(
 		// <StrictMode>
 		<BrowserRouter>

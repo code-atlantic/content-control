@@ -67,7 +67,7 @@ const UpgradeView = () => {
 	const { running, done, redirectCountdown, logs, showLogs, status } =
 		upgradeState;
 
-	const [ eventSource, eventSourceStatus ] = useEventSource(
+	const [ eventSource ] = useEventSource(
 		running ? `${ upgradeUrl }&nonce=${ upgradeNonce }` : '',
 		true
 	);
