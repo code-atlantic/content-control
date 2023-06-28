@@ -1,0 +1,35 @@
+<?php
+/**
+ * Compatibility controller.
+ *
+ * @copyright (c) 2022, Code Atlantic LLC.
+ *
+ * @package ContentControl
+ */
+
+namespace ContentControl\Controllers;
+
+use ContentControl\Base\Controller;
+use ContentControl\Controllers\Compatibility\Elementor;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Admin controller  class.
+ *
+ * @package ContentControl
+ */
+class Compatibility extends Controller {
+
+	/**
+	 * Initialize admin controller.
+	 *
+	 * @return void
+	 */
+	public function init() {
+		$this->container->register_controllers( [
+			'Compatibility\Elementor' => new Elementor( $this->container ),
+		] );
+	}
+
+}
