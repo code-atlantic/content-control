@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Content Control
- * Plugin URI: https://contentcontrolplugin.com/
+ * Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=plugin-uri
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
  * Version: 2.0.0-beta
  * Author: Code Atlantic
- * Author URI: https://code-atlantic.com/
- * Donate link: https://code-atlantic.com/donate
+ * Author URI: https://code-atlantic.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=author-uri
+ * Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=donate-link
  * Text Domain: content-control
  *
  * Minimum PHP: 5.6

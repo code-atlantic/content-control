@@ -1,8 +1,8 @@
 === Content Control - User Access Restriction Plugin ===
 Contributors: codeatlantic, danieliser
-Author URI:  https://code-atlantic.com/
-Plugin URI:  https://wordpress.org/plugins/content-control/
-Donate link: https://code-atlantic.com/donate/
+Author URI:  https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=plugins-page&utm_medium=plugin-ui&utm_content=action-links-upgrade-text
+Plugin URI:  https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
+Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access, content, content restriction,  permission, private,  restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 3.5.0
 Tested up to: 6.1.1
