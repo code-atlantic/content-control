@@ -31,7 +31,7 @@ const Wrapper = ( { id, children }: Props ) => {
 				<div className="editable-area">{ children }</div>
 			</div>
 
-			<div className="add-rule=column">
+			<div className="add-rule-column">
 				<Button
 					icon={ plus }
 					iconSize={ 18 }

@@ -4,6 +4,8 @@
 // Rule Wrapper
 .cc-rule-engine-item-wrapper--rule {
 	> .cc-rule-engine-rule {
+		position: relative;
+
 		@include flexRow();
 		margin-top: $spacing;
 
@@ -15,6 +17,11 @@
 
 		.if-text-column {
 			display: block;
+			min-width: 65px;
+		}
+
+		.add-rule-column {
+			display: none;
 		}
 
 		.controls-column {

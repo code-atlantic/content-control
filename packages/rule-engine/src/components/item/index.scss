@@ -5,6 +5,10 @@
 	@include flexColumn();
 	padding: $spacing 0;
 
+	> .cc-rule-engine-logical-operator {
+		min-width: 65px;
+	}
+
 	.cc-rule-engine-item {
 		background-color: rgba(#1a191b, 0.02);
 		padding: $spacing;

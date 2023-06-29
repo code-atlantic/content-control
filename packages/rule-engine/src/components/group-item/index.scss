@@ -20,12 +20,14 @@
 
 			.cc-rule-engine-item-wrapper--rule {
 				@include flexRow();
+
 				padding: 0;
 
 				.cc-rule-engine-rule {
-					margin: 0 0 $spacing;
+					margin: 0 0 $spacing * 2;
 					background-color: transparent;
 					border: none;
+					padding: 0;
 				}
 
 				&:last-child {
