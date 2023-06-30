@@ -20,14 +20,14 @@ use function get_current_screen;
 use function admin_url;
 use function is_admin;
 use function current_user_can;
-use function get_option;
-use function update_option;
 use function wp_create_nonce;
 use function wp_verify_nonce;
 use function wp_send_json_error;
-use function wp_send_json_success;
 use function wp_unslash;
 use function is_wp_error;
+use function ContentControl\get_upgrade_name;
+use function ContentControl\is_upgrade_complete;
+use function ContentControl\mark_upgrade_complete;
 
 /**
  * Upgrades Controller.
@@ -35,13 +35,6 @@ use function is_wp_error;
  * @package ContentControl\Admin
  */
 class Upgrades extends Controller {
-
-	/**
-	 * Key to save list of upgrades that have been done.
-	 *
-	 * @var string
-	 */
-	const OPTION_KEY = 'content_control_completed_upgrades';
 
 	/**
 	 * Initialize the settings page.
@@ -71,10 +64,10 @@ class Upgrades extends Controller {
 	public function all_upgrades() {
 		return [
 			// Version 2 upgrades.
-			'plugin_meta-2'  => '\ContentControl\Upgrades\PluginMeta_2',
-			'restrictions-2' => '\ContentControl\Upgrades\Restrictions_2',
-			'settings-2'     => '\ContentControl\Upgrades\Settings_2',
-			'user_meta-2'    => '\ContentControl\Upgrades\UserMeta_2',
+			'\ContentControl\Upgrades\PluginMeta_2',
+			'\ContentControl\Upgrades\Settings_2',
+			'\ContentControl\Upgrades\UserMeta_2',
+			'\ContentControl\Upgrades\Restrictions_2',
 		];
 	}
 
@@ -98,18 +91,11 @@ class Upgrades extends Controller {
 		static $required_upgrades = null;
 
 		if ( null === $required_upgrades ) {
+			$all_upgrades      = $this->all_upgrades();
 			$required_upgrades = [];
 
-			$all_upgrades  = $this->all_upgrades();
-			$upgrades_done = get_option( self::OPTION_KEY, [] );
-			$count_done    = count( $upgrades_done );
-
-			foreach ( $all_upgrades as $key => $upgrade_class_name ) {
-				if ( in_array( $key, $upgrades_done, true ) ) {
-					continue;
-				}
-
-				if ( ! class_exists( $upgrade_class_name ) ) {
+			foreach ( $all_upgrades as $upgrade_class ) {
+				if ( ! class_exists( $upgrade_class ) ) {
 					continue;
 				}
 
@@ -118,26 +104,22 @@ class Upgrades extends Controller {
 				 *
 				 * @var \ContentControl\Base\Upgrade $upgrade
 				 */
-				$upgrade = new $upgrade_class_name();
+				$upgrade = new $upgrade_class();
 
-				if ( $upgrade->is_required() ) {
-					$required_upgrades[ $key ] = $upgrade;
-				} else {
+				// Check if required, and if so, add it to the list.
+				if ( is_upgrade_complete( $upgrade ) ) {
+					continue;
+				} elseif ( ! $upgrade->is_required() ) {
 					// If its not required, mark it as done.
-					$upgrades_done[] = $key;
+					mark_upgrade_complete( $upgrade );
+					continue;
 				}
 
-				// Unset the upgrade class to prevent memory leaks.
-				unset( $upgrade );
+				$required_upgrades[] = $upgrade;
 			}
 
 			// Sort the required upgrades based on prerequisites.
 			$required_upgrades = $this->sort_upgrades_by_prerequisites( $required_upgrades );
-
-			// Store the list of upgrades that have been done if it has changed.
-			if ( count( $upgrades_done ) > $count_done ) {
-				update_option( self::OPTION_KEY, $upgrades_done );
-			}
 		}
 
 		return $required_upgrades;
@@ -244,10 +226,10 @@ class Upgrades extends Controller {
 					if ( is_wp_error( $result ) ) {
 						$stream->send_error( $result );
 					} elseif ( false !== $result ) {
-						$this->mark_upgrade_complete( $upgrade );
+						mark_upgrade_complete( $upgrade );
 					} else {
 						// False means the upgrade failed.
-						$failed_upgrades[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
+						$failed_upgrades[] = get_upgrade_name( $upgrade );
 					}
 				}
 
@@ -265,19 +247,6 @@ class Upgrades extends Controller {
 		} catch ( \Exception $e ) {
 			$stream->send_error( $e );
 		}
-	}
-
-	/**
-	 * Mark an upgrade as complete.
-	 *
-	 * @param \ContentControl\Base\Upgrade $upgrade Upgrade to mark as complete.
-	 *
-	 * @return void
-	 */
-	public function mark_upgrade_complete( $upgrade ) {
-		$upgrades_done   = get_option( self::OPTION_KEY, [] );
-		$upgrades_done[] = $upgrade::TYPE . '-' . $upgrade::VERSION;
-		update_option( self::OPTION_KEY, $upgrades_done );
 	}
 
 	/**
