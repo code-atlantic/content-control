@@ -76,7 +76,7 @@ function remap_condition_to_rule( $condition ) {
 		// custom rules will pass through.
 		'name'       => $target,
 		'notOperand' => isset( $condition['not_operand'] ) && $condition['not_operand'] ? true : false,
-		'options'    => is_array( $condition['settings'] ) ? $condition['settings'] : [],
+		'options'    => isset( $condition['settings'] ) && is_array( $condition['settings'] ) ? $condition['settings'] : [],
 	];
 
 	// Start from simplest to match to most complex.
