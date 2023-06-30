@@ -10,7 +10,7 @@ namespace ContentControl\RestAPI;
 
 use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 use function ContentControl\get_all_plugin_options;
-use function ContentControl\update_options as update_plugin_options;
+use function ContentControl\update_plugin_options;
 
 defined( 'ABSPATH' ) || exit;
 

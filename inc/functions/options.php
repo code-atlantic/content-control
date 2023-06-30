@@ -26,7 +26,7 @@ function get_all_plugin_options() {
  *
  * @return mixed|void
  */
-function get_option( $key, $default_value = false ) {
+function get_plugin_option( $key, $default_value = false ) {
 	return plugin( 'options' )->get( $key, $default_value );
 }
 
@@ -42,7 +42,7 @@ function get_option( $key, $default_value = false ) {
  *
  * @return boolean True if updated, false if not.
  */
-function update_option( $key = '', $value = false ) {
+function update_plugin_option( $key = '', $value = false ) {
 	return plugin( 'options' )->update( $key, $value );
 }
 
@@ -53,7 +53,7 @@ function update_option( $key = '', $value = false ) {
  *
  * @return bool
  */
-function update_options( $new_options = [] ) {
+function update_plugin_options( $new_options = [] ) {
 	return plugin( 'options' )->update_many( $new_options );
 }
 
@@ -64,7 +64,7 @@ function update_options( $new_options = [] ) {
  *
  * @return boolean True if updated, false if not.
  */
-function delete_options( $keys = '' ) {
+function delete_plugin_options( $keys = '' ) {
 	return plugin( 'options' )->delete( $keys );
 }
 
@@ -125,10 +125,10 @@ function update_block_types( $incoming_block_types = [] ) {
  */
 function get_default_denial_message() {
 	if ( \ContentControl\get_data_version( 'settings' ) === 1 ) {
-		$settings = get_option( 'jp_cc_settings', [] );
+		$settings = get_plugin_option( 'jp_cc_settings', [] );
 
 		return isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
 	}
 
-	return get_option( 'defaultDenialMessage', '' );
+	return get_plugin_option( 'defaultDenialMessage', '' );
 }

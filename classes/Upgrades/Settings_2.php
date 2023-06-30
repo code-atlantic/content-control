@@ -13,7 +13,7 @@ use function __;
 use function get_option;
 use function update_option;
 use function delete_option;
-use function ContentControl\update_option as update_plugin_option;
+use function ContentControl\update_plugin_option;
 
 /**
  * Settings v2 migration.
