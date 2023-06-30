@@ -289,7 +289,7 @@ class Prerequisites {
 	 * @return bool
 	 */
 	protected function plugin_is_active( $slug ) {
-		$active_plugins = get_option( 'active_plugins', [] );
+		$active_plugins = \get_option( 'active_plugins', [] );
 
 		return in_array( $slug, $active_plugins, true );
 	}

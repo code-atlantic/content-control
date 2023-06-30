@@ -11,8 +11,6 @@ defined( 'ABSPATH' ) || exit;
 
 use function __;
 use function add_post_meta;
-use function get_option;
-use function update_option;
 use function wp_parse_args;
 use function sanitize_url;
 use function wp_insert_post;
@@ -45,7 +43,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		$stream = $this->stream();
 
 		// Get settings (where restrictions were store before).
-		$settings = get_option( 'jp_cc_settings', [] );
+		$settings = \get_option( 'jp_cc_settings', [] );
 
 		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
 		$count        = count( $restrictions );
@@ -86,7 +84,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		}
 
 		// Update the settings with any migrated restrictions removed so they can later be migrated.
-		update_option( 'jp_cc_settings', $settings );
+		\update_option( 'jp_cc_settings', $settings );
 
 		if ( ! $count || $progress === $count ) {
 			// translators: %d: number of restrictions migrated.

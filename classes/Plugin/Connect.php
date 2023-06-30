@@ -10,8 +10,6 @@
 namespace ContentControl\Plugin;
 
 use function ContentControl\plugin;
-use function ContentControl\Base\Container;
-use function request_filesystem_credentials;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,7 +67,7 @@ class Connect {
 	public function generate_token() {
 		$token = hash( 'sha512', wp_rand() );
 
-		update_option( self::TOKEN_OPTION_NAME, $token );
+		\update_option( self::TOKEN_OPTION_NAME, $token );
 
 		return $token;
 	}
@@ -80,7 +78,7 @@ class Connect {
 	 * @return string|false
 	 */
 	public function get_access_token() {
-		return get_option( self::TOKEN_OPTION_NAME, false );
+		return \get_option( self::TOKEN_OPTION_NAME, false );
 	}
 
 	/**
@@ -450,7 +448,7 @@ class Connect {
 		// 3. Delete the token to prevent abuse.
 		if ( ! self::DEBUG_MODE ) {
 			$this->debug_log( 'Deleting token', 'DEBUG' );
-			delete_option( self::TOKEN_OPTION_NAME );
+			\delete_option( self::TOKEN_OPTION_NAME );
 		}
 
 		// 4. Validate license key.

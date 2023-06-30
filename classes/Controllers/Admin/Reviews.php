@@ -9,7 +9,6 @@ namespace ContentControl\Controllers\Admin;
 
 use ContentControl\Base\Controller;
 
-use function ContentControl\get_option;
 use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
@@ -73,11 +72,11 @@ class Reviews extends Controller {
 	 * @return false|string
 	 */
 	public function installed_on() {
-		$installed_on = get_option( 'content_control_installed_on', false );
+		$installed_on = \get_option( 'content_control_installed_on', false );
 
 		if ( ! $installed_on ) {
 			$installed_on = current_time( 'mysql' );
-			update_option( 'content_control_installed_on', $installed_on );
+			\update_option( 'content_control_installed_on', $installed_on );
 		}
 
 		return $installed_on;

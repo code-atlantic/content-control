@@ -185,10 +185,10 @@ class Logging {
 	public function init() {
 		$upload_dir = $this->get_upload_dir();
 
-		$file_token = get_option( 'content_control_debug_log_token' );
+		$file_token = \get_option( 'content_control_debug_log_token' );
 		if ( false === $file_token ) {
 			$file_token = uniqid( wp_rand(), true );
-			update_option( 'content_control_debug_log_token', $file_token );
+			\update_option( 'content_control_debug_log_token', $file_token );
 		}
 
 		$this->filename = self::LOG_FILE_PREFIX . "debug-{$file_token}.log"; // ex. content-control-debug-5c2f6a9b9b5a3.log.

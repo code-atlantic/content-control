@@ -9,8 +9,6 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
-use function get_option;
-use function update_option;
 use function wp_parse_args;
 use function apply_filters;
 
@@ -34,7 +32,7 @@ function current_data_versions() {
  * @return int[]
  */
 function get_data_versions() {
-	$versioning = get_option( 'content_control_data_versioning', [] );
+	$versioning = \get_option( 'content_control_data_versioning', [] );
 
 	return wp_parse_args( $versioning, current_data_versions() );
 }
@@ -65,7 +63,7 @@ function set_data_version( $key, $version ) {
 function set_data_versions( $versioning ) {
 	$versioning = wp_parse_args( $versioning, get_data_versions() );
 
-	return update_option( 'content_control_data_versioning', $versioning );
+	return \update_option( 'content_control_data_versioning', $versioning );
 }
 
 /**
@@ -102,7 +100,7 @@ function maybe_force_v2_migrations( $old_version ) {
 			'user_meta'    => 1,
 		], $versioning );
 
-		update_option( 'content_control_data_versioning', $versioning );
+		\update_option( 'content_control_data_versioning', $versioning );
 	}
 }
 
@@ -127,7 +125,7 @@ function get_upgrade_name( $upgrade ) {
  * @return string[]
  */
 function get_completed_upgrades() {
-	return get_option( 'content_control_completed_upgrades', [] );
+	return \get_option( 'content_control_completed_upgrades', [] );
 }
 
 /**
@@ -138,7 +136,7 @@ function get_completed_upgrades() {
  * @return bool
  */
 function set_completed_upgrades( $upgrades ) {
-	return update_option( 'content_control_completed_upgrades', $upgrades );
+	return \update_option( 'content_control_completed_upgrades', $upgrades );
 }
 
 /**

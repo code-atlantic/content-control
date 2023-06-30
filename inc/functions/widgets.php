@@ -32,7 +32,7 @@ function get_options( $widget_id ) {
 		// Examples: "text-2" will return "2", "recent-post-2" will return "2".
 		$index = substr( $widget_id, $split_pos + 1 );
 
-		$widget_settings = get_option( 'widget_' . $basename );
+		$widget_settings = \get_option( 'widget_' . $basename );
 
 		if ( isset( $widget_settings[ $index ] ) ) {
 			$options[ $widget_id ] = parse_options( $widget_settings[ $index ] );

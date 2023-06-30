@@ -57,11 +57,11 @@ class Options {
 	 * @return array settings
 	 */
 	public function get_all() {
-		$settings = get_option( $this->prefix . 'settings' );
+		$settings = \get_option( $this->prefix . 'settings' );
 
 		if ( ! is_array( $settings ) ) {
 			$settings = \ContentControl\get_default_settings();
-			update_option( $this->prefix . 'settings', $settings );
+			\update_option( $this->prefix . 'settings', $settings );
 		}
 
 		/**
@@ -163,7 +163,7 @@ class Options {
 
 		// Next let's try to update the value.
 		$options[ $key ] = $value;
-		$did_update      = update_option( $this->prefix . 'settings', $options );
+		$did_update      = \update_option( $this->prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable.
 		if ( $did_update ) {
@@ -208,7 +208,7 @@ class Options {
 			$options[ $key ] = $value;
 		}
 
-		$did_update = update_option( $this->prefix . 'settings', $options );
+		$did_update = \update_option( $this->prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable.
 		if ( $did_update ) {
@@ -244,7 +244,7 @@ class Options {
 			}
 		}
 
-		$did_update = update_option( $this->prefix . 'settings', $options );
+		$did_update = \update_option( $this->prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable.
 		if ( $did_update ) {
@@ -276,7 +276,7 @@ class Options {
 			unset( $options[ $key ] );
 		}
 
-		$did_update = update_option( $this->prefix . 'settings', $options );
+		$did_update = \update_option( $this->prefix . 'settings', $options );
 
 		// If it updated, let's update the global variable.
 		if ( $did_update ) {

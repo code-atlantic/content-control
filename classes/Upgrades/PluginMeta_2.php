@@ -9,11 +9,6 @@ namespace ContentControl\Upgrades;
 
 defined( 'ABSPATH' ) || exit;
 
-use function __;
-use function get_option;
-use function update_option;
-use function delete_option;
-
 /**
  * Version 2 migration.
  */
@@ -47,11 +42,11 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 		];
 
 		foreach ( $remaps as $key => $new_key ) {
-			$value = get_option( $key, null );
+			$value = \get_option( $key, null );
 
 			if ( null !== $value ) {
-				update_option( $new_key, $value );
-				delete_option( $key );
+				\update_option( $new_key, $value );
+				\delete_option( $key );
 			}
 		}
 

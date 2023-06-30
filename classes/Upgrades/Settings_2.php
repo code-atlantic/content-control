@@ -10,9 +10,6 @@ namespace ContentControl\Upgrades;
 defined( 'ABSPATH' ) || exit;
 
 use function __;
-use function get_option;
-use function update_option;
-use function delete_option;
 use function ContentControl\update_plugin_option;
 
 /**
@@ -54,7 +51,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 
 		$stream->start_task( __( 'Migrating plugin settings', 'content-control' ) );
 
-		$settings               = get_option( 'jp_cc_settings', [] );
+		$settings               = \get_option( 'jp_cc_settings', [] );
 		$default_denial_message = isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
 
 		if ( ! empty( $default_denial_message ) ) {
@@ -64,9 +61,9 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 		unset( $settings['default_denial_message'] );
 
 		if ( ! empty( $settings ) ) {
-			update_option( 'jp_cc_settings', $settings );
+			\update_option( 'jp_cc_settings', $settings );
 		} else {
-			delete_option( 'jp_cc_settings' );
+			\delete_option( 'jp_cc_settings' );
 		}
 
 		$stream->complete_task( __( 'Plugin settings migrated', 'content-control' ) );

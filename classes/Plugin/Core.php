@@ -62,7 +62,7 @@ class Core {
 		$version    = $this->get( 'version' );
 		$option_key = 'content_control_version';
 
-		$current_data = get_option( $option_key, false );
+		$current_data = \get_option( $option_key, false );
 
 		$data = wp_parse_args(
 			false !== $current_data ? $current_data : [],
@@ -97,7 +97,7 @@ class Core {
 		}
 
 		if ( $current_data !== $data ) {
-			update_option( $option_key, $data );
+			\update_option( $option_key, $data );
 		}
 	}
 
@@ -108,8 +108,8 @@ class Core {
 	 * @return array
 	 */
 	private function process_version_data_migration( $data ) {
-		$has_old_settings_data = get_option( 'jp_cc_settings', false );
-		$has_old_install_date  = get_option( 'jp_cc_reviews_installed_on', false );
+		$has_old_settings_data = \get_option( 'jp_cc_settings', false );
+		$has_old_install_date  = \get_option( 'jp_cc_reviews_installed_on', false );
 
 		// Check if old settings exist.
 		if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {

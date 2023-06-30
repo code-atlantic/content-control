@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * @return array
  */
 function get_v1_restrictions() {
-	$settings = get_option( 'jp_cc_settings', [] );
+	$settings = \get_option( 'jp_cc_settings', [] );
 
 	if ( ! isset( $settings['restrictions'] ) ) {
 		return [];
