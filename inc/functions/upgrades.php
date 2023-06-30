@@ -105,3 +105,89 @@ function maybe_force_v2_migrations( $old_version ) {
 		update_option( 'content_control_data_versioning', $versioning );
 	}
 }
+
+/**
+ * Get the name of an upgrade.
+ *
+ * @param string|\ContentControl\Base\Upgrade $upgrade Upgrade to get name for.
+ *
+ * @return string
+ */
+function get_upgrade_name( $upgrade ) {
+	if ( is_object( $upgrade ) ) {
+		$upgrade = $upgrade::TYPE . '-' . $upgrade::VERSION;
+	}
+
+	return $upgrade;
+}
+
+/**
+ * Get the completed upgrades.
+ *
+ * @return string[]
+ */
+function get_completed_upgrades() {
+	return get_option( 'content_control_completed_upgrades', [] );
+}
+
+/**
+ * Set the completed upgrades.
+ *
+ * @param string[] $upgrades Completed upgrades.
+ *
+ * @return bool
+ */
+function set_completed_upgrades( $upgrades ) {
+	return update_option( 'content_control_completed_upgrades', $upgrades );
+}
+
+/**
+ * Mark an upgrade as complete.
+ *
+ * @param \ContentControl\Base\Upgrade $upgrade Upgrade to mark as complete.
+ *
+ * @return void
+ */
+function mark_upgrade_complete( $upgrade ) {
+	$upgrade_name = get_upgrade_name( $upgrade );
+
+	$upgrades = get_completed_upgrades();
+
+	if ( ! in_array( $upgrade_name, $upgrades, true ) ) {
+		$upgrades[] = $upgrade_name;
+	}
+
+	set_completed_upgrades( $upgrades );
+
+	// Update the data version.
+	set_data_version( $upgrade::TYPE, $upgrade::VERSION );
+
+	/**
+	 * Fires when an upgrade is marked as complete.
+	 *
+	 * @param string $upgrade Upgrade type.
+	 */
+	do_action( 'content_control/upgrade_complete', $upgrade );
+
+	/**
+	 * Fires when a specific upgrade is marked as complete.
+	 *
+	 * @param string $upgrade Upgrade type.
+	 */
+	do_action( "content_control/upgrade_complete/{$upgrade_name}" );
+}
+
+/**
+ * Check if an upgrade has been completed.
+ *
+ * @param string|\ContentControl\Base\Upgrade $upgrade Upgrade to check.
+ *
+ * @return bool
+ */
+function is_upgrade_complete( $upgrade ) {
+	$upgrade = get_upgrade_name( $upgrade );
+
+	$upgrades = get_completed_upgrades();
+
+	return in_array( $upgrade, $upgrades, true );
+}
