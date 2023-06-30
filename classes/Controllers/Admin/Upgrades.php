@@ -407,9 +407,11 @@ class Upgrades extends Controller {
 
 		$upgrades = $this->get_required_upgrades();
 
-		foreach ( $this->get_required_upgrades() as $key => $upgrade ) {
-			$vars['upgrades'][ $key ] = [
-				'key'         => $upgrade::TYPE . '-' . $upgrade::VERSION,
+		foreach ( $upgrades as  $upgrade ) {
+			$upgrade_name = get_upgrade_name( $upgrade );
+
+			$vars['upgrades'][ $upgrade_name ] = [
+				'key'         => $upgrade_name,
 				'label'       => $upgrade->label(),
 				'description' => $upgrade->description(),
 			];
