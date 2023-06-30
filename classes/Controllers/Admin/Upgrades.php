@@ -134,9 +134,14 @@ class Upgrades extends Controller {
 	 */
 	private function sort_upgrades_by_prerequisites( $upgrades ) {
 		// Build the graph of upgrades and their dependencies.
-		$graph = [];
+		$graph           = [];
+		$upgrade_by_name = [];
 		foreach ( $upgrades as $upgrade ) {
-			$graph[ $upgrade::TYPE . '-' . $upgrade::VERSION ] = $upgrade->get_dependencies();
+			$updgrade_name = get_upgrade_name( $upgrade );
+
+			$graph[ $updgrade_name ] = $upgrade->get_dependencies();
+
+			$upgrade_by_name[ $updgrade_name ] = $upgrade;
 		}
 
 		// Perform a topological sort on the graph.
@@ -144,8 +149,11 @@ class Upgrades extends Controller {
 
 		// Rebuild the list of upgrades in the sorted order.
 		foreach ( $sorted as $key => $value ) {
-			$sorted[ $key ] = $upgrades[ $value ];
+			$sorted[ $key ] = $upgrade_by_name[ $value ];
 		}
+
+		// Remove null values, these are upgrades that have been marked as done.
+		$sorted = array_filter( $sorted );
 
 		// Return the sorted upgrades.
 		return $sorted;
