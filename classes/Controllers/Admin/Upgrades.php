@@ -216,11 +216,11 @@ class Upgrades extends Controller {
 	public function ajax_handler() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( __( 'Invalid nonce.', 'content-control' ) );
 		}
 
 		if ( ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
-			wp_send_json_error();
+			wp_send_json_error( __( 'You do not have permission to run upgrades.', 'content-control' ) );
 		}
 
 		try {
@@ -286,11 +286,11 @@ class Upgrades extends Controller {
 	public function ajax_handler_demo() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( __( 'Invalid nonce.', 'content-control' ) );
 		}
 
 		if ( ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
-			wp_send_json_error();
+			wp_send_json_error( __( 'You do not have permission to run upgrades.', 'content-control' ) );
 		}
 
 		try {
