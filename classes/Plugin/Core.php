@@ -218,6 +218,17 @@ class Core {
 	}
 
 	/**
+	 * Get a controller.
+	 *
+	 * @param string $name Controller name.
+	 *
+	 * @return Controller|null
+	 */
+	public function get_controller( $name ) {
+		return $this->controllers->get( $name, null );
+	}
+
+	/**
 	 * Initiate internal paths.
 	 */
 	private function define_paths() {
