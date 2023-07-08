@@ -181,6 +181,8 @@ class Core {
 		$this->container['restrictions'] = function () {
 			return new \ContentControl\Services\Restrictions();
 		};
+
+		apply_filters( 'content_control/register_services', $this->container, $this );
 	}
 
 	/**
