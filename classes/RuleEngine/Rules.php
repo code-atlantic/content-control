@@ -146,6 +146,8 @@ class Rules {
 			'isnot'       => __( 'Is Not', 'content-control' ),
 			'has'         => __( 'Has', 'content-control' ),
 			'hasnot'      => __( 'Has Not', 'content-control' ),
+			'can'         => __( 'Can', 'content-control' ),
+			'cannot'      => __( 'Can Not', 'content-control' ),
 			'doesnothave' => __( 'Does Not Have', 'content-control' ),
 			'does'        => __( 'Does', 'content-control' ),
 			'doesnot'     => __( 'Does Not', 'content-control' ),
