@@ -9,9 +9,6 @@
 namespace ContentControl\Services;
 
 use ContentControl\Models\Restriction;
-use ContentControl\Models\RuleEngine\Query;
-
-use function ContentControl\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
