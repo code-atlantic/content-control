@@ -65,7 +65,7 @@ const GeneralTab = ( {
 			/>
 
 			{ values.title.length <= 0 && (
-				<Notice status="warning" isDismissible={ false }>
+				<Notice status="warning" isDismissible={ false } className="title-field-notice">
 					{ __( 'Enter a label for this set.', 'content-control' ) }
 				</Notice>
 			) }

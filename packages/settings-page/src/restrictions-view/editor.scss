@@ -219,6 +219,16 @@ $gap4: $gap * 4;
 			}
 		}
 
+		.title-field-notice {
+			margin-bottom: $gap2;
+			margin-top: -$gap2;
+			margin-left: 0;
+			line-height: 1;
+			.components-notice__content {
+				padding: 0;
+			}
+		}
+
 		.description-field {
 			.components-text-control__input,
 			.components-textarea-control__input {
