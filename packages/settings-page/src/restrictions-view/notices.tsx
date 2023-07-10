@@ -44,23 +44,25 @@ const Notices = () => {
 		} );
 	}, [ notices ] );
 
+	if ( ! notices.length ) {
+		return null;
+	}
+
 	// Render each notice, some notices have a closeDelay which will automatically dismiss the notice after a set time.
 	return (
-		notices.length > 0 && (
-			<div className="notices">
-				{ notices.map( ( notice ) => (
-					<Notice
-						key={ notice.id }
-						status={ notice.type }
-						isDismissible={ notice.isDismissible }
-						onRemove={ () => handleDismiss( notice.id ) }
-						// actions={ notice.actions }
-					>
-						{ notice.message }
-					</Notice>
-				) ) }
-			</div>
-		)
+		<div className="notices">
+			{ notices.map( ( notice ) => (
+				<Notice
+					key={ notice.id }
+					status={ notice.type }
+					isDismissible={ notice.isDismissible }
+					onRemove={ () => handleDismiss( notice.id ) }
+					// actions={ notice.actions }
+				>
+					{ notice.message }
+				</Notice>
+			) ) }
+		</div>
 	);
 };
 
