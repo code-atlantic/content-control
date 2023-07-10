@@ -125,7 +125,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				__( 'Restriction "%s" saved successfully.', 'content-control' ),
 				valuesToSave.title
 			),
-			closeDelay: 3000,
+			closeDelay: 5000,
 		} );
 
 		closeEditor();
@@ -258,6 +258,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 					isDestructive={ true }
 					onClick={ () => closeEditor() }
 					disabled={ isSaving }
+					className="cancel-button"
 				/>
 				<Button
 					variant="primary"
