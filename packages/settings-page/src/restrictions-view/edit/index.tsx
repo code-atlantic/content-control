@@ -257,7 +257,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 					variant="tertiary"
 					isDestructive={ true }
 					onClick={ () => closeEditor() }
-					disabled={ ! isSetValid() || isSaving }
+					disabled={ isSaving }
 				/>
 				<Button
 					variant="primary"
