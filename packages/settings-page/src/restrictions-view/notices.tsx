@@ -46,19 +46,21 @@ const Notices = () => {
 
 	// Render each notice, some notices have a closeDelay which will automatically dismiss the notice after a set time.
 	return (
-		<div className="notices">
-			{ notices.map( ( notice ) => (
-				<Notice
-					key={ notice.id }
-					status={ notice.type }
-					isDismissible={ notice.isDismissible }
-					onRemove={ () => handleDismiss( notice.id ) }
-					// actions={ notice.actions }
-				>
-					{ notice.message }
-				</Notice>
-			) ) }
-		</div>
+		notices.length > 0 && (
+			<div className="notices">
+				{ notices.map( ( notice ) => (
+					<Notice
+						key={ notice.id }
+						status={ notice.type }
+						isDismissible={ notice.isDismissible }
+						onRemove={ () => handleDismiss( notice.id ) }
+						// actions={ notice.actions }
+					>
+						{ notice.message }
+					</Notice>
+				) ) }
+			</div>
+		)
 	);
 };
 
