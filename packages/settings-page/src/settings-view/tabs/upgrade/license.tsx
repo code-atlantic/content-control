@@ -265,6 +265,7 @@ const LicenseTab = () => {
 						width={ 500 }
 						onChange={ setValue }
 						readOnly={ isActivating || isLicenseKeyValid }
+						tabIndex={ isActivating || isLicenseKeyValid ? -1 : 0 }
 						onPaste={ ( event ) => {
 							event.preventDefault();
 							const pastedText =
