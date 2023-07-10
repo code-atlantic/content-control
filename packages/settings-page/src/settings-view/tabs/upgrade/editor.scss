@@ -135,8 +135,11 @@
 			padding: 0 2em;
 			border-radius: 3px;
 			vertical-align: middle;
-			box-shadow: none;
 			border: 1px solid #d0d5dd;
+
+			&:not(:focus) {
+				box-shadow: none;
+			}
 
 			// margin: 0;
 
@@ -167,11 +170,6 @@
 	}
 
 	.deactivate-license {
-		color: #1e1e1e;
-
-		&:hover span {
-			color: darkorange;
-		}
 	}
 
 	.remove-license {
