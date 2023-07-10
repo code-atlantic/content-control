@@ -70,13 +70,18 @@ $gap4: $gap * 4;
 		box-sizing: border-box;
 		display: flex;
 		justify-content: right;
-		gap: $gap2;
+		gap: $gap;
 		padding: 0 $gap2;
 		align-items: center;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		border-top: 1px solid #c3c4c7;
+
+		.cancel-button {
+			// padding-left: $gap;
+			// padding-right: $gap;
+		}
 
 		> :last-child {
 			position: absolute;
@@ -279,6 +284,14 @@ $gap4: $gap * 4;
 		}
 	}
 
+	.filters-toggle {
+		padding: 6px 12px;
+
+		svg {
+			margin-right: 5px;
+		}
+	}
+
 	.list-table-filters,
 	.list-table-bulk-actions {
 		.components-button.popover-toggle {
@@ -291,7 +304,7 @@ $gap4: $gap * 4;
 			line-height: 1;
 
 			svg:first-child {
-				margin-right: 8px;
+				margin-right: 5px;
 			}
 
 			svg.toggle-icon {

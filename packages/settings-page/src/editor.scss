@@ -57,8 +57,9 @@ $path: "../../../vendor-prefixed/trustedlogin/client/src/assets/";
 		.components-tab-panel__tabs-item {
 			&.upgrade {
 				margin-left: auto;
+
 				svg {
-					margin-right: 10px;
+					margin-right: 5px;
 				}
 
 				&:hover {
