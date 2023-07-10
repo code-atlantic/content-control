@@ -11,8 +11,6 @@ $gap4: $gap * 4;
 		margin-bottom: 30px;
 
 		.view-title {
-			margin: 0;
-			line-height: 1;
 		}
 
 		.item-count {
@@ -416,8 +414,6 @@ $gap4: $gap * 4;
 }
 
 .restriction-list {
-	padding: 10px 0;
-
 	> * {
 		margin-bottom: 10px;
 	}
