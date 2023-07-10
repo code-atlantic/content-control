@@ -86,7 +86,7 @@ const Header = ( { tabs }: Props ) => {
 		return () => {
 			window.removeEventListener( 'beforeunload', beforeunload );
 		};
-	}, [] );
+	}, [ hasUnsavedChanges ] );
 
 	// Listens for unsaved changes & user ignoring notice. Changes views & resets accordingly.
 	useEffect( () => {
