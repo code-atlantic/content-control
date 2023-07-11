@@ -9,6 +9,8 @@
 
 namespace ContentControl\Services;
 
+use function ContentControl\plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -87,6 +89,10 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	public function send_event( $event, $data = [] ) {
 		// Always send the status.
 		$data['status'] = $this->status;
+
+		if ( ! empty( $data['message'] ) ) {
+			plugin('logging')->log( $data['message'] );
+		}
 
 		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
 
@@ -184,4 +190,5 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 			'message' => $message ? $message : sprintf( __( 'Completed: %s', 'content-control' ), $task_status['name'] ),
 		] );
 	}
+
 }
