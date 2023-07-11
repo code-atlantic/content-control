@@ -44,7 +44,6 @@ const statusStateDefaults = {
 type UpgradeState = {
 	running: boolean;
 	done: boolean;
-	redirectCountdown: number;
 	logs: string[];
 	showLogs: boolean;
 	status: StatusState;
@@ -58,14 +57,15 @@ const UpgradeView = () => {
 	const [ upgradeState, setUpgradeState ] = useState< UpgradeState >( {
 		running: false,
 		done: false,
-		redirectCountdown: -1,
 		logs: [],
 		showLogs: false,
 		status: statusStateDefaults,
 	} );
 
-	const { running, done, redirectCountdown, logs, showLogs, status } =
-		upgradeState;
+	const [ redirectCountdown, setRedirectCountdown ] =
+		useState< number >( -1 );
+
+	const { running, done, logs, showLogs, status } = upgradeState;
 
 	const [ eventSource ] = useEventSource(
 		running ? `${ upgradeUrl }&nonce=${ upgradeNonce }` : '',
@@ -102,8 +102,8 @@ const UpgradeView = () => {
 				case 'task:complete':
 				case 'task:progress':
 					if ( type === 'upgrades:complete' ) {
-						// newState.done = true;
-						// newState.redirectCountdown = 15;
+						newState.done = true;
+						setRedirectCountdown( 15 );
 						// Close the connection when the 'upgrades:complete' event is received
 						eventSource?.close();
 					}
@@ -151,10 +151,7 @@ const UpgradeView = () => {
 				if ( 0 === redirectCountdown ) {
 					window.location.reload();
 				} else {
-					setUpgradeState( {
-						...upgradeState,
-						redirectCountdown: redirectCountdown - 1,
-					} );
+					setRedirectCountdown( redirectCountdown - 1 );
 				}
 			}, 1000 );
 		}
