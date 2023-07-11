@@ -127,7 +127,8 @@ class Logging {
 	 * @return bool
 	 */
 	public function enabled() {
-		return defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING && $this->is_writable();
+		return ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) || ! CONTENT_CONTROL_DISABLE_LOGGING && $this->is_writable();
+		// return defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING && $this->is_writable();
 	}
 
 	/**
