@@ -28,14 +28,6 @@ class Upgrader {
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
-
-		$this->register_hooks();
-	}
-
-	/**
-	 * Register hooks.
-	 */
-	public function register_hooks() {
 	}
 
 	/**

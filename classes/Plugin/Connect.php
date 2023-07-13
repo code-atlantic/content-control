@@ -47,16 +47,6 @@ class Connect {
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
-
-		$this->register_hooks();
-	}
-
-	/**
-	 * Register hooks.
-	 */
-	public function register_hooks() {
-		add_action( 'wp_ajax_nopriv_content_control_connect_verify_connection', [ $this, 'process_verify_connection' ] );
-		add_action( 'wp_ajax_nopriv_content_control_connect_webhook', [ $this, 'process_webhook' ] );
 	}
 
 	/**
@@ -126,6 +116,7 @@ class Connect {
 				$headers = trim( $request_headers['Authorization'] );
 			}
 		}
+
 		return $headers;
 	}
 
