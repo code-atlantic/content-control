@@ -208,6 +208,15 @@ class Logging {
 	}
 
 	/**
+	 * Get the log file path.
+	 *
+	 * @return string
+	 */
+	public function get_file_path() {
+		return $this->file;
+	}
+
+	/**
 	 * Retrieves the url to the file
 	 *
 	 * @returns string|bool The url to the file or false on failure
@@ -227,6 +236,16 @@ class Logging {
 	 */
 	public function get_log() {
 		return $this->get_log_content();
+	}
+
+	/**
+	 * Delete the log file and token.
+	 *
+	 * @return void
+	 */
+	public function delete_logs() {
+		$this->fs->delete( $this->file );
+		\delete_option( 'content_control_debug_log_token' );
 	}
 
 	/**
