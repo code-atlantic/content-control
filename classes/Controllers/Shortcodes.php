@@ -37,65 +37,53 @@ class Shortcodes extends Controller {
 	 * @return string
 	 */
 	public function content_control( $atts, $content = '' ) {
+		// Deprecated.
+		$deprecated_atts = shortcode_atts( [
+			'logged_out' => null, // @deprecated 2.0.
+			'roles'      => null, // @deprecated 2.0.
+		], $atts );
+
 		$atts = shortcode_atts( [
-			'status'         => null, // 'logged_in' or 'logged_out
+			'status'         => 'logged_in', // 'logged_in' or 'logged_out
 			'allowed_roles'  => null,
 			'excluded_roles' => null,
 			'class'          => '',
 			'message'        => $this->container->get_option( 'defaultDenialMessage', '' ),
-			// Deprecated.
-			'logged_out'     => null, // @deprecated 2.0.0
-			'roles'          => '', // @deprecated 2.0.0
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
 		// Handle old args.
-		if ( null === $atts['status'] && isset( $atts['logged_out]'] ) && (bool) $atts['logged_out'] ) {
-			// @deprecated 2.0.0
-			$atts['status'] = 'logged_out';
-			unset( $atts['logged_out'] );
+		if ( isset( $deprecated_atts['logged_out]'] ) ) {
+			$atts['status'] = (bool) $deprecated_atts['logged_out'] ? 'logged_out' : 'logged_in';
 		}
 
-		if ( isset( $atts['roles'] ) && ! empty( $atts['roles'] ) ) {
-			// @deprecated 2.0.
-			$atts['allowed_roles'] = $atts['roles'];
-			unset( $atts['roles'] );
+		if ( isset( $deprecated_atts['roles'] ) && ! empty( $deprecated_atts['roles'] ) ) {
+			$atts['allowed_roles'] = $deprecated_atts['roles'];
 		}
 
-		if ( isset( $atts['allowed_roles'] ) && ! is_array( $atts['allowed_roles'] ) ) {
-			$atts['allowed_roles'] = explode( ',', $atts['allowed_roles'] );
-		}
 
-		if ( isset( $atts['excluded_roles'] ) && ! is_array( $atts['excluded_roles'] ) ) {
-			$atts['excluded_roles'] = explode( ',', $atts['excluded_roles'] );
-		}
+		$user_roles = [];
+		$match_type = 'any';
 
-		if ( is_array( $atts['excluded_roles'] ) && count( $atts['excluded_roles'] ) ) {
+		// Normalize args.
+		if ( ! empty( $atts['excluded_roles'] ) ) {
 			$user_roles = $atts['excluded_roles'];
 			$match_type = 'exclude';
-		} elseif ( is_array( $atts['allowed_roles'] ) && count( $atts['allowed_roles'] ) ) {
+		} elseif ( ! empty( $atts['allowed_roles'] ) ) {
 			$user_roles = $atts['allowed_roles'];
 			$match_type = 'match';
-		} else {
-			$user_roles = [];
-			$match_type = 'any';
 		}
-
-		$user_roles = array_map( 'trim', $user_roles );
-		$user_roles = array_map( 'strtolower', $user_roles );
-
-		$user_status = $atts['status'];
 
 		$classes = $atts['class'];
 
 		if ( ! is_array( $classes ) ) {
-			$classes = explode( ' ', $classes );
+			$classes = ! empty( $classes ) ? explode( ' ', $classes ) : [];
 		}
 
 		$classes[] = 'content-control-container';
 		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
-		if ( user_meets_requirements( $user_status, $user_roles, $match_type ) ) {
+		if ( user_meets_requirements( $atts['status'], $user_roles, $match_type ) ) {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';

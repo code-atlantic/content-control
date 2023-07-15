@@ -28,10 +28,9 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 
 	// If roles is string, convert to array.
 	if ( is_string( $user_roles ) ) {
-		$user_roles = strpos( $user_roles, ',' ) !== false ? array_map(
-			'trim',
-			explode( ',', $user_roles )
-		) : [ $user_roles ];
+		$user_roles = explode( ',', $user_roles );
+		$user_roles = array_map( 'trim', $user_roles );
+		$user_roles = array_map( 'strtolower', $user_roles );
 	}
 
 	// If roles is array of keyed roles, convert to array of roles[].
