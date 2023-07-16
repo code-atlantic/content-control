@@ -12,6 +12,7 @@ use ContentControl\Base\Controller;
 
 use function ContentControl\content_is_restricted;
 use function ContentControl\protection_is_disabled;
+use function ContentControl\user_is_excluded;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -59,7 +60,7 @@ class Posts extends Controller {
 			return $content;
 		}
 
-		if ( protection_is_disabled() ) {
+		if ( user_is_excluded() || protection_is_disabled() ) {
 			return $content;
 		}
 

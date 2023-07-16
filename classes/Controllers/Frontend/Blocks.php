@@ -9,6 +9,7 @@
 namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
+use function ContentControl\user_is_excluded;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -76,7 +77,7 @@ class Blocks extends Controller {
 	 * @return string|null
 	 */
 	public function pre_render_block( $pre_render, $parsed_block, $parent_block ) {
-		if ( ! isset( $parsed_block['attrs']['contentControls'] ) ) {
+		if ( user_is_excluded() || ! isset( $parsed_block['attrs']['contentControls'] ) ) {
 			return $pre_render;
 		}
 

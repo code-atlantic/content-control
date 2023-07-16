@@ -14,6 +14,7 @@ use ContentControl\Base\Controller;
 
 use WP_Customize_Manager;
 
+use function ContentControl\user_is_excluded;
 use function ContentControl\user_meets_requirements;
 use function ContentControl\Widgets\get_options as get_widget_options;
 
@@ -37,7 +38,7 @@ class Widgets extends Controller {
 	 * @return array The modified $widget_area array.
 	 */
 	public function exclude_widgets( $widget_areas ) {
-		if ( is_admin() || $this->is_customize_preview() ) {
+		if ( user_is_excluded() || is_admin() || $this->is_customize_preview() ) {
 			return $widget_areas;
 		}
 

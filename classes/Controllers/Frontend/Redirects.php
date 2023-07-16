@@ -11,6 +11,7 @@ namespace ContentControl\Controllers\Frontend;
 use ContentControl\Base\Controller;
 
 use function ContentControl\content_is_restricted;
+use function ContentControl\user_is_excluded;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -34,7 +35,7 @@ class Redirects extends Controller {
 	 * Check if content protected by redirect.
 	 */
 	public function template_redirect() {
-		if ( ! content_is_restricted() ) {
+		if ( user_is_excluded() || ! content_is_restricted() ) {
 			return;
 		}
 

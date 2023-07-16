@@ -12,6 +12,7 @@ use ContentControl\Base\Controller;
 
 use function ContentControl\content_is_restricted;
 use function ContentControl\get_restricted_content_message;
+use function ContentControl\user_is_excluded;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -46,7 +47,7 @@ class Feeds extends Controller {
 			return $content;
 		}
 
-		if ( ! is_feed() || ! content_is_restricted() ) {
+		if ( user_is_excluded() || ! is_feed() || ! content_is_restricted() ) {
 			return $content;
 		}
 
