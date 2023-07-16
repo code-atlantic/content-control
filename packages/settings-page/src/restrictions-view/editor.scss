@@ -43,6 +43,23 @@ $gap4: $gap * 4;
 		height: $gap4;
 		padding: 0 $gap2;
 		border-bottom: 1px solid #c3c4c7;
+
+		.components-modal__header-heading-container {
+			line-clamp: 1;
+			margin-right: 125px;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 4;
+			overflow: hidden;
+
+			h1 {
+				overflow: hidden;
+				max-width: 100%;
+				text-overflow: ellipsis;
+				width: fit-content;
+				white-space: nowrap;
+			}
+		}
 	}
 
 	.restriction-enabled-toggle {
