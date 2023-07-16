@@ -12,6 +12,25 @@ namespace ContentControl;
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Check if admins are excluded from restrictions.
+ *
+ * @return bool True if admins are excluded, false if not.
+ */
+function admins_are_excluded() {
+	return plugin()->get_option( 'excludeAdmins' );
+}
+
+/**
+ * Current user is excluded from restrictions.
+ *
+ * @return bool True if user is excluded, false if not.
+ */
+function user_is_excluded() {
+	return admins_are_excluded() && current_user_can( plugin()->get_permission( 'manage_settings' ) );
+}
+
+
+/**
  * Check if user meets requirements.
  *
  * @param string       $user_status logged_in or logged_out.
@@ -45,6 +64,11 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 			// If not logged in, return false.
 			if ( ! $logged_in ) {
 				return false;
+			}
+
+			// If current user is excluded from restrictions, return true.
+			if ( user_is_excluded() ) {
+				return true;
 			}
 
 			// If we got this far, we're logged in.

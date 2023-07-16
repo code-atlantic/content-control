@@ -9,6 +9,7 @@ export type PermissionValue = string | false;
 
 export interface Settings {
 	defaultDenialMessage: string;
+	excludeAdmins: boolean;
 	excludedBlocks: string[];
 	permissions: {
 		// Block Controls

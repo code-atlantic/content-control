@@ -31,6 +31,7 @@ export const settingsDefaults: Settings =
 	 */
 	applyFilters( 'contentControl.defaultSettings', {
 		defaultDenialMessage: '',
+		excludeAdmins: true,
 		excludedBlocks: [],
 		permissions: {
 			// Block Controls

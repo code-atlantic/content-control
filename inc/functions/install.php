@@ -54,6 +54,7 @@ function get_default_media_queries() {
 function get_default_settings() {
 	return [
 		'defaultDenialMessage' => '',
+		'excludeAdmins'        => true,
 		'excludedBlocks'       => [],
 		'urlOverrides'         => [],
 		'permissions'          => [],
