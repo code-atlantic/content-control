@@ -26,6 +26,7 @@ class BlockEditor extends Controller {
 	 */
 	public function init() {
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_assets' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'enqueue_block_assets' ] );
 	}
 
 	/**
@@ -33,5 +34,12 @@ class BlockEditor extends Controller {
 	 */
 	public function enqueue_assets() {
 		wp_enqueue_script( 'content-control-block-editor' );
+	}
+
+	/**
+	 * Enqueue block assets.
+	 */
+	public function enqueue_block_assets() {
+		wp_enqueue_style( 'content-control-block-styles' );
 	}
 }
