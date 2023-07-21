@@ -114,8 +114,8 @@ const GeneralTab = ( {
 						<SearchableMulticheckControl
 							label={
 								'exclude' === settings.roleMatch
-									? __( 'Excluded Roles', 'content-control' )
-									: __( 'Chosen Roles', 'content-control' )
+									? __( 'Roles to exclude', 'content-control' )
+									: __( 'Roles to include', 'content-control' )
 							}
 							searchIcon={ search }
 							placeholder={ __(
