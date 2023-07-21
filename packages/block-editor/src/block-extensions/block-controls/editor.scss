@@ -1,21 +1,7 @@
 @import "~@wordpress/base-styles/variables";
 @import "~@wordpress/base-styles/mixins";
 @import "~@wordpress/base-styles/colors";
-
-.controlled-content {
-	&::before {
-		content: " ";
-		background: no-repeat center center transparent;
-		border-radius: 100px;
-		width: 16px;
-		height: 20px;
-		display: block;
-		position: absolute;
-		top: -16px;
-		right: -16px;
-		background-size: contain;
-	}
-}
+@import "./controlled-content";
 
 .cc__block-controls {
 	border-bottom: $border-width solid $gray-200;
