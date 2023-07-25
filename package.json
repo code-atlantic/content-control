@@ -48,6 +48,7 @@
   },
   "scripts": {
     "build": "wp-scripts build",
+    "clean:packages": "nx run-many --target=clean",
     "build:tsc": "nx run-many --target=build:tsc",
     "build:types": "nx run-many --target=build:types",
     "packages-update-deep": "nx run-many --target=packages-update",

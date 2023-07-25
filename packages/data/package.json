@@ -39,6 +39,7 @@
 	"scripts": {
 		"build:tsc": "tsc",
 		"build:types": "tsc --build",
+		"clean": "rimraf build build-types tsconfig.tsbuildinfo",
 		"packages-update": "wp-scripts packages-update"
 	}
 }
