@@ -27,9 +27,9 @@ $gap4: $gap * 4;
 
 .restriction-editor {
 	width: 860px;
-	min-height: 60vh;
-	max-height: 80%;
-	margin: 10vh auto auto;
+	min-height: 65vh;
+	max-height: 85%;
+	margin: 8vh auto auto;
 
 	/** Modal Styles */
 	.components-modal__content {
@@ -37,6 +37,16 @@ $gap4: $gap * 4;
 		margin-bottom: $gap4;
 		padding: $gap;
 		overflow-y: scroll;
+
+		&::-webkit-scrollbar {
+			-webkit-appearance: none;
+			width: 7px;
+		}
+		&::-webkit-scrollbar-thumb {
+			border-radius: 4px;
+			background-color: rgba(0, 0, 0, 0.5);
+			-webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+		}
 	}
 
 	.components-modal__header {
@@ -272,6 +282,13 @@ $gap4: $gap * 4;
 	.protection-tab {
 		h3 {
 			margin-top: 0;
+		}
+
+		.component-smart-token-control__input {
+			width: fit-content;
+			min-width: 300px;
+			min-height: 42px;
+			vertical-align: middle;
 		}
 	}
 }
