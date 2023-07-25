@@ -40,7 +40,10 @@ export interface RestrictionSettings {
 	userStatus: 'logged_in' | 'logged_out';
 	roleMatch: 'any' | 'match' | 'exclude';
 	userRoles: string[];
-	protectionMethod: 'redirect' | 'message';
+	protectionMethod: 'redirect' | 'replace';
+	replacementType: 'page' | 'message';
+	replacementPage?: number;
+	archiveHandling: 'filter_posts' | 'restrict' | 'redirect';
 	redirectType: 'login' | 'home' | 'custom';
 	redirectUrl: string;
 	showExcerpts: boolean;

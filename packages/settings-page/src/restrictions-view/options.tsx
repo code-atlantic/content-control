@@ -29,7 +29,7 @@ export const userStatusOptions: {
 ];
 
 export const protectionMethodOptions: {
-	value: Restriction[ 'protectionMethod' ];
+	value: Restriction[ 'settings' ][ 'protectionMethod' ];
 	label: string;
 	[ key: string ]: any;
 }[] = [
@@ -40,15 +40,15 @@ export const protectionMethodOptions: {
 		// iconSize: 18,
 	},
 	{
-		value: 'message',
-		label: __( 'Custom Message', 'content-control' ),
+		value: 'replace',
+		label: __( 'Replace Content', 'content-control' ),
 		icon: protectedMessage,
 		// iconSize: 18,
 	},
 ];
 
 export const redirectTypeOptions: {
-	value: Restriction[ 'redirectType' ];
+	value: Restriction[ 'settings' ][ 'redirectType' ];
 	label: string;
 	[ key: string ]: any;
 }[] = [
@@ -70,5 +70,39 @@ export const redirectTypeOptions: {
 		label: __( 'Custom URL', 'content-control' ),
 		icon: link,
 		// iconSize: 24,
+	},
+];
+
+export const replacementTypeOptions: {
+	value: Restriction[ 'settings' ][ 'replacementType' ];
+	label: string;
+	[ key: string ]: any;
+}[] = [
+	{
+		value: 'message',
+		label: __( 'Custom Message', 'content-control' ),
+	},
+	{
+		value: 'page',
+		label: __( 'Use Existing Page', 'content-control' ),
+	},
+];
+
+export const archiveHandlingOptions: {
+	value: Restriction[ 'settings' ][ 'archiveHandling' ];
+	label: string;
+	[ key: string ]: any;
+}[] = [
+	{
+		label: __( 'Replace restricted post contents.', 'content-control' ),
+		value: 'filter_posts',
+	},
+	{
+		label: __( 'Restrict entire archive page.', 'content-control' ),
+		value: 'restrict',
+	},
+	{
+		label: __( 'Redirect to a different page.', 'content-control' ),
+		value: 'redirect',
 	},
 ];
