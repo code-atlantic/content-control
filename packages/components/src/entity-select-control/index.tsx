@@ -3,29 +3,36 @@ import { useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { useDebounce } from '@wordpress/compose';
 import { store as coreDataStore } from '@wordpress/core-data';
-import { SmartTokenControl } from '@content-control/components';
+import SmartTokenControl from '../smart-token-control';
 
 import type { Post, Taxonomy } from '@wordpress/core-data';
+import type { Props as SmartTokenControlProps } from '../smart-token-control';
 
-import type {
-	ObjectSelectFieldProps,
-	PostSelectFieldProps,
-	TaxonomySelectFieldProps,
-	WithOnChange,
-} from '../types';
+export type Props< T extends number | number[] > = Omit<
+	SmartTokenControlProps,
+	'value' | 'onChange' | 'suggestions'
+> & {
+	value?: T;
+	onChange: ( value: T ) => void;
+	multiple?: boolean;
+	entityKind: 'postType' | 'taxonomy';
+	entityType?: string;
+};
 
 interface ObjectOption extends Post< 'edit' >, Taxonomy< 'edit' > {}
 
-const ObjectSelectField = ( {
+const EntitySelectControl = <
+	T extends number | number[] = number | number[]
+>( {
 	label,
 	value,
 	onChange,
+	placeholder,
 	entityKind = 'postType',
 	entityType = 'post',
 	multiple = false,
-}: WithOnChange<
-	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
-> ) => {
+	...inputProps
+}: Props< T > ) => {
 	const [ queryText, setQueryText ] = useState( '' );
 
 	const updateQueryText = useDebounce( ( text: string ) => {
@@ -87,14 +94,14 @@ const ObjectSelectField = ( {
 		);
 	};
 
-	const values = ( () => {
+	const values: string[] = ( () => {
 		if ( ! value ) {
 			return [];
 		}
 
-		return typeof value === 'number' || typeof value === 'string'
-			? [ value ]
-			: value;
+		let val = Array.isArray( value ) ? value : [ value ];
+
+		return val.map( ( v ) => v.toString() );
 	} )();
 
 	const getTokenValue = ( token: string | { value: string } ) => {
@@ -121,21 +128,25 @@ const ObjectSelectField = ( {
 									entityType.replace( /_/g, ' ' ).slice( 1 )
 						  )
 				}
-				hideLabelFromVision={ true }
 				multiple={ multiple }
-				placeholder={ sprintf(
-					__( 'Select %s(s)', 'content-control' ),
-					entityType.replace( /_/g, ' ' ).toLowerCase()
-				) }
+				placeholder={
+					placeholder
+						? placeholder
+						: sprintf(
+								__( 'Select %s(s)', 'content-control' ),
+								entityType.replace( /_/g, ' ' ).toLowerCase()
+						  )
+				}
+				{ ...inputProps }
 				tokenOnComma={ true }
-				value={ values.map( ( v ) => v.toString() ) }
+				value={ values }
 				onInputChange={ updateQueryText }
 				onChange={ ( newValue ) => {
-					onChange(
-						newValue
-							.map( ( v ) => parseInt( getTokenValue( v ), 10 ) )
-							.filter( ( v ) => ! isNaN( v ) )
-					);
+					const val = newValue
+						.map( ( v ) => parseInt( getTokenValue( v ), 10 ) )
+						.filter( ( v ) => ! isNaN( v ) );
+
+					onChange( ( multiple ? val : val[ 0 ] ) as T );
 				} }
 				renderToken={ ( token ) => {
 					const suggestion = findSuggestion( getTokenValue( token ) );
@@ -174,4 +185,4 @@ const ObjectSelectField = ( {
 	);
 };
 
-export default ObjectSelectField;
+export default EntitySelectControl;

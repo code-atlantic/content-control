@@ -48,6 +48,7 @@ const TokenSelectField = ( {
 		<div className="cc-token-select-field">
 			<SmartTokenControl< string >
 				label={ label }
+				hideLabelFromVision={ true }
 				multiple={ multiple }
 				placeholder={ placeholder }
 				value={ values.map( ( v ) => v.toString() ) }

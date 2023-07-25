@@ -17,14 +17,14 @@ import './editor.scss';
 import type { ForwardedRef } from 'react';
 import type { KeyboardShortcutsProps } from '@wordpress/components/build-types/keyboard-shortcuts/types';
 
-type Token =
+export type Token =
 	| string
 	| {
 			value: string;
 			[ key: string ]: any;
 	  };
 
-type Props< T extends Token = Token > = {
+export type Props< T extends Token = Token > = {
 	value: T[];
 	onChange: ( value: T[] ) => void;
 	label?: string | JSX.Element;
@@ -45,6 +45,7 @@ type Props< T extends Token = Token > = {
 	};
 	multiple?: boolean;
 	suggestions: string[];
+	closeOnSelect?: boolean;
 	renderToken?: ( token: T ) => JSX.Element | string;
 	/**
 	 * Render a suggestion.
@@ -110,6 +111,7 @@ const SmartTokenControl = < T extends Token = string >(
 		renderSuggestion = ( suggestion: string ) => <>{ suggestion }</>,
 		onInputChange = noop,
 		saveTransform = ( value: string ) => value as T,
+		closeOnSelect = false,
 		hideLabelFromVision = false,
 		extraKeyboardShortcuts = {},
 		multiple = false,
@@ -196,6 +198,7 @@ const SmartTokenControl = < T extends Token = string >(
 		setState( {
 			...state,
 			inputText: '',
+			popoverOpen: closeOnSelect ? false : popoverOpen,
 		} );
 	}
 
@@ -376,28 +379,38 @@ const SmartTokenControl = < T extends Token = string >(
 					label={ label }
 					hideLabelFromVision={ hideLabelFromVision }
 				>
-					<div className={ elClasses.inputContainer }>
-						<div className={ elClasses.tokens }>
-							{ value.map( ( token ) => (
-								<div
-									className={ elClasses.token }
-									key={ getTokenValue( token ) }
-								>
-									<div className={ elClasses.tokenLabel }>
-										{ renderToken( token ) }
+					<div
+						className={ classNames( [
+							elClasses.inputContainer,
+							! multiple && value.length > 0 && 'input-disabled',
+						] ) }
+					>
+						{ value.length > 0 && (
+							<div className={ elClasses.tokens }>
+								{ value.map( ( token ) => (
+									<div
+										className={ elClasses.token }
+										key={ getTokenValue( token ) }
+									>
+										<div className={ elClasses.tokenLabel }>
+											{ renderToken( token ) }
+										</div>
+										<Button
+											className={ elClasses.tokenRemove }
+											label={ messages.removeToken }
+											icon={ close }
+											onClick={ () =>
+												deleteToken( token )
+											}
+										/>
 									</div>
-									<Button
-										className={ elClasses.tokenRemove }
-										label={ messages.removeToken }
-										icon={ close }
-										onClick={ () => deleteToken( token ) }
-									/>
-								</div>
-							) ) }
-						</div>
+								) ) }
+							</div>
+						) }
 						<input
+							id={ `component-smart-token-control-${ id }` }
 							type="text"
-							className={ elClasses.textInput }
+							className={ classNames( [ elClasses.textInput ] ) }
 							placeholder={ placeholder }
 							disabled={ ! multiple && value.length > 0 }
 							ref={ inputRef }

@@ -1,10 +1,6 @@
 .component-smart-token-control {
 	width: 100%;
 
-	.components-base-control__label {
-		display: none;
-	}
-
 	.component-smart-token-control__input {
 		padding: 5px;
 		box-shadow: 0 0 0 transparent;
@@ -65,6 +61,12 @@
 			min-height: auto;
 		}
 
+		&.input-disabled {
+			input[type="text"] {
+				display: none;
+			}
+		}
+
 		.component-smart-token-control__toggle {
 			min-width: auto;
 			height: auto;
@@ -75,7 +77,7 @@
 
 	.component-smart-token-control__suggestions {
 		width: 100%;
-        position: relative;
+		position: relative;
 	}
 
 	.component-smart-token-control__suggestions-popover {
