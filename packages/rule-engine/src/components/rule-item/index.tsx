@@ -1,6 +1,6 @@
 import './index.scss';
 
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 import { useRules } from '../../contexts';
 import Editor from './editor';
@@ -45,13 +45,7 @@ const RuleItem = ( {
 						onChange={ updateRule }
 					/>
 				) : (
-					<p>
-						{ sprintf(
-							/* translators: 1. field id. */
-							__( `Rule not found for %s`, 'content-control' ),
-							`${ id }`
-						) }
-					</p>
+					<MissingNotice name={ name } />
 				) ) }
 			{ ! ruleChosen && <Finder onSelect={ updateRule } /> }
 		</Wrapper>
