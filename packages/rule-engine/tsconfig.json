@@ -13,6 +13,9 @@
 			"path": "../components"
 		},
 		{
+			"path": "../fields"
+		},
+		{
 			"path": "../utils"
 		}
 	],
