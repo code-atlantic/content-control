@@ -21,18 +21,21 @@ class Elementor extends Controller {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'wp', [ $this, 'disable_for_builder' ] );
+		add_filter( 'content_control/protection_is_disabled', [ $this, 'protection_is_disabled' ] );
 	}
 
 	/**
 	 * Conditionally disable Content Control for Elementor builder.
 	 *
-	 * @return void
+	 * @param boolean $protection_is_disabled Whether protection is disabled.
+	 * @return boolean
 	 */
-	public function disable_for_builder() {
+	public function protection_is_disabled( $protection_is_disabled ) {
 		if ( did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active() ) {
-			add_filter( 'content_control/content_is_restricted', '__return_false' );
+			return true;
 		}
+
+		return $protection_is_disabled;
 	}
 
 	/**

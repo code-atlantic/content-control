@@ -166,9 +166,12 @@ function get_restricted_content_message( $post_id = null ) {
  */
 function protection_is_disabled() {
 	$checks = [
+		// Disable protection when viewing post previews.
 		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
-		did_action( 'elementor/loaded' ) && class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance ) && isset( \Elementor\Plugin::$instance->preview ) && method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode' ) && \Elementor\Plugin::$instance->preview->is_preview_mode(),
 	];
 
-	return in_array( true, $checks, true );
+	return apply_filters(
+		'content_control/protection_is_disabled',
+		in_array( true, $checks, true )
+	);
 }
