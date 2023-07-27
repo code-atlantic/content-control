@@ -61,3 +61,29 @@ function get_default_settings() {
 		'mediaQueries'         => get_default_media_queries(),
 	];
 }
+
+/**
+ * Get default restriction settings.
+ *
+ * @return array Default restriction settings.
+ */
+function get_default_restriction_settings() {
+	return [
+		'userStatus'       => 'logged_in',
+		'roleMatch'        => 'any',
+		'userRoles'        => [],
+		'protectionMethod' => 'redirect',
+		'replacementType'  => 'message',
+		'replacementPage'  => 0,
+		'archiveHandling'  => 'filter_post_content',
+		'showExcerpts'     => false,
+		'overrideMessage'  => false,
+		'customMessage'    => '',
+		'redirectType'     => 'login',
+		'redirectUrl'      => '',
+		'conditions'       => [
+			'logicalOperator' => 'and',
+			'items'           => [],
+		],
+	];
+}

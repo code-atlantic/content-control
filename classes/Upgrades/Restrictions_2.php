@@ -15,6 +15,7 @@ use function wp_parse_args;
 use function sanitize_url;
 use function wp_insert_post;
 use function ContentControl\remap_conditions_to_query;
+use function ContentControl\get_default_restriction_settings;
 
 /**
  * Restrictions v2 migration.
@@ -136,18 +137,18 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		// Convert from associative to indexed array.
 		$user_roles = is_array( $restriction['roles'] ) ? array_values( $restriction['roles'] ) : [];
 
-		$settings = [
+		$settings = wp_parse_args( [
 			'userStatus'       => $restriction['who'],
 			'roleMatch'        => count( $user_roles ) > 0 ? 'match' : 'any',
 			'userRoles'        => $user_roles,
-			'protectionMethod' => 'custom_message' === $restriction['protection_method'] ? 'message' : 'redirect',
-			'redirectType'     => $restriction['redirect_type'],
-			'redirectUrl'      => sanitize_url( $restriction['redirect_url'] ),
+			'protectionMethod' => 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect',
+			'showExcerpts'     => $restriction['show_excerpts'],
 			'overrideMessage'  => $restriction['override_default_message'],
 			'customMessage'    => $restriction['custom_message'],
-			'showExcerpts'     => $restriction['show_excerpts'],
+			'redirectType'     => $restriction['redirect_type'],
+			'redirectUrl'      => sanitize_url( $restriction['redirect_url'] ),
 			'conditions'       => remap_conditions_to_query( $restriction['conditions'] ),
-		];
+		], get_default_restriction_settings() );
 
 		$added_meta = add_post_meta( $new_restriction_id, 'restriction_settings', $settings, true );
 

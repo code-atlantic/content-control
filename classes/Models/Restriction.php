@@ -9,6 +9,9 @@
 namespace ContentControl\Models;
 
 use ContentControl\Models\RuleEngine\Query;
+use function ContentControl\get_default_restriction_settings;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Model for restriction sets.
@@ -104,6 +107,27 @@ class Restriction {
 	public $protection_method;
 
 	/**
+	 * Restriction Setting: Replacement type.
+	 *
+	 * @var string 'message' | 'page'
+	 */
+	public $replacement_type;
+
+	/**
+	 * Restriction Setting: Replacement page.
+	 *
+	 * @var int
+	 */
+	public $replacement_page = 0;
+
+	/**
+	 * Restriction Setting: Archive handling.
+	 *
+	 * @var string 'filter_post_content' | 'replace_archive_page' | 'redirect'
+	 */
+	public $archive_handling;
+
+	/**
 	 * Restriction Setting: Redirect type.
 	 *
 	 * @var string 'login' | 'home' | 'custom'
@@ -167,21 +191,7 @@ class Restriction {
 
 			$settings = wp_parse_args(
 				is_array( $settings ) ? $settings : [],
-				[
-					'userStatus'       => 'logged_in',
-					'userRoles'        => [],
-					'roleMatch'        => 'any',
-					'protectionMethod' => 'redirect',
-					'redirectType'     => 'login',
-					'redirectUrl'      => '',
-					'showExcerpts'     => false,
-					'overrideMessage'  => false,
-					'customMessage'    => '',
-					'conditions'       => [
-						'logicalOperator' => 'and',
-						'items'           => [],
-					],
-				]
+				get_default_restriction_settings()
 			);
 
 			// Convert keys to snake_case using camel_case_to_snake_case().
@@ -228,7 +238,7 @@ class Restriction {
 			'redirect_type'            => 'login',
 			'redirect_url'             => '',
 			'conditions'               => '',
-		]);
+		] );
 
 		$this->id          = 0;
 		$this->slug        = '';
@@ -241,7 +251,10 @@ class Restriction {
 		$this->user_status       = $restriction['who'];
 		$this->role_match        = count( $user_roles ) > 0 ? 'match' : 'any';
 		$this->user_roles        = $user_roles;
-		$this->protection_method = 'custom_message' === $restriction['protection_method'] ? 'message' : 'redirect';
+		$this->protection_method = 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect';
+		$this->replacement_type  = 'message';
+		$this->replacement_page  = 0;
+		$this->archive_handling  = 'filter_post_content';
 		$this->redirect_type     = $restriction['redirect_type'];
 		$this->redirect_url      = $restriction['redirect_url'];
 		$this->override_message  = $restriction['override_default_message'];
@@ -350,11 +363,14 @@ class Restriction {
 			'roleMatch'        => $this->role_match,
 			'userRoles'        => $this->user_roles,
 			'protectionMethod' => $this->protection_method,
-			'redirectType'     => $this->redirect_type,
-			'redirectUrl'      => $this->redirect_url,
+			'replacementType'  => $this->replacement_type,
+			'replacementPage'  => $this->replacement_page,
+			'archiveHandling'  => $this->archive_handling,
 			'overrideMessage'  => $this->override_message,
 			'customMessage'    => $this->custom_message,
 			'showExcerpts'     => $this->show_excerpts,
+			'redirectType'     => $this->redirect_type,
+			'redirectUrl'      => $this->redirect_url,
 			'conditions'       => $this->conditions,
 		];
 	}
