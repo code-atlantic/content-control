@@ -341,7 +341,25 @@ class Restriction {
 	 * @return bool
 	 */
 	public function show_excerpts() {
-		return $this->show_excerpts;
+		return (bool) $this->show_excerpts;
+	}
+
+	/**
+	 * Check if this uses the redirect method.
+	 *
+	 * @return bool
+	 */
+	public function uses_redirect_method() {
+		return 'redirect' === $this->protection_method;
+	}
+
+	/**
+	 * Check if this uses the replace method.
+	 *
+	 * @return bool
+	 */
+	public function uses_replace_method() {
+		return 'replace' === $this->protection_method;
 	}
 
 	/**
