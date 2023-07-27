@@ -38,7 +38,6 @@ if ( ! function_exists( 'is_rest' ) ) {
 	 */
 	function is_rest() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
 				|| isset( $_GET['rest_route'] ) // (#2)
 						&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) {
@@ -58,6 +57,33 @@ if ( ! function_exists( 'is_rest' ) ) {
 		return strpos( $current_url['path'] ? $current_url['path'] : '/', $rest_url['path'], 0 ) === 0;
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
+}
+
+/**
+ * Check if this is a cron request.
+ *
+ * @return boolean
+ */
+function is_cron() {
+	return defined( 'DOING_CRON' ) && DOING_CRON;
+}
+
+/**
+ * Check if this is an AJAX request.
+ *
+ * @return boolean
+ */
+function is_ajax() {
+	return defined( 'DOING_AJAX' ) && DOING_AJAX;
+}
+
+/**
+ * Check if this is a frontend request.
+ *
+ * @return boolean
+ */
+function is_frontend() {
+	return ! \is_admin() && ! is_rest() && ! is_cron() && ! is_ajax();
 }
 
 /**
