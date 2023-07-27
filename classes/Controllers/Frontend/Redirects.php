@@ -11,6 +11,7 @@ namespace ContentControl\Controllers\Frontend;
 use ContentControl\Base\Controller;
 
 use function ContentControl\content_is_restricted;
+use function ContentControl\protection_is_disabled;
 use function ContentControl\user_is_excluded;
 
 defined( 'ABSPATH' ) || exit;
@@ -35,16 +36,39 @@ class Redirects extends Controller {
 	 * Check if content protected by redirect.
 	 */
 	public function template_redirect() {
-		if ( user_is_excluded() || ! content_is_restricted() ) {
+		if ( user_is_excluded() || protection_is_disabled() ) {
+			return;
+		}
+
+		if ( ! content_is_restricted() ) {
 			return;
 		}
 
 		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
 
-		if ( ! $restriction || 'redirect' !== $restriction->protection_method ) {
+		if ( ! $restriction ) {
 			return;
 		}
 
+		switch ( $restriction->protection_method ) {
+			case 'redirect':
+				$this->redirect( $restriction );
+				break;
+			case 'message':
+				if ( 'redirect' === $restriction->archive_handling && is_archive() ) {
+					$this->redirect( $restriction );
+				}
+				break;
+		}
+	}
+
+	/**
+	 * Redirect to the appropriate location.
+	 *
+	 * @param Restriction $restriction Restriction object.
+	 * @return void
+	 */
+	public function redirect( $restriction ) {
 		$redirect = false;
 
 		switch ( $restriction->redirect_type ) {
