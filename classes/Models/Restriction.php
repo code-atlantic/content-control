@@ -102,7 +102,7 @@ class Restriction {
 	/**
 	 * Restriction Setting: Protection method.
 	 *
-	 * @var string 'redirect' | 'message'
+	 * @var string 'redirect' | 'replace'
 	 */
 	public $protection_method;
 
