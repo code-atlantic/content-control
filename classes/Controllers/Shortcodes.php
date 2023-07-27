@@ -52,14 +52,13 @@ class Shortcodes extends Controller {
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
 		// Handle old args.
-		if ( isset( $deprecated_atts['logged_out]'] ) ) {
+		if ( isset( $deprecated_atts['logged_out'] ) ) {
 			$atts['status'] = (bool) $deprecated_atts['logged_out'] ? 'logged_out' : 'logged_in';
 		}
 
 		if ( isset( $deprecated_atts['roles'] ) && ! empty( $deprecated_atts['roles'] ) ) {
 			$atts['allowed_roles'] = $deprecated_atts['roles'];
 		}
-
 
 		$user_roles = [];
 		$match_type = 'any';
