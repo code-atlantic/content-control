@@ -43,12 +43,15 @@ export interface RestrictionSettings {
 	protectionMethod: 'redirect' | 'replace';
 	replacementType: 'page' | 'message';
 	replacementPage?: number;
-	archiveHandling: 'filter_posts' | 'restrict' | 'redirect';
-	redirectType: 'login' | 'home' | 'custom';
-	redirectUrl: string;
+	archiveHandling:
+		| 'filter_post_content'
+		| 'replace_archive_page'
+		| 'redirect';
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
+	redirectType: 'login' | 'home' | 'custom';
+	redirectUrl: string;
 	conditions: Query;
 	[ key: string ]: any;
 }

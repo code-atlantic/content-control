@@ -95,11 +95,11 @@ export const archiveHandlingOptions: {
 }[] = [
 	{
 		label: __( 'Replace restricted post contents.', 'content-control' ),
-		value: 'filter_posts',
+		value: 'filter_post_content',
 	},
 	{
-		label: __( 'Restrict entire archive page.', 'content-control' ),
-		value: 'restrict',
+		label: __( 'Replace entire archive page.', 'content-control' ),
+		value: 'replace_archive_page',
 	},
 	{
 		label: __( 'Redirect to a different page.', 'content-control' ),
