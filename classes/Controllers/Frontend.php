@@ -12,7 +12,6 @@ use ContentControl\Base\Controller;
 
 use ContentControl\Controllers\Frontend\Blocks;
 use ContentControl\Controllers\Frontend\Feeds;
-use ContentControl\Controllers\Frontend\Posts;
 use ContentControl\Controllers\Frontend\Restrictions;
 use ContentControl\Controllers\Frontend\Widgets;
 
@@ -30,7 +29,6 @@ class Frontend extends Controller {
 		$this->container->register_controllers([
 			'Frontend\Blocks'       => new Blocks( $this->container ),
 			'Frontend\Feeds'        => new Feeds( $this->container ),
-			'Frontend\Posts'        => new Posts( $this->container ),
 			'Frontend\Restrictions' => new Restrictions( $this->container ),
 			'Frontend\Widgets'      => new Widgets( $this->container ),
 		]);
