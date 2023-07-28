@@ -11,7 +11,6 @@ namespace ContentControl\Controllers;
 use ContentControl\Base\Controller;
 
 use ContentControl\Controllers\Frontend\Blocks;
-use ContentControl\Controllers\Frontend\Feeds;
 use ContentControl\Controllers\Frontend\Restrictions;
 use ContentControl\Controllers\Frontend\Widgets;
 
@@ -28,7 +27,6 @@ class Frontend extends Controller {
 	public function init() {
 		$this->container->register_controllers([
 			'Frontend\Blocks'       => new Blocks( $this->container ),
-			'Frontend\Feeds'        => new Feeds( $this->container ),
 			'Frontend\Restrictions' => new Restrictions( $this->container ),
 			'Frontend\Widgets'      => new Widgets( $this->container ),
 		]);
@@ -42,9 +40,6 @@ class Frontend extends Controller {
 	 * @return void
 	 */
 	public function hooks() {
-		add_filter( 'content_control/feed_restricted_message', '\ContentControl\append_post_excerpts', 9, 2 );
-		add_filter( 'content_control/feed_restricted_message', '\ContentControl\the_content_filters', 10 );
-
 		add_filter( 'content_control/post_restricted_content', '\ContentControl\append_post_excerpts', 9, 2 );
 		add_filter( 'content_control/post_restricted_content', '\ContentControl\the_content_filters', 10 );
 

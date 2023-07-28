@@ -30,8 +30,17 @@ class Restrictions extends Controller {
 		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
 		// Can be done on send_headers, posts_selection, or wp as well.
 		add_action( 'template_redirect', [ $this, 'restrict_content' ], 10 );
-		add_action( 'the_content', [ $this, 'the_content_if_restricted' ], 1000 );
-		add_action( 'get_the_excerpt', [ $this, 'get_the_excerpt_if_restricted' ], 1000, 2 );
+		add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
+		add_filter( 'get_the_excerpt', [ $this, 'get_the_excerpt_if_restricted' ], 1000, 2 );
+
+		// add_filter( 'the_title', [ $this, 'filter_the_title_if_restricted'], 1000, 2 );
+		// add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
+		// add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
+		// add_filter( 'post_class', [ $this, 'filter_post_class_if_restricted' ], 1000, 3 );
+		// add_filter( 'body_class', [ $this, 'filter_body_class_if_restricted' ], 1000, 2 );
+
+		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
+		// add_filter( 'the_password_form', [ $this, 'filter_password_form_if_restricted' ], 1000, 2 );
 	}
 
 	/**
@@ -86,7 +95,7 @@ class Restrictions extends Controller {
 	 *
 	 * @return string
 	 */
-	public function the_content_if_restricted( $content ) {
+	public function filter_the_content_if_restricted( $content ) {
 		$filter_name = 'content_control/post_restricted_content';
 
 		// Ensure we don't get into an infinite loop.
@@ -94,10 +103,8 @@ class Restrictions extends Controller {
 			return $content;
 		}
 
-		$post = get_post();
-
 		// If this isn't a post type that can be restricted, bail.
-		if ( ! $post || $this->can_bail_early( $post ) ) {
+		if ( $this->can_bail_early() ) {
 			return $content;
 		}
 
@@ -133,10 +140,8 @@ class Restrictions extends Controller {
 			return $post_excerpt;
 		}
 
-		$post = get_post( $post );
-
 		// If this isn't a post type that can be restricted, bail.
-		if ( ! $post || $this->can_bail_early( $post ) ) {
+		if ( $this->can_bail_early() ) {
 			return $post_excerpt;
 		}
 
@@ -160,11 +165,9 @@ class Restrictions extends Controller {
 	/**
 	 * Check if we can bail early.
 	 *
-	 * @param \WP_Post|null $post Post object.
-	 *
 	 * @return \ContentControl\Models\Restriction|bool
 	 */
-	public function can_bail_early( $post = null ) {
+	public function can_bail_early() {
 		// Bail if this isn't the main query on the frontend.
 		if ( ! \ContentControl\is_frontend() ) {
 			return true;
@@ -174,7 +177,7 @@ class Restrictions extends Controller {
 			return true;
 		}
 
-		if ( ! content_is_restricted( $post ) ) {
+		if ( ! content_is_restricted() ) {
 			return true;
 		}
 
