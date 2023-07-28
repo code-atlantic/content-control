@@ -14,6 +14,7 @@ use ContentControl\Controllers\Frontend\Blocks;
 use ContentControl\Controllers\Frontend\Feeds;
 use ContentControl\Controllers\Frontend\Posts;
 use ContentControl\Controllers\Frontend\Redirects;
+use ContentControl\Controllers\Frontend\Restrictions;
 use ContentControl\Controllers\Frontend\Widgets;
 
 defined( 'ABSPATH' ) || exit;
@@ -28,11 +29,12 @@ class Frontend extends Controller {
 	 */
 	public function init() {
 		$this->container->register_controllers([
-			'Frontend\Blocks'    => new Blocks( $this->container ),
-			'Frontend\Feeds'     => new Feeds( $this->container ),
-			'Frontend\Posts'     => new Posts( $this->container ),
-			'Frontend\Redirects' => new Redirects( $this->container ),
-			'Frontend\Widgets'   => new Widgets( $this->container ),
+			'Frontend\Blocks'       => new Blocks( $this->container ),
+			'Frontend\Feeds'        => new Feeds( $this->container ),
+			'Frontend\Posts'        => new Posts( $this->container ),
+			'Frontend\Redirects'    => new Redirects( $this->container ),
+			'Frontend\Restrictions' => new Restrictions( $this->container ),
+			'Frontend\Widgets'      => new Widgets( $this->container ),
 		]);
 
 		$this->hooks();
