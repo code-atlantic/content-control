@@ -17,7 +17,7 @@ use function ContentControl\user_is_excluded;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Pages
+ * Class for handling global restrictions.
  *
  * @package ContentControl
  */
@@ -29,45 +29,48 @@ class Restrictions extends Controller {
 	public function init() {
 		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
 		// Can be done on send_headers, posts_selection, or wp as well.
-		add_action( 'template_redirect', [ $this, 'overload_query_if_restricted' ], 10 );
+		add_action( 'template_redirect', [ $this, 'restrict_content' ], 10 );
+		add_action( 'template_redirect', [ $this, 'redirect_if_restricted' ], 10 );
 	}
 
-	/**
-	 * Change the template if the query is restricted.
-	 *
-	 * @return string
-	 */
-	public function overload_query_if_restricted() {
+	public function restrict_content() {
 		if ( $this->can_bail_early() ) {
 			return;
 		}
 
-		$restriction = $this->container->get( 'restrictions' )->get_applicable_restriction();
+		$restriction = $this->matching_restriction();
 
 		// Bail if we didn't match a restriction.
-		if ( false === $restriction ) {
+		if ( ! $restriction ) {
 			return;
 		}
 
-		// Bail if the restriction doesn't use the replace method.
-		if ( ! $restriction->uses_replace_method() ) {
-			return;
-		}
+		$is_archive_page = \is_home() || \is_archive() || \is_search();
 
-		// Bail if this is an archive and the restriction doesn't replace the archive.
-		if (
-			'replace_archive_page' !== $restriction->archive_handling &&
-			(
-				\is_home() ||
-				\is_archive() ||
-				\is_search()
-			)
-		) {
-			return;
+		switch ( $restriction->protection_method ) {
+			case 'redirect':
+				$this->redirect( $restriction );
+				break;
+			case 'replace':
+				// If this is an archive handle it based on the archive handling setting.
+				if ( ! $is_archive_page ) {
+					// Overload the query with the replacement page.
+					$this->set_query_to_page( $restriction->replacement_page );
+				} else {
+					switch ( $restriction->archive_handling ) {
+						case 'filter_post_content':
+							break;
+						case 'replace_archive_page':
+							// Overload the query with the replacement page.
+							$this->set_query_to_page( $restriction->replacement_page );
+							break;
+						case 'redirect':
+							$this->redirect( $restriction );
+							break;
+					}
+				}
+				break;
 		}
-
-		// Overload the query with the replacement page.
-		$this->set_query_to_page( $restriction->replacement_page );
 	}
 
 	/**
@@ -159,5 +162,37 @@ class Restrictions extends Controller {
 
 		// Reset the post data.
 		$query->reset_postdata();
+	}
+
+	/**
+	 * Redirect to the appropriate location.
+	 *
+	 * @param Restriction $restriction Restriction object.
+	 * @return void
+	 */
+	public function redirect( $restriction ) {
+		$redirect = false;
+
+		switch ( $restriction->redirect_type ) {
+			case 'login':
+				$redirect = wp_login_url( \ContentControl\get_current_page_url() );
+				break;
+
+			case 'home':
+				$redirect = home_url();
+				break;
+
+			case 'custom':
+				$redirect = $restriction->redirect_url;
+				break;
+
+			default:
+				// Do not redirect if not one of our values.
+		}
+
+		if ( $redirect ) {
+			wp_safe_redirect( $redirect );
+			exit;
+		}
 	}
 }
