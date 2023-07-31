@@ -16,7 +16,11 @@ type Props< T extends TableItemBase > = {
 		[ key: string ]: React.ReactNode | ( () => React.ReactNode );
 	};
 	rowClasses?: ( item: T ) => Argument;
-	renderCell: ( col: string, item: T ) => React.ReactNode | string | number;
+	renderCell: (
+		col: string,
+		item: T,
+		index: number
+	) => React.ReactNode | string | number;
 	sortableColumns: string[];
 	idCol?: string;
 	noItemsText?: string;
@@ -47,7 +51,7 @@ const ListTable = < T extends TableItemBase >( {
 	sortableColumns = [],
 	idCol = 'id',
 	rowClasses = ( item ) => [ `item-${ item.id }` ],
-	renderCell = ( col, item ) => item[ col ],
+	renderCell = ( col, item, index ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
 	className,
@@ -201,52 +205,58 @@ const ListTable = < T extends TableItemBase >( {
 							key={ item.id }
 							className={ classNames( rowClasses( item ) ) }
 						>
-							{ Object.entries( cols ).map( ( [ col ] ) => {
-								const isIdCol = col === idCol;
+							{ Object.entries( cols ).map(
+								( [ col ], index ) => {
+									const isIdCol = col === idCol;
 
-								return (
-									<TableCell
-										key={ col }
-										heading={ isIdCol }
-										className={ classNames( [
-											`column-${ col }`,
-											showBulkSelect &&
-												isIdCol &&
-												'check-column',
-										] ) }
-										scope={ isIdCol ? 'row' : undefined }
-									>
-										{ isIdCol ? (
-											<CheckboxControl
-												onChange={ ( checked ) => {
-													const newSelectedItems =
-														! checked
-															? selectedItems.filter(
-																	( id ) =>
-																		id !==
-																		item.id
-															  )
-															: [
-																	...selectedItems,
-																	item.id,
-															  ];
+									return (
+										<TableCell
+											key={ col }
+											heading={ isIdCol }
+											className={ classNames( [
+												`column-${ col }`,
+												showBulkSelect &&
+													isIdCol &&
+													'check-column',
+											] ) }
+											scope={
+												isIdCol ? 'row' : undefined
+											}
+										>
+											{ isIdCol ? (
+												<CheckboxControl
+													onChange={ ( checked ) => {
+														const newSelectedItems =
+															! checked
+																? selectedItems.filter(
+																		(
+																			id
+																		) =>
+																			id !==
+																			item.id
+																  )
+																: [
+																		...selectedItems,
+																		item.id,
+																  ];
 
-													setSelectedItems(
-														newSelectedItems
-													);
-												} }
-												checked={
-													selectedItems.indexOf(
-														item.id
-													) >= 0
-												}
-											/>
-										) : (
-											renderCell( col, item )
-										) }
-									</TableCell>
-								);
-							} ) }
+														setSelectedItems(
+															newSelectedItems
+														);
+													} }
+													checked={
+														selectedItems.indexOf(
+															item.id
+														) >= 0
+													}
+												/>
+											) : (
+												renderCell( col, item, index )
+											) }
+										</TableCell>
+									);
+								}
+							) }
 						</tr>
 					) )
 				) : (
