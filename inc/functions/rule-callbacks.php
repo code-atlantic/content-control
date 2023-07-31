@@ -14,7 +14,6 @@ use function ContentControl\Rules\is_post_type;
 use function ContentControl\Rules\get_rule_option;
 use function ContentControl\Rules\get_rule_extra;
 
-
 /**
  * Checks if a user has one of the selected roles.
  *

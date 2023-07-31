@@ -70,6 +70,13 @@ class Restriction {
 	public $status;
 
 	/**
+	 * Restriction priority.
+	 *
+	 * @var int
+	 */
+	public $priority;
+
+	/**
 	 * Restriction Setting: Required user status.
 	 *
 	 * @var string 'logged_in' | 'logged_out';
@@ -206,6 +213,7 @@ class Restriction {
 					'slug'        => $restriction->post_name,
 					'title'       => $restriction->post_title,
 					'status'      => $restriction->post_status,
+					'priority'    => $restriction->menu_order,
 					// We set this late.. on first use.
 					'description' => null,
 					'message'     => null,
@@ -318,6 +326,8 @@ class Restriction {
 	 * @return string
 	 */
 	public function get_message() {
+		// TODO Refactor this based on the new replacement_type.
+
 		if ( ! isset( $this->message ) ) {
 			if ( ! empty( $this->post->post_content ) ) {
 				$message = \get_the_content( null, false, $this->id );
@@ -375,6 +385,7 @@ class Restriction {
 			'description'      => $this->get_description(),
 			'message'          => $this->get_message(),
 			'status'           => $this->status,
+			'priority'         => $this->priority,
 			// Options include logged_in, logged_out.
 			'userStatus'       => $this->user_status,
 			// Options include any, match, exclude.
