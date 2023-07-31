@@ -10,6 +10,8 @@ namespace ContentControl\Services;
 
 use ContentControl\Models\Restriction;
 
+use function ContentControl\sort_restrictions_by_priority;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -139,6 +141,7 @@ class Restrictions {
 	 */
 	public function get_applicable_restriction() {
 		global $wp_query;
+		// TODO Review if this is the best way to cache this. Might be using global query every time, even in the loop.
 		static $cache = [];
 
 		// Generate cache key from hasing $wp_query.
@@ -151,6 +154,8 @@ class Restrictions {
 		$cache[ $cache_key ] = false;
 
 		$restrictions = $this->get_restrictions();
+
+		$restrictions = sort_restrictions_by_priority( $restrictions );
 
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
