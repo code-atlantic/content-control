@@ -91,6 +91,75 @@ function get_applicable_restriction( $post_id = null ) {
 }
 
 /**
+ * Check if query has restricted posts.
+ *
+ * @param \WP_Query $query Query object.
+ * @return bool
+ */
+function queried_posts_have_restrictions( $query = null ) {
+	return (bool) get_restriction_matches_for_queried_posts( $query );
+}
+
+/**
+ * Check if query has restrictions.
+ *
+ * @param \WP_Query $query Query object.
+ * @return \ContentControl\Restrictions\Restriction[]|false
+ */
+function get_restriction_matches_for_queried_posts( $query = null ) {
+	if ( is_null( $query ) ) {
+		global $wp_query;
+		/**
+		 * Global Query
+		 *
+		 * @var \WP_Query $wp_query
+		 */
+		$query = $wp_query;
+	}
+
+	// If its the main query, and not an archive-like page, bail.
+	if ( $query->is_main_query() && ( ! $query->is_home() && ! $query->is_archive() && ! $query->is_search() ) ) {
+		return false;
+	}
+
+	if ( empty( $query->posts ) ) {
+		return false;
+	}
+
+	static $restrictions;
+
+	// Generate cache key from hasing $wp_query.
+	$cache_key = md5( wp_json_encode( $wp_query ) );
+
+	if ( isset( $restrictions[ $cache_key ] ) ) {
+		return $restrictions[ $cache_key ];
+	}
+
+	foreach ( $query->posts as $post ) {
+		if ( content_is_restricted( $post->ID ) ) {
+			$restriction = get_applicable_restriction( $post->ID );
+
+			if ( ! isset( $restrictions[ $cache_key ][ $restriction->priority ] ) ) {
+				// Handles deduplication & sorting.
+				$restrictions[ $cache_key ][ $restriction->priority ] = [
+					'restriction' => $restriction,
+					'post_ids'    => [],
+				];
+			}
+
+			// Add post to restriction.
+			$restrictions[ $cache_key ][ $restriction->priority ]['posts'][] = $post->ID;
+		}
+	}
+
+	if ( empty( $restrictions[ $cache_key ] ) ) {
+		$restrictions[ $cache_key ] = false;
+	}
+
+	return $restrictions[ $cache_key ];
+}
+
+/**
  * Sort restrictions based on post sort order.
  *
  * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
