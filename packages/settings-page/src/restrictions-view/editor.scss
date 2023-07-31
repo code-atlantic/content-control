@@ -493,9 +493,32 @@ $gap4: $gap * 4;
 				}
 			}
 		}
+
+		&.column-priority {
+			width: 80px;
+			vertical-align: middle;
+			text-align: center;
+		}
+
 		&.column-status {
 			vertical-align: middle;
 			text-align: center;
+		}
+	}
+
+	td {
+		&.column-priority {
+			.components-flex {
+				justify-content: start;
+				gap: 5px;
+				strong {
+					min-width: 18px;
+				}
+				.components-button {
+					padding: 0;
+					min-width: auto;
+				}
+			}
 		}
 	}
 

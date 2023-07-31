@@ -3,14 +3,15 @@ import { StringParam, useQueryParams, withDefault } from 'use-query-params';
 import { restrictionsStore } from '@content-control/core-data';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
-	createContext,
-	useContext,
-	useEffect,
 	useMemo,
 	useState,
+	useEffect,
+	useContext,
+	createContext,
 } from '@wordpress/element';
 
 import type {
+	Restriction,
 	RestrictionsState,
 	RestrictionsStore,
 } from '@content-control/core-data';
@@ -27,6 +28,10 @@ type ListContext = {
 	filteredRestrictions: RestrictionsState[ 'restrictions' ];
 	updateRestriction: RestrictionsStore[ 'Actions' ][ 'updateRestriction' ];
 	deleteRestriction: RestrictionsStore[ 'Actions' ][ 'deleteRestriction' ];
+	increasePriority: ( index: number ) => void;
+	decreasePriority: ( index: number ) => void;
+	swapPriority: ( currentIndex: number, newIndex: number ) => void;
+	updatePrioritySortOrder: ( restrictions: Restriction[] ) => void;
 	bulkSelection: number[];
 	setBulkSelection: ( bulkSelection: number[] ) => void;
 	isLoading: boolean;
@@ -44,6 +49,10 @@ const defaultContext: ListContext = {
 	setBulkSelection: noop,
 	updateRestriction: noop,
 	deleteRestriction: noop,
+	increasePriority: noop,
+	decreasePriority: noop,
+	swapPriority: noop,
+	updatePrioritySortOrder: noop,
 	isLoading: false,
 	isDeleting: false,
 	filters: {
@@ -134,6 +143,51 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 			);
 	}, [ restrictions, filters ] );
 
+	const swapPriority = ( currentIndex: number, newIndex: number ) => {
+		const newRestrictions = [ ...filteredRestrictions ];
+		const current = newRestrictions[ currentIndex ];
+		const next = newRestrictions[ newIndex ];
+
+		if ( ! current || ! next ) {
+			return;
+		}
+
+		newRestrictions[ currentIndex ] = next;
+		newRestrictions[ newIndex ] = current;
+
+		updatePrioritySortOrder( newRestrictions );
+	};
+
+	const increasePriority = ( currentIndex: number ) => {
+		swapPriority( currentIndex, currentIndex - 1 );
+	};
+
+	const decreasePriority = ( currentIndex: number ) => {
+		swapPriority( currentIndex, currentIndex + 1 );
+	};
+
+	const updatePrioritySortOrder = ( inputRestrictions?: Restriction[] ) => {
+		// If no input restrictions are provided, use the current state
+		const currentRestrictions = inputRestrictions || filteredRestrictions;
+
+		let updated = false; // Flag to check if any restriction was updated
+		const updatedRestrictions = currentRestrictions.map(
+			( restriction, index ) => {
+				// If the restriction's priority doesn't match its current index, update it
+				if ( restriction.priority !== index ) {
+					updated = true;
+					return { ...restriction, priority: index };
+				}
+				return restriction;
+			}
+		);
+
+		if ( updated ) {
+			// Update the restrictions in the store
+			updatedRestrictions.forEach( ( r ) => updateRestriction( r ) );
+		}
+	};
+
 	return (
 		<Provider
 			value={ {
@@ -146,6 +200,10 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 				filteredRestrictions,
 				updateRestriction,
 				deleteRestriction,
+				increasePriority,
+				decreasePriority,
+				swapPriority,
+				updatePrioritySortOrder,
 				isLoading,
 				isDeleting,
 			} }

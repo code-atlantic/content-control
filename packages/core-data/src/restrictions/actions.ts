@@ -4,7 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { Status, Statuses } from '../constants';
 import { fetch } from '../controls';
 import { getErrorMessage } from '../utils';
-import { ACTION_TYPES, restrictionDefaults, STORE_NAME } from './constants';
+import { ACTION_TYPES, STORE_NAME } from './constants';
 import { getResourcePath } from './utils';
 
 import type {
@@ -113,6 +113,11 @@ export function* changeEditorId(
 				editorValues: undefined,
 			};
 		}
+
+		const restrictionDefaults = yield select(
+			STORE_NAME,
+			'getRestrictionDefaults'
+		);
 
 		let restriction: Restriction | undefined =
 			editorId === 'new' ? restrictionDefaults : undefined;

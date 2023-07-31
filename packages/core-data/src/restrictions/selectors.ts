@@ -1,4 +1,5 @@
 import { Status } from '../constants';
+import { restrictionDefaults } from './constants';
 
 import type {
 	AppNotice,
@@ -79,6 +80,42 @@ export const getEditorId = ( state: RestrictionsState ): EditorId =>
 export const getEditorValues = (
 	state: RestrictionsState
 ): RestrictionsState[ 'editor' ][ 'values' ] => state?.editor?.values;
+
+/**
+ * Get the next priority number for new restriction.
+ *
+ * @param state Current state.
+ * @returns {number} Next priority number.
+ */
+export const getNextPriority = ( state: RestrictionsState ): number => {
+	const restrictions = getRestrictions( state );
+
+	if ( restrictions.length === 0 ) {
+		return 0;
+	}
+
+	// Get restriction with lowest priority (higher number = lower priority).
+	const lowestPriority = restrictions.reduce( ( lowest, restriction ) => {
+		if ( restriction.priority > lowest ) {
+			return restriction.priority;
+		}
+
+		return lowest;
+	}, 0 );
+
+	return lowestPriority + 1;
+};
+
+export const getRestrictionDefaults = (
+	state: RestrictionsState
+): Restriction => {
+	const priority = getNextPriority( state );
+
+	return {
+		...restrictionDefaults,
+		priority,
+	};
+};
 
 /**
  * Get current status for dispatched action.

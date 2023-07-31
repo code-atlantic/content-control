@@ -12,7 +12,7 @@ import {
 } from '@wordpress/components';
 import { __, _n } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import { info, search, trash } from '@wordpress/icons';
+import { arrowDown, arrowUp, info, search, trash } from '@wordpress/icons';
 
 import { ListConsumer, ListProvider } from '../context';
 import useEditor from '../use-editor';
@@ -47,6 +47,8 @@ const List = () => {
 					filteredRestrictions = [],
 					updateRestriction = noop,
 					deleteRestriction = noop,
+					increasePriority = noop,
+					decreasePriority = noop,
 					filters: { searchText = '' },
 					setFilters,
 				} ) => (
@@ -146,8 +148,12 @@ const List = () => {
 									),
 									status: __( 'Status', 'content-control' ),
 									roles: __( 'Roles', 'content-control' ),
+									priority: __(
+										'Priority',
+										'content-control'
+									),
 								} }
-								sortableColumns={ [ 'title' ] }
+								sortableColumns={ [ 'priority', 'title' ] }
 								rowClasses={ ( restriction ) => {
 									return [
 										`restriction-${ restriction.id }`,
@@ -407,6 +413,50 @@ const List = () => {
 												</Flex>
 											);
 										}
+
+										case 'priority':
+											return (
+												<Flex gap={ 0 }>
+													<strong>
+														{ ( restriction.priority ??
+															0 ) + 1 }
+													</strong>
+
+													<Button
+														className="priority-up"
+														variant="link"
+														disabled={
+															0 ===
+															restriction.priority
+														}
+														iconSize={ 18 }
+														icon={ arrowUp }
+														onClick={ () => {
+															increasePriority(
+																restriction.priority
+															);
+														} }
+													/>
+
+													<Button
+														className="priority-down"
+														variant="link"
+														disabled={
+															filteredRestrictions.length -
+																1 ===
+															restriction.priority
+														}
+														iconSize={ 18 }
+														icon={ arrowDown }
+														onClick={ () => {
+															decreasePriority(
+																restriction.priority
+															);
+														} }
+													/>
+												</Flex>
+											);
+
 										default:
 											return (
 												restriction[ col ] ??

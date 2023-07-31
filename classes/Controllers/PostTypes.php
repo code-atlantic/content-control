@@ -146,6 +146,37 @@ class PostTypes extends Controller {
 				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
 		] );
+
+		register_rest_field( 'cc_restriction', 'priority', [
+			'get_callback'        => function ( $obj ) {
+				$priority = get_post_field( 'menu_order', $obj['id'] );
+
+				return $priority >= 0 ? $priority : 0;
+			},
+			'update_callback'     => function ( $value, $obj ) {
+				// Update the posts menu order.
+				wp_update_post( [
+					'ID'         => $obj->ID,
+					'menu_order' => $value,
+				] );
+			},
+			'permission_callback' => function () {
+				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
+			},
+		] );
+
+		register_rest_field( 'cc_restriction', 'data_version', [
+			'get_callback'        => function ( $obj ) {
+				return get_post_meta( $obj['id'], 'data_version', true );
+			},
+			'update_callback'     => function ( $value, $obj ) {
+				// Update the field/meta value.
+				update_post_meta( $obj->ID, 'data_version', $value );
+			},
+			'permission_callback' => function () {
+				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
+			},
+		] );
 	}
 
 	/**
