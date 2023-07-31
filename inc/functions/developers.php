@@ -91,6 +91,24 @@ function get_applicable_restriction( $post_id = null ) {
 }
 
 /**
+ * Sort restrictions based on post sort order.
+ *
+ * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
+ * @return \ContentControl\Models\Restriction[]
+ */
+function sort_restrictions_by_priority( $restrictions ) {
+	$sorted_restrictions = [];
+
+	foreach ( $restrictions as $restriction ) {
+		$sorted_restrictions[ $restriction->priority ] = $restriction;
+	}
+
+	ksort( $sorted_restrictions );
+
+	return $sorted_restrictions;
+}
+
+/**
  * Check if user can view content.
  *
  * @param int|null $post_id Post ID.
