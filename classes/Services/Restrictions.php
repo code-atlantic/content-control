@@ -52,8 +52,10 @@ class Restrictions {
 						'posts_per_page' => -1,
 						'post_status'    => 'publish',
 						// Order by menu order.
-						'orderby'        => [ 'menu_order', 'date' ],
-						'order'          => 'DESC',
+						'orderby'        => [
+							'menu_order'    => 'ASC',
+							'post_modified' => 'DESC',
+						],
 					]
 				);
 
