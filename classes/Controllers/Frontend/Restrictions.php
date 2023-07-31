@@ -13,6 +13,9 @@ use ContentControl\Base\Controller;
 use function ContentControl\user_is_excluded;
 use function ContentControl\content_is_restricted;
 use function ContentControl\protection_is_disabled;
+use function ContentControl\get_applicable_restriction;
+use function ContentControl\queried_posts_have_restrictions;
+use function ContentControl\get_restriction_matches_for_queried_posts;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -44,6 +47,28 @@ class Restrictions extends Controller {
 	}
 
 	/**
+	 * Check if we can bail early.
+	 *
+	 * @return \ContentControl\Models\Restriction|bool
+	 */
+	public function can_bail_early() {
+		// Bail if this isn't the main query on the frontend.
+		if ( ! \ContentControl\is_frontend() ) {
+			return true;
+		}
+
+		if ( user_is_excluded() || protection_is_disabled() ) {
+			return true;
+		}
+
+		if ( ! content_is_restricted() && ! queried_posts_have_restrictions() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Handle restricted content appropriately.
 	 *
 	 * @return void
@@ -53,35 +78,115 @@ class Restrictions extends Controller {
 			return;
 		}
 
-		$restriction = $this->matching_restriction();
+		$restriction       = get_applicable_restriction();
+		$post_restrictions = get_restriction_matches_for_queried_posts();
 
-		// Bail if we didn't match a restriction.
-		if ( ! $restriction ) {
+		// Bail if we didn't match any restrictions.
+		if ( ! $restriction && ! $post_restrictions ) {
 			return;
 		}
 
-		$is_archive_page = \is_home() || \is_archive() || \is_search();
+		// If we have a restriction, handle it.
+		if ( false !== $restriction ) {
+			// If we have a restriction on the main query, handle it & bail.
+			if ( $this->restrict_main_query( $restriction ) ) {
+				return;
+			}
+		}
+
+		// If we have restrictions on the queried posts, handle them top down.
+		if ( false !== $post_restrictions ) {
+			foreach ( $post_restrictions as $match ) {
+				$this->restrict_archive_post( $match['restriction'], $match['post_ids'] );
+			}
+		}
+	}
+
+	/**
+	 * Handle a restriction on the main query.
+	 *
+	 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+	 * @return bool
+	 */
+	public function restrict_main_query( $restriction ) {
+		/**
+		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
+		 *
+		 * @param null                               $pre        Whether to prevent the post from being restricted.
+		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
+		 * @return null|mixed
+		 */
+		if ( null !== apply_filters( 'content_control/pre_restrict_main_query', null, $restriction ) ) {
+			return true;
+		}
+
+		/**
+		 * Fires when a post is restricted, but before the restriction is handled.
+		 *
+		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+		 */
+		do_action( 'content_control/restrict_main_query', $restriction );
 
 		switch ( $restriction->protection_method ) {
 			case 'redirect':
 				$this->redirect( $restriction );
-				break;
+				return true;
+
 			case 'replace':
-				// If this is an archive handle it based on the archive handling setting.
-				if ( ! $is_archive_page ) {
-					// Overload the query with the replacement page.
-					$this->set_query_to_page( $restriction->replacement_page );
-				} else {
-					switch ( $restriction->archive_handling ) {
-						case 'filter_post_content':
-							break;
-						case 'replace_archive_page':
-							// Overload the query with the replacement page.
-							$this->set_query_to_page( $restriction->replacement_page );
-							break;
-						case 'redirect':
-							$this->redirect( $restriction );
-							break;
+				$this->set_query_to_page( $restriction->replacement_page );
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Handle post restrictions within main query loop.
+	 *
+	 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+	 * @param int|int[]                          $post_id     Post ID.
+	 * @return void
+	 */
+	public function restrict_archive_post( $restriction, $post_id ) {
+		if ( is_int( $post_id ) ) {
+			$post_id = [ $post_id ];
+		}
+
+		/**
+		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
+		 *
+		 * @param null                                    $pre         Whether to prevent the post from being restricted.
+		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
+		 * @param int[]                               $post_id     Post ID.
+		 * @return null|mixed
+		 */
+		if ( null !== apply_filters( 'content_control/pre_restrict_archive_post', null, $restriction, $post_id ) ) {
+			return;
+		}
+
+		/**
+		 * Fires when a post is restricted, but before the restriction is handled.
+		 *
+		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+		 * @param int[]                          $post_id     Post ID.
+		 */
+		do_action( 'content_control/restrict_archive_post', $restriction, $post_id );
+
+		switch ( $restriction->archive_handling ) {
+			case 'filter_post_content':
+				// Filter the title/excerpt/contents of the restricted items.
+				break;
+			case 'replace_archive_page':
+				$this->set_query_to_page( $restriction->replacement_page );
+				break;
+			case 'redirect':
+				$this->redirect( $restriction );
+				break;
+			case 'hide':
+				global $wp_query;
+				foreach ( $wp_query->posts as $key => $post ) {
+					if ( in_array( $post->ID, $post_id, true ) ) {
+						unset( $wp_query->posts[ $key ] );
 					}
 				}
 				break;
@@ -108,7 +213,7 @@ class Restrictions extends Controller {
 			return $content;
 		}
 
-		$restriction = $this->matching_restriction();
+		$restriction = get_applicable_restriction();
 
 		/**
 		 * Filter the message to display when a post is restricted.
@@ -145,7 +250,7 @@ class Restrictions extends Controller {
 			return $post_excerpt;
 		}
 
-		$restriction = $this->matching_restriction();
+		$restriction = get_applicable_restriction();
 
 		/**
 		 * Filter the excerpt to display when a post is restricted.
@@ -160,37 +265,6 @@ class Restrictions extends Controller {
 			$restriction->get_message(),
 			$restriction
 		);
-	}
-
-	/**
-	 * Check if we can bail early.
-	 *
-	 * @return \ContentControl\Models\Restriction|bool
-	 */
-	public function can_bail_early() {
-		// Bail if this isn't the main query on the frontend.
-		if ( ! \ContentControl\is_frontend() ) {
-			return true;
-		}
-
-		if ( user_is_excluded() || protection_is_disabled() ) {
-			return true;
-		}
-
-		if ( ! content_is_restricted() ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if the current query is restricted.
-	 *
-	 * @return \ContentControl\Models\Restriction|bool
-	 */
-	public function matching_restriction() {
-		return $this->container->get( 'restrictions' )->get_applicable_restriction();
 	}
 
 	/**
