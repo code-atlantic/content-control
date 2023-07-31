@@ -109,7 +109,7 @@ function update_block_types( $incoming_block_types = [] ) {
 	// Add or update incoming block types into the array.
 	foreach ( $incoming_block_types as $type ) {
 		// Sanitize each new block type.
-		$block_types[ $type['name'] ] = sanitize_block_type( $type );
+		$block_types[ $type['name'] ] = $type;
 	}
 
 	// Flatten values to a simple array for storage.

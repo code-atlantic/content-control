@@ -10,6 +10,7 @@ namespace ContentControl\RestAPI;
 
 use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 use function ContentControl\get_block_types;
+use function ContentControl\sanitize_block_type;
 use function ContentControl\update_block_types;
 
 defined( 'ABSPATH' ) || exit;
@@ -89,8 +90,14 @@ class BlockTypes extends WP_REST_Controller {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
-		// TODO Add validation & schema as needed.
+		// Add or update incoming block types into the array.
+		foreach ( $block_types as $type ) {
+			// Sanitize each new block type.
+			$block_types[ sanitize_key( $type['name'] ) ] = sanitize_block_type( $type );
+		}
+
 		update_block_types( $block_types );
+
 		$new_block_types = get_block_types();
 
 		if ( $new_block_types ) {
