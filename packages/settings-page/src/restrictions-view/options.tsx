@@ -94,15 +94,49 @@ export const archiveHandlingOptions: {
 	[ key: string ]: any;
 }[] = [
 	{
-		label: __( 'Replace restricted post contents.', 'content-control' ),
+		label: __(
+			"Filter the restricted items' title, excerpt, and content.",
+			'content-control'
+		),
 		value: 'filter_post_content',
 	},
 	{
-		label: __( 'Replace entire archive page.', 'content-control' ),
+		label: __(
+			'Hide the restricted items from the archive page.',
+			'content-control'
+		),
+		value: 'hide',
+	},
+	{
+		label: __(
+			'Replace the entire archive page with a custom page.',
+			'content-control'
+		),
 		value: 'replace_archive_page',
 	},
 	{
 		label: __( 'Redirect to a different page.', 'content-control' ),
 		value: 'redirect',
+	},
+];
+
+export const additionalQueryHandlingOptions: {
+	value: Restriction[ 'settings' ][ 'additionalQueryHandling' ];
+	label: string;
+	[ key: string ]: any;
+}[] = [
+	{
+		label: __(
+			"Filter the restricted items' title, excerpt, and content.",
+			'content-control'
+		),
+		value: 'filter_post_content',
+	},
+	{
+		label: __(
+			'Hide the restricted items from the list page.',
+			'content-control'
+		),
+		value: 'hide',
 	},
 ];

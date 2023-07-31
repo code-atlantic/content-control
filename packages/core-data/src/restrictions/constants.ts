@@ -35,6 +35,7 @@ export const restrictionDefaults: Restriction = {
 	title: '',
 	description: '',
 	status: 'draft',
+	priority: 0,
 	settings: {
 		userStatus: 'logged_in',
 		roleMatch: 'any',
@@ -43,6 +44,8 @@ export const restrictionDefaults: Restriction = {
 		replacementType: 'message',
 		replacementPage: undefined,
 		archiveHandling: 'filter_post_content',
+		archiveReplacementPage: undefined,
+		additionalQueryHandling: 'filter_post_content',
 		showExcerpts: false,
 		overrideMessage: false,
 		customMessage: '',

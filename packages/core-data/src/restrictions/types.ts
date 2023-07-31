@@ -46,7 +46,10 @@ export interface RestrictionSettings {
 	archiveHandling:
 		| 'filter_post_content'
 		| 'replace_archive_page'
-		| 'redirect';
+		| 'redirect'
+		| 'hide';
+	archiveReplacementPage?: number;
+	additionalQueryHandling: 'filter_post_content' | 'hide';
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
@@ -61,6 +64,7 @@ export interface Restriction {
 	title: string;
 	description: string;
 	status: 'publish' | 'draft' | 'pending' | 'trash';
+	priority: number;
 	settings: RestrictionSettings;
 	[ key: string ]: any;
 }

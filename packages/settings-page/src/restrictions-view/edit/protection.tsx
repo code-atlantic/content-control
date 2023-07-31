@@ -16,6 +16,7 @@ import {
 	redirectTypeOptions,
 	replacementTypeOptions,
 	archiveHandlingOptions,
+	additionalQueryHandlingOptions,
 } from '../options';
 
 import type { EditTabProps } from '.';
@@ -62,6 +63,15 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 				);
 
 			case 'archiveHandling':
+				return 'replace' === settings.protectionMethod;
+
+			case 'archiveReplacementPage':
+				return (
+					'replace' === settings.protectionMethod &&
+					'replace_archive_page' === settings.archiveHandling
+				);
+
+			case 'additionalQueryHandling':
 				return 'replace' === settings.protectionMethod;
 
 			case 'redirectType':
@@ -181,7 +191,11 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 			{ showField( 'archiveHandling' ) && (
 				<RadioControl
 					label={ __(
-						'When archive contains restricted posts:',
+						'Handling matches within archives',
+						'content-control'
+					) }
+					help={ __(
+						'Choose how to handle matched content found within archive pages. This option applies to restricted content within the archive page, not the archive page itself.',
 						'content-control'
 					) }
 					selected={ settings.archiveHandling }
@@ -192,6 +206,29 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 								archiveHandling as typeof settings.archiveHandling,
 						} )
 					}
+				/>
+			) }
+
+			{ showField( 'archiveReplacementPage' ) && (
+				<EntitySelectControl
+					label={ __(
+						'Choose a page to replace the archive with',
+						'content-control'
+					) }
+					placeholder={ __(
+						'Choose a page to replace the archive with',
+						'content-control'
+					) }
+					value={ settings.archiveReplacementPage }
+					multiple={ false }
+					onChange={ ( archiveReplacementPage ) =>
+						updateSettings( {
+							archiveReplacementPage,
+						} )
+					}
+					entityKind="postType"
+					entityType="page"
+					closeOnSelect={ true }
 				/>
 			) }
 
@@ -219,6 +256,27 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 							redirectUrl,
 						} );
 					} }
+				/>
+			) }
+
+			{ showField( 'additionalQueryHandling' ) && (
+				<RadioControl
+					label={ __(
+						'Handling matches everywhere else',
+						'content-control'
+					) }
+					help={ __(
+						'Choose how to handle matched content in all other areas outside the main content. This option applies to restricted content found in non-main queries, sidebars, widgets, footers, or within the page content itself.',
+						'content-control'
+					) }
+					selected={ settings.additionalQueryHandling }
+					options={ additionalQueryHandlingOptions }
+					onChange={ ( additionalQueryHandling ) =>
+						updateSettings( {
+							additionalQueryHandling:
+								additionalQueryHandling as typeof settings.additionalQueryHandling,
+						} )
+					}
 				/>
 			) }
 		</div>
