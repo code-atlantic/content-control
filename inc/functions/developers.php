@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Check and overload global post if needed.
  *
  * @param int|null $post_id Post ID.
+ *
  * @return bool
  */
 function setup_post( $post_id = null ) {
@@ -39,6 +40,7 @@ function setup_post( $post_id = null ) {
  * Check and clear global post if needed.
  *
  * @param bool $overload_post Whether post was overloaded.
+ *
  * @return void
  */
 function clear_post( $overload_post = false ) {
@@ -52,6 +54,7 @@ function clear_post( $overload_post = false ) {
  * Check if content has restrictions.
  *
  * @param int|null $post_id Post ID.
+ *
  * @return bool
  */
 function content_has_restrictions( $post_id = null ) {
@@ -77,7 +80,8 @@ function content_has_restrictions( $post_id = null ) {
  * Get applicable restriction.
  *
  * @param int|null $post_id Post ID.
- * @return \ContentControl\Restrictions\Restriction|false
+ *
+ * @return \ContentControl\Models\Restriction|false
  */
 function get_applicable_restriction( $post_id = null ) {
 	$overload_post = setup_post( $post_id );
@@ -94,6 +98,7 @@ function get_applicable_restriction( $post_id = null ) {
  * Check if query has restricted posts.
  *
  * @param \WP_Query $query Query object.
+ *
  * @return bool
  */
 function queried_posts_have_restrictions( $query = null ) {
@@ -104,7 +109,8 @@ function queried_posts_have_restrictions( $query = null ) {
  * Check if query has restrictions.
  *
  * @param \WP_Query $query Query object.
- * @return \ContentControl\Restrictions\Restriction[]|false
+ *
+ * @return \ContentControl\Models\Restriction[]|false
  */
 function get_restriction_matches_for_queried_posts( $query = null ) {
 	if ( is_null( $query ) ) {
@@ -163,6 +169,7 @@ function get_restriction_matches_for_queried_posts( $query = null ) {
  * Sort restrictions based on post sort order.
  *
  * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
+ *
  * @return \ContentControl\Models\Restriction[]
  */
 function sort_restrictions_by_priority( $restrictions ) {
@@ -181,6 +188,7 @@ function sort_restrictions_by_priority( $restrictions ) {
  * Check if user can view content.
  *
  * @param int|null $post_id Post ID.
+ *
  * @return bool True if user meets requirements, false if not.
  */
 function user_can_view_content( $post_id = null ) {
@@ -232,6 +240,7 @@ function content_is_restricted( $post_id = null ) {
  * Get restricted content message.
  *
  * @param int|null $post_id Post ID.
+ *
  * @return string
  */
 function get_restricted_content_message( $post_id = null ) {
@@ -257,6 +266,13 @@ function protection_is_disabled() {
 		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
 	];
 
+	/**
+	 * Filter whether protection is disabled.
+	 *
+	 * @param bool $is_disabled Whether protection is disabled.
+	 *
+	 * @return bool
+	 */
 	return apply_filters(
 		'content_control/protection_is_disabled',
 		in_array( true, $checks, true )
