@@ -143,7 +143,9 @@ $gap4: $gap * 4;
 	}
 
 	.components-base-control {
-		margin-bottom: $gap2;
+		&:not(.title-field,.description-field) {
+			margin-bottom: $gap2;
+		}
 	}
 
 	.components-base-control {
