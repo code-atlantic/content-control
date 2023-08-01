@@ -29,7 +29,6 @@ function user_is_excluded() {
 	return admins_are_excluded() && current_user_can( plugin()->get_permission( 'manage_settings' ) );
 }
 
-
 /**
  * Check if user meets requirements.
  *
@@ -97,4 +96,33 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 	}
 
 	return false;
+}
+
+/**
+ * Redirect to the appropriate location.
+ *
+ * @param string $type login|home|custom.
+ * @param string $url  Custom URL.
+ *
+ * @return void
+ */
+function redirect( $type = 'login', $url = null ) {
+	switch ( $type ) {
+		case 'login':
+			$url = wp_login_url( \ContentControl\get_current_page_url() );
+			break;
+
+		case 'home':
+			$url = home_url();
+			break;
+
+		default:
+		case 'custom':
+			// Do nothing.
+	}
+
+	if ( $url ) {
+		wp_safe_redirect( $url );
+		exit;
+	}
 }

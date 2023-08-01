@@ -16,6 +16,7 @@ use function ContentControl\protection_is_disabled;
 use function ContentControl\get_applicable_restriction;
 use function ContentControl\queried_posts_have_restrictions;
 use function ContentControl\get_restriction_matches_for_queried_posts;
+use function ContentControl\redirect;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -129,7 +130,7 @@ class Restrictions extends Controller {
 
 		switch ( $restriction->protection_method ) {
 			case 'redirect':
-				$this->redirect( $restriction );
+				redirect( $restriction->redirect_type, $restriction->redirect_url );
 				return true;
 
 			case 'replace':
@@ -180,7 +181,7 @@ class Restrictions extends Controller {
 				$this->set_query_to_page( $restriction->replacement_page );
 				break;
 			case 'redirect':
-				$this->redirect( $restriction );
+				redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
 				break;
 			case 'hide':
 				global $wp_query;
@@ -332,35 +333,4 @@ class Restrictions extends Controller {
 		$query->reset_postdata();
 	}
 
-	/**
-	 * Redirect to the appropriate location.
-	 *
-	 * @param Restriction $restriction Restriction object.
-	 * @return void
-	 */
-	public function redirect( $restriction ) {
-		$redirect = false;
-
-		switch ( $restriction->redirect_type ) {
-			case 'login':
-				$redirect = wp_login_url( \ContentControl\get_current_page_url() );
-				break;
-
-			case 'home':
-				$redirect = home_url();
-				break;
-
-			case 'custom':
-				$redirect = $restriction->redirect_url;
-				break;
-
-			default:
-				// Do not redirect if not one of our values.
-		}
-
-		if ( $redirect ) {
-			wp_safe_redirect( $redirect );
-			exit;
-		}
-	}
 }
