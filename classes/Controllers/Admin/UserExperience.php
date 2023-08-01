@@ -52,7 +52,6 @@ class UserExperience extends Controller {
 				unset( $plugin_action_links['upgrade'] );
 			}
 
-			// TODO Rewrite this to take full advantage of our polyglot detection code in Popup Maker Alerts for translation requests.
 			if ( substr( get_locale(), 0, 2 ) === 'en' ) {
 				$plugin_action_links = array_merge( [ 'translate' => '<a href="' . sprintf( 'https://translate.wordpress.org/locale/%s/default/wp-plugins/content-control/', substr( get_locale(), 0, 2 ) ) . '" target="_blank">' . __( 'Translate', 'content-control' ) . '</a>' ], $plugin_action_links );
 			}

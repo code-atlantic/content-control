@@ -44,14 +44,13 @@ const TableCell = ( { heading = false, children, ...props }: CellProps ) => {
 	);
 };
 
-// TODO Relabel `items` to `rows` or `data` throughtout to be in line with actual tabular data structures.
 const ListTable = < T extends TableItemBase >( {
 	items,
 	columns,
 	sortableColumns = [],
 	idCol = 'id',
 	rowClasses = ( item ) => [ `item-${ item.id }` ],
-	renderCell = ( col, item, rowIndex ) => item[ col ],
+	renderCell = ( col, item ) => item[ col ],
 	noItemsText = __( 'No items found.', 'content-control' ),
 	showBulkSelect = true,
 	className,
