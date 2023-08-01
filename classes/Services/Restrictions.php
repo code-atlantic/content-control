@@ -143,17 +143,10 @@ class Restrictions {
 	 */
 	public function get_applicable_restriction() {
 		global $wp_query;
-		// TODO Review if this is the best way to cache this. Might be using global query every time, even in the loop.
+
 		static $cache = [];
 
-		// Generate cache key from hasing $wp_query.
-		$cache_key = md5( wp_json_encode( $wp_query ) );
-
-		if ( isset( $cache[ $cache_key ] ) ) {
-			return $cache[ $cache_key ];
-		}
-
-		$cache[ $cache_key ] = false;
+		$return = false;
 
 		$restrictions = $this->get_restrictions();
 
@@ -162,13 +155,13 @@ class Restrictions {
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
 				if ( $restriction->check_rules() ) {
-					$cache[ $cache_key ] = $restriction;
+					$return = $restriction;
 					break;
 				}
 			}
 		}
 
-		return $cache[ $cache_key ];
+		return $return;
 	}
 
 	/**
