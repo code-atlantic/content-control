@@ -262,6 +262,10 @@ function get_restricted_content_message( $post_id = null ) {
  */
 function protection_is_disabled() {
 	$checks = [
+		// Disable protection when not on the frontend.
+		! \ContentControl\is_frontend(),
+		// Disable protection when user is excluded.
+		user_is_excluded(),
 		// Disable protection when viewing post previews.
 		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
 	];

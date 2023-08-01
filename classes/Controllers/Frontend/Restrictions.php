@@ -10,13 +10,13 @@ namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
 
-use function ContentControl\user_is_excluded;
 use function ContentControl\content_is_restricted;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_applicable_restriction;
 use function ContentControl\queried_posts_have_restrictions;
 use function ContentControl\get_restriction_matches_for_queried_posts;
 use function ContentControl\redirect;
+use function ContentControl\set_query_to_page;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -48,30 +48,12 @@ class Restrictions extends Controller {
 	}
 
 	/**
-	 * Check if we can bail early.
-	 *
-	 * @return \ContentControl\Models\Restriction|bool
-	 */
-	public function can_bail_early() {
-		// Bail if this isn't the main query on the frontend.
-		if ( ! \ContentControl\is_frontend() ) {
-			return true;
-		}
-
-		if ( user_is_excluded() || protection_is_disabled() ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Handle restricted content appropriately.
 	 *
 	 * @return void
 	 */
 	public function restrict_content() {
-		if ( ! \is_main_query() || $this->can_bail_early() ) {
+		if ( ! \is_main_query() || protection_is_disabled() ) {
 			return;
 		}
 
@@ -134,7 +116,7 @@ class Restrictions extends Controller {
 				return true;
 
 			case 'replace':
-				$this->set_query_to_page( $restriction->replacement_page );
+				set_query_to_page( $restriction->replacement_page );
 				return true;
 		}
 
@@ -178,7 +160,7 @@ class Restrictions extends Controller {
 				// Filter the title/excerpt/contents of the restricted items.
 				break;
 			case 'replace_archive_page':
-				$this->set_query_to_page( $restriction->replacement_page );
+				set_query_to_page( $restriction->replacement_page );
 				break;
 			case 'redirect':
 				redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
@@ -210,12 +192,12 @@ class Restrictions extends Controller {
 		}
 
 		// If this isn't a post type that can be restricted, bail.
-		if ( $this->can_bail_early() ) {
+		if ( protection_is_disabled() ) {
 			return $content;
 		}
 
 		if ( ! content_is_restricted() ) {
-			return;
+			return $content;
 		}
 
 		$restriction = get_applicable_restriction();
@@ -251,7 +233,7 @@ class Restrictions extends Controller {
 		}
 
 		// If this isn't a post type that can be restricted, bail.
-		if ( $this->can_bail_early() ) {
+		if ( protection_is_disabled() ) {
 			return $post_excerpt;
 		}
 
@@ -275,62 +257,4 @@ class Restrictions extends Controller {
 			$restriction
 		);
 	}
-
-	/**
-	 * Set the query to the page with the specified ID.
-	 *
-	 * @param int       $page_id Page ID.
-	 * @param \WP_Query $query   Query object.
-	 * @return void
-	 */
-	public function set_query_to_page( $page_id, $query = null ) {
-		if ( ! $page_id ) {
-			return;
-		}
-
-		if ( ! $query ) {
-			/**
-			 * Global WP_Query object.
-			 *
-			 * @var \WP_Query $wp_query
-			 */
-			global $wp_query;
-			$query = $wp_query;
-		}
-
-		// Create a new custom query for the specific page.
-		$args = [
-			'page_id'        => $page_id,
-			'post_type'      => 'page',
-			'posts_per_page' => 1,
-		];
-
-		$custom_query = new \WP_Query( $args );
-
-		if ( ! $custom_query->have_posts() ) {
-			return;
-		}
-
-		$query->init(); // Reset the main query.
-		$query->query_vars        = $args;
-		$query->queried_object    = $custom_query->post;
-		$query->queried_object_id = $page_id;
-		$query->post              = $custom_query->post;
-		$query->posts             = $custom_query->posts;
-		$query->query             = $custom_query->query;
-
-		// Since init, only override defaults as needed to emulate page.
-		$query->is_page       = true;
-		$query->is_singular   = true;
-		$query->found_posts   = 1;
-		$query->post_count    = 1;
-		$query->max_num_pages = 1;
-
-		// Suppress filters. Might not need this.
-		$query->set( 'suppress_filters', true );
-
-		// Reset the post data.
-		$query->reset_postdata();
-	}
-
 }
