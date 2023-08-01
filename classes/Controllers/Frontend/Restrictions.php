@@ -61,10 +61,6 @@ class Restrictions extends Controller {
 			return true;
 		}
 
-		if ( ! content_is_restricted() && ! queried_posts_have_restrictions() ) {
-			return true;
-		}
-
 		return false;
 	}
 
@@ -75,6 +71,10 @@ class Restrictions extends Controller {
 	 */
 	public function restrict_content() {
 		if ( ! \is_main_query() || $this->can_bail_early() ) {
+			return;
+		}
+
+		if ( ! content_is_restricted() && ! queried_posts_have_restrictions() ) {
 			return;
 		}
 
@@ -213,6 +213,10 @@ class Restrictions extends Controller {
 			return $content;
 		}
 
+		if ( ! content_is_restricted() ) {
+			return;
+		}
+
 		$restriction = get_applicable_restriction();
 
 		/**
@@ -247,6 +251,10 @@ class Restrictions extends Controller {
 
 		// If this isn't a post type that can be restricted, bail.
 		if ( $this->can_bail_early() ) {
+			return $post_excerpt;
+		}
+
+		if ( ! content_is_restricted( $post ) ) {
 			return $post_excerpt;
 		}
 
