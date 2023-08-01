@@ -2,6 +2,8 @@ import classNames from 'classnames';
 
 import { pick } from '@content-control/utils';
 
+import { decodeEntities } from '@wordpress/html-entities';
+
 import type {
 	FieldBaseProps,
 	FieldProps,
@@ -349,7 +351,8 @@ export const parseFieldValue = < F extends FieldProps >(
 
 		case 'textarea':
 			if ( fieldProps.allowHtml ) {
-				// TODO Handle Decoding HTML.
+				// Decoding HTML.
+				parsedValue = decodeEntities( parsedValue );
 			}
 	}
 
