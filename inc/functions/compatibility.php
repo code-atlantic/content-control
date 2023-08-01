@@ -81,7 +81,7 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
-	return ! \is_admin() && ! is_cron() && ! is_ajax();
+	return ! \is_admin() && ! is_cron() && ! is_ajax() && ! \is_favicon();
 }
 
 /**
