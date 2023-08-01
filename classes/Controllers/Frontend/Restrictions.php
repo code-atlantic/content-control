@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend page setup.
+ * Frontend restrictions setup.
  *
  * @copyright (c) 2023, Code Atlantic LLC.
  * @package ContentControl
@@ -9,14 +9,9 @@
 namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
-
-use function ContentControl\content_is_restricted;
-use function ContentControl\protection_is_disabled;
-use function ContentControl\get_applicable_restriction;
-use function ContentControl\queried_posts_have_restrictions;
-use function ContentControl\get_restriction_matches_for_queried_posts;
-use function ContentControl\redirect;
-use function ContentControl\set_query_to_page;
+use ContentControl\Controllers\Frontend\Restrictions\MainQuery;
+use ContentControl\Controllers\Frontend\Restrictions\QueryPosts;
+use ContentControl\Controllers\Frontend\Restrictions\PostContent;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,230 +26,10 @@ class Restrictions extends Controller {
 	 * Initiate functionality.
 	 */
 	public function init() {
-		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
-		// Can be done on send_headers, posts_selection, or wp as well.
-		add_action( 'template_redirect', [ $this, 'restrict_content' ], 10 );
-		add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
-		add_filter( 'get_the_excerpt', [ $this, 'get_the_excerpt_if_restricted' ], 1000, 2 );
-
-		// add_filter( 'the_title', [ $this, 'filter_the_title_if_restricted'], 1000, 2 );
-		// add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
-		// add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
-		// add_filter( 'post_class', [ $this, 'filter_post_class_if_restricted' ], 1000, 3 );
-		// add_filter( 'body_class', [ $this, 'filter_body_class_if_restricted' ], 1000, 2 );
-
-		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
-		// add_filter( 'the_password_form', [ $this, 'filter_password_form_if_restricted' ], 1000, 2 );
-	}
-
-	/**
-	 * Handle restricted content appropriately.
-	 *
-	 * @return void
-	 */
-	public function restrict_content() {
-		if ( ! \is_main_query() || protection_is_disabled() ) {
-			return;
-		}
-
-		if ( ! content_is_restricted() && ! queried_posts_have_restrictions() ) {
-			return;
-		}
-
-		$restriction       = get_applicable_restriction();
-		$post_restrictions = get_restriction_matches_for_queried_posts();
-
-		// Bail if we didn't match any restrictions.
-		if ( ! $restriction && ! $post_restrictions ) {
-			return;
-		}
-
-		// If we have a restriction, handle it.
-		if ( false !== $restriction ) {
-			// If we have a restriction on the main query, handle it & bail.
-			if ( $this->restrict_main_query( $restriction ) ) {
-				return;
-			}
-		}
-
-		// If we have restrictions on the queried posts, handle them top down.
-		if ( false !== $post_restrictions ) {
-			foreach ( $post_restrictions as $match ) {
-				$this->restrict_archive_post( $match['restriction'], $match['post_ids'] );
-			}
-		}
-	}
-
-	/**
-	 * Handle a restriction on the main query.
-	 *
-	 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-	 * @return bool
-	 */
-	public function restrict_main_query( $restriction ) {
-		/**
-		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
-		 *
-		 * @param null                               $pre        Whether to prevent the post from being restricted.
-		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-		 * @return null|mixed
-		 */
-		if ( null !== apply_filters( 'content_control/pre_restrict_main_query', null, $restriction ) ) {
-			return true;
-		}
-
-		/**
-		 * Fires when a post is restricted, but before the restriction is handled.
-		 *
-		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-		 */
-		do_action( 'content_control/restrict_main_query', $restriction );
-
-		switch ( $restriction->protection_method ) {
-			case 'redirect':
-				redirect( $restriction->redirect_type, $restriction->redirect_url );
-				return true;
-
-			case 'replace':
-				set_query_to_page( $restriction->replacement_page );
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Handle post restrictions within main query loop.
-	 *
-	 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-	 * @param int|int[]                          $post_id     Post ID.
-	 * @return void
-	 */
-	public function restrict_archive_post( $restriction, $post_id ) {
-		if ( is_int( $post_id ) ) {
-			$post_id = [ $post_id ];
-		}
-
-		/**
-		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
-		 *
-		 * @param null                                    $pre         Whether to prevent the post from being restricted.
-		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                               $post_id     Post ID.
-		 * @return null|mixed
-		 */
-		if ( null !== apply_filters( 'content_control/pre_restrict_archive_post', null, $restriction, $post_id ) ) {
-			return;
-		}
-
-		/**
-		 * Fires when a post is restricted, but before the restriction is handled.
-		 *
-		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                          $post_id     Post ID.
-		 */
-		do_action( 'content_control/restrict_archive_post', $restriction, $post_id );
-
-		switch ( $restriction->archive_handling ) {
-			case 'filter_post_content':
-				// Filter the title/excerpt/contents of the restricted items.
-				break;
-			case 'replace_archive_page':
-				set_query_to_page( $restriction->replacement_page );
-				break;
-			case 'redirect':
-				redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
-				break;
-			case 'hide':
-				global $wp_query;
-				foreach ( $wp_query->posts as $key => $post ) {
-					if ( in_array( $post->ID, $post_id, true ) ) {
-						unset( $wp_query->posts[ $key ] );
-					}
-				}
-				break;
-		}
-	}
-
-	/**
-	 * Filter post content when needed.
-	 *
-	 * @param string $content Content of post being checked.
-	 *
-	 * @return string
-	 */
-	public function filter_the_content_if_restricted( $content ) {
-		$filter_name = 'content_control/post_restricted_content';
-
-		// Ensure we don't get into an infinite loop.
-		if ( doing_filter( $filter_name ) || doing_filter( 'get_the_excerpt' ) ) {
-			return $content;
-		}
-
-		// If this isn't a post type that can be restricted, bail.
-		if ( protection_is_disabled() ) {
-			return $content;
-		}
-
-		if ( ! content_is_restricted() ) {
-			return $content;
-		}
-
-		$restriction = get_applicable_restriction();
-
-		/**
-		 * Filter the message to display when a post is restricted.
-		 *
-		 * @param string $message     Message to display.
-		 * @param object $restriction Restriction object.
-		 *
-		 * @return string
-		 */
-		return apply_filters(
-			$filter_name,
-			$restriction->get_message(),
-			$restriction
-		);
-	}
-
-	/**
-	 * Filter post excerpt when needed.
-	 *
-	 * @param string  $post_excerpt The post excerpt.
-	 * @param WP_Post $post         Post object.
-	 *
-	 * @return string
-	 */
-	public function get_the_excerpt_if_restricted( $post_excerpt, $post ) {
-		$filter_name = 'content_control/post_restricted_excerpt';
-
-		if ( doing_filter( $filter_name ) ) {
-			return $post_excerpt;
-		}
-
-		// If this isn't a post type that can be restricted, bail.
-		if ( protection_is_disabled() ) {
-			return $post_excerpt;
-		}
-
-		if ( ! content_is_restricted( $post ) ) {
-			return $post_excerpt;
-		}
-
-		$restriction = get_applicable_restriction();
-
-		/**
-		 * Filter the excerpt to display when a post is restricted.
-		 *
-		 * @param string $message     Message to display.
-		 * @param object $restriction Restriction object.
-		 *
-		 * @return string
-		 */
-		return apply_filters(
-			$filter_name,
-			$restriction->get_message(),
-			$restriction
-		);
+		$this->container->register_controllers( [
+			'Frontend\Restrictions\MainQuery'   => new MainQuery( $this->container ),
+			'Frontend\Restrictions\QueryPosts'  => new QueryPosts( $this->container ),
+			'Frontend\Restrictions\PostContent' => new PostContent( $this->container ),
+		] );
 	}
 }
