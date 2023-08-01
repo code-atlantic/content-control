@@ -114,6 +114,20 @@ class Restriction {
 	public $protection_method;
 
 	/**
+	 * Restriction Setting: Redirect type.
+	 *
+	 * @var string 'login' | 'home' | 'custom'
+	 */
+	public $redirect_type;
+
+	/**
+	 * Restriction Setting: Redirect url.
+	 *
+	 * @var string
+	 */
+	public $redirect_url;
+
+	/**
 	 * Restriction Setting: Replacement type.
 	 *
 	 * @var string 'message' | 'page'
@@ -130,23 +144,37 @@ class Restriction {
 	/**
 	 * Restriction Setting: Archive handling.
 	 *
-	 * @var string 'filter_post_content' | 'replace_archive_page' | 'redirect'
+	 * @var string 'filter_post_content' | 'replace_archive_page' | 'redirect' | 'hide'
 	 */
 	public $archive_handling;
+
+	/**
+	 * Restriction Setting: Archive replacement page.
+	 *
+	 * @var int
+	 */
+	public $archive_replacement_page = 0;
 
 	/**
 	 * Restriction Setting: Redirect type.
 	 *
 	 * @var string 'login' | 'home' | 'custom'
 	 */
-	public $redirect_type;
+	public $archive_redirect_type;
 
 	/**
 	 * Restriction Setting: Redirect url.
 	 *
 	 * @var string
 	 */
-	public $redirect_url;
+	public $archive_redirect_url;
+
+	/**
+	 * Restriction Setting: Additional query handling.
+	 *
+	 * @var string 'filter_post_content' | 'hide'
+	 */
+	public $additional_query_handling;
 
 	/**
 	 * Restriction Settings: Show Excerpts.
@@ -253,22 +281,27 @@ class Restriction {
 		$this->title       = $restriction['title'];
 		$this->description = '';
 		$this->status      = 'publish';
+		$this->priority    = 0;
 
 		$user_roles = is_array( $restriction['roles'] ) ? $restriction['roles'] : [];
 
-		$this->user_status       = $restriction['who'];
-		$this->role_match        = count( $user_roles ) > 0 ? 'match' : 'any';
-		$this->user_roles        = $user_roles;
-		$this->protection_method = 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect';
-		$this->replacement_type  = 'message';
-		$this->replacement_page  = 0;
-		$this->archive_handling  = 'filter_post_content';
-		$this->redirect_type     = $restriction['redirect_type'];
-		$this->redirect_url      = $restriction['redirect_url'];
-		$this->override_message  = $restriction['override_default_message'];
-		$this->custom_message    = $restriction['custom_message'];
-		$this->show_excerpts     = $restriction['show_excerpts'];
-		$this->conditions        = \ContentControl\remap_conditions_to_query( $restriction['conditions'] );
+		$this->user_status               = $restriction['who'];
+		$this->role_match                = count( $user_roles ) > 0 ? 'match' : 'any';
+		$this->user_roles                = $user_roles;
+		$this->protection_method         = 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect';
+		$this->redirect_type             = $restriction['redirect_type'];
+		$this->redirect_url              = $restriction['redirect_url'];
+		$this->replacement_type          = 'message';
+		$this->replacement_page          = 0;
+		$this->archive_handling          = 'filter_post_content';
+		$this->archive_replacement_page  = 0;
+		$this->archive_redirect_type     = $restriction['redirect_type'];
+		$this->archive_redirect_url      = $restriction['redirect_url'];
+		$this->additional_query_handling = 'filter_post_content';
+		$this->override_message          = $restriction['override_default_message'];
+		$this->custom_message            = $restriction['custom_message'];
+		$this->show_excerpts             = $restriction['show_excerpts'];
+		$this->conditions                = \ContentControl\remap_conditions_to_query( $restriction['conditions'] );
 
 		$this->query = new Query( $this->conditions );
 	}
@@ -377,28 +410,32 @@ class Restriction {
 	 */
 	public function to_array() {
 		return [
-			'id'               => $this->id,
-			'slug'             => $this->slug,
-			'title'            => $this->title,
-			'description'      => $this->get_description(),
-			'message'          => $this->get_message(),
-			'status'           => $this->status,
-			'priority'         => $this->priority,
+			'id'                      => $this->id,
+			'slug'                    => $this->slug,
+			'title'                   => $this->title,
+			'description'             => $this->get_description(),
+			'message'                 => $this->get_message(),
+			'status'                  => $this->status,
+			'priority'                => $this->priority,
 			// Options include logged_in, logged_out.
-			'userStatus'       => $this->user_status,
+			'userStatus'              => $this->user_status,
 			// Options include any, match, exclude.
-			'roleMatch'        => $this->role_match,
-			'userRoles'        => $this->user_roles,
-			'protectionMethod' => $this->protection_method,
-			'replacementType'  => $this->replacement_type,
-			'replacementPage'  => $this->replacement_page,
-			'archiveHandling'  => $this->archive_handling,
-			'overrideMessage'  => $this->override_message,
-			'customMessage'    => $this->custom_message,
-			'showExcerpts'     => $this->show_excerpts,
-			'redirectType'     => $this->redirect_type,
-			'redirectUrl'      => $this->redirect_url,
-			'conditions'       => $this->conditions,
+			'roleMatch'               => $this->role_match,
+			'userRoles'               => $this->user_roles,
+			'protectionMethod'        => $this->protection_method,
+			'redirectType'            => $this->redirect_type,
+			'redirectUrl'             => $this->redirect_url,
+			'replacementType'         => $this->replacement_type,
+			'replacementPage'         => $this->replacement_page,
+			'archiveHandling'         => $this->archive_handling,
+			'archiveReplacementPage'  => $this->archive_replacement_page,
+			'archiveRedirectType'     => $this->archive_redirect_type,
+			'archiveRedirectUrl'      => $this->archive_redirect_url,
+			'additionalQueryHandling' => $this->additional_query_handling,
+			'overrideMessage'         => $this->override_message,
+			'customMessage'           => $this->custom_message,
+			'showExcerpts'            => $this->show_excerpts,
+			'conditions'              => $this->conditions,
 		];
 	}
 

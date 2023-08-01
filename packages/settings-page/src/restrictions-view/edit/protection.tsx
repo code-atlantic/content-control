@@ -34,6 +34,15 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 
 	const showField = ( field: keyof Restriction[ 'settings' ] ): boolean => {
 		switch ( field ) {
+			case 'redirectType':
+				return 'redirect' === settings.protectionMethod;
+
+			case 'redirectUrl':
+				return (
+					'redirect' === settings.protectionMethod &&
+					'custom' === settings.redirectType
+				);
+
 			case 'replacementType':
 				return 'replace' === settings.protectionMethod;
 
@@ -62,29 +71,25 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 					settings.overrideMessage
 				);
 
-			case 'archiveHandling':
-				return 'replace' === settings.protectionMethod;
+			// case 'archiveHandling':
+			// 	return 'replace' === settings.protectionMethod;
 
 			case 'archiveReplacementPage':
 				return (
-					'replace' === settings.protectionMethod &&
+					// 'replace' === settings.protectionMethod &&
 					'replace_archive_page' === settings.archiveHandling
 				);
 
-			case 'additionalQueryHandling':
-				return 'replace' === settings.protectionMethod;
+			// case 'additionalQueryHandling':
+			// 	return 'replace' === settings.protectionMethod;
 
-			case 'redirectType':
-				return (
-					'redirect' === settings.protectionMethod ||
-					'redirect' === settings.archiveHandling
-				);
+			case 'archiveRedirectType':
+				return 'redirect' === settings.archiveHandling;
 
-			case 'redirectUrl':
+			case 'archiveRedirectUrl':
 				return (
-					( 'redirect' === settings.protectionMethod ||
-						'redirect' === settings.archiveHandling ) &&
-					'custom' === settings.redirectType
+					'redirect' === settings.archiveHandling &&
+					'custom' === settings.archiveRedirectType
 				);
 
 			default:
@@ -113,6 +118,33 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 				}
 				options={ protectionMethodOptions }
 			/>
+
+			{ showField( 'redirectType' ) && (
+				<RadioButtonControl< Restriction[ 'redirectType' ] >
+					label={ __(
+						'Where will the user be taken?',
+						'content-control'
+					) }
+					value={ settings.redirectType }
+					onChange={ ( redirectType ) =>
+						updateSettings( { redirectType } )
+					}
+					options={ redirectTypeOptions }
+				/>
+			) }
+
+			{ showField( 'redirectUrl' ) && (
+				<URLControl
+					label={ __( 'Custom Redirect URL', 'content-control' ) }
+					className="is-large"
+					value={ settings.redirectUrl }
+					onChange={ ( { url: redirectUrl } ) => {
+						updateSettings( {
+							redirectUrl,
+						} );
+					} }
+				/>
+			) }
 
 			{ showField( 'replacementType' ) && (
 				<RadioButtonControl
@@ -232,28 +264,28 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 				/>
 			) }
 
-			{ showField( 'redirectType' ) && (
-				<RadioButtonControl< Restriction[ 'redirectType' ] >
+			{ showField( 'archiveRedirectType' ) && (
+				<RadioButtonControl< Restriction[ 'archiveRedirectType' ] >
 					label={ __(
 						'Where will the user be taken?',
 						'content-control'
 					) }
-					value={ settings.redirectType }
-					onChange={ ( redirectType ) =>
-						updateSettings( { redirectType } )
+					value={ settings.archiveRedirectType }
+					onChange={ ( archiveRedirectType ) =>
+						updateSettings( { archiveRedirectType } )
 					}
 					options={ redirectTypeOptions }
 				/>
 			) }
 
-			{ showField( 'redirectUrl' ) && (
+			{ showField( 'archiveRedirectUrl' ) && (
 				<URLControl
 					label={ __( 'Custom Redirect URL', 'content-control' ) }
 					className="is-large"
-					value={ settings.redirectUrl }
-					onChange={ ( { url: redirectUrl } ) => {
+					value={ settings.archiveRedirectUrl }
+					onChange={ ( { url: archiveRedirectUrl } ) => {
 						updateSettings( {
-							redirectUrl,
+							archiveRedirectUrl,
 						} );
 					} }
 				/>

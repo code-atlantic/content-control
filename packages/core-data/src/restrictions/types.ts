@@ -36,11 +36,20 @@ type Item = RuleItem | GroupItem;
 
 export type EditorId = 'new' | number | undefined;
 
+/**
+ * The settings for a restriction.
+ *
+ * This should be kept in sync with the settings in the PHP code.
+ * @see /classes/Model/Restriction.php
+ * @see /includes/functions/install.php:get_default_restriction_settings()
+ */
 export interface RestrictionSettings {
 	userStatus: 'logged_in' | 'logged_out';
 	roleMatch: 'any' | 'match' | 'exclude';
 	userRoles: string[];
 	protectionMethod: 'redirect' | 'replace';
+	redirectType: 'login' | 'home' | 'custom';
+	redirectUrl: string;
 	replacementType: 'page' | 'message';
 	replacementPage?: number;
 	archiveHandling:
@@ -49,12 +58,12 @@ export interface RestrictionSettings {
 		| 'redirect'
 		| 'hide';
 	archiveReplacementPage?: number;
+	archiveRedirectType: 'login' | 'home' | 'custom';
+	archiveRedirectUrl: string;
 	additionalQueryHandling: 'filter_post_content' | 'hide';
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
-	redirectType: 'login' | 'home' | 'custom';
-	redirectUrl: string;
 	conditions: Query;
 	[ key: string ]: any;
 }

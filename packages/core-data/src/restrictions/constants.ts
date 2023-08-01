@@ -30,6 +30,13 @@ export const noticeDefaults: AppNotice = {
 	isDismissible: true,
 };
 
+/**
+ * Default values for a new restriction.
+ *
+ * This should be kept in sync with the settings in the PHP code.
+ * @see /classes/Model/Restriction.php
+ * @see /includes/functions/install.php:get_default_restriction_settings()
+ */
 export const restrictionDefaults: Restriction = {
 	id: 0,
 	title: '',
@@ -41,16 +48,18 @@ export const restrictionDefaults: Restriction = {
 		roleMatch: 'any',
 		userRoles: [],
 		protectionMethod: 'redirect',
+		redirectType: 'login',
+		redirectUrl: '',
 		replacementType: 'message',
 		replacementPage: undefined,
 		archiveHandling: 'filter_post_content',
 		archiveReplacementPage: undefined,
+		archiveRedirectType: 'login',
+		archiveRedirectUrl: '',
 		additionalQueryHandling: 'filter_post_content',
 		showExcerpts: false,
 		overrideMessage: false,
 		customMessage: '',
-		redirectType: 'login',
-		redirectUrl: '',
 		conditions: {
 			logicalOperator: 'or',
 			items: [],
