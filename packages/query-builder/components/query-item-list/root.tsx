@@ -54,7 +54,7 @@ const RootQuery = ( {
 	 * Generate a context to be provided to all children consumers of this query.
 	 */
 	const rootQueryContext: QueryContextProps = {
-		onChange, // TODO REVIEW usage of this one later.
+		onChange,
 		logicalOperator,
 		setList,
 		isDragging,

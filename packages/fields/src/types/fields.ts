@@ -23,9 +23,7 @@ export interface FieldBaseProps {
 	className?: string;
 	default?: any;
 	required?: boolean;
-	//! TODO This needs implemented, mapped from desc | dynamic_desc
 	help?: string | React.ReactElement;
-	//! TODO Check all known usage types of this.
 	dependencies?: { [ key: string ]: string | boolean | number };
 }
 
@@ -39,7 +37,6 @@ export interface InputFieldProps< V extends string | number = string | number >
 export interface SelectFieldBaseProps extends FieldBaseProps {
 	options: Options | OptGroups;
 	multiple?: boolean;
-	//! TODO Rename this based on select2
 	searchable?: boolean;
 }
 

@@ -56,11 +56,9 @@ export interface OldFieldBase {
 	class?: string;
 	classes?: string | string[];
 	required?: boolean;
-	//! TODO Check all known usage types of this.
 	meta?: {
 		[ key: string ]: any;
 	};
-	//! TODO Check all known usage types of this.
 	dependencies?: { [ key: string ]: string | boolean | number };
 }
 
@@ -108,7 +106,6 @@ export interface OldMulticheckField extends Omit< OldRadioField, 'type' > {
 	type: 'multicheck';
 }
 
-//! TODO This needs to be checked against known select types.
 export type OldSelectOptions =
 	| Option[]
 	| {

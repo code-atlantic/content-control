@@ -44,7 +44,7 @@ const NestedQuery = ( {
 		...parentQueryContext,
 		indexs,
 		logicalOperator,
-		onChange, // TODO REVIEW usage of this one later.
+		onChange,
 		updateOperator: ( updatedOperator: QueryLogicalOperator ) =>
 			onChange( {
 				...query,

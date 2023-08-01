@@ -326,8 +326,6 @@ class Restriction {
 	 * @return string
 	 */
 	public function get_message() {
-		// TODO Refactor this based on the new replacement_type.
-
 		if ( ! isset( $this->message ) ) {
 			if ( ! empty( $this->post->post_content ) ) {
 				$message = \get_the_content( null, false, $this->id );

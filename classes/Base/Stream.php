@@ -86,7 +86,6 @@ class Stream {
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo str_repeat( ' ', 1024 * 8 ) . PHP_EOL;
-		// TODO This may not be needed with usleep.
 
 		flush(); // Unless both are called. Some browsers will still cache.
 

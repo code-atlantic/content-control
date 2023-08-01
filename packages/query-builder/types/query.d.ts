@@ -29,7 +29,6 @@ export interface Query {
 	items: QueryItem[];
 }
 
-// TODO Review, this seems identical to QueryGroup.
 export type QuerySet = {
 	id: Identifier;
 	label: string;
