@@ -127,3 +127,44 @@ function set_rules_query( $query ) {
 	global $cc_current_query;
 	$cc_current_query = $query;
 }
+
+/**
+ * Check and overload global post if needed.
+ *
+ * MOVE to a new file, maybe content-control/inc/functions/query.php
+ *
+ * @param int|null $post_id Post ID.
+ *
+ * @return bool
+ */
+function setup_post( $post_id = null ) {
+	global $post;
+
+	$overload_post = isset( $post_id ) && isset( $post ) && (
+		( is_object( $post_id ) && $post_id->ID !== $post->ID ) ||
+		( is_int( $post_id ) && $post_id !== $post->ID ) );
+
+	if ( $overload_post ) {
+        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$post = get_post( $post_id );
+		setup_postdata( $post );
+	}
+
+	return $overload_post;
+}
+
+/**
+ * Check and clear global post if needed.
+ *
+ * MOVE to a new file, maybe content-control/inc/functions/query.php
+ *
+ * @param bool $overload_post Whether post was overloaded.
+ *
+ * @return void
+ */
+function clear_post( $overload_post = false ) {
+	if ( $overload_post ) {
+		// Reset global post object.
+		wp_reset_postdata();
+	}
+}
