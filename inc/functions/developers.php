@@ -197,11 +197,12 @@ function sort_restrictions_by_priority( $restrictions ) {
  * @return bool True if user meets requirements, false if not.
  */
 function user_can_view_content( $post_id = null ) {
-	$overload_post = setup_post( $post_id );
-
+	// Called before setup_post because it does it internally already.
 	if ( ! content_has_restrictions( $post_id ) ) {
 		return true;
 	}
+
+	$overload_post = setup_post( $post_id );
 
 	$restriction = plugin( 'restrictions' )->get_applicable_restriction();
 	$can_view    = $restriction->user_meets_requirements();
