@@ -80,17 +80,7 @@ function queried_posts_have_restrictions( $query = null ) {
  *
  * @return \ContentControl\Models\Restriction[]|false
  */
-function get_restriction_matches_for_queried_posts( $query = null ) {
-	if ( is_null( $query ) ) {
-		global $wp_query;
-		/**
-		 * Global Query
-		 *
-		 * @var \WP_Query $wp_query
-		 */
-		$query = $wp_query;
-	}
-
+function get_restriction_matches_for_queried_posts( $query ) {
 	// If its the main query, and not an archive-like page, bail.
 	if ( $query->is_main_query() && ( ! $query->is_home() && ! $query->is_archive() && ! $query->is_search() ) ) {
 		return false;
