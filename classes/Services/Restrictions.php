@@ -150,7 +150,7 @@ class Restrictions {
 
 		$restrictions = $this->get_restrictions();
 
-		$restrictions = sort_restrictions_by_priority( $restrictions );
+		$restrictions = $this->sort_restrictions_by_priority( $restrictions );
 
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
@@ -201,5 +201,26 @@ class Restrictions {
 		$cache[ $cache_key ] = $restriction->user_meets_requirements();
 
 		return $cache[ $cache_key ];
+	}
+
+	/**
+	 * Sort restrictions based on post sort order.
+	 *
+	 * MOVE to restrictions file.
+	 *
+	 * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
+	 *
+	 * @return \ContentControl\Models\Restriction[]
+	 */
+	public function sort_restrictions_by_priority( $restrictions ) {
+		$sorted_restrictions = [];
+
+		foreach ( $restrictions as $restriction ) {
+			$sorted_restrictions[ $restriction->priority ] = $restriction;
+		}
+
+		ksort( $sorted_restrictions );
+
+		return $sorted_restrictions;
 	}
 }
