@@ -53,6 +53,13 @@ function get_query( $query = null ) {
 /**
  * Get or set the current rule (globaly accessible).
  *
+ * 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`
+ *
+ * Rules can work differently depending on the context they are being checked in.
+ * This context allows us to handle the main query differently to other queries,
+ * and blocks. It further allows us to handle blocks in several unique ways per
+ * rule.
+ *
  *  1. Main query is checked in the template_redirect action.
  *  2. Main query posts are checked in the the_posts filter & $wp_query->is_main_query().
  *  3. Alternate query posts are checked in the_posts or pre_get_posts & ! $wp_query->is_main_query().
@@ -60,7 +67,7 @@ function get_query( $query = null ) {
  *
  * @param \WP_Query|null $query Query object.
  *
- * @return string 'main', 'main/loop', 'alternate', 'alternate/loop'
+ * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
  */
 function current_query_context( $query = null ) {
 	$query = get_query( $query );
