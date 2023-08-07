@@ -10,7 +10,7 @@
 namespace ContentControl;
 
 use function ContentControl\plugin;
-use function ContentControl\Rules\set_rules_query;
+use function ContentControl\set_rules_query;
 
 defined( 'ABSPATH' ) || exit;
 
