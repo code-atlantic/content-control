@@ -16,6 +16,7 @@ require_once 'functions/globals.php';
 require_once 'functions/install.php';
 require_once 'functions/options.php';
 require_once 'functions/protections.php';
+require_once 'functions/query.php';
 require_once 'functions/restrictions.php';
 require_once 'functions/rules.php';
 require_once 'functions/rule-callbacks.php';
