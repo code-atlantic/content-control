@@ -47,7 +47,11 @@ class QueryPosts extends Controller {
 			return;
 		}
 
-		$post_restrictions = get_restriction_matches_for_queried_posts();
+		if ( query_can_be_ignored( $query ) ) {
+			return $posts;
+		}
+
+		$post_restrictions = get_restriction_matches_for_queried_posts( $query );
 
 		if ( ! $post_restrictions ) {
 			return;

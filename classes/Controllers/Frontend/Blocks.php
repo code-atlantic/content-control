@@ -181,8 +181,8 @@ class Blocks extends Controller {
 		return array_unique( $classes );
 	}
 
-
 	/**
+	 * Filter the block attributes, primarily to add classes and control visibility.
 	 *
 	 * References: https://github.com/WordPress/gutenberg/search?l=PHP&q=%27render_block%27
 	 * - https://github.com/WordPress/gutenberg/blob/9aab0c4f60c78d19aae0af3351a2b66f8fa4c162/lib/block-supports/layout.php#L317

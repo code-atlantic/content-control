@@ -183,3 +183,25 @@ function set_query_to_page( $page_id, $query = null ) {
 	// Reset the post data.
 	$query->reset_postdata();
 }
+
+/**
+ * Check if a given query can be ignored.
+ *
+ * @param \WP_Query $query Query object.
+ * @return bool True if query can be ignored, false if not.
+ */
+function query_can_be_ignored( $query = null ) {
+	$post_types_to_ignore = [
+		'cc_restriction',
+		'wp_template',
+		'wp_template_part',
+		'wp_global_styles',
+	];
+
+	// Ignore specific core post types.
+	if ( in_array( $query->get( 'post_type' ), $post_types_to_ignore, true ) ) {
+		return true;
+	}
+
+	return false !== apply_filters( 'content_control/ignoreable_query', false, $query );
+}
