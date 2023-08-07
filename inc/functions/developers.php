@@ -10,6 +10,7 @@
 namespace ContentControl;
 
 use function ContentControl\plugin;
+use function ContentControl\Rules\set_rules_query;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -141,6 +142,8 @@ function get_restriction_matches_for_queried_posts( $query = null ) {
 		return $restrictions[ $cache_key ];
 	}
 
+	set_rules_query( $query );
+
 	foreach ( $query->posts as $post ) {
 		if ( content_is_restricted( $post->ID ) ) {
 			$restriction = get_applicable_restriction( $post->ID );
@@ -157,6 +160,8 @@ function get_restriction_matches_for_queried_posts( $query = null ) {
 			$restrictions[ $cache_key ][ $restriction->priority ]['posts'][] = $post->ID;
 		}
 	}
+
+	set_rules_query( null );
 
 	if ( empty( $restrictions[ $cache_key ] ) ) {
 		$restrictions[ $cache_key ] = false;
