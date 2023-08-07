@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+use function ContentControl\Rules\get_query;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -81,7 +83,23 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
-	return ! \is_admin() && ! is_cron() && ! is_ajax() && ! \is_favicon();
+	$query = get_query();
+
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+
+	if (
+		$query->is_admin() ||
+			is_cron() ||
+			is_ajax() ||
+			$query->is_favicon() ||
+			strpos( $request_uri, 'favicon.ico' ) ||
+			$query->is_robots() ||
+			strpos( $request_uri, 'robots.txt' )
+	) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
