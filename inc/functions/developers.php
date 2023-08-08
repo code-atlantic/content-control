@@ -17,18 +17,16 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Check if content has restrictions.
  *
- * RENAME to post_has_restrictions()
- *
- * @since 2.0.0
- *
  * @param int|null $post_id Post ID.
  *
  * @return bool
+ *
+ * @since 2.0.0
  */
 function content_has_restrictions( $post_id = null ) {
 	$overload_post = setup_post( $post_id );
 
-	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions();
+	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions( $post_id );
 
 	// Clear post if we overloaded it.
 	clear_post( $overload_post );
@@ -40,8 +38,71 @@ function content_has_restrictions( $post_id = null ) {
 	 * @param int|null $post_id Post ID.
 	 *
 	 * @return bool
+	 *
+	 * @since 2.0.0
 	 */
 	return (bool) apply_filters( 'content_control/content_has_restriction', $has_restrictions, $post_id );
+}
+
+/**
+ * Check if user can access content.
+ *
+ * @param int|null $post_id Post ID.
+ *
+ * @return bool True if user meets requirements, false if not.
+ *
+ * @since 2.0.0
+ */
+function user_can_view_content( $post_id = null ) {
+	if ( ! content_has_restrictions( $post_id ) ) {
+		return true;
+	}
+
+	$restriction = get_applicable_restriction( $post_id );
+
+	if ( ! $restriction ) {
+		return true;
+	}
+
+	$can_view = $restriction->user_meets_requirements();
+
+	/**
+	 * Filter whether user can view content.
+	 *
+	 * @param bool $can_view Whether user can view content.
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 *
+	 * @since 2.0.0
+	 */
+	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id );
+}
+
+/**
+ * Check if the current post is restricted.
+ *
+ * @param int|null $post_id Post ID.
+ *
+ * @return bool
+ *
+ * @since 2.0.0
+ */
+function content_is_restricted( $post_id = null ) {
+	// $is_restricted = content_has_restrictions( $post_id ) && ! user_can_view_content( $post_id );
+	$is_restricted = ! user_can_view_content( $post_id );
+
+	/**
+	 * Filter whether content is restricted.
+	 *
+	 * @param bool $is_restricted Whether content is restricted.
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 *
+	 * @since 2.0.0
+	 */
+	return (bool) apply_filters( 'content_control/content_is_restricted', $is_restricted, $post_id );
 }
 
 /**
@@ -50,11 +111,13 @@ function content_has_restrictions( $post_id = null ) {
  * @param int|null $post_id Post ID.
  *
  * @return \ContentControl\Models\Restriction|false
+ *
+ * @since 2.0.0
  */
 function get_applicable_restriction( $post_id = null ) {
 	$overload_post = setup_post( $post_id );
 
-	$restriction = plugin( 'restrictions' )->get_applicable_restriction();
+	$restriction = plugin( 'restrictions' )->get_applicable_restriction( $post_id );
 
 	// Clear post if we overloaded it.
 	clear_post( $overload_post );
@@ -63,22 +126,13 @@ function get_applicable_restriction( $post_id = null ) {
 }
 
 /**
- * Check if query has restricted posts.
- *
- * @param \WP_Query $query Query object.
- *
- * @return bool
- */
-function queried_posts_have_restrictions( $query = null ) {
-	return (bool) get_restriction_matches_for_queried_posts( $query );
-}
-
-/**
  * Check if query has restrictions.
  *
  * @param \WP_Query $query Query object.
  *
  * @return \ContentControl\Models\Restriction[]|false
+ *
+ * @since 2.0.0
  */
 function get_restriction_matches_for_queried_posts( $query ) {
 	// If its the main query, and not an archive-like page, bail.
@@ -93,7 +147,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
 	static $restrictions;
 
 	// Generate cache key from hasing $wp_query.
-	$cache_key = md5( wp_json_encode( $wp_query ) );
+	$cache_key = md5( wp_json_encode( $query ) );
 
 	if ( isset( $restrictions[ $cache_key ] ) ) {
 		return $restrictions[ $cache_key ];
@@ -114,7 +168,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
 			}
 
 			// Add post to restriction.
-			$restrictions[ $cache_key ][ $restriction->priority ]['posts'][] = $post->ID;
+			$restrictions[ $cache_key ][ $restriction->priority ]['post_ids'][] = $post->ID;
 		}
 	}
 
@@ -128,81 +182,13 @@ function get_restriction_matches_for_queried_posts( $query ) {
 }
 
 /**
- * Check if user can view content.
- *
- * @param int|null $post_id Post ID.
- *
- * @return bool True if user meets requirements, false if not.
- */
-function user_can_view_content( $post_id = null ) {
-	// Called before setup_post because it does it internally already.
-	if ( ! content_has_restrictions( $post_id ) ) {
-		return true;
-	}
-
-	$overload_post = setup_post( $post_id );
-
-	$restriction = plugin( 'restrictions' )->get_applicable_restriction();
-	$can_view    = $restriction->user_meets_requirements();
-
-	// Clear post if we overloaded it.
-	clear_post( $overload_post );
-
-	/**
-	 * Filter whether user can view content.
-	 *
-	 * @param bool $can_view Whether user can view content.
-	 * @param int|null $post_id Post ID.
-	 *
-	 * @return bool
-	 */
-	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id );
-}
-
-/**
- * Check if the current post is restricted.
- *
- * @param int|null $post_id Post ID.
- *
- * @return bool
- */
-function content_is_restricted( $post_id = null ) {
-	$is_restricted = content_has_restrictions( $post_id ) && ! user_can_view_content( $post_id );
-
-	/**
-	 * Filter whether content is restricted.
-	 *
-	 * @param bool $is_restricted Whether content is restricted.
-	 * @param int|null $post_id Post ID.
-	 *
-	 * @return bool
-	 */
-	return (bool) apply_filters( 'content_control/content_is_restricted', $is_restricted, $post_id );
-}
-
-/**
- * Get restricted content message.
- *
- * @param int|null $post_id Post ID.
- *
- * @return string
- */
-function get_restricted_content_message( $post_id = null ) {
-	$restriction = get_applicable_restriction( $post_id );
-
-	if ( ! $restriction ) {
-		return '';
-	}
-
-	return $restriction->get_message();
-}
-
-/**
  * Check if protection methods should be disabled.
  *
  * Generally used to bypass protections when using page editors.
  *
  * @return bool
+ *
+ * @since 2.0.0
  */
 function protection_is_disabled() {
 	$checks = [
@@ -220,6 +206,8 @@ function protection_is_disabled() {
 	 * @param bool $is_disabled Whether protection is disabled.
 	 *
 	 * @return bool
+	 *
+	 * @since 2.0.0
 	 */
 	return apply_filters(
 		'content_control/protection_is_disabled',
