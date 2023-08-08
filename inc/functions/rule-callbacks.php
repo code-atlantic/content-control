@@ -113,15 +113,22 @@ function content_is_post_type() {
 function content_is_selected_post() {
 	global $post;
 
+	$context = current_query_context();
+
 	$post_type = get_rule_extra( 'post_type', '' );
 	// Handle array of string or int, and comman list.
 	$selected = \wp_parse_id_list(
 		get_rule_option( 'selected', [] )
 	);
 
-	return is_post_type( $post_type ) &&
-		\is_singular( $post_type ) &&
-		in_array( $post->ID, $selected, true );
+	$check = is_post_type( $post_type ) && in_array( $post->ID, $selected, true );
+
+	if ( 'main' === $context ) {
+		// If this is the main query, then we can check if the post is in the main query.
+		return $check && \is_singular( $post_type );
+	}
+
+	return $check;
 }
 
 /**
