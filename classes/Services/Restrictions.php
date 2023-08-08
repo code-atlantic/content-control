@@ -10,7 +10,8 @@ namespace ContentControl\Services;
 
 use ContentControl\Models\Restriction;
 
-use function ContentControl\sort_restrictions_by_priority;
+use function ContentControl\get_query;
+use function ContentControl\current_query_context;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,11 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class Restrictions {
 
 	/**
-	 * Cache to prevent rechechs & queries.
+	 * Cache
 	 *
 	 * @var array
 	 */
-	private $cache = [];
+	protected $cache = [];
 
 	/**
 	 * Get a list of all restrictions.
@@ -136,17 +137,42 @@ class Restrictions {
 	 * Get the first applicable restriction for the current post.
 	 *
 	 * Performant version that breaks on first applicable restriction. Sorted by priority.
-	 *
 	 * cached internally.
+	 *
+	 * @param int|null $post_id Post ID.
 	 *
 	 * @return Restriction|false
 	 */
-	public function get_applicable_restriction() {
-		global $wp_query;
+	public function get_applicable_restriction( $post_id = null ) {
+		$query      = get_query();
+		$context    = current_query_context();
+		$query_hash = md5( maybe_serialize( $query->query_vars ) );
+		$cache_name = 'applicable_restriction';
 
-		static $cache = [];
+		if ( is_null( $post_id ) ) {
+			$post_id = \get_the_ID();
+		}
 
-		$return = false;
+		switch ( $context ) {
+			case 'main':
+				$cache_key = 'main';
+				break;
+
+			case 'main/posts':
+			case 'posts':
+				$cache_key = 'post-' . $post_id;
+				break;
+
+			default:
+				$cache_key = $context . '_' . $query_hash . ( $post_id ? ( '_post-' . $post_id ) : '' );
+				break;
+		}
+
+		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
+			return $this->cache[ $cache_name ][ $cache_key ];
+		}
+
+		$this->cache[ $cache_name ][ $cache_key ] = false;
 
 		$restrictions = $this->get_restrictions();
 
@@ -155,13 +181,13 @@ class Restrictions {
 		if ( ! empty( $restrictions ) ) {
 			foreach ( $restrictions as $restriction ) {
 				if ( $restriction->check_rules() ) {
-					$return = $restriction;
+					$this->cache[ $cache_name ][ $cache_key ] = $restriction;
 					break;
 				}
 			}
 		}
 
-		return $return;
+		return $this->cache[ $cache_name ][ $cache_key ];
 	}
 
 	/**
@@ -169,10 +195,12 @@ class Restrictions {
 	 *
 	 * Cached via get_applicable_restriction().
 	 *
+	 * @param int|null $post_id Post ID.
+	 *
 	 * @return boolean
 	 */
-	public function has_applicable_restrictions() {
-		return false !== $this->get_applicable_restriction();
+	public function has_applicable_restrictions( $post_id = null ) {
+		return false !== $this->get_applicable_restriction( $post_id );
 	}
 
 	/**
@@ -189,18 +217,20 @@ class Restrictions {
 			return false;
 		}
 
-		static $cache = [];
-		$cache_key    = $restriction->id;
+		$cache_name = 'user_meets_requirements';
+		$cache_key  = $restriction->id;
 
 		// Check cache.
-		if ( isset( $cache[ $cache_key ] ) ) {
-			return $cache[ $cache_key ];
+		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
+			return $this->cache[ $cache_name ][ $cache_key ];
 		}
 
-		// Check if user meets requirements.
-		$cache[ $cache_key ] = $restriction->user_meets_requirements();
+		$user_meets_requirements = $restriction->user_meets_requirements();
 
-		return $cache[ $cache_key ];
+		// Cache result.
+		$this->cache[ $cache_name ][ $cache_key ] = $user_meets_requirements;
+
+		return $user_meets_requirements;
 	}
 
 	/**
