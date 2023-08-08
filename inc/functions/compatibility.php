@@ -7,7 +7,7 @@
 
 namespace ContentControl;
 
-use function ContentControl\Rules\get_query;
+use function ContentControl\get_query;
 
 defined( 'ABSPATH' ) || exit;
 
