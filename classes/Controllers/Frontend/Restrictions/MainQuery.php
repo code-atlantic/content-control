@@ -15,7 +15,6 @@ use function ContentControl\set_query_to_page;
 use function ContentControl\content_is_restricted;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_applicable_restriction;
-use function ContentControl\queried_posts_have_restrictions;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,7 +49,7 @@ class MainQuery extends Controller {
 			return;
 		}
 
-		if ( ! content_is_restricted() && ! queried_posts_have_restrictions() ) {
+		if ( ! content_is_restricted() ) {
 			return;
 		}
 
