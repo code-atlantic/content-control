@@ -9,15 +9,18 @@ namespace ContentControl\Rules;
 
 defined( 'ABSPATH' ) || exit;
 
-use function ContentControl\Rules\allowed_user_roles;
 use function ContentControl\Rules\is_post_type;
-use function ContentControl\Rules\get_rule_option;
 use function ContentControl\Rules\get_rule_extra;
+use function ContentControl\Rules\get_rule_option;
+use function ContentControl\current_query_context;
+use function ContentControl\Rules\allowed_user_roles;
 
 /**
  * Checks if a user has one of the selected roles.
  *
  * @return bool
+ *
+ * @since 2.0.0
  */
 function user_has_role() {
 	if ( ! \is_user_logged_in() ) {
@@ -55,31 +58,42 @@ function user_has_role() {
  * Check if this is the home page.
  *
  * @return bool
+ *
+ * @since 2.0.0
  */
 function content_is_home_page() {
-	$checks = [
-		\is_front_page(),
-		\is_main_query(),
-	];
+	global $post;
 
-	if ( 'content_control/should_hide_block' === \current_filter() ) {
-		// Checking block visibility, in the loop.
-		$checks[] = \in_the_loop();
-	} else {
-		// Checking current page, globally, not in the loop.
-		$checks[] = ! \in_the_loop();
+	$context = current_query_context();
+
+	if ( 'main' === $context ) {
+		return \is_front_page();
 	}
 
-	return ! in_array( false, $checks, true );
+	$page_id = 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ? get_option( 'page_on_front' ) : -1;
+
+	return (int) $page_id === (int) $post->ID;
 }
 
 /**
  * Check if this is the home page.
  *
  * @return bool
+ *
+ * @since 2.0.0
  */
 function content_is_blog_index() {
-	return \is_home() && \is_main_query() && ! \in_the_loop();
+	global $post;
+
+	$context = current_query_context();
+
+	if ( 'main' === $context ) {
+		return \is_home();
+	}
+
+	$page_for_posts = 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_option( 'page_for_posts' ) : -1;
+
+	return (int) $page_for_posts === (int) $post->ID;
 }
 
 /**
