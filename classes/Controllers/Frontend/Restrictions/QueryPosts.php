@@ -109,6 +109,11 @@ class QueryPosts extends Controller {
 							unset( $posts[ $key ] );
 						}
 					}
+
+					// Update the query's post count.
+					$query->post_count = count( $posts );
+					// Reset post indexes.
+					$posts = array_values( $posts );
 					break;
 			}
 		}
