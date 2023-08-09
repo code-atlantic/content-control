@@ -7,25 +7,15 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
- * Get the current wp query.
- *
- * Helper that returns the current query object, reguardless of if
- * it's the main query or not.
+ * Get the main query.
  *
  * @return \WP_Query|null
  */
-function current_wp_query() {
-	global $wp_the_query, $wp_query;
-
-	if ( ! is_null( $wp_query ) ) {
-		/**
-		 * WP Query object.
-		 *
-		 * @var \WP_Query $wp_query
-		 */
-		return $wp_query;
-	}
+function get_main_wp_query() {
+	global $wp_the_query;
 
 	if ( ! is_null( $wp_the_query ) ) {
 		/**
@@ -37,6 +27,29 @@ function current_wp_query() {
 	}
 
 	return null;
+}
+
+/**
+ * Get the current wp query.
+ *
+ * Helper that returns the current query object, reguardless of if
+ * it's the main query or not.
+ *
+ * @return \WP_Query|null
+ */
+function get_current_wp_query() {
+	global $wp_query;
+
+	if ( ! is_null( $wp_query ) ) {
+		/**
+		 * WP Query object.
+		 *
+		 * @var \WP_Query $wp_query
+		 */
+		return $wp_query;
+	}
+
+	return get_main_wp_query();
 }
 
 /**
@@ -60,7 +73,7 @@ function get_query( $query = null ) {
 			 */
 			$query = $cc_current_query;
 		} else {
-			$query = current_wp_query();
+			$query = get_current_wp_query();
 		}
 	}
 
