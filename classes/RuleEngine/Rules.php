@@ -281,7 +281,7 @@ class Rules {
 		foreach ( $post_types as $name => $post_type ) {
 			$type_rules = [];
 
-			if ( $post_type->has_archive ) {
+			if ( $post_type->has_archive || 'post' === $name ) {
 				$type_rules[ "content_is_{$name}_archive" ] = [
 					'name'     => "content_is_{$name}_archive",
 					/* translators: %s: Post type singular name */
