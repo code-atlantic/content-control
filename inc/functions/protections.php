@@ -49,14 +49,16 @@ function set_query_to_page( $page_id, $query = null ) {
 	}
 
 	if ( ! $query ) {
-		$query = current_wp_query();
+		$query = get_current_wp_query();
 	}
 
 	// Create a new custom query for the specific page.
 	$args = [
-		'page_id'        => $page_id,
-		'post_type'      => 'page',
-		'posts_per_page' => 1,
+		'page_id'             => $page_id,
+		'post_type'           => 'page',
+		'posts_per_page'      => 1,
+		// Used to bypass the restrictions and not add processing to the new query.
+		'ignore_restrictions' => true,
 	];
 
 	$custom_query = new \WP_Query( $args );
