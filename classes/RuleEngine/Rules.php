@@ -375,7 +375,7 @@ class Rules {
 							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
 						],
 					],
-					'callback' => '\ContentControl\Rules\content_is_ancestor_of_post',
+					'callback' => '\ContentControl\Rules\content_is_post_with_template',
 				];
 			}
 
