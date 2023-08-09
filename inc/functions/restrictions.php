@@ -112,6 +112,10 @@ function query_can_be_ignored( $query = null ) {
 		'wp_global_styles',
 	];
 
+	if ( $query->get( 'ignore_restrictions', false ) ) {
+		return true;
+	}
+
 	// Ignore specific core post types.
 	if ( in_array( $query->get( 'post_type' ), $post_types_to_ignore, true ) ) {
 		return true;
