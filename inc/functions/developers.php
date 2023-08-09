@@ -89,7 +89,6 @@ function user_can_view_content( $post_id = null ) {
  * @since 2.0.0
  */
 function content_is_restricted( $post_id = null ) {
-	// $is_restricted = content_has_restrictions( $post_id ) && ! user_can_view_content( $post_id );
 	$is_restricted = ! user_can_view_content( $post_id );
 
 	/**
