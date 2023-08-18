@@ -142,7 +142,7 @@ const Finder = (
 
 	const viewUpsell = () =>
 		window.open(
-			`${ adminUrl }/options-general.php?page=cc-settings&tab=upgrade`,
+			`${ adminUrl }/options-general.php?page=content-control-settings&view=settings&tab=license-and-updates`,
 			'_blank'
 		);
 
