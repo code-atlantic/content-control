@@ -12,9 +12,9 @@ use ContentControl\Base\Controller;
 
 use function ContentControl\redirect;
 use function ContentControl\set_query_to_page;
+use function ContentControl\query_can_be_ignored;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_restriction_matches_for_queried_posts;
-use function ContentControl\query_can_be_ignored;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,11 +29,7 @@ class QueryPosts extends Controller {
 	 * Initiate functionality.
 	 */
 	public function init() {
-		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
-		// Can be done on send_headers, posts_selection, or wp as well.
-		// add_action( 'template_redirect', [ $this, 'restrict_main_query_posts' ], 10 );
 		add_filter( 'the_posts', [ $this, 'restrict_query_posts' ], 10, 2 );
-
 		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
 	}
 
