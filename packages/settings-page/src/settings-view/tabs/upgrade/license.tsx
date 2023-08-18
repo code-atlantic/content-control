@@ -220,7 +220,7 @@ const LicenseTab = () => {
 					} }
 				/>
 
-				{ <UpgradeFeatures /> }
+				{ ! isLicenseKeyValid && <UpgradeFeatures /> }
 
 				<p
 					dangerouslySetInnerHTML={ {
