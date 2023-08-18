@@ -143,12 +143,6 @@ $gap4: $gap * 4;
 	}
 
 	.components-base-control {
-		&:not(.title-field,.description-field) {
-			margin-bottom: $gap2;
-		}
-	}
-
-	.components-base-control {
 		&.is-large {
 			.components-text-control__input {
 				padding: 1em;
@@ -235,6 +229,12 @@ $gap4: $gap * 4;
 	}
 
 	.general-tab {
+		.components-base-control {
+			&:not(.title-field, .description-field) {
+				margin-bottom: $gap2;
+			}
+		}
+
 		.title-field {
 			.components-text-control__input {
 				height: auto;
@@ -274,14 +274,19 @@ $gap4: $gap * 4;
 			}
 		}
 
-		.roleMatch-field {
+		.userRoles-field {
+			.components-base-control,
 			.components-base-control__field {
-				margin-bottom: $gap2;
+				margin-bottom: 0;
 			}
 		}
 	}
 
 	.protection-tab {
+		.components-base-control {
+			margin-bottom: $gap2;
+		}
+
 		h3 {
 			margin-top: 0;
 		}
