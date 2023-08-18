@@ -203,6 +203,10 @@ const ProtectionTab = ( { values, updateSettings }: EditTabProps ) => {
 					onChange={ ( overrideMessage ) =>
 						updateSettings( { overrideMessage } )
 					}
+					help={ __(
+						"Edit the default message via the plugin's Settings page.",
+						'content-control'
+					) }
 				/>
 			) }
 
