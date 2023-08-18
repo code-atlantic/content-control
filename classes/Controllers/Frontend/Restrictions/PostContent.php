@@ -27,7 +27,7 @@ class PostContent extends Controller {
 	 * Initiate functionality.
 	 */
 	public function init() {
-		// add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
+		add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
 		// add_filter( 'get_the_excerpt', [ $this, 'get_the_excerpt_if_restricted' ], 1000, 2 );
 
 		// add_filter( 'the_title', [ $this, 'filter_the_title_if_restricted'], 1000, 2 );
