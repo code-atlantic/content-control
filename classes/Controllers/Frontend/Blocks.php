@@ -9,7 +9,8 @@
 namespace ContentControl\Controllers\Frontend;
 
 use ContentControl\Base\Controller;
-use function ContentControl\user_is_excluded;
+
+use function ContentControl\protection_is_disabled;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -106,7 +107,11 @@ class Blocks extends Controller {
 			// TODO for some reason, controls applied to core/navigation-link are not being saved, or not appearing in attrs.
 		}
 
-		if ( user_is_excluded() || ! isset( $parsed_block['attrs']['contentControls'] ) ) {
+		if ( ! isset( $parsed_block['attrs']['contentControls'] ) ) {
+			return $pre_render;
+		}
+
+		if ( protection_is_disabled() ) {
 			return $pre_render;
 		}
 
