@@ -136,7 +136,7 @@ class Blocks extends Controller {
 		}
 
 		$user_status = ! empty( $rules['user']['userStatus'] ) ? $rules['user']['userStatus'] : false;
-		$role_match  = ! empty( $rules['user']['ruleMatch'] ) ? $rules['user']['ruleMatch'] : 'any';
+		$role_match  = ! empty( $rules['user']['roleMatch'] ) ? $rules['user']['roleMatch'] : 'any';
 		$user_roles  = ! empty( $rules['user']['userRoles'] ) ? $rules['user']['userRoles'] : [];
 
 		if ( ! \ContentControl\user_meets_requirements( $user_status, $user_roles, $role_match ) ) {
