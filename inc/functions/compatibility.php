@@ -83,18 +83,24 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
+	/**
+	 * WP Query.
+	 *
+	 * @var \WP_Query $query
+	 */
 	$query = get_query();
 
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	if (
+		is_rest() ||
+		is_cron() ||
+		is_ajax() ||
 		$query->is_admin() ||
-			is_cron() ||
-			is_ajax() ||
-			$query->is_favicon() ||
-			strpos( $request_uri, 'favicon.ico' ) ||
-			$query->is_robots() ||
-			strpos( $request_uri, 'robots.txt' )
+		$query->is_favicon() ||
+		strpos( $request_uri, 'favicon.ico' ) ||
+		$query->is_robots() ||
+		strpos( $request_uri, 'robots.txt' )
 	) {
 		return false;
 	}
