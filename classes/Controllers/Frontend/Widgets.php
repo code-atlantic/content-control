@@ -47,6 +47,11 @@ class Widgets extends Controller {
 				foreach ( $widgets as $position => $widget_id ) {
 					$options = get_widget_options( $widget_id );
 
+					// If no options, then skip this one.
+					if ( empty( $options['which_users'] ) ) {
+						continue;
+					}
+
 					// If not accessible then exclude this item.
 
 					/**
