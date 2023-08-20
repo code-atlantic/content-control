@@ -77,10 +77,13 @@ class Blocks extends Controller {
 	 * @return string|null
 	 */
 	public function pre_render_block( $pre_render, $parsed_block, $parent_block ) {
-		if ( $parsed_block['blockName'] === 'core/navigation' ) {
-			$nav_menu_ref   = $parsed_block['attrs']['ref'];
-			$navigation_post = get_post( $nav_menu_ref  );
-			$parsed_blocks = parse_blocks( $navigation_post->post_content );
+		if ( 'core/navigation' === $parsed_block['blockName'] ) {
+			$nav_menu_ref = ! empty( $parsed_block['attrs']['ref'] ) ? $parsed_block['attrs']['ref'] : 0;
+
+			if ( $nav_menu_ref ) {
+				$navigation_post = get_post( $nav_menu_ref );
+				$parsed_blocks   = parse_blocks( $navigation_post->post_content );
+			}
 
 			// TODO for some reason, controls applied to core/navigation-link are not being saved, or not appearing in attrs.
 		}
