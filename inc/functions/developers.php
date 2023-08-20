@@ -58,6 +58,19 @@ function user_can_view_content( $post_id = null ) {
 		return true;
 	}
 
+	if ( (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
+		$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $post_id );
+
+		$checks = [];
+
+		foreach ( $restrictions as $restriction ) {
+			$checks[] = $restriction->user_meets_requirements();
+		}
+
+		// When checking all, we are looking for any true value.
+		return in_array( true, $checks, true );
+	}
+
 	$restriction = get_applicable_restriction( $post_id );
 
 	if ( ! $restriction ) {
