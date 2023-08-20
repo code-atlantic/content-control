@@ -26,10 +26,28 @@ class Blocks extends Controller {
 			return;
 		}
 
+		add_action( 'wp_loaded', [ $this, 'register_block_attributes' ], 100 );
 		add_filter( 'pre_render_block', [ $this, 'pre_render_block' ], 10, 3 );
 		add_filter( 'render_block', [ $this, 'render_block' ], 10, 2 );
 		add_filter( 'content_control/should_hide_block', [ $this, 'block_user_rules' ], 10, 2 );
 		add_action( 'wp_print_styles', [ $this, 'print_block_styles' ] );
+	}
+
+	/**
+	 * Adds custom attributes to allowed block attributes.
+	 */
+	public function register_block_attributes() {
+		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+		foreach ( $registered_blocks as $name => $block ) {
+			$block->attributes['contentControls'] = [
+				'type'    => 'object',
+				'default' => [
+					'enabled' => false,
+					'rules'   => [],
+				],
+			];
+		}
 	}
 
 	/**
