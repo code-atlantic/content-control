@@ -117,9 +117,41 @@ class Restrictions {
 	 *
 	 * Careful, this could be very unperformant if you have a lot of restrictions.
 	 *
-	 * @return array
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return Restriction[]
 	 */
-	public function get_all_applicable_restrictions() {
+	public function get_all_applicable_restrictions( $post_id = null ) {
+		$query      = get_query();
+		$context    = current_query_context();
+		$query_hash = md5( maybe_serialize( $query->query_vars ) );
+		$cache_name = 'applicable_restriction';
+
+		if ( is_null( $post_id ) ) {
+			$post_id = \get_the_ID();
+		}
+
+		switch ( $context ) {
+			case 'main':
+				$cache_key = 'main';
+				break;
+
+			case 'main/posts':
+			case 'posts':
+				$cache_key = 'post-' . $post_id;
+				break;
+
+			default:
+				$cache_key = $context . '_' . $query_hash . ( $post_id ? ( '_post-' . $post_id ) : '' );
+				break;
+		}
+
+		$cache_key = 'all_' . $cache_key;
+
+		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
+			return $this->cache[ $cache_name ][ $cache_key ];
+		}
+
 		$restrictions = $this->get_restrictions();
 
 		if ( ! empty( $restrictions ) ) {
@@ -129,6 +161,8 @@ class Restrictions {
 				}
 			}
 		}
+
+		$this->cache[ $cache_name ][ $cache_key ] = $restrictions;
 
 		return $restrictions;
 	}
@@ -167,6 +201,8 @@ class Restrictions {
 				$cache_key = $context . '_' . $query_hash . ( $post_id ? ( '_post-' . $post_id ) : '' );
 				break;
 		}
+
+		$cache_key = 'first_' . $cache_key;
 
 		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
 			return $this->cache[ $cache_name ][ $cache_key ];
