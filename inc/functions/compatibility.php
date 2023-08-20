@@ -96,6 +96,7 @@ function is_frontend() {
 		is_rest() ||
 		is_cron() ||
 		is_ajax() ||
+		is_admin() ||
 		$query->is_admin() ||
 		$query->is_favicon() ||
 		strpos( $request_uri, 'favicon.ico' ) ||
