@@ -88,8 +88,8 @@ export const blockControlsEnabled = (
 
 	// Enabled by default for all insertable block types. (Temporary).
 	if (
-		hasBlockSupport( name, 'inserter', true ) &&
-		! Object.prototype.hasOwnProperty.call( settings, 'parent' )
+		hasBlockSupport( name, 'inserter', true )
+		// ! Object.prototype.hasOwnProperty.call( settings, 'parent' )
 	) {
 		return true;
 	}
