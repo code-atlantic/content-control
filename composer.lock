@@ -318,12 +318,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/code-atlantic/coding-standards.git",
-                "reference": "c8a769696fdb64c2fee9d7354346f58624fcc867"
+                "reference": "6454d27d1e1748577c93b97bef60060724451a7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/code-atlantic/coding-standards/zipball/c8a769696fdb64c2fee9d7354346f58624fcc867",
-                "reference": "c8a769696fdb64c2fee9d7354346f58624fcc867",
+                "url": "https://api.github.com/repos/code-atlantic/coding-standards/zipball/6454d27d1e1748577c93b97bef60060724451a7c",
+                "reference": "6454d27d1e1748577c93b97bef60060724451a7c",
                 "shasum": ""
             },
             "require": {
@@ -341,7 +341,7 @@
                 "issues": "https://github.com/code-atlantic/coding-standards/issues",
                 "source": "https://github.com/code-atlantic/coding-standards/tree/develop"
             },
-            "time": "2022-10-09T09:15:08+00:00"
+            "time": "2023-07-18T14:20:36+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -880,21 +880,21 @@
         },
         {
             "name": "phpcsstandards/phpcsextra",
-            "version": "1.0.4",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSExtra.git",
-                "reference": "029af41e270ae73f10c0e9a1ce376b12da4e4810"
+                "reference": "61a9be9f74a53735f7c421d7de8dc64fa80488e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/029af41e270ae73f10c0e9a1ce376b12da4e4810",
-                "reference": "029af41e270ae73f10c0e9a1ce376b12da4e4810",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/61a9be9f74a53735f7c421d7de8dc64fa80488e6",
+                "reference": "61a9be9f74a53735f7c421d7de8dc64fa80488e6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
-                "phpcsstandards/phpcsutils": "^1.0.6",
+                "phpcsstandards/phpcsutils": "^1.0.8",
                 "squizlabs/php_codesniffer": "^3.7.1"
             },
             "require-dev": {
@@ -939,7 +939,7 @@
                 "issues": "https://github.com/PHPCSStandards/PHPCSExtra/issues",
                 "source": "https://github.com/PHPCSStandards/PHPCSExtra"
             },
-            "time": "2023-06-17T22:57:40+00:00"
+            "time": "2023-07-19T19:40:11+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -1126,16 +1126,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.7.2",
+            "version": "1.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "b2fe4d22a5426f38e014855322200b97b5362c0d"
+                "reference": "3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/b2fe4d22a5426f38e014855322200b97b5362c0d",
-                "reference": "b2fe4d22a5426f38e014855322200b97b5362c0d",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419",
+                "reference": "3219c6ee25c9ea71e3d9bbaf39c67c9ebd499419",
                 "shasum": ""
             },
             "require": {
@@ -1178,9 +1178,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.7.2"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.7.3"
             },
-            "time": "2023-05-30T18:13:47+00:00"
+            "time": "2023-08-12T11:01:26+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -1251,16 +1251,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.22.1",
+            "version": "1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0"
+                "reference": "846ae76eef31c6d7790fac9bc399ecee45160b26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/65c39594fbd8c67abfc68bb323f86447bab79cc0",
-                "reference": "65c39594fbd8c67abfc68bb323f86447bab79cc0",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/846ae76eef31c6d7790fac9bc399ecee45160b26",
+                "reference": "846ae76eef31c6d7790fac9bc399ecee45160b26",
                 "shasum": ""
             },
             "require": {
@@ -1292,9 +1292,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.22.1"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.23.1"
             },
-            "time": "2023-06-29T20:46:06+00:00"
+            "time": "2023-08-03T16:32:59+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2523,19 +2523,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "0734364f65df0cfb9e8d858b47f9c98fb0743372"
+                "reference": "1eb217b1c69cdb085d409c59671901aa22704f1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/0734364f65df0cfb9e8d858b47f9c98fb0743372",
-                "reference": "0734364f65df0cfb9e8d858b47f9c98fb0743372",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/1eb217b1c69cdb085d409c59671901aa22704f1f",
+                "reference": "1eb217b1c69cdb085d409c59671901aa22704f1f",
                 "shasum": ""
             },
             "require": {
                 "ext-filter": "*",
+                "ext-libxml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlreader": "*",
                 "php": ">=5.4",
-                "phpcsstandards/phpcsextra": "^1.0",
-                "phpcsstandards/phpcsutils": "^1.0.7",
+                "phpcsstandards/phpcsextra": "^1.1.0",
+                "phpcsstandards/phpcsutils": "^1.0.8",
                 "squizlabs/php_codesniffer": "^3.7.2"
             },
             "require-dev": {
@@ -2546,6 +2549,7 @@
                 "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "suggest": {
+                "ext-iconv": "For improved results",
                 "ext-mbstring": "For improved results"
             },
             "default-branch": true,
@@ -2572,20 +2576,20 @@
                 "source": "https://github.com/WordPress/WordPress-Coding-Standards",
                 "wiki": "https://github.com/WordPress/WordPress-Coding-Standards/wiki"
             },
-            "time": "2023-07-11T09:36:30+00:00"
+            "time": "2023-08-19T08:47:28+00:00"
         },
         {
             "name": "yoast/phpunit-polyfills",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast/PHPUnit-Polyfills.git",
-                "reference": "3b59adeef77fb1c03ff5381dbb9d68b0aaff3171"
+                "reference": "224e4a1329c03d8bad520e3fc4ec980034a4b212"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/3b59adeef77fb1c03ff5381dbb9d68b0aaff3171",
-                "reference": "3b59adeef77fb1c03ff5381dbb9d68b0aaff3171",
+                "url": "https://api.github.com/repos/Yoast/PHPUnit-Polyfills/zipball/224e4a1329c03d8bad520e3fc4ec980034a4b212",
+                "reference": "224e4a1329c03d8bad520e3fc4ec980034a4b212",
                 "shasum": ""
             },
             "require": {
@@ -2632,7 +2636,7 @@
                 "issues": "https://github.com/Yoast/PHPUnit-Polyfills/issues",
                 "source": "https://github.com/Yoast/PHPUnit-Polyfills"
             },
-            "time": "2023-03-30T23:39:05+00:00"
+            "time": "2023-08-19T14:25:08+00:00"
         }
     ],
     "aliases": [],
