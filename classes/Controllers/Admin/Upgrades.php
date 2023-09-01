@@ -418,6 +418,15 @@ class Upgrades extends Controller {
 		foreach ( $upgrades as  $upgrade ) {
 			$upgrade_name = get_upgrade_name( $upgrade );
 
+			switch( $upgrade->get_type() ) {
+				case 'restrictions':
+					$vars['hasRestrictionUpgrades'] = true;
+					break;
+				case 'settings':
+					$vars['hasSettingsUpgrades'] = true;
+					break;
+			}
+
 			$vars['upgrades'][ $upgrade_name ] = [
 				'key'         => $upgrade_name,
 				'label'       => $upgrade->label(),
