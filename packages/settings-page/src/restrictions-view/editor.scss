@@ -3,6 +3,10 @@ $gap2: $gap * 2;
 $gap3: $gap * 3;
 $gap4: $gap * 4;
 
+.restriction-list {
+	position: relative;
+}
+
 .cc-settings-page.view-restrictions {
 	header.cc-settings-view__header {
 		display: flex;

@@ -1,4 +1,8 @@
 .cc-settings-page {
+	.plugin-settings {
+		position: relative;
+	}
+
 	.cc-settings-view {
 		&.permission-denied {
 			text-align: center;
