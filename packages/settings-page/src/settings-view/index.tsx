@@ -12,6 +12,7 @@ import GeneralTab from './tabs/general';
 import UpgradeTab from './tabs/upgrade';
 
 import type { TabComponent } from '../types';
+import HasUpgrades from '../has-upgrades';
 
 const {
 	permissions: { manage_settings: userCanManageSettings },
@@ -73,9 +74,12 @@ const SettingsView = () => {
 
 	return (
 		<div className={ classNames( [ 'cc-settings-view', `tab-${ tab }` ] ) }>
-			<Header tabs={ tabs } />
-			<div className="cc-settings-view__content">
-				{ Component ? <Component /> : title }
+			<div className="plugin-settings">
+				<HasUpgrades type="settings" />
+				<Header tabs={ tabs } />
+				<div className="cc-settings-view__content">
+					{ Component ? <Component /> : title }
+				</div>
 			</div>
 		</div>
 	);

@@ -8,6 +8,7 @@ import Edit from './edit';
 import Header from './header';
 import List from './list';
 import Notices from './notices';
+import HasUpgrades from '../has-upgrades';
 
 const {
 	permissions: { edit_restrictions: userCanEditRestrictions },
@@ -43,6 +44,7 @@ const RestrictionsView = () => {
 
 	return (
 		<div className="restriction-list">
+			<HasUpgrades type="restrictions" />
 			<Notices />
 			<Header />
 			<List />
