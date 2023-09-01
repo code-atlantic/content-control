@@ -19,6 +19,8 @@ declare global {
 		userRoles: { [ key: string ]: string };
 		restBase: string;
 		hasUpgrades?: boolean;
+		hasRestrictionUpgrades?: boolean;
+		hasSettingsUpgrades?: boolean;
 		upgradeNonce?: string;
 		upgradeUrl?: string;
 		upgrades: [];
