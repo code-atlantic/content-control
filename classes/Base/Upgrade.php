@@ -70,6 +70,15 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	}
 
 	/**
+	 * Get the type of upgrade.
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		return static::TYPE;
+	}
+
+	/**
 	 * Check if the prerequisites are met.
 	 *
 	 * @return bool
