@@ -58,26 +58,28 @@ function user_can_view_content( $post_id = null ) {
 		return true;
 	}
 
-	if ( (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
+	$can_view = true;
+
+	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
+		$restriction = get_applicable_restriction( $post_id );
+
+		if ( null !== $restriction ) {
+			$can_view = $restriction->user_meets_requirements();
+		}
+	} else {
 		$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $post_id );
 
-		$checks = [];
+		if ( count( $restrictions ) ) {
+			$checks = [];
 
-		foreach ( $restrictions as $restriction ) {
-			$checks[] = $restriction->user_meets_requirements();
+			foreach ( $restrictions as $restriction ) {
+				$checks[] = $restriction->user_meets_requirements();
+			}
+
+			// When checking all, we are looking for any true value.
+			$can_view = in_array( true, $checks, true );
 		}
-
-		// When checking all, we are looking for any true value.
-		return in_array( true, $checks, true );
 	}
-
-	$restriction = get_applicable_restriction( $post_id );
-
-	if ( ! $restriction ) {
-		return true;
-	}
-
-	$can_view = $restriction->user_meets_requirements();
 
 	/**
 	 * Filter whether user can view content.
