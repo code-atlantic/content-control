@@ -263,12 +263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/trustedlogin/client.git",
-                "reference": "7a72ec47f0618376c9599dfb5ae61a83b34cc80e"
+                "reference": "2dc5c86e270c00548d7396eff53ad3532d9bf1d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trustedlogin/client/zipball/7a72ec47f0618376c9599dfb5ae61a83b34cc80e",
-                "reference": "7a72ec47f0618376c9599dfb5ae61a83b34cc80e",
+                "url": "https://api.github.com/repos/trustedlogin/client/zipball/2dc5c86e270c00548d7396eff53ad3532d9bf1d9",
+                "reference": "2dc5c86e270c00548d7396eff53ad3532d9bf1d9",
                 "shasum": ""
             },
             "require-dev": {
@@ -308,7 +308,7 @@
                 "issues": "https://github.com/trustedlogin/client/issues",
                 "source": "https://github.com/trustedlogin/client/tree/develop"
             },
-            "time": "2023-06-05T23:25:23+00:00"
+            "time": "2023-08-31T20:33:35+00:00"
         }
     ],
     "packages-dev": [
@@ -880,16 +880,16 @@
         },
         {
             "name": "phpcsstandards/phpcsextra",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSExtra.git",
-                "reference": "61a9be9f74a53735f7c421d7de8dc64fa80488e6"
+                "reference": "98bcdbacbda14b1db85f710b1853125726795bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/61a9be9f74a53735f7c421d7de8dc64fa80488e6",
-                "reference": "61a9be9f74a53735f7c421d7de8dc64fa80488e6",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/98bcdbacbda14b1db85f710b1853125726795bbc",
+                "reference": "98bcdbacbda14b1db85f710b1853125726795bbc",
                 "shasum": ""
             },
             "require": {
@@ -939,7 +939,7 @@
                 "issues": "https://github.com/PHPCSStandards/PHPCSExtra/issues",
                 "source": "https://github.com/PHPCSStandards/PHPCSExtra"
             },
-            "time": "2023-07-19T19:40:11+00:00"
+            "time": "2023-08-26T04:46:45+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -2523,12 +2523,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "1eb217b1c69cdb085d409c59671901aa22704f1f"
+                "reference": "bb792cb331472b82c5d7f28fb9b8ec2d20f68826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/1eb217b1c69cdb085d409c59671901aa22704f1f",
-                "reference": "1eb217b1c69cdb085d409c59671901aa22704f1f",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/bb792cb331472b82c5d7f28fb9b8ec2d20f68826",
+                "reference": "bb792cb331472b82c5d7f28fb9b8ec2d20f68826",
                 "shasum": ""
             },
             "require": {
@@ -2576,7 +2576,7 @@
                 "source": "https://github.com/WordPress/WordPress-Coding-Standards",
                 "wiki": "https://github.com/WordPress/WordPress-Coding-Standards/wiki"
             },
-            "time": "2023-08-19T08:47:28+00:00"
+            "time": "2023-08-21T14:28:38+00:00"
         },
         {
             "name": "yoast/phpunit-polyfills",
