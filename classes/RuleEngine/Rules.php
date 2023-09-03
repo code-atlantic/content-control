@@ -17,7 +17,7 @@ class Rules {
 	 *
 	 * @var array
 	 */
-	public $data = [];
+	private $data = [];
 
 	/**
 	 * Current global rule instance.
@@ -25,13 +25,6 @@ class Rules {
 	 * @var Rule
 	 */
 	public $current_rule = null;
-
-	/**
-	 * Rules constructor.
-	 */
-	public function __construct() {
-		$this->init();
-	}
 
 	/**
 	 * Get the current global rule instance.
@@ -53,7 +46,10 @@ class Rules {
 	 * @return void
 	 */
 	public function init() {
+		// Register rules.
 		$this->register_built_in_rules();
+
+		// Register deprecated rules (using old filter).
 		$this->register_deprecated_rules();
 	}
 
@@ -102,6 +98,10 @@ class Rules {
 	 * @return array
 	 */
 	public function get_rules() {
+		if ( ! did_action( 'content_control/rule_engine/register_rules' ) ) {
+			$this->init();
+		}
+
 		return $this->data;
 	}
 
@@ -112,7 +112,8 @@ class Rules {
 	 * @return array|null
 	 */
 	public function get_rule( $rule_name ) {
-		return isset( $this->data[ $rule_name ] ) ? $this->data[ $rule_name ] : null;
+		$rules = $this->get_rules();
+		return isset( $rules[ $rule_name ] ) ? $rules[ $rule_name ] : null;
 	}
 
 	/**
@@ -130,7 +131,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		return apply_filters( 'content_control/rule_engine_rules', $rules );
+		return apply_filters( 'content_control/rule_engine/get_block_editor_rules', $rules );
 	}
 
 	/**
@@ -164,8 +165,6 @@ class Rules {
 	 * @return void
 	 */
 	private function register_built_in_rules() {
-		$verbs = $this->get_verbs();
-
 		$rules = array_merge(
 			$this->get_user_rules(),
 			$this->get_general_content_rules(),
@@ -173,9 +172,27 @@ class Rules {
 			$this->get_taxonomy_rules()
 		);
 
+		/**	
+		 * Allow registering additional rules quickly.
+		 *
+		 * @param array $rules Rules.
+		 *
+		 * @return array
+		 */
+		$rules = apply_filters( 'content_control/rule_engine/rules', $rules );
+
 		foreach ( $rules as $rule ) {
 			$this->register_rule( $rule );
 		}
+
+		/**
+		 * Allow manipulating registered rules.
+		 *
+		 * @param Rules $this Rules instance.
+		 *
+		 * @return void
+		 */
+		do_action( 'content_control/rule_engine/register_rules', $this );
 	}
 
 	/**
