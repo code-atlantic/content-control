@@ -102,7 +102,7 @@ class Rule extends Item {
 
 		if ( ! $this->definition ) {
 			/* translators: 1. Rule name. */
-			throw new \Exception( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
+			throw new \Exception( esc_html( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) ) );
 		}
 
 		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
@@ -152,12 +152,12 @@ class Rule extends Item {
 
 		if ( ! $callback ) {
 			/* translators: 1. Rule name. */
-			throw new \Exception( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) );
+			throw new \Exception( esc_html( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) ) );
 		}
 
 		if ( ! is_callable( $callback ) ) {
 			/* translators: 1. Rule name. 2. Callback name. */
-			throw new \Exception( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) );
+			throw new \Exception( esc_html( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) ) );
 		}
 
 		// Set global current rule so it can be easily accessed.
