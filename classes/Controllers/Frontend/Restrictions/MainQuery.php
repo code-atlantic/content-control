@@ -32,11 +32,6 @@ class MainQuery extends Controller {
 		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
 		// Can be done on send_headers, posts_selection, or wp as well.
 		add_action( 'template_redirect', [ $this, 'restrict_main_query' ], 10 );
-
-		// add_filter( 'body_class', [ $this, 'filter_body_class_if_restricted' ], 1000, 2 );
-
-		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
-		// add_filter( 'the_password_form', [ $this, 'filter_password_form_if_restricted' ], 1000, 2 );
 	}
 
 	/**

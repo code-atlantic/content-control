@@ -181,7 +181,8 @@ class Connect {
 				'version'  => plugin( 'version' ),
 				'siteurl'  => admin_url(),
 				'homeurl'  => home_url(),
-				'redirect' => rawurldecode(base64_encode($redirect)), // phpcs:ignore
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				'redirect' => rawurldecode( base64_encode( $redirect ) ),
 			],
 			self::API_URL
 		);
@@ -316,6 +317,7 @@ class Connect {
 			// Sort the array before encoding it as JSON.
 			ksort( $data );
 
+			// Ignored due to wp_json_encode stripping slashes and breaking hashes.
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
 			$data = json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		}
@@ -327,7 +329,8 @@ class Connect {
 		$this->debug_log( 'Data: ' . $data, 'DEBUG' );
 
 		// Encode the hash in base64 to make it URL safe.
-		return base64_encode( $hash ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		return base64_encode( $hash );
 	}
 
 	/**
@@ -344,7 +347,8 @@ class Connect {
 		$signature = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_CONTENTCONTROL_SIGNATURE'] ) );
 
 		// Calculate the expected signature.
-		$expected_signature = $this->generate_hash( $_POST, $this->get_access_token() ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$expected_signature = $this->generate_hash( $_POST, $this->get_access_token() );
 
 		// Compare the expected signature to the received signature.
 		if ( ! hash_equals( $expected_signature, $signature ) ) {

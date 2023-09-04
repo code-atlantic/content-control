@@ -167,7 +167,8 @@ class Upgrader {
 				}
 
 				$this->debug_log( 'Filtering update_plugins transient to replace package with file.' );
-				$this->debug_log( 'Current: ' . print_r( $current->response[ $plugin_basename ], true ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+				$this->debug_log( 'Current: ' . print_r( $current->response[ $plugin_basename ], true ) );
 				return $current;
 			}, 10, 1 );
 

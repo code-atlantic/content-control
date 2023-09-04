@@ -172,7 +172,7 @@ class Rules {
 			$this->get_taxonomy_rules()
 		);
 
-		/**	
+		/**
 		 * Allow registering additional rules quickly.
 		 *
 		 * @param array $rules Rules.

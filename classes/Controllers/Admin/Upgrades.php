@@ -418,7 +418,7 @@ class Upgrades extends Controller {
 		foreach ( $upgrades as  $upgrade ) {
 			$upgrade_name = get_upgrade_name( $upgrade );
 
-			switch( $upgrade->get_type() ) {
+			switch ( $upgrade->get_type() ) {
 				case 'restrictions':
 					$vars['hasRestrictionUpgrades'] = true;
 					break;

@@ -469,12 +469,6 @@ class Reviews extends Controller {
 				gap: 16px;
 				align-items: center;
 			}
-			.content-control-notice .review-actions li {
-
-			}
-
-			.content-control-notice .five-stars {}
-
 			.content-control-notice .five-stars::before {
 				content: "★★★★★";
 				color: #f0ad4e;

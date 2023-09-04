@@ -154,7 +154,7 @@ class Core {
 		 */
 		$GLOBALS['content_control'] = $this->container;
 
-		$this->container['options'] = function( $c ) {
+		$this->container['options'] = function ( $c ) {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
 
@@ -170,7 +170,7 @@ class Core {
 			return new \ContentControl\Plugin\Logging( $c );
 		};
 
-		$this->container['upgrader'] = function( $c ) {
+		$this->container['upgrader'] = function ( $c ) {
 			return new \ContentControl\Plugin\Upgrader( $c );
 		};
 

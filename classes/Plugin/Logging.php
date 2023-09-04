@@ -128,7 +128,6 @@ class Logging {
 	 */
 	public function enabled() {
 		return ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) || ! CONTENT_CONTROL_DISABLE_LOGGING && $this->is_writable();
-		// return defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING && $this->is_writable();
 	}
 
 	/**
@@ -391,7 +390,8 @@ class Logging {
 	 */
 	public function clear_log() {
 		// Delete the file.
-		@$this->fs()->delete( $this->file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		@$this->fs()->delete( $this->file );
 
 		if ( $this->enabled() ) {
 			$this->setup_new_log();

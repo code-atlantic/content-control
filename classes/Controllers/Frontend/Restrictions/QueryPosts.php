@@ -30,7 +30,6 @@ class QueryPosts extends Controller {
 	 */
 	public function init() {
 		add_filter( 'the_posts', [ $this, 'restrict_query_posts' ], 10, 2 );
-		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
 	}
 
 	/**

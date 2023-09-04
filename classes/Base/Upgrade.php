@@ -126,7 +126,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	 * @return \ContentControl\Services\UpgradeStream|Object $stream Stream.
 	 */
 	public function stream() {
-		$noop = function() {};
+		$noop = function () {};
 
 		return isset( $this->stream ) ? $this->stream : (object) [
 			'send_event'           => $noop,

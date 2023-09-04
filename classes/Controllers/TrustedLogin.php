@@ -103,7 +103,7 @@ class TrustedLogin extends Controller {
 			__( 'Content Control Support Access', 'content-control' ),
 			$this->container->get_permission( 'manage_settings' ),
 			'grant-content-control-access',
-			function() {
+			function () {
 				// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 				do_action( 'trustedlogin/content-control/auth_screen' );
 			}
