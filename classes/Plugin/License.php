@@ -407,8 +407,7 @@ class License {
 				$message = sprintf(
 					/* translators: the license key expiration date */
 					__( 'Your license key expired on %s.', 'content-control' ),
-					// phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-					date_i18n( \get_option( 'date_format' ), strtotime( $license_status['expires'], current_time( 'timestamp' ) ) )
+					date_i18n( \get_option( 'date_format' ), strtotime( $license_status['expires'], time() ) )
 				);
 				break;
 
