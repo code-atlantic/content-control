@@ -23,10 +23,5 @@
 	<config name="text_domain" value="content-control, default" />
 
 	<!-- Force short syntax arrays. -->
-	<rule ref="CodeAtlantic">
-		<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
-		<rule ref="Universal.Arrays.DisallowLongArraySyntax.Found"/>
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax" />
-		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found" />
-	</rule>
+	<rule ref="CodeAtlantic" />
 </ruleset>

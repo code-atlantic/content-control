@@ -10,8 +10,8 @@
         "trustedlogin/client": "dev-develop"
     },
     "require-dev": {
-        "code-atlantic/coding-standards": "dev-develop",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "code-atlantic/coding-standards": "^1.1.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
         "php": ">=7.3",
         "phpunit/phpunit": "^6.5",
         "yoast/phpunit-polyfills": "^1.0"
