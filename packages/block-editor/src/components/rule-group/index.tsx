@@ -8,6 +8,8 @@ import {
 } from '../../contexts';
 import RuleGroupHeader from './header';
 
+import type React from 'react';
+
 import type { BlockControlGroups } from '../../types';
 
 import type { IconType } from '@wordpress/components';
@@ -40,6 +42,9 @@ type RuleGroupProps = React.PropsWithChildren< {
 /**
  * Main component provides group based context and renders the rest of
  * the groups components.
+ *
+ * @param {RuleGroupProps} props Props.
+ * @return {React.ReactElement}  RuleGroup.
  */
 const RuleGroup = ( { label, groupId, icon, children }: RuleGroupProps ) => {
 	return (

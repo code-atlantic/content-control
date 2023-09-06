@@ -142,7 +142,7 @@ const PasteMenuItem = ( {
 								) }
 								hideLabelFromVision={ true }
 								placeholder={ __(
-									'Paste settings string here...',
+									'Paste settings string here…',
 									'content-control'
 								) }
 								value={ data.text }

@@ -9,6 +9,8 @@ import UserRules from './user-rules';
 import DeviceRules from './device-rules';
 import { RulesInspectorSlot, RulesInspector } from '../rules-inspector';
 
+import type React from 'react';
+
 type Props = {};
 
 addFilter(

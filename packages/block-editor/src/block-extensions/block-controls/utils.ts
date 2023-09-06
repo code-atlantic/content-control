@@ -19,7 +19,7 @@ const getExcludedBlocks = () => {
 /**
  * Array of explicitly allowed block types.
  *
- * @returns {string[]} Array of explicitly allowed block types.
+ * @return {string[]} Array of explicitly allowed block types.
  */
 export const explicitlyAllowedBlocks = (): string[] =>
 	/**
@@ -37,7 +37,7 @@ export const explicitlyAllowedBlocks = (): string[] =>
 /**
  * Array of explicitly excluded block types.
  *
- * @returns {string[]} Array of explicitly excluded block types.
+ * @return {string[]} Array of explicitly excluded block types.
  */
 export const explicitlyExcludedBlocks = (): string[] =>
 	/**
@@ -102,7 +102,7 @@ export const blockControlsEnabled = (
  * Check if block instance has controls.
  *
  * @param {BlockInstanceWithControls} settings Instance of block, maybe with controls.
- * @returns {boolean} Whether block has controls.
+ * @return {boolean} Whether block has controls.
  */
 export const blockHasControls = (
 	settings: BlockInstanceWithControls

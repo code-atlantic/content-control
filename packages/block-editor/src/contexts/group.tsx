@@ -34,8 +34,7 @@ export const BlockControlsGroupContextProvider = ( {
 /**
  * Get block controls context for specific group.
  *
- * @param groupId Group ID.
- * @returns BlockControls contextually bound to group ID.
+ * @return BlockControls contextually bound to group ID.
  */
 export const useBlockControlsForGroup = < K extends BlockControlGroups >() => {
 	const parentContext = useBlockControls();

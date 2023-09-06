@@ -50,7 +50,7 @@ const RuleGroupHeader = () => {
 						) }
 						toggleProps={ {
 							isSmall: true,
-							iconSize: iconSize,
+							iconSize,
 							className: 'cc__rules-group__options-toggle',
 						} }
 						menuProps={ {
@@ -62,7 +62,7 @@ const RuleGroupHeader = () => {
 								<OptionalGroupOptions
 									items={ additionalOptions }
 									toggleItem={ ( item: string ) => {
-										item; // Here to prevent TS error.
+										return item; // Here to prevent TS error.
 									} }
 									onClose={ onClose }
 								/>

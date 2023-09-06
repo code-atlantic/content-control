@@ -28,6 +28,7 @@
 	"dependencies": {
 		"@content-control/components": "*",
 		"@content-control/core-data": "*",
+		"@content-control/icons": "*",
 		"@content-control/rule-engine": "*",
 		"@content-control/utils": "*",
 		"@wordpress/base-styles": "^4.27.0",
@@ -52,6 +53,8 @@
 		"build:tsc": "tsc",
 		"build:types": "tsc --build",
 		"clean": "rimraf build build-types tsconfig.tsbuildinfo",
+		"lint": "wp-scripts lint-js .",
+		"format": "wp-scripts lint-js . --fix",
 		"packages-update": "wp-scripts packages-update"
 	}
 }
