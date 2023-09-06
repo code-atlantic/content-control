@@ -40,10 +40,10 @@ class Frontend extends Controller {
 	 * @return void
 	 */
 	public function hooks() {
-		add_filter( 'content_control/post_restricted_content', '\ContentControl\append_post_excerpts', 9, 2 );
-		add_filter( 'content_control/post_restricted_content', '\ContentControl\the_content_filters', 10 );
+		add_filter( 'content_control/restricted_post_content', '\ContentControl\append_post_excerpts', 9, 2 );
+		add_filter( 'content_control/restricted_post_content', '\ContentControl\the_content_filters', 10 );
 
-		add_filter( 'content_control/post_restricted_excerpt', '\ContentControl\append_post_excerpts', 9, 2 );
-		add_filter( 'content_control/post_restricted_excerpt', '\ContentControl\the_excerpt_filters', 10 );
+		add_filter( 'content_control/restricted_post_excerpt', '\ContentControl\append_post_excerpts', 9, 2 );
+		add_filter( 'content_control/restricted_post_excerpt', '\ContentControl\the_excerpt_filters', 10 );
 	}
 }

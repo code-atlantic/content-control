@@ -28,16 +28,15 @@ class PostContent extends Controller {
 	 */
 	public function init() {
 		add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
-		add_filter( 'get_the_excerpt', [ $this, 'get_the_excerpt_if_restricted' ], 1000, 2 );
+		add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
 
+		// phpcs:disable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar -- These are for future use.
 		// add_filter( 'the_title', [ $this, 'filter_the_title_if_restricted'], 1000, 2 );
-		// add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
 		// add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
 		// add_filter( 'post_class', [ $this, 'filter_post_class_if_restricted' ], 1000, 3 );
-		// add_filter( 'body_class', [ $this, 'filter_body_class_if_restricted' ], 1000, 2 );
-
 		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
 		// add_filter( 'the_password_form', [ $this, 'filter_password_form_if_restricted' ], 1000, 2 );
+		// phpcs:enable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar
 	}
 
 	/**
@@ -48,7 +47,7 @@ class PostContent extends Controller {
 	 * @return string
 	 */
 	public function filter_the_content_if_restricted( $content ) {
-		$filter_name = 'content_control/post_restricted_content';
+		$filter_name = 'content_control/restricted_post_content';
 
 		// Ensure we don't get into an infinite loop.
 		if ( doing_filter( $filter_name ) || doing_filter( 'get_the_excerpt' ) ) {
@@ -89,8 +88,8 @@ class PostContent extends Controller {
 	 *
 	 * @return string
 	 */
-	public function get_the_excerpt_if_restricted( $post_excerpt, $post ) {
-		$filter_name = 'content_control/post_restricted_excerpt';
+	public function filter_the_excerpt_if_restricted( $post_excerpt, $post ) {
+		$filter_name = 'content_control/restricted_post_excerpt';
 
 		if ( doing_filter( $filter_name ) ) {
 			return $post_excerpt;
