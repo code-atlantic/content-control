@@ -8,7 +8,7 @@ export interface BlockControls {
 
 export type BlockControlAttrs = {
 	contentControls?: BlockControls;
-	[ key: string ]: any;
+	[ key: string ]: unknown;
 };
 
 export type BlockWithControls = Block< BlockControlAttrs >;

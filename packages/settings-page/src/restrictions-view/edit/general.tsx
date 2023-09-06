@@ -65,7 +65,11 @@ const GeneralTab = ( {
 			/>
 
 			{ values.title.length <= 0 && (
-				<Notice status="warning" isDismissible={ false } className="title-field-notice">
+				<Notice
+					status="warning"
+					isDismissible={ false }
+					className="title-field-notice"
+				>
 					{ __( 'Enter a label for this set.', 'content-control' ) }
 				</Notice>
 			) }
@@ -114,8 +118,14 @@ const GeneralTab = ( {
 						<SearchableMulticheckControl
 							label={
 								'exclude' === settings.roleMatch
-									? __( 'Roles to exclude', 'content-control' )
-									: __( 'Roles to include', 'content-control' )
+									? __(
+											'Roles to exclude',
+											'content-control'
+									  )
+									: __(
+											'Roles to include',
+											'content-control'
+									  )
 							}
 							searchIcon={ search }
 							placeholder={ __(
