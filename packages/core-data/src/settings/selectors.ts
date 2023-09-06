@@ -77,7 +77,7 @@ export const getExcludedBlocks = ( state: SettingsState ): string[] =>
  * Get required cap/permission for given capability.
  *
  * @param {SettingsState} state Current state.
- * @param {T}             cap   Capability to check for.
+ * @param {string}        cap   Capability to check for.
  * @return {string} Mapped WP capability.
  */
 export const getReqPermission = < T extends keyof Settings[ 'permissions' ] >(

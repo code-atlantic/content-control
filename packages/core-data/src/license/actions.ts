@@ -32,8 +32,8 @@ const {
  * Change status of a dispatch action request.
  *
  * @param {LicenseStore[ 'ActionNames' ]} actionName Action name to change status of.
- * @param {Statuses}                       status     New status.
- * @param {string | undefined}             message    Optional error message.
+ * @param {Statuses}                      status     New status.
+ * @param {string | undefined}            message    Optional error message.
  * @return {Object} Action object.
  */
 export const changeActionStatus = (

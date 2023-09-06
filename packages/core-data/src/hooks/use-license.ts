@@ -70,10 +70,12 @@ const useLicense = () => {
 	const hasError = !! licenseStatus?.error;
 
 	// Check if there is a general error.
-	const isGeneralError = isLicenseInvalid && hasError;
-	! [ 'missing', 'expired', 'disabled' ].includes(
-		licenseStatus?.error ?? ''
-	);
+	const isGeneralError =
+		isLicenseInvalid &&
+		hasError &&
+		! [ 'missing', 'expired', 'disabled' ].includes(
+			licenseStatus?.error ?? ''
+		);
 
 	const isLicenseKeyValid = useMemo(
 		() =>
@@ -105,9 +107,8 @@ const useLicense = () => {
 			return 'disabled';
 		} else if ( isGeneralError ) {
 			return 'error';
-		} else {
-			return 'unknown';
 		}
+		return 'unknown';
 	}, [
 		isLicenseActive,
 		isLicenseExpired,

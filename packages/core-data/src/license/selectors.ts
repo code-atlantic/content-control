@@ -13,7 +13,7 @@ import type {
 /**
  *
  * @param {LicenseState} state Current state.
- * @returns {License}
+ * @return {License}           License data.
  */
 export const getLicenseData = ( state: LicenseState ): License => state.license;
 
@@ -31,8 +31,8 @@ export const getLicenseKey = ( state: LicenseState ): LicenseKey => {
 /**
  * Get license status.
  *
- * @param state LicenseState Current state.
- * @returns {LicenseStatus} Current license status.
+ * @param  state LicenseState Current state.
+ * @return {LicenseStatus} Current license status.
  */
 export const getLicenseStatus = ( state: LicenseState ): LicenseStatus => {
 	const { status } = getLicenseData( state );
@@ -46,8 +46,8 @@ export const getLicenseStatus = ( state: LicenseState ): LicenseStatus => {
 /**
  * Get connect info for pro upgrade.
  *
- * @param state LicenseState Current state.
- * @returns {LicenseConnect|undefined} Current license status.
+ * @param  state LicenseState Current state.
+ * @return {LicenseConnect|undefined} Current license status.
  */
 export const getConnectInfo = (
 	state: LicenseState
@@ -69,7 +69,7 @@ export const getDispatchStatus = (
 /**
  * Check if action is dispatching.
  *
- * @param {LicenseState}                                               state       Current state.
+ * @param {LicenseState}                                              state       Current state.
  * @param {LicenseStore['ActionNames']|LicenseStore['ActionNames'][]} actionNames Action name or array of names to check.
  *
  * @return {boolean} True if is dispatching.

@@ -84,8 +84,8 @@ export const getEditorValues = (
 /**
  * Get the next priority number for new restriction.
  *
- * @param state Current state.
- * @returns {number} Next priority number.
+ * @param  state Current state.
+ * @return {number} Next priority number.
  */
 export const getNextPriority = ( state: RestrictionsState ): number => {
 	const restrictions = getRestrictions( state );
