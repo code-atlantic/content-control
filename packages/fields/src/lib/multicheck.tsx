@@ -49,9 +49,12 @@ const MulticheckField = ( {
 					);
 				}
 				return (
-					<BaseControl label={ optLabel }>
+					<BaseControl
+						key={ optValue }
+						id={ fieldProps.id + '-' + optValue.toString() }
+						label={ optLabel }
+					>
 						<FormToggle
-							key={ optValue }
 							checked={ isChecked }
 							onChange={ toggleOption }
 						/>

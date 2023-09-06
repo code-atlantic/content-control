@@ -26,7 +26,7 @@ const CheckboxField = ( {
 	}
 
 	return (
-		<BaseControl label={ label }>
+		<BaseControl id={ fieldProps.id } label={ label }>
 			<FormToggle
 				checked={ value }
 				onChange={ () => onChange( ! value ) }

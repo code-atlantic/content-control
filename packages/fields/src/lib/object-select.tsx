@@ -32,11 +32,6 @@ const ObjectSelectField = ( {
 		setQueryText( text );
 	}, 300 );
 
-	const queryArgs = {
-		search: queryText,
-		per_page: 10,
-	};
-
 	const { prefill = [] } = useSelect(
 		( select ) => ( {
 			// @ts-ignore
@@ -50,7 +45,7 @@ const ObjectSelectField = ( {
 				}
 			) as ObjectOption[],
 		} ),
-		[ value ]
+		[ value, entityKind, entityType ]
 	);
 
 	const { suggestions = [] } = useSelect(
@@ -61,22 +56,23 @@ const ObjectSelectField = ( {
 				entityType,
 				{
 					context: 'view',
-					...queryArgs,
+					search: queryText,
+					per_page: 10,
 				}
 			) as ObjectOption[],
 		} ),
-		[ queryText ]
+		[ queryText, entityKind, entityType ]
 	);
 
 	const findSuggestion = ( id: number | string ) => {
-		const findSuggestion =
+		const found =
 			suggestions &&
 			suggestions.find(
 				( suggestion ) => suggestion.id.toString() === id.toString()
 			);
 
-		if ( findSuggestion ) {
-			return findSuggestion;
+		if ( found ) {
+			return found;
 		}
 
 		return (
@@ -112,6 +108,7 @@ const ObjectSelectField = ( {
 					label
 						? label
 						: sprintf(
+								// translators: %s: entity type.
 								__( '%s(s)', 'content-control' ),
 								entityType
 									.replace( /_/g, ' ' )
@@ -124,6 +121,7 @@ const ObjectSelectField = ( {
 				hideLabelFromVision={ true }
 				multiple={ multiple }
 				placeholder={ sprintf(
+					// translators: %s: entity type.
 					__( 'Select %s(s)', 'content-control' ),
 					entityType.replace( /_/g, ' ' ).toLowerCase()
 				) }

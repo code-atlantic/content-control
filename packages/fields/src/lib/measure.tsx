@@ -1,5 +1,6 @@
 import {
 	// @ts-ignore
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalUnitControl as UnitControl,
 } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
@@ -21,7 +22,7 @@ const MeasureField = ( {
 
 	useEffect( () => {
 		onChange( `${ state.number }${ state.unit }` );
-	}, [ state ] );
+	}, [ state, onChange ] );
 
 	const unitsArray = Object.entries( units ).map( ( [ v, l ] ) => ( {
 		value: v,

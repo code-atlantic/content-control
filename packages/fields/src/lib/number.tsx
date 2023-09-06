@@ -1,5 +1,6 @@
 import {
 	// @ts-ignore
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 

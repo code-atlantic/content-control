@@ -271,8 +271,8 @@ export const parseFieldOptions = (
 /**
  * Parse value based on field type & props.
  *
- * @param {FieldProps['value']|OldFieldValue} value      Value to parse.
- * @param {FieldProps}                        fieldProps Field props to use for processing value.
+ * @param {FieldProps['value']} value      Value to parse.
+ * @param {FieldProps}          fieldProps Field props to use for processing value.
  * @return {FieldProps['value']} Parsed field value.
  */
 export const parseFieldValue = < F extends FieldProps >(
@@ -386,7 +386,7 @@ export function isOldFieldType( props: any ): boolean {
 /**
  * Parse field props, handling conversion to current components.
  *
- * @param {FieldProps|OldField} props Field props to be parsed.
+ * @param {FieldProps} props Field props to be parsed.
  * @return {FieldProps} Parsed field props.
  */
 export const parseFieldProps = (
