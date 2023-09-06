@@ -3,8 +3,10 @@ import './index.scss';
 import classNames from 'classnames';
 
 import { noop } from '@content-control/utils';
-import { Icon, IconType, ToggleControl, Tooltip } from '@wordpress/components';
+import { Icon, ToggleControl, Tooltip } from '@wordpress/components';
 import { _x, sprintf } from '@wordpress/i18n';
+
+import type { IconType } from '@wordpress/components';
 
 type Props = {
 	label: string;

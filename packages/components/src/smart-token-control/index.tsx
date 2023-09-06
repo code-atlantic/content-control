@@ -50,19 +50,19 @@ export type Props< T extends Token = Token > = {
 	/**
 	 * Render a suggestion.
 	 * @param {string} suggestion suggestion to be rendered
-	 * @returns {JSX.Element | string}
+	 * @return {JSX.Element | string}
 	 */
 	renderSuggestion?: ( suggestion: string ) => JSX.Element | string;
 	/**
 	 * Transform the value before adding it to the value array and calling onChange.
 	 * @param {string} value string to be transformed
-	 * @returns {Token}
+	 * @return {Token}
 	 */
 	saveTransform?: ( value: string ) => T;
 	/**
 	 * When the search input changes.
 	 * @param {string} value selected suggestion
-	 * @returns {void}
+	 * @return {void}
 	 */
 	onInputChange?: ( value: string ) => void;
 	hideLabelFromVision?: boolean;
@@ -110,7 +110,7 @@ const SmartTokenControl = < T extends Token = string >(
 		),
 		renderSuggestion = ( suggestion: string ) => <>{ suggestion }</>,
 		onInputChange = noop,
-		saveTransform = ( value: string ) => value as T,
+		saveTransform = ( newValue: string ) => newValue as T,
 		closeOnSelect = false,
 		hideLabelFromVision = false,
 		extraKeyboardShortcuts = {},
@@ -145,7 +145,7 @@ const SmartTokenControl = < T extends Token = string >(
 	 * Get value from token.
 	 *
 	 * @param {Token} token token to get value from
-	 * @returns {string} value of token
+	 * @return {string} value of token
 	 */
 	function getTokenValue( token: Token ): string {
 		if ( 'object' === typeof token ) {
@@ -159,7 +159,7 @@ const SmartTokenControl = < T extends Token = string >(
 	 * Check if value contains token.
 	 *
 	 * @param {Token} token token to check
-	 * @returns {boolean} true if value contains token
+	 * @return {boolean} true if value contains token
 	 */
 	function valueContainsToken( token: Token ): boolean {
 		return value.some( ( item ) => {
@@ -420,7 +420,6 @@ const SmartTokenControl = < T extends Token = string >(
 							}
 							autoComplete="off"
 							aria-autocomplete="list"
-							aria-expanded={ popoverOpen }
 							aria-controls={ `${ id }-listbox` }
 							aria-activedescendant={ `sug-${ currentIndex }` }
 							onFocus={ () => {

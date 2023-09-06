@@ -7,12 +7,13 @@ import {
 	Button,
 	CheckboxControl,
 	Icon,
-	IconType,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { chevronDown, chevronUp } from '@wordpress/icons';
+
+import type { IconType } from '@wordpress/components';
 
 type Props< T extends string | number > = {
 	label?: string | React.ReactNode;
@@ -160,9 +161,12 @@ const SearchableMulticheckControl = < T extends string | number >( {
 							<tr key={ optValue.toString() }>
 								<td>
 									<span
+										role="button"
+										tabIndex={ -1 }
 										onClick={ () =>
 											toggleOption( optValue )
 										}
+										onKeyDown={ () => {} }
 									>
 										{ optLabel }
 									</span>

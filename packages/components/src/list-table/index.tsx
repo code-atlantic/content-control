@@ -75,7 +75,7 @@ const ListTable = < T extends TableItemBase >( {
 
 	useEffect( () => {
 		onSelectItems( selectedItems );
-	}, [ selectedItems ] );
+	}, [ selectedItems, onSelectItems ] );
 
 	const sortedItems = ! sortBy
 		? items

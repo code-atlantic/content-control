@@ -1,7 +1,7 @@
 import './editor.scss';
 
 import classNames, { Argument } from 'classnames';
-import { clamp, debounce, throttle } from 'lodash';
+import { clamp, debounce } from 'lodash';
 
 import { urlSearchStore } from '@content-control/core-data';
 import {
@@ -16,7 +16,6 @@ import { useInstanceId } from '@wordpress/compose';
 import { useDispatch, useSelect } from '@wordpress/data';
 import {
 	forwardRef,
-	useCallback,
 	useEffect,
 	useImperativeHandle,
 	useMemo,
@@ -103,20 +102,12 @@ const URLControl = (
 		[]
 	);
 
-	// Calculate if should use throttle or debounce to delay fetches.
-	const shouldThrottle =
-		query.length < minQueryLength || query.endsWith( ' ' );
-
 	// Get dispatcher for updating suggestions.
 	const { updateSuggestions } = useDispatch( urlSearchStore );
 
-	// Change from debounce to throttle under certain curcumstances.
-	const debounceSearchRequest = useCallback(
-		shouldThrottle
-			? throttle( updateSuggestions, 200, { leading: true } )
-			: debounce( updateSuggestions, 200, { leading: true } ),
-		[ shouldThrottle ]
-	);
+	const debounceSearchRequest = debounce( updateSuggestions, 200, {
+		leading: true,
+	} );
 
 	// Left off conceptualizing adding debounce to something from useSelect
 	const handleAutocomplete = ( searchText: string ) => {
@@ -158,7 +149,7 @@ const URLControl = (
 		if ( parsedValue.url !== value.url ) {
 			onChange( value );
 		}
-	}, [ value.url ] );
+	}, [ value, parsedValue.url, onChange ] );
 
 	useEffect( () => {
 		if ( ! isFocused ) {
@@ -170,7 +161,7 @@ const URLControl = (
 		} else {
 			editBtnRef.current?.focus();
 		}
-	}, [ isEditing ] );
+	}, [ isEditing, isFocused ] );
 
 	// Memo-ize filtered & truncated list of suggestions
 	const suggestions = useMemo(
@@ -416,10 +407,7 @@ const URLControl = (
 									focusOnMount={ false }
 									onClose={ () => setFocusedSuggestion( -1 ) }
 									position="bottom right"
-									// @ts-ignore
-									getAnchorRect={ () =>
-										inputWrapperRef.current?.getBoundingClientRect()
-									}
+									anchor={ inputWrapperRef.current }
 									className="suggestions-popover"
 								>
 									<div

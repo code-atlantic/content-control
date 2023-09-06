@@ -39,11 +39,6 @@ const EntitySelectControl = <
 		setQueryText( text );
 	}, 300 );
 
-	const queryArgs = {
-		search: queryText,
-		per_page: 10,
-	};
-
 	const { prefill = [] } = useSelect(
 		( select ) => ( {
 			// @ts-ignore
@@ -57,7 +52,7 @@ const EntitySelectControl = <
 				}
 			) as ObjectOption[],
 		} ),
-		[ value ]
+		[ value, entityKind, entityType ]
 	);
 
 	const { suggestions = [] } = useSelect(
@@ -68,22 +63,23 @@ const EntitySelectControl = <
 				entityType,
 				{
 					context: 'view',
-					...queryArgs,
+					search: queryText,
+					per_page: 10,
 				}
 			) as ObjectOption[],
 		} ),
-		[ queryText ]
+		[ entityKind, entityType, queryText ]
 	);
 
 	const findSuggestion = ( id: number | string ) => {
-		const findSuggestion =
+		const found =
 			suggestions &&
 			suggestions.find(
 				( suggestion ) => suggestion.id.toString() === id.toString()
 			);
 
-		if ( findSuggestion ) {
-			return findSuggestion;
+		if ( found ) {
+			return found;
 		}
 
 		return (
@@ -99,7 +95,7 @@ const EntitySelectControl = <
 			return [];
 		}
 
-		let val = Array.isArray( value ) ? value : [ value ];
+		const val = Array.isArray( value ) ? value : [ value ];
 
 		return val.map( ( v ) => v.toString() );
 	} )();
@@ -119,6 +115,7 @@ const EntitySelectControl = <
 					label
 						? label
 						: sprintf(
+								// translators: %s: entity type.
 								__( '%s(s)', 'content-control' ),
 								entityType
 									.replace( /_/g, ' ' )
@@ -133,6 +130,7 @@ const EntitySelectControl = <
 					placeholder
 						? placeholder
 						: sprintf(
+								// translators: %s: entity type.
 								__( 'Select %s(s)', 'content-control' ),
 								entityType.replace( /_/g, ' ' ).toLowerCase()
 						  )
