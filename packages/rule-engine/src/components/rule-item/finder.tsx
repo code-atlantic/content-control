@@ -44,37 +44,6 @@ type State = {
 	popoverOpen: boolean;
 };
 
-const rulesToOptions = ( rules: EngineRuleType[] ) => {
-	const { formatRuleText = defaultForamatRuleText } = useOptions();
-
-	return rules.reduce< Suggestion[] >( ( options, rule ) => {
-		const { name, verbs = [ '', '' ] } = rule;
-
-		if ( Array.isArray( verbs ) && verbs.length ) {
-			[ 0, 1 ].forEach( ( i ) => {
-				options.push( {
-					id: name,
-					label: formatRuleText( rule, { notOperand: !! i } ),
-					notOperand: !! i,
-				} );
-			} );
-		} else {
-			options.push( {
-				id: name,
-				label: formatRuleText( rule, { notOperand: false } ),
-				notOperand: false,
-			} );
-			options.push( {
-				id: name,
-				label: formatRuleText( rule, { notOperand: true } ),
-				notOperand: true,
-			} );
-		}
-
-		return options;
-	}, [] );
-};
-
 const Finder = (
 	{ onSelect = noop }: Props,
 	ref: React.MutableRefObject< Element | null >
@@ -111,6 +80,36 @@ const Finder = (
 
 	const queryTerms = queryText.split( ' ' );
 
+	const { formatRuleText = defaultForamatRuleText } = useOptions();
+	const rulesToOptions = ( rules: EngineRuleType[] ) => {
+		return rules.reduce< Suggestion[] >( ( options, rule ) => {
+			const { name, verbs = [ '', '' ] } = rule;
+
+			if ( Array.isArray( verbs ) && verbs.length ) {
+				[ 0, 1 ].forEach( ( i ) => {
+					options.push( {
+						id: name,
+						label: formatRuleText( rule, { notOperand: !! i } ),
+						notOperand: !! i,
+					} );
+				} );
+			} else {
+				options.push( {
+					id: name,
+					label: formatRuleText( rule, { notOperand: false } ),
+					notOperand: false,
+				} );
+				options.push( {
+					id: name,
+					label: formatRuleText( rule, { notOperand: true } ),
+					notOperand: true,
+				} );
+			}
+
+			return options;
+		}, [] );
+	};
+
 	const ruleOptions = rulesToOptions( getRules() );
 	const suggestions = useMemo(
 		() =>
@@ -128,7 +127,7 @@ const Finder = (
 					].indexOf( false ) === -1
 				);
 			} ),
-		[ queryText ]
+		[ ruleOptions, queryTerms ]
 	).slice( 0, maxSuggestions );
 
 	const upsellIndex = suggestions.length;
@@ -214,9 +213,8 @@ const Finder = (
 						...state,
 						popoverOpen: false,
 					} );
-				} else {
-					selectRule( 0 );
 				}
+				selectRule( 0 );
 			}
 			if ( currentIndex !== upsellIndex ) {
 				selectRule( currentIndex );

@@ -69,7 +69,7 @@ const SortableList = < I extends BaseItem >( {
 					) &&
 					to.classList.contains( 'is-nested' )
 				) {
-					console.log( 'Nesting groups is not currently allowed.' );
+					// Nesting groups is not currently allowed.
 					return false;
 				}
 

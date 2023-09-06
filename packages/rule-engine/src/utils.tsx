@@ -105,13 +105,15 @@ export const removeEmptyItems = ( query: Query ): Query => {
 			.map( ( item ) => {
 				if ( 'group' === item.type ) {
 					// Build a new item, recursively removing empty items.
-					const newGroup = {
+					const newGroupItem = {
 						...item,
 						query: removeEmptyItems( item.query ),
 					};
 
 					// If the new group has no items, return null.
-					return newGroup.query.items.length ? newGroup : null;
+					return newGroupItem.query.items.length
+						? newGroupItem
+						: null;
 				}
 
 				// If the rule has a name, return it.
