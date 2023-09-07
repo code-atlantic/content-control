@@ -73,7 +73,7 @@ class QueryPosts extends Controller {
 			 * @return null|mixed
 			 */
 			if ( null !== apply_filters( 'content_control/pre_restrict_archive_post', null, $restriction, $post_id ) ) {
-				return $posts;
+				continue;
 			}
 
 			/**
