@@ -65,6 +65,10 @@ class PostContent extends Controller {
 
 		$restriction = get_applicable_restriction();
 
+		if ( is_page( $restriction->replacement_page ) || is_page( $restriction->archive_replacement_page ) ) {
+			return $content;
+		}
+
 		/**
 		 * Filter the message to display when a post is restricted.
 		 *
