@@ -6,7 +6,7 @@ Extends Wordpress [Dependency Extraction Webpack Plugin](https://github.com/Word
 
 Install the module
 
-```
+```bash
 pnpm install @content-control/dependency-extraction-webpack-plugin --save-dev
 ```
 
@@ -26,16 +26,16 @@ module.exports = {
 
 Additional module requests on top of Wordpress [Dependency Extraction Webpack Plugin](https://github.com/WordPress/gutenberg/tree/master/packages/dependency-extraction-webpack-plugin) are:
 
-| Request                        	| Global                   				| Script handle          				| Notes                                                   |
-| --------------------------------- | ------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
-| `@content-control/components`     | `contentControl['components']`      	| `content-control-components`        	| |
-| `@content-control/core-data`      | `contentControl['coreData']`      	| `content-control-core-data`        	| |
-| `@content-control/data`      		| `contentControl['data']`      		| `content-control-data`        		| |
-| `@content-control/fields`			| `contentControl['fields']`			| `content-control-fields`   			| |
-| `@content-control/rule-engine`	| `contentControl['ruleEngine']`		| `content-control-rule-engine`   		| |
-| `@content-control/*`              | `contentControl['*']`                	| `content-control-*`                 	| |
+| Request                        | Global                         | Script handle                 | Notes |
+| ------------------------------ | ------------------------------ | ----------------------------- | ----- |
+| `@content-control/components`  | `contentControl['components']` | `content-control-components`  |       |
+| `@content-control/core-data`   | `contentControl['coreData']`   | `content-control-core-data`   |       |
+| `@content-control/data`        | `contentControl['data']`       | `content-control-data`        |       |
+| `@content-control/fields`      | `contentControl['fields']`     | `content-control-fields`      |       |
+| `@content-control/rule-engine` | `contentControl['ruleEngine']` | `content-control-rule-engine` |       |
+| `@content-control/*`           | `contentControl['*']`          | `content-control-*`           |       |
 
-#### Options
+### Options
 
 An object can be passed to the constructor to customize the behavior, for example:
 
@@ -49,7 +49,7 @@ module.exports = {
 };
 ```
 
-##### `bundledPackages`
+#### `bundledPackages`
 
 -   Type: array
 -   Default: []

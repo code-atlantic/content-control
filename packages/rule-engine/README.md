@@ -6,7 +6,7 @@ Custom rule engine for intuitively building complex boolean AND / OR queries of 
 
 See @content-control/block-editor for working usage.
 
-```
+```jsx
 <RuleEngine
     value={ query }
     onChange={ ( query ) => {} }

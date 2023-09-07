@@ -1,61 +1,61 @@
 {
-  "name": "@content-control/fields",
-  "version": "1.0.0",
-  "description": "Dynamic react field rendering.",
-  "author": "Code Atlantic",
-  "license": "GPL-2.0-or-later",
-  "keywords": [
-    "wordpress",
-    "content control",
-    "components"
-  ],
-  "homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/components#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/code-atlantic/content-control.git",
-    "directory": "packages/fields"
-  },
-  "bugs": {
-    "url": "https://github.com/code-atlantic/content-control/issues"
-  },
-  "main": "build/index",
-  "types": "build-types",
-  "peerDependencies": {
-    "react": "^18.2.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@content-control/components": "*",
-    "@content-control/core-data": "*",
-    "@content-control/utils": "*",
-    "@wordpress/base-styles": "^4.32.0",
-    "@wordpress/components": "^25.7.0",
-    "@wordpress/compose": "^6.18.0",
-    "@wordpress/core-data": "^6.18.0",
-    "@wordpress/data": "^9.11.0",
-    "@wordpress/element": "^5.18.0",
-    "@wordpress/html-entities": "^3.41.0",
-    "@wordpress/i18n": "^4.41.0",
-    "@wordpress/icons": "^9.32.0",
-    "@wordpress/url": "^3.42.0",
-    "classnames": "^2.3.2",
-    "lodash": "^4.17.21",
-    "react-tag-autocomplete": "^7.0.0-rc.5"
-  },
-  "devDependencies": {
-    "@types/lodash": "^4.14.191",
-    "@types/wordpress__components": "^23.0.1",
-    "@types/wordpress__compose": "^6.0.1",
-    "@types/wordpress__data": "^6.0.2"
-  },
-  "scripts": {
-    "build:tsc": "tsc",
-    "build:types": "tsc --build",
-    "clean": "rimraf build build-types tsconfig.tsbuildinfo",
-    "lint": "wp-scripts lint-js .",
-    "format": "wp-scripts lint-js . --fix",
-    "packages-update": "wp-scripts packages-update"
-  }
+	"name": "@content-control/fields",
+	"version": "1.0.0",
+	"description": "Dynamic react field rendering.",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"content control",
+		"components"
+	],
+	"homepage": "https://github.com/code-atlantic/content-control/tree/HEAD/packages/components#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/code-atlantic/content-control.git",
+		"directory": "packages/fields"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"main": "build/index",
+	"types": "build-types",
+	"dependencies": {
+		"@content-control/components": "*",
+		"@content-control/core-data": "*",
+		"@content-control/utils": "*",
+		"@wordpress/base-styles": "^4.32.0",
+		"@wordpress/components": "^25.7.0",
+		"@wordpress/compose": "^6.18.0",
+		"@wordpress/core-data": "^6.18.0",
+		"@wordpress/data": "^9.11.0",
+		"@wordpress/element": "^5.18.0",
+		"@wordpress/html-entities": "^3.41.0",
+		"@wordpress/i18n": "^4.41.0",
+		"@wordpress/icons": "^9.32.0",
+		"@wordpress/url": "^3.42.0",
+		"classnames": "^2.3.2",
+		"lodash": "^4.17.21",
+		"react-tag-autocomplete": "^7.0.0-rc.5"
+	},
+	"devDependencies": {
+		"@types/lodash": "^4.14.191",
+		"@types/wordpress__components": "^23.0.1",
+		"@types/wordpress__compose": "^6.0.1",
+		"@types/wordpress__data": "^6.0.2"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build:tsc": "tsc",
+		"build:types": "tsc --build",
+		"clean": "rimraf build build-types tsconfig.tsbuildinfo",
+		"lint": "wp-scripts lint-js .",
+		"format": "wp-scripts lint-js . --fix",
+		"packages-update": "wp-scripts packages-update"
+	}
 }

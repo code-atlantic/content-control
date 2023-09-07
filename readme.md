@@ -27,7 +27,7 @@ Task info coming soon....
 
 ## Built With
 
-* [SASS](https://sass-lang.com) - The CSS pre-processor we use. We use the SCSS syntax.
+-   [SASS](https://sass-lang.com) - The CSS pre-processor we use. We use the SCSS syntax.
 
 ## Deployment
 
@@ -44,16 +44,16 @@ Please Note: GitHub is not intended for support based questions. For those, plea
 
 ### Creating Issues
 
-* If you have any bugs or feature requests, please [create an issue](https://github.com/JunglePlugins/Content-Control/issues/new)
-* For bug reports, please clearly describe the bug/issue and include steps on how to reproduce it
-* For feature requests, please clearly describe what you would like, how it would be used, and example screenshots (if possible)
+-   If you have any bugs or feature requests, please [create an issue](https://github.com/JunglePlugins/Content-Control/issues/new)
+-   For bug reports, please clearly describe the bug/issue and include steps on how to reproduce it
+-   For feature requests, please clearly describe what you would like, how it would be used, and example screenshots (if possible)
 
 ### Pull Requests
 
-* Ensure you stick to the [WordPress Coding Standards](https://codex.wordpress.org/WordPress_Coding_Standards)
-* When committing, reference your issue (if present) and include a note about the fix
-* Push the changes to your fork and submit a pull request to the 'master' branch of this repository
-* We are trying to ensure that every function is documented well and follows the standards set by phpDoc going forward
+-   Ensure you stick to the [WordPress Coding Standards](https://codex.wordpress.org/WordPress_Coding_Standards)
+-   When committing, reference your issue (if present) and include a note about the fix
+-   Push the changes to your fork and submit a pull request to the 'master' branch of this repository
+-   We are trying to ensure that every function is documented well and follows the standards set by phpDoc going forward
 
 ## Versioning
 
@@ -61,7 +61,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Developers
 
-* Daniel Iser - Lead Developer
+-   Daniel Iser - Lead Developer
 
 See also [the list of contributors](https://github.com/JunglePlugins/Content-Control/graphs/contributors) who participated in this project.
 
@@ -73,22 +73,20 @@ This project is licensed under the GPLv3 License.
 
 This is a developer's portal for Content Control and **should not** be used for support. Please [create a support ticket here](https://wordpress.org/plugins/content-control/).
 
-
-
 ## v2 Development Guide Updates
 
 ### Requirements
 
-- Composer
-- Node >16 / NPM
+-   Composer
+-   Node >16 / NPM
 
-### Install & use appropriate version of Node.js via NVM.
+### Install & use appropriate version of Node.js via NVM
 
 ```bash
 nvm use
 ```
 
-### Install project dependencies.
+### Install project dependencies
 
 ```bash
 # install lerna
@@ -98,13 +96,13 @@ npm install -g lerna
 npm i && composer install
 ```
 
-### Build assets.
+### Build assets
 
 ```bash
 npm run build
 ```
 
-### Start asset watcher & build routines.
+### Start asset watcher & build routines
 
 ```bash
 npm run start # Normal
@@ -115,4 +113,4 @@ npm run start:hot # Hot module loading via @wordpress/env & Gutenberg plugin.
 
 This allows very quick creation of a working development environment using docker.
 
-```npm i -g @wordpress/env```
+`npm i -g @wordpress/env`

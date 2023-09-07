@@ -21,14 +21,14 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
+	"dependencies": {
+		"@wordpress/primitives": "^3.39.0"
+	},
 	"peerDependencies": {
 		"react": "^18.2.0"
 	},
 	"publishConfig": {
 		"access": "public"
-	},
-	"dependencies": {
-		"@wordpress/primitives": "^3.39.0"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

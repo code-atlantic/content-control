@@ -21,12 +21,6 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
-	"peerDependencies": {
-		"react": "^18.2.0"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"dependencies": {
 		"@wordpress/api-fetch": "^6.38.0",
 		"@wordpress/data": "^9.11.0",
@@ -36,6 +30,12 @@
 	"devDependencies": {
 		"@types/wordpress__data": "^6.0.2",
 		"@types/wordpress__data-controls": "^2.2.0"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

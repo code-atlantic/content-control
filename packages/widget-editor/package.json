@@ -19,17 +19,17 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
-	"peerDependencies": {
-		"jquery": "^3.6.3"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"dependencies": {
 		"jquery": "^3.6.3"
 	},
 	"devDependencies": {
 		"@types/jquery": "^3.5.16"
+	},
+	"peerDependencies": {
+		"jquery": "^3.6.3"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build:tsc": "tsc",

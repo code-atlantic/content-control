@@ -21,12 +21,6 @@
 	},
 	"main": "build/index",
 	"types": "build-types",
-	"peerDependencies": {
-		"react": "^18.2.0"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"dependencies": {
 		"@content-control/components": "*",
 		"@content-control/fields": "*",
@@ -45,6 +39,12 @@
 	},
 	"devDependencies": {
 		"@types/wordpress__components": "^23.0.1"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build:tsc": "tsc",
