@@ -263,12 +263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/trustedlogin/client.git",
-                "reference": "eaee952cf7f427db44d6b37188307173728a8db9"
+                "reference": "64f0f2b9b8d1aba2c8bc77c5f932a2cca8161d82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/trustedlogin/client/zipball/eaee952cf7f427db44d6b37188307173728a8db9",
-                "reference": "eaee952cf7f427db44d6b37188307173728a8db9",
+                "url": "https://api.github.com/repos/trustedlogin/client/zipball/64f0f2b9b8d1aba2c8bc77c5f932a2cca8161d82",
+                "reference": "64f0f2b9b8d1aba2c8bc77c5f932a2cca8161d82",
                 "shasum": ""
             },
             "require-dev": {
@@ -308,7 +308,7 @@
                 "issues": "https://github.com/trustedlogin/client/issues",
                 "source": "https://github.com/trustedlogin/client/tree/develop"
             },
-            "time": "2023-09-03T17:21:47+00:00"
+            "time": "2023-09-06T02:16:23+00:00"
         }
     ],
     "packages-dev": [
