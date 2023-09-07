@@ -150,9 +150,7 @@ const SearchableMulticheckControl = < T extends string | number >( {
 								iconPosition="right"
 							/>
 						</th>
-						<td className="cb-column">
-							{ __( 'Grant Access', 'content-control' ) }
-						</td>
+						<td className="cb-column"></td>
 					</tr>
 				</thead>
 				<tbody>
