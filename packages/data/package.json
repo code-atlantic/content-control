@@ -29,8 +29,8 @@
 	},
 	"dependencies": {
 		"@content-control/core-data": "*",
-		"@wordpress/core-data": "^6.12.0",
-		"@wordpress/data": "^9.5.0"
+		"@wordpress/core-data": "^6.18.0",
+		"@wordpress/data": "^9.11.0"
 	},
 	"devDependencies": {
 		"@types/wordpress__core-data": "^2.4.5",

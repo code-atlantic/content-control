@@ -57,7 +57,6 @@ const DefaultGroupOptions = ( { onClose }: Props ) => {
 				</PasteMenuItem>
 				<MenuItem
 					icon={ rotateLeft }
-					variant={ 'tertiary' }
 					onClick={ () => {
 						setGroupRules( groupDefaults );
 						onClose();
@@ -70,7 +69,6 @@ const DefaultGroupOptions = ( { onClose }: Props ) => {
 			<MenuGroup>
 				<MenuItem
 					icon={ trash }
-					variant={ 'tertiary' }
 					onClick={ () => {
 						setGroupRules( undefined );
 						onClose();

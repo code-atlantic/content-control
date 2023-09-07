@@ -87,7 +87,6 @@ const CopyMenuItem = ( {
 		<MenuItem
 			{ ...buttonProps }
 			icon={ icon() }
-			variant={ 'tertiary' }
 			className={ classes }
 			ref={ ref }
 			onCopy={ focusOnCopyEventTarget }

@@ -169,6 +169,7 @@ const Header = ( { tabs }: Props ) => {
 							<MenuGroup>
 								<MenuItem
 									icon={ pages }
+									// @ts-ignore - Undocumented, but accepts all button props.
 									href="https://contentcontrolplugin.com/docs/?utm_campaign=plugin-support&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=view-documentation-link"
 									target="_blank"
 								>
@@ -179,6 +180,7 @@ const Header = ( { tabs }: Props ) => {
 								</MenuItem>
 								<MenuItem
 									icon={ people }
+									// @ts-ignore - Undocumented, but accepts all button props.
 									href="https://contentcontrolplugin.com/support/?utm_campaign=plugin-support&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=get-support-link"
 									target="_blank"
 								>

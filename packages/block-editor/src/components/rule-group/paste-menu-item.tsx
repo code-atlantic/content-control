@@ -90,7 +90,6 @@ const PasteMenuItem = ( {
 			<MenuItem
 				{ ...buttonProps }
 				icon={ upload }
-				variant={ 'tertiary' }
 				className={ classes }
 				onClick={ () =>
 					setState( {
