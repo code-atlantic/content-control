@@ -68,22 +68,26 @@ function set_query_to_page( $page_id, $query = null ) {
 	}
 
 	$query->init(); // Reset the main query.
-	$query->query_vars        = $args;
-	$query->queried_object    = $custom_query->post;
-	$query->queried_object_id = $page_id;
-	$query->post              = $custom_query->post;
-	$query->posts             = $custom_query->posts;
-	$query->query             = $custom_query->query;
+	$query->query_vars = $args;
 
-	// Since init, only override defaults as needed to emulate page.
-	$query->is_page       = true;
-	$query->is_singular   = true;
-	$query->found_posts   = 1;
-	$query->post_count    = 1;
-	$query->max_num_pages = 1;
+	// $query->queried_object    = $custom_query->post;
+	// $query->queried_object_id = $page_id;
+	// $query->post              = $custom_query->post;
+	// $query->posts             = $custom_query->posts;
+	// $query->query             = $custom_query->query;
 
-	// Suppress filters. Might not need this.
-	$query->set( 'suppress_filters', true );
+	// // Since init, only override defaults as needed to emulate page.
+	// $query->is_page       = true;
+	// $query->is_singular   = true;
+	// $query->found_posts   = 1;
+	// $query->post_count    = 1;
+	// $query->max_num_pages = 1;
+
+	// // Suppress filters. Might not need this.
+	// $query->set( 'suppress_filters', true );
+
+	// Ensure all query vars are set.
+	$query->get_posts();
 
 	// Reset the post data.
 	$query->reset_postdata();
