@@ -89,7 +89,11 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 		setFilters( { status: undefined, searchText: undefined } );
 
 	// Self clear query params when component is removed.
-	useEffect( () => clearFilterParams, [] );
+	useEffect(
+		() => clearFilterParams,
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
 
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
 	const { restrictions, isLoading, isDeleting } = useSelect( ( select ) => {

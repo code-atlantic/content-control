@@ -23,6 +23,16 @@ type Props = {
 
 const { adminUrl } = contentControlSettingsPage;
 
+/**
+ * The following section covers notifying users of unsaved changes during
+ * various state changes and attempts to leave the page.
+ */
+const defaultState = {
+	showNotice: false,
+	ignoreNotice: false,
+	retryView: '',
+};
+
 const Header = ( { tabs }: Props ) => {
 	const [ view = 'restrictions', setView ] = useQueryParam(
 		'view',
@@ -30,16 +40,6 @@ const Header = ( { tabs }: Props ) => {
 	);
 
 	const btnRef = useRef< HTMLButtonElement | null >( null );
-
-	/**
-	 * The following section covers notifying users of unsaved changes during
-	 * various state changes and attempts to leave the page.
-	 */
-	const defaultState = {
-		showNotice: false,
-		ignoreNotice: false,
-		retryView: '',
-	};
 
 	const [ state, setState ] = useState< {
 		showNotice: boolean;
@@ -71,16 +71,16 @@ const Header = ( { tabs }: Props ) => {
 		setView( newView );
 	};
 
-	// Check before page unload whether there are unsaved changes in settings.
-	const beforeunload = ( event: BeforeUnloadEvent ) => {
-		if ( hasUnsavedChanges ) {
-			event.preventDefault();
-			event.returnValue = false;
-		}
-	};
-
 	// Add beforeunload listener for unsaved changes.
 	useEffect( () => {
+		// Check before page unload whether there are unsaved changes in settings.
+		const beforeunload = ( event: BeforeUnloadEvent ) => {
+			if ( hasUnsavedChanges ) {
+				event.preventDefault();
+				event.returnValue = false;
+			}
+		};
+
 		window.addEventListener( 'beforeunload', beforeunload );
 
 		return () => {
@@ -89,19 +89,23 @@ const Header = ( { tabs }: Props ) => {
 	}, [ hasUnsavedChanges ] );
 
 	// Listens for unsaved changes & user ignoring notice. Changes views & resets accordingly.
-	useEffect( () => {
-		// Reset state if there are no longer unsaved changes.
-		if ( ! hasUnsavedChanges ) {
-			resetState();
-		}
+	useEffect(
+		() => {
+			// Reset state if there are no longer unsaved changes.
+			if ( ! hasUnsavedChanges ) {
+				resetState();
+			}
 
-		if ( ( ! hasUnsavedChanges || ignoreNotice ) && retryView ) {
-			// After user ignroed changes or saved, set the view.
-			setView( retryView );
-		}
+			if ( ( ! hasUnsavedChanges || ignoreNotice ) && retryView ) {
+				// After user ignroed changes or saved, set the view.
+				setView( retryView );
+			}
 
-		return () => resetState();
-	}, [ hasUnsavedChanges, ignoreNotice ] );
+			return () => resetState();
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[ hasUnsavedChanges, ignoreNotice ]
+	);
 
 	/** -------------- End of Section ------------------------ */
 

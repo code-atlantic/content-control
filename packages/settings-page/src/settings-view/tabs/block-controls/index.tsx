@@ -12,10 +12,10 @@ import DeviceMediaQueries from './device-media-queries';
 import type { TabComponent } from '../../../types';
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 
-const BlockControlsTab = () => {
-	// Filtered & mappable list of TabComponent definitions.
-	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+// Filtered & mappable list of TabComponent definitions.
+type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 
+const BlockControlsTab = () => {
 	/**
 	 * Filtered & mappable list of TabComponent definitions.
 	 *

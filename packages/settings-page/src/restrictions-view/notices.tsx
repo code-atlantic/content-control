@@ -1,8 +1,10 @@
 import { Notice } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { AppNotice, restrictionsStore } from '@content-control/core-data';
-import { useLayoutEffect, useRef } from '@wordpress/element';
+import { restrictionsStore } from '@content-control/core-data';
+import { useCallback, useLayoutEffect, useRef } from '@wordpress/element';
+
+import type { AppNotice } from '@content-control/core-data';
 
 const Notices = () => {
 	const noticeTimerRef = useRef< {
@@ -18,15 +20,18 @@ const Notices = () => {
 
 	const { clearNotice } = useDispatch( restrictionsStore );
 
-	const handleDismiss = ( id: string ) => {
-		// Clear the timer if it exists.
-		if ( noticeTimerRef.current[ id ] ) {
-			clearTimeout( noticeTimerRef.current[ id ] );
-			delete noticeTimerRef.current[ id ];
-		}
+	const handleDismiss = useCallback(
+		( id: string ) => {
+			// Clear the timer if it exists.
+			if ( noticeTimerRef.current[ id ] ) {
+				clearTimeout( noticeTimerRef.current[ id ] );
+				delete noticeTimerRef.current[ id ];
+			}
 
-		clearNotice( id );
-	};
+			clearNotice( id );
+		},
+		[ clearNotice ]
+	);
 
 	// Handle auto-dismissing notices. Should this use effect and ref list?
 	useLayoutEffect( () => {
@@ -42,7 +47,7 @@ const Notices = () => {
 				}, notice.closeDelay );
 			}
 		} );
-	}, [ notices ] );
+	}, [ notices, handleDismiss ] );
 
 	if ( ! notices.length ) {
 		return null;

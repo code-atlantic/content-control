@@ -1,6 +1,8 @@
-import { Icon, IconType, Panel, PanelBody } from '@wordpress/components';
+import { Icon, Panel, PanelBody } from '@wordpress/components';
 import { _x, __ } from '@wordpress/i18n';
 import classNames from 'classnames';
+
+import type { IconType } from '@wordpress/components';
 
 type Props = {
 	name?: string;

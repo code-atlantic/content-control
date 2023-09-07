@@ -63,10 +63,10 @@ addFilter(
 	50
 );
 
-const GeneralTab = () => {
-	// Filtered & mappable list of TabComponent definitions.
-	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+// Filtered & mappable list of TabComponent definitions.
+type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 
+const GeneralTab = () => {
 	/**
 	 * Filter the list of sections on the "General" tab.
 	 *

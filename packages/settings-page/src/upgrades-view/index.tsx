@@ -86,11 +86,11 @@ const UpgradeView = () => {
 		( { type, data } ) => {
 			const eventData = JSON.parse( data ) as SSEvent[ 'data' ];
 
-			const { message = '', status } = eventData;
+			const { message = '', status: eventStatus } = eventData;
 
 			const newState = {
 				...upgradeState,
-				status,
+				status: eventStatus,
 				logs: message.length ? [ ...logs, message ] : logs,
 			};
 
@@ -113,6 +113,7 @@ const UpgradeView = () => {
 
 				case 'task:error':
 				case 'error':
+					// eslint-disable-next-line no-console
 					console.log( 'Error:', message, eventData );
 					setUpgradeState( {
 						...newState,
@@ -125,16 +126,13 @@ const UpgradeView = () => {
 					break;
 
 				default:
+					// eslint-disable-next-line no-console
 					console.log( 'Unknown event:', type );
 					break;
 			}
 		},
 		[ upgradeState ]
 	);
-
-	if ( ! hasUpgrades ) {
-		return null;
-	}
 
 	const { total: totalTasks, progress: completedTasks, currentTask } = status;
 
@@ -155,7 +153,7 @@ const UpgradeView = () => {
 				}
 			}, 1000 );
 		}
-	}, [ done, redirectCountdown ] );
+	}, [ done, redirectCountdown, running ] );
 
 	// Calculate the number of tasks that have been completed or are currently running
 	const completedOrRunningTasks = completedTasks + 1;
@@ -191,12 +189,16 @@ const UpgradeView = () => {
 		[ taskPercentage, taskFillMaxWidth, status.currentTask ]
 	);
 
-	return (
+	return hasUpgrades ? (
 		<div className="content-control-upgrades-panel">
 			{ ! running ? (
 				<div className="upgrade-notice">
 					<div className="notice-icon">
 						<img
+							alt={ __(
+								'Content Control requires an upgrade to the database.',
+								'content-control'
+							) }
 							src={ `${ contentControlSettingsPage.pluginUrl }assets/images/illustration-check.svg` }
 						/>
 					</div>
@@ -328,7 +330,7 @@ const UpgradeView = () => {
 				</div>
 			) }
 		</div>
-	);
+	) : null;
 };
 
 export default UpgradeView;

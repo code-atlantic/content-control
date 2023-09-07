@@ -5,7 +5,6 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { sprintf, __ } from '@wordpress/i18n';
 
@@ -124,13 +123,10 @@ const PermissionsTab = () => {
 				( { name, label, description, default: defaultCap } ) => {
 					const cap = settings?.permissions?.[ name ];
 
-					const capInList = useMemo(
-						() =>
-							typeof getRolesAndCapsOptions.find(
-								( { value } ) => value === cap
-							) !== 'undefined',
-						[ cap ]
-					);
+					const capInList =
+						typeof getRolesAndCapsOptions.find(
+							( { value } ) => value === cap
+						) !== 'undefined';
 
 					const isCustom = cap && ! capInList;
 
@@ -144,8 +140,8 @@ const PermissionsTab = () => {
 							<div className="field-group__controls">
 								<ToggleControl
 									label={ sprintf(
+										// translators: %s: default capability
 										__(
-											/* translators: %s: default capability */
 											'Override the default (%s)',
 											'content-control'
 										),

@@ -58,14 +58,18 @@ const useEditor = () => {
 		if ( urlId !== editorId ) {
 			changeEditorId( urlId );
 		}
-	}, [ edit, add ] );
+	}, [ edit, add, editorId, changeEditorId ] );
 
 	// Sync editorId changes to the URL.
-	useEffect( () => {
-		if ( ! add && ! edit && ! isEditorActive ) {
-			clearEditorParams();
-		}
-	}, [ isEditorActive ] );
+	useEffect(
+		() => {
+			if ( ! add && ! edit && ! isEditorActive ) {
+				clearEditorParams();
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[ isEditorActive, add, edit ]
+	);
 
 	/**
 	 * Set the editor to edit a specific restriction.

@@ -14,6 +14,7 @@ const LogViewer = () => {
 		fetch( logUrl )
 			.then( ( response ) => response.text() )
 			.then( ( data ) => setLogContent( data ) )
+			// eslint-disable-next-line no-console
 			.catch( ( error ) => console.error( error ) );
 	}, [] );
 

@@ -39,8 +39,8 @@ const ListOptions = () => {
 			addNotice( {
 				id: 'content-control-import-error',
 				type: 'error',
-				// translators: %d is the number of restrictions that failed to import.
 				message: sprintf(
+					// translators: %d is the number of restrictions that failed to import.
 					_n(
 						'%d Restriction failed to import.',
 						'%d Restrictions failed to import.',
@@ -62,8 +62,8 @@ const ListOptions = () => {
 		addNotice( {
 			id: 'content-control-import-success',
 			type: 'success',
-			// translators: %d is the number of restrictions imported.
 			message: sprintf(
+				// translators: %d is the number of restrictions imported.
 				_n(
 					'%d Restriction imported successfully.',
 					'%d Restrictions imported successfully.',

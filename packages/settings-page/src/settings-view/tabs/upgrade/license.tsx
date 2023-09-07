@@ -12,9 +12,11 @@ import {
 	Icon,
 	Popover,
 } from '@wordpress/components';
-import { LicenseKey, useLicense } from '@content-control/core-data';
+import { useLicense } from '@content-control/core-data';
 
 import UpgradeFeatures from './upgrade-features';
+
+import type { LicenseKey } from '@content-control/core-data';
 
 const LicenseTab = () => {
 	const {
@@ -37,7 +39,7 @@ const LicenseTab = () => {
 		hasError,
 	} = useLicense();
 
-	const { expires, error_message } = licenseStatus;
+	const { expires, error_message: errorMessage } = licenseStatus;
 	const [ value, setValue ] = useState< LicenseKey >( licenseKey );
 	const [ isActivating, setIsActivating ] = useState( false );
 
@@ -75,38 +77,41 @@ const LicenseTab = () => {
 				}, 1000 );
 			}
 		}, 1000 );
-	}, [ connectInfo ] );
+	}, [ connectInfo, checkLicenseStatus ] );
 
 	// Listen for changes from the license store and update the local state.
 	useEffect( () => {
 		if ( keyHasChanged ) {
 			setValue( licenseKey );
 		}
-	}, [ licenseKey ] );
+	}, [ licenseKey, keyHasChanged ] );
 
 	useEffect( () => {
 		if ( isActivating && ! isSaving ) {
 			setIsActivating( false );
 		}
-	}, [ isSaving ] );
+	}, [ isSaving, isActivating ] );
 
 	const statusMessage = () => {
 		if ( isLicenseMissing ) {
 			// No lincense key has been entered.
 			return sprintf(
+				// translators: 1: opening a tag, 2: closing a tag.
 				__(
-					'Enter your license key to activate. If you do not have a license key, you can <a href="%s" target="_blank">purchase one here</a>.',
+					'Enter your license key to activate. If you do not have a license key, you can %1$spurchase one here%2$s',
 					'content-control'
 				),
-				'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-field-upgrade-text'
+				'<a href="https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-field-upgrade-text" target="_blank">',
+				'</a>'
 			);
 		}
 
 		if ( isLicenseActive ) {
 			// The license key is active.
 			return sprintf(
+				// translators: 1: date
 				__(
-					'Your license key is active%s. Thank you for supporting Content Control!',
+					'Your license key is active%1$s. Thank you for supporting Content Control!',
 					'content-control'
 				),
 				// format date as MM-DD-YYYY
@@ -119,28 +124,33 @@ const LicenseTab = () => {
 		if ( isLicenseExpired ) {
 			// The license key has expired.
 			return sprintf(
+				// translators: 1: date, 2: opening a tag, 3: closing a tag.
 				__(
-					'Your license key has expired on %s. Please <a href="%s" target="_blank">renew your license</a> to continue receiving updates and support.',
+					'Your license key has expired on %1$s. Please %2$srenew your license$3$s to continue receiving updates and support.',
 					'content-control'
 				),
 				new Date( expires ).toLocaleDateString(),
-				'https://contentcontrolplugin.com/checkout/?edd_license_key=' +
+				'<a href="https://contentcontrolplugin.com/checkout/?edd_license_key=' +
 					licenseKey +
-					'&utm_campaign=renew-license&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-renew-link'
+					'&utm_campaign=renew-license&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-renew-link" target="_blank">',
+				'</a>'
 			);
 		}
 
 		if ( isLicenseOverQuota ) {
 			// The license key has reached its site limit.
 			return sprintf(
+				// translators: 1: opening a tag, 2: closing a tag, 3: opening a tag, 4: closing a tag.
 				__(
-					'Your license key has reached its site limit. <a href="%s" target="_blank">Upgrade your license</a> to add more sites, or <a href="%s" target="_blank">log in</a> to manage current activations.',
+					'Your license key has reached its site limit. %1$sUpgrade your license%2$s to add more sites, or %3$slog in%4$s to manage current activations.',
 					'content-control'
 				),
-				'https://contentcontrolplugin.com/checkout/?edd_license_key=' +
+				'<a href="https://contentcontrolplugin.com/checkout/?edd_license_key=' +
 					licenseKey +
-					'&utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-upgrade-link',
-				'https://contentcontrolplugin.com/your-account/?utm_campaign=manage-activations&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-login-link'
+					'&utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-upgrade-link" target="_blank">',
+				'</a>',
+				'<a href="https://contentcontrolplugin.com/your-account/?utm_campaign=manage-activations&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-login-link" target="_blank">',
+				'</a>'
 			);
 		}
 
@@ -163,20 +173,19 @@ const LicenseTab = () => {
 		if ( hasError ) {
 			// The license key is not active.
 			return sprintf(
+				// translators: 1: error message.
 				__(
-					'Your license key failed to activate with the following error: %s',
+					'Your license key failed to activate with the following error: %1$s',
 					'content-control'
 				),
-				error_message
-			);
-		} else {
-			return __(
-				'There was an error with your license key. Please check your key and try again.',
-				'content-control'
+				errorMessage
 			);
 		}
 
-		return '';
+		return __(
+			'There was an error with your license key. Please check your key and try again.',
+			'content-control'
+		);
 	};
 
 	const buttonVariant = 'tertiary';
@@ -190,7 +199,7 @@ const LicenseTab = () => {
 				>
 					<p>
 						{ __(
-							'Please wait while we connect to the license store...',
+							'Please wait while we connect to the license store…',
 							'content-control'
 						) }
 					</p>
@@ -225,8 +234,9 @@ const LicenseTab = () => {
 				<p
 					dangerouslySetInnerHTML={ {
 						__html: sprintf(
+							// translators: 1: opening strong tag, 2: closing strong tag.
 							__(
-								'Enter your license key below to activate %sContent Control Pro%s!',
+								'Enter your license key below to activate %1$sContent Control Pro%2$s!',
 								'content-control'
 							),
 							'<strong>',
@@ -301,7 +311,7 @@ const LicenseTab = () => {
 								<>
 									<span>
 										{ __(
-											'Activating...',
+											'Activating…',
 											'content-control'
 										) }
 									</span>

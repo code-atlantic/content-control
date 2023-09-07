@@ -91,7 +91,7 @@ const BlockControlsTab = () => {
 							} ),
 						].indexOf( false ) === -1
 			  );
-	}, [ knownBlockTypes, searchText ] );
+	}, [ searchText, blockTypes ] );
 
 	return (
 		<>

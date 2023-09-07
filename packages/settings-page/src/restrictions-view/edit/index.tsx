@@ -65,9 +65,13 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		addNotice,
 	} = useDispatch( restrictionsStore );
 
-	useEffect( () => {
-		return clearEditorParams;
-	}, [] );
+	useEffect(
+		() => {
+			return clearEditorParams;
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
 
 	// If the editor isn't active, return empty.
 	if ( ! isEditorActive ) {

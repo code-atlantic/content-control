@@ -17,8 +17,8 @@ const RestrictionsSection = () => {
 					'content-control'
 				) }
 				value={ defaultDenialMessage }
-				onChange={ ( defaultDenialMessage ) =>
-					updateSettings( { defaultDenialMessage } )
+				onChange={ ( newValue ) =>
+					updateSettings( { defaultDenialMessage: newValue } )
 				}
 			/>
 

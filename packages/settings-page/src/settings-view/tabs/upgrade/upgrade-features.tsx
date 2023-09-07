@@ -44,6 +44,7 @@ const UpgradeFeatures = () => {
 			<p
 				dangerouslySetInnerHTML={ {
 					__html: sprintf(
+						// translators: %s: Upgrade link.
 						__(
 							'To unlock the following features, <a href="%s" target="_blank">upgrade to Pro</a> and enter your license key below.',
 							'content-control'

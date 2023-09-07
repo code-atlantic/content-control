@@ -40,9 +40,10 @@ addFilter(
 	5
 );
 
+// Filtered & mappable list of TabComponent definitions.
+type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
+
 const UpgradeView = () => {
-	// Filtered & mappable list of TabComponent definitions.
-	type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];
 	/**
 	 * Filter the list of sections on the "Upgrade" tab.
 	 *
