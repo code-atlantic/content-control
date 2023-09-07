@@ -36,8 +36,6 @@ class MainQuery extends Controller {
 
 	/**
 	 * Handle a restriction on the main query.
-	 *
-	 * @return bool
 	 */
 	public function restrict_main_query() {
 		if ( ! \is_main_query() || protection_is_disabled() ) {
@@ -63,7 +61,7 @@ class MainQuery extends Controller {
 		 * @return null|mixed
 		 */
 		if ( null !== apply_filters( 'content_control/pre_restrict_main_query', null, $restriction ) ) {
-			return true;
+			return;
 		}
 
 		/**
@@ -76,13 +74,11 @@ class MainQuery extends Controller {
 		switch ( $restriction->protection_method ) {
 			case 'redirect':
 				redirect( $restriction->redirect_type, $restriction->redirect_url );
-				return true;
+				return;
 
 			case 'replace':
 				set_query_to_page( $restriction->replacement_page );
-				return true;
+				return;
 		}
-
-		return false;
 	}
 }
