@@ -18,7 +18,7 @@ const eslintConfig = {
 		},
 		'import/resolver': {
 			node: {
-				moduleDirectory: [ 'node_modules', 'src' ],
+				moduleDirectory: [ 'node_modules' ],
 			},
 		},
 	},
@@ -28,7 +28,9 @@ const eslintConfig = {
 			presets: [ require.resolve( '@wordpress/babel-preset-default' ) ],
 		},
 	},
-	rules: {},
+	rules: {
+		'no-unused-vars': 'warning',
+	},
 };
 
 module.exports = eslintConfig;

@@ -4,4 +4,4 @@
 /vendor/*
 /.vscode/*
 /assets/*
-/packages/*
+/packages/query-builder/**
