@@ -67,9 +67,9 @@ add_filter( 'content_control/user_roles', function ( $roles ) {
 	return $roles;
 }, 9 );
 
-add_filter( 'content_control/post_restricted_content', function ( $message ) {
+add_filter( 'content_control/restricted_post_content', function ( $message ) {
 	if ( has_filter( 'jp_cc_restricted_message' ) ) {
-		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_restricted_message', '2.0.0', 'filter:content_control/post_restricted_content' );
+		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_restricted_message', '2.0.0', 'filter:content_control/restricted_post_content' );
 		/**
 		 * Filter the restricted message.
 		 *
