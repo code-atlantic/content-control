@@ -77,8 +77,10 @@ class MainQuery extends Controller {
 				return;
 
 			case 'replace':
+				if ( 'page' === $restriction->replacement_type ) {
 				set_query_to_page( $restriction->replacement_page );
 				return;
 		}
 	}
+}
 }
