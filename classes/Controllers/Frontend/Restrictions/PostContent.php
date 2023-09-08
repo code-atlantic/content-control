@@ -65,7 +65,11 @@ class PostContent extends Controller {
 
 		$restriction = get_applicable_restriction();
 
-		if ( is_page( $restriction->replacement_page ) || is_page( $restriction->archive_replacement_page ) ) {
+		// If this is a replacement page, bail.
+		if (
+			( 'replace' === $restriction->protection_method && 'page' === $restriction->replacement_type && is_page( $restriction->replacement_page ) ) ||
+			( 'replace_archive_page' === $restriction->archive_handling && is_page( $restriction->archive_replacement_page ) )
+		) {
 			return $content;
 		}
 
