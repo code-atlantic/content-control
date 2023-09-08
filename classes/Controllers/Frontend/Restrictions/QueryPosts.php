@@ -35,6 +35,9 @@ class QueryPosts extends Controller {
 	/**
 	 * Handle restricted content appropriately.
 	 *
+	 * NOTE. This is only for filtering posts, and should not
+	 *       be used to redirect or replace the entire page.
+	 *
 	 * @param WP_Post[] $posts Array of post objects.
 	 * @param \WP_Query $query The WP_Query instance (passed by reference).
 	 *
