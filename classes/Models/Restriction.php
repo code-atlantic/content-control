@@ -362,7 +362,7 @@ class Restriction {
 		if ( ! isset( $this->message ) ) {
 			if ( ! empty( $this->post->post_content ) ) {
 				$message = \get_the_content( null, false, $this->id );
-			} elseif ( ! empty( $this->custom_message ) ) {
+			} elseif ( 'message' === $this->replacement_type && $this->override_message && ! empty( $this->custom_message ) ) {
 				$message = $this->custom_message;
 			} else {
 				$message = \ContentControl\get_default_denial_message();
