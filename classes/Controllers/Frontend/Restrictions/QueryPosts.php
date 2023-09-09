@@ -91,16 +91,6 @@ class QueryPosts extends Controller {
 				case 'filter_post_content':
 					// Filter the title/excerpt/contents of the restricted items.
 					break;
-				case 'replace_archive_page':
-					if ( $query->is_main_query() ) {
-						set_query_to_page( $restriction->replacement_page );
-					}
-					break;
-				case 'redirect':
-					if ( $query->is_main_query() ) {
-						redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
-					}
-					break;
 				case 'hide':
 					foreach ( $posts as $key => $post ) {
 						if ( in_array( $post->ID, $post_id, true ) ) {

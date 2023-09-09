@@ -15,6 +15,11 @@ use function ContentControl\set_query_to_page;
 use function ContentControl\content_is_restricted;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_applicable_restriction;
+use function ContentControl\get_main_wp_query;
+use function ContentControl\get_restriction_matches_for_queried_posts;
+use function ContentControl\override_query_context;
+use function ContentControl\query_can_be_ignored;
+use function ContentControl\reset_query_context;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -32,6 +37,7 @@ class MainQuery extends Controller {
 		// This can be done no later than template_redirect, and no sooner than send_headers (when conditional tags are available).
 		// Can be done on send_headers, posts_selection, or wp as well.
 		add_action( 'template_redirect', [ $this, 'restrict_main_query' ], 10 );
+		add_action( 'template_redirect', [ $this, 'restrict_main_query_posts' ], 10 );
 	}
 
 	/**
@@ -78,9 +84,78 @@ class MainQuery extends Controller {
 
 			case 'replace':
 				if ( 'page' === $restriction->replacement_type ) {
-				set_query_to_page( $restriction->replacement_page );
-				return;
+					set_query_to_page( $restriction->replacement_page );
+					return;
+				}
 		}
 	}
-}
+
+	/**
+	 * Handle a restriction on the main query posts.
+	 */
+	public function restrict_main_query_posts() {
+		if ( protection_is_disabled() ) {
+			return;
+		}
+
+		$query = get_main_wp_query();
+
+		if ( query_can_be_ignored( $query ) ) {
+			return;
+		}
+
+		override_query_context( 'main/posts' );
+
+		$post_restrictions = get_restriction_matches_for_queried_posts( $query );
+
+		reset_query_context();
+
+		if ( ! $post_restrictions ) {
+			return;
+		}
+
+		// If we have restrictions on the queried posts, handle them top down.
+		foreach ( $post_restrictions as $match ) {
+			$post_id = $match['post_ids'];
+			/**
+			 * Restriction object.
+			 *
+			 * @var \ContentControl\Models\Restriction
+			 */
+			$restriction = $match['restriction'];
+
+			if ( is_int( $post_id ) ) {
+				$post_id = [ $post_id ];
+			}
+
+			/**
+			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
+			 *
+			 * @param null                                    $pre         Whether to prevent the post from being restricted.
+			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
+			 * @param int[]                               $post_id     Post ID.
+			 * @return null|mixed
+			 */
+			if ( null !== apply_filters( 'content_control/pre_restrict_main_query_post', null, $restriction, $post_id ) ) {
+				continue;
+			}
+
+			/**
+			 * Fires when a post is restricted, but before the restriction is handled.
+			 *
+			 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+			 * @param int[]                          $post_id     Post ID.
+			 */
+			do_action( 'content_control/restrict_main_query_post', $restriction, $post_id );
+
+			switch ( $restriction->archive_handling ) {
+				case 'replace_archive_page':
+					set_query_to_page( $restriction->archive_replacement_page );
+					break;
+				case 'redirect':
+					redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
+					break;
+			}
+		}
+	}
 }
