@@ -81,6 +81,24 @@ function get_query( $query = null ) {
 }
 
 /**
+ * Set the current query context.
+ *
+ * @param string $context 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
+ */
+function override_query_context( $context ) {
+	global $cc_current_query_context;
+	$cc_current_query_context = $context;
+}
+
+/**
+ * Reset the current query context.
+ */
+function reset_query_context() {
+	global $cc_current_query_context;
+	unset( $cc_current_query_context );
+}
+
+/**
  * Get or set the current rule (globaly accessible).
  *
  * MOVE to a new file, maybe content-control/inc/functions/query.php
@@ -102,21 +120,30 @@ function get_query( $query = null ) {
  * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
  */
 function current_query_context( $query = null ) {
+	global $cc_current_query_context;
+
+	if ( isset( $cc_current_query_context ) ) {
+		return $cc_current_query_context;
+	}
+
 	$query = get_query( $query );
 
-	$posts_check = doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' );
+	$is_main           = $query->is_main_query();
+	$template_redirect = doing_action( 'template_redirect' );
+	$posts_check       = doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' );
+	$block_check       = doing_filter( 'content_control/should_hide_block' );
 
 	$context_checks = [
 		// 1. Main query (page/psst/home/search/archive etc) (template_redirect)
-		'main'        => $query->is_main_query() && doing_action( 'template_redirect' ),
+		'main'        => $is_main && $template_redirect,
 		// 2. Check posts in the main query. (the_posts)
-		'main/posts'  => $query->is_main_query() && $posts_check,
+		'main/posts'  => $is_main && ( $posts_check || $template_redirect ),
 		// 2. Check posts in the other queries. (the_posts)
-		'posts'       => ! $query->is_main_query() && $posts_check,
+		'posts'       => ! $is_main && $posts_check,
 		// 4. Blocks in the main page
-		'main/blocks' => $query->is_main_query() && doing_filter( 'content_control/should_hide_block' ),
+		'main/blocks' => $is_main && $block_check,
 		// 5. Blocks in query posts
-		'blocks'      => ! $query->is_main_query() && doing_filter( 'content_control/should_hide_block' ),
+		'blocks'      => ! $is_main && $block_check,
 	];
 
 	foreach ( $context_checks as $context => $check ) {
