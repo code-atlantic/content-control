@@ -144,7 +144,7 @@ function get_applicable_restriction( $post_id = null ) {
  *
  * @param \WP_Query $query Query object.
  *
- * @return \ContentControl\Models\Restriction[]|false
+ * @return array|false
  *
  * @since 2.0.0
  */
