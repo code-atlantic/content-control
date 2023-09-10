@@ -54,7 +54,7 @@ class QueryPosts extends Controller {
 
 		$post_restrictions = get_restriction_matches_for_queried_posts( $query );
 
-		if ( ! $post_restrictions ) {
+		if ( false === $post_restrictions ) {
 			return $posts;
 		}
 
