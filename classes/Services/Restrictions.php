@@ -113,19 +113,16 @@ class Restrictions {
 	}
 
 	/**
-	 * Get all applicable restrictions for the current post.
-	 *
-	 * Careful, this could be very unperformant if you have a lot of restrictions.
+	 * Get cache key for restrictions.
 	 *
 	 * @param int|null $post_id Post ID.
 	 *
-	 * @return Restriction[]
+	 * @return string
 	 */
-	public function get_all_applicable_restrictions( $post_id = null ) {
+	public function get_cache_key( $post_id = null ) {
 		$query      = get_query();
 		$context    = current_query_context();
 		$query_hash = md5( maybe_serialize( $query->query_vars ) );
-		$cache_name = 'applicable_restriction';
 
 		if ( is_null( $post_id ) ) {
 			$post_id = \get_the_ID();
@@ -146,7 +143,21 @@ class Restrictions {
 				break;
 		}
 
-		$cache_key = 'all_' . $cache_key;
+		return $cache_key;
+	}
+
+	/**
+	 * Get all applicable restrictions for the current post.
+	 *
+	 * Careful, this could be very unperformant if you have a lot of restrictions.
+	 *
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return Restriction[]
+	 */
+	public function get_all_applicable_restrictions( $post_id = null ) {
+		$cache_name = 'all_applicable_restrictions';
+		$cache_key  = $this->get_cache_key( $post_id );
 
 		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
 			return $this->cache[ $cache_name ][ $cache_key ];
@@ -178,31 +189,8 @@ class Restrictions {
 	 * @return Restriction|false
 	 */
 	public function get_applicable_restriction( $post_id = null ) {
-		$query      = get_query();
-		$context    = current_query_context();
-		$query_hash = md5( maybe_serialize( $query->query_vars ) );
 		$cache_name = 'applicable_restriction';
-
-		if ( is_null( $post_id ) ) {
-			$post_id = \get_the_ID();
-		}
-
-		switch ( $context ) {
-			case 'main':
-				$cache_key = 'main';
-				break;
-
-			case 'main/posts':
-			case 'posts':
-				$cache_key = 'post-' . $post_id;
-				break;
-
-			default:
-				$cache_key = $context . '_' . $query_hash . ( $post_id ? ( '_post-' . $post_id ) : '' );
-				break;
-		}
-
-		$cache_key = 'first_' . $cache_key;
+		$cache_key  = $this->get_cache_key( $post_id );
 
 		if ( isset( $this->cache[ $cache_name ][ $cache_key ] ) ) {
 			return $this->cache[ $cache_name ][ $cache_key ];
