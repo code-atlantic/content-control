@@ -126,68 +126,62 @@ function current_query_context( $query = null ) {
 		return $cc_current_query_context;
 	}
 
-	$query = get_query( $query );
+	$query   = get_query( $query );
+	$is_main = $query->is_main_query();
 
-	$is_main           = $query->is_main_query();
-	$template_redirect = doing_action( 'template_redirect' );
-	$posts_check       = doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' );
-	$block_check       = doing_filter( 'content_control/should_hide_block' );
-
-	$context_checks = [
-		// 1. Main query (page/psst/home/search/archive etc) (template_redirect)
-		'main'        => $is_main && $template_redirect,
-		// 2. Check posts in the main query. (the_posts)
-		'main/posts'  => $is_main && ( $posts_check || $template_redirect ),
-		// 2. Check posts in the other queries. (the_posts)
-		'posts'       => ! $is_main && $posts_check,
-		// 4. Blocks in the main page
-		'main/blocks' => $is_main && $block_check,
-		// 5. Blocks in query posts
-		'blocks'      => ! $is_main && $block_check,
-	];
-
-	foreach ( $context_checks as $context => $check ) {
-		if ( $check ) {
-			return $context;
-		}
+	// Blocks in the main page or other locations.
+	if ( doing_filter( 'content_control/should_hide_block' ) ) {
+		return $is_main ? 'main/blocks' : 'blocks';
 	}
+
+	// Main query (page/psst/home/search/archive etc) (template_redirect).
+	if ( $is_main && doing_action( 'template_redirect' ) ) {
+		return 'main';
+	}
+
+	if ( doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' ) ) {
+		return $is_main ? 'main/posts' : 'posts';
+	}
+
+	// Default to posts.
+	return 'posts';
 }
 
-/**
- * Set the current rule (globaly accessible).
- *
- * Because we check posts in `the_posts`, we can't trust the global $wp_query
- * has been set yet, so we need to manage global state ourselves.
- *
- * @param string $query WP_Query object.
- *
- * @return void
- */
+	/**
+	 * Set the current rule (globaly accessible).
+	 *
+	 * Because we check posts in `the_posts`, we can't trust the global $wp_query
+	 * has been set yet, so we need to manage global state ourselves.
+	 *
+	 * @param string $query WP_Query object.
+	 *
+	 * @return void
+	 */
 function set_rules_query( $query ) {
 	global $cc_current_query;
 	$cc_current_query = $query;
 }
 
-/**
- * Check and overload global post if needed.
- *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
- *
- * @param int|null $post_id Post ID.
- *
- * @return bool
- */
+	/**
+	 * Check and overload global post if needed.
+	 *
+	 * MOVE to a new file, maybe content-control/inc/functions/query.php
+	 *
+	 * @param int|null $post_id Post ID.
+	 *
+	 * @return bool
+	 */
 function setup_post( $post_id = null ) {
 	global $post;
 
 	$current_post_id = isset( $post ) ? $post->ID : null;
 
 	$overload_post = isset( $post_id ) && (
-		( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
-		( is_int( $post_id ) && $post_id !== $current_post_id ) );
+	( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
+	( is_int( $post_id ) && $post_id !== $current_post_id ) );
 
 	if ( $overload_post ) {
-        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = get_post( $post_id );
 		setup_postdata( $post );
 	}
@@ -195,15 +189,15 @@ function setup_post( $post_id = null ) {
 	return $overload_post;
 }
 
-/**
- * Check and clear global post if needed.
- *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
- *
- * @param bool $overload_post Whether post was overloaded.
- *
- * @return void
- */
+	/**
+	 * Check and clear global post if needed.
+	 *
+	 * MOVE to a new file, maybe content-control/inc/functions/query.php
+	 *
+	 * @param bool $overload_post Whether post was overloaded.
+	 *
+	 * @return void
+	 */
 function clear_post( $overload_post = false ) {
 	if ( $overload_post ) {
 		// Reset global post object.
