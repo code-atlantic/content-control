@@ -95,7 +95,9 @@ function user_can_view_content( $post_id = null ) {
 }
 
 /**
- * Check if the current post is restricted.
+ * Helper that checks if given or current post is restricted or not.
+ * 
+ * @see \ContentControl\user_can_view_content() to check if user can view content.
  *
  * @param int|null $post_id Post ID.
  *
