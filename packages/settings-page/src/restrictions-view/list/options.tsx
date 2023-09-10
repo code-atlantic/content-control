@@ -9,13 +9,19 @@ import {
 import { sprintf, _n, __ } from '@wordpress/i18n';
 import { moreVertical, upload } from '@wordpress/icons';
 import { restrictionsStore } from '@content-control/core-data';
-import { useDispatch } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import type { Restriction } from '@content-control/core-data';
 
 const ListOptions = () => {
 	// Get action dispatchers.
 	const { createRestriction, addNotice } = useDispatch( restrictionsStore );
+	const { getNextPriority } = useSelect( ( select ) => {
+		const sel = select( restrictionsStore );
+		return {
+			getNextPriority: sel.getNextPriority,
+		};
+	}, [] );
 
 	const handleUpload = ( uploadData: string ) => {
 		const data = JSON.parse( uploadData );
@@ -25,14 +31,23 @@ const ListOptions = () => {
 		}
 
 		let errorCount = 0;
+		let pri = getNextPriority();
 
 		data.restrictions.forEach( ( restriction: Restriction ) => {
 			try {
+				debugger;
+
 				// Create a restriction from the imported data, setting the status to draft.
-				createRestriction( { ...restriction, status: 'draft' } );
+				createRestriction( {
+					...restriction,
+					status: 'draft',
+					priority: pri,
+				} );
 			} catch ( error ) {
 				errorCount++;
 			}
+
+			pri++;
 		} );
 
 		if ( errorCount ) {
