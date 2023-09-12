@@ -241,6 +241,16 @@ class Rules {
 		$rules = [];
 		$verbs = $this->get_verbs();
 
+		$rules['entire_site'] = [
+			'name'     => 'entire_site',
+			'label'    => __( 'Any Page, Post, or Archive (Entire Site)', 'content-control' ),
+			'context'  => [ 'content' ],
+			'category' => __( 'Content', 'content-control' ),
+			'format'   => '{category} {verb} {label}',
+			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
+			'callback' => '__return_true',
+		];
+
 		$rules['content_is_front_page'] = [
 			'name'     => 'content_is_front_page',
 			'label'    => __( 'The Home Page', 'content-control' ),
