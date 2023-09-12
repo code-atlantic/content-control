@@ -321,6 +321,11 @@ class Restriction {
 	 * @return bool
 	 */
 	public function check_rules() {
+		if ( ! $this->query->has_rules() ) {
+			// No rules should be treated as no restrictions.
+			return false;
+		}
+
 		return $this->query->check_rules();
 	}
 

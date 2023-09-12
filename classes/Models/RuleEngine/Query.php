@@ -54,6 +54,15 @@ class Query {
 	}
 
 	/**
+	 * Check if this query has any rules.
+	 *
+	 * @return bool
+	 */
+	public function has_rules() {
+		return ! empty( $this->items );
+	}
+
+	/**
 	 * Check if this query has JS based rules.
 	 *
 	 * @return bool
