@@ -6,6 +6,7 @@ import { Icon, Popover } from '@wordpress/components';
 import { useEffect, useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
+import { SlotFillProvider } from '@wordpress/components';
 
 import Header from './header';
 import RestrictionsView from './restrictions-view';
@@ -123,18 +124,23 @@ const App = () => {
 	}, [ view, views ] );
 
 	return (
-		<div
-			className={ classNames( [ 'cc-settings-page', `view-${ view }` ] ) }
-		>
-			<UpgradeView />
-			<Header tabs={ views } />
-			<div className="cc-settings-page__content">
-				<ViewComponent />
-			</div>
-			{ /*
+		<SlotFillProvider>
+			<div
+				className={ classNames( [
+					'cc-settings-page',
+					`view-${ view }`,
+				] ) }
+			>
+				<UpgradeView />
+				<Header tabs={ views } />
+				<div className="cc-settings-page__content">
+					<ViewComponent />
+				</div>
+				{ /*
 			// @ts-ignore */ }
-			<Popover.Slot />
-		</div>
+				<Popover.Slot />
+			</div>
+		</SlotFillProvider>
 	);
 };
 
