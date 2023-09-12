@@ -307,15 +307,14 @@ const Finder = (
 				</div>
 
 				{ popoverOpen && (
-					<div className="cc-rule-engine-search__suggestions">
-						<Popover
-							focusOnMount={ false }
-							onClose={ () => setSelectedSuggestion( -1 ) }
-							position="bottom right"
-							// @ts-ignore This exists, just not typed in wp-core.
-							anchor={ wrapperRef.current }
-							className="cc-rule-engine-search__suggestions-popover"
-						>
+					<Popover
+						focusOnMount={ false }
+						onClose={ () => setSelectedSuggestion( -1 ) }
+						position="bottom right"
+						anchor={ wrapperRef.current }
+						className="cc-rule-engine-search__suggestions-popover"
+					>
+						<div className="cc-rule-engine-search__suggestions">
 							{ suggestions.length ? (
 								suggestions.map( ( suggestion, i ) => (
 									<div
@@ -385,8 +384,8 @@ const Finder = (
 									) }
 								</strong>
 							</div>
-						</Popover>
-					</div>
+						</div>
+					</Popover>
 				) }
 			</div>
 		</KeyboardShortcuts>

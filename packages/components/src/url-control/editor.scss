@@ -12,7 +12,7 @@
 				top: 50%;
 				left: 9px;
 				transform: translateY(-50%);
-				color: #1E1E1E;
+				color: #1e1e1e;
 				pointer-events: none;
 			}
 
@@ -48,10 +48,10 @@
 			}
 		}
 	}
+}
 
-	.suggestions-popover > .components-popover__content {
-		width: fit-content;
-	}
+.suggestions-popover > .components-popover__content {
+	width: fit-content;
 
 	.suggestion {
 		align-items: flex-start;

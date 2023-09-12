@@ -461,24 +461,20 @@ const SmartTokenControl = < T extends Token = string >(
 					</div>
 				</BaseControl>
 				{ popoverOpen && (
+					<Popover
+						focusOnMount={ false }
+						onClose={ () => setSelectedSuggestion( -1 ) }
+						position="bottom right"
+						anchor={ inputRef.current }
+						className={ elClasses.popover }
+					>
 					<div
 						className={ elClasses.suggestions }
 						style={ {
 							// Allows the popover to assume full width.
-							position: 'relative',
 							width: inputRef.current?.clientWidth,
 						} }
 					>
-						<Popover
-							focusOnMount={ false }
-							onClose={ () => setSelectedSuggestion( -1 ) }
-							position="bottom right"
-							// @ts-ignore
-							getAnchorRect={ () =>
-								inputRef.current?.getBoundingClientRect()
-							}
-							className={ elClasses.popover }
-						>
 							{ suggestions.length ? (
 								suggestions.map( ( suggestion, i ) => (
 									<div
@@ -513,8 +509,8 @@ const SmartTokenControl = < T extends Token = string >(
 							) : (
 								<div>{ messages.noSuggestions }</div>
 							) }
+						</div>
 						</Popover>
-					</div>
 				) }
 			</div>
 		</KeyboardShortcuts>

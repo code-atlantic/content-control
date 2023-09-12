@@ -72,7 +72,13 @@ const ListBulkActions = () => {
 				// @ts-ignore this is not typed in WP yet.
 				placement="bottom left"
 				focusOnMount="firstElement"
-				popoverProps={ { noArrow: false } }
+				popoverProps={ {
+					noArrow: false,
+					anchor: {
+						getBoundingClientRect: () =>
+							bulkActionsBtnRef?.current?.getBoundingClientRect(),
+					} as Element,
+				} }
 				renderToggle={ ( { isOpen, onToggle } ) => (
 					<Flex>
 						<span className="selected-items">

@@ -96,11 +96,14 @@ const ListFilters = () => {
 				</Button>
 				{ visible && (
 					<Popover
-						className="filter-popover"
-						getAnchorRect={ () =>
-							filterButtonRefs.current[
-								name
-							].getBoundingClientRect()
+						className="list-table-filters__popover"
+						anchor={
+							{
+								getBoundingClientRect: () =>
+									filterButtonRefs.current[
+										name
+									].getBoundingClientRect(),
+							} as Element
 						}
 						onClose={ () => setVisibleFilterControl( '' ) }
 						position="bottom right"
