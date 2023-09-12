@@ -80,6 +80,7 @@ type State = {
 	isFocused: boolean;
 	selectedSuggestion: number;
 	popoverOpen: boolean;
+	refocus: boolean;
 };
 
 const defaultClasses: Required< Props[ 'classes' ] > = {
@@ -137,6 +138,7 @@ const SmartTokenControl = < T extends Token = string >(
 		isFocused: false,
 		selectedSuggestion: -1,
 		popoverOpen: false,
+		refocus: false,
 	} );
 
 	const { inputText, isFocused, selectedSuggestion, popoverOpen } = state;
@@ -208,6 +210,11 @@ const SmartTokenControl = < T extends Token = string >(
 	 * @param {Token} token token to delete
 	 */
 	function deleteToken( token: Token ) {
+		setState( {
+			...state,
+			refocus: true,
+		} );
+
 		onChange(
 			value.filter( ( item ) => {
 				return getTokenValue( item ) !== getTokenValue( token );
@@ -259,6 +266,17 @@ const SmartTokenControl = < T extends Token = string >(
 			}
 		}, 25 );
 	}, [ selectedSuggestion, popoverOpen ] );
+
+	useEffect( () => {
+		if ( state.refocus ) {
+			setState( {
+				...state,
+				refocus: false,
+			} );
+
+			inputRef.current?.focus();
+		}
+	}, [ state, state.refocus ] );
 
 	const keyboardShortcuts = {
 		up: ( event: KeyboardEvent ) => {
@@ -468,13 +486,13 @@ const SmartTokenControl = < T extends Token = string >(
 						anchor={ inputRef.current }
 						className={ elClasses.popover }
 					>
-					<div
-						className={ elClasses.suggestions }
-						style={ {
-							// Allows the popover to assume full width.
-							width: inputRef.current?.clientWidth,
-						} }
-					>
+						<div
+							className={ elClasses.suggestions }
+							style={ {
+								// Allows the popover to assume full width.
+								width: inputRef.current?.clientWidth,
+							} }
+						>
 							{ suggestions.length ? (
 								suggestions.map( ( suggestion, i ) => (
 									<div
@@ -510,7 +528,7 @@ const SmartTokenControl = < T extends Token = string >(
 								<div>{ messages.noSuggestions }</div>
 							) }
 						</div>
-						</Popover>
+					</Popover>
 				) }
 			</div>
 		</KeyboardShortcuts>
