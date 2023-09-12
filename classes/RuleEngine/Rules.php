@@ -243,7 +243,7 @@ class Rules {
 
 		$rules['entire_site'] = [
 			'name'     => 'entire_site',
-			'label'    => __( 'Any Page, Post, or Archive (Entire Site)', 'content-control' ),
+			'label'    => __( 'Entire Site (Any Page, Post, or Archive)', 'content-control' ),
 			'context'  => [ 'content' ],
 			'category' => __( 'Content', 'content-control' ),
 			'format'   => '{category} {verb} {label}',
