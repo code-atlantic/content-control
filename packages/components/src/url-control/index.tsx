@@ -414,11 +414,6 @@ const URLControl = (
 										className="suggestions"
 										id={ suggestionsListId }
 										role="listbox"
-										style={ {
-											// Allows the popover to assume full width.
-											// width: inputRef.current
-											// 	?.clientWidth,
-										} }
 									>
 										{ suggestions.map(
 											( suggestion, i ) => (
