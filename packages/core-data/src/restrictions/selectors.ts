@@ -193,4 +193,5 @@ export const hasDispatched = (
 export const getDispatchError = (
 	state: RestrictionsState,
 	actionName: RestrictionsStore[ 'ActionNames' ]
-): string | undefined => state?.dispatchStatus?.[ actionName ]?.error;
+): string | { message: string; [ key: string ]: any } | undefined =>
+	state?.dispatchStatus?.[ actionName ]?.error;

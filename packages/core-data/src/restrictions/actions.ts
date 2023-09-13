@@ -14,6 +14,7 @@ import type {
 	RestrictionsState,
 	RestrictionsStore,
 } from './types';
+import { validateRestriction } from './validation';
 
 const {
 	CREATE,
@@ -40,7 +41,7 @@ const {
 export const changeActionStatus = (
 	actionName: RestrictionsStore[ 'ActionNames' ],
 	status: Statuses,
-	message?: string | undefined
+	message?: string | { message: string; [ key: string ]: any } | undefined
 ) => {
 	if ( message ) {
 		// eslint-disable-next-line no-console
@@ -186,6 +187,19 @@ export function* createRestriction( restriction: Restriction ) {
 
 		const { id, ...noIdRestriction } = restriction;
 
+		// Validate the restriction.
+		const validation = validateRestriction( restriction );
+
+		if ( true !== validation ) {
+			return changeActionStatus(
+				actionName,
+				Status.Error,
+				validation
+					? validation
+					: __( 'An error occurred, restriction was not saved.' )
+			);
+		}
+
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
 		const result: Restriction = yield fetch( getResourcePath(), {
@@ -248,6 +262,19 @@ export function* updateRestriction( restriction: Restriction ) {
 	// catch any request errors.
 	try {
 		yield changeActionStatus( actionName, Status.Resolving );
+
+		// Validate the restriction.
+		const validation = validateRestriction( restriction );
+
+		if ( true !== validation ) {
+			return changeActionStatus(
+				actionName,
+				Status.Error,
+				validation
+					? validation
+					: __( 'An error occurred, restriction was not saved.' )
+			);
+		}
 
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
