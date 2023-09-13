@@ -35,8 +35,6 @@ const ListOptions = () => {
 
 		data.restrictions.forEach( ( restriction: Restriction ) => {
 			try {
-				debugger;
-
 				// Create a restriction from the imported data, setting the status to draft.
 				createRestriction( {
 					...restriction,

@@ -1,19 +1,19 @@
 import classNames from 'classnames';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { upgrade } from '@content-control/icons';
-import { Icon, Popover } from '@wordpress/components';
-import { useEffect, useMemo } from '@wordpress/element';
-import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { SlotFillProvider } from '@wordpress/components';
+import { applyFilters } from '@wordpress/hooks';
+import { upgrade } from '@content-control/icons';
+import { useEffect, useMemo } from '@wordpress/element';
+import { Icon, Popover, SlotFillProvider } from '@wordpress/components';
+
+import { useLicense } from '@content-control/core-data';
 
 import Header from './header';
 import RestrictionsView from './restrictions-view';
 import SettingsView from './settings-view';
 
 import type { TabComponent } from './types';
-import { useLicense } from '@content-control/core-data';
 import UpgradeView from './upgrades-view';
 
 const {

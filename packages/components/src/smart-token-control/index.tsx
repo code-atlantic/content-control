@@ -47,20 +47,26 @@ export type Props< T extends Token = Token > = {
 	suggestions: string[];
 	closeOnSelect?: boolean;
 	renderToken?: ( token: T ) => JSX.Element | string;
+
 	/**
 	 * Render a suggestion.
+	 *
 	 * @param {string} suggestion suggestion to be rendered
 	 * @return {JSX.Element | string}
 	 */
 	renderSuggestion?: ( suggestion: string ) => JSX.Element | string;
+
 	/**
 	 * Transform the value before adding it to the value array and calling onChange.
+	 *
 	 * @param {string} value string to be transformed
 	 * @return {Token}
 	 */
 	saveTransform?: ( value: string ) => T;
+
 	/**
 	 * When the search input changes.
+	 *
 	 * @param {string} value selected suggestion
 	 * @return {void}
 	 */

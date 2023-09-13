@@ -79,6 +79,7 @@ const QueryList = ( { query, onChange, indexs = [] }: Props ) => {
 		 * The root setList method calls the onChange method directly.
 		 * Nested lists will then call setRootList and pass a SetStateFunctional
 		 * that modifies the rootList based on the current list indexs list.
+		 *
 		 * @param newList
 		 */
 		setList: ( newList ) => {

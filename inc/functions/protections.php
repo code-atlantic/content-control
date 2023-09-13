@@ -70,6 +70,7 @@ function set_query_to_page( $page_id, $query = null ) {
 	$query->init(); // Reset the main query.
 	$query->query_vars = $args;
 
+	// phpcs:disable:Squiz.PHP.CommentedOutCode.Found
 	// $query->queried_object    = $custom_query->post;
 	// $query->queried_object_id = $page_id;
 	// $query->post              = $custom_query->post;
@@ -85,6 +86,7 @@ function set_query_to_page( $page_id, $query = null ) {
 
 	// // Suppress filters. Might not need this.
 	// $query->set( 'suppress_filters', true );
+	// phpcs:enable:Squiz.PHP.CommentedOutCode.Found
 
 	// Ensure all query vars are set.
 	$query->get_posts();

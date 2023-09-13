@@ -40,6 +40,7 @@ export type EditorId = 'new' | number | undefined;
  * The settings for a restriction.
  *
  * This should be kept in sync with the settings in the PHP code.
+ *
  * @see /classes/Model/Restriction.php
  * @see /includes/functions/install.php:get_default_restriction_settings()
  */
