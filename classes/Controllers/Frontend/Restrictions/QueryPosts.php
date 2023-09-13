@@ -10,8 +10,6 @@ namespace ContentControl\Controllers\Frontend\Restrictions;
 
 use ContentControl\Base\Controller;
 
-use function ContentControl\redirect;
-use function ContentControl\set_query_to_page;
 use function ContentControl\query_can_be_ignored;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_restriction_matches_for_queried_posts;

@@ -27,7 +27,11 @@ function redirect( $type = 'login', $url = null ) {
 
 		default:
 		case 'custom':
-			// Do nothing.
+			add_filter( 'allowed_redirect_hosts', function ( $hosts ) use ( $url ) {
+				$hosts[] = wp_parse_url( $url, PHP_URL_HOST );
+
+				return $hosts;
+			} );
 	}
 
 	if ( $url ) {
