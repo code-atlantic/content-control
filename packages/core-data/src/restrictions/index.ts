@@ -36,6 +36,8 @@ declare module '@wordpress/data' {
 
 export * from './types';
 
+export { validateRestriction } from './validation';
+
 export {
 	STORE_NAME as RESTRICTION_STORE,
 	store as restrictionsStore,
