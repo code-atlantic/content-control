@@ -15,6 +15,7 @@ use function ContentControl\get_main_wp_query;
 use function ContentControl\set_query_to_page;
 use function ContentControl\reset_query_context;
 use function ContentControl\query_can_be_ignored;
+use function ContentControl\content_is_restricted;
 use function ContentControl\override_query_context;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_applicable_restriction;
@@ -60,10 +61,10 @@ class MainQuery extends Controller {
 	 *       should not be used to filter or hide post contents.
 	 */
 	public function check_main_query() {
-		$restriction = get_applicable_restriction();
-
 		// Bail if we didn't match any restrictions.
-		if ( false !== $restriction ) {
+		if ( content_is_restricted() ) {
+			$restriction = get_applicable_restriction();
+
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
