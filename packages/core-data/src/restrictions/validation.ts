@@ -32,11 +32,12 @@ export const validateRestriction = (
 	}
 
 	if (
-		! restriction.settings?.conditions?.items?.length
+		! restriction.settings?.conditions?.items?.length &&
+		restriction.status === 'publish'
 	) {
 		return {
 			message: __(
-				'Please provide at least one condition for this restriction.',
+				'Please provide at least one condition for this restriction before enabling it.',
 				'content-control'
 			),
 			tabName: 'content',
