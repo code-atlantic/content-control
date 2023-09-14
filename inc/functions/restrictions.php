@@ -102,6 +102,7 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
  * Check if a given query can be ignored.
  *
  * @param \WP_Query $query Query object.
+ *
  * @return bool True if query can be ignored, false if not.
  */
 function query_can_be_ignored( $query = null ) {
