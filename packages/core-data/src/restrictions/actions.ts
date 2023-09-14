@@ -1,11 +1,13 @@
+import { __, sprintf } from '@wordpress/i18n';
 import { select } from '@wordpress/data-controls';
-import { __ } from '@wordpress/i18n';
 
-import { Status, Statuses } from '../constants';
 import { fetch } from '../controls';
 import { getErrorMessage } from '../utils';
-import { ACTION_TYPES, STORE_NAME } from './constants';
+import { Status, Statuses } from '../constants';
+
 import { getResourcePath } from './utils';
+import { validateRestriction } from './validation';
+import { ACTION_TYPES, STORE_NAME } from './constants';
 
 import type {
 	AppNotice,
@@ -14,7 +16,6 @@ import type {
 	RestrictionsState,
 	RestrictionsStore,
 } from './types';
-import { validateRestriction } from './validation';
 
 const {
 	CREATE,
@@ -191,13 +192,21 @@ export function* createRestriction( restriction: Restriction ) {
 		const validation = validateRestriction( restriction );
 
 		if ( true !== validation ) {
-			return changeActionStatus(
+			yield changeActionStatus(
 				actionName,
 				Status.Error,
 				validation
 					? validation
 					: __( 'An error occurred, restriction was not saved.' )
 			);
+
+			return addNotice( {
+				id: 'restriction-error',
+				type: 'error',
+				message:
+					typeof validation === 'object' ? validation.message : '',
+				closeDelay: 5000,
+			} );
 		}
 
 		// execution will pause here until the `FETCH` control function's return
@@ -228,6 +237,20 @@ export function* createRestriction( restriction: Restriction ) {
 				yield changeEditorId( result.id );
 				return;
 			}
+
+			yield addNotice( {
+				id: 'restriction-saved',
+				type: 'success',
+				message: sprintf(
+					// translators: %s: restriction title.
+					__(
+						'Restriction "%s" saved successfully.',
+						'content-control'
+					),
+					restriction?.title
+				),
+				closeDelay: 5000,
+			} );
 
 			return returnAction;
 		}
@@ -267,13 +290,21 @@ export function* updateRestriction( restriction: Restriction ) {
 		const validation = validateRestriction( restriction );
 
 		if ( true !== validation ) {
-			return changeActionStatus(
+			yield changeActionStatus(
 				actionName,
 				Status.Error,
 				validation
 					? validation
 					: __( 'An error occurred, restriction was not saved.' )
 			);
+
+			return addNotice( {
+				id: 'restriction-error',
+				type: 'error',
+				message:
+					typeof validation === 'object' ? validation.message : '',
+				closeDelay: 5000,
+			} );
 		}
 
 		// execution will pause here until the `FETCH` control function's return
@@ -296,6 +327,20 @@ export function* updateRestriction( restriction: Restriction ) {
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
+
+			yield addNotice( {
+				id: 'restriction-saved',
+				type: 'success',
+				message: sprintf(
+					// translators: %s: restriction title.
+					__(
+						'Restriction "%s" saved successfully.',
+						'content-control'
+					),
+					restriction?.title
+				),
+				closeDelay: 5000,
+			} );
 
 			return {
 				type: UPDATE,
