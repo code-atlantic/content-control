@@ -147,32 +147,38 @@ function current_query_context( $query = null ) {
 	return 'posts';
 }
 
-	/**
-	 * Set the current rule (globaly accessible).
-	 *
-	 * Because we check posts in `the_posts`, we can't trust the global $wp_query
-	 * has been set yet, so we need to manage global state ourselves.
-	 *
-	 * @param string $query WP_Query object.
-	 *
-	 * @return void
-	 */
+/**
+ * Set the current rule (globaly accessible).
+ *
+ * Because we check posts in `the_posts`, we can't trust the global $wp_query
+ * has been set yet, so we need to manage global state ourselves.
+ *
+ * @param string $query WP_Query object.
+ *
+ * @return void
+ */
 function set_rules_query( $query ) {
 	global $cc_current_query;
 	$cc_current_query = $query;
 }
 
-	/**
-	 * Check and overload global post if needed.
-	 *
-	 * MOVE to a new file, maybe content-control/inc/functions/query.php
-	 *
-	 * @param int|null $post_id Post ID.
-	 *
-	 * @return bool
-	 */
+/**
+ * Check and overload global post if needed.
+ *
+ * This has no effect when checking global queries ($post_id = null).
+ *
+ * MOVE to a new file, maybe content-control/inc/functions/query.php
+ *
+ * @param int|null $post_id Post ID.
+ *
+ * @return bool
+ */
 function setup_post( $post_id = null ) {
 	global $post;
+
+	if ( is_null( $post_id ) ) {
+		return false;
+	}
 
 	$current_post_id = isset( $post ) ? $post->ID : null;
 
@@ -189,15 +195,15 @@ function setup_post( $post_id = null ) {
 	return $overload_post;
 }
 
-	/**
-	 * Check and clear global post if needed.
-	 *
-	 * MOVE to a new file, maybe content-control/inc/functions/query.php
-	 *
-	 * @param bool $overload_post Whether post was overloaded.
-	 *
-	 * @return void
-	 */
+/**
+ * Check and clear global post if needed.
+ *
+ * MOVE to a new file, maybe content-control/inc/functions/query.php
+ *
+ * @param bool $overload_post Whether post was overloaded.
+ *
+ * @return void
+ */
 function clear_post( $overload_post = false ) {
 	if ( $overload_post ) {
 		// Reset global post object.
