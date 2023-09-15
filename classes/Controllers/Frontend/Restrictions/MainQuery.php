@@ -123,8 +123,23 @@ class MainQuery extends Controller {
 			return;
 		}
 
-		// Only the highest priority restriction is needed.
-		$restriction_match = array_shift( $post_restrictions );
+		// Only the highest priority restriction is needed with redirect or replace handling.
+		$restriction_match = false;
+
+		// Find the highest priority restriction with redirect or replace handling.
+		foreach ( $post_restrictions as $post_restriction ) {
+			/**
+			 * Restriction object.
+			 *
+			 * @var \ContentControl\Models\Restriction
+			 */
+			$restriction = $post_restriction['restriction'];
+
+			if ( 'redirect' === $restriction->archive_handling || 'replace_archive_page' === $restriction->archive_handling ) {
+				$restriction_match = $post_restriction;
+				break;
+			}
+		}
 
 		/**
 		 * Restriction object.
@@ -144,6 +159,7 @@ class MainQuery extends Controller {
 		 * @param null                                    $pre         Whether to prevent the post from being restricted.
 		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
 		 * @param int[]                               $post_id     Post ID.
+		 *
 		 * @return null|mixed
 		 */
 		if ( null !== apply_filters( 'content_control/pre_restrict_main_query_post', null, $restriction, $post_ids ) ) {
