@@ -53,6 +53,7 @@ export default {
 						type: 'post',
 						subtype,
 					} ),
+					cache: 'no-cache',
 				} )
 					.then( ( results ) => {
 						return results.map( ( result ) => {
@@ -76,6 +77,7 @@ export default {
 						type: 'term',
 						subtype,
 					} ),
+					cache: 'no-cache',
 				} )
 					.then( ( results ) => {
 						return results.map( ( result ) => {
@@ -99,6 +101,7 @@ export default {
 						type: 'post-format',
 						subtype,
 					} ),
+					cache: 'no-cache',
 				} )
 					.then( ( results ) => {
 						return results.map( ( result ) => {
@@ -120,6 +123,7 @@ export default {
 						page,
 						per_page: perPage,
 					} ),
+					cache: 'no-cache',
 				} )
 					.then( ( results ) => {
 						return results.map( ( result ) => {
