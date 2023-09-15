@@ -304,12 +304,31 @@ const URLControl = (
 						! wrapperRef.current?.contains( event.relatedTarget ) &&
 						! popoverRef.current?.contains( event.relatedTarget )
 					) {
-						setState( {
+						const newState = {
 							...state,
 							selected: -1,
 							isFocused: false,
 							showSuggestions: false,
-						} );
+						};
+
+						if ( isEditing ) {
+							newState.isEditing = false;
+
+							// If there is a selected suggestion, select it.
+							if ( selected > -1 ) {
+								newState.value = suggestions[ selected ];
+							}
+							// Otherwise, select the current query.
+							else {
+								newState.value = {
+									title: __( 'Custom URL' ),
+									type: 'URL',
+									url: query,
+								};
+							}
+						}
+
+						setState( newState );
 					}
 				} }
 			>
