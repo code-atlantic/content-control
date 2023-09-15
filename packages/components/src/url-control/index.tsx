@@ -63,6 +63,7 @@ const URLControl = (
 	const wrapperRef = useRef< HTMLDivElement | null >( null );
 	const inputWrapperRef = useRef< HTMLDivElement | null >( null );
 	const inputRef = useRef< HTMLInputElement | null >( null );
+	const popoverRef = useRef< HTMLDivElement | null >( null );
 	const editBtnRef = useRef< HTMLButtonElement | null >( null );
 	const suggestionRefs = useRef< HTMLButtonElement[] >( [] );
 
@@ -300,7 +301,8 @@ const URLControl = (
 				onBlur={ ( event ) => {
 					// If focus is now on element outside this container, clear state.
 					if (
-						! wrapperRef.current?.contains( event.relatedTarget )
+						! wrapperRef.current?.contains( event.relatedTarget ) &&
+						! popoverRef.current?.contains( event.relatedTarget )
 					) {
 						setState( {
 							...state,
@@ -404,6 +406,7 @@ const URLControl = (
 
 							{ showSuggestions && suggestions.length > 0 && (
 								<Popover
+									ref={ popoverRef }
 									focusOnMount={ false }
 									onClose={ () => setFocusedSuggestion( -1 ) }
 									position="bottom right"
