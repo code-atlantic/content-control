@@ -1,4 +1,4 @@
-export const enum Status {
+export enum Status {
 	Idle = 'IDLE',
 	Resolving = 'RESOLVING',
 	Error = 'ERROR',
