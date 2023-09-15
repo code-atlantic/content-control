@@ -55,8 +55,6 @@ function get_current_wp_query() {
 /**
  * Get the current query.
  *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
- *
  * @param \WP_Query|null $query Query object.
  *
  * @return \WP_Query
@@ -100,8 +98,6 @@ function reset_query_context() {
 
 /**
  * Get or set the current rule (globaly accessible).
- *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
  *
  * 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`
  *
@@ -167,8 +163,6 @@ function set_rules_query( $query ) {
  *
  * This has no effect when checking global queries ($post_id = null).
  *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
- *
  * @param int|null $post_id Post ID.
  *
  * @return bool
@@ -197,8 +191,6 @@ function setup_post( $post_id = null ) {
 
 /**
  * Check and clear global post if needed.
- *
- * MOVE to a new file, maybe content-control/inc/functions/query.php
  *
  * @param bool $overload_post Whether post was overloaded.
  *
