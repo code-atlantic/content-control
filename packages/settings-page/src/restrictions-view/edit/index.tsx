@@ -1,14 +1,21 @@
-import { restrictionsStore } from '@content-control/core-data';
+import classNames from 'classnames';
+
+import {
+	Status,
+	restrictionsStore,
+	validateRestriction,
+} from '@content-control/core-data';
 import {
 	Button,
 	Modal,
+	Notice,
 	Spinner,
 	TabPanel,
 	ToggleControl,
 } from '@wordpress/components';
 import { link } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { useDispatch, useSelect } from '@wordpress/data';
 
@@ -24,7 +31,6 @@ export const documenationUrl =
 
 import type { Restriction } from '@content-control/core-data';
 import type { TabComponent } from '../../types';
-import classNames from 'classnames';
 
 export type EditProps = {
 	onSave?: ( values: Restriction ) => void;
@@ -41,9 +47,27 @@ const noop = () => {};
 
 const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	const { tab, setTab, clearEditorParams } = useEditor();
+	const [ triedSaving, setTriedSaving ] = useState< boolean >( false );
+	const [ errorMessage, setErrorMessage ] = useState<
+		| string
+		| {
+				message: string;
+				tabName?: string;
+				field?: string;
+				[ key: string ]: any;
+		  }
+		| null
+	>( null );
 
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
-	const { editorId, isEditorActive, values, isSaving } = useSelect(
+	const {
+		editorId,
+		isEditorActive,
+		values,
+		isSaving,
+		dispatchStatus,
+		dispatchErrors,
+	} = useSelect(
 		( select ) => ( {
 			editorId: select( restrictionsStore ).getEditorId(),
 			values: select( restrictionsStore ).getEditorValues(),
@@ -52,6 +76,22 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				'createRestriction',
 				'updateRestriction',
 			] ),
+			dispatchStatus: {
+				create: select( restrictionsStore ).getDispatchStatus(
+					'createRestriction'
+				),
+				update: select( restrictionsStore ).getDispatchStatus(
+					'updateRestriction'
+				),
+			},
+			dispatchErrors: {
+				create: select( restrictionsStore ).getDispatchError(
+					'createRestriction'
+				),
+				update: select( restrictionsStore ).getDispatchError(
+					'updateRestriction'
+				),
+			},
 		} ),
 		[]
 	);
@@ -62,7 +102,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		createRestriction,
 		updateRestriction,
 		clearEditorData,
-		addNotice,
 	} = useDispatch( restrictionsStore );
 
 	useEffect(
@@ -72,6 +111,26 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
+
+	useEffect( () => {
+		if ( ! triedSaving ) {
+			return;
+		}
+
+		if (
+			Status.Success === dispatchStatus.create ||
+			Status.Success === dispatchStatus.update
+		) {
+			closeEditor();
+			return;
+		}
+
+		const error = dispatchErrors.create ?? dispatchErrors.update;
+
+		if ( typeof error !== 'undefined' ) {
+			setErrorMessage( error );
+		}
+	}, [ dispatchStatus, dispatchErrors ] );
 
 	// If the editor isn't active, return empty.
 	if ( ! isEditorActive ) {
@@ -119,20 +178,10 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 			createRestriction( valuesToSave );
 		}
 
+		setTriedSaving( true );
+		setErrorMessage( null );
+
 		onSave( valuesToSave );
-
-		addNotice( {
-			id: 'restriction-saved',
-			type: 'success',
-			message: sprintf(
-				// translators: %s: restriction title.
-				__( 'Restriction "%s" saved successfully.', 'content-control' ),
-				valuesToSave.title
-			),
-			closeDelay: 5000,
-		} );
-
-		closeEditor();
 	}
 
 	/**
@@ -150,15 +199,6 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				...newSettings,
 			},
 		} );
-	};
-
-	/**
-	 * Checks of the set values are valid.
-	 *
-	 * @return {boolean} True when set values are valid.
-	 */
-	const isSetValid = (): boolean => {
-		return values && [ values.title.length > 0 ].indexOf( false ) === -1;
 	};
 
 	/**
@@ -206,6 +246,17 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		]
 	) as TabComponent[];
 
+	if ( typeof errorMessage === 'object' && errorMessage?.tabName?.length ) {
+		const tab = tabs.find( ( tab ) => tab.name === errorMessage.tabName );
+
+		if ( tab ) {
+			tabs[ tabs.indexOf( tab ) ].className = tabs[ tabs.indexOf( tab ) ]
+				.className
+				? tabs[ tabs.indexOf( tab ) ].className + ' error'
+				: 'error';
+		}
+	}
+
 	// Define the modal title dynamically using editorId.
 	const modalTitle = sprintf(
 		// translators: 1. Id of set to edit.
@@ -243,6 +294,21 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 					}
 				/>
 			</div>
+
+			{ errorMessage && (
+				<Notice
+					status="error"
+					className="restriction-editor-error"
+					onDismiss={ () => {
+						setErrorMessage( null );
+					} }
+				>
+					{ typeof errorMessage === 'string'
+						? errorMessage
+						: errorMessage.message }
+				</Notice>
+			) }
+
 			<TabPanel
 				orientation="vertical"
 				initialTabName={ tab ?? 'general' }
@@ -266,9 +332,13 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				/>
 				<Button
 					variant="primary"
-					disabled={ ! isSetValid() || isSaving }
+					disabled={ isSaving }
 					onClick={ () => {
-						if ( ! isSetValid() ) {
+						const validation = validateRestriction( values );
+						if ( true !== validation ) {
+							if ( typeof validation === 'object' ) {
+								setErrorMessage( validation );
+							}
 							return;
 						}
 						saveRestriction();
