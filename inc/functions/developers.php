@@ -192,6 +192,11 @@ function get_restriction_matches_for_queried_posts( $query ) {
 
 	if ( empty( $restrictions[ $cache_key ] ) ) {
 		$restrictions[ $cache_key ] = false;
+	} else {
+		// Sort by priority.
+		ksort( $restrictions[ $cache_key ] );
+		// Remove priority keys.
+		$restrictions[ $cache_key ] = array_values( $restrictions[ $cache_key ] );
 	}
 
 	return $restrictions[ $cache_key ];
