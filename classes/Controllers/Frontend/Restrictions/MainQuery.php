@@ -123,48 +123,48 @@ class MainQuery extends Controller {
 			return;
 		}
 
-		// If we have restrictions on the queried posts, handle them top down.
-		foreach ( $post_restrictions as $match ) {
-			$post_id = $match['post_ids'];
-			/**
-			 * Restriction object.
-			 *
-			 * @var \ContentControl\Models\Restriction
-			 */
-			$restriction = $match['restriction'];
+		// Only the highest priority restriction is needed.
+		$restriction_match = array_shift( $post_restrictions );
 
-			if ( is_int( $post_id ) ) {
-				$post_id = [ $post_id ];
-			}
+		/**
+		 * Restriction object.
+		 *
+		 * @var \ContentControl\Models\Restriction
+		 */
+		$restriction = $restriction_match['restriction'];
+		$post_ids    = $restriction_match['post_ids'];
 
-			/**
-			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
-			 *
-			 * @param null                                    $pre         Whether to prevent the post from being restricted.
-			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-			 * @param int[]                               $post_id     Post ID.
-			 * @return null|mixed
-			 */
-			if ( null !== apply_filters( 'content_control/pre_restrict_main_query_post', null, $restriction, $post_id ) ) {
-				continue;
-			}
+		if ( is_int( $post_ids ) ) {
+			$post_ids = [ $post_ids ];
+		}
 
-			/**
-			 * Fires when a post is restricted, but before the restriction is handled.
-			 *
-			 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-			 * @param int[]                          $post_id     Post ID.
-			 */
-			do_action( 'content_control/restrict_main_query_post', $restriction, $post_id );
+		/**
+		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
+		 *
+		 * @param null                                    $pre         Whether to prevent the post from being restricted.
+		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
+		 * @param int[]                               $post_id     Post ID.
+		 * @return null|mixed
+		 */
+		if ( null !== apply_filters( 'content_control/pre_restrict_main_query_post', null, $restriction, $post_ids ) ) {
+			return;
+		}
 
-			switch ( $restriction->archive_handling ) {
-				case 'replace_archive_page':
-					set_query_to_page( $restriction->archive_replacement_page );
-					break;
-				case 'redirect':
-					redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
-					break;
-			}
+		/**
+		 * Fires when a post is restricted, but before the restriction is handled.
+		 *
+		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
+		 * @param int[]                          $post_id     Post ID.
+		 */
+		do_action( 'content_control/restrict_main_query_post', $restriction, $post_ids );
+
+		switch ( $restriction->archive_handling ) {
+			case 'replace_archive_page':
+				set_query_to_page( $restriction->archive_replacement_page );
+				break;
+			case 'redirect':
+				redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
+				break;
 		}
 	}
 }
