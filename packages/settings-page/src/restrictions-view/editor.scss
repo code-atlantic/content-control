@@ -302,6 +302,21 @@ $gap4: $gap * 4;
 			vertical-align: middle;
 		}
 	}
+
+	.restriction-editor-error {
+		margin: -5px 0 10px 0;
+	}
+
+	.editor-tabs {
+		.components-tab-panel__tabs {
+			.components-tab-panel__tabs-item {
+				&.error {
+					background-color: #f4a2a2;
+					border-left: 4px solid #cc1818;
+				}
+			}
+		}
+	}
 }
 
 .list-table-header {
