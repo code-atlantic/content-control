@@ -1,4 +1,5 @@
 // import type { Query } from '@content-control/rule-engine';
+import type { Statuses } from '../constants';
 import type { OmitFirstArgs, RemoveReturnTypes } from '../types';
 
 /* temporary to prevent cyclical dependencies. */
@@ -99,7 +100,7 @@ export type RestrictionsState = {
 	// Boilerplate
 	dispatchStatus?: {
 		[ Property in RestrictionsStore[ 'ActionNames' ] ]?: {
-			status: string;
+			status: Statuses;
 			error: string;
 		};
 	};

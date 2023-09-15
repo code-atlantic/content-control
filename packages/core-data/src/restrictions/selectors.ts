@@ -1,6 +1,8 @@
 import { Status } from '../constants';
 import { restrictionDefaults } from './constants';
 
+import type { Statuses } from '../constants';
+
 import type {
 	AppNotice,
 	EditorId,
@@ -128,7 +130,7 @@ export const getRestrictionDefaults = (
 export const getDispatchStatus = (
 	state: RestrictionsState,
 	actionName: RestrictionsStore[ 'ActionNames' ]
-): string | undefined => state?.dispatchStatus?.[ actionName ]?.status;
+): Statuses | undefined => state?.dispatchStatus?.[ actionName ]?.status;
 
 /**
  * Check if action is dispatching.
