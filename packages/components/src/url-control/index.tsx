@@ -152,6 +152,7 @@ const URLControl = (
 		}
 	}, [ value, parsedValue.url, onChange ] );
 
+	// Change internal focus based on isEditing.
 	useEffect( () => {
 		if ( ! isFocused ) {
 			return;
@@ -186,17 +187,6 @@ const URLControl = (
 	// If it is higher, set it to 0 as they have new query results.
 	// This prevents an extra state change.
 	const currentIndex = selected > maxSelectionIndex ? 0 : selected;
-
-	/**
-	 * Ensure selected suggestion is visible in a scrollable list.
-	 */
-	useEffect( () => {
-		setTimeout( () => {
-			if ( suggestionRefs.current ) {
-				// suggestionRefs?.current?.[ selected ]?.scrollIntoView();
-			}
-		}, 25 );
-	}, [ selected, showSuggestions ] );
 
 	// Define our list of keyboard shortcuts.
 	const keyboardShortcuts = {
