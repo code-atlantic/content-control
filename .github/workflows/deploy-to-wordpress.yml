@@ -10,14 +10,15 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-              
+              with:
+                  ref: ${{ github.event.release.target_commitish }}
+
             - name: Restore npm dependency cache
               uses: ./.github/actions/restore-npm-cache
 
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
-
 
             - name: Custom Build Action
               id: custom_build
