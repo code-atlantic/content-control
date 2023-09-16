@@ -13,8 +13,20 @@ jobs:
               with:
                   ref: ${{ github.event.release.target_commitish }}
 
-            - name: Restore npm dependency cache
-              uses: ./.github/actions/restore-npm-cache
+            - name: Get npm cache directory
+              id: npm-cache-dir
+              shell: bash
+              run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+            # Cache node modules
+            - name: Cache node modules
+              uses: actions/cache@v3
+              id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+              with:
+                  path: ${{ steps.npm-cache-dir.outputs.dir }}
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - uses: actions/setup-node@v3
               with:
