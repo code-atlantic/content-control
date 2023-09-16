@@ -3,6 +3,9 @@ name: Deploy to WordPress.org
 on:
     release:
         types: [published]
+    push:
+        branches:
+            - workflow-test
 
 jobs:
     deploy:
@@ -10,30 +13,33 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-              with: 
+              with:
                   ref: workflow-test
 
             - name: List files in the root of the repo
               run: ls -la
 
-            - name: Get npm cache directory
-              id: npm-cache-dir
-              shell: bash
-              run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+            # - name: Get npm cache directory
+            #   id: npm-cache-dir
+            #   shell: bash
+            #   run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
-            # Cache node modules
-            - name: Cache node modules
-              uses: actions/cache@v3
-              id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-              with:
-                  path: ${{ steps.npm-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+            # # Cache node modules
+            # - name: Cache node modules
+            #   uses: actions/cache@v3
+            #   id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+            #   with:
+            #       path: ${{ steps.npm-cache-dir.outputs.dir }}
+            #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            #       restore-keys: |
+            #           ${{ runner.os }}-node-
 
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
+
+            - name: List files in the root of the repo
+              run: ls -la
 
             - name: Custom Build Action
               id: custom_build
@@ -50,32 +56,32 @@ jobs:
                   unzip ${{ steps.custom_build.outputs.zip-path }} -d build
                   ls -la build
 
-            - name: WordPress Plugin Deploy
-              id: deploy
-              uses: 10up/action-wordpress-plugin-deploy@stable
-              with:
-                  generate-zip: true
-                  dry-run: true
-              env:
-                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+            # - name: WordPress Plugin Deploy
+            #   id: deploy
+            #   uses: 10up/action-wordpress-plugin-deploy@stable
+            #   with:
+            #       generate-zip: true
+            #       dry-run: true
+            #   env:
+            #       SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+            #       SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
 
-            - name: Upload Custom Build Release Asset
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ steps.custom_build.outputs.zip-path }}
-                  asset_name: custom-${{ github.event.repository.name }}.zip
-                  asset_content_type: application/zip
+            # - name: Upload Custom Build Release Asset
+            #   uses: actions/upload-release-asset@v1
+            #   env:
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   with:
+            #       upload_url: ${{ github.event.release.upload_url }}
+            #       asset_path: ${{ steps.custom_build.outputs.zip-path }}
+            #       asset_name: custom-${{ github.event.repository.name }}.zip
+            #       asset_content_type: application/zip
 
-            - name: Upload 10up Build Release Asset
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ steps.deploy.outputs.zip-path }}
-                  asset_name: 10up-${{ github.event.repository.name }}.zip
-                  asset_content_type: application/zip
+            # - name: Upload 10up Build Release Asset
+            #   uses: actions/upload-release-asset@v1
+            #   env:
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #   with:
+            #       upload_url: ${{ github.event.release.upload_url }}
+            #       asset_path: ${{ steps.deploy.outputs.zip-path }}
+            #       asset_name: 10up-${{ github.event.repository.name }}.zip
+            #       asset_content_type: application/zip
