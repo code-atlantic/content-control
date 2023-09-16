@@ -40,8 +40,7 @@
 	},
 	"devDependencies": {
 		"@types/wordpress__blocks": "^12.5.0",
-		"@types/wordpress__components": "^23.0.1",
-		"@types/wordpress__compose": "^6.0.1"
+		"@types/wordpress__components": "^23.0.1"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0"
