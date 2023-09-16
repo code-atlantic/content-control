@@ -22,15 +22,14 @@ jobs:
                   npm run release
                   echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
 
-            - name: Prepare BUILD directory
+            - name: Prepare build directory
               run: |
-                  unzip ${{ steps.custom_build.outputs.zip-path }} -d BUILD
+                  unzip ${{ steps.custom_build.outputs.zip-path }} -d build
 
             - name: WordPress Plugin Deploy
               id: deploy
               uses: 10up/action-wordpress-plugin-deploy@stable
               with:
-                  path: BUILD
                   generate-zip: true
                   dry-run: true
               env:
