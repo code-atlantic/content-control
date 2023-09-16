@@ -27,7 +27,7 @@
 		"inc",
 		"languages",
 		"vendor/autoload.php",
-		"vendor/composer/*.php",
+		"vendor/composer/*.*",
 		"vendor-prefixed",
 		"readme.txt",
 		"index.php",
