@@ -44,10 +44,10 @@ jobs:
               run: |
                   npm i
                   npm run release
-                  echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
+                #   echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
 
-            # - name: List files in the root of the repo
-            #   run: ls -la
+            - name: List files in the root of the repo
+              run: ls -la
 
             # - name: Prepare build directory
             #   run: |
