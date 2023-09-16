@@ -30,43 +30,45 @@ jobs:
               with:
                   node-version: 16
 
-            - name: Custom Build Action
-              id: custom_build
+            - name: Install dependencies
               run: |
                   npm i
                   npm run release
 
+            - name: Build release zip
+              id: custom_build
+              run: npm run release
+
             - name: Prepare build directory
               run: |
-                  unzip ${{ steps.custom_build.outputs.zip-path }} -d build
-                  ls -la build
+                  unzip ${{ secrets.SLUG }}.zip -d build
 
-            # - name: WordPress Plugin Deploy
-            #   id: deploy
-            #   uses: 10up/action-wordpress-plugin-deploy@stable
-            #   with:
-            #       generate-zip: true
-            #       dry-run: true
-            #   env:
-            #       SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-            #       SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+            - name: WordPress Plugin Deploy
+              id: deploy
+              uses: 10up/action-wordpress-plugin-deploy@stable
+              with:
+                  generate-zip: true
+                  dry-run: true
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
 
-            # - name: Upload Custom Build Release Asset
-            #   uses: actions/upload-release-asset@v1
-            #   env:
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       upload_url: ${{ github.event.release.upload_url }}
-            #       asset_path: ${{ steps.custom_build.outputs.zip-path }}
-            #       asset_name: custom-${{ github.event.repository.name }}.zip
-            #       asset_content_type: application/zip
+            - name: Upload Custom Build Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ github.event.release.upload_url }}
+                  asset_path: ${{ secrets.SLUG }}.zip
+                  asset_name: custom-${{ github.event.repository.name }}.zip
+                  asset_content_type: application/zip
 
-            # - name: Upload 10up Build Release Asset
-            #   uses: actions/upload-release-asset@v1
-            #   env:
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #   with:
-            #       upload_url: ${{ github.event.release.upload_url }}
-            #       asset_path: ${{ steps.deploy.outputs.zip-path }}
-            #       asset_name: 10up-${{ github.event.repository.name }}.zip
-            #       asset_content_type: application/zip
+            - name: Upload 10up Build Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ github.event.release.upload_url }}
+                  asset_path: ${{ steps.deploy.outputs.zip-path }}
+                  asset_name: 10up-${{ github.event.repository.name }}.zip
+                  asset_content_type: application/zip
