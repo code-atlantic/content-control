@@ -13,6 +13,9 @@ jobs:
               with:
                   ref: ${{ github.event.release.target_commitish }}
 
+            - name: List files in the root of the repo
+              run: ls -la
+
             - name: Get npm cache directory
               id: npm-cache-dir
               shell: bash
@@ -39,9 +42,13 @@ jobs:
                   npm run release
                   echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
 
+            - name: List files in the root of the repo
+              run: ls -la
+
             - name: Prepare build directory
               run: |
                   unzip ${{ steps.custom_build.outputs.zip-path }} -d build
+                  rm build/${{ secrets.SLUG }}.zip
 
             - name: WordPress Plugin Deploy
               id: deploy
