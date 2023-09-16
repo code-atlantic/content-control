@@ -1,4 +1,4 @@
-name: Deploy to WordPress.org
+name: Test Deployment
 
 on:
     push:
@@ -16,3 +16,10 @@ jobs:
 
             - name: List files in the root of the repo
               run: ls -la
+
+            # - uses: actions/setup-node@v3
+            #   with:
+            #       node-version: 16
+
+            # - name: List files in the root of the repo
+            #   run: ls -la
