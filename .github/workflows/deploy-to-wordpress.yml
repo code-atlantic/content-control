@@ -19,8 +19,9 @@ jobs:
               # switch to npm ci when possible
               run: |
                   npm install
-                  composer install
+                  composer install --no-dev --classmap-authoritative
                   npm run build
+                  npm run translate
 
             - name: WordPress Plugin Deploy
               id: deploy
