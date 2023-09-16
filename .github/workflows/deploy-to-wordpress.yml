@@ -15,18 +15,20 @@ jobs:
               uses: actions/checkout@v4
               with:
                   ref: workflow-test
-                  
+
             - name: List files in the root of the repo
-              run: ls -la
+              run: |
+                  ls -la ./.github/
+                  ls -la ./.github/actions
+                  ls -la ./.github/actions/restore-npm-cache
 
             # Cache node modules
             - name: Cache node modules
-              uses: ./github/actions/restore-npm-cache
+              uses: ./.github/actions/restore-npm-cache
 
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
-
 
             - name: Custom Build Action
               id: custom_build
