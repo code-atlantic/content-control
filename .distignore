@@ -10,16 +10,6 @@
 /src
 /tests
 
-# Ignore everything in vendor
-/vendor/*
-
-# Un-ignore autoload.php and composer directory
-!/vendor/autoload.php
-!/vendor/composer/
-
-# Re-ignore the installers within composer
-/vendor/composer/installers/
-
 .browserslistrc
 .distignore
 .editorconfig
