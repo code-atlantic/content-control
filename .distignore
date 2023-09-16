@@ -11,7 +11,7 @@
 /tests
 
 # Ignore everything in vendor
-/vendor
+/vendor/*
 
 # Un-ignore autoload.php and composer directory
 !/vendor/autoload.php
