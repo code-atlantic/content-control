@@ -5,15 +5,20 @@
 /bin
 /build
 /node_modules
+/packages
 /release
 /src
 /tests
 
-# Ignore everything in vendor except autoload.php and composer folder
+# Ignore everything in vendor
 /vendor/*
+
+# Un-ignore autoload.php and composer directory
 !/vendor/autoload.php
-!/vendor/composer
-/vendor/composer/installers
+!/vendor/composer/
+
+# Re-ignore the installers within composer
+/vendor/composer/installers/
 
 .browserslistrc
 .distignore
@@ -41,6 +46,8 @@ composer.lock
 gulpfile.js
 labels.json
 npm-debug.log
+LICENSE
+nx.json
 package.json
 package-lock.json
 phpci.yml
