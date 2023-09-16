@@ -48,7 +48,7 @@ jobs:
             - name: Prepare build directory
               run: |
                   unzip ${{ steps.custom_build.outputs.zip-path }} -d build
-                  rm build/${{ secrets.SLUG }}.zip
+                  ls -la build
 
             - name: WordPress Plugin Deploy
               id: deploy
