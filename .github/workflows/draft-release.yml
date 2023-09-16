@@ -12,9 +12,13 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
+            - uses: actions/setup-node@v3
+              with:
+                node-version: 16
+
             - name: Install and build
               run: |
-                  npm install
+                  npm ci
                   composer install
                   npm run release
 
