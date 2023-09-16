@@ -27,14 +27,16 @@
 		"inc",
 		"languages",
 		"vendor/autoload.php",
-		"vendor/composer/*.*",
+		"vendor/composer/*.php",
+		"vendor/composer/*.json",
 		"vendor-prefixed",
 		"readme.txt",
 		"index.php",
 		"content-control.php",
 		"contributors.txt",
 		"index.php",
-		"uninstall.php"
+		"uninstall.php",
+		"!package.json"
 	],
 	"dependencies": {
 		"@content-control/block-editor": "file:./packages/block-editor",
