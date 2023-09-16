@@ -15,30 +15,44 @@ jobs:
               with:
                   node-version: 16
 
-            - name: Install and build
-              # switch to npm ci when possible
+            - name: Custom Build Action
+              id: custom_build
               run: |
-                  npm install
-                  composer install --no-dev --classmap-authoritative
-                  npm run build
-                  npm run translate
+                  npm i
+                  npm run release
+                  echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
+
+            - name: Prepare BUILD directory
+              run: |
+                  unzip ${{ steps.custom_build.outputs.zip-path }} -d BUILD
 
             - name: WordPress Plugin Deploy
               id: deploy
               uses: 10up/action-wordpress-plugin-deploy@stable
               with:
+                  path: BUILD
                   generate-zip: true
-                  dry-run: true # Ensure dry-run is true during testing phase
+                  dry-run: true
               env:
                   SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
 
-            - name: Upload release asset
+            - name: Upload Custom Build Release Asset
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ github.event.release.upload_url }}
+                  asset_path: ${{ steps.custom_build.outputs.zip-path }}
+                  asset_name: custom-${{ github.event.repository.name }}.zip
+                  asset_content_type: application/zip
+
+            - name: Upload 10up Build Release Asset
               uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   upload_url: ${{ github.event.release.upload_url }}
                   asset_path: ${{ steps.deploy.outputs.zip-path }}
-                  asset_name: ${{ github.event.repository.name }}.zip
+                  asset_name: 10up-${{ github.event.repository.name }}.zip
                   asset_content_type: application/zip
