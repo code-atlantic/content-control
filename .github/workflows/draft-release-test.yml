@@ -1,0 +1,42 @@
+name: Draft Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Tag Version (e.g., v1.0.0)'
+                required: true
+
+jobs:
+    draft:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            # release command output is a zip file with the name of the slug.zip in the plugin root
+            - name: Install and build release zi
+              run: |
+                  npm install
+                  composer install
+                  npm run build
+
+            - name: Create Draft Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.event.inputs.version }}
+                  release_name: Release v${{ github.event.inputs.version }}
+                  draft: true
+
+            - name: Attach assets to release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: ./${{ secrets.SLUG }}.zip
+                  asset_name: ${{ secrets.SLUG }}.zip
+                  asset_content_type: application/zip
