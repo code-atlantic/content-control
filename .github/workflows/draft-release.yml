@@ -20,8 +20,10 @@ jobs:
               # switch to npm ci when possible
               run: |
                   npm install
-                  composer install
-                  npm run release
+                  composer install --no-dev --classmap-authoritative
+                  npm run build
+                  npm run translate
+                  npm run plugin-zip
 
             - name: Create Draft Release
               id: create_release
