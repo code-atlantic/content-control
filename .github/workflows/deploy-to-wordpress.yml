@@ -10,8 +10,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-              with:
-                  ref: ${{ github.event.release.target_commitish }}
+              with: 
+                  ref: workflow-test
 
             - name: List files in the root of the repo
               run: ls -la
