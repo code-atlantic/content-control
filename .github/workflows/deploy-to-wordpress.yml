@@ -16,40 +16,19 @@ jobs:
               with:
                   ref: workflow-test
 
-            - name: List files in the root of the repo
-              run: ls -la
-
-            # - name: Get npm cache directory
-            #   id: npm-cache-dir
-            #   shell: bash
-            #   run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-
-            # # Cache node modules
-            # - name: Cache node modules
-            #   uses: actions/cache@v3
-            #   id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-            #   with:
-            #       path: ${{ steps.npm-cache-dir.outputs.dir }}
-            #       key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-            #       restore-keys: |
-            #           ${{ runner.os }}-node-
+            # Cache node modules
+            - name: Cache node modules
+              uses: ./github/actions/restore-npm-cache
 
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
-
-            - name: List files in the root of the repo
-              run: ls -la
 
             - name: Custom Build Action
               id: custom_build
               run: |
                   npm i
                   npm run release
-                  echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
-
-            - name: List files in the root of the repo
-              run: ls -la
 
             - name: Prepare build directory
               run: |

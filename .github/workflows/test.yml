@@ -1,9 +1,15 @@
 name: Test Deployment
 
 on:
-    push:
-        branches:
-            - workflow-test
+    workflow_dispatch:
+        inputs:
+            branch:
+                description: 'Branch to deploy'
+                required: true
+                default: 'workflow-test'
+    # push:
+    #     branches:
+    #         - workflow-test
 
 jobs:
     deploy:
@@ -44,7 +50,6 @@ jobs:
               run: |
                   npm i
                   npm run release
-                #   echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
 
             - name: List files in the root of the repo
               run: ls -la
