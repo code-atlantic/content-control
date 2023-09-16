@@ -17,8 +17,9 @@ jobs:
                 node-version: 16
 
             - name: Install and build
+              # switch to npm ci when possible
               run: |
-                  npm ci
+                  npm install
                   composer install
                   npm run release
 
