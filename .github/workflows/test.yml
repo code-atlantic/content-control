@@ -46,10 +46,10 @@ jobs:
                   npm run release
                   echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
 
-            - name: List files in the root of the repo
-              run: ls -la
+            # - name: List files in the root of the repo
+            #   run: ls -la
 
-            - name: Prepare build directory
-              run: |
-                  unzip ${{ steps.custom_build.outputs.zip-path }} -d build
-                  ls -la build
+            # - name: Prepare build directory
+            #   run: |
+            #       unzip ${{ steps.custom_build.outputs.zip-path }} -d build
+            #       ls -la build
