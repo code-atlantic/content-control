@@ -38,3 +38,18 @@ jobs:
 
             - name: List files in the root of the repo
               run: ls -la
+
+            - name: Custom Build Action
+              id: custom_build
+              run: |
+                  npm i
+                  npm run release
+                  echo "::set-output name=zip-path::${{ secrets.SLUG }}.zip"
+
+            - name: List files in the root of the repo
+              run: ls -la
+
+            - name: Prepare build directory
+              run: |
+                  unzip ${{ steps.custom_build.outputs.zip-path }} -d build
+                  ls -la build
