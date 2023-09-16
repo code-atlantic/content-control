@@ -21,17 +21,19 @@
 		"node": "^16"
 	},
 	"files": [
-		"assets/images",
+		"assets",
 		"classes",
 		"dist",
 		"inc",
 		"languages",
 		"vendor/autoload.php",
-		"vendor/composer/**/*.php",
+		"vendor/composer/*.php",
 		"vendor-prefixed",
 		"readme.txt",
 		"index.php",
 		"content-control.php",
+		"contributors.txt",
+		"index.php",
 		"uninstall.php"
 	],
 	"dependencies": {
