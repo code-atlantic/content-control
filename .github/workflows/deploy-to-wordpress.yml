@@ -15,6 +15,9 @@ jobs:
               with:
                   node-version: 16
 
+            - name: Restore npm dependency cache
+              uses: ./.github/actions/restore-npm-cache
+
             - name: Custom Build Action
               id: custom_build
               run: |
