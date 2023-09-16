@@ -2,15 +2,18 @@
 /.github
 /.vscode
 /.wordpress-org
-/assets/scripts/src
-/assets/styles/sass
 /bin
 /build
 /node_modules
 /release
 /src
 /tests
-/vendor
+
+# Ignore everything in vendor except autoload.php and composer folder
+/vendor/*
+!/vendor/autoload.php
+!/vendor/composer
+/vendor/composer/installers
 
 .browserslistrc
 .distignore
@@ -20,13 +23,18 @@
 .gitattributes
 .gitignore
 .jshintrc
+.npmrc
+.nvmrc
 .phpcs.xml.dist
+.phpstorm.meta.php
 .prettierrc.js
 .scrutinizer.yml
 .stylelintignore
 .stylelintrc.json
 .travis.yml
+.wp-env.json
 apigen.neon
+babel.config.js
 CHANGELOG.md
 composer.json
 composer.lock
@@ -36,8 +44,16 @@ npm-debug.log
 package.json
 package-lock.json
 phpci.yml
+phpunit-watcher.yml.dist
 phpunit.xml.dist
 postcss.config.js
 readme.md
+strauss.phar
+tsconfig.base.json
+tsconfig.json
+webpack.config.js
 yarn-lock.json
 *.css.map
+
+# plugin release zip
+*.zip
