@@ -21,22 +21,21 @@
 		"node": "^16"
 	},
 	"files": [
-		"assets",
-		"classes",
-		"dist",
-		"inc",
-		"languages",
+		"assets/**/*",
+		"classes/**/*",
+		"dist/**/*",
+		"inc/**/*",
+		"languages/**/*",
 		"vendor/autoload.php",
 		"vendor/composer/*.php",
 		"vendor/composer/*.json",
-		"vendor-prefixed",
+		"vendor-prefixed/**/*",
 		"readme.txt",
 		"index.php",
 		"content-control.php",
 		"contributors.txt",
 		"index.php",
-		"uninstall.php",
-		"!package.json"
+		"uninstall.php"
 	],
 	"dependencies": {
 		"@content-control/block-editor": "file:./packages/block-editor",
@@ -66,6 +65,7 @@
 	},
 	"scripts": {
 		"build": "wp-scripts build",
+		"build-plugin": "node bin/copy-build.js",
 		"clean:packages": "nx run-many --target=clean",
 		"build:tsc": "nx run-many --target=build:tsc",
 		"build:types": "nx run-many --target=build:types",
