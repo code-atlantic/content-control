@@ -46,8 +46,10 @@ jobs:
                   npm run copy-build
 
             # zip the build folder into slug.zip
-            - name: Zip build directory
+            - name: Make new SLUG directory in build and move files to it, then zip it
               run: |
+                  mkdir $BUILD_DIR/${{ secrets.SLUG }}
+                  mv $BUILD_DIR/* $BUILD_DIR/${{ secrets.SLUG }}
                   zip -r ${{ secrets.SLUG }}_${{ github.ref_name }}.zip $BUILD_DIR
 
             # Create draft release
