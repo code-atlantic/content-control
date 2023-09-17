@@ -9,6 +9,7 @@ on:
 
 env:
     BUILD_DIR: build
+    SLUG: ${{ vars.SLUG }}
 
 jobs:
     draft:
@@ -48,9 +49,9 @@ jobs:
             # zip the build folder into slug.zip
             - name: Prepare zip file
               run: |
-                  mv $BUILD_DIR ${{ secrets.SLUG }}
-                  zip -r ${{ secrets.SLUG }}_${{ github.ref_name }}.zip ${{ secrets.SLUG }}
-          
+                  mv $BUILD_DIR ${{ env.SLUG }}
+                  zip -r ${{ env.SLUG }}_${{ github.ref_name }}.zip ${{ env.SLUG }}
+
             # Create draft release
             - name: Create Draft Release
               id: create_release
@@ -70,6 +71,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ${{ secrets.SLUG }}_${{ github.ref_name }}.zip
-                  asset_name: ${{ secrets.SLUG }}_${{ github.ref_name }}.zip
+                  asset_path: ${{ env.SLUG }}_${{ github.ref_name }}.zip
+                  asset_name: ${{ env.SLUG }}_${{ github.ref_name }}.zip
                   asset_content_type: application/zip
