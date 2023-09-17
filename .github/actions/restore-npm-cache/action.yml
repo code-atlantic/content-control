@@ -1,15 +1,19 @@
-name: "Restore npm cache"
-description: ""
+name: 'Restore npm cache'
+description: 'Cache node_modules and npm cache for faster subsequent runs'
+inputs:
+    cache-prefix:
+        description: 'Cache prefix (change to invalidate cache)'
+        required: true
+        default: 'npm-deps-v1'
 runs:
-  using: composite
-  steps:
-    - uses: actions/cache@v3
-      env:
-        cache-name: npm-deps-v1
-      with:
-        path: |
-          ~/.npm
-          ./node_modules
-        key: ${{ env.cache-name }}-${{ hashFiles( 'package-lock.json' ) }}
-        restore-keys: |
-          ${{ env.cache-name }}-
+    using: composite
+    steps:
+        - name: Cache npm dependencies
+          uses: actions/cache@v3
+          with:
+              path: |
+                  ~/.npm
+                  ./node_modules
+              key: ${{ runner.os }}-${{ inputs.cache-prefix }}-${{ hashFiles('package-lock.json') }}
+              restore-keys: |
+                  ${{ runner.os }}-${{ inputs.cache-prefix }}-
