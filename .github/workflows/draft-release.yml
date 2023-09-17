@@ -4,27 +4,54 @@ on:
     push:
         tags:
             - 'v*'
+        branches:
+            - workflow-test
+
+env:
+    BUILD_DIR: build
+    SLUG: content-control
 
 jobs:
     draft:
         runs-on: ubuntu-latest
         steps:
+            # Checkout code
             - name: Checkout code
               uses: actions/checkout@v4
 
+            # Cache node modules
+            - name: Cache node modules
+              uses: ./.github/actions/restore-npm-cache
+              with:
+                  cache-prefix: npm-deps-v1
+
+            # Setup Node 16
             - uses: actions/setup-node@v3
               with:
-                node-version: 16
+                  node-version: 16
 
-            - name: Install and build
-              # switch to npm ci when possible
+            # Install dependencies & build release assets
+            - name: Install dependencies
               run: |
-                  npm install
+                  npm i
                   composer install --no-dev --classmap-authoritative
-                  npm run build
-                  npm run translate
-                  npm run plugin-zip
 
+            # Build release assets
+            - name: Build release assets
+              run: |
+                  npm run build
+
+            # Copy build directory
+            - name: Prepare build directory
+              run: |
+                  npm run copy-build
+
+            # zip the build folder into slug.zip
+            - name: Zip build directory
+              run: |
+                  zip -r $BUILD_DIR/$SLUG.zip $BUILD_DIR/$SLUG
+
+            # Create draft release
             - name: Create Draft Release
               id: create_release
               uses: actions/create-release@v1
@@ -35,12 +62,14 @@ jobs:
                   release_name: Release ${{ github.ref }}
                   draft: true
 
-            - name: Attach assets to release
+            # Upload release asset
+            - name: Upload Release Asset
+              id: upload-release-asset
               uses: actions/upload-release-asset@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./${{ secrets.SLUG }}.zip
-                  asset_name: ${{ secrets.SLUG }}_${{ github.ref_name }}.zip
+                  asset_path: $BUILD_DIR/$SLUG.zip
+                  asset_name: $SLUG.zip
                   asset_content_type: application/zip
