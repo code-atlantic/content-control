@@ -33,6 +33,8 @@ jobs:
             - name: Prepare build directory
               run: |
                   npm run copy-build
+                  ls -la build
+                  ls -la build/vendor
 
             - name: WordPress Plugin Deploy
               id: deploy
