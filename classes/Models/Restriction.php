@@ -307,7 +307,7 @@ class Restriction {
 
 		$this->query = new Query( $this->conditions );
 
-		$index++;
+		++$index;
 	}
 
 	/**

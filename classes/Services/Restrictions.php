@@ -267,14 +267,10 @@ class Restrictions {
 	 * @return \ContentControl\Models\Restriction[]
 	 */
 	public function sort_restrictions_by_priority( $restrictions ) {
-		$sorted_restrictions = [];
+		usort( $restrictions, function ( $a, $b ) {
+			return $a->priority - $b->priority;
+		});
 
-		foreach ( $restrictions as $restriction ) {
-			$sorted_restrictions[ $restriction->priority ] = $restriction;
-		}
-
-		ksort( $sorted_restrictions );
-
-		return $sorted_restrictions;
+		return $restrictions;
 	}
 }
