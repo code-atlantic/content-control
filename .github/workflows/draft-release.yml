@@ -8,7 +8,7 @@ on:
             - workflow-test
 
 env:
-    BUILD_DIR: ./build/${{ secrets.SLUG }}
+    BUILD_DIR: build
 
 jobs:
     draft:
@@ -48,7 +48,7 @@ jobs:
             # zip the build folder into slug.zip
             - name: Zip build directory
               run: |
-                  zip -r $BUILD_DIR/$SLUG.zip $BUILD_DIR
+                  zip -r ${{ secrets.SLUG }}_${{ github.ref_name }}.zip $BUILD_DIR
 
             # Create draft release
             - name: Create Draft Release
