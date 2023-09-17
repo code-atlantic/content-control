@@ -6,7 +6,7 @@ on:
 
 env:
     BUILD_DIR: ./build
-    SLUG: content-control
+    SLUG: ${{ vars.SLUG }}
 
 jobs:
     deploy:
@@ -53,14 +53,3 @@ jobs:
               env:
                   SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-
-            # Upload build release assets
-            - name: Upload Build Release Asset
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ steps.deploy.outputs.zip-path }}
-                  asset_name: ${{ github.event.repository.name }}_v${{ github.event.release.tag_name }}.zip
-                  asset_content_type: application/zip
