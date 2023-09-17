@@ -79,6 +79,23 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 == Changelog ==
 
+= v2.0.0 - 09/17/2023 =
+
+- Feature: Restrict individual blocks in the Gutenberg editor.
+- Feature: Restrict individual blocks in the Full Site Editor.
+- Feature: Use a custom page template for restricted content.
+- Feature: Restrict blocks by device type with customizable breakpoints.
+- Feature: Restrict blocks by user status & role.
+- Feature: Global restrictions now offer more control over how restricted content is handled.
+  - Choose to redirect or replace content with a custom page.
+  - Filter or hide posts in archives or custom loops.
+  - Secondary controls for posts if found in an archive.
+- Improvement: Match or exclude specific roles.
+- Improvement: Updated interface with intuitive and responsive controls.
+- Improvement: Boolean editor improvements.
+- Improvement: Control who can modify plugin settings.
+- Improvement: Upgraded tooling & Code quality improvements.
+
 = v1.1.10 - 12/28/2022 =
 
 - Security: Fix unescaped output for CSS classname in the [contentcontrol] shortcode allowing users with the ability to edit posts to inject code into the page.
