@@ -263,6 +263,8 @@ class Restriction {
 	 * @param array $restriction Restriction data.
 	 */
 	public function setup_v1_restriction( $restriction ) {
+		static $index = 0;
+
 		$restriction = \wp_parse_args( $restriction, [
 			'title'                    => '',
 			'who'                      => '',
@@ -281,7 +283,7 @@ class Restriction {
 		$this->title       = $restriction['title'];
 		$this->description = '';
 		$this->status      = 'publish';
-		$this->priority    = 0;
+		$this->priority    = $index;
 
 		$user_roles = is_array( $restriction['roles'] ) ? $restriction['roles'] : [];
 
@@ -304,6 +306,8 @@ class Restriction {
 		$this->conditions                = \ContentControl\remap_conditions_to_query( $restriction['conditions'] );
 
 		$this->query = new Query( $this->conditions );
+
+		$index++;
 	}
 
 	/**
