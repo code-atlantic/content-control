@@ -48,9 +48,8 @@ jobs:
             # zip the build folder into slug.zip
             - name: Prepare zip file
               run: |
-                  mkdir $BUILD_DIR/${{ secrets.SLUG }}
-                  rsync -av --remove-source-files $BUILD_DIR/ $BUILD_DIR/${{ secrets.SLUG }} --exclude $BUILD_DIR/${{ secrets.SLUG }}
-                  zip -r $BUILD_DIR/${{ secrets.SLUG }}_${{ github.ref_name }}.zip $BUILD_DIR/${{ secrets.SLUG }}
+                  mv $BUILD_DIR ${{ secrets.SLUG }}
+                  zip -r ${{ secrets.SLUG }}_${{ github.ref_name }}.zip ${{ secrets.SLUG }}
           
             # Create draft release
             - name: Create Draft Release
