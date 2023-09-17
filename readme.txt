@@ -4,9 +4,9 @@ Author URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=pl
 Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
-Requires at least: 5.0.0
-Tested up to: 6.2.2
-Stable tag: 1.1.10
+Requires at least: 5.6
+Tested up to: 6.3.1
+Stable tag: 2.0.0
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
@@ -78,6 +78,23 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.0 - 09/17/2023 =
+
+- Feature: Restrict individual blocks in the Gutenberg editor.
+- Feature: Restrict individual blocks in the Full Site Editor.
+- Feature: Use a custom page template for restricted content.
+- Feature: Restrict blocks by device type with customizable breakpoints.
+- Feature: Restrict blocks by user status & role.
+- Feature: Global restrictions now offer more control over how restricted content is handled.
+  - Choose to redirect or replace content with a custom page.
+  - Filter or hide posts in archives or custom loops.
+  - Secondary controls for posts if found in an archive.
+- Improvement: Match or exclude specific roles.
+- Improvement: Updated interface with intuitive and responsive controls.
+- Improvement: Boolean editor improvements.
+- Improvement: Control who can modify plugin settings.
+- Improvement: Upgraded tooling & Code quality improvements.
 
 = v1.1.10 - 12/28/2022 =
 
