@@ -65,7 +65,6 @@
 	},
 	"scripts": {
 		"build": "wp-scripts build",
-		"build-plugin": "node bin/copy-build.js",
 		"clean:packages": "nx run-many --target=clean",
 		"build:tsc": "nx run-many --target=build:tsc",
 		"build:types": "nx run-many --target=build:types",
@@ -73,6 +72,7 @@
 		"check-engines": "wp-scripts check-engines",
 		"check-licenses": "wp-scripts check-licenses",
 		"composer": "wp-env run cli --env-cwd=wp-content/plugins/content-control composer",
+		"copy-build": "node bin/copy-build.js",
 		"format": "wp-scripts format",
 		"format:src": "wp-scripts format ./src",
 		"format:packages": "wp-scripts format ./packages/**/src",
