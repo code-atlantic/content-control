@@ -69,6 +69,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                   upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: $BUILD_DIR/$SLUG.zip
-                  asset_name: $SLUG.zip
+                  asset_path: ${{ secrets.SLUG }}_${{ github.ref_name }}.zip
+                  asset_name: ${{ secrets.SLUG }}_${{ github.ref_name }}.zip
                   asset_content_type: application/zip
