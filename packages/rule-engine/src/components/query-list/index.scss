@@ -1,0 +1,80 @@
+@import "../../styles/variables";
+@import "../../styles/animations";
+
+.cc-rule-engine-item-list {
+	border: $dropzoneBorderStyle transparent;
+
+	// Status Classes
+	&.has-item {
+		$placeholder: 1;
+	}
+	&.has-items {
+		$placeholder: 1;
+	}
+	&.is-root {
+		$placeholder: 1;
+	}
+	&.is-nested {
+		$placeholder: 1;
+	}
+
+	// Handles parent and nested list dropzone highlights.
+	&.is-dragging,
+	.is-dragging & {
+		animation-name: blinkingBorder;
+		animation-duration: 1.5s;
+		animation-timing-function: linear;
+		animation-iteration-count: infinite;
+	}
+
+	&.is-root {
+		> .cc-rule-engine-item-wrapper {
+			/**
+			 * Logical Operator Customizations
+			 */
+			> .cc-rule-engine-logical-operator {
+				position: relative;
+
+				&:before,
+				&:after {
+					content: "";
+					background-color: #ddd;
+					position: absolute;
+					z-index: -1;
+				}
+
+				&.and {
+					width: fit-content;
+
+					&:before,
+					&:after {
+						width: 2px;
+						height: $spacing * 2;
+						left: 50%;
+					}
+
+					&:before {
+						bottom: 100%;
+					}
+
+					&:after {
+						top: 100%;
+					}
+				}
+
+				&.or {
+					.cc-rule-engine-logical-operator__control {
+						width: fit-content;
+					}
+
+					&:after {
+						width: 100%;
+						height: 2px;
+						top: 50%;
+						left: 0;
+					}
+				}
+			}
+		}
+	}
+}

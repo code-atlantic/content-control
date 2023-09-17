@@ -1,0 +1,6 @@
+{
+    "plugins": [
+        ".",
+        "https://downloads.wordpress.org/plugin/gutenberg.zip"
+    ]
+}

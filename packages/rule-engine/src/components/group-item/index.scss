@@ -1,0 +1,95 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.cc-rule-engine-item-wrapper--group {
+	padding: $spacing 0;
+
+	/**
+	 * Conditional modifications for first element in list
+	 */
+	&:first-child {
+		padding-top: 0;
+	}
+
+	> .cc-rule-engine-group {
+		margin-top: $spacing;
+		position: relative;
+
+		.cc-rule-engine-item-list {
+			min-height: calc($spacing / 2);
+
+			.cc-rule-engine-item-wrapper--rule {
+				@include flexRow();
+
+				padding: 0;
+
+				.cc-rule-engine-rule {
+					margin: 0 0 $spacing * 2;
+					background-color: transparent;
+					border: none;
+					padding: 0;
+				}
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		> .cc-rule-engine-item-list.has-items
+			> .cc-rule-engine-item-wrapper--rule
+			> .cc-rule-engine-rule {
+			flex-grow: initial;
+			justify-content: left;
+		}
+	}
+}
+
+.cc-rule-engine-group {
+	// Disable animation for group items while its being dragged.
+	.is-chosen & .cc-rule-engine-item-list {
+		animation-name: none;
+	}
+
+	> .cc-condition-editor-item-actions {
+		position: absolute;
+		right: -1px;
+		top: -1px;
+
+		.components-button.has-icon {
+			&:first-child {
+				border-top-left-radius: 0;
+			}
+
+			&:last-child {
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+}
+
+.cc-rule-engine-group-label {
+	margin: 0 0 $spacing;
+
+	display: flex;
+	align-items: center;
+	vertical-align: middle;
+
+	h3, .components-base-control__label {
+		margin: 0;
+	}
+
+	.components-base-control__field {
+		margin: 0;
+	}
+
+	.components-text-control__input {
+		background-color: transparent;
+		border-left: none;
+		border-right: none;
+		border-top: none;
+		font-size: 16px;
+		padding-left: 0;
+		width: 100%;
+	}
+}

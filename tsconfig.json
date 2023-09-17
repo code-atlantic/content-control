@@ -1,0 +1,42 @@
+{
+	"extends": "./tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"paths": {},
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"**/node_modules/**"
+	],
+	"references": [
+		{
+			"path": "packages/block-editor"
+		},
+		{
+			"path": "packages/components"
+		},
+		{
+			"path": "packages/core-data"
+		},
+		{
+			"path": "packages/data"
+		},
+		{
+			"path": "packages/fields"
+		},
+		{
+			"path": "packages/icons"
+		},
+		{
+			"path": "packages/rule-engine"
+		},
+		{
+			"path": "packages/settings-page"
+		},
+		{
+			"path": "packages/utils"
+		}
+	],
+}

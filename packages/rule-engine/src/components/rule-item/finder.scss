@@ -1,0 +1,55 @@
+.cc-rule-engine-search {
+	position: relative;
+
+	&:is-focused {
+		border: 1px solid red;
+	}
+}
+
+.cc-rule-engine-search__input {
+	display: flex;
+
+	.components-base-control,
+	.components-base-control__field {
+		margin-bottom: 0 !important;
+
+		.components-text-control__input {
+			border-color: transparent;
+		}
+	}
+}
+
+.cc-rule-engine-search__suggestions {
+	width: fit-content;
+}
+
+.cc-rule-engine-search__suggestions-popover {
+	.components-popover__content {
+		max-height: 150px !important;
+	}
+}
+
+.cc-rule-engine-search__suggestion {
+	padding: 8px 10px;
+	line-height: 1;
+	display: block;
+	width: max-content;
+	min-width: 100%;
+	cursor: pointer;
+
+	&:hover,
+	&:focus,
+	&.is-selected {
+		background-color: var(--wp-admin-theme-color);
+		color: #fff;
+	}
+
+	&.is-upsell {
+		color: purple;
+
+		&.is-selected {
+			background-color: purple;
+			color: #fff;
+		}
+	}
+}

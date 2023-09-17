@@ -1,0 +1,76 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+// Rule Wrapper
+.cc-rule-engine-item-wrapper--rule {
+	> .cc-rule-engine-rule {
+		position: relative;
+
+		@include flexRow();
+		margin-top: $spacing;
+
+		// Ensure this row fills all space.
+		flex-grow: 1;
+
+		// Spread children to full width.
+		justify-content: space-between;
+
+		.if-text-column {
+			display: block;
+			min-width: 65px;
+		}
+
+		.add-rule-column {
+			display: none;
+		}
+
+		.controls-column {
+			flex-grow: 1;
+
+			.editable-area {
+				@include flexRow(20px);
+				background-color: #fff;
+				border: 1px solid #ddd;
+				padding: calc($spacing / 2);
+				width: fit-content;
+
+				.rule-label {
+					width: fit-content;
+					white-space: nowrap;
+				}
+
+				.rule-fields {
+					flex-grow: auto;
+				}
+
+				.components-base-control__field {
+					margin-bottom: 0;
+				}
+
+				.components-button {
+					padding: 0;
+					height: 30px;
+				}
+			}
+
+			.rule-fields {
+				@include flexRow(4px);
+			}
+		}
+	}
+
+	// Only apply to consecutive rules.
+	+ .cc-rule-engine-item-wrapper--rule {
+		.if-text-column {
+			display: none;
+		}
+	}
+
+	// Only apply these to ungrouped (root level) rules.
+	.is-root > & {
+		.if-text-column {
+			// Override the prior greedy rule.
+			display: block;
+		}
+	}
+}

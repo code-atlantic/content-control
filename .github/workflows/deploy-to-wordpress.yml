@@ -1,0 +1,55 @@
+name: Deploy to WordPress.org
+
+on:
+    release:
+        types: [published]
+
+env:
+    BUILD_DIR: ./build
+    SLUG: ${{ vars.SLUG }}
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            # Checkout code
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            # Cache node modules
+            - name: Cache node modules
+              uses: ./.github/actions/restore-npm-cache
+              with:
+                  cache-prefix: npm-deps-v1
+
+            # Setup Node 16
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            # Install dependencies & build release assets
+            - name: Install dependencies
+              run: |
+                  npm i
+                  composer install --no-dev --classmap-authoritative
+
+            # Build release assets
+            - name: Build release assets
+              run: |
+                  npm run build
+
+            # Copy build directory
+            - name: Prepare build directory
+              run: |
+                  npm run copy-build
+
+            # Deploy to WordPress.org
+            - name: WordPress Plugin Deploy
+              id: deploy
+              uses: 10up/action-wordpress-plugin-deploy@2.2.2
+              with:
+                  generate-zip: true
+                  dry-run: true
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}

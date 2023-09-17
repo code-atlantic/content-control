@@ -1,0 +1,213 @@
+.cc-settings-page {
+	.plugin-settings {
+		position: relative;
+	}
+
+	.cc-settings-view {
+		&.permission-denied {
+			text-align: center;
+		}
+	}
+
+	.cc-settings-view__header {
+		.header-top-bar {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			margin-bottom: 10px;
+
+			.wp-heading-inline {
+				margin-right: auto;
+			}
+
+			.settings-search {
+				display: flex;
+				align-items: center;
+
+				svg {
+					fill: #999;
+				}
+
+				&:focus-within {
+					svg {
+						fill: #3c434a;
+					}
+				}
+
+				.components-base-control__field {
+					margin: 0;
+				}
+
+				.components-text-control__input {
+					background-color: transparent;
+					border: 0;
+					width: 140px;
+					font-size: 16px;
+				}
+			}
+		}
+
+		.tabs {
+			.components-tab-panel__tabs-item {
+				font-size: 14px;
+
+				&:first-child {
+					padding-left: 0;
+				}
+
+				&.is-active {
+					box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus)
+							#0000,
+						inset 0 -2px 0 0 var(--wp-admin-theme-color);
+				}
+			}
+		}
+	}
+
+	.cc-settings-view__content {
+		padding: 20px 0;
+	}
+
+	.settings-section-panel {
+		margin: 30px 0;
+		border-bottom: 1px solid d9d9d9;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		.components-panel__header {
+			display: flex;
+			justify-content: left;
+			align-items: center;
+			min-height: 60px;
+		}
+
+		.panel-icon {
+			display: flex;
+			align-items: center;
+			margin-right: 10px;
+		}
+
+		.panel-title {
+			font-size: 1.1em;
+			font-weight: 500;
+		}
+
+		.panel-actions {
+			display: flex;
+			gap: 10px;
+			margin-left: auto;
+			align-items: center;
+
+			.components-base-control__field {
+				margin-bottom: 0;
+
+				.components-form-toggle {
+					margin-right: 0;
+				}
+			}
+
+			.components-button.has-icon {
+				padding: 0;
+			}
+		}
+
+		.components-notice {
+			margin: 5px 0 30px;
+		}
+
+		.field-group {
+			display: flex;
+
+			padding-bottom: 20px;
+			margin-top: 20px;
+
+			border-bottom: 1px solid #ccc;
+
+			&:last-child {
+				padding-bottom: 0;
+				border-bottom: 0;
+			}
+
+			.field-group__label {
+				width: 350px;
+				padding-right: 20px;
+
+				.branding-pro-tag {
+					margin-top: -4px;
+					margin-bottom: -4px;
+				}
+			}
+
+			.field-group__controls {
+				justify-content: left;
+				flex-grow: 1;
+
+				.components-base-control {
+					margin-bottom: 20px;
+				}
+			}
+		}
+	}
+
+	.preset-manager-preview {
+		display: block;
+		position: relative;
+
+		.preview-overlay {
+			z-index: 2;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			gap: 15px;
+
+			font-size: 1.4em;
+			line-height: 1;
+
+			span {
+				color: #fff;
+				margin-bottom: 20px;
+			}
+
+			span:first-child {
+				font-size: 2em;
+			}
+
+			.components-button {
+				font-size: 1.2em;
+				height: max-content;
+				padding: 0.5em 1em;
+				line-height: 1.2;
+
+				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25);
+			}
+		}
+
+		&::after {
+			z-index: 1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			content: "";
+			background-color: #000;
+			opacity: 0.75;
+		}
+
+		img {
+			z-index: 0;
+		}
+	}
+}

@@ -1,0 +1,4 @@
+@mixin elevation($value) {
+	box-shadow: 0 #{$value}px calc(#{$value}px * 2) 0
+		rgba(0, 0, 0, calc($value / 20));
+}

@@ -1,0 +1,139 @@
+.content-control-upgrades-panel {
+	margin: 10px;
+	background: #fff;
+	border: 1px solid #ddd;
+	padding: 20px;
+	border-radius: 3px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+
+	.upgrade-notice {
+		display: flex;
+		gap: 20px;
+		justify-content: left;
+		min-width: 100%;
+		align-items: center;
+
+		.notice-icon {
+			color: #007cba;
+			font-size: 20px;
+			img {
+				max-height: 60px;
+				width: auto;
+			}
+		}
+
+		.notice-content {
+			flex-grow: 1;
+			text-align: center;
+			h2 {
+				margin-top: 0;
+			}
+			p {
+				margin-bottom: 0;
+			}
+		}
+
+		.components-button {
+			margin-left: auto;
+
+			&:hover {
+				background: #007cba;
+				color: #fff;
+			}
+		}
+	}
+
+	.upgrade-progress {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		position: relative;
+
+		&__header {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&__title {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+		&__percentage {
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+		&__bar {
+			background-color: #f1f1f1;
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			height: 20px;
+			min-height: 20px;
+			position: relative;
+
+			&__fill {
+				position: absolute;
+				background-color: #fff;
+				height: 100%;
+				width: 0;
+				top: 0;
+				left: 0;
+
+				&--current {
+					background-color: #007cba;
+					z-index: 3;
+					width: 0;
+
+					&.complete {
+						background-color: #00a32a;
+					}
+				}
+
+				&--next {
+					background-color: #ddd;
+					z-index: 1;
+					width: 0;
+				}
+
+				&--task {
+					background-color: #11a0d2;
+					z-index: 2;
+					width: 0;
+
+					transition: all 0.1s ease-in-out;
+
+					.task-progress {
+						margin-left: 5px;
+						color: #fff;
+					}
+				}
+			}
+		}
+
+		&__logs {
+			&__header {
+				min-height: 1.4em;
+				display: flex;
+				justify-content: space-between;
+
+				&__status {
+					font-weight: bold;
+				}
+
+				.components-button {
+				}
+			}
+
+			&__content {
+				background-color: #fff;
+				border: 1px solid #ddd;
+				border-radius: 3px;
+				padding: 10px;
+				max-height: 200px;
+				overflow-y: auto;
+				margin-top: 10px;
+			}
+		}
+	}
+}

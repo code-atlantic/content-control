@@ -1,0 +1,25 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "build",
+		"declarationDir": "build-types"
+	},
+	"include": [
+		"./src/**/*"
+	],
+	"references": [
+		{
+			"path": "../components"
+		},
+		{
+			"path": "../core-data"
+		},
+		{
+			"path": "../rule-engine"
+		},
+		{
+			"path": "../utils"
+		},
+	],
+}

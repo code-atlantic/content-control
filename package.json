@@ -1,52 +1,105 @@
 {
-  "name": "content-control",
-  "version": "1.1.10",
-  "description": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "gulp release"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jungle-Plugins/Content-Control.git"
-  },
-  "author": "Daniel Iser",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/Jungle-Plugins/Content-Control/issues"
-  },
-  "homepage": "https://github.com/Jungle-Plugins/Content-Control#readme",
-  "engines": {
-    "node": "^7.10.0",
-    "npm": ">=4.2.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-combine-mq": "^0.4.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-csso": "^1.1.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-ignore": "^2.0.1",
-    "gulp-jshint": "^2.0.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-load-plugins": "^1.2.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-order": "^1.1.1",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.2.0",
-    "gulp-sort": "^2.0.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
-    "gulp-watch": "^4.3.5",
-    "gulp-wp-pot": "^1.1.1",
-    "gulp-zip": "^3.2.0",
-    "jshint": "^2.9.1",
-    "run-sequence": "^1.1.5"
-  },
-  "dependencies": {
-    "notify-send": "^0.1.2"
-  }
+	"name": "content-control",
+	"version": "2.0.0",
+	"description": "",
+	"author": "Code Atlantic",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wordpress",
+		"restriction",
+		"access control"
+	],
+	"homepage": "https://github.com/code-atlantic/content-control#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/code-atlantic/content-control.git"
+	},
+	"bugs": {
+		"url": "https://github.com/code-atlantic/content-control/issues"
+	},
+	"engines": {
+		"node": "^16"
+	},
+	"files": [
+		"assets/**/*",
+		"classes/**/*",
+		"dist/**/*",
+		"inc/**/*",
+		"languages/**/*",
+		"vendor/autoload.php",
+		"vendor/composer/*.php",
+		"vendor/composer/*.json",
+		"vendor-prefixed/**/*",
+		"readme.txt",
+		"index.php",
+		"content-control.php",
+		"contributors.txt",
+		"index.php",
+		"uninstall.php"
+	],
+	"dependencies": {
+		"@content-control/block-editor": "file:./packages/block-editor",
+		"@content-control/components": "file:./packages/components",
+		"@content-control/core-data": "file:./packages/core-data",
+		"@content-control/data": "file:./packages/data",
+		"@content-control/fields": "file:./packages/fields",
+		"@content-control/icons": "file:./packages/icons",
+		"@content-control/rule-engine": "file:./packages/rule-engine",
+		"@content-control/settings-page": "file:./packages/settings-page",
+		"@content-control/utils": "file:./packages/utils",
+		"@content-control/widget-editor": "file:./packages/widget-editor"
+	},
+	"devDependencies": {
+		"@code-atlantic/browserslist-config": "^1.0.1",
+		"@code-atlantic/eslint-plugin": "^1.2.1",
+		"@code-atlantic/stylelint-config": "^1.2.0",
+		"@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
+		"@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
+		"@nrwl/nx-cloud": "^16.3.0",
+		"@wordpress/prettier-config": "^2.24.0",
+		"@wordpress/scripts": "^26.12.0",
+		"nx": "16.7.4",
+		"path": "^0.12.7",
+		"prettier": "npm:wp-prettier@latest",
+		"wp-pot-cli": "^1.5.0"
+	},
+	"scripts": {
+		"build": "wp-scripts build",
+		"clean:packages": "nx run-many --target=clean",
+		"build:tsc": "nx run-many --target=build:tsc",
+		"build:types": "nx run-many --target=build:types",
+		"packages-update-deep": "nx run-many --target=packages-update",
+		"check-engines": "wp-scripts check-engines",
+		"check-licenses": "wp-scripts check-licenses",
+		"composer": "wp-env run cli --env-cwd=wp-content/plugins/content-control composer",
+		"copy-build": "node bin/copy-build.js",
+		"format": "wp-scripts format",
+		"format:src": "wp-scripts format ./src",
+		"format:packages": "wp-scripts format ./packages/**/src",
+		"format:php": "npm run composer run-script format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:md:docs": "wp-scripts lint-md-docs",
+		"lint:md:js": "wp-scripts lint-md-js",
+		"lint:packages": "nx run-many --target=lint",
+		"lint:pkg-json": "wp-scripts lint-pkg-json",
+		"prelint:php": "npm run composer install --no-interaction",
+		"lint:php": "npm run composer run-script lint",
+		"packages-update": "wp-scripts packages-update && npx nx run-many --target=packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start",
+		"start:hot": "wp-scripts start --hot",
+		"test:e2e": "wp-scripts test-e2e",
+		"test:unit": "wp-scripts test-unit-js",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"test:php": "npm run lint:php && npm run test:unit:php",
+		"test:php:watch": "npm run composer run-script test:watch",
+		"pretest:unit:php": "wp-env start",
+		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
+		"translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
+		"release": "composer install --no-dev --classmap-authoritative && npm run build && npm run translate && npm run plugin-zip"
+	},
+	"babel": {},
+	"workspaces": [
+		"./packages/*"
+	]
 }

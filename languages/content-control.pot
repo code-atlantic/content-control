@@ -1,470 +1,565 @@
-# Copyright (C) 2022 content-control
-# This file is distributed under the same license as the content-control package.
+# Copyright (C) 2023 Content Control
+# This file is distributed under the same license as the Content Control package.
 msgid ""
 msgstr ""
-"Project-Id-Version: content-control\n"
-"Report-Msgid-Bugs-To: support@code-atlantic.com\n"
+"Project-Id-Version: Content Control\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
-"Language-Team: Code Atlantic Support <support@code-atlantic.com>\n"
+"Language-Team: Code Atlantic <support@code-atlantic.com>\n"
+"Last-Translator: Code Atlantic <support@code-atlantic.com>\n"
+"POT-Creation-Date: 2023-06-28 07:15+0000\n"
+"Report-Msgid-Bugs-To: https://code-atlantic.com/contact/\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: classes/Admin.php:17
-msgid "Content Control Settings"
-msgstr ""
-
-#: classes/Admin.php:19
+#: ../classes/Controllers/PostTypes.php:40, ../classes/Controllers/PostTypes.php:45
 msgid "Restrictions"
 msgstr ""
 
-#: classes/Admin.php:20, classes/Admin/Assets.php:51, classes/Conditions.php:101
-msgid "General"
+#: ../classes/Controllers/PostTypes.php:41
+msgid "Restriction"
 msgstr ""
 
-#: classes/Admin/Assets.php:52
-msgid "Protection"
+#: ../classes/Controllers/PostTypes.php:191
+msgid "Access to this endpoint requires authorization."
 msgstr ""
 
-#: classes/Admin/Assets.php:53
-msgid "Content"
+#: ../classes/Controllers/TrustedLogin.php:48
+msgid "This allows us to check your global restrictions and plugin settings."
 msgstr ""
 
-#: classes/Admin/Assets.php:56
-msgid "Are you sure you want to delete this restriction?"
+#: ../classes/Controllers/TrustedLogin.php:49
+msgid "This allows us to check your block control settings."
 msgstr ""
 
-#: classes/Admin/Assets.php:59
-msgid "Restriction Editor"
+#: ../classes/Controllers/TrustedLogin.php:102, ../classes/Controllers/TrustedLogin.php:103
+msgid "Content Control Support Access"
 msgstr ""
 
-#: classes/Admin/Assets.php:60
-msgid "Use this to modify a restrictions settings."
+#: ../classes/Models/Restriction.php:287, ../classes/Models/Restriction.php:314
+msgid "This content is restricted."
 msgstr ""
 
-#: classes/Admin/Assets.php:64, classes/Admin/Footer_Templates.php:406, classes/Admin/Footer_Templates.php:440
-msgid "Is"
+#. translators: 1. Plugin name
+#: ../classes/Plugin/Autoloader.php:52
+msgid "Your installation of %1$s is incomplete. If you installed %1$s from GitHub, please refer to this document to set up your development environment."
 msgstr ""
 
-#: classes/Admin/Assets.php:65
-msgid "Not"
+#: ../classes/Plugin/Connect.php:225
+msgid "Sorry, You Are Not Allowed to Access This Page."
 msgstr ""
 
-#: classes/Admin/Assets.php:68
-msgid "Save"
+#: ../classes/Plugin/Connect.php:445, ../classes/Plugin/Connect.php:504
+msgid "There was an error while installing an upgrade. Please download the plugin from contentcontrolplugin.com and install it manually."
 msgstr ""
 
-#: classes/Admin/Assets.php:69
-msgid "Cancel"
+#: ../classes/Plugin/Connect.php:484, ../classes/Plugin/Connect.php:495
+msgid "Plugin installed & activated."
 msgstr ""
 
-#: classes/Admin/Assets.php:70
-msgid "Add"
+#: ../classes/Plugin/License.php:333, ../classes/Plugin/License.php:384, ../classes/Plugin/License.php:442
+msgid "An error occurred, please try again."
 msgstr ""
 
-#: classes/Admin/Assets.php:71
-msgid "Update"
+#. translators: the license key expiration date
+#: ../classes/Plugin/License.php:409
+msgid "Your license key expired on %s."
 msgstr ""
 
-#: classes/Admin/Footer_Templates.php:311
-msgid "Close"
+#: ../classes/Plugin/License.php:417
+msgid "Your license key has been disabled."
 msgstr ""
 
-#: classes/Admin/Footer_Templates.php:379
-msgid "Apply this restriction if the user views content that is:"
+#: ../classes/Plugin/License.php:421
+msgid "Invalid license."
 msgstr ""
 
-#: classes/Admin/Footer_Templates.php:381
-msgid "Learn more about restriction content conditions"
+#: ../classes/Plugin/License.php:426
+msgid "Your license is not active for this URL."
 msgstr ""
 
-#: classes/Admin/Footer_Templates.php:388
-msgid "When users visit your site, the plugin will check the viewed content against your selection below and permit or deny access."
+#. translators: the plugin name
+#: ../classes/Plugin/License.php:432
+msgid "This appears to be an invalid license key for %s."
 msgstr ""
 
-#: classes/Admin/Footer_Templates.php:403
-msgid "Choose a content type to get started."
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:405, classes/Admin/Footer_Templates.php:439
-msgid "Enable the Not Operand"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:407, classes/Admin/Footer_Templates.php:441
-msgid "Is Not"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:410, classes/Admin/Footer_Templates.php:444
-msgid "Choose a condition"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:426
-msgctxt "aria-label for add new OR condition button"
-msgid "Add another OR condition"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:426, classes/Admin/Footer_Templates.php:437
-msgid "or"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:430
-msgctxt "aria-label for add new AND condition button"
-msgid "Add another AND condition group"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:430
-msgid "and"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:452
-msgid "Remove Condition"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:466
-msgid "Select restriction"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:481
-msgctxt "Edit button label for restriction table"
-msgid "Edit “{{data.title}}”"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:481
-msgid "Edit"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:484
-msgctxt "Trash button label for restriction table"
-msgid "Delete “{{data.title}}!”"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:484
-msgid "Trash"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:490, classes/Admin/Settings/Restrictions.php:110, classes/Admin/Widget/Settings.php:39
-msgid "Everyone"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:492, classes/Admin/Settings/Restrictions.php:112, classes/Admin/Widget/Settings.php:40
-msgid "Logged Out Users"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:495, classes/Admin/Settings/Restrictions.php:111, classes/Admin/Widget/Settings.php:41
-msgid "Logged In Users"
-msgstr ""
-
-#: classes/Admin/Footer_Templates.php:503
-msgid "All Users"
-msgstr ""
-
-#: classes/Admin/Pages.php:29, classes/Admin/Pages.php:29
+#: ../classes/Plugin/License.php:433, ../classes/Controllers/Admin/SettingsPage.php:34, ../classes/Controllers/Admin/SettingsPage.php:35, ../classes/Controllers/Admin/UserExperience.php:94
 msgid "Content Control"
 msgstr ""
 
-#: classes/Admin/Reviews.php:238
-msgid "Hi there! You've been using the Content Control plugin on your site for %s now - We hope it's been helpful. If you're enjoying the plugin, would you mind rating it 5-stars to help spread the word?"
+#: ../classes/Plugin/License.php:438
+msgid "Your license key has reached its activation limit."
 msgstr ""
 
-#: classes/Admin/Reviews.php:243
-msgid "1 week"
+#. translators: 1. Requirement name (WordPress|PHP)., 2. Version Number.
+#: ../classes/Plugin/Prerequisites.php:307, ../classes/Plugin/Prerequisites.php:323
+msgid "This plugin requires <b>%1$s %2$s</b> or higher in order to run."
 msgstr ""
 
-#: classes/Admin/Reviews.php:251
-msgid "1 month"
+#: ../classes/Plugin/Prerequisites.php:371
+msgid "install it"
 msgstr ""
 
-#: classes/Admin/Reviews.php:259
-msgid "3 months"
+#. translators: 1. Plugin Name, 2. Required Plugin Name, 3. `install it` link.
+#: ../classes/Plugin/Prerequisites.php:375, ../classes/Plugin/Prerequisites.php:352
+msgid "The plugin \"%1$s\" requires %2$s! Please %3$s to continue!"
 msgstr ""
 
-#: classes/Admin/Reviews.php:416
-msgid "Ok, you deserve it"
+#: ../classes/Plugin/Prerequisites.php:359
+msgid "update it"
 msgstr ""
 
-#: classes/Admin/Reviews.php:421
-msgid "Nope, maybe later"
+#: ../classes/Plugin/Prerequisites.php:363
+msgid "The plugin \"%1$s\" requires %2$s v%3$s or higher! Please %4$s to continue!"
 msgstr ""
 
-#: classes/Admin/Reviews.php:426
-msgid "I already did"
+#: ../classes/Plugin/Prerequisites.php:348
+msgid "activate it"
 msgstr ""
 
-#: classes/Admin/Setting_Callbacks.php:197
-msgid "The callback function used for the <strong>%s</strong> setting is missing."
+#: ../classes/Plugin/Upgrader.php:107
+msgid "Plugin basename empty."
 msgstr ""
 
-#: classes/Admin/Setting_Callbacks.php:265
-msgid "Choose Icon"
+#: ../classes/Plugin/Upgrader.php:136
+msgid "Unable to get filesystem credentials."
 msgstr ""
 
-#: classes/Admin/Setting_Callbacks.php:359
-msgid "Upload File"
+#: ../classes/Plugin/Upgrader.php:148
+msgid "Upgrader missing install method."
 msgstr ""
 
-#: classes/Admin/Setting_Callbacks.php:421
-msgid "Deactivate License"
+#: ../classes/RestAPI/BlockTypes.php:71
+msgid "Something went wrong, the block types could not be found."
 msgstr ""
 
-#: classes/Admin/Settings.php:159
-msgid "Default Denial Message"
+#: ../classes/RestAPI/BlockTypes.php:86
+msgid "Something went wrong, the block types could not be updated."
 msgstr ""
 
-#: classes/Admin/Settings.php:283
-msgid "Settings updated."
+#: ../classes/RestAPI/License.php:168, ../classes/RestAPI/License.php:229, ../classes/RestAPI/License.php:298, ../classes/RestAPI/License.php:313
+msgid "Something went wrong."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:36
-msgid "Add a Restriction"
+#: ../classes/RestAPI/License.php:208
+msgid "Something went wrong, the license key could not be saved."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:39
-msgid "Select bulk action"
+#: ../classes/RestAPI/License.php:256
+msgid "Something went wrong, the license could not be activated."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:41, classes/Admin/Settings/Restrictions.php:82
-msgid "Bulk Actions"
+#: ../classes/RestAPI/License.php:277
+msgid "Something went wrong, the license could not be deactivated."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:42, classes/Admin/Settings/Restrictions.php:83
-msgid "Move to Trash"
+#: ../classes/RestAPI/ObjectSearch.php:48
+msgid "Nonce"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:44, classes/Admin/Settings/Restrictions.php:85
-msgid "Apply"
+#: ../classes/RestAPI/ObjectSearch.php:53
+msgid "Hash"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:52, classes/Admin/Settings/Restrictions.php:63
-msgid "Select All"
+#: ../classes/RestAPI/ObjectSearch.php:58
+msgid "Object kind, (postType, taxonomy)"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:55, classes/Admin/Settings/Restrictions.php:66
-msgid "Priority"
+#: ../classes/RestAPI/ObjectSearch.php:63
+msgid "Object type (post, category)"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:56, classes/Admin/Settings/Restrictions.php:67, classes/Admin/Settings/Restrictions.php:99
-msgid "Restriction Title"
+#: ../classes/RestAPI/ObjectSearch.php:68
+msgid "Page number"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:57, classes/Admin/Settings/Restrictions.php:68
-msgid "Overview"
+#: ../classes/RestAPI/ObjectSearch.php:73
+msgid "Search term"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:73
-msgid "No restrictions found."
+#: ../classes/RestAPI/ObjectSearch.php:78
+msgid "Include IDs"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:100
-msgid "Pages restricted to logged in users"
+#: ../classes/RestAPI/ObjectSearch.php:83
+msgid "Exclude IDs"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:107
-msgid "Who can see this content?"
+#: ../classes/RestAPI/ObjectSearch.php:266
+msgid "Something went wrong, the results could not be returned."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:119
-msgid "Choose which roles can see this content, leave blank to apply to every role"
+#: ../classes/RestAPI/Settings.php:71
+msgid "Something went wrong, the settings could not be found."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:131
-msgid "Choose how to protect your content"
+#: ../classes/RestAPI/Settings.php:85
+msgid "Something went wrong, the settings could not be updated."
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:133
-msgid "Custom Message"
+#: ../classes/RuleEngine/Rules.php:143
+msgid "Are"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:134
-msgid "Redirect"
+#: ../classes/RuleEngine/Rules.php:144
+msgid "Are Not"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:145
-msgid "Show excerpts above access denied message?"
+#: ../classes/RuleEngine/Rules.php:145
+msgid "Is"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:151
-msgid "Override the default message?"
+#: ../classes/RuleEngine/Rules.php:146
+msgid "Is Not"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:160
-msgid "Enter a custom message to display to restricted users"
+#: ../classes/RuleEngine/Rules.php:147
+msgid "Has"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:170
-msgid "Where will they be taken?"
+#: ../classes/RuleEngine/Rules.php:148
+msgid "Has Not"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:173
-msgid "Login & Back"
+#: ../classes/RuleEngine/Rules.php:149
+msgid "Does Not Have"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:174
-msgid "Home Page"
+#: ../classes/RuleEngine/Rules.php:150
+msgid "Does"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:175
-msgid "Custom URL"
+#: ../classes/RuleEngine/Rules.php:151
+msgid "Does Not"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:187
-msgid "Redirect URL"
+#: ../classes/RuleEngine/Rules.php:152
+msgid "Was"
 msgstr ""
 
-#: classes/Admin/Settings/Restrictions.php:188
-msgid "http://example.com"
+#: ../classes/RuleEngine/Rules.php:153
+msgid "Was Not"
 msgstr ""
 
-#: classes/Admin/Widget/Settings.php:50
-msgid "Who can see this widget?"
+#: ../classes/RuleEngine/Rules.php:154
+msgid "Were"
 msgstr ""
 
-#: classes/Admin/Widget/Settings.php:66
-msgid "Choose which roles can see this widget"
+#: ../classes/RuleEngine/Rules.php:155
+msgid "Were Not"
 msgstr ""
 
-#: classes/Conditions.php:102
-msgid "Pages"
+#: ../classes/RuleEngine/Rules.php:189
+msgid "Logged In"
 msgstr ""
 
-#: classes/Conditions.php:103
-msgid "Posts"
+#: ../classes/RuleEngine/Rules.php:191, ../classes/RuleEngine/Rules.php:200
+msgid "User"
 msgstr ""
 
-#: classes/Conditions.php:104
-msgid "Categories"
+#: ../classes/RuleEngine/Rules.php:198, ../classes/RuleEngine/Rules.php:205
+msgid "Role(s)"
 msgstr ""
 
-#: classes/Conditions.php:105
-msgid "Tags"
+#: ../classes/RuleEngine/Rules.php:227
+msgid "The Home Page"
 msgstr ""
 
-#: classes/Conditions.php:106
-msgid "Format"
+#: ../classes/RuleEngine/Rules.php:229, ../classes/RuleEngine/Rules.php:239, ../classes/RuleEngine/Rules.php:249, ../classes/RuleEngine/Rules.php:259, ../classes/RuleEngine/Rules.php:383, ../classes/RuleEngine/Rules.php:421, ../classes/RuleEngine/Rules.php:456, ../classes/RuleEngine/Rules.php:518
+msgid "Content"
 msgstr ""
 
-#: classes/Conditions.php:202
-msgid "Select a condition"
+#: ../classes/RuleEngine/Rules.php:237
+msgid "The Blog Index"
 msgstr ""
 
-#: classes/Conditions.php:238
-msgctxt "condition: post type plural label ie. Posts: All"
-msgid "%s Archive"
+#: ../classes/RuleEngine/Rules.php:247
+msgid "A Search Result Page"
 msgstr ""
 
-#: classes/Conditions.php:246
-msgctxt "condition: post type singular label ie. Posts: All"
+#: ../classes/RuleEngine/Rules.php:257
+msgid "A 404 Error Page"
+msgstr ""
+
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:286
+msgid "A %s Archive"
+msgstr ""
+
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:294
 msgid "A %s"
 msgstr ""
 
-#: classes/Conditions.php:252
-msgctxt "condition: post type singular label ie. Posts: Selected"
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:301
 msgid "A Selected %s"
 msgstr ""
 
-#: classes/Conditions.php:255
-msgctxt "condition: post type singular label ie. Select Posts"
+#. translators: %s: Post type plurals name
+#. translators: %s: Post type plural name
+#: ../classes/RuleEngine/Rules.php:305, ../classes/RuleEngine/Rules.php:336, ../classes/RuleEngine/Rules.php:352
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:268
-msgctxt "condition: post type singular label ie. Posts: ID"
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:317
 msgid "A %s with ID"
 msgstr ""
 
-#: classes/Conditions.php:271
-msgctxt "condition: post type singular label ie. Posts IDs"
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:321
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: classes/Conditions.php:281
-msgctxt "condition: post type plural label ie. Posts: ID"
-msgid "%s: Child Of"
+#. translators: %s: Post type plural name
+#: ../classes/RuleEngine/Rules.php:332
+msgid "A Child of Selected %s"
 msgstr ""
 
-#: classes/Conditions.php:284, classes/Conditions.php:299
-msgctxt "condition: post type plural label ie. Select Posts"
-msgid "Select %s."
+#. translators: %s: Post type plural name
+#: ../classes/RuleEngine/Rules.php:348
+msgid "An Ancestor of Selected %s"
 msgstr ""
 
-#: classes/Conditions.php:296
-msgctxt "condition: post type plural label ie. Posts: ID"
-msgid "%s: Ancestor Of"
+#. translators: %s: Post type singular name
+#: ../classes/RuleEngine/Rules.php:368
+msgid "A %s With Template"
 msgstr ""
 
-#: classes/Conditions.php:317
-msgctxt "condition: post type plural label ie. Pages: With Template"
-msgid "A %s: With Template"
-msgstr ""
-
-#: classes/Conditions.php:324
+#: ../classes/RuleEngine/Rules.php:373
 msgid "Default"
 msgstr ""
 
-#: classes/Conditions.php:351
-msgctxt "condition: post type plural and taxonomy singular label ie. Posts: With Category"
+#. translators: %1$s: Post type singular name, %2$s: Taxonomy singular name
+#: ../classes/RuleEngine/Rules.php:419
+msgctxt "condition: post type plural and taxonomy singular label ie. A Post With Category"
 msgid "A %1$s with %2$s"
 msgstr ""
 
-#: classes/Conditions.php:354
+#. translators: %s: Taxonomy singular name
+#: ../classes/RuleEngine/Rules.php:427
 msgctxt "condition: post type plural label ie. Select categories"
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:383
-msgctxt "condition: taxonomy plural label ie. Categories: All"
-msgid "A %s"
+#. translators: %s: Taxonomy plural name
+#: ../classes/RuleEngine/Rules.php:469
+msgctxt "condition: taxonomy plural label ie. A Category Archive"
+msgid "A %s Archive"
 msgstr ""
 
-#: classes/Conditions.php:389
-msgctxt "condition: taxonomy plural label ie. Categories: Selected"
-msgid "%s: Selected"
+#. translators: %s: Taxonomy plural name
+#: ../classes/RuleEngine/Rules.php:476
+msgctxt "condition: taxonomy plural label ie. A Selected Category"
+msgid "A Selected %s"
 msgstr ""
 
-#: classes/Conditions.php:392
+#. translators: %s: Taxonomy plural name
+#: ../classes/RuleEngine/Rules.php:480
 msgctxt "condition: taxonomy plural label ie. Select Categories"
 msgid "Select %s."
 msgstr ""
 
-#: classes/Conditions.php:404
-msgctxt "condition: taxonomy plural label ie. Categories: Selected"
-msgid "A %s with IDs"
+#. translators: %s: Taxonomy plural name
+#: ../classes/RuleEngine/Rules.php:492
+msgctxt "condition: taxonomy plural label ie. A Category with ID: Selected"
+msgid "A %s with ID"
 msgstr ""
 
-#: classes/Conditions.php:407
+#. translators: %s: Taxonomy plural name
+#: ../classes/RuleEngine/Rules.php:496
 msgctxt "condition: taxonomy plural label ie. Category IDs"
 msgid "%s IDs: 128, 129"
 msgstr ""
 
-#: classes/Conditions.php:427
-msgid "The Home Page"
+#: ../classes/Services/UpgradeStream.php:116
+msgid "Starting upgrades..."
 msgstr ""
 
-#: classes/Conditions.php:434
-msgid "The Blog Index"
+#: ../classes/Services/UpgradeStream.php:132
+msgid "Upgrades complete."
 msgstr ""
 
-#: classes/Conditions.php:441
-msgid "A Search Result Page"
+#. translators: %s: task name.
+#: ../classes/Services/UpgradeStream.php:184
+msgid "Completed: %s"
 msgstr ""
 
-#: classes/Conditions.php:447
-msgid "A 404 Error Page"
+#: ../classes/Upgrades/PluginMeta_2.php:31
+msgid "Update plugin meta"
 msgstr ""
 
-#: classes/Site/Feeds.php:46, classes/Site/Posts.php:67
-msgid "This content is restricted."
+#: ../classes/Upgrades/PluginMeta_2.php:43
+msgid "Migrating plugin meta"
 msgstr ""
 
-#: content-control.php:253
-msgid "The %4$s %1$s %5$s plugin requires %2$s version %3$s or greater."
+#: ../classes/Upgrades/PluginMeta_2.php:58
+msgid "Plugin meta migrated"
 msgstr ""
 
-#: content-control.php:255
-msgid "Plugin Activation Error"
+#: ../classes/Upgrades/Restrictions_2.php:35
+msgid "Update global restrictions"
+msgstr ""
+
+#. translators: %d: number of restrictions to migrate.
+#: ../classes/Upgrades/Restrictions_2.php:56
+msgid "Migrating %d restrictions"
+msgstr ""
+
+#. translators: %s: restriction title.
+#: ../classes/Upgrades/Restrictions_2.php:74
+msgid "Failed to migrate restriction \"%s\"."
+msgstr ""
+
+#. translators: %d: number of restrictions that failed to migrate.
+#: ../classes/Upgrades/Restrictions_2.php:99
+msgid "Failed to migrate %d restrictions."
+msgstr ""
+
+#. translators: %d: number of restrictions migrated.
+#: ../classes/Upgrades/Restrictions_2.php:93, ../classes/Controllers/Admin/Upgrades.php:330
+msgid "%d restrictions migrated"
+msgstr ""
+
+#: ../classes/Upgrades/Settings_2.php:32
+msgid "Update plugin settings"
+msgstr ""
+
+#: ../classes/Upgrades/Settings_2.php:55
+msgid "Migrating plugin settings"
+msgstr ""
+
+#: ../classes/Upgrades/Settings_2.php:72
+msgid "Plugin settings migrated"
+msgstr ""
+
+#: ../classes/Upgrades/UserMeta_2.php:28
+msgid "Migrate user meta"
+msgstr ""
+
+#: ../classes/Upgrades/UserMeta_2.php:42
+msgid "Migrating user meta"
+msgstr ""
+
+#: ../classes/Upgrades/UserMeta_2.php:61
+msgid "User meta migrated"
+msgstr ""
+
+#. translators: 1. emoji, 2. html tag, 3. html tag, 4. the number of days, 5. html tag, 6. html tag.
+#: ../classes/Controllers/Admin/Reviews.php:275
+msgid "Hi there! %1$s You've been using the %2$sContent Control%3$s plugin on your site for %4$s now - We hope it's been helpful. If you're enjoying the plugin, would you mind rating it %5$s5-stars%6$s to help spread the word?"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:285
+msgid "1 week"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:301
+msgid "1 month"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:317
+msgid "3 months"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:502
+msgid "Ok, you deserve it"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:508
+msgid "Maybe later, okay?"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Reviews.php:513
+msgid "I already did"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:234, ../classes/Controllers/Admin/Upgrades.php:307
+msgid "Upgrades started"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:262, ../classes/Controllers/Admin/Upgrades.php:334
+msgid "Upgrades complete!"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:256
+msgid "Some upgrades failed to complete."
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:260
+msgid "Upgrades complete with errors."
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:317
+msgid "Migrating restrictions"
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:405
+msgid "Content Control has been updated and needs to run some database upgrades."
+msgstr ""
+
+#: ../classes/Controllers/Admin/Upgrades.php:411
+msgid "Upgrade Now"
+msgstr ""
+
+#: ../classes/Controllers/Admin/UserExperience.php:46
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: ../classes/Controllers/Admin/UserExperience.php:47
+msgid "Settings"
+msgstr ""
+
+#: ../classes/Controllers/Admin/UserExperience.php:57
+msgid "Translate"
+msgstr ""
+
+#. translators: %1$s: Plugin name, %2$s: Plugin URL
+#: ../classes/Controllers/Admin/UserExperience.php:93
+msgid "You are using the %1$s plugin. Please visit the %2$s to learn how to use it."
+msgstr ""
+
+#: ../classes/Controllers/Admin/UserExperience.php:95
+msgid "plugin website"
+msgstr ""
+
+#: ../classes/Controllers/Admin/WidgetEditor.php:59
+msgid "Everyone"
+msgstr ""
+
+#: ../classes/Controllers/Admin/WidgetEditor.php:60
+msgid "Logged Out Users"
+msgstr ""
+
+#: ../classes/Controllers/Admin/WidgetEditor.php:61
+msgid "Logged In Users"
+msgstr ""
+
+#: ../classes/Controllers/Admin/WidgetEditor.php:69
+msgid "Who can see this widget?"
+msgstr ""
+
+#: ../classes/Controllers/Admin/WidgetEditor.php:81
+msgid "Choose which roles can see this widget"
+msgstr ""
+
+#. translators: 1. Rule name.
+#: ../classes/Models/RuleEngine/Rule.php:105
+msgid "Rule `%s` not found."
+msgstr ""
+
+#. translators: 1. Rule name.
+#: ../classes/Models/RuleEngine/Rule.php:155
+msgid "Rule `%s` has no callback."
+msgstr ""
+
+#. translators: 1. Rule name. 2. Callback name.
+#: ../classes/Models/RuleEngine/Rule.php:160
+msgid "Rule `%1$s` callback is not callable (%2$s)."
 msgstr ""

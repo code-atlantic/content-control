@@ -1,0 +1,17 @@
+.cc-query-builder-not-operand-toggle {
+	svg {
+		fill: #e0e0e0;
+	}
+
+	&:hover {
+		svg {
+			fill: #e0e0e0;
+		}
+	}
+
+	&.is-checked {
+		svg {
+			fill: #cc1818;
+		}
+	}
+}

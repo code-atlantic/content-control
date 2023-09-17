@@ -1,0 +1,11 @@
+watch:
+  files:
+    - ./content-control.php
+  directories:
+    - ./classes/
+    - ./inc/
+    - ./tests/
+
+notifications:
+  passingTests: false
+  failingTests: false

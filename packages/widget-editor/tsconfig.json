@@ -1,0 +1,15 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "build",
+		"declarationDir": "build-types"
+	},
+	"include": [
+		"./src/**/*"
+	],
+	// jquery global
+	"types": [
+		"jquery"
+	],
+}

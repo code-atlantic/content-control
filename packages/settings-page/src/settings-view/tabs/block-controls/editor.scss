@@ -1,0 +1,74 @@
+.settings-section-panel--block-manager {
+	header {
+		display: flex;
+		border-bottom: 1px solid #eaecf0;
+
+		.block-search {
+			position: relative;
+			margin-left: auto;
+
+			svg {
+				position: absolute;
+				top: 5px;
+				left: 5px;
+			}
+
+			input {
+				padding-left: 30px;
+			}
+		}
+	}
+
+	.block-list {
+		width: 100%;
+		max-height: 450px;
+		overflow-y: auto;
+
+		.block-list-item {
+			display: flex;
+			gap: 16px;
+			align-items: center;
+			padding: 1em 0;
+			border-bottom: 1px solid #eaecf0;
+
+			.block-icon {
+				background-color: #f0f0f1;
+				padding: 5px 8px;
+				vertical-align: middle;
+				border: 1px solid #ddd;
+				border-radius: 3px;
+				line-height: 1;
+
+				svg {
+					fill: #fff;
+					stroke: #1e1e1e;
+				}
+			}
+
+			.block-info {
+				.block-name,
+				.block-description {
+					margin: 0;
+					font-size: 14px;
+					line-height: 1.5;
+				}
+			}
+
+			.block-toggle {
+				margin-left: auto;
+
+				.components-base-control {
+					margin-bottom: 0;
+				}
+
+				.components-h-stack {
+					flex-direction: row-reverse;
+				}
+			}
+
+			&.is-disabled {
+				opacity: 0.5;
+			}
+		}
+	}
+}
