@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * @return bool True if admins are excluded, false if not.
  */
 function admins_are_excluded() {
-	return plugin()->get_option( 'excludeAdmins' );
+	return get_data_version( 'settings' ) > 1 && plugin()->get_option( 'excludeAdmins' );
 }
 
 /**
