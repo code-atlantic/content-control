@@ -54,6 +54,9 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 		$settings               = \get_option( 'jp_cc_settings', [] );
 		$default_denial_message = isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
 
+		// For migrations, maintain the old default of not excluding admins.
+		update_plugin_option( 'excludeAdmins', false );
+
 		if ( ! empty( $default_denial_message ) ) {
 			update_plugin_option( 'defaultDenialMessage', $default_denial_message );
 		}
