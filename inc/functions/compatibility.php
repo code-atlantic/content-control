@@ -119,3 +119,27 @@ function is_frontend() {
 function camel_case_to_snake_case( $str ) {
 	return strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $str ) );
 }
+
+
+/**
+ * Function that deeply cleans arrays for wp_maybe_serialize
+ *
+ * Gets rid of Closure and other invalid data types.
+ *
+ * @param array $array Array to clean.
+ *
+ * @return array Cleaned array.
+ */
+function deep_clean_array( $array ) {
+	// Clean \Closure values deeply.
+	array_walk_recursive(
+		$array,
+		function ( &$value ) {
+			if ( $value instanceof \Closure ) {
+				$value = null;
+			}
+		}
+	);
+
+	return $array;
+}

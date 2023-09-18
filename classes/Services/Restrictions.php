@@ -12,6 +12,8 @@ use ContentControl\Models\Restriction;
 
 use function ContentControl\get_query;
 use function ContentControl\current_query_context;
+use function ContentControl\deep_clean_array;
+use function ContentControlPro\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -120,9 +122,17 @@ class Restrictions {
 	 * @return string
 	 */
 	public function get_cache_key( $post_id = null ) {
-		$query      = get_query();
-		$context    = current_query_context();
-		$query_hash = md5( maybe_serialize( $query->query_vars ) );
+		$query   = get_query();
+		$context = current_query_context();
+
+		try {
+			$hash_vars = deep_clean_array( $query->query_vars );
+
+			$query_hash = md5( maybe_serialize( $hash_vars ) );
+		} catch ( \Exception $e ) {
+			$query_hash = md5( wp_rand( 0, 100000 ) );
+			plugin( 'logging' )->log( 'ERROR: ' . $e->getMessage() );
+		}
 
 		if ( is_null( $post_id ) ) {
 			$post_id = \get_the_ID();
