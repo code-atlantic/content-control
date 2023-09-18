@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.0.4 - 09/18/2023
+
+-   Fix: Error when WP Query vars include anoymoush function closures.
+
 ## v2.0.3 - 09/18/2023
 
 -   Fix: Log errors instead of throwing exceptions to prevent uncaught exceptions turning into fatal errors.
