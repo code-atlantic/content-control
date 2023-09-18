@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
@@ -31,6 +31,8 @@ Content Control is packed with features that allow you to:
 - Display specific content on a page or post to logged in users only, specific user roles, or logged out users.
 - Use the `[content_control]` shortcode to protect content inline.
 - Control widget visibility by selecting the user type that can view each widget.
+
+[Content Control Documentation](https://contentcontrolplugin.com/docs/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=documentation-link)
 
 **Note: Content Control restricts media access at the content level via media attachment pages. It does not restrict server-level access to actual media files (e.g.: .jpg, .gif, .pdf, .webp files).**
 
@@ -78,6 +80,10 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.1 - 09/17/2023 =
+
+- Fix: Fatal error from unregistered or unknown rule types from 3rd party plugins/themes or custom code. Now they are logged in plugin settings page.
 
 = v2.0.0 - 09/17/2023 =
 
