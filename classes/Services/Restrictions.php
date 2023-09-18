@@ -13,6 +13,7 @@ use ContentControl\Models\Restriction;
 use function ContentControl\get_query;
 use function ContentControl\current_query_context;
 use function ContentControl\deep_clean_array;
+use function ContentControlPro\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -130,6 +131,7 @@ class Restrictions {
 			$query_hash = md5( maybe_serialize( $hash_vars ) );
 		} catch ( \Exception $e ) {
 			$query_hash = md5( wp_rand( 0, 100000 ) );
+			plugin( 'logging' )->log( 'ERROR: ' . $e->getMessage() );
 		}
 
 		if ( is_null( $post_id ) ) {
