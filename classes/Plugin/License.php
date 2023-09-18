@@ -78,7 +78,11 @@ class License {
 	 */
 	public function autoregister() {
 		if ( defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && ! empty( \CONTENT_CONTROL_LICENSE_KEY ) && '' === $this->get_license_key() ) {
+			try {
 				$this->activate_license( \CONTENT_CONTROL_LICENSE_KEY );
+			} catch ( \Exception $e ) {
+				// Do nothing.
+			}
 		}
 	}
 
@@ -449,7 +453,11 @@ class License {
 	 * Remove license.
 	 */
 	public function remove_license() {
-		$deactivated = $this->deactivate_license();
+		try {
+			$deactivated = $this->deactivate_license();
+		} catch ( \Exception $e ) {
+			$deactivated = [];
+		}
 
 		if ( ! empty( $deactivated['license'] ) && 'active' !== $deactivated['license'] ) {
 			\delete_option( self::OPTION_KEY );

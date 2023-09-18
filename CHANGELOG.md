@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.0.3 - 09/18/2023
+
+-   Fix: Log errors instead of throwing exceptions to prevent uncaught exceptions turning into fatal errors.
+
 ## v2.0.2 - 09/18/2023
 
 -   Fix: Fatal error from error logger on systems without write access.
