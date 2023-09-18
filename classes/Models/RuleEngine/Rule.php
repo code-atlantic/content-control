@@ -80,8 +80,6 @@ class Rule extends Item {
 	 * Build a rule.
 	 *
 	 * @param array $rule Rule data.
-	 *
-	 * @throws \Exception If rule not found.
 	 */
 	public function __construct( $rule ) {
 		$rule = wp_parse_args( $rule, [
@@ -102,7 +100,7 @@ class Rule extends Item {
 
 		if ( ! $this->definition ) {
 			/* translators: 1. Rule name. */
-			throw new \Exception( esc_html( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) ) );
+			plugin( 'logger' )->error( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
 		}
 
 		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
