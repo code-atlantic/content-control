@@ -168,11 +168,18 @@ class Logging {
 			return $this->is_writable;
 		}
 
-		$this->is_writable = false !== $this->fs() && 'direct' === $this->fs()->method;
+		$file_system = $this->fs();
+
+		if ( false === $file_system ) {
+			$this->is_writable = false;
+			return $this->is_writable;
+		}
+
+		$this->is_writable = 'direct' === $file_system->method;
 
 		$upload_dir = $this->get_upload_dir();
 
-		if ( ! $this->fs()->is_writable( $upload_dir['basedir'] ) ) {
+		if ( ! $file_system->is_writable( $upload_dir['basedir'] ) ) {
 			$this->is_writable = false;
 		}
 
@@ -183,7 +190,12 @@ class Logging {
 	 * Get things started
 	 */
 	public function init() {
-		$upload_dir = $this->get_upload_dir();
+		$upload_dir  = $this->get_upload_dir();
+		$file_system = $this->fs();
+
+		if ( false === $upload_dir || false === $file_system ) {
+			return;
+		}
 
 		$file_token = \get_option( 'content_control_debug_log_token' );
 		if ( false === $file_token ) {
@@ -194,14 +206,14 @@ class Logging {
 		$this->filename = self::LOG_FILE_PREFIX . "debug-{$file_token}.log"; // ex. content-control-debug-5c2f6a9b9b5a3.log.
 		$this->file     = trailingslashit( $upload_dir['basedir'] ) . $this->filename;
 
-		if ( ! $this->fs()->exists( $this->file ) ) {
+		if ( ! $file_system->exists( $this->file ) ) {
 			$this->setup_new_log();
 		} else {
 			$this->content = $this->get_file( $this->file );
 		}
 
 		// Truncate long log files.
-		if ( $this->fs()->exists( $this->file ) && $this->fs()->size( $this->file ) >= 1048576 ) {
+		if ( $file_system->exists( $this->file ) && $file_system->size( $this->file ) >= 1048576 ) {
 			$this->truncate_log();
 		}
 	}
@@ -243,7 +255,13 @@ class Logging {
 	 * @return void
 	 */
 	public function delete_logs() {
-		$this->fs->delete( $this->file );
+		$file_system = $this->fs();
+
+		if ( false === $file_system ) {
+			return;
+		}
+
+		$file_system->delete( $this->file );
 		\delete_option( 'content_control_debug_log_token' );
 	}
 
@@ -309,14 +327,16 @@ class Logging {
 	protected function get_file( $file = false ) {
 		$file = $file ? $file : $this->file;
 
-		if ( ! $this->enabled() ) {
+		$file_system = $this->fs();
+
+		if ( false === $file_system || ! $this->enabled() ) {
 			return '';
 		}
 
 		$content = '';
 
-		if ( $this->fs()->exists( $file ) ) {
-			$content = $this->fs()->get_contents( $file );
+		if ( $file_system->exists( $file ) ) {
+			$content = $file_system->get_contents( $file );
 		}
 
 		return $content;
@@ -346,11 +366,13 @@ class Logging {
 	 * Save the current contents to file.
 	 */
 	public function save_logs() {
-		if ( ! $this->enabled() ) {
+		$file_system = $this->fs();
+
+		if ( false === $file_system || ! $this->enabled() ) {
 			return;
 		}
 
-		$this->fs()->put_contents( $this->file, $this->content, FS_CHMOD_FILE );
+		$file_system->put_contents( $this->file, $this->content, FS_CHMOD_FILE );
 	}
 
 	/**
@@ -389,9 +411,15 @@ class Logging {
 	 * Delete the log file.
 	 */
 	public function clear_log() {
+		$file_system = $this->fs();
+
+		if ( false === $file_system ) {
+			return;
+		}
+
 		// Delete the file.
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		@$this->fs()->delete( $this->file );
+		@$file_system->delete( $this->file );
 
 		if ( $this->enabled() ) {
 			$this->setup_new_log();

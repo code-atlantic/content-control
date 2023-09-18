@@ -2,107 +2,110 @@
 
 ## Unreleased
 
+## v2.0.2 - 09/18/2023
+
+-   Fix: Fatal error from error logger on systems without write access.
+
 ## v2.0.1 - 09/17/2023
 
-* Fix: Fatal error from unregistered or unknown rule types from 3rd party plugins/themes or custom code. Now they are logged in plugin settings page.
+-   Fix: Fatal error from unregistered or unknown rule types from 3rd party plugins/themes or custom code. Now they are logged in plugin settings page.
 
 ## v2.0.0 - 09/17/2023
 
-* Feature: Restrict individual blocks in the Gutenberg editor.
-* Feature: Restrict individual blocks in the Full Site Editor.
-* Feature: Use a custom page template for restricted content.
-* Feature: Restrict blocks by device type with customizable breakpoints.
-* Feature: Restrict blocks by user status & role.
-* Feature: Global restrictions now offer more control over how restricted content is handled.
-  * Choose to redirect or replace content with a custom page.
-  * Filter or hide posts in archives or custom loops.
-  * Secondary controls for posts if found in an archive.
-* Improvement: Match or exclude specific roles.
-* Improvement: Updated interface with intuitive and responsive controls.
-* Improvement: Boolean editor improvements.
-* Improvement: Control who can modify plugin settings.
-* Improvement: Upgraded tooling & Code quality improvements.
+-   Feature: Restrict individual blocks in the Gutenberg editor.
+-   Feature: Restrict individual blocks in the Full Site Editor.
+-   Feature: Use a custom page template for restricted content.
+-   Feature: Restrict blocks by device type with customizable breakpoints.
+-   Feature: Restrict blocks by user status & role.
+-   Feature: Global restrictions now offer more control over how restricted content is handled.
+    -   Choose to redirect or replace content with a custom page.
+    -   Filter or hide posts in archives or custom loops.
+    -   Secondary controls for posts if found in an archive.
+-   Improvement: Match or exclude specific roles.
+-   Improvement: Updated interface with intuitive and responsive controls.
+-   Improvement: Boolean editor improvements.
+-   Improvement: Control who can modify plugin settings.
+-   Improvement: Upgraded tooling & Code quality improvements.
 
 ## v1.18.2 - 07/03/2023
 
-* Fix: WP 4.9 missing `wp_get_environment_type` function notices
+-   Fix: WP 4.9 missing `wp_get_environment_type` function notices
 
 ## v1.18.1 - 03/08/2023
 
-* Improvement: Add nonce to asset cache purging for admins.
-* Fix: PHP 8.2 Deprecated notices.
-* Fix: Bug in asset caching causing assets to falsly determine they couldn't be writtien.
-* Fix: Add backcompat fix for WP >5.3 `wp_date` errors.
-
+-   Improvement: Add nonce to asset cache purging for admins.
+-   Fix: PHP 8.2 Deprecated notices.
+-   Fix: Bug in asset caching causing assets to falsly determine they couldn't be writtien.
+-   Fix: Add backcompat fix for WP >5.3 `wp_date` errors.
 
 ## v1.1.10 - 12/28/2022 =
 
-* Security: Fix unescaped output for CSS classname in the [contentcontrol] shortcode allowing users with the ability to edit posts to inject code into the page.
+-   Security: Fix unescaped output for CSS classname in the [contentcontrol] shortcode allowing users with the ability to edit posts to inject code into the page.
 
 ## v1.1.9 - 09/30/2021 =
 
-* Fix: Error when using Gutenberg Preview.
+-   Fix: Error when using Gutenberg Preview.
 
 ## v1.1.8 - 07/17/2021 =
 
-* Fix: Error when Elementor instance preview proptery was null.
+-   Fix: Error when Elementor instance preview proptery was null.
 
 ## v1.1.7 - 07/17/2021 =
 
-* Fix: Prevent warning if widget settings don't exist in options table.
-* Fix: Arbitrary limit of 10 on current items listed in Restriction Editor due to WP query default args.
-* Fix: Prevent restrictions from activating when using the Elementor page builder.
+-   Fix: Prevent warning if widget settings don't exist in options table.
+-   Fix: Arbitrary limit of 10 on current items listed in Restriction Editor due to WP query default args.
+-   Fix: Prevent restrictions from activating when using the Elementor page builder.
 
 ## v1.1.6 - 03/21/2021 =
 
-* Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
-* Fix: Prevent corrupted options from preventing saving of settings.
+-   Fix: Nonce validation was preventing 3rd party plugin from saving widget settings when it failed. Thanks @jacobmischka
+-   Fix: Prevent corrupted options from preventing saving of settings.
 
 ## v1.1.5 - 02/22/2021 =
 
-* Fix: Issue where roles with `-` would not save when checked.
+-   Fix: Issue where roles with `-` would not save when checked.
 
 ## v1.1.4 - 03/24/2020 =
 
-* Improvement: Added gettext handling for several strings that were not translatable.
-* Tweak: Process shortcodes in default denial message contents.
-* Tweak: Various improvements in form reliability & user experience.
-* Fix: Issues with ajax search fields not retaining their values after save.
-* Fix: Issue where only would show 10 pages.
-* Fix: PHP 7.4 compatibility fixes.
+-   Improvement: Added gettext handling for several strings that were not translatable.
+-   Tweak: Process shortcodes in default denial message contents.
+-   Tweak: Various improvements in form reliability & user experience.
+-   Fix: Issues with ajax search fields not retaining their values after save.
+-   Fix: Issue where only would show 10 pages.
+-   Fix: PHP 7.4 compatibility fixes.
 
 ## v1.1.3 - 12/03/2019 =
 
-* Fix: Custom post type conditions were not always registered.
+-   Fix: Custom post type conditions were not always registered.
 
 ## v1.1.2 - 11/10/2019 =
 
-* Tweak: Remove erroneous console.log messages in admin.
-* Fix: Fatal error when empty shortcode used.
+-   Tweak: Remove erroneous console.log messages in admin.
+-   Fix: Fatal error when empty shortcode used.
 
 ## v1.1.1 - 10/15/2019 =
 
-* Fix: Bugs where variables were not always the expected type.
+-   Fix: Bugs where variables were not always the expected type.
 
 ## v1.1.0 =
 
-* Improvement: Added default denial message to shortcode.
-* Improvement: Render nested shortcodes in the [content_control] shortcode.
-* Fix: Bug where multiple roles checked together in restriction editor.
+-   Improvement: Added default denial message to shortcode.
+-   Improvement: Render nested shortcodes in the [content_control] shortcode.
+-   Fix: Bug where multiple roles checked together in restriction editor.
 
 ## v1.0.3 =
 
-* Fix: Minor notice on activation.
+-   Fix: Minor notice on activation.
 
 ## v1.0.2 =
 
-* Fix: Call to undefined function.
+-   Fix: Call to undefined function.
 
 ## v1.0.1 =
 
-* Fix: Non static method called statically
-* Fix: Bug when using invalid variable type.
+-   Fix: Non static method called statically
+-   Fix: Bug when using invalid variable type.
 
 ## v1.0.0 =
 
-* Initial Release
+-   Initial Release
