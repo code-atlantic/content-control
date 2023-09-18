@@ -83,7 +83,7 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 = v2.0.4 - 09/18/2023 =
 
--   Fix: Error when WP Query vars include anoymoush function closures.
+-   Fix: Error when WP Query vars include anonymous function closures.
 
 = v2.0.3 - 09/18/2023 =
 
