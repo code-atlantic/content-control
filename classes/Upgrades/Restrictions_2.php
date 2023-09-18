@@ -112,6 +112,8 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 	 * @return bool True if successful, false otherwise.
 	 */
 	public function migrate_restriction( $restriction ) {
+		static $priority = 0;
+
 		$restriction = wp_parse_args( $restriction, [
 			'title'                    => '',
 			'who'                      => '',
@@ -131,6 +133,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 				'post_title'   => $restriction['title'],
 				'post_content' => $restriction['custom_message'],
 				'post_status'  => 'publish',
+				'menu_order'   => $priority++, // Maintain order.
 			]
 		);
 
