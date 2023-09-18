@@ -142,20 +142,20 @@ class Rule extends Item {
 	 * Check the results of this rule.
 	 *
 	 * @return bool True if rule passes, false if not.
-	 *
-	 * @throws \Exception If rule callback is not callable.
 	 */
 	private function run_check() {
 		$callback = isset( $this->definition['callback'] ) ? $this->definition['callback'] : null;
 
 		if ( ! $callback ) {
 			/* translators: 1. Rule name. */
-			throw new \Exception( esc_html( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) ) );
+			plugin( 'logging' )->log( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) ) );
+			return false;
 		}
 
 		if ( ! is_callable( $callback ) ) {
 			/* translators: 1. Rule name. 2. Callback name. */
-			throw new \Exception( esc_html( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) ) );
+			plugin( 'logging' )->log( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) ) );
+			return false;
 		}
 
 		// Set global current rule so it can be easily accessed.
