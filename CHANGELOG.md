@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.0.1 - 09/17/2023
+
+* Fix: Fatal error from unregistered or unknown rule types from 3rd party plugins/themes or custom code. Now they are logged in plugin settings page.
+
 ## v2.0.0 - 09/17/2023
 
 * Feature: Restrict individual blocks in the Gutenberg editor.

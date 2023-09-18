@@ -100,7 +100,7 @@ class Rule extends Item {
 
 		if ( ! $this->definition ) {
 			/* translators: 1. Rule name. */
-			plugin( 'logger' )->error( sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
+			plugin( 'logging' )->log( 'ERROR: ' . sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
 		}
 
 		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
