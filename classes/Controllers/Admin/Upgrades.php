@@ -192,8 +192,10 @@ class Upgrades extends Controller {
 
 		$visited[ $node ] = true;
 
-		foreach ( $graph[ $node ] as $dependency ) {
-			$this->visit_node( $dependency, $graph, $visited, $sorted );
+		if ( isset( $graph[ $node ] ) && ! empty( $graph[ $node ] ) ) {
+			foreach ( $graph[ $node ] as $dependency ) {
+				$this->visit_node( $dependency, $graph, $visited, $sorted );
+			}
 		}
 
 		$sorted[] = $node;
