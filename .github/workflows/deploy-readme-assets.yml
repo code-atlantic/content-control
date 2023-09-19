@@ -3,6 +3,10 @@ on:
     push:
         branches:
             - master
+
+env:
+    IGNORE_OTHER_FILES: true
+
 jobs:
     master:
         name: Push to master
