@@ -57,7 +57,7 @@ function get_current_wp_query() {
  *
  * @param \WP_Query|null $query Query object.
  *
- * @return \WP_Query
+ * @return \WP_Query|null
  */
 function get_query( $query = null ) {
 	global $cc_current_query;
