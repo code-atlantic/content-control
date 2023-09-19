@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-   Fix: Error when function is called early & global $wp_query is not yet available.
+
 ## v2.0.6 - 09/19/2023
 
 -   Improvement: Added data backup step to upgrade process that stores json export in the media library.
