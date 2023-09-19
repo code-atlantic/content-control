@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
@@ -80,6 +80,10 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.5 - 09/18/2023 =
+
+-   Fix: Fix errors on some sites with custom conditions due to registering all rules too early.
 
 = v2.0.4 - 09/18/2023 =
 

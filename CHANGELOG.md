@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.0.5 - 09/18/2023
+
+-   Fix: Fix errors on some sites with custom conditions due to registering all rules too early.
+
 ## v2.0.4 - 09/18/2023
 
 -   Fix: Error when WP Query vars include anonymous function closures.
