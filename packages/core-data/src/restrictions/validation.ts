@@ -4,6 +4,8 @@ import type { Restriction } from './types';
 /**
  * Checks of the set values are valid.
  *
+ * @param {Restriction} restriction Restriction to validate.
+ *
  * @return {boolean} True when set values are valid.
  */
 export const validateRestriction = (

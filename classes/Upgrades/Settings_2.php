@@ -36,6 +36,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 	 */
 	public function get_dependencies() {
 		return [
+			'backup-2',
 			'restrictions-2',
 		];
 	}
@@ -51,7 +52,14 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 
 		$stream->start_task( __( 'Migrating plugin settings', 'content-control' ) );
 
-		$settings               = \get_option( 'jp_cc_settings', [] );
+		$settings = \get_option( 'jp_cc_settings', [] );
+
+		if ( ! is_array( $settings ) ||
+			empty( $settings )
+		) {
+			$settings = [];
+		}
+
 		$default_denial_message = isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
 
 		// For migrations, maintain the old default of not excluding admins.

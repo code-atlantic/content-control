@@ -126,14 +126,14 @@ function camel_case_to_snake_case( $str ) {
  *
  * Gets rid of Closure and other invalid data types.
  *
- * @param array $array Array to clean.
+ * @param array $arr Array to clean.
  *
  * @return array Cleaned array.
  */
-function deep_clean_array( $array ) {
+function deep_clean_array( $arr ) {
 	// Clean \Closure values deeply.
 	array_walk_recursive(
-		$array,
+		$arr,
 		function ( &$value ) {
 			if ( $value instanceof \Closure ) {
 				$value = null;
@@ -141,5 +141,5 @@ function deep_clean_array( $array ) {
 		}
 	);
 
-	return $array;
+	return $arr;
 }

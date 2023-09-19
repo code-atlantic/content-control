@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
@@ -81,21 +81,28 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 == Changelog ==
 
+= v2.0.6 - 09/19/2023 =
+
+- Improvement: Added data backup step to upgrade process that stores json export in the media library.
+- Improvement: Better error handling in the data upgrade process.
+- Fix: Fix bug in data upgrade process that caused it to never finish.
+- Fix: Possible error when no restriction match found in some custom` queries.
+
 = v2.0.5 - 09/18/2023 =
 
--   Fix: Fix errors on some sites with custom conditions due to registering all rules too early.
+- Fix: Fix errors on some sites with custom conditions due to registering all rules too early.
 
 = v2.0.4 - 09/18/2023 =
 
--   Fix: Error when WP Query vars include anonymous function closures.
+- Fix: Error when WP Query vars include anonymous function closures.
 
 = v2.0.3 - 09/18/2023 =
 
--   Fix: Log errors instead of throwing exceptions to prevent uncaught exceptions turning into fatal errors.
+- Fix: Log errors instead of throwing exceptions to prevent uncaught exceptions turning into fatal errors.
 
 = v2.0.2 - 09/18/2023 =
 
--   Fix: Fatal error from error logger on systems without write access.
+- Fix: Fatal error from error logger on systems without write access.
 
 = v2.0.1 - 09/17/2023 =
 

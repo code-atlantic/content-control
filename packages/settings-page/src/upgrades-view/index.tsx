@@ -19,6 +19,7 @@ type StatusState = {
 		total: number;
 		progress: number;
 	};
+	error?: string;
 };
 
 type SSEvent = {
@@ -26,9 +27,12 @@ type SSEvent = {
 		| 'upgrades:start'
 		| 'upgrades:progress'
 		| 'upgrades:complete'
+		| 'upgrades:error'
 		| 'task:start'
 		| 'task:progress'
-		| 'task:complete';
+		| 'task:complete'
+		| 'task:retry'
+		| 'task:error';
 	data: {
 		message?: string;
 		status: StatusState;
@@ -39,6 +43,7 @@ const statusStateDefaults = {
 	total: 1,
 	progress: 0,
 	currentTask: undefined,
+	error: undefined,
 };
 
 type UpgradeState = {
@@ -78,10 +83,12 @@ const UpgradeView = () => {
 			'upgrades:start',
 			'upgrades:progress',
 			'upgrades:complete',
+			'upgrades:error',
 			'task:start',
 			'task:progress',
-			'task:error',
 			'task:complete',
+			'task:retry',
+			'task:error',
 		],
 		( { type, data } ) => {
 			const eventData = JSON.parse( data ) as SSEvent[ 'data' ];
@@ -98,6 +105,7 @@ const UpgradeView = () => {
 				case 'upgrades:start':
 				case 'upgrades:progress':
 				case 'upgrades:complete':
+				case 'task:retry':
 				case 'task:start':
 				case 'task:complete':
 				case 'task:progress':
@@ -111,10 +119,21 @@ const UpgradeView = () => {
 					setUpgradeState( newState );
 					break;
 
+				case 'upgrades:error':
 				case 'task:error':
 				case 'error':
 					// eslint-disable-next-line no-console
 					console.log( 'Error:', message, eventData );
+					if ( type === 'upgrades:error' ) {
+						newState.done = true;
+						// Close the connection when the 'upgrades:error' event is received
+						eventSource?.close();
+						newState.status = {
+							...newState.status,
+							error: message,
+						};
+					}
+
 					setUpgradeState( {
 						...newState,
 						logs: [
@@ -230,7 +249,12 @@ const UpgradeView = () => {
 					</Button>
 				</div>
 			) : (
-				<div className="upgrade-progress">
+				<div
+					className={ classNames( [
+						'upgrade-progress',
+						status.error ? 'upgrade-errors' : '',
+					] ) }
+				>
 					<div className="upgrade-progress__header">
 						<h3 className="upgrade-progress__title">
 							{ __( 'Upgrade Progress', 'content-control' ) }
