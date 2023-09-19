@@ -25,9 +25,9 @@ class Assets extends Controller {
 	 * Initialize the assets controller.
 	 */
 	public function init() {
-		add_action( 'init', [ $this, 'register_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'register_scripts' ], 0 );
+		add_action( 'admin_enqueue_scripts', [ $this, 'register_scripts' ], 0 );
 		add_action( 'wp_print_scripts', [ $this, 'autoload_styles_for_scripts' ], 0 );
-		add_action( 'admin_enqueue_scripts', [ $this, 'register_scripts' ] );
 		add_action( 'admin_print_scripts', [ $this, 'autoload_styles_for_scripts' ], 0 );
 	}
 
