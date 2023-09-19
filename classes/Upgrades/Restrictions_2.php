@@ -35,6 +35,17 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 	}
 
 	/**
+	 * Get the dependencies for this upgrade.
+	 *
+	 * @return string[]
+	 */
+	public function get_dependencies() {
+		return [
+			'backup-2',
+		];
+	}
+
+	/**
 	 * Run the migration.
 	 *
 	 * @return void|WP_Error|false

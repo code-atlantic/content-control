@@ -64,6 +64,7 @@ class Upgrades extends Controller {
 	public function all_upgrades() {
 		return [
 			// Version 2 upgrades.
+			'\ContentControl\Upgrades\Backup_2',
 			'\ContentControl\Upgrades\PluginMeta_2',
 			'\ContentControl\Upgrades\Settings_2',
 			'\ContentControl\Upgrades\UserMeta_2',
@@ -405,7 +406,7 @@ class Upgrades extends Controller {
 			<div class="notice-content">
 				<p>
 					<strong>
-						<?php esc_html_e( 'Content Control has been updated and needs to run some database upgrades.', 'content-control' ); ?>
+					<?php esc_html_e( 'Content Control has been updated and needs to run some database upgrades.', 'content-control' ); ?>
 					</strong>
 				</p>
 				<ul class="notice-actions">

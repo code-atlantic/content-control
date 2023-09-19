@@ -19,6 +19,7 @@ use function apply_filters;
  */
 function current_data_versions() {
 	return apply_filters( 'content_control/current_data_versions', [
+		'backup'       => 2,
 		'settings'     => 2,
 		'restrictions' => 2,
 		'plugin_meta'  => 2,
@@ -94,6 +95,7 @@ function maybe_force_v2_migrations( $old_version ) {
 
 		// Forces updates for all data types to v2.
 		$versioning = wp_parse_args( [
+			'backup'       => 1,
 			'settings'     => 1,
 			'restrictions' => 1,
 			'plugin_meta'  => 1,

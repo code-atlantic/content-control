@@ -36,6 +36,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 	 */
 	public function get_dependencies() {
 		return [
+			'backup-2',
 			'restrictions-2',
 		];
 	}
