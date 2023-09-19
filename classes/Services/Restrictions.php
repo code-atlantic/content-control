@@ -10,10 +10,10 @@ namespace ContentControl\Services;
 
 use ContentControl\Models\Restriction;
 
+use function ContentControl\plugin;
 use function ContentControl\get_query;
 use function ContentControl\current_query_context;
 use function ContentControl\deep_clean_array;
-use function ContentControlPro\plugin;
 
 defined( 'ABSPATH' ) || exit;
 
