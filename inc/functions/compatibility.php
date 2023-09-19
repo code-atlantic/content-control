@@ -83,11 +83,6 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
-	/**
-	 * WP Query.
-	 *
-	 * @var \WP_Query $query
-	 */
 	$query = get_query();
 
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
@@ -97,11 +92,11 @@ function is_frontend() {
 		is_cron() ||
 		is_ajax() ||
 		is_admin() ||
-		$query->is_admin() ||
-		$query->is_favicon() ||
-		strpos( $request_uri, 'favicon.ico' ) ||
-		$query->is_robots() ||
-		strpos( $request_uri, 'robots.txt' )
+		$query && $query->is_admin ||
+		$query && $query->is_favicon() ||
+		strpos( $request_uri, 'favicon.ico' ) >= 0 ||
+		$query && $query->is_robots() ||
+		strpos( $request_uri, 'robots.txt' ) >= 0
 	) {
 		return false;
 	}
