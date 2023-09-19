@@ -88,39 +88,37 @@ class Upgrades extends Controller {
 	 * @return \ContentControl\Base\Upgrade[]
 	 */
 	public function get_required_upgrades() {
-		static $required_upgrades = null;
+		$required_upgrades = [];
 
-		if ( null === $required_upgrades ) {
-			$all_upgrades      = $this->all_upgrades();
-			$required_upgrades = [];
+		$all_upgrades      = $this->all_upgrades();
+		$required_upgrades = [];
 
-			foreach ( $all_upgrades as $upgrade_class ) {
-				if ( ! class_exists( $upgrade_class ) ) {
-					continue;
-				}
-
-				/**
-				 * Upgrade class instance.
-				 *
-				 * @var \ContentControl\Base\Upgrade $upgrade
-				 */
-				$upgrade = new $upgrade_class();
-
-				// Check if required, and if so, add it to the list.
-				if ( is_upgrade_complete( $upgrade ) ) {
-					continue;
-				} elseif ( ! $upgrade->is_required() ) {
-					// If its not required, mark it as done.
-					mark_upgrade_complete( $upgrade );
-					continue;
-				}
-
-				$required_upgrades[] = $upgrade;
+		foreach ( $all_upgrades as $upgrade_class ) {
+			if ( ! class_exists( $upgrade_class ) ) {
+				continue;
 			}
 
-			// Sort the required upgrades based on prerequisites.
-			$required_upgrades = $this->sort_upgrades_by_prerequisites( $required_upgrades );
+			/**
+			 * Upgrade class instance.
+			 *
+			 * @var \ContentControl\Base\Upgrade $upgrade
+			 */
+			$upgrade = new $upgrade_class();
+
+			// Check if required, and if so, add it to the list.
+			if ( is_upgrade_complete( $upgrade ) ) {
+				continue;
+			} elseif ( ! $upgrade->is_required() ) {
+				// If its not required, mark it as done.
+				mark_upgrade_complete( $upgrade );
+				continue;
+			}
+
+			$required_upgrades[] = $upgrade;
 		}
+
+		// Sort the required upgrades based on prerequisites.
+		$required_upgrades = $this->sort_upgrades_by_prerequisites( $required_upgrades );
 
 		return $required_upgrades;
 	}
