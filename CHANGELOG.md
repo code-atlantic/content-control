@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+-   Tweak: Only log each unique plugin debug notice once to prevent filling log files quickly.
 -   Fix: Error when function is called early & global $wp_query is not yet available.
 
 ## v2.0.6 - 09/19/2023
