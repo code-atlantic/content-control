@@ -57,6 +57,14 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 		// Get settings (where restrictions were store before).
 		$settings = \get_option( 'jp_cc_settings', [] );
 
+		if ( ! is_array( $settings ) ||
+			empty( $settings ) ||
+			! isset( $settings['restrictions'] ) ||
+			empty( $settings['restrictions'] )
+		) {
+			$stream->complete_task( __( 'No restrictions to migrate.', 'content-control' ) );
+		}
+
 		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
 		$count        = count( $restrictions );
 
