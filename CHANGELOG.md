@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v2.0.6 - 09/19/2023
+
+-   Improvement: Added data backup step to upgrade process that stores json export in the media library.
+-   Improvement: Better error handling in the data upgrade process.
+-   Fix: Fix bug in data upgrade process that caused it to never finish.
+-   Fix: Possible error when no restriction match found in some custom` queries.
+
 ## v2.0.5 - 09/18/2023
 
 -   Fix: Fix errors on some sites with custom conditions due to registering all rules too early.
