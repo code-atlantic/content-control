@@ -80,6 +80,7 @@ class License {
 		if ( defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && ! empty( \CONTENT_CONTROL_LICENSE_KEY ) && '' === $this->get_license_key() ) {
 			try {
 				$this->activate_license( \CONTENT_CONTROL_LICENSE_KEY );
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( \Exception $e ) {
 				// Do nothing.
 			}

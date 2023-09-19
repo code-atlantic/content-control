@@ -112,25 +112,29 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 		[]
 	);
 
-	useEffect( () => {
-		if ( ! triedSaving ) {
-			return;
-		}
+	useEffect(
+		() => {
+			if ( ! triedSaving ) {
+				return;
+			}
 
-		if (
-			Status.Success === dispatchStatus.create ||
-			Status.Success === dispatchStatus.update
-		) {
-			closeEditor();
-			return;
-		}
+			if (
+				Status.Success === dispatchStatus.create ||
+				Status.Success === dispatchStatus.update
+			) {
+				closeEditor();
+				return;
+			}
 
-		const error = dispatchErrors.create ?? dispatchErrors.update;
+			const error = dispatchErrors.create ?? dispatchErrors.update;
 
-		if ( typeof error !== 'undefined' ) {
-			setErrorMessage( error );
-		}
-	}, [ dispatchStatus, dispatchErrors ] );
+			if ( typeof error !== 'undefined' ) {
+				setErrorMessage( error );
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[ dispatchStatus, dispatchErrors ]
+	);
 
 	// If the editor isn't active, return empty.
 	if ( ! isEditorActive ) {
@@ -247,12 +251,13 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 	) as TabComponent[];
 
 	if ( typeof errorMessage === 'object' && errorMessage?.tabName?.length ) {
-		const tab = tabs.find( ( tab ) => tab.name === errorMessage.tabName );
+		const _tab = tabs.find( ( t ) => t.name === errorMessage.tabName );
 
-		if ( tab ) {
-			tabs[ tabs.indexOf( tab ) ].className = tabs[ tabs.indexOf( tab ) ]
-				.className
-				? tabs[ tabs.indexOf( tab ) ].className + ' error'
+		if ( _tab ) {
+			tabs[ tabs.indexOf( _tab ) ].className = tabs[
+				tabs.indexOf( _tab )
+			].className
+				? tabs[ tabs.indexOf( _tab ) ].className + ' error'
 				: 'error';
 		}
 	}
