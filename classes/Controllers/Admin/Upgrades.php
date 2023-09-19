@@ -224,8 +224,36 @@ class Upgrades extends Controller {
 				$failed_upgrades = [];
 
 				// This second while loop runs the upgrades.
-				while ( ! empty( $upgrades ) ) {
-					$upgrade = array_shift( $upgrades );
+				while ( ! empty( $this->get_required_upgrades() ) ) {
+					$upgrade      = array_shift( $this->get_required_upgrades() );
+					$upgrade_name = get_upgrade_name( $upgrade );
+
+					if ( ! isset( $failed_upgrades[ $upgrade_name ] ) ) {
+						$failed_upgrades[ $upgrade_name ] = 0;
+					} elseif ( $failed_upgrades[ $upgrade_name ] > 0 ) {
+						$stream->send_event(
+							'task:retry',
+							[
+								'message' => __( 'Retrying upgrade', 'content-control' ),
+								'data'    => [
+									'key'   => $upgrade_name,
+									'label' => $upgrade->label(),
+								],
+							]
+						);
+					}
+
+					if ( $failed_upgrades[ $upgrade_name ] > 2 ) {
+						$stream->send_error( [
+							'message' => __( 'Some upgrades failed to complete.', 'content-control' ),
+						] );
+
+						$stream->send_event( 'upgrades:error', [
+							'message' => __( 'Upgrade did not complete, see error logs above.', 'content-control' ),
+							'data'    => $failed_upgrades,
+						] );
+						return;
+					}
 
 					$result = $upgrade->stream_run( $stream );
 
@@ -235,7 +263,7 @@ class Upgrades extends Controller {
 						mark_upgrade_complete( $upgrade );
 					} else {
 						// False means the upgrade failed.
-						$failed_upgrades[] = get_upgrade_name( $upgrade );
+						++$failed_upgrades[ $upgrade_name ];
 					}
 				}
 

@@ -135,5 +135,23 @@
 				margin-top: 10px;
 			}
 		}
+
+		&.upgrade-errors {
+			.upgrade-progress__bar {
+				&__fill {
+					&--current {
+						background-color: #d54e21;
+					}
+
+					&--next {
+						background-color: #d54e21;
+					}
+
+					&--task {
+						background-color: #d54e21;
+					}
+				}
+			}
+		}
 	}
 }
