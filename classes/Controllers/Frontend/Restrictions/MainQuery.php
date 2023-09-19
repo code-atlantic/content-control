@@ -141,6 +141,10 @@ class MainQuery extends Controller {
 			}
 		}
 
+		if ( false === $restriction_match ) {
+			return;
+		}
+
 		/**
 		 * Restriction object.
 		 *
