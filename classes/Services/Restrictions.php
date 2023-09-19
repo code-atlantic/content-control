@@ -131,7 +131,7 @@ class Restrictions {
 			$query_hash = md5( maybe_serialize( $hash_vars ) );
 		} catch ( \Exception $e ) {
 			$query_hash = md5( wp_rand( 0, 100000 ) );
-			plugin( 'logging' )->log( 'ERROR: ' . $e->getMessage() );
+			plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
 		}
 
 		if ( is_null( $post_id ) ) {
