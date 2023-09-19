@@ -45,17 +45,23 @@ function is_rest() {
 			return true;
 	}
 
-	// (#3)
-	global $wp_rewrite;
-	if ( null === $wp_rewrite ) {
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_rewrite = new \WP_Rewrite();
-	}
-
 	// (#4)
 	$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
 	$current_url = wp_parse_url( add_query_arg( [] ) );
-	return strpos( $current_url['path'] ? $current_url['path'] : '/', $rest_url['path'], 0 ) === 0;
+
+	if ( ! $rest_url || ! $current_url ) {
+		return false;
+	}
+
+	$current_path = isset( $current_url['path'] ) ? $current_url['path'] : false;
+	$rest_path    = isset( $rest_url['path'] ) ? $rest_url['path'] : false;
+
+	// If one of the URLs failed to parse, then the current request isn't a REST request.
+	if ( ! $current_path || ! $rest_path ) {
+		return false;
+	}
+
+	return strpos( $current_path, $rest_path, 0 ) === 0;
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 }
 
