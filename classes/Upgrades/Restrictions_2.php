@@ -63,6 +63,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			empty( $settings['restrictions'] )
 		) {
 			$stream->complete_task( __( 'No restrictions to migrate.', 'content-control' ) );
+			return true;
 		}
 
 		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
