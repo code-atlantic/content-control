@@ -51,7 +51,7 @@ class BlockTypes extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'update_block_types' ],
 					'permission_callback' => [ $this, 'update_block_types_permissions' ],
-					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				],
 				'schema' => [ $this, 'get_schema' ],
 			]
