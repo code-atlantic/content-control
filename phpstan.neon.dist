@@ -1,5 +1,5 @@
 parameters:
-    level: 3
+    level: 5
     paths:
         - bin/
         - classes/
@@ -9,3 +9,7 @@ parameters:
         - uninstall.php
     bootstrapFiles:
         - bin/phpstan-bootstrap.php
+    dynamicConstantNames:
+        - 'IS_WPCOM'
+        - 'CONTENT_CONTROL_DISABLE_LOGGING'
+        - 'CONTENT_CONTROL_LICENSE_KEY'
