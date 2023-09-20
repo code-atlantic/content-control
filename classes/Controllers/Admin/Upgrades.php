@@ -361,7 +361,10 @@ class Upgrades extends Controller {
 			} while ( ! $stream->should_abort() && ! empty( $upgrades ) );
 		} catch ( \Exception $e ) {
 			if ( isset( $stream ) ) {
-				$stream->send_error( $e );
+				$stream->send_error( [
+					'message' => $e->getMessage(),
+					'data'    => $e,
+				] );
 			} else {
 				wp_send_json_error( $e );
 			}
