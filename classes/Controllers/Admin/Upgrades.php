@@ -228,8 +228,9 @@ class Upgrades extends Controller {
 
 				// This second while loop runs the upgrades.
 				while ( ! empty( $this->get_required_upgrades() ) ) {
-					$upgrade      = array_shift( $this->get_required_upgrades() );
-					$upgrade_name = get_upgrade_name( $upgrade );
+					$required_upgrades = $this->get_required_upgrades();
+					$upgrade           = array_shift( $required_upgrades );
+					$upgrade_name      = get_upgrade_name( $upgrade );
 
 					if ( ! isset( $failed_upgrades[ $upgrade_name ] ) ) {
 						$failed_upgrades[ $upgrade_name ] = 0;
@@ -261,7 +262,14 @@ class Upgrades extends Controller {
 					$result = $upgrade->stream_run( $stream );
 
 					if ( is_wp_error( $result ) ) {
-						$stream->send_error( $result );
+						$stream->send_error( [
+							'message' => sprintf(
+								// translators: %s: error message.
+								__( 'Some upgrades failed to complete: %s', 'content-control' ),
+								$result->get_error_message()
+							),
+							'data'    => $result,
+						] );
 					} elseif ( false !== $result ) {
 						mark_upgrade_complete( $upgrade );
 					} else {
