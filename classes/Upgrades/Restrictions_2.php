@@ -169,7 +169,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			'overrideMessage'  => $restriction['override_default_message'],
 			'customMessage'    => $restriction['custom_message'],
 			'redirectType'     => $restriction['redirect_type'],
-			'redirectUrl'      => sanitize_url( $restriction['redirect_url'] ),
+			'redirectUrl'      => esc_url( $restriction['redirect_url'] ),
 			'conditions'       => remap_conditions_to_query( $restriction['conditions'] ),
 		], get_default_restriction_settings() );
 
