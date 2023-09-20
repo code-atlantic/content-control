@@ -464,9 +464,9 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		$count_source_files = count( $source_files );
 
 		// Locate which directory to copy to the new folder, This is based on the actual folder holding the files.
-		if ( $count_source_files === 1 && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) { // Only one folder? Then we want its contents.
+		if ( 1 === $count_source_files && $wp_filesystem->is_dir( trailingslashit( $args['source'] ) . $source_files[0] . '/' ) ) { // Only one folder? Then we want its contents.
 			$source = trailingslashit( $args['source'] ) . trailingslashit( $source_files[0] );
-		} elseif ( $count_source_files === 0 ) {
+		} elseif ( 0 === $count_source_files ) {
 			return new WP_Error( 'incompatible_archive_empty', $this->strings['incompatible_archive'], $this->strings['no_files'] ); // There are no files?
 		} else { // It's only a single file, the upgrader will use the folder name of this file as the destination folder. Folder name is based on zip filename.
 			$source = trailingslashit( $args['source'] );
@@ -507,7 +507,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			$protected_directories = array_merge( $protected_directories, $wp_theme_directories );
 		}
 
-		if ( in_array( $destination, $protected_directories ) ) {
+		if ( in_array( $destination, $protected_directories, true ) ) {
 			$remote_destination = trailingslashit( $remote_destination ) . trailingslashit( basename( $source ) );
 			$destination        = trailingslashit( $destination ) . trailingslashit( basename( $source ) );
 		}
@@ -568,7 +568,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 
 		$destination_name = basename( str_replace( $local_destination, '', $destination ) );
 
-		if ( $destination_name === '.' ) {
+		if ( '.' === $destination_name ) {
 			$destination_name = '';
 		}
 
