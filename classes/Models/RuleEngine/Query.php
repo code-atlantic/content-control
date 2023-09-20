@@ -94,13 +94,13 @@ class Query {
 		}
 
 		foreach ( $this->items as $item ) {
+			// Missing rules should result in restricted content.
+			$result = false;
+
 			if ( $item instanceof Rule ) {
 				$result = $item->check_rule();
 			} elseif ( $item instanceof Group ) {
 				$result = $item->check_rules();
-			} else {
-				// If no result, default to false (deny).
-				$result = false;
 			}
 
 			$checks[] = $result;
@@ -122,7 +122,7 @@ class Query {
 		 */
 		if ( 'or' === $this->logical_operator ) {
 			// If any values are true or null, return true.
-			return in_array( true, $checks, true ) || in_array( null, $checks, true );
+			return in_array( true, $checks, true );
 		} else {
 			// If any values are false, return false.
 			return ! in_array( false, $checks, true );
