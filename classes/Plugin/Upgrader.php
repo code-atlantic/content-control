@@ -95,7 +95,7 @@ class Upgrader {
 	 * @return bool|\WP_Error
 	 */
 	public function activate_plugin( $plugin_basename ) {
-		if ( ! $plugin_basename || empty( $plugin_basename ) ) {
+		if ( ! $plugin_basename || strlen( $plugin_basename ) === 0 ) {
 			return new \WP_Error( 'content_control_plugin_basename', __( 'Plugin basename empty.', 'content-control' ) );
 		}
 
