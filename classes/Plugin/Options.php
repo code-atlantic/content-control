@@ -92,6 +92,7 @@ class Options {
 		 *
 		 * @param mixed $value Option value.
 		 * @param string $key Option key.
+		 * @param mixed $default_value Default value.
 		 *
 		 * @return mixed
 		 */

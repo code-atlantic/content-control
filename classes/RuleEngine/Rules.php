@@ -188,7 +188,7 @@ class Rules {
 		/**
 		 * Allow manipulating registered rules.
 		 *
-		 * @param Rules $this Rules instance.
+		 * @param Rules $rules Rules instance.
 		 *
 		 * @return void
 		 */

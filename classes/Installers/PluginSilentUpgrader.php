@@ -146,7 +146,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			// Don't output the 'no signature could be found' failure message for now.
 			if ( (string) $download->get_error_code() !== 'signature_verification_no_signature' || WP_DEBUG ) {
 				// Outout the failure error as a normal feedback, and not as an error:
-				// $this->skin->feedback( $download->get_error_message() );
+				// $this->skin->feedback( $download->get_error_message() );.
 
 				// Report this failure back to WordPress.org for debugging purposes.
 				wp_version_check(
@@ -198,10 +198,13 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		$this->skin->set_result( $result );
 		if ( is_wp_error( $result ) ) {
 			$this->skin->error( $result );
+			// phpcs:disable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar
 			// $this->skin->feedback( 'process_failed' );
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedElse
 		} else {
 			// Installation succeeded.
 			// $this->skin->feedback( 'process_success' );
+			// phpcs:enable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar
 		}
 
 		$this->skin->after();
@@ -217,7 +220,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			 * @since 3.7.0 Added to WP_Upgrader::run().
 			 * @since 4.6.0 `$translations` was added as a possible argument to `$hook_extra`.
 			 *
-			 * @param WP_Upgrader $this WP_Upgrader instance. In other contexts, $this, might be a
+			 * @param WP_Upgrader $upgrader WP_Upgrader instance. In other contexts, $this, might be a
 			 *                          Theme_Upgrader, Plugin_Upgrader, Core_Upgrade, or Language_Pack_Upgrader instance.
 			 * @param array       $hook_extra {
 			 *     Array of bulk item update data.
@@ -295,7 +298,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		 * @param bool        $reply      Whether to bail without returning the package.
 		 *                                Default false.
 		 * @param string      $package    The package file name.
-		 * @param WP_Upgrader $this       The WP_Upgrader instance.
+		 * @param WP_Upgrader $upgrader       The WP_Upgrader instance.
 		 * @param array       $hook_extra Extra arguments passed to hooked filters.
 		 */
 		$reply = apply_filters( 'upgrader_pre_download', false, $package, $this, $hook_extra );
@@ -349,15 +352,15 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			}
 		}
 
-		// We need a working directory - Strip off any .tmp or .zip suffixes
+		// We need a working directory - Strip off any .tmp or .zip suffixes.
 		$working_dir = $upgrade_folder . basename( basename( $package, '.tmp' ), '.zip' );
 
-		// Clean up working directory
+		// Clean up working directory.
 		if ( $wp_filesystem->is_dir( $working_dir ) ) {
 			$wp_filesystem->delete( $working_dir, true );
 		}
 
-		// Unzip package to working directory
+		// Unzip package to working directory.
 		$result = unzip_file( $package, $working_dir );
 
 		// Once extracted, delete the package if required.
@@ -411,8 +414,8 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		global $wp_filesystem, $wp_theme_directories;
 
 		$defaults = [
-			'source'                      => '', // Please always pass this
-			'destination'                 => '', // and this
+			'source'                      => '', // Please always pass this.
+			'destination'                 => '', // and this.
 			'clear_destination'           => false,
 			'clear_working'               => false,
 			'abort_if_destination_exists' => true,
@@ -475,10 +478,10 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		 * @since 2.8.0
 		 * @since 4.4.0 The $hook_extra parameter became available.
 		 *
-		 * @param string      $source        File source location.
-		 * @param string      $remote_source Remote file source location.
-		 * @param WP_Upgrader $this          WP_Upgrader instance.
-		 * @param array       $hook_extra    Extra arguments passed to hooked filters.
+		 * @param string|\WP_Error  $source         File source location.
+		 * @param string            $remote_source  Remote file source location.
+		 * @param WP_Upgrader       $upgrader       WP_Upgrader instance.
+		 * @param array             $hook_extra     Extra arguments passed to hooked filters.
 		 */
 		$source = apply_filters( 'upgrader_source_selection', $source, $remote_source, $this, $args['hook_extra'] );
 
@@ -576,7 +579,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		 *
 		 * @since 2.8.0
 		 *
-		 * @param bool  $response   Installation response.
+		 * @param bool|\WP_Error  $response   Installation response.
 		 * @param array $hook_extra Extra arguments passed to hooked filters.
 		 * @param array $result     Installation result data.
 		 */

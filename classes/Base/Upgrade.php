@@ -99,7 +99,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Run the upgrade.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|false
 	 */
 	abstract public function run();
 
@@ -108,7 +108,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	 *
 	 * @param \ContentControl\Services\UpgradeStream $stream Stream.
 	 *
-	 * @return void|WP_Error|false
+	 * @return bool|\WP_Error
 	 */
 	public function stream_run( $stream ) {
 		$this->stream = $stream;

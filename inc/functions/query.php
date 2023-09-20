@@ -163,7 +163,7 @@ function set_rules_query( $query ) {
  *
  * This has no effect when checking global queries ($post_id = null).
  *
- * @param int|null $post_id Post ID.
+ * @param int|\WP_Post|null $post_id Post ID.
  *
  * @return bool
  */
