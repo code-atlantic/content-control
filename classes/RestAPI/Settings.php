@@ -75,9 +75,9 @@ class Settings extends WP_REST_Controller {
 	/**
 	 * Update plugin settings.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request $request Request object.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_settings( $request ) {
 		$settings = $request->get_params();

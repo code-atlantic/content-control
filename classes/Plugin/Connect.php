@@ -206,8 +206,8 @@ class Connect {
 	/**
 	 * Kill the connection with no permission.
 	 *
-	 * @param int    $error_no Error number.
-	 * @param string $message Error message.
+	 * @param int          $error_no Error number.
+	 * @param string|false $message Error message.
 	 */
 	public function kill_connection( $error_no = self::ERROR_REFERRER, $message = false ) {
 		$this->debug_log( "Killing connection with error ($error_no) message: " . $message, 'ERROR' );

@@ -36,10 +36,10 @@ class QueryPosts extends Controller {
 	 * NOTE. This is only for filtering posts, and should not
 	 *       be used to redirect or replace the entire page.
 	 *
-	 * @param WP_Post[] $posts Array of post objects.
-	 * @param \WP_Query $query The WP_Query instance (passed by reference).
+	 * @param \WP_Post[] $posts Array of post objects.
+	 * @param \WP_Query  $query The WP_Query instance (passed by reference).
 	 *
-	 * @return WP_Post[]
+	 * @return \WP_Post[]
 	 */
 	public function restrict_query_posts( $posts, $query ) {
 		if ( protection_is_disabled() ) {

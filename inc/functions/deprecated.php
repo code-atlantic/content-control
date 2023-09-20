@@ -29,7 +29,7 @@ class JP_Content_Control {}
  *
  * @deprecated 2.0.0 Use \ContentControl\plugin() instead.
  *
- * @return \ContentControl\Plugin
+ * @return \ContentControl\Plugin\Core
  */
 function jp_content_control() {
 	return \ContentControl\plugin();

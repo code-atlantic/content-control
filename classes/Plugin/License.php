@@ -42,7 +42,7 @@ class License {
 	/**
 	 * Container.
 	 *
-	 * @var Container
+	 * @var \ContentControl\Base\Container
 	 */
 	private $c;
 
@@ -56,7 +56,7 @@ class License {
 	/**
 	 * Initialize license management.
 	 *
-	 * @param Container $c Container.
+	 * @param \ContentControl\Base\Container $c Container.
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
@@ -225,7 +225,7 @@ class License {
 	 *
 	 * @param bool $as_datetime Whether to return as DateTime object.
 	 *
-	 * @return DateTime|false|null
+	 * @return \DateTime|false|null
 	 */
 	public function get_license_expiration( $as_datetime = false ) {
 		$status = $this->get_license_status();

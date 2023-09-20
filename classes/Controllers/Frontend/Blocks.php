@@ -89,9 +89,9 @@ class Blocks extends Controller {
 	/**
 	 * Short curcuit block rendering for hidden blocks.
 	 *
-	 * @param string|null   $pre_render   The pre-rendered content. Default null.
-	 * @param array         $parsed_block The block being rendered.
-	 * @param WP_Block|null $parent_block If this is a nested block, a reference to the parent block.
+	 * @param string|null    $pre_render   The pre-rendered content. Default null.
+	 * @param array          $parsed_block The block being rendered.
+	 * @param \WP_Block|null $parent_block If this is a nested block, a reference to the parent block.
 	 *
 	 * @return string|null
 	 */

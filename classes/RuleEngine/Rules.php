@@ -7,6 +7,10 @@
 
 namespace ContentControl\RuleEngine;
 
+defined( 'ABSPATH' ) || exit;
+
+use ContentControl\Models\RuleEngine\Rule;
+
 /**
  * Rules registry
  */
@@ -38,6 +42,7 @@ class Rules {
 		}
 
 		$this->current_rule = $rule;
+		return $rule;
 	}
 
 	/**
@@ -437,23 +442,35 @@ class Rules {
 	public function get_post_type_tax_rules( $name ) {
 		$verbs = $this->get_verbs();
 
-		$post_type  = get_post_type_object( $name );
+		$post_type = get_post_type_object( $name );
+		/**
+		 * Taxnomies array.
+		 *
+		 * @var \WP_Taxonomy[]
+		 */
 		$taxonomies = get_object_taxonomies( $name, 'object' );
 		$rules      = [];
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
 			$rules[ "content_is_{$name}_with_{$tax_name}" ] = [
 				'name'     => "content_is_{$name}_with_{$tax_name}",
-				/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
-				'label'    => sprintf( _x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ), $post_type->labels->singular_name, $taxonomy->labels->singular_name ),
+				'label'    => sprintf(
+					/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
+					_x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ),
+					$post_type->labels->singular_name,
+					$taxonomy->labels->singular_name
+				),
 				'context'  => [ 'content', "posttype:{$name}", "taxonomy:{$tax_name}" ],
 				'category' => __( 'Content', 'content-control' ),
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'fields'   => [
 					'selected' => [
-						/* translators: %s: Taxonomy singular name */
-						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'placeholder' => sprintf(
+							/* translators: %s: Taxonomy singular name */
+							_x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ),
+							strtolower( $taxonomy->labels->name )
+						),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,

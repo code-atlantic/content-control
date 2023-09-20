@@ -48,7 +48,7 @@ class Logging {
 	/**
 	 * File system API.
 	 *
-	 * @var WP_Filesystem_Base
+	 * @var \WP_Filesystem_Base
 	 */
 	private $fs;
 
@@ -133,7 +133,7 @@ class Logging {
 	/**
 	 * Get working WP Filesystem instance
 	 *
-	 * @return WP_Filesystem_Base|false
+	 * @return \WP_Filesystem_Base|false
 	 */
 	public function fs() {
 		if ( isset( $this->fs ) ) {

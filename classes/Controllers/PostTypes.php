@@ -182,9 +182,9 @@ class PostTypes extends Controller {
 	/**
 	 * Add data version meta to new restrictions.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 * @param bool     $update  Whether this is an existing post being updated or not.
 	 *
 	 * @return void
 	 */
@@ -199,9 +199,9 @@ class PostTypes extends Controller {
 	/**
 	 * Prevent access to restrictions endpoint.
 	 *
-	 * @param mixed           $result Response to replace the requested version with.
-	 * @param WP_REST_Server  $server Server instance.
-	 * @param WP_REST_Request $request  Request used to generate the response.
+	 * @param mixed            $result Response to replace the requested version with.
+	 * @param \WP_REST_Server  $server Server instance.
+	 * @param \WP_REST_Request $request  Request used to generate the response.
 	 * @return mixed
 	 */
 	public function rest_pre_dispatch( $result, $server, $request ) {
