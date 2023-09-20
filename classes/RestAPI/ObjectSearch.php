@@ -8,7 +8,7 @@
 
 namespace ContentControl\RestAPI;
 
-use WP_User_Query, WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
+use WP_User_Query, WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 

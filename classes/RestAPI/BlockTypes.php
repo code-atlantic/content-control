@@ -8,7 +8,7 @@
 
 namespace ContentControl\RestAPI;
 
-use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
+use WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 use function ContentControl\get_block_types;
 use function ContentControl\sanitize_block_type;
 use function ContentControl\update_block_types;
