@@ -28,6 +28,9 @@ class Install_Skin extends PluginSilentUpgraderSkin {
 	public function error( $errors ) {
 		if ( ! empty( $errors ) ) {
 			wp_send_json_error( $errors );
+			exit;
 		}
+
+		return $errors;
 	}
 }
