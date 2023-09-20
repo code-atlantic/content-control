@@ -109,7 +109,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 		}
 
 		// Check if the put_contents method is available.
-		if ( ! method_exists( $wp_filesystem, 'put_contents' ) ) {
+		if ( ! method_exists( $wp_filesystem, 'put_contents' ) || ! method_exists( $wp_filesystem, 'exists' ) ) {
 			$stream->send_event(
 				'task:error',
 				[
