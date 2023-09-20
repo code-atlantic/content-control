@@ -224,10 +224,16 @@ class Core {
 	 *
 	 * @param string $name Controller name.
 	 *
-	 * @return Controller|null
+	 * @return \ContentControl\Base\Container|null
 	 */
 	public function get_controller( $name ) {
-		return $this->controllers->get( $name, null );
+		$controller = $this->controllers->get( $name );
+
+		if ( $controller instanceof Controller ) {
+			return $controller;
+		}
+
+		return null;
 	}
 
 	/**
