@@ -108,7 +108,6 @@ add_filter( 'content_control/excerpt_length', function ( $length = 50 ) {
 		 * @deprecated 2.0.0
 		 *
 		 * @param array $settings
-		 * @param int   $popup_id
 		 */
 		return apply_filters( 'jp_cc_filter_excerpt_length', $length );
 	}

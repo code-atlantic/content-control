@@ -165,16 +165,16 @@ function mark_upgrade_complete( $upgrade ) {
 	/**
 	 * Fires when an upgrade is marked as complete.
 	 *
-	 * @param string $upgrade Upgrade type.
+	 * @param \ContentControl\Base\Upgrade $upgrade Upgrade type.
 	 */
 	do_action( 'content_control/upgrade_complete', $upgrade );
 
 	/**
 	 * Fires when a specific upgrade is marked as complete.
 	 *
-	 * @param string $upgrade Upgrade type.
+	 * @param \ContentControl\Base\Upgrade $upgrade Upgrade type.
 	 */
-	do_action( "content_control/upgrade_complete/{$upgrade_name}" );
+	do_action( "content_control/upgrade_complete/{$upgrade_name}", $upgrade );
 }
 
 /**

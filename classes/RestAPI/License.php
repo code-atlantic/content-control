@@ -305,7 +305,7 @@ class License extends WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function refresh_license_status() {
-		$license_status = plugin( 'license' )->refresh_license_status();
+		$license_status = plugin( 'license' )->get_license_status( true );
 
 		if ( $license_status ) {
 			return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );

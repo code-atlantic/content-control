@@ -140,9 +140,15 @@ class License {
 	/**
 	 * Get license status.
 	 *
+	 * @param bool $refresh Whether to refresh license status.
+	 *
 	 * @return array Array of license status data.
 	 */
-	public function get_license_status() {
+	public function get_license_status( $refresh = false ) {
+		if ( $refresh ) {
+			$this->refresh_license_status();
+		}
+
 		$license_data = $this->get_license_data();
 
 		$license_status = isset( $license_data['status'] ) ? $license_data['status'] : [];
@@ -234,8 +240,6 @@ class License {
 	/**
 	 * Fetch license status from remote server.
 	 * This is a blocking request.
-	 *
-	 * @return array
 	 */
 	public function refresh_license_status() {
 		$key = $this->get_license_key();
@@ -251,8 +255,6 @@ class License {
 		}
 
 		$this->update_license_status( $status );
-
-		return $status;
 	}
 
 	/**
