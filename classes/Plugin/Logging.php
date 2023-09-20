@@ -41,14 +41,14 @@ class Logging {
 	/**
 	 * File system API.
 	 *
-	 * @var \WP_Filesystem_Base
+	 * @var \WP_Filesystem_Base|null
 	 */
 	private $fs;
 
 	/**
 	 * Log file content.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $content;
 
@@ -116,7 +116,9 @@ class Logging {
 	 * @return bool
 	 */
 	public function enabled() {
-		return ! defined( '\CONTENT_CONTROL_DISABLE_LOGGING' ) || ! \CONTENT_CONTROL_DISABLE_LOGGING && $this->is_writable();
+		$disabled = defined( '\CONTENT_CONTROL_DISABLE_LOGGING' ) && true === \CONTENT_CONTROL_DISABLE_LOGGING;
+
+		return ! $disabled && $this->is_writable();
 	}
 
 	/**

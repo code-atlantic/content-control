@@ -20,9 +20,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Connect {
 
-	const API_URL    = 'https://upgrade.contentcontrolplugin.com/';
-	const DEBUG_MODE = false;
-
+	const API_URL           = 'https://upgrade.contentcontrolplugin.com/';
 	const TOKEN_OPTION_NAME = 'content_control_connect_token';
 	const NONCE_OPTION_NAME = 'content_control_connect_nonce';
 
@@ -47,6 +45,15 @@ class Connect {
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;
+	}
+
+	/**
+	 * Check if debug mode is enabled.
+	 *
+	 * @return bool
+	 */
+	public function debug_mode_enabled() {
+		return defined( '\WP_DEBUG' ) && \WP_DEBUG;
 	}
 
 	/**
@@ -91,7 +98,7 @@ class Connect {
 	 * @param string $type    Type.
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
-		if ( self::DEBUG_MODE ) {
+		if ( $this->debug_mode_enabled() ) {
 			plugin( 'logging' )->log( "Plugin\Connect.$type: $message" );
 		}
 	}
@@ -212,7 +219,15 @@ class Connect {
 	public function kill_connection( $error_no = self::ERROR_REFERRER, $message = false ) {
 		$this->debug_log( "Killing connection with error ($error_no) message: " . $message, 'ERROR' );
 
-		wp_die( esc_html( self::DEBUG_MODE && $message ? $message : __( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' ) ), esc_attr( $error_no ), [ 'response' => 403 ] );
+		wp_die(
+			esc_html(
+				$this->debug_mode_enabled() && $message ?
+					$message :
+						__( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' )
+			),
+			esc_attr( $error_no ),
+			[ 'response' => 403 ]
+		);
 	}
 
 	/**
@@ -441,7 +456,7 @@ class Connect {
 		$args = $this->get_webhook_args();
 
 		// 3. Delete the token to prevent abuse.
-		if ( ! self::DEBUG_MODE ) {
+		if ( ! $this->debug_mode_enabled() ) {
 			$this->debug_log( 'Deleting token', 'DEBUG' );
 			\delete_option( self::TOKEN_OPTION_NAME );
 		}
