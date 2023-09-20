@@ -87,6 +87,8 @@ function get_query( $query = null ) {
  * Set the current query context.
  *
  * @param string $context 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
+ *
+ * @return void
  */
 function override_query_context( $context ) {
 	global $cc_current_query_context;
@@ -95,6 +97,8 @@ function override_query_context( $context ) {
 
 /**
  * Reset the current query context.
+ *
+ * @return void
  */
 function reset_query_context() {
 	global $cc_current_query_context;

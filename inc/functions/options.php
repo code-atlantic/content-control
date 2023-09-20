@@ -97,6 +97,8 @@ function sanitize_block_type( $type = [] ) {
  * Update block type list.
  *
  * @param array $incoming_block_types Array of updated block type declarations.
+ *
+ * @return void
  */
 function update_block_types( $incoming_block_types = [] ) {
 	$block_types = [];

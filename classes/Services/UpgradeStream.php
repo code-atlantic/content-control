@@ -33,6 +33,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Update the status of the upgrade.
 	 *
 	 * @param array $status Status to update.
+	 *
+	 * @return void
 	 */
 	public function update_status( $status = [] ) {
 		$defaults = [
@@ -55,6 +57,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Update the status of the current task.
 	 *
 	 * @param array|null $task_status Status to update.
+	 *
+	 * @return void
 	 */
 	public function update_task_status( $task_status = [] ) {
 		$defaults = [
@@ -110,6 +114,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 *
 	 * @param int    $total Number of upgrades.
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function start_upgrades( $total, $message = null ) {
 		$this->update_status( [
@@ -127,6 +133,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Complete the upgrade process.
 	 *
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function complete_upgrades( $message = null ) {
 		$this->update_status( [
@@ -145,6 +153,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * @param string $name Task name.
 	 * @param int    $task_steps Number of steps in the task.
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function start_task( $name, $task_steps = 1, $message = null ) {
 		$this->update_task_status( [
@@ -162,6 +172,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Update the progress of the current task.
 	 *
 	 * @param int $progress Progress of the task.
+	 *
+	 * @return void
 	 */
 	public function update_task_progress( $progress ) {
 		$this->update_task_status( [
@@ -175,6 +187,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Complete the current task.
 	 *
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function complete_task( $message = null ) {
 		$task_status = $this->status['currentTask'];

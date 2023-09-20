@@ -96,6 +96,8 @@ class Connect {
 	 *
 	 * @param string $message Message.
 	 * @param string $type    Type.
+	 *
+	 * @return void
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
 		if ( $this->debug_mode_enabled() ) {
@@ -215,6 +217,8 @@ class Connect {
 	 *
 	 * @param int          $error_no Error number.
 	 * @param string|false $message Error message.
+	 *
+	 * @return void
 	 */
 	public function kill_connection( $error_no = self::ERROR_REFERRER, $message = false ) {
 		$this->debug_log( "Killing connection with error ($error_no) message: " . $message, 'ERROR' );
@@ -276,6 +280,8 @@ class Connect {
 	 * Verify the nonce.
 	 *
 	 * @deprecated 2.0.0 Don't use, it doesn't work as its a separate server making request.
+	 *
+	 * @return void
 	 */
 	public function verify_nonce() {
 		$token = $this->get_access_token();

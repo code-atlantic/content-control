@@ -44,6 +44,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing pages and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function restrict_main_query() {
 		if ( ! \is_main_query() || protection_is_disabled() ) {
@@ -59,6 +61,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing archives and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function check_main_query() {
 		// Bail if we didn't match any restrictions.
@@ -102,6 +106,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing archives and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function check_main_query_posts() {
 		$query = get_main_wp_query();

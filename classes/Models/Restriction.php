@@ -261,6 +261,8 @@ class Restriction {
 	 * Map old v1 restriction to new v2 restriction object.
 	 *
 	 * @param array $restriction Restriction data.
+	 *
+	 * @return void
 	 */
 	public function setup_v1_restriction( $restriction ) {
 		static $index = 0;

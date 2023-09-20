@@ -63,6 +63,8 @@ class Logging {
 
 	/**
 	 * Register hooks.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		// On shutdown, save the log file.
@@ -179,6 +181,8 @@ class Logging {
 
 	/**
 	 * Get things started
+	 *
+	 * @return void
 	 */
 	public function init() {
 		$upload_dir  = $this->get_upload_dir();
@@ -221,7 +225,7 @@ class Logging {
 	/**
 	 * Retrieves the url to the file
 	 *
-	 * @returns string|bool The url to the file or false on failure
+	 * @return string|bool The url to the file or false on failure
 	 */
 	public function get_file_url() {
 		if ( ! $this->enabled() ) {
@@ -260,6 +264,8 @@ class Logging {
 	 * Log message to file
 	 *
 	 * @param string $message The message to log.
+	 *
+	 * @return void
 	 */
 	public function log( $message = '' ) {
 		$this->write_to_log( wp_date( 'Y-n-d H:i:s' ) . ' - ' . $message );
@@ -269,6 +275,8 @@ class Logging {
 	 * Log unique message to file.
 	 *
 	 * @param string $message The unique message to log.
+	 *
+	 * @return void
 	 */
 	public function log_unique( $message = '' ) {
 		$contents = $this->get_log_content();
@@ -337,6 +345,8 @@ class Logging {
 	 * Write the log message
 	 *
 	 * @param string $message The message to write.
+	 *
+	 * @return void
 	 */
 	protected function write_to_log( $message = '' ) {
 		if ( ! $this->enabled() ) {
@@ -355,6 +365,8 @@ class Logging {
 
 	/**
 	 * Save the current contents to file.
+	 *
+	 * @return void
 	 */
 	public function save_logs() {
 		$file_system = $this->fs();
@@ -380,6 +392,8 @@ class Logging {
 
 	/**
 	 * Truncates a log file to maximum of 250 lines.
+	 *
+	 * @return void
 	 */
 	public function truncate_log() {
 		$content           = $this->get_log_content();
@@ -400,6 +414,8 @@ class Logging {
 
 	/**
 	 * Delete the log file.
+	 *
+	 * @return void
 	 */
 	public function clear_log() {
 		$file_system = $this->fs();
@@ -423,6 +439,8 @@ class Logging {
 	 * @param string $func_name Function name.
 	 * @param string $version Versoin deprecated.
 	 * @param string $replacement Replacement function (optional).
+	 *
+	 * @return void
 	 */
 	public function log_deprecated_notice( $func_name, $version, $replacement = null ) {
 		if ( ! is_null( $replacement ) ) {

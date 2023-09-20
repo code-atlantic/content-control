@@ -56,6 +56,8 @@ class Reviews extends Controller {
 
 	/**
 	 * Hook into relevant WP actions.
+	 *
+	 * @return void
 	 */
 	public function hooks() {
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
@@ -84,6 +86,8 @@ class Reviews extends Controller {
 
 	/**
 	 * AJAX Handler
+	 *
+	 * @return void
 	 */
 	public function ajax_handler() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -357,6 +361,8 @@ class Reviews extends Controller {
 
 	/**
 	 * Render admin notices if available.
+	 *
+	 * @return void
 	 */
 	public function admin_notices() {
 		if ( $this->hide_notices() ) {

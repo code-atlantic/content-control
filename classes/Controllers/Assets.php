@@ -119,6 +119,8 @@ class Assets extends Controller {
 
 	/**
 	 * Register all package scripts & styles.
+	 *
+	 * @return void
 	 */
 	public function register_scripts() {
 		$packages = $this->get_packages();
@@ -154,6 +156,8 @@ class Assets extends Controller {
 
 	/**
 	 * Auto load styles if scripts are enqueued.
+	 *
+	 * @return void
 	 */
 	public function autoload_styles_for_scripts() {
 		$packages = $this->get_packages();

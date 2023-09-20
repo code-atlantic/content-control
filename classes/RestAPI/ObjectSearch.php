@@ -33,6 +33,8 @@ class ObjectSearch extends WP_REST_Controller {
 
 	/**
 	 * Register API endpoint routes.
+	 *
+	 * @return void
 	 */
 	public function register_routes() {
 		register_rest_route(

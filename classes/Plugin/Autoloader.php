@@ -46,6 +46,8 @@ class Autoloader {
 	 * If the autoloader is missing, add an admin notice.
 	 *
 	 *  @param string $plugin_name Plugin name for error messaging.
+	 *
+	 * @return void
 	 */
 	protected static function missing_autoloader( $plugin_name = '' ) {
 		/* translators: 1. Plugin name */

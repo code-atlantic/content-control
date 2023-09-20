@@ -111,6 +111,8 @@ class Prerequisites {
 
 	/**
 	 * Render notices when appropriate.
+	 *
+	 * @return void
 	 */
 	public function setup_notices() {
 		add_action( 'admin_notices', [ $this, 'render_notices' ] );
@@ -131,6 +133,8 @@ class Prerequisites {
 	 * Report failure notice to the queue.
 	 *
 	 * @param array $check_args Array of check arguments.
+	 *
+	 * @return void
 	 */
 	public function report_failure( $check_args ) {
 		$this->failures[] = $check_args;

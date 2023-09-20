@@ -84,6 +84,8 @@ class TrustedLogin extends Controller {
 
 	/**
 	 * Hooks.
+	 *
+	 * @return void
 	 */
 	public function hooks() {
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
@@ -91,6 +93,8 @@ class TrustedLogin extends Controller {
 
 	/**
 	 * Admin menu.
+	 *
+	 * @return void
 	 */
 	public function admin_menu() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended

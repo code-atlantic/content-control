@@ -35,6 +35,8 @@ class WidgetEditor extends Controller {
 	 * Enqueue v1 admin scripts.
 	 *
 	 * @param mixed $hook Admin page hook name.
+	 *
+	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
 		if ( 'widgets.php' === $hook ) {
@@ -49,6 +51,8 @@ class WidgetEditor extends Controller {
 	 * @param \WP_Widget $widget Widget instance.
 	 * @param bool       $ret Whether to return the output.
 	 * @param array      $instance Widget instance options.
+	 *
+	 * @return void
 	 */
 	public function fields( $widget, $ret, $instance ) {
 		$allowed_user_roles = allowed_user_roles();

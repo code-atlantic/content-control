@@ -55,6 +55,8 @@ class License {
 
 	/**
 	 * Register hooks.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		add_action( 'init', [ $this, 'autoregister' ] );
@@ -64,6 +66,8 @@ class License {
 
 	/**
 	 * Autoregister license.
+	 *
+	 * @return void
 	 */
 	public function autoregister() {
 		$key = defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && '' !== \CONTENT_CONTROL_LICENSE_KEY ? \CONTENT_CONTROL_LICENSE_KEY : false;
@@ -80,6 +84,8 @@ class License {
 
 	/**
 	 * Schedule cron jobs.
+	 *
+	 * @return void
 	 */
 	public function schedule_crons() {
 		if ( ! wp_next_scheduled( 'content_control_license_status_check' ) ) {
@@ -151,6 +157,8 @@ class License {
 	 * Update license data.
 	 *
 	 * @param array $license_data License data.
+	 *
+	 * @return bool
 	 */
 	public function udpate_license_data( $license_data ) {
 		if ( \update_option( self::OPTION_KEY, $license_data ) ) {
@@ -165,6 +173,8 @@ class License {
 	 * Update license key.
 	 *
 	 * @param string $key License key.
+	 *
+	 * @return void
 	 */
 	public function update_license_key( $key ) {
 		$license_data = $this->get_license_data();
@@ -188,6 +198,8 @@ class License {
 	 * Update license status.
 	 *
 	 * @param array $license_status License status data.
+	 *
+	 * @return void
 	 */
 	public function update_license_status( $license_status ) {
 		$license_data = $this->get_license_data();
@@ -231,12 +243,14 @@ class License {
 	/**
 	 * Fetch license status from remote server.
 	 * This is a blocking request.
+	 *
+	 * @return void
 	 */
 	public function refresh_license_status() {
 		$key = $this->get_license_key();
 
 		if ( empty( $key ) ) {
-			return [];
+			return;
 		}
 
 		try {
@@ -445,6 +459,8 @@ class License {
 
 	/**
 	 * Remove license.
+	 *
+	 * @return void
 	 */
 	public function remove_license() {
 		try {

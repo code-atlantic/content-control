@@ -57,6 +57,8 @@ class Core {
 
 	/**
 	 * Update & track version info.
+	 *
+	 * @return void
 	 */
 	private function check_version() {
 		$version    = $this->get( 'version' );
@@ -134,14 +136,18 @@ class Core {
 	}
 
 	/**
-	 * Internationalization
+	 * Internationalization.
+	 *
+	 * @return void
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( $this->container['text_domain'], false, $this->get_path( 'languages' ) );
 	}
 
 	/**
-	 * Add default services to our Container
+	 * Add default services to our Container.
+	 *
+	 * @return void
 	 */
 	public function register_services() {
 		/**
@@ -187,6 +193,8 @@ class Core {
 
 	/**
 	 * Initiate internal components.
+	 *
+	 * @return void
 	 */
 	private function initiate_controllers() {
 		$this->define_paths();
@@ -238,6 +246,8 @@ class Core {
 
 	/**
 	 * Initiate internal paths.
+	 *
+	 * @return void
 	 */
 	private function define_paths() {
 		/**

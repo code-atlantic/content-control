@@ -36,6 +36,8 @@ class Blocks extends Controller {
 
 	/**
 	 * Adds custom attributes to allowed block attributes.
+	 *
+	 * @return void
 	 */
 	public function register_block_attributes() {
 		$registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();

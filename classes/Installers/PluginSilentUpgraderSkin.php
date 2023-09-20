@@ -24,12 +24,16 @@ class PluginSilentUpgraderSkin extends \WP_Upgrader_Skin {
 	/**
 	 * Empty out the header of its HTML content and only check to see if it has
 	 * been performed or not.
+	 *
+	 * @return void
 	 */
 	public function header() {
 	}
 
 	/**
 	 * Empty out the footer of its HTML contents.
+	 *
+	 * @return void
 	 */
 	public function footer() {
 	}
@@ -50,6 +54,8 @@ class PluginSilentUpgraderSkin extends \WP_Upgrader_Skin {
 	 * Empty out JavaScript output that calls function to decrement the update counts.
 	 *
 	 * @param string $type Type of update count to decrement.
+	 *
+	 * @return void
 	 */
 	public function decrement_update_count( $type ) {
 	}

@@ -88,6 +88,8 @@ add_action( 'content_control/update_version', __NAMESPACE__ . '\maybe_force_v2_m
  * Sets data versioning to 1 as they didn't exist before.
  *
  * @param string $old_version Old version.
+ *
+ * @return void
  */
 function maybe_force_v2_migrations( $old_version ) {
 	if ( version_compare( $old_version, '2.0.0', '<' ) ) {

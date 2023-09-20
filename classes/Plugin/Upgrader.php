@@ -54,6 +54,8 @@ class Upgrader {
 	 *
 	 * @param string $message Message.
 	 * @param string $type    Type.
+	 *
+	 * @return void
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
 		if ( defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING ) {

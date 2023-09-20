@@ -36,6 +36,8 @@ function is_func_disabled( $func ) {
  *
  * @returns boolean
  * @author matzeeable
+ * 
+ * @return bool
  */
 function is_rest() {
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended

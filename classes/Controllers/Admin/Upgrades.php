@@ -47,6 +47,8 @@ class Upgrades extends Controller {
 
 	/**
 	 * Hook into relevant WP actions.
+	 *
+	 * @return void
 	 */
 	public function hooks() {
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
@@ -183,6 +185,8 @@ class Upgrades extends Controller {
 	 * @param array $graph Graph to sort.
 	 * @param array $visited List of visited nodes.
 	 * @param array $sorted List of sorted nodes.
+	 *
+	 * @return void
 	 */
 	private function visit_node( $node, $graph, &$visited, &$sorted ) {
 		if ( isset( $visited[ $node ] ) ) {
@@ -202,7 +206,9 @@ class Upgrades extends Controller {
 	}
 
 	/**
-	 * AJAX Handler
+	 * AJAX Handler.
+	 *
+	 * @return void
 	 */
 	public function ajax_handler() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -299,7 +305,9 @@ class Upgrades extends Controller {
 	}
 
 	/**
-	 * AJAX Handler
+	 * AJAX Handler.
+	 *
+	 * @return void
 	 */
 	public function ajax_handler_demo() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -362,6 +370,8 @@ class Upgrades extends Controller {
 
 	/**
 	 * Render admin notices if available.
+	 *
+	 * @return void
 	 */
 	public function admin_notices() {
 		if ( ! is_admin() ) {

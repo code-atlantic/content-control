@@ -259,6 +259,8 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 * @global WP_Filesystem_Base $wp_filesystem Subclass
 	 *
 	 * @param bool $enable True to enable maintenance mode, false to disable.
+	 *
+	 * @return void
 	 */
 	public function maintenance_mode( $enable = false ) {
 		global $wp_filesystem;
