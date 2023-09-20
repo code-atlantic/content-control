@@ -105,165 +105,165 @@ class ObjectSearch extends WP_REST_Controller {
 			wp_send_json_error();
 		}
 
-		$results = [
-			'hash'       => $request->get_param( 'hash' ),
-			'items'      => [],
-			'totalCount' => 0,
-		];
+		try {
+			$results = [
+				'hash'       => $request->get_param( 'hash' ),
+				'items'      => [],
+				'totalCount' => 0,
+			];
 
-		$object_kind = isset( $params['entityKind'] ) ? sanitize_text_field( wp_unslash( $params['entityKind'] ) ) : '';
-		$object_type = isset( $params['entityType'] ) ? sanitize_text_field( wp_unslash( $params['entityType'] ) ) : '';
-		$include     = ! empty( $params['include'] ) ? wp_parse_id_list( wp_unslash( $params['include'] ) ) : [];
-		$exclude     = ! empty( $params['exclude'] ) ? wp_parse_id_list( wp_unslash( $params['exclude'] ) ) : [];
+			$object_kind = isset( $params['entityKind'] ) ? sanitize_text_field( wp_unslash( $params['entityKind'] ) ) : '';
+			$object_type = isset( $params['entityType'] ) ? sanitize_text_field( wp_unslash( $params['entityType'] ) ) : '';
+			$include     = ! empty( $params['include'] ) ? wp_parse_id_list( wp_unslash( $params['include'] ) ) : [];
+			$exclude     = ! empty( $params['exclude'] ) ? wp_parse_id_list( wp_unslash( $params['exclude'] ) ) : [];
 
-		if ( ! empty( $include ) ) {
-			$exclude = array_merge( $include, $exclude );
-		}
+			if ( ! empty( $include ) ) {
+				$exclude = array_merge( $include, $exclude );
+			}
 
-		switch ( $object_kind ) {
-			case 'post_type':
-				$post_type = ! empty( $object_type ) ? $object_type : 'post';
+			switch ( $object_kind ) {
+				case 'post_type':
+					$post_type = ! empty( $object_type ) ? $object_type : 'post';
 
-				if ( ! empty( $include ) ) {
-					$include_query = $this->post_type_selectlist_query(
+					if ( ! empty( $include ) ) {
+						$include_query = $this->post_type_selectlist_query(
+							$post_type,
+							[
+								'post__in'       => $include,
+								'posts_per_page' => - 1,
+							],
+							true
+						);
+
+						foreach ( $include_query['items'] as $id => $name ) {
+							$results['items'][] = [
+								'id'   => $id,
+								'text' => "$name (ID: $id)",
+							];
+						}
+
+						$results['totalCount'] += (int) $include_query['totalCount'];
+					}
+
+					$query = $this->post_type_selectlist_query(
 						$post_type,
 						[
-							'post__in'       => $include,
-							'posts_per_page' => - 1,
+							's'              => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
+							'paged'          => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
+							'post__not_in'   => $exclude,
+							'posts_per_page' => 10,
 						],
 						true
 					);
 
-					foreach ( $include_query['items'] as $id => $name ) {
+					foreach ( $query['items'] as $id => $name ) {
 						$results['items'][] = [
 							'id'   => $id,
 							'text' => "$name (ID: $id)",
 						];
 					}
 
-					$results['totalCount'] += (int) $include_query['totalCount'];
-				}
+					$results['totalCount'] += (int) $query['totalCount'];
+					break;
 
-				$query = $this->post_type_selectlist_query(
-					$post_type,
-					[
-						's'              => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
-						'paged'          => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
-						'post__not_in'   => $exclude,
-						'posts_per_page' => 10,
-					],
-					true
-				);
+				case 'taxonomy':
+					$taxonomy = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : 'category';
 
-				foreach ( $query['items'] as $id => $name ) {
-					$results['items'][] = [
-						'id'   => $id,
-						'text' => "$name (ID: $id)",
-					];
-				}
+					if ( ! empty( $include ) ) {
+						$include_query = $this->taxonomy_selectlist_query(
+							$taxonomy,
+							[
+								'include' => $include,
+								'number'  => 0,
+							],
+							true
+						);
 
-				$results['totalCount'] += (int) $query['totalCount'];
-				break;
+						foreach ( $include_query['items'] as $id => $name ) {
+							$results['items'][] = [
+								'id'   => $id,
+								'text' => "$name (ID: $id)",
+							];
+						}
 
-			case 'taxonomy':
-				$taxonomy = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : 'category';
+						$results['totalCount'] += (int) $include_query['totalCount'];
+					}
 
-				if ( ! empty( $include ) ) {
-					$include_query = $this->taxonomy_selectlist_query(
+					$query = $this->taxonomy_selectlist_query(
 						$taxonomy,
 						[
-							'include' => $include,
-							'number'  => 0,
+							'search'  => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
+							'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
+							'exclude' => $exclude,
+							'number'  => 10,
 						],
 						true
 					);
 
-					foreach ( $include_query['items'] as $id => $name ) {
+					foreach ( $query['items'] as $id => $name ) {
 						$results['items'][] = [
 							'id'   => $id,
 							'text' => "$name (ID: $id)",
 						];
 					}
 
-					$results['totalCount'] += (int) $include_query['totalCount'];
-				}
+					$results['totalCount'] += (int) $query['totalCount'];
+					break;
+				case 'user':
+					if ( ! current_user_can( 'list_users' ) ) {
+						wp_send_json_error();
+					}
 
-				$query = $this->taxonomy_selectlist_query(
-					$taxonomy,
-					[
-						'search'  => ! empty( $params['s'] ) ? sanitize_text_field( wp_unslash( $params['s'] ) ) : null,
-						'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
-						'exclude' => $exclude,
-						'number'  => 10,
-					],
-					true
-				);
+					$user_role = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : null;
 
-				foreach ( $query['items'] as $id => $name ) {
-					$results['items'][] = [
-						'id'   => $id,
-						'text' => "$name (ID: $id)",
-					];
-				}
+					if ( ! empty( $include ) ) {
+						$include_query = $this->user_selectlist_query(
+							[
+								'role'    => $user_role,
+								'include' => $include,
+								'number'  => - 1,
+							],
+							true
+						);
 
-				$results['totalCount'] += (int) $query['totalCount'];
-				break;
-			case 'user':
-				if ( ! current_user_can( 'list_users' ) ) {
-					wp_send_json_error();
-				}
+						foreach ( $include_query['items'] as $id => $name ) {
+							$results['items'][] = [
+								'id'   => $id,
+								'text' => "$name (ID: $id)",
+							];
+						}
 
-				$user_role = ! empty( $params['object_key'] ) ? sanitize_text_field( wp_unslash( $params['object_key'] ) ) : null;
+						$results['totalCount'] += (int) $include_query['totalCount'];
+					}
 
-				if ( ! empty( $include ) ) {
-					$include_query = $this->user_selectlist_query(
+					$query = $this->user_selectlist_query(
 						[
 							'role'    => $user_role,
-							'include' => $include,
-							'number'  => - 1,
+							'search'  => ! empty( $params['s'] ) ? '*' . sanitize_text_field( wp_unslash( $params['s'] ) ) . '*' : null,
+							'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
+							'exclude' => $exclude,
+							'number'  => 10,
 						],
 						true
 					);
 
-					foreach ( $include_query['items'] as $id => $name ) {
+					foreach ( $query['items'] as $id => $name ) {
 						$results['items'][] = [
 							'id'   => $id,
 							'text' => "$name (ID: $id)",
 						];
 					}
 
-					$results['totalCount'] += (int) $include_query['totalCount'];
-				}
+					$results['totalCount'] += (int) $query['totalCount'];
+					break;
+			}
 
-				$query = $this->user_selectlist_query(
-					[
-						'role'    => $user_role,
-						'search'  => ! empty( $params['s'] ) ? '*' . sanitize_text_field( wp_unslash( $params['s'] ) ) . '*' : null,
-						'paged'   => ! empty( $params['paged'] ) ? absint( $params['paged'] ) : null,
-						'exclude' => $exclude,
-						'number'  => 10,
-					],
-					true
-				);
+			// Take out keys which were only used to deduplicate.
+			$results['items'] = array_values( $results['items'] );
 
-				foreach ( $query['items'] as $id => $name ) {
-					$results['items'][] = [
-						'id'   => $id,
-						'text' => "$name (ID: $id)",
-					];
-				}
-
-				$results['totalCount'] += (int) $query['totalCount'];
-				break;
-		}
-
-		// Take out keys which were only used to deduplicate.
-		$results['items'] = array_values( $results['items'] );
-
-		if ( $results ) {
 			return new WP_REST_Response( $results, 200 );
-		} else {
-			return new WP_Error( '404', __( 'Something went wrong, the results could not be returned.', 'content-control' ), [ 'status' => 404 ] );
+		} catch ( \Exception $e ) {
+			return new WP_Error( '500', __( 'Something went wrong, the results could not be returned.', 'content-control' ), [ 'status' => 500 ] );
 		}
 	}
 
@@ -276,7 +276,7 @@ class ObjectSearch extends WP_REST_Controller {
 	 * @param boolean $include_total Whether to include the total count in the response.
 	 * @return array
 	 */
-	public function post_type_selectlist_query( $post_type = [], $args = [], $include_total = false ) {
+	public function post_type_selectlist_query( $post_type, $args = [], $include_total = false ) {
 		if ( empty( $post_type ) ) {
 			$post_type = [ 'any' ];
 		}
