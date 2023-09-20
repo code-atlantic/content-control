@@ -117,7 +117,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 
 		unset( $this->stream );
 
-		return $return;
+		return ! is_null( $return ) ? $return : true;
 	}
 
 	/**

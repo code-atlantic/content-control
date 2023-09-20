@@ -282,7 +282,11 @@ class Upgrades extends Controller {
 				}
 			} while ( ! $stream->should_abort() );
 		} catch ( \Exception $e ) {
-			$stream->send_error( $e );
+			if ( isset( $stream ) ) {
+				$stream->send_error( $e );
+			} else {
+				wp_send_json_error( $e );
+			}
 		}
 	}
 
@@ -340,7 +344,11 @@ class Upgrades extends Controller {
 				$stream->complete_upgrades( __( 'Upgrades complete!', 'content-control' ) );
 			} while ( ! $stream->should_abort() && ! empty( $upgrades ) );
 		} catch ( \Exception $e ) {
-			$stream->send_error( $e );
+			if ( isset( $stream ) ) {
+				$stream->send_error( $e );
+			} else {
+				wp_send_json_error( $e );
+			}
 		}
 	}
 

@@ -8,8 +8,6 @@
 
 namespace ContentControl\Models\RuleEngine;
 
-use function ContentControl\Rules\current_query;
-
 /**
  * Handler for condition queries.
  *
@@ -100,6 +98,9 @@ class Query {
 				$result = $item->check_rule();
 			} elseif ( $item instanceof Group ) {
 				$result = $item->check_rules();
+			} else {
+				// If no result, default to false (deny).
+				$result = false;
 			}
 
 			$checks[] = $result;
