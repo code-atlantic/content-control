@@ -268,8 +268,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			$maintenance_string = '<?php $upgrading = ' . time() . '; ?>';
 			$wp_filesystem->delete( $file );
 			$wp_filesystem->put_contents( $file, $maintenance_string, FS_CHMOD_FILE );
-		} elseif ( ! $enable && $wp_filesystem->exists( $file ) ) {
-			// $this->skin->feedback( 'maintenance_end' );
+		} elseif ( $wp_filesystem->exists( $file ) ) {
 			$wp_filesystem->delete( $file );
 		}
 	}
@@ -360,7 +359,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 
 		// Once extracted, delete the package if required.
 		if ( $delete_package ) {
-			unlink( $package );
+			wp_delete_file( $package );
 		}
 
 		if ( is_wp_error( $result ) ) {

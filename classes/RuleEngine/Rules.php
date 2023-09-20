@@ -94,7 +94,7 @@ class Rules {
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
-		return ! empty( $rule ) && true;
+		return ! empty( $rule );
 	}
 
 	/**
@@ -310,8 +310,9 @@ class Rules {
 		$rules      = [];
 		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 
-		foreach ( $post_types as $name => $post_type ) {
+		foreach ( $post_types as  $post_type ) {
 			$type_rules = [];
+			$name       = $post_type->name;
 
 			if ( $post_type->has_archive || 'post' === $name ) {
 				$type_rules[ "content_is_{$name}_archive" ] = [

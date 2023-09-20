@@ -66,7 +66,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			return true;
 		}
 
-		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
+		$restrictions = $settings['restrictions'];
 		$count        = count( $restrictions );
 
 		if ( $count ) {

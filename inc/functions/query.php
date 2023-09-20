@@ -68,7 +68,7 @@ function get_query( $query = null ) {
 	global $cc_current_query;
 
 	if ( is_null( $query ) ) {
-		if ( isset( $cc_current_query ) && ! is_null( $cc_current_query ) ) {
+		if ( isset( $cc_current_query ) ) {
 			/**
 			 * WP Query object.
 			 *

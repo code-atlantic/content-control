@@ -70,7 +70,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 		$upload_dir = wp_upload_dir();
 
 		// Check if there was an error getting the upload directory.
-		if ( isset( $upload_dir['error'] ) && $upload_dir['error'] ) {
+		if ( false !== $upload_dir['error'] ) {
 			// Handle the error, e.g., logging or returning.
 			$stream->send_event(
 				'task:error',

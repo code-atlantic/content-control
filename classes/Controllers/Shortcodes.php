@@ -72,11 +72,8 @@ class Shortcodes extends Controller {
 			$match_type = 'match';
 		}
 
-		$classes = $atts['class'];
-
-		if ( ! is_array( $classes ) ) {
-			$classes = ! empty( $classes ) ? explode( ' ', $classes ) : [];
-		}
+		// Convert classes to array.
+		$classes = ! empty( $atts['class'] ) ? explode( ' ', $atts['class'] ) : [];
 
 		$classes[] = 'content-control-container';
 		// @deprecated 2.0.0

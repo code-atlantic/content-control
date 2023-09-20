@@ -88,10 +88,10 @@ class Settings extends WP_REST_Controller {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
-		update_plugin_options( $settings );
+		$updated      = update_plugin_options( $settings );
 		$new_settings = get_all_plugin_options();
 
-		if ( $new_settings ) {
+		if ( $updated ) {
 			return new WP_REST_Response( $new_settings, 200 );
 		} else {
 			return new WP_Error( '404', $error_message, [ 'status' => 404 ] );

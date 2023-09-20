@@ -51,14 +51,14 @@ class Restriction {
 	/**
 	 * Restriction description.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $description;
 
 	/**
 	 * Restriction Message.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $message;
 

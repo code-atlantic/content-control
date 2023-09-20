@@ -117,7 +117,11 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 
 		unset( $this->stream );
 
-		return ! is_null( $return ) ? $return : true;
+		if ( is_bool( $return ) || is_wp_error( $return ) ) {
+			return $return;
+		}
+
+		return true;
 	}
 
 	/**
@@ -128,7 +132,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	public function stream() {
 		$noop = function () {};
 
-		return isset( $this->stream ) ? $this->stream : (object) [
+		return is_a( $this->stream, '\ContentControl\Services\UpgradeStream' ) ? $this->stream : (object) [
 			'send_event'           => $noop,
 			'send_error'           => $noop,
 			'send_data'            => $noop,
