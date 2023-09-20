@@ -154,7 +154,7 @@ function current_query_context( $query = null ) {
  * Because we check posts in `the_posts`, we can't trust the global $wp_query
  * has been set yet, so we need to manage global state ourselves.
  *
- * @param string $query WP_Query object.
+ * @param \WP_Query|null $query WP_Query object.
  *
  * @return void
  */

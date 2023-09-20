@@ -57,7 +57,7 @@ function set_data_version( $key, $version ) {
 /**
  * Set the data version.
  *
- * @param int $versioning Data versions.
+ * @param int[] $versioning Data versions.
  *
  * @return bool
  */

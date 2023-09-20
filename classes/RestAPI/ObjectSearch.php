@@ -328,9 +328,9 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get a list of terms for a select list.
 	 *
-	 * @param array   $taxonomies Taxonomy(s) to query.
-	 * @param array   $args Query arguments.
-	 * @param boolean $include_total Whether to include the total count in the response.
+	 * @param string|array $taxonomies Taxonomy(s) to query.
+	 * @param array        $args Query arguments.
+	 * @param boolean      $include_total Whether to include the total count in the response.
 	 * @return array
 	 */
 	public function taxonomy_selectlist_query( $taxonomies = [], $args = [], $include_total = false ) {

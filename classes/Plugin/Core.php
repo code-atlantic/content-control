@@ -300,8 +300,8 @@ class Core {
 	/**
 	 * Get plugin option.
 	 *
-	 * @param string  $key Option key.
-	 * @param boolean $default_value Default value.
+	 * @param string        $key Option key.
+	 * @param boolean|mixed $default_value Default value.
 	 * @return mixed
 	 */
 	public function get_option( $key, $default_value = false ) {
