@@ -176,9 +176,9 @@ function setup_post( $post_id = null ) {
 
 	$current_post_id = isset( $post ) ? $post->ID : null;
 
-	$overload_post = isset( $post_id ) && (
-	( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
-	( is_int( $post_id ) && $post_id !== $current_post_id ) );
+	$overload_post =
+		( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
+		( is_int( $post_id ) && $post_id !== $current_post_id );
 
 	if ( $overload_post ) {
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
