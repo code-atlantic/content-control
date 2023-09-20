@@ -94,8 +94,6 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**
