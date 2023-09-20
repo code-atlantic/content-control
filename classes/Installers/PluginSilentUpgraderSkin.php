@@ -38,9 +38,9 @@ class PluginSilentUpgraderSkin extends \WP_Upgrader_Skin {
 	 * Instead of outputting HTML for errors, just return them.
 	 * Ajax request will just ignore it.
 	 *
-	 * @param array $errors Array of errors with the install process.
+	 * @param string|\WP_Error $errors Array of errors with the install process.
 	 *
-	 * @return array
+	 * @return string|\WP_Error
 	 */
 	public function error( $errors ) {
 		return $errors;

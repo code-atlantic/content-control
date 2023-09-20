@@ -74,7 +74,7 @@ class Group extends Item {
 	/**
 	 * Check this groups rules.
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public function get_checks() {
 		return $this->query->get_checks();

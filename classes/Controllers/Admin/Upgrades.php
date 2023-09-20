@@ -78,7 +78,7 @@ class Upgrades extends Controller {
 	 * @return boolean
 	 */
 	public function has_upgrades() {
-		return count( $this->get_required_upgrades() );
+		return (bool) count( $this->get_required_upgrades() );
 	}
 
 	/**

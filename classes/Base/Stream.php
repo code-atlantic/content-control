@@ -147,6 +147,6 @@ class Stream {
 	 * @return bool
 	 */
 	public function should_abort() {
-		return connection_aborted();
+		return (bool) connection_aborted();
 	}
 }

@@ -295,7 +295,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		 * @since 3.7.0
 		 * @since 5.5.0 Added the `$hook_extra` parameter.
 		 *
-		 * @param bool        $reply      Whether to bail without returning the package.
+		 * @param bool|\WP_Error        $reply      Whether to bail without returning the package.
 		 *                                Default false.
 		 * @param string      $package    The package file name.
 		 * @param WP_Upgrader $upgrader       The WP_Upgrader instance.

@@ -157,7 +157,7 @@ class Connect {
 	 *
 	 * @param string $license_key License key.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_connect_info( $license_key ) {
 		$token    = $this->generate_token();

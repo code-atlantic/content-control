@@ -36,7 +36,7 @@ class Core {
 	 *
 	 * @var Container
 	 */
-	public $controllers = [];
+	public $controllers;
 
 	/**
 	 * Initiate the plugin.
@@ -224,7 +224,7 @@ class Core {
 	 *
 	 * @param string $name Controller name.
 	 *
-	 * @return \ContentControl\Base\Container|null
+	 * @return Controller|null
 	 */
 	public function get_controller( $name ) {
 		$controller = $this->controllers->get( $name );

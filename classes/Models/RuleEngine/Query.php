@@ -134,7 +134,7 @@ class Query {
 	 *
 	 * Useful for debugging or passing to JS.
 	 *
-	 * @return (bool|null)[]
+	 * @return array
 	 */
 	public function get_checks() {
 		$checks = [];
