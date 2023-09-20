@@ -77,11 +77,11 @@ class Logging {
 	 * @return bool|array An associated array with baseurl and basedir or false on failure
 	 */
 	public function get_upload_dir() {
-		if ( defined( '\IS_WPCOM' ) && \IS_WPCOM ) {
-			$wp_upload_dir = wp_get_upload_dir();
-		} else {
-			$wp_upload_dir = wp_upload_dir();
-		}
+		// Used if you only need to fetch data, not create missing folders.
+		$wp_upload_dir = wp_get_upload_dir();
+
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+		// $wp_upload_dir = wp_upload_dir(); // Disable this on IS_WPCOM if used.
 
 		if ( isset( $wp_upload_dir['error'] ) && false !== $wp_upload_dir['error'] ) {
 			return false;
