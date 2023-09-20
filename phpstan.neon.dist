@@ -1,0 +1,11 @@
+parameters:
+    level: 2
+    paths:
+        - bin/
+        - classes/
+        - dist/
+        - inc/
+        - content-control.php
+        - uninstall.php
+    bootstrapFiles:
+        - bin/phpstan-bootstrap.php
