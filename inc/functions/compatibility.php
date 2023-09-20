@@ -98,11 +98,11 @@ function is_frontend() {
 		is_cron() ||
 		is_ajax() ||
 		is_admin() ||
-		$query && $query->is_admin ||
-		$query && $query->is_favicon() ||
-		strpos( $request_uri, 'favicon.ico' ) >= 0 ||
-		$query && $query->is_robots() ||
-		strpos( $request_uri, 'robots.txt' ) >= 0
+		( $query && $query->is_admin ) ||
+		( $query && $query->is_favicon() ) ||
+		strpos( $request_uri, 'favicon.ico' ) !== false ||
+		( $query && $query->is_robots() ) ||
+		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;
 	}
