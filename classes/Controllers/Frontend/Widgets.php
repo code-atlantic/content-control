@@ -27,7 +27,7 @@ class Widgets extends Controller {
 	 * Initialize Widgets Frontend.
 	 */
 	public function init() {
-		add_action( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
+		add_filter( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
 	}
 
 	/**
