@@ -62,7 +62,7 @@ class Connect {
 	 * @return string
 	 */
 	public function generate_token() {
-		$token = hash( 'sha512', wp_rand() );
+		$token = hash( 'sha512', (string) wp_rand() );
 
 		\update_option( self::TOKEN_OPTION_NAME, $token );
 
@@ -225,7 +225,7 @@ class Connect {
 					$message :
 						__( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' )
 			),
-			esc_attr( $error_no ),
+			esc_attr( (string) $error_no ),
 			[ 'response' => 403 ]
 		);
 	}

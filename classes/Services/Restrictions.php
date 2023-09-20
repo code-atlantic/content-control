@@ -130,7 +130,7 @@ class Restrictions {
 
 			$query_hash = md5( maybe_serialize( $hash_vars ) );
 		} catch ( \Exception $e ) {
-			$query_hash = md5( wp_rand( 0, 100000 ) );
+			$query_hash = md5( (string) wp_rand( 0, 100000 ) );
 			plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
 		}
 

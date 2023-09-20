@@ -49,9 +49,10 @@ class Stream {
 		ignore_user_abort( true );
 
 		// phpcs:disable WordPress.PHP.IniSet.Risky, WordPress.PHP.NoSilencedErrors.Discouraged
-		@ini_set( 'zlib.output_compression', 0 );
-		@ini_set( 'implicit_flush', 1 );
-		@ini_set( 'log_limit', 8096 );
+		@ini_set( 'zlib.output_compression', '0' );
+		@ini_set( 'implicit_flush', '1' );
+		@ini_set( 'log_limit', '8096' );
+
 		@ob_end_clean();
 		set_time_limit( 0 );
 		// phpcs:enable WordPress.PHP.IniSet.Risky, WordPress.PHP.NoSilencedErrors.Discouraged
@@ -133,7 +134,7 @@ class Stream {
 	/**
 	 * Send an error to the client.
 	 *
-	 * @param string $error Error message.
+	 * @param array|string $error Error message.
 	 *
 	 * @return void
 	 */

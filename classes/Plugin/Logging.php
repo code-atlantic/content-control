@@ -190,7 +190,7 @@ class Logging {
 
 		$file_token = \get_option( 'content_control_debug_log_token' );
 		if ( false === $file_token ) {
-			$file_token = uniqid( wp_rand(), true );
+			$file_token = uniqid( (string) wp_rand(), true );
 			\update_option( 'content_control_debug_log_token', $file_token );
 		}
 

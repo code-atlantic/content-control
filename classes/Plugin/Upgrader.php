@@ -78,7 +78,7 @@ class Upgrader {
 			)
 		);
 
-		$creds = request_filesystem_credentials( $url, '', false, false, null );
+		$creds = request_filesystem_credentials( $url, '', false, '', null );
 
 		if ( false === $creds || ! WP_Filesystem( $creds ) ) {
 			$this->debug_log( 'Unable to get filesystem credentials.', 'ERROR' );
