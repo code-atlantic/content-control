@@ -6,15 +6,15 @@
  */
 
 if ( ! defined( 'CONTENT_CONTROL_LICENSE_KEY' ) ) {
-	define( 'CONTENT_CONTROL_LICENSE_KEY', false );
+	define( 'CONTENT_CONTROL_LICENSE_KEY', 'some+key' );
 }
 
 if ( ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) ) {
-	define( 'CONTENT_CONTROL_DISABLE_LOGGING', false );
+	define( 'CONTENT_CONTROL_DISABLE_LOGGING', true );
 }
 
 if ( ! defined( 'IS_WPCOM' ) ) {
-	define( 'IS_WPCOM', false );
+	define( 'IS_WPCOM', true );
 }
 
 if ( ! defined( 'WP_PLUGIN_DIR' ) ) {
