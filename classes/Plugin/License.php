@@ -40,13 +40,6 @@ class License {
 	const OPTION_KEY = 'content_control_license';
 
 	/**
-	 * Container.
-	 *
-	 * @var \ContentControl\Base\Container
-	 */
-	private $c;
-
-	/**
 	 * License data
 	 *
 	 * @var array|null
@@ -56,9 +49,7 @@ class License {
 	/**
 	 * Initialize license management.
 	 */
-	public function __construct( $c ) {
-		$this->c = $c;
-
+	public function __construct() {
 		$this->register_hooks();
 	}
 
@@ -75,7 +66,9 @@ class License {
 	 * Autoregister license.
 	 */
 	public function autoregister() {
-		if ( defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && ! empty( \CONTENT_CONTROL_LICENSE_KEY ) && '' === $this->get_license_key() ) {
+		$key = defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && '' !== \CONTENT_CONTROL_LICENSE_KEY ? \CONTENT_CONTROL_LICENSE_KEY : false;
+
+		if ( $key && '' === $this->get_license_key() ) {
 			try {
 				$this->activate_license( \CONTENT_CONTROL_LICENSE_KEY );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch

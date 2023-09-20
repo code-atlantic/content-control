@@ -162,12 +162,12 @@ class Core {
 			return new \ContentControl\Plugin\Connect( $c );
 		};
 
-		$this->container['license'] = function ( $c ) {
-			return new \ContentControl\Plugin\License( $c );
+		$this->container['license'] = function () {
+			return new \ContentControl\Plugin\License();
 		};
 
-		$this->container['logging'] = function ( $c ) {
-			return new \ContentControl\Plugin\Logging( $c );
+		$this->container['logging'] = function () {
+			return new \ContentControl\Plugin\Logging();
 		};
 
 		$this->container['upgrader'] = function ( $c ) {

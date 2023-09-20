@@ -18,13 +18,6 @@ class Logging {
 	const LOG_FILE_PREFIX = 'content-control-';
 
 	/**
-	 * Container.
-	 *
-	 * @var \ContentControl\Base\Container
-	 */
-	private $c;
-
-	/**
 	 * Whether the log file is writable.
 	 *
 	 * @var bool|null
@@ -62,9 +55,7 @@ class Logging {
 	/**
 	 * Initialize logging.
 	 */
-	public function __construct( $c ) {
-		$this->c = $c;
-
+	public function __construct() {
 		$this->init();
 
 		$this->register_hooks();
