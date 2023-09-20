@@ -27,7 +27,7 @@ class Logging {
 	/**
 	 * Whether the log file is writable.
 	 *
-	 * @var bool
+	 * @var bool|null
 	 */
 	private $is_writable;
 
@@ -61,8 +61,6 @@ class Logging {
 
 	/**
 	 * Initialize logging.
-	 *
-	 * @param \ContentControl\Base\Container $c Container.
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;

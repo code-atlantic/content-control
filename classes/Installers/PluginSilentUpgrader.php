@@ -264,8 +264,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		global $wp_filesystem;
 		$file = $wp_filesystem->abspath() . '.maintenance';
 		if ( $enable ) {
-			// $this->skin->feedback( 'maintenance_start' );
-			// Create maintenance file to signal that we are upgrading
+			// Create maintenance file to signal that we are upgrading.
 			$maintenance_string = '<?php $upgrading = ' . time() . '; ?>';
 			$wp_filesystem->delete( $file );
 			$wp_filesystem->put_contents( $file, $maintenance_string, FS_CHMOD_FILE );
@@ -314,8 +313,6 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 			return new WP_Error( 'no_package', $this->strings['no_package'] );
 		}
 
-		// $this->skin->feedback( 'downloading_package', $package );
-
 		$download_file = download_url( $package, 300, $check_signatures );
 
 		if ( is_wp_error( $download_file ) && ! $download_file->get_error_data( 'softfail-filename' ) ) {
@@ -339,8 +336,6 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 */
 	public function unpack_package( $package, $delete_package = true ) {
 		global $wp_filesystem;
-
-		// $this->skin->feedback( 'unpack_package' );
 
 		$upgrade_folder = $wp_filesystem->wp_content_dir() . 'upgrade/';
 
@@ -435,7 +430,6 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 		if ( empty( $source ) || empty( $destination ) ) {
 			return new WP_Error( 'bad_request', $this->strings['bad_request'] );
 		}
-		// $this->skin->feedback( 'installing_package' );
 
 		/**
 		 * Filter the install response before the installation has started.

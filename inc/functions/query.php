@@ -60,6 +60,11 @@ function get_current_wp_query() {
  * @return \WP_Query|null
  */
 function get_query( $query = null ) {
+	/**
+	 * Current query object.
+	 *
+	 * @var null|\WP_Query $cc_current_query
+	 */
 	global $cc_current_query;
 
 	if ( is_null( $query ) ) {
@@ -154,6 +159,11 @@ function current_query_context( $query = null ) {
  * @return void
  */
 function set_rules_query( $query ) {
+	/**
+	 * Current query object.
+	 *
+	 * @var null|\WP_Query $cc_current_query
+	 */
 	global $cc_current_query;
 	$cc_current_query = $query;
 }

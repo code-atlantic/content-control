@@ -271,7 +271,7 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get a list of posts for a select list.
 	 *
-	 * @param array   $post_type Post type(s) to query.
+	 * @param string  $post_type Post type(s) to query.
 	 * @param array   $args   Query arguments.
 	 * @param boolean $include_total Whether to include the total count in the response.
 	 * @return array
@@ -294,6 +294,7 @@ class ObjectSearch extends WP_REST_Controller {
 			'update_post_meta_cache' => false,
 		] );
 
+		// $post_type should always be single string?
 		if ( 'attachment' === $post_type ) {
 			$args['post_status'] = 'inherit';
 		}

@@ -33,7 +33,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Stream.
 	 *
-	 * @var \ContentControl\Services\UpgradeStream
+	 * @var \ContentControl\Services\UpgradeStream|null
 	 */
 	public $stream;
 

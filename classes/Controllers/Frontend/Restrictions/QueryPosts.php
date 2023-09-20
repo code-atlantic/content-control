@@ -68,9 +68,9 @@ class QueryPosts extends Controller {
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
-			 * @param null                                    $pre         Whether to prevent the post from being restricted.
+			 * @param null|mixed                              $pre         Whether to prevent the post from being restricted.
 			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-			 * @param int[]                               $post_id     Post ID.
+			 * @param int[]                                   $post_id     Post ID.
 			 * @return null|mixed
 			 */
 			if ( null !== apply_filters( 'content_control/pre_restrict_archive_post', null, $restriction, $post_id ) ) {

@@ -49,14 +49,12 @@ class License {
 	/**
 	 * License data
 	 *
-	 * @var array
+	 * @var array|null
 	 */
 	private $license_data;
 
 	/**
 	 * Initialize license management.
-	 *
-	 * @param \ContentControl\Base\Container $c Container.
 	 */
 	public function __construct( $c ) {
 		$this->c = $c;

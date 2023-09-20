@@ -68,7 +68,7 @@ class MainQuery extends Controller {
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
-			 * @param null                               $pre        Whether to prevent the post from being restricted.
+			 * @param null|mixed                              $pre        Whether to prevent the post from being restricted.
 			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
 			 * @return null|mixed
 			 */
@@ -160,9 +160,9 @@ class MainQuery extends Controller {
 		/**
 		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 		 *
-		 * @param null                                    $pre         Whether to prevent the post from being restricted.
+		 * @param null|mixed                              $pre         Whether to prevent the post from being restricted.
 		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                               $post_id     Post ID.
+		 * @param int[]                                   $post_id     Post ID.
 		 *
 		 * @return null|mixed
 		 */
@@ -174,7 +174,7 @@ class MainQuery extends Controller {
 		 * Fires when a post is restricted, but before the restriction is handled.
 		 *
 		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                          $post_id     Post ID.
+		 * @param int[]                              $post_id     Post ID.
 		 */
 		do_action( 'content_control/restrict_main_query_post', $restriction, $post_ids );
 
