@@ -61,7 +61,7 @@ class PostTypes extends Controller {
 			'can_export'          => true,
 			'rewrite'             => false,
 			'query_var'           => false,
-			'supports'            => [ 'title' ],
+			'supports'            => [ 'title', 'excerpt' ],
 			'show_in_graphql'     => false,
 			'capabilities'        => [
 				'create_posts' => $this->container->get_permission( 'edit_restrictions' ),
@@ -111,7 +111,7 @@ class PostTypes extends Controller {
 
 		register_rest_field( 'cc_restriction', 'description', [
 			'get_callback'    => function ( $obj ) {
-				return get_the_excerpt( $obj['id'] );
+				return $obj['excerpt']['raw'];
 			},
 			'update_callback' => function ( $value, $obj ) {
 				wp_update_post( [
