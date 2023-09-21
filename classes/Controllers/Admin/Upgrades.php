@@ -40,7 +40,7 @@ class Upgrades extends Controller {
 	 * Initialize the settings page.
 	 */
 	public function init() {
-		add_action( 'init', [ $this, 'hooks' ] );
+		add_action( 'admin_init', [ $this, 'hooks' ] );
 		add_action( 'wp_ajax_content_control_upgrades', [ $this, 'ajax_handler' ] );
 		add_filter( 'content_control/settings-page_localized_vars', [ $this, 'localize_vars' ] );
 	}
@@ -460,6 +460,10 @@ class Upgrades extends Controller {
 	 * @return array<string,mixed>
 	 */
 	public function localize_vars( $vars ) {
+		if ( ! is_admin() ) {
+			return $vars;
+		}
+
 		$vars['hasUpgrades'] = false;
 
 		if ( ! $this->has_upgrades() ) {
