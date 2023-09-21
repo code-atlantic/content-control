@@ -58,7 +58,7 @@ class Upgrader {
 	 * @return void
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
-		if ( defined( 'CONTENT_CONTROL_LOGGING' ) && CONTENT_CONTROL_LOGGING ) {
+		if ( defined( 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING' ) && CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING ) {
 			$this->c->get( 'logging' )->log( "Plugin\Upgrader.$type: $message" );
 		}
 	}
