@@ -25,14 +25,14 @@ class Reviews extends Controller {
 	/**
 	 * Enable debug mode.
 	 *
-	 * @var boolean|array
+	 * @var boolean
 	 */
 	private $debug = false;
 
 	/**
 	 * Debug trigger.
 	 *
-	 * @var array
+	 * @var array{group:string,code:string}
 	 */
 	private $debug_trigger = [
 		'group' => 'time_installed',
@@ -56,6 +56,8 @@ class Reviews extends Controller {
 
 	/**
 	 * Hook into relevant WP actions.
+	 *
+	 * @return void
 	 */
 	public function hooks() {
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
@@ -84,6 +86,8 @@ class Reviews extends Controller {
 
 	/**
 	 * AJAX Handler
+	 *
+	 * @return void
 	 */
 	public function ajax_handler() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -133,7 +137,7 @@ class Reviews extends Controller {
 		static $selected;
 
 		if ( $this->debug ) {
-			return isset( $this->debug_trigger['group'] ) ? $this->debug_trigger['group'] : 'time_installed';
+			return ! empty( $this->debug_trigger['group'] ) ? $this->debug_trigger['group'] : 'time_installed';
 		}
 
 		if ( ! isset( $selected ) ) {
@@ -167,7 +171,7 @@ class Reviews extends Controller {
 		static $selected;
 
 		if ( $this->debug ) {
-			return isset( $this->debug_trigger['code'] ) ? $this->debug_trigger['code'] : 'one_week';
+			return ! empty( $this->debug_trigger['code'] ) ? $this->debug_trigger['code'] : 'one_week';
 		}
 
 		if ( ! isset( $selected ) ) {
@@ -357,6 +361,8 @@ class Reviews extends Controller {
 
 	/**
 	 * Render admin notices if available.
+	 *
+	 * @return void
 	 */
 	public function admin_notices() {
 		if ( $this->hide_notices() ) {
@@ -550,8 +556,8 @@ class Reviews extends Controller {
 	/**
 	 * Sort array in reverse by priority value
 	 *
-	 * @param array $a First array to compare.
-	 * @param array $b Second array to compare.
+	 * @param array{pri:int|null} $a First array to compare.
+	 * @param array{pri:int|null} $b Second array to compare.
 	 *
 	 * @return int
 	 */

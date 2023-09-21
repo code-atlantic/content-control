@@ -47,7 +47,7 @@ interface Upgrade {
 	/**
 	 * Run the upgrade.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|false
 	 */
 	public function run();
 }

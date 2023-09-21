@@ -8,8 +8,6 @@
 
 namespace ContentControl\Models\RuleEngine;
 
-use function ContentControl\Rules\current_query;
-
 /**
  * Handler for condition queries.
  *
@@ -34,7 +32,7 @@ class Query {
 	/**
 	 * Build a query.
 	 *
-	 * @param array $query Query data.
+	 * @param array{logicalOperator:string,items:array<mixed>} $query Query data.
 	 */
 	public function __construct( $query ) {
 		$query = wp_parse_args( $query, [
@@ -96,6 +94,9 @@ class Query {
 		}
 
 		foreach ( $this->items as $item ) {
+			// Missing rules should result in restricted content.
+			$result = false;
+
 			if ( $item instanceof Rule ) {
 				$result = $item->check_rule();
 			} elseif ( $item instanceof Group ) {
@@ -121,7 +122,7 @@ class Query {
 		 */
 		if ( 'or' === $this->logical_operator ) {
 			// If any values are true or null, return true.
-			return in_array( true, $checks, true ) || in_array( null, $checks, true );
+			return in_array( true, $checks, true );
 		} else {
 			// If any values are false, return false.
 			return ! in_array( false, $checks, true );
@@ -133,7 +134,7 @@ class Query {
 	 *
 	 * Useful for debugging or passing to JS.
 	 *
-	 * @return (bool|null)[]
+	 * @return array<bool|null|array<bool|null>>
 	 */
 	public function get_checks() {
 		$checks = [];
@@ -154,7 +155,7 @@ class Query {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array
+	 * @return array<mixed>
 	 */
 	public function get_check_info() {
 		$checks = [];

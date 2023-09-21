@@ -48,7 +48,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Run the migration.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|bool
 	 */
 	public function run() {
 		// Gets a stream or mock stream for sending events.
@@ -66,7 +66,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			return true;
 		}
 
-		$restrictions = isset( $settings['restrictions'] ) ? $settings['restrictions'] : [];
+		$restrictions = $settings['restrictions'];
 		$count        = count( $restrictions );
 
 		if ( $count ) {
@@ -127,7 +127,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Migrate a given restriction to the new post type.
 	 *
-	 * @param array $restriction Restriction data.
+	 * @param array<string,mixed> $restriction Restriction data.
 	 *
 	 * @return bool True if successful, false otherwise.
 	 */
@@ -169,7 +169,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			'overrideMessage'  => $restriction['override_default_message'],
 			'customMessage'    => $restriction['custom_message'],
 			'redirectType'     => $restriction['redirect_type'],
-			'redirectUrl'      => sanitize_url( $restriction['redirect_url'] ),
+			'redirectUrl'      => esc_url( $restriction['redirect_url'] ),
 			'conditions'       => remap_conditions_to_query( $restriction['conditions'] ),
 		], get_default_restriction_settings() );
 

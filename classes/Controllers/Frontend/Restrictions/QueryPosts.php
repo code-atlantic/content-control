@@ -36,10 +36,10 @@ class QueryPosts extends Controller {
 	 * NOTE. This is only for filtering posts, and should not
 	 *       be used to redirect or replace the entire page.
 	 *
-	 * @param WP_Post[] $posts Array of post objects.
-	 * @param \WP_Query $query The WP_Query instance (passed by reference).
+	 * @param \WP_Post[] $posts Array of post objects.
+	 * @param \WP_Query  $query The WP_Query instance (passed by reference).
 	 *
-	 * @return WP_Post[]
+	 * @return \WP_Post[]
 	 */
 	public function restrict_query_posts( $posts, $query ) {
 		if ( protection_is_disabled() ) {
@@ -61,16 +61,12 @@ class QueryPosts extends Controller {
 			$post_id     = $match['post_ids'];
 			$restriction = $match['restriction'];
 
-			if ( is_int( $post_id ) ) {
-				$post_id = [ $post_id ];
-			}
-
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
-			 * @param null                                    $pre         Whether to prevent the post from being restricted.
+			 * @param null|mixed                              $pre         Whether to prevent the post from being restricted.
 			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-			 * @param int[]                               $post_id     Post ID.
+			 * @param int[]                                   $post_id     Post ID.
 			 * @return null|mixed
 			 */
 			if ( null !== apply_filters( 'content_control/pre_restrict_archive_post', null, $restriction, $post_id ) ) {

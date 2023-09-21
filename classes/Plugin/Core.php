@@ -36,12 +36,12 @@ class Core {
 	 *
 	 * @var Container
 	 */
-	public $controllers = [];
+	public $controllers;
 
 	/**
 	 * Initiate the plugin.
 	 *
-	 * @param array $config Configuration variables passed from main plugin file.
+	 * @param array<string,string|bool> $config Configuration variables passed from main plugin file.
 	 */
 	public function __construct( $config ) {
 		$this->container   = new Container( $config );
@@ -57,6 +57,8 @@ class Core {
 
 	/**
 	 * Update & track version info.
+	 *
+	 * @return void
 	 */
 	private function check_version() {
 		$version    = $this->get( 'version' );
@@ -104,8 +106,8 @@ class Core {
 	/**
 	 * Process old version data.
 	 *
-	 * @param array $data Array of data.
-	 * @return array
+	 * @param array<string,string|null> $data Array of data.
+	 * @return array<string,string|null>
 	 */
 	private function process_version_data_migration( $data ) {
 		$has_old_settings_data = \get_option( 'jp_cc_settings', false );
@@ -134,14 +136,18 @@ class Core {
 	}
 
 	/**
-	 * Internationalization
+	 * Internationalization.
+	 *
+	 * @return void
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( $this->container['text_domain'], false, $this->get_path( 'languages' ) );
 	}
 
 	/**
-	 * Add default services to our Container
+	 * Add default services to our Container.
+	 *
+	 * @return void
 	 */
 	public function register_services() {
 		/**
@@ -162,12 +168,12 @@ class Core {
 			return new \ContentControl\Plugin\Connect( $c );
 		};
 
-		$this->container['license'] = function ( $c ) {
-			return new \ContentControl\Plugin\License( $c );
+		$this->container['license'] = function () {
+			return new \ContentControl\Plugin\License();
 		};
 
-		$this->container['logging'] = function ( $c ) {
-			return new \ContentControl\Plugin\Logging( $c );
+		$this->container['logging'] = function () {
+			return new \ContentControl\Plugin\Logging();
 		};
 
 		$this->container['upgrader'] = function ( $c ) {
@@ -187,6 +193,8 @@ class Core {
 
 	/**
 	 * Initiate internal components.
+	 *
+	 * @return void
 	 */
 	private function initiate_controllers() {
 		$this->define_paths();
@@ -207,7 +215,7 @@ class Core {
 	/**
 	 * Register controllers.
 	 *
-	 * @param array $controllers Array of controllers.
+	 * @param array<string,Controller> $controllers Array of controllers.
 	 * @return void
 	 */
 	public function register_controllers( $controllers = [] ) {
@@ -227,11 +235,19 @@ class Core {
 	 * @return Controller|null
 	 */
 	public function get_controller( $name ) {
-		return $this->controllers->get( $name, null );
+		$controller = $this->controllers->get( $name );
+
+		if ( $controller instanceof Controller ) {
+			return $controller;
+		}
+
+		return null;
 	}
 
 	/**
 	 * Initiate internal paths.
+	 *
+	 * @return void
 	 */
 	private function define_paths() {
 		/**
@@ -294,8 +310,8 @@ class Core {
 	/**
 	 * Get plugin option.
 	 *
-	 * @param string  $key Option key.
-	 * @param boolean $default_value Default value.
+	 * @param string        $key Option key.
+	 * @param boolean|mixed $default_value Default value.
 	 * @return mixed
 	 */
 	public function get_option( $key, $default_value = false ) {
@@ -305,7 +321,7 @@ class Core {
 	/**
 	 * Get plugin permissions.
 	 *
-	 * @return array Array of permissions.
+	 * @return array<string,string> Array of permissions.
 	 */
 	public function get_permissions() {
 		$permissions = \ContentControl\get_default_permissions();

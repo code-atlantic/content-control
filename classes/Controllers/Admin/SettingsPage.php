@@ -33,6 +33,8 @@ class SettingsPage extends Controller {
 
 	/**
 	 * Register admin options pages.
+	 *
+	 * @return void
 	 */
 	public function register_page() {
 		add_options_page(
@@ -45,7 +47,9 @@ class SettingsPage extends Controller {
 	}
 
 	/**
-	 * Render settings page title & container..
+	 * Render settings page title & container.
+	 *
+	 * @return void
 	 */
 	public function render_page() {
 		?>
@@ -58,6 +62,8 @@ class SettingsPage extends Controller {
 	 * Enqueue assets for the settings page.
 	 *
 	 * @param string $hook Page hook name.
+	 *
+	 * @return void
 	 */
 	public function enqueue_scripts( $hook ) {
 		if ( 'settings_page_content-control-settings' !== $hook ) {

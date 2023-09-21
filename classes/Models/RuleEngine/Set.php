@@ -39,7 +39,7 @@ class Set {
 	/**
 	 * Build a set.
 	 *
-	 * @param array $set Set data.
+	 * @param array{id:string,label:string,query:array<mixed>} $set Set data.
 	 */
 	public function __construct( $set ) {
 		$set = wp_parse_args( $set, [
@@ -74,7 +74,7 @@ class Set {
 	/**
 	 * Get the check array for further post processing.
 	 *
-	 * @return array Array of check values.
+	 * @return array<bool|null|array<bool|null>> Array of check values.
 	 */
 	public function get_checks() {
 		return $this->query->get_checks();
@@ -85,7 +85,7 @@ class Set {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_check_info() {
 		return $this->query->get_check_info();

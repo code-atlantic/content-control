@@ -1,0 +1,52 @@
+name: PHP CI Tests
+
+on:
+    push:
+        branches:
+            - master
+            - develop
+    pull_request:
+        branches:
+            - master
+            - develop
+    workflow_dispatch:
+
+jobs:
+    phpcs:
+        name: PHP Code Sniffer
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  tools: composer:v2, cs2pr
+
+            - name: Install dependencies
+              run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-interaction
+
+            - name: Run PHP Code Sniffer
+              run: vendor/bin/phpcs --standard=.phpcs.xml.dist -q --report=checkstyle | cs2pr
+
+              # path: ./bin ./classes ./inc ./dist content-control.php uninstall.php
+              # standard: ./phpcs.xml.dist
+
+    phpstan:
+        name: PHP Static Analysis
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  tools: composer:v2
+
+            - name: Install dependencies
+              run: composer install --no-progress --no-suggest
+
+            - name: Run PHPStan
+              run: composer run phpstan

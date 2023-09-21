@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get v1 restrictions from wp_options.
  *
- * @return array
+ * @return array<string,string|bool|int|array<mixed>>[]
  */
 function get_v1_restrictions() {
 	$settings = \get_option( 'jp_cc_settings', [] );
@@ -27,9 +27,9 @@ function get_v1_restrictions() {
 /**
  * Remap old conditions to new rules.
  *
- * @param array $old_conditions Array of old conditions.
+ * @param array<array<string,mixed>> $old_conditions Array of old conditions.
  *
- * @return array
+ * @return array{logicalOperator:string,items:array<array<string,mixed>>}
  */
 function remap_conditions_to_query( $old_conditions ) {
 	$query = [
@@ -62,9 +62,9 @@ function remap_conditions_to_query( $old_conditions ) {
 /**
  * Remap old condition to new rule.
  *
- * @param array $condition Old condition.
+ * @param array<string,mixed> $condition Old condition.
  *
- * @return array
+ * @return array<string,mixed>
  */
 function remap_condition_to_rule( $condition ) {
 	$target = $condition['target'];

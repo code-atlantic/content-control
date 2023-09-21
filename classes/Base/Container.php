@@ -33,6 +33,8 @@ class Container extends Base {
 	 *
 	 * @param string $id Key for the item.
 	 * @param mixed  $value Value to be set.
+	 *
+	 * @return void
 	 */
 	public function set( $id, $value ) {
 		$this->offsetSet( $id, $value );

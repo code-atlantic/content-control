@@ -44,6 +44,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing pages and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function restrict_main_query() {
 		if ( ! \is_main_query() || protection_is_disabled() ) {
@@ -59,6 +61,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing archives and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function check_main_query() {
 		// Bail if we didn't match any restrictions.
@@ -68,7 +72,7 @@ class MainQuery extends Controller {
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
-			 * @param null                               $pre        Whether to prevent the post from being restricted.
+			 * @param null|mixed                              $pre        Whether to prevent the post from being restricted.
 			 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
 			 * @return null|mixed
 			 */
@@ -102,6 +106,8 @@ class MainQuery extends Controller {
 	 *
 	 * NOTE: This is only for redirecting or replacing archives and
 	 *       should not be used to filter or hide post contents.
+	 *
+	 * @return void
 	 */
 	public function check_main_query_posts() {
 		$query = get_main_wp_query();
@@ -153,16 +159,12 @@ class MainQuery extends Controller {
 		$restriction = $restriction_match['restriction'];
 		$post_ids    = $restriction_match['post_ids'];
 
-		if ( is_int( $post_ids ) ) {
-			$post_ids = [ $post_ids ];
-		}
-
 		/**
 		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 		 *
-		 * @param null                                    $pre         Whether to prevent the post from being restricted.
+		 * @param null|mixed                              $pre         Whether to prevent the post from being restricted.
 		 * @param null|\ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                               $post_id     Post ID.
+		 * @param int[]                                   $post_id     Post ID.
 		 *
 		 * @return null|mixed
 		 */
@@ -174,7 +176,7 @@ class MainQuery extends Controller {
 		 * Fires when a post is restricted, but before the restriction is handled.
 		 *
 		 * @param \ContentControl\Models\Restriction $restriction Restriction object.
-		 * @param int[]                          $post_id     Post ID.
+		 * @param int[]                              $post_id     Post ID.
 		 */
 		do_action( 'content_control/restrict_main_query_post', $restriction, $post_ids );
 

@@ -8,7 +8,7 @@
 
 namespace ContentControl\RestAPI;
 
-use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error, WP_REST_Request;
+use WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error, WP_REST_Request;
 
 use function ContentControl\plugin;
 
@@ -35,6 +35,8 @@ class License extends WP_REST_Controller {
 
 	/**
 	 * Register API endpoint routes.
+	 *
+	 * @return void
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -120,8 +122,8 @@ class License extends WP_REST_Controller {
 	/**
 	 * Clean private or unnecessary data from license data before returning it.
 	 *
-	 * @param array $license_data License data.
-	 * @return array
+	 * @param array{key:string,status:array<string,mixed>} $license_data License data.
+	 * @return array{key:string,status:array<string,mixed>}
 	 */
 	public function clean_license_data( $license_data ) {
 		$license_data['status'] = $this->clean_license_status( $license_data['status'] );
@@ -132,8 +134,8 @@ class License extends WP_REST_Controller {
 	/**
 	 * Clean license status.
 	 *
-	 * @param array $license_status License status.
-	 * @return array
+	 * @param array{key:string,status:array<string,mixed>} $license_status License status.
+	 * @return array{key:string,status:array<string,mixed>}
 	 */
 	public function clean_license_status( $license_status ) {
 		// Remove customer_email, customer_name, payment_id, ..., checksum keys from status array.
@@ -157,7 +159,7 @@ class License extends WP_REST_Controller {
 	/**
 	 * Get plugin license.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function get_license() {
 		$license_data = plugin( 'license' )->get_license_data();
@@ -172,9 +174,9 @@ class License extends WP_REST_Controller {
 	/**
 	 * Update plugin license key.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_license_key( $request ) {
 		$license_key = sanitize_text_field( $request->get_param( 'licenseKey' ) );
@@ -218,7 +220,7 @@ class License extends WP_REST_Controller {
 	/**
 	 * Remove plugin license key.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function remove_license() {
 		plugin( 'license' )->remove_license();
@@ -233,9 +235,9 @@ class License extends WP_REST_Controller {
 	/**
 	 * Activate plugin license.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function activate_license( $request ) {
 		$license_key = sanitize_text_field( $request->get_param( 'licenseKey' ) );
@@ -266,13 +268,13 @@ class License extends WP_REST_Controller {
 	/**
 	 * Deactivate plugin license.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function deactivate_license() {
 		try {
 			$license_status = plugin( 'license' )->deactivate_license();
 
-			return new WP_REST_Response( $this->clean_license_status( [ 'status' => $license_status ] ), 200 );
+			return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license could not be deactivated.', 'content-control' );
 
@@ -287,7 +289,7 @@ class License extends WP_REST_Controller {
 	/**
 	 * Get plugin license status.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function get_status() {
 		$license_status = plugin( 'license' )->get_license_status();
@@ -302,10 +304,10 @@ class License extends WP_REST_Controller {
 	/**
 	 * Refresh plugin license status.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function refresh_license_status() {
-		$license_status = plugin( 'license' )->refresh_license_status();
+		$license_status = plugin( 'license' )->get_license_status( true );
 
 		if ( $license_status ) {
 			return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );

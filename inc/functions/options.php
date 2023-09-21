@@ -10,7 +10,7 @@ namespace ContentControl;
 /**
  * Get all options
  *
- * @return array
+ * @return array<string,mixed>
  */
 function get_all_plugin_options() {
 	return plugin( 'options' )->get_all();
@@ -49,7 +49,7 @@ function update_plugin_option( $key = '', $value = false ) {
 /**
  * Update many values at once.
  *
- * @param array $new_options Array of new replacement options.
+ * @param array<string,mixed> $new_options Array of new replacement options.
  *
  * @return bool
  */
@@ -71,17 +71,17 @@ function delete_plugin_options( $keys = '' ) {
 /**
  * Get index of blockTypes.
  *
- * @return array
+ * @return array<array{name:string,category:string,description:string,keywords:string[],title:string}>
  */
 function get_block_types() {
 	return \get_option( 'content_control_known_blockTypes', [] );
 }
 
 /**
- * Sanitize expeced block type data.
+ * Sanitize expetced block type data.
  *
- * @param array $type Block type definition.
- * @return array Sanitized definition.
+ * @param array<string,string|string[]> $type Block type definition.
+ * @return array<string,mixed> Sanitized definition.
  */
 function sanitize_block_type( $type = [] ) {
 	foreach ( $type as $key => $value ) {
@@ -96,7 +96,9 @@ function sanitize_block_type( $type = [] ) {
 /**
  * Update block type list.
  *
- * @param array $incoming_block_types Array of updated block type declarations.
+ * @param array<array{name:string,category:string,description:string,keywords:string[],title:string}> $incoming_block_types Array of updated block type declarations.
+ *
+ * @return void
  */
 function update_block_types( $incoming_block_types = [] ) {
 	$block_types = [];

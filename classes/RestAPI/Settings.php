@@ -8,7 +8,7 @@
 
 namespace ContentControl\RestAPI;
 
-use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
+use WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 use function ContentControl\get_all_plugin_options;
 use function ContentControl\update_plugin_options;
 
@@ -35,6 +35,8 @@ class Settings extends WP_REST_Controller {
 
 	/**
 	 * Register API endpoint routes.
+	 *
+	 * @return void
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -50,7 +52,7 @@ class Settings extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'update_settings' ],
 					'permission_callback' => [ $this, 'update_settings_permissions' ],
-					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				],
 				'schema' => [ $this, 'get_schema' ],
 			]
@@ -75,9 +77,9 @@ class Settings extends WP_REST_Controller {
 	/**
 	 * Update plugin settings.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_settings( $request ) {
 		$settings = $request->get_params();
@@ -88,10 +90,10 @@ class Settings extends WP_REST_Controller {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
-		update_plugin_options( $settings );
+		$updated      = update_plugin_options( $settings );
 		$new_settings = get_all_plugin_options();
 
-		if ( $new_settings ) {
+		if ( $updated ) {
 			return new WP_REST_Response( $new_settings, 200 );
 		} else {
 			return new WP_Error( '404', $error_message, [ 'status' => 404 ] );
@@ -110,7 +112,7 @@ class Settings extends WP_REST_Controller {
 	/**
 	 * Get settings schema.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_schema() {
 		if ( $this->schema ) {

@@ -31,7 +31,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Get v1 data.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_v1_data() {
 		$data = [];
@@ -55,7 +55,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Run the migration.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|false
 	 */
 	public function run() {
 		// Gets a stream or mock stream for sending events.
@@ -70,7 +70,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 		$upload_dir = wp_upload_dir();
 
 		// Check if there was an error getting the upload directory.
-		if ( isset( $upload_dir['error'] ) && $upload_dir['error'] ) {
+		if ( false !== $upload_dir['error'] ) {
 			// Handle the error, e.g., logging or returning.
 			$stream->send_event(
 				'task:error',
@@ -109,7 +109,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 		}
 
 		// Check if the put_contents method is available.
-		if ( ! method_exists( $wp_filesystem, 'put_contents' ) ) {
+		if ( ! method_exists( $wp_filesystem, 'put_contents' ) || ! method_exists( $wp_filesystem, 'exists' ) ) {
 			$stream->send_event(
 				'task:error',
 				[
@@ -160,6 +160,11 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 			'post_status'    => 'inherit',
 		];
 
+		/**
+		 * Attachment ID.
+		 *
+		 * @var int|\WP_Error $attach_id
+		 */
 		$attach_id = wp_insert_attachment( $attachment, $file_path );
 
 		if ( ! is_wp_error( $attach_id ) ) {

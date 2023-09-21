@@ -36,6 +36,8 @@ function is_func_disabled( $func ) {
  *
  * @returns boolean
  * @author matzeeable
+ *
+ * @return bool
  */
 function is_rest() {
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
@@ -98,11 +100,11 @@ function is_frontend() {
 		is_cron() ||
 		is_ajax() ||
 		is_admin() ||
-		$query && $query->is_admin ||
-		$query && $query->is_favicon() ||
-		strpos( $request_uri, 'favicon.ico' ) >= 0 ||
-		$query && $query->is_robots() ||
-		strpos( $request_uri, 'robots.txt' ) >= 0
+		( $query && $query->is_admin ) ||
+		( $query && $query->is_favicon() ) ||
+		strpos( $request_uri, 'favicon.ico' ) !== false ||
+		( $query && $query->is_robots() ) ||
+		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;
 	}
@@ -127,9 +129,9 @@ function camel_case_to_snake_case( $str ) {
  *
  * Gets rid of Closure and other invalid data types.
  *
- * @param array $arr Array to clean.
+ * @param array<mixed> $arr Array to clean.
  *
- * @return array Cleaned array.
+ * @return array<mixed> Cleaned array.
  */
 function deep_clean_array( $arr ) {
 	// Clean \Closure values deeply.

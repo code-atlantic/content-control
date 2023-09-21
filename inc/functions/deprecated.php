@@ -29,7 +29,7 @@ class JP_Content_Control {}
  *
  * @deprecated 2.0.0 Use \ContentControl\plugin() instead.
  *
- * @return \ContentControl\Plugin
+ * @return \ContentControl\Plugin\Core
  */
 function jp_content_control() {
 	return \ContentControl\plugin();
@@ -108,7 +108,6 @@ add_filter( 'content_control/excerpt_length', function ( $length = 50 ) {
 		 * @deprecated 2.0.0
 		 *
 		 * @param array $settings
-		 * @param int   $popup_id
 		 */
 		return apply_filters( 'jp_cc_filter_excerpt_length', $length );
 	}

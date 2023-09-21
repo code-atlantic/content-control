@@ -27,15 +27,15 @@ class Widgets extends Controller {
 	 * Initialize Widgets Frontend.
 	 */
 	public function init() {
-		add_action( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
+		add_filter( 'sidebars_widgets', [ $this, 'exclude_widgets' ] );
 	}
 
 	/**
 	 * Checks for and excludes widgets based on their chosen options.
 	 *
-	 * @param array $widget_areas An array of widget areas and their widgets.
+	 * @param array<string,array<string>> $widget_areas An array of widget areas and their widgets.
 	 *
-	 * @return array The modified $widget_area array.
+	 * @return array<string,array<string>> The modified $widget_area array.
 	 */
 	public function exclude_widgets( $widget_areas ) {
 		if ( protection_is_disabled() || $this->is_customize_preview() ) {

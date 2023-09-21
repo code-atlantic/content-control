@@ -16,7 +16,7 @@ namespace ContentControl;
  * before the <!--more--> tag if it exists, but not generate an excerpt
  * from the_contnet. It also doesn't filter the content.
  *
- * @param int|WP_Post|null $post_id Post ID or object. Defaults to global $post.
+ * @param int|\WP_Post|null $post_id Post ID or object. Defaults to global $post.
  * @return string
  */
 function get_excerpt_by_id( $post_id = null ) {

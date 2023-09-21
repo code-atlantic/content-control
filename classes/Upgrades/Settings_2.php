@@ -44,7 +44,7 @@ class Settings_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Run the migration.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|false
 	 */
 	public function run() {
 		// Gets a stream or mock stream for sending events.

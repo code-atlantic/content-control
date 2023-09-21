@@ -23,6 +23,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Define plugin's global configuration.
+ *
+ * @return array<string,string|bool>
  */
 function get_plugin_config() {
 	return [
@@ -72,6 +74,8 @@ if ( ! Plugin\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
 
 /**
  * Check plugin prerequisites.
+ *
+ * @return bool
  */
 function check_prerequisites() {
 

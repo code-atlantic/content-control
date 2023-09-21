@@ -20,7 +20,7 @@ class Restrictions {
 	/**
 	 * Protected posts.
 	 *
-	 * @var array
+	 * @var array<int>
 	 */
 	public static $protected_posts = [];
 

@@ -39,7 +39,7 @@ class Group extends Item {
 	/**
 	 * Build a group.
 	 *
-	 * @param array $group Group data.
+	 * @param array{id:string,label:string,query:array<mixed>} $group Group data.
 	 */
 	public function __construct( $group ) {
 		$group = wp_parse_args( $group, [
@@ -74,7 +74,7 @@ class Group extends Item {
 	/**
 	 * Check this groups rules.
 	 *
-	 * @return bool
+	 * @return array<bool|null|array<bool|null>>
 	 */
 	public function get_checks() {
 		return $this->query->get_checks();
@@ -85,7 +85,7 @@ class Group extends Item {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array
+	 * @return array<mixed>
 	 */
 	public function get_check_info() {
 		return $this->query->get_check_info();

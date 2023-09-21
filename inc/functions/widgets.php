@@ -13,7 +13,7 @@ namespace ContentControl\Widgets;
  *
  * @param string $widget_id The unique ID of a widget.
  *
- * @return array The array of widget settings or empty array if none
+ * @return array<string,mixed> The array of widget settings or empty array if none
  */
 function get_options( $widget_id ) {
 	static $options = [];
@@ -45,9 +45,9 @@ function get_options( $widget_id ) {
 /**
  * Checks for & adds missing widget options to prevent errors or missing data.
  *
- * @param array $options Widget options.
+ * @param array<string,mixed> $options Widget options.
  *
- * @return array
+ * @return array<string,mixed>
  */
 function parse_options( $options = [] ) {
 	if ( ! is_array( $options ) ) {

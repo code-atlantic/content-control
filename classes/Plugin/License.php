@@ -40,32 +40,23 @@ class License {
 	const OPTION_KEY = 'content_control_license';
 
 	/**
-	 * Container.
-	 *
-	 * @var Container
-	 */
-	private $c;
-
-	/**
 	 * License data
 	 *
-	 * @var array
+	 * @var array<string,mixed>|null
 	 */
 	private $license_data;
 
 	/**
 	 * Initialize license management.
-	 *
-	 * @param Container $c Container.
 	 */
-	public function __construct( $c ) {
-		$this->c = $c;
-
+	public function __construct() {
 		$this->register_hooks();
 	}
 
 	/**
 	 * Register hooks.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		add_action( 'init', [ $this, 'autoregister' ] );
@@ -75,9 +66,13 @@ class License {
 
 	/**
 	 * Autoregister license.
+	 *
+	 * @return void
 	 */
 	public function autoregister() {
-		if ( defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && ! empty( \CONTENT_CONTROL_LICENSE_KEY ) && '' === $this->get_license_key() ) {
+		$key = defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && '' !== \CONTENT_CONTROL_LICENSE_KEY ? \CONTENT_CONTROL_LICENSE_KEY : false;
+
+		if ( $key && '' === $this->get_license_key() ) {
 			try {
 				$this->activate_license( \CONTENT_CONTROL_LICENSE_KEY );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
@@ -89,6 +84,8 @@ class License {
 
 	/**
 	 * Schedule cron jobs.
+	 *
+	 * @return void
 	 */
 	public function schedule_crons() {
 		if ( ! wp_next_scheduled( 'content_control_license_status_check' ) ) {
@@ -99,7 +96,7 @@ class License {
 	/**
 	 * Get license data.
 	 *
-	 * @return array
+	 * @return array{key:string|null,status:array<string,mixed>|null}
 	 */
 	public function get_license_data() {
 		if ( ! isset( $this->license_data ) ) {
@@ -134,15 +131,21 @@ class License {
 	 */
 	public function get_license_key() {
 		$license_data = $this->get_license_data();
-		return isset( $license_data['key'] ) ? $license_data['key'] : '';
+		return ! empty( $license_data['key'] ) ? $license_data['key'] : '';
 	}
 
 	/**
 	 * Get license status.
 	 *
-	 * @return array Array of license status data.
+	 * @param bool $refresh Whether to refresh license status.
+	 *
+	 * @return array<string,mixed> Array of license status data.
 	 */
-	public function get_license_status() {
+	public function get_license_status( $refresh = false ) {
+		if ( $refresh ) {
+			$this->refresh_license_status();
+		}
+
 		$license_data = $this->get_license_data();
 
 		$license_status = isset( $license_data['status'] ) ? $license_data['status'] : [];
@@ -153,7 +156,9 @@ class License {
 	/**
 	 * Update license data.
 	 *
-	 * @param array $license_data License data.
+	 * @param array{key:string|null,status:array<string,mixed>|null} $license_data License data.
+	 *
+	 * @return bool
 	 */
 	public function udpate_license_data( $license_data ) {
 		if ( \update_option( self::OPTION_KEY, $license_data ) ) {
@@ -168,6 +173,8 @@ class License {
 	 * Update license key.
 	 *
 	 * @param string $key License key.
+	 *
+	 * @return void
 	 */
 	public function update_license_key( $key ) {
 		$license_data = $this->get_license_data();
@@ -190,7 +197,9 @@ class License {
 	/**
 	 * Update license status.
 	 *
-	 * @param array $license_status License status data.
+	 * @param array<string,mixed> $license_status License status data.
+	 *
+	 * @return void
 	 */
 	public function update_license_status( $license_status ) {
 		$license_data = $this->get_license_data();
@@ -219,7 +228,7 @@ class License {
 	 *
 	 * @param bool $as_datetime Whether to return as DateTime object.
 	 *
-	 * @return DateTime|false|null
+	 * @return \DateTime|false|null
 	 */
 	public function get_license_expiration( $as_datetime = false ) {
 		$status = $this->get_license_status();
@@ -235,13 +244,13 @@ class License {
 	 * Fetch license status from remote server.
 	 * This is a blocking request.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function refresh_license_status() {
 		$key = $this->get_license_key();
 
 		if ( empty( $key ) ) {
-			return [];
+			return;
 		}
 
 		try {
@@ -251,14 +260,12 @@ class License {
 		}
 
 		$this->update_license_status( $status );
-
-		return $status;
 	}
 
 	/**
 	 * Get license status from remote server.
 	 *
-	 * @return array
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -300,7 +307,7 @@ class License {
 	 *
 	 * @param string $key License key.
 	 *
-	 * @return array License status data.
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -357,7 +364,7 @@ class License {
 	/**
 	 * Deactivate license.
 	 *
-	 * @return array License status data.
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -402,7 +409,7 @@ class License {
 	/**
 	 * Convert license error to human readable message.
 	 *
-	 * @param array $license_status License status data.
+	 * @param array<string,mixed> $license_status License status data.
 	 *
 	 * @return string
 	 */
@@ -452,6 +459,8 @@ class License {
 
 	/**
 	 * Remove license.
+	 *
+	 * @return void
 	 */
 	public function remove_license() {
 		try {
