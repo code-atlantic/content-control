@@ -335,9 +335,9 @@ class ObjectSearch extends WP_REST_Controller {
 	 * @param boolean             $include_total Whether to include the total count in the response.
 	 * @return array{items:array<int,string>,totalCount:int}|array<int,string>
 	 */
-	public function taxonomy_selectlist_query( $taxonomies = [], $args = [], $include_total = false ) {
-		if ( empty( $taxonomies ) ) {
-			$taxonomies = [ 'category' ];
+	public function taxonomy_selectlist_query( $taxonomy, $args = [], $include_total = false ) {
+		if ( empty( $taxonomy ) ) {
+			$taxonomy = [ 'category' ];
 		}
 
 		$args = wp_parse_args( $args, [
@@ -348,7 +348,7 @@ class ObjectSearch extends WP_REST_Controller {
 			'exclude'    => null,
 			'offset'     => 0,
 			'page'       => null,
-			'taxonomy'   => $taxonomies,
+			'taxonomy'   => $taxonomy,
 		] );
 
 		if ( $args['page'] ) {
