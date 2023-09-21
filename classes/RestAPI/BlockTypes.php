@@ -98,10 +98,9 @@ class BlockTypes extends WP_REST_Controller {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
-		// Add or update incoming block types into the array.
-		foreach ( $block_types as $type ) {
+		foreach ( $block_types as $key => $type ) {
 			// Sanitize each new block type.
-			$block_types[ sanitize_key( $type['name'] ) ] = sanitize_block_type( $type );
+			$block_types[ $key ] = sanitize_block_type( $type );
 		}
 
 		// Add or update incoming block types into the array.
