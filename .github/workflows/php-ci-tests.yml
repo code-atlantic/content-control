@@ -1,0 +1,45 @@
+name: PHP CI Tests
+
+on:
+    push:
+        branches:
+            - master
+            - develop
+            - phpstan
+    pull_request:
+        branches:
+            - master
+            - develop
+    workflow_dispatch:
+
+jobs:
+    phpstan:
+        name: PHP Code Sniffer
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  tools: phpstan
+
+            - name: Run PHPStan
+              run: phpstan analyse
+
+              # path: ./bin ./classes ./inc ./dist content-control.php uninstall.php
+              # configuration: ./phpstan.neon.dist
+
+    # phpstan:
+    #     name: PHP Code Sniffer
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - uses: actions/checkout@v4
+    #         - uses: php-actions/composer@v6
+
+    #         - uses: php-actions/phpstan@v3
+    #           with:
+    #               path: ./bin ./classes ./inc ./dist content-control.php uninstall.php
+    #               configuration: ./phpstan.neon.dist
+    #               memory_limit: 512M
