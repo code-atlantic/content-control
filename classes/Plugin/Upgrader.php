@@ -87,7 +87,7 @@ class Upgrader {
 			return false;
 		}
 
-		return $creds;
+		return (bool) $creds;
 	}
 
 	/**
