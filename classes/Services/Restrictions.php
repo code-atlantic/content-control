@@ -37,7 +37,7 @@ class Restrictions {
 				$restrictions = \ContentControl\get_v1_restrictions();
 
 				foreach ( $restrictions as $key => $restriction ) {
-					$restriction['id']        = $key;
+					$restriction['id']        = (int) $key;
 					$all_restrictions[ $key ] = new Restriction( $restriction );
 				}
 			} else {
