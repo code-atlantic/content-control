@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 Requires PHP: 5.6
 License: GPLv3 or Any Later Version
 
@@ -80,6 +80,15 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.7 - 09/21/2023 =
+
+- Tweak: Only log each unique plugin debug notice once to prevent filling log files quickly.
+- Tweak: Replace usage of `wp_upload_dir` with `wp_get_upload_dir` which is more performant.
+- Fix: Error in upgrades when no data is found to migrate.
+- Fix: Error when function is called early & global $wp_query is not yet available.
+- Fix: Conditional check that could always return false.
+- Developer: Implemented PHP Static Analysis to catch more bugs before they happen. Currently clean on lvl 6.
 
 = v2.0.6 - 09/19/2023 =
 
