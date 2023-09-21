@@ -23,13 +23,13 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.2'
-                  tools: composer:v2, phpstan
+                  tools: composer:v2
 
             - name: Install dependencies
-              run: composer install --no-dev --classmap-authoritative
+              run: composer install
 
             - name: Run PHPStan
-              run: phpstan analyse
+              run: composer run phpstan
 
               # path: ./bin ./classes ./inc ./dist content-control.php uninstall.php
               # configuration: ./phpstan.neon.dist
