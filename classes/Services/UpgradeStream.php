@@ -36,7 +36,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 *
 	 * @return void
 	 */
-	public function update_status( $status = [] ) {
+	public function update_status( $status ) {
 		$defaults = [
 			'total'       => 0,
 			'progress'    => 0,
@@ -60,7 +60,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 *
 	 * @return void
 	 */
-	public function update_task_status( $task_status = [] ) {
+	public function update_task_status( $task_status ) {
 		$defaults = [
 			'name'     => '',
 			'total'    => 0,
