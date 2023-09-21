@@ -159,10 +159,6 @@ class MainQuery extends Controller {
 		$restriction = $restriction_match['restriction'];
 		$post_ids    = $restriction_match['post_ids'];
 
-		if ( is_int( $post_ids ) ) {
-			$post_ids = [ $post_ids ];
-		}
-
 		/**
 		 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 		 *

@@ -61,10 +61,6 @@ class QueryPosts extends Controller {
 			$post_id     = $match['post_ids'];
 			$restriction = $match['restriction'];
 
-			if ( is_int( $post_id ) ) {
-				$post_id = [ $post_id ];
-			}
-
 			/**
 			 * Use this filter to prevent a post from being restricted, or to handle it yourself.
 			 *
