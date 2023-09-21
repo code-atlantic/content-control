@@ -96,7 +96,7 @@ function check_prerequisites() {
 	/**
 	 * 1.b If there are missing requirements, render error messaging and return.
 	 */
-	if ( $prerequisites->check() === false ) {
+	if ($prerequisites->check() === false) {
 		$prerequisites->setup_notices();
 
 		return false;
