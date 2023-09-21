@@ -3,7 +3,6 @@ parameters:
     paths:
         - bin/
         - classes/
-        - dist/
         - inc/
         - content-control.php
         - uninstall.php
