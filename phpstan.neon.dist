@@ -1,5 +1,5 @@
 parameters:
-    level: 5
+    level: 6
     paths:
         - bin/
         - classes/
@@ -11,5 +11,6 @@ parameters:
         - bin/phpstan-bootstrap.php
     dynamicConstantNames:
         - 'IS_WPCOM'
-        - 'CONTENT_CONTROL_DISABLE_LOGGING'
         - 'CONTENT_CONTROL_LICENSE_KEY'
+        - 'CONTENT_CONTROL_DISABLE_LOGGING'
+        - 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING'
