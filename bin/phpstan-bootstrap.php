@@ -15,6 +15,16 @@ if ( ! defined( 'CONTENT_CONTROL_LICENSE_KEY' ) ) {
 	define( 'CONTENT_CONTROL_LICENSE_KEY', '' );
 }
 
+if ( ! defined( 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING' ) ) {
+	/**
+	 * Enable upgrade process logs.
+	 *
+	 * @phpstan-type bool $disable_license_check
+	 * @var bool $disable_license_check
+	 */
+	define( 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING', false );
+}
+
 if ( ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) ) {
 	/**
 	 * Disable logging.
