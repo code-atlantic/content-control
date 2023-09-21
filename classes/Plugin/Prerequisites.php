@@ -206,7 +206,7 @@ class Prerequisites {
 		 */
 		if ( true === $active ) {
 			// If required version is set & plugin is active, check that first.
-			if ( isset( $check_args['version'] ) ) {
+			if ( ! empty( $check_args['version'] ) ) {
 				$version = $this->get_plugin_data( $check_args['slug'], 'Version' );
 
 				// If its higher than the required version, we can bail now > true.

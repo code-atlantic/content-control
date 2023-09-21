@@ -137,7 +137,7 @@ class Reviews extends Controller {
 		static $selected;
 
 		if ( $this->debug ) {
-			return isset( $this->debug_trigger['group'] ) ? $this->debug_trigger['group'] : 'time_installed';
+			return ! empty( $this->debug_trigger['group'] ) ? $this->debug_trigger['group'] : 'time_installed';
 		}
 
 		if ( ! isset( $selected ) ) {
@@ -171,7 +171,7 @@ class Reviews extends Controller {
 		static $selected;
 
 		if ( $this->debug ) {
-			return isset( $this->debug_trigger['code'] ) ? $this->debug_trigger['code'] : 'one_week';
+			return ! empty( $this->debug_trigger['code'] ) ? $this->debug_trigger['code'] : 'one_week';
 		}
 
 		if ( ! isset( $selected ) ) {

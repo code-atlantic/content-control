@@ -131,7 +131,7 @@ class License {
 	 */
 	public function get_license_key() {
 		$license_data = $this->get_license_data();
-		return isset( $license_data['key'] ) ? $license_data['key'] : '';
+		return ! empty( $license_data['key'] ) ? $license_data['key'] : '';
 	}
 
 	/**
