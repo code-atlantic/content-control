@@ -31,8 +31,8 @@ class UserExperience extends Controller {
 	/**
 	 * Render plugin action links.
 	 *
-	 * @param array  $links Existing links.
-	 * @param string $file Plugin file path.
+	 * @param array<string,string> $links Existing links.
+	 * @param string               $file Plugin file path.
 	 *
 	 * @return mixed
 	 */
@@ -67,8 +67,8 @@ class UserExperience extends Controller {
 	/**
 	 * Add a row to the plugin list table.
 	 *
-	 * @param string $file Plugin file path.
-	 * @param array  $plugin_data Plugin data.
+	 * @param string                   $file Plugin file path.
+	 * @param array<string,string|int> $plugin_data Plugin data.
 	 *
 	 * @return void
 	 */

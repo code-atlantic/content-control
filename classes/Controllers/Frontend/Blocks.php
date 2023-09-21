@@ -56,7 +56,7 @@ class Blocks extends Controller {
 	/**
 	 * Check if block has controls enabled.
 	 *
-	 * @param array $block Block to be checked.
+	 * @param array<string,mixed> $block Block to be checked.
 	 * @return boolean Whether the block has Controls enabled.
 	 */
 	public function has_block_controls( $block ) {
@@ -74,8 +74,8 @@ class Blocks extends Controller {
 	/**
 	 * Get blocks controls if enabled.
 	 *
-	 * @param array $block Block to get controls from.
-	 * @return array|null Controls if enabled.
+	 * @param array{attrs:array<string,mixed>} $block Block to get controls for.
+	 * @return array{enabled:bool,rules:array<string,mixed>}|null Controls if enabled.
 	 */
 	public function get_block_controls( $block ) {
 		if ( ! $this->has_block_controls( $block ) ) {
@@ -91,9 +91,9 @@ class Blocks extends Controller {
 	/**
 	 * Short curcuit block rendering for hidden blocks.
 	 *
-	 * @param string|null    $pre_render   The pre-rendered content. Default null.
-	 * @param array          $parsed_block The block being rendered.
-	 * @param \WP_Block|null $parent_block If this is a nested block, a reference to the parent block.
+	 * @param string|null         $pre_render   The pre-rendered content. Default null.
+	 * @param array<string,mixed> $parsed_block The block being rendered.
+	 * @param \WP_Block|null      $parent_block If this is a nested block, a reference to the parent block.
 	 *
 	 * @return string|null
 	 */
@@ -147,8 +147,8 @@ class Blocks extends Controller {
 	/**
 	 * Check block rules to see if it should be hidden from user.
 	 *
-	 * @param bool  $should_hide Whether the block should be hidden.
-	 * @param array $rules  Rules to check.
+	 * @param bool                                   $should_hide Whether the block should be hidden.
+	 * @param array<string,array<string,mixed>|null> $rules  Rules to check.
 	 * @return bool
 	 */
 	public function block_user_rules( $should_hide, $rules ) {
@@ -174,8 +174,8 @@ class Blocks extends Controller {
 	/**
 	 * Get any classes to be added to the outer block element.
 	 *
-	 * @param array $block Block to get classes for.
-	 * @return null|array
+	 * @param array<string,mixed> $block Block to get classes for.
+	 * @return null|string[]
 	 */
 	public function get_block_control_classes( $block ) {
 		if ( ! $this->has_block_controls( $block ) ) {
@@ -225,8 +225,8 @@ class Blocks extends Controller {
 	 * - https://github.com/WordPress/gutenberg/blob/e776b4f00f690ce9cf21c027ebf5e7442420d716/lib/block-supports/duotone.php#L503
 	 * - https://github.com/WordPress/gutenberg/blob/9aab0c4f60c78d19aae0af3351a2b66f8fa4c162/lib/block-supports/elements.php#L54-L72
 	 *
-	 * @param string $block_content Blocks rendered html.
-	 * @param array  $block Array of block properties.
+	 * @param string              $block_content Blocks rendered html.
+	 * @param array<string,mixed> $block Array of block properties.
 	 *
 	 * @return string
 	 */

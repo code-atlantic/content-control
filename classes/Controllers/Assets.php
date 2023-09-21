@@ -34,7 +34,7 @@ class Assets extends Controller {
 	/**
 	 * Get list of plugin packages.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_packages() {
 		$permissions = $this->container->get_permissions();
@@ -175,7 +175,7 @@ class Assets extends Controller {
 	 * Get asset meta from generated files.
 	 *
 	 * @param string $package Package name.
-	 * @return array
+	 * @return array{dependencies:string[],version:string}
 	 */
 	public function get_asset_meta( $package ) {
 		$meta_path = $this->container->get_path( "dist/$package.asset.php" );

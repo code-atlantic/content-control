@@ -19,7 +19,7 @@ class Rules {
 	/**
 	 * Array of rules.
 	 *
-	 * @var array
+	 * @var array<string,array<string,mixed>>
 	 */
 	private $data = [];
 
@@ -61,7 +61,7 @@ class Rules {
 	/**
 	 * Register new rule type.
 	 *
-	 * @param array $rule New rule to register.
+	 * @param array<string,mixed> $rule New rule to register.
 	 * @return void
 	 */
 	public function register_rule( $rule ) {
@@ -90,7 +90,7 @@ class Rules {
 	/**
 	 * Check if rule is valid.
 	 *
-	 * @param array $rule Rule to test.
+	 * @param array<string,mixed> $rule Rule to test.
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
@@ -100,7 +100,7 @@ class Rules {
 	/**
 	 * Get array of all registered rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_rules() {
 		if ( ! did_action( 'content_control/rule_engine/register_rules' ) ) {
@@ -114,7 +114,7 @@ class Rules {
 	 * Get a rule definition by name.
 	 *
 	 * @param string $rule_name Rule definition or null.
-	 * @return array|null
+	 * @return array<string,mixed>|null
 	 */
 	public function get_rule( $rule_name ) {
 		$rules = $this->get_rules();
@@ -124,7 +124,7 @@ class Rules {
 	/**
 	 * Get array of registered rules filtered for the block-editor.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_block_editor_rules() {
 		$rules = $this->get_rules();
@@ -142,7 +142,7 @@ class Rules {
 	/**
 	 * Get list of verbs.
 	 *
-	 * @return array List of verbs with translatable text.
+	 * @return array<string,string> List of verbs with translatable text.
 	 */
 	public function get_verbs() {
 		return [
@@ -180,9 +180,9 @@ class Rules {
 		/**
 		 * Allow registering additional rules quickly.
 		 *
-		 * @param array $rules Rules.
+		 * @param array<string,array<string,mixed>> $rules Rules.
 		 *
-		 * @return array
+		 * @return array<string,array<string,mixed>>
 		 */
 		$rules = apply_filters( 'content_control/rule_engine/rules', $rules );
 
@@ -203,7 +203,7 @@ class Rules {
 	/**
 	 * Get a list of user rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_user_rules() {
 		$verbs = $this->get_verbs();
@@ -240,7 +240,7 @@ class Rules {
 	/**
 	 * Get a list of general content rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_general_content_rules() {
 		$rules = [];
@@ -302,7 +302,7 @@ class Rules {
 	/**
 	 * Get a list of WP post type rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_post_type_rules() {
 		$verbs = $this->get_verbs();
@@ -438,7 +438,7 @@ class Rules {
 	 *
 	 * @param string $name Post type name.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_post_type_tax_rules( $name ) {
 		$verbs = $this->get_verbs();
@@ -491,7 +491,7 @@ class Rules {
 	/**
 	 * Generates conditions for all public taxonomies.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_taxonomy_rules() {
 		$rules      = [];
@@ -554,7 +554,7 @@ class Rules {
 	/**
 	 * Get an array of rule default values.
 	 *
-	 * @return array Array of rule default values.
+	 * @return array<string,mixed> Array of rule default values.
 	 */
 	public function get_rule_defaults() {
 		$verbs = $this->get_verbs();
@@ -601,8 +601,8 @@ class Rules {
 	/**
 	 * Parse rules that are still registered using the older deprecated methods.
 	 *
-	 * @param array $old_rules Array of old rules to manipulate.
-	 * @return array
+	 * @param array<string,mixed> $old_rules Array of old rules to manipulate.
+	 * @return array<string,mixed>
 	 */
 	public function parse_old_rules( $old_rules ) {
 		$new_rules = [];
@@ -617,8 +617,8 @@ class Rules {
 	/**
 	 * Remaps keys & values from an old `condition` into a new `rule`.
 	 *
-	 * @param array $old_rule Old rule definition.
-	 * @return array New rule definition.
+	 * @param array<string,mixed> $old_rule Old rule definition.
+	 * @return array<string,mixed> New rule definition.
 	 */
 	public function remap_old_rule( $old_rule ) {
 		$old_rule = wp_parse_args( $old_rule, $this->get_old_rule_defaults() );
@@ -651,7 +651,7 @@ class Rules {
 	/**
 	 * Get an array of old rule default values.
 	 *
-	 * @return array Array of old rule default values.
+	 * @return array<string,mixed> Array of old rule default values.
 	 */
 	private function get_old_rule_defaults() {
 		return [

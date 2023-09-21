@@ -32,7 +32,7 @@ class Query {
 	/**
 	 * Build a query.
 	 *
-	 * @param array $query Query data.
+	 * @param array{logicalOperator:string,items:array<mixed>} $query Query data.
 	 */
 	public function __construct( $query ) {
 		$query = wp_parse_args( $query, [
@@ -134,7 +134,7 @@ class Query {
 	 *
 	 * Useful for debugging or passing to JS.
 	 *
-	 * @return array
+	 * @return array<bool|null|array<bool|null>>
 	 */
 	public function get_checks() {
 		$checks = [];
@@ -155,7 +155,7 @@ class Query {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array
+	 * @return array<mixed>
 	 */
 	public function get_check_info() {
 		$checks = [];

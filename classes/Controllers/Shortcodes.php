@@ -31,8 +31,8 @@ class Shortcodes extends Controller {
 	/**
 	 * Process the [content_control] shortcode.
 	 *
-	 * @param array  $atts Array or shortcode attributes.
-	 * @param string $content Content inside shortcode.
+	 * @param array<string,string|int|null> $atts Array or shortcode attributes.
+	 * @param string                        $content Content inside shortcode.
 	 *
 	 * @return string
 	 */
@@ -101,9 +101,9 @@ class Shortcodes extends Controller {
 	 *
 	 * These are typically valueless boolean attributes.
 	 *
-	 * @param array $atts Array of shortcode attributes.
+	 * @param array<string|int,string|int|null> $atts Array of shortcode attributes.
 	 *
-	 * @return mixed
+	 * @return array<string,string|int|bool|null>
 	 */
 	public function normalize_empty_atts( $atts = [] ) {
 		if ( ! is_array( $atts ) ) {

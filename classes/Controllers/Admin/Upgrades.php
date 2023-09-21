@@ -163,9 +163,9 @@ class Upgrades extends Controller {
 	/**
 	 * Perform a topological sort on a graph.
 	 *
-	 * @param array $graph Graph to sort.
+	 * @param array<string,array<string>> $graph Graph to sort.
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	private function topological_sort( $graph ) {
 		$visited = [];
@@ -181,10 +181,10 @@ class Upgrades extends Controller {
 	/**
 	 * Visit a node in the graph for topological sort.
 	 *
-	 * @param mixed $node Node to visit.
-	 * @param array $graph Graph to sort.
-	 * @param array $visited List of visited nodes.
-	 * @param array $sorted List of sorted nodes.
+	 * @param string                      $node Node to visit.
+	 * @param array<string,array<string>> $graph Graph to sort.
+	 * @param array<string,bool>          $visited List of visited nodes.
+	 * @param array<string>               $sorted List of sorted nodes.
 	 *
 	 * @return void
 	 */
@@ -455,9 +455,9 @@ class Upgrades extends Controller {
 	/**
 	 * Add localized vars to settings page if there are upgrades to run.
 	 *
-	 * @param array $vars Localized vars.
+	 * @param array<string,mixed> $vars Localized vars.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function localize_vars( $vars ) {
 		$vars['hasUpgrades'] = false;

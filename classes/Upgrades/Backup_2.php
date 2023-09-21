@@ -31,7 +31,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Get v1 data.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_v1_data() {
 		$data = [];

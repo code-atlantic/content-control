@@ -42,7 +42,7 @@ class License {
 	/**
 	 * License data
 	 *
-	 * @var array|null
+	 * @var array<string,mixed>|null
 	 */
 	private $license_data;
 
@@ -96,7 +96,7 @@ class License {
 	/**
 	 * Get license data.
 	 *
-	 * @return array
+	 * @return array{key:string|null,status:array<string,mixed>|null}
 	 */
 	public function get_license_data() {
 		if ( ! isset( $this->license_data ) ) {
@@ -139,7 +139,7 @@ class License {
 	 *
 	 * @param bool $refresh Whether to refresh license status.
 	 *
-	 * @return array Array of license status data.
+	 * @return array<string,mixed> Array of license status data.
 	 */
 	public function get_license_status( $refresh = false ) {
 		if ( $refresh ) {
@@ -156,7 +156,7 @@ class License {
 	/**
 	 * Update license data.
 	 *
-	 * @param array $license_data License data.
+	 * @param array{key:string|null,status:array<string,mixed>|null} $license_data License data.
 	 *
 	 * @return bool
 	 */
@@ -197,7 +197,7 @@ class License {
 	/**
 	 * Update license status.
 	 *
-	 * @param array $license_status License status data.
+	 * @param array<string,mixed> $license_status License status data.
 	 *
 	 * @return void
 	 */
@@ -265,7 +265,7 @@ class License {
 	/**
 	 * Get license status from remote server.
 	 *
-	 * @return array
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -307,7 +307,7 @@ class License {
 	 *
 	 * @param string $key License key.
 	 *
-	 * @return array License status data.
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -364,7 +364,7 @@ class License {
 	/**
 	 * Deactivate license.
 	 *
-	 * @return array License status data.
+	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
 	 */
@@ -409,7 +409,7 @@ class License {
 	/**
 	 * Convert license error to human readable message.
 	 *
-	 * @param array $license_status License status data.
+	 * @param array<string,mixed> $license_status License status data.
 	 *
 	 * @return string
 	 */

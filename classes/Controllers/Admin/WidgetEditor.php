@@ -48,9 +48,9 @@ class WidgetEditor extends Controller {
 	/**
 	 * Renders additional widget option fields.
 	 *
-	 * @param \WP_Widget $widget Widget instance.
-	 * @param bool       $ret Whether to return the output.
-	 * @param array      $instance Widget instance options.
+	 * @param \WP_Widget          $widget Widget instance.
+	 * @param bool                $ret Whether to return the output.
+	 * @param array<string,mixed> $instance Widget instance options.
 	 *
 	 * @return void
 	 */
@@ -96,11 +96,11 @@ class WidgetEditor extends Controller {
 	/**
 	 * Validates & saves additional widget options.
 	 *
-	 * @param array $instance Widget instance options.
-	 * @param array $new_instance New widget instance options.
-	 * @param array $old_instance Old widget instance options.
+	 * @param array<string,mixed> $instance Widget instance options.
+	 * @param array<string,mixed> $new_instance New widget instance options.
+	 * @param array<string,mixed> $old_instance Old widget instance options.
 	 *
-	 * @return array|bool
+	 * @return array<string,mixed>|bool
 	 */
 	public function save( $instance, $new_instance, $old_instance ) {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -122,6 +122,7 @@ class WidgetEditor extends Controller {
 				unset( $instance['roles'] );
 			}
 		} else {
+			// Failed validation, use old instance.
 			$old_instance            = parse_widget_options( $old_instance );
 			$instance['which_users'] = $old_instance['which_users'];
 

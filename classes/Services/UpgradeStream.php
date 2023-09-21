@@ -21,7 +21,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Upgrade status.
 	 *
-	 * @var array
+	 * @var array{total:int,progress:int,currentTask:null|array{name:string,total:int,progress:int}}|null
 	 */
 	public $status = [
 		'total'       => 0,
@@ -32,7 +32,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Update the status of the upgrade.
 	 *
-	 * @param array $status Status to update.
+	 * @param array{total?:int|null,progress?:int|null,curentTask?:string|null} $status Status to update.
 	 *
 	 * @return void
 	 */
@@ -56,7 +56,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Update the status of the current task.
 	 *
-	 * @param array|null $task_status Status to update.
+	 * @param array{total?:int,progress?:int,curentTask?:string}|null $task_status Status to update.
 	 *
 	 * @return void
 	 */
@@ -86,7 +86,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Send an event to the client.
 	 *
 	 * @param string $event Event name.
-	 * @param array  $data Data to send.
+	 * @param mixed  $data Data to send.
 	 *
 	 * @return void
 	 */

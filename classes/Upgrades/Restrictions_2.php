@@ -127,7 +127,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Migrate a given restriction to the new post type.
 	 *
-	 * @param array $restriction Restriction data.
+	 * @param array<string,mixed> $restriction Restriction data.
 	 *
 	 * @return bool True if successful, false otherwise.
 	 */

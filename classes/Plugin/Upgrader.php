@@ -66,7 +66,7 @@ class Upgrader {
 	/**
 	 * Get credentials for the current request.
 	 *
-	 * @return array|bool
+	 * @return bool
 	 */
 	public function get_fs_creds() {
 		// Prepare variables.

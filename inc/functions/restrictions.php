@@ -32,9 +32,9 @@ function user_is_excluded() {
 /**
  * Check if user meets requirements.
  *
- * @param string       $user_status logged_in or logged_out.
- * @param array|string $user_roles array of roles to check.
- * @param string       $role_match any|match|exclude.
+ * @param string                               $user_status logged_in or logged_out.
+ * @param string[]|array<string,string>|string $user_roles array of roles to check.
+ * @param string                               $role_match any|match|exclude.
  *
  * @return bool True if user meets requirements, false if not.
  */

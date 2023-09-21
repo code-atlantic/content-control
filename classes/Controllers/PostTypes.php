@@ -199,9 +199,9 @@ class PostTypes extends Controller {
 	/**
 	 * Prevent access to restrictions endpoint.
 	 *
-	 * @param mixed            $result Response to replace the requested version with.
-	 * @param \WP_REST_Server  $server Server instance.
-	 * @param \WP_REST_Request $request  Request used to generate the response.
+	 * @param mixed                                 $result Response to replace the requested version with.
+	 * @param \WP_REST_Server                       $server Server instance.
+	 * @param \WP_REST_Request<array<string,mixed>> $request  Request used to generate the response.
 	 * @return mixed
 	 */
 	public function rest_pre_dispatch( $result, $server, $request ) {

@@ -166,7 +166,7 @@ class Connect {
 	 *
 	 * @param string $license_key License key.
 	 *
-	 * @return array
+	 * @return array{url:string,back_url:string}
 	 */
 	public function get_connect_info( $license_key ) {
 		$token    = $this->generate_token();
@@ -322,8 +322,8 @@ class Connect {
 	/**
 	 * Generate signature hash.
 	 *
-	 * @param array|string $data Data to hash.
-	 * @param string       $token Token to hash with.
+	 * @param array<string,mixed>|string $data Data to hash.
+	 * @param string                     $token Token to hash with.
 	 * @return string
 	 */
 	public function generate_hash( $data, $token ) {
@@ -408,7 +408,7 @@ class Connect {
 	/**
 	 * Get the webhook args.
 	 *
-	 * @return array
+	 * @return array{file:string,type:string,slug:string,force:boolean}
 	 */
 	public function get_webhook_args() {
 		$args = [
@@ -428,7 +428,7 @@ class Connect {
 	/**
 	 * Verify and return webhook args.
 	 *
-	 * @param array $args The webhook args.
+	 * @param array{file:string,type:string,slug:string,force:bool} $args The webhook args.
 	 *
 	 * @return void
 	 */
@@ -486,7 +486,7 @@ class Connect {
 	/**
 	 * Install a plugin.
 	 *
-	 * @param array $args The file args.
+	 * @param array{file:string,type:string,slug:string,force:bool} $args The file args.
 	 * @return void
 	 */
 	public function install_plugin( $args ) {

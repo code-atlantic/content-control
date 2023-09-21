@@ -36,7 +36,7 @@ function is_func_disabled( $func ) {
  *
  * @returns boolean
  * @author matzeeable
- * 
+ *
  * @return bool
  */
 function is_rest() {
@@ -129,9 +129,9 @@ function camel_case_to_snake_case( $str ) {
  *
  * Gets rid of Closure and other invalid data types.
  *
- * @param array $arr Array to clean.
+ * @param array<mixed> $arr Array to clean.
  *
- * @return array Cleaned array.
+ * @return array<mixed> Cleaned array.
  */
 function deep_clean_array( $arr ) {
 	// Clean \Closure values deeply.

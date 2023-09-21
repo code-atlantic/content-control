@@ -41,7 +41,7 @@ class Core {
 	/**
 	 * Initiate the plugin.
 	 *
-	 * @param array $config Configuration variables passed from main plugin file.
+	 * @param array<string,string|bool> $config Configuration variables passed from main plugin file.
 	 */
 	public function __construct( $config ) {
 		$this->container   = new Container( $config );
@@ -106,8 +106,8 @@ class Core {
 	/**
 	 * Process old version data.
 	 *
-	 * @param array $data Array of data.
-	 * @return array
+	 * @param array<string,string|null> $data Array of data.
+	 * @return array<string,string|null>
 	 */
 	private function process_version_data_migration( $data ) {
 		$has_old_settings_data = \get_option( 'jp_cc_settings', false );
@@ -215,7 +215,7 @@ class Core {
 	/**
 	 * Register controllers.
 	 *
-	 * @param array $controllers Array of controllers.
+	 * @param array<string,Controller> $controllers Array of controllers.
 	 * @return void
 	 */
 	public function register_controllers( $controllers = [] ) {
@@ -321,7 +321,7 @@ class Core {
 	/**
 	 * Get plugin permissions.
 	 *
-	 * @return array Array of permissions.
+	 * @return array<string,string> Array of permissions.
 	 */
 	public function get_permissions() {
 		$permissions = \ContentControl\get_default_permissions();

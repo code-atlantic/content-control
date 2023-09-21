@@ -54,9 +54,9 @@ class Install {
 	/**
 	 * Handle single & multisite processes.
 	 *
-	 * @param bool     $network_wide Weather to do it network wide.
-	 * @param callable $method Callable method for each site.
-	 * @param array    $args Array of extra args.
+	 * @param bool                $network_wide Weather to do it network wide.
+	 * @param callable            $method Callable method for each site.
+	 * @param array<string,mixed> $args Array of extra args.
 	 *
 	 * @return void
 	 */

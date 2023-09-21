@@ -78,12 +78,18 @@ class BlockTypes extends WP_REST_Controller {
 	/**
 	 * Update plugin settings.
 	 *
-	 * @param \WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_block_types( $request ) {
 		// Get request json params.
+
+		/**
+		 * Block types.
+		 *
+		 * @var array<int,array<string,string|string[]>> $block_types
+		 */
 		$block_types = $request->get_json_params();
 
 		$error_message = __( 'Something went wrong, the block types could not be updated.', 'content-control' );
@@ -98,6 +104,7 @@ class BlockTypes extends WP_REST_Controller {
 			$block_types[ sanitize_key( $type['name'] ) ] = sanitize_block_type( $type );
 		}
 
+		// Add or update incoming block types into the array.
 		update_block_types( $block_types );
 
 		$new_block_types = get_block_types();
@@ -121,7 +128,7 @@ class BlockTypes extends WP_REST_Controller {
 	/**
 	 * Get settings schema.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_schema() {
 		if ( $this->schema ) {

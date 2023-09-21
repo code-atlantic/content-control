@@ -74,7 +74,7 @@ class Logging {
 	/**
 	 * Gets the Uploads directory
 	 *
-	 * @return bool|array An associated array with baseurl and basedir or false on failure
+	 * @return bool|array{path: string, url: string, subdir: string, basedir: string, baseurl: string, error: string|false} An associated array with baseurl and basedir or false on failure
 	 */
 	public function get_upload_dir() {
 		// Used if you only need to fetch data, not create missing folders.

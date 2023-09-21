@@ -95,7 +95,7 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get block type list.
 	 *
-	 * @param \WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
 	 * @return WP_Error|WP_REST_Response
 	 */
@@ -273,10 +273,10 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get a list of posts for a select list.
 	 *
-	 * @param string  $post_type Post type(s) to query.
-	 * @param array   $args   Query arguments.
-	 * @param boolean $include_total Whether to include the total count in the response.
-	 * @return array
+	 * @param string              $post_type Post type(s) to query.
+	 * @param array<string,mixed> $args   Query arguments.
+	 * @param boolean             $include_total Whether to include the total count in the response.
+	 * @return array{items:array<int,string>,totalCount:int}|array<int,string>
 	 */
 	public function post_type_selectlist_query( $post_type, $args = [], $include_total = false ) {
 		if ( empty( $post_type ) ) {
@@ -330,10 +330,10 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get a list of terms for a select list.
 	 *
-	 * @param string|array $taxonomies Taxonomy(s) to query.
-	 * @param array        $args Query arguments.
-	 * @param boolean      $include_total Whether to include the total count in the response.
-	 * @return array
+	 * @param string              $taxonomy Taxonomy(s) to query.
+	 * @param array<string,mixed> $args   Query arguments.
+	 * @param boolean             $include_total Whether to include the total count in the response.
+	 * @return array{items:array<int,string>,totalCount:int}|array<int,string>
 	 */
 	public function taxonomy_selectlist_query( $taxonomies = [], $args = [], $include_total = false ) {
 		if ( empty( $taxonomies ) ) {
@@ -388,10 +388,10 @@ class ObjectSearch extends WP_REST_Controller {
 	/**
 	 * Get a list of users for a select list.
 	 *
-	 * @param array $args Query arguments.
-	 * @param bool  $include_total Whether to include the total count in the response.
+	 * @param array<string,mixed> $args Query arguments.
+	 * @param bool                $include_total Whether to include the total count in the response.
 	 *
-	 * @return array|mixed
+	 * @return array{items:array<int,string>,totalCount:int}|array<int,string>
 	 */
 	public function user_selectlist_query( $args = [], $include_total = false ) {
 		$args = wp_parse_args(

@@ -25,14 +25,14 @@ class Reviews extends Controller {
 	/**
 	 * Enable debug mode.
 	 *
-	 * @var boolean|array
+	 * @var boolean
 	 */
 	private $debug = false;
 
 	/**
 	 * Debug trigger.
 	 *
-	 * @var array
+	 * @var array{group:string,code:string}
 	 */
 	private $debug_trigger = [
 		'group' => 'time_installed',
@@ -556,8 +556,8 @@ class Reviews extends Controller {
 	/**
 	 * Sort array in reverse by priority value
 	 *
-	 * @param array $a First array to compare.
-	 * @param array $b Second array to compare.
+	 * @param array{pri:int|null} $a First array to compare.
+	 * @param array{pri:int|null} $b Second array to compare.
 	 *
 	 * @return int
 	 */

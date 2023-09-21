@@ -134,7 +134,7 @@ class Stream {
 	/**
 	 * Send an error to the client.
 	 *
-	 * @param array|string $error Error message.
+	 * @param array{message:string}|string $error Error message.
 	 *
 	 * @return void
 	 */

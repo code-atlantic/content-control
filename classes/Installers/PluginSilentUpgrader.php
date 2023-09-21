@@ -38,7 +38,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param array $options {
+	 * @param array{package:string,destination:string,clear_destination:bool,clear_working:bool,abort_if_destination_exists:bool,is_multi:bool,hook_extra:array<string,mixed>} $options {
 	 *     Array or string of arguments for upgrading/installing a package.
 	 *
 	 *     @type string $package                     The full path or URI of the package to install.
@@ -60,7 +60,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 *     @type array  $hook_extra                  Extra arguments to pass to the filter hooks called by
 	 *                                               WP_Upgrader::run().
 	 * }
-	 * @return array|false|WP_error The result from self::install_package() on success, otherwise a WP_Error,
+	 * @return array{source:string,source_files:string[],destination:string,destination_name:string,local_destination:string,remote_destination:string,clear_destination:bool}|\WP_Error|bool The result from self::install_package() on success, otherwise a WP_Error,
 	 *                              or false if unable to connect to the filesystem.
 	 */
 	public function run( $options ) {
@@ -281,10 +281,10 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 * @since 2.8.0
 	 * @since 5.5.0 Added the `$hook_extra` parameter.
 	 *
-	 * @param string $package          The URI of the package. If this is the full path to an
-	 *                                 existing local file, it will be returned untouched.
-	 * @param bool   $check_signatures Whether to validate file signatures. Default false.
-	 * @param array  $hook_extra       Extra arguments to pass to the filter hooks. Default empty array.
+	 * @param string              $package          The URI of the package. If this is the full path to an
+	 *                                              existing local file, it will be returned untouched.
+	 * @param bool                $check_signatures Whether to validate file signatures. Default false.
+	 * @param array<string,mixed> $hook_extra       Extra arguments to pass to the filter hooks. Default empty array.
 	 * @return string|WP_Error The full path to the downloaded package file, or a WP_Error object.
 	 */
 	public function download_package( $package, $check_signatures = false, $hook_extra = [] ) {
@@ -388,7 +388,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 * @global WP_Filesystem_Base $wp_filesystem        WordPress filesystem subclass.
 	 * @global array              $wp_theme_directories
 	 *
-	 * @param array|string $args {
+	 * @param array<string,mixed>|array{source:string|null,destination:string,clear_destination:bool,clear_working:bool,abort_if_destination_exists:bool,hook_extra:array<mixed>} $args {
 	 *     Optional. Array or string of arguments for installing a package. Default empty array.
 	 *
 	 *     @type string $source                      Required path to the package source. Default empty.
@@ -404,7 +404,7 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 *                                               WP_Upgrader::install_package(). Default empty array.
 	 * }
 	 *
-	 * @return array|WP_Error The result (also stored in `WP_Upgrader::$result`), or a WP_Error on failure.
+	 * @return array{source:string,source_files:string[],destination:string,destination_name:string,local_destination:string,remote_destination:string,clear_destination:bool}|\WP_Error The result (also stored in `WP_Upgrader::$result`), or a WP_Error on failure.
 	 */
 	public function install_package( $args = [] ) {
 		global $wp_filesystem, $wp_theme_directories;
@@ -595,8 +595,8 @@ class PluginSilentUpgrader extends \Plugin_Upgrader {
 	 *
 	 * @since 1.6.3
 	 *
-	 * @param string $package The full local path or URI of the package.
-	 * @param array  $args    Optional. Other arguments for installing a plugin package. Default empty array.
+	 * @param string              $package The full local path or URI of the package.
+	 * @param array<string,mixed> $args    Optional. Other arguments for installing a plugin package. Default empty array.
 	 *
 	 * @return bool|\WP_Error True if the installation was successful, false or a WP_Error otherwise.
 	 */

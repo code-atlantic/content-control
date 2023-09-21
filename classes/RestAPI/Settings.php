@@ -77,7 +77,7 @@ class Settings extends WP_REST_Controller {
 	/**
 	 * Update plugin settings.
 	 *
-	 * @param \WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
 	 */
@@ -112,7 +112,7 @@ class Settings extends WP_REST_Controller {
 	/**
 	 * Get settings schema.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_schema() {
 		if ( $this->schema ) {

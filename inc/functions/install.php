@@ -10,7 +10,7 @@ namespace ContentControl;
 /**
  * Returns an array of the default permissions.
  *
- * @return array Default permissions.
+ * @return array<string,string> Default permissions.
  */
 function get_default_permissions() {
 	return [
@@ -27,7 +27,7 @@ function get_default_permissions() {
 /**
  * Get the default media queries.
  *
- * @return array Array of media queries.
+ * @return array<string,array{override:bool,breakpoint:int}> Array of media queries.
  */
 function get_default_media_queries() {
 	return [
@@ -49,7 +49,7 @@ function get_default_media_queries() {
 /**
  * Returns an array of the default settings.
  *
- * @return array Default settings.
+ * @return array<string,mixed> Default settings.
  */
 function get_default_settings() {
 	return [
@@ -65,7 +65,7 @@ function get_default_settings() {
 /**
  * Get default restriction settings.
  *
- * @return array Default restriction settings.
+ * @return array<string,mixed> Default restriction settings.
  */
 function get_default_restriction_settings() {
 	return [
