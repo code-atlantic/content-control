@@ -23,7 +23,10 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: '8.2'
-                  tools: phpstan
+                  tools: composer:v2, phpstan
+
+            - name: Install dependencies
+              run: composer install --no-dev --classmap-authoritative
 
             - name: Run PHPStan
               run: phpstan analyse
