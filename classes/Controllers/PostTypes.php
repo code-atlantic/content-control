@@ -68,7 +68,6 @@ class PostTypes extends Controller {
 				'edit_posts'   => $this->container->get_permission( 'edit_restrictions' ),
 				'delete_posts' => $this->container->get_permission( 'edit_restrictions' ),
 			],
-
 		];
 
 		register_post_type( 'cc_restriction', $args );
