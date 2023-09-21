@@ -31,6 +31,8 @@ class BlockEditor extends Controller {
 
 	/**
 	 * Enqueue block editor assets.
+	 *
+	 * @return void
 	 */
 	public function enqueue_assets() {
 		wp_enqueue_script( 'content-control-block-editor' );
@@ -38,6 +40,8 @@ class BlockEditor extends Controller {
 
 	/**
 	 * Enqueue block assets.
+	 *
+	 * @return void
 	 */
 	public function enqueue_block_assets() {
 		wp_enqueue_style( 'content-control-block-styles' );

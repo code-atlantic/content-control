@@ -40,13 +40,15 @@ class Upgrades extends Controller {
 	 * Initialize the settings page.
 	 */
 	public function init() {
-		add_action( 'init', [ $this, 'hooks' ] );
+		add_action( 'admin_init', [ $this, 'hooks' ] );
 		add_action( 'wp_ajax_content_control_upgrades', [ $this, 'ajax_handler' ] );
 		add_filter( 'content_control/settings-page_localized_vars', [ $this, 'localize_vars' ] );
 	}
 
 	/**
 	 * Hook into relevant WP actions.
+	 *
+	 * @return void
 	 */
 	public function hooks() {
 		if ( is_admin() && current_user_can( 'manage_options' ) ) {
@@ -78,7 +80,7 @@ class Upgrades extends Controller {
 	 * @return boolean
 	 */
 	public function has_upgrades() {
-		return count( $this->get_required_upgrades() );
+		return (bool) count( $this->get_required_upgrades() );
 	}
 
 	/**
@@ -161,9 +163,9 @@ class Upgrades extends Controller {
 	/**
 	 * Perform a topological sort on a graph.
 	 *
-	 * @param array $graph Graph to sort.
+	 * @param array<string,array<string>> $graph Graph to sort.
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	private function topological_sort( $graph ) {
 		$visited = [];
@@ -179,10 +181,12 @@ class Upgrades extends Controller {
 	/**
 	 * Visit a node in the graph for topological sort.
 	 *
-	 * @param mixed $node Node to visit.
-	 * @param array $graph Graph to sort.
-	 * @param array $visited List of visited nodes.
-	 * @param array $sorted List of sorted nodes.
+	 * @param string                      $node Node to visit.
+	 * @param array<string,array<string>> $graph Graph to sort.
+	 * @param array<string,bool>          $visited List of visited nodes.
+	 * @param array<string>               $sorted List of sorted nodes.
+	 *
+	 * @return void
 	 */
 	private function visit_node( $node, $graph, &$visited, &$sorted ) {
 		if ( isset( $visited[ $node ] ) ) {
@@ -192,15 +196,19 @@ class Upgrades extends Controller {
 
 		$visited[ $node ] = true;
 
-		foreach ( $graph[ $node ] as $dependency ) {
-			$this->visit_node( $dependency, $graph, $visited, $sorted );
+		if ( isset( $graph[ $node ] ) && ! empty( $graph[ $node ] ) ) {
+			foreach ( $graph[ $node ] as $dependency ) {
+				$this->visit_node( $dependency, $graph, $visited, $sorted );
+			}
 		}
 
 		$sorted[] = $node;
 	}
 
 	/**
-	 * AJAX Handler
+	 * AJAX Handler.
+	 *
+	 * @return void
 	 */
 	public function ajax_handler() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -226,8 +234,9 @@ class Upgrades extends Controller {
 
 				// This second while loop runs the upgrades.
 				while ( ! empty( $this->get_required_upgrades() ) ) {
-					$upgrade      = array_shift( $this->get_required_upgrades() );
-					$upgrade_name = get_upgrade_name( $upgrade );
+					$required_upgrades = $this->get_required_upgrades();
+					$upgrade           = array_shift( $required_upgrades );
+					$upgrade_name      = get_upgrade_name( $upgrade );
 
 					if ( ! isset( $failed_upgrades[ $upgrade_name ] ) ) {
 						$failed_upgrades[ $upgrade_name ] = 0;
@@ -259,7 +268,14 @@ class Upgrades extends Controller {
 					$result = $upgrade->stream_run( $stream );
 
 					if ( is_wp_error( $result ) ) {
-						$stream->send_error( $result );
+						$stream->send_error( [
+							'message' => sprintf(
+								// translators: %s: error message.
+								__( 'Some upgrades failed to complete: %s', 'content-control' ),
+								$result->get_error_message()
+							),
+							'data'    => $result,
+						] );
 					} elseif ( false !== $result ) {
 						mark_upgrade_complete( $upgrade );
 					} else {
@@ -280,12 +296,18 @@ class Upgrades extends Controller {
 				}
 			} while ( ! $stream->should_abort() );
 		} catch ( \Exception $e ) {
-			$stream->send_error( $e );
+			if ( isset( $stream ) ) {
+				$stream->send_error( $e );
+			} else {
+				wp_send_json_error( $e );
+			}
 		}
 	}
 
 	/**
-	 * AJAX Handler
+	 * AJAX Handler.
+	 *
+	 * @return void
 	 */
 	public function ajax_handler_demo() {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -338,12 +360,21 @@ class Upgrades extends Controller {
 				$stream->complete_upgrades( __( 'Upgrades complete!', 'content-control' ) );
 			} while ( ! $stream->should_abort() && ! empty( $upgrades ) );
 		} catch ( \Exception $e ) {
-			$stream->send_error( $e );
+			if ( isset( $stream ) ) {
+				$stream->send_error( [
+					'message' => $e->getMessage(),
+					'data'    => $e,
+				] );
+			} else {
+				wp_send_json_error( $e );
+			}
 		}
 	}
 
 	/**
 	 * Render admin notices if available.
+	 *
+	 * @return void
 	 */
 	public function admin_notices() {
 		if ( ! is_admin() ) {
@@ -424,11 +455,15 @@ class Upgrades extends Controller {
 	/**
 	 * Add localized vars to settings page if there are upgrades to run.
 	 *
-	 * @param array $vars Localized vars.
+	 * @param array<string,mixed> $vars Localized vars.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function localize_vars( $vars ) {
+		if ( ! is_admin() ) {
+			return $vars;
+		}
+
 		$vars['hasUpgrades'] = false;
 
 		if ( ! $this->has_upgrades() ) {

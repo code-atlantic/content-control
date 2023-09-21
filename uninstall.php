@@ -9,6 +9,8 @@ namespace ContentControl;
 
 /**
  * Uninstall Content Control
+ *
+ * @return void
  */
 function remove_wp_options_data() {
 	$keys = [

@@ -35,6 +35,8 @@ class WidgetEditor extends Controller {
 	 * Enqueue v1 admin scripts.
 	 *
 	 * @param mixed $hook Admin page hook name.
+	 *
+	 * @return void
 	 */
 	public function enqueue_assets( $hook ) {
 		if ( 'widgets.php' === $hook ) {
@@ -46,9 +48,11 @@ class WidgetEditor extends Controller {
 	/**
 	 * Renders additional widget option fields.
 	 *
-	 * @param \WP_Widget $widget Widget instance.
-	 * @param bool       $ret Whether to return the output.
-	 * @param array      $instance Widget instance options.
+	 * @param \WP_Widget          $widget Widget instance.
+	 * @param bool                $ret Whether to return the output.
+	 * @param array<string,mixed> $instance Widget instance options.
+	 *
+	 * @return void
 	 */
 	public function fields( $widget, $ret, $instance ) {
 		$allowed_user_roles = allowed_user_roles();
@@ -92,15 +96,14 @@ class WidgetEditor extends Controller {
 	/**
 	 * Validates & saves additional widget options.
 	 *
-	 * @param array $instance Widget instance options.
-	 * @param array $new_instance New widget instance options.
-	 * @param array $old_instance Old widget instance options.
+	 * @param array<string,mixed> $instance Widget instance options.
+	 * @param array<string,mixed> $new_instance New widget instance options.
+	 * @param array<string,mixed> $old_instance Old widget instance options.
 	 *
-	 * @return array|bool
+	 * @return array<string,mixed>|bool
 	 */
 	public function save( $instance, $new_instance, $old_instance ) {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( isset( $_POST['content-control-widget-editor-nonce'] ) && wp_verify_nonce( $_POST['content-control-widget-editor-nonce'], 'content-control-widget-editor-nonce' ) ) {
+		if ( isset( $_POST['content-control-widget-editor-nonce'] ) && wp_verify_nonce( wp_unslash( sanitize_key( $_POST['content-control-widget-editor-nonce'] ) ), 'content-control-widget-editor-nonce' ) ) {
 			$new_instance            = parse_widget_options( $new_instance );
 			$instance['which_users'] = $new_instance['which_users'];
 			$instance['roles']       = $new_instance['roles'];
@@ -118,6 +121,7 @@ class WidgetEditor extends Controller {
 				unset( $instance['roles'] );
 			}
 		} else {
+			// Failed validation, use old instance.
 			$old_instance            = parse_widget_options( $old_instance );
 			$instance['which_users'] = $old_instance['which_users'];
 

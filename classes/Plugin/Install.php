@@ -24,6 +24,8 @@ class Install {
 	 * Activation wrapper.
 	 *
 	 * @param bool $network_wide Weather to activate network wide.
+	 *
+	 * @return void
 	 */
 	public static function activate_plugin( $network_wide ) {
 		self::do_multisite( $network_wide, [ __CLASS__, 'activate_site' ] );
@@ -33,6 +35,8 @@ class Install {
 	 * Deactivation wrapper.
 	 *
 	 * @param bool $network_wide Weather to deactivate network wide.
+	 *
+	 * @return void
 	 */
 	public static function deactivate_plugin( $network_wide ) {
 		self::do_multisite( $network_wide, [ __CLASS__, 'deactivate_site' ] );
@@ -40,6 +44,8 @@ class Install {
 
 	/**
 	 * Uninstall the plugin.
+	 *
+	 * @return void
 	 */
 	public static function uninstall_plugin() {
 		self::do_multisite( true, [ __CLASS__, 'uninstall_site' ] );
@@ -48,9 +54,11 @@ class Install {
 	/**
 	 * Handle single & multisite processes.
 	 *
-	 * @param bool     $network_wide Weather to do it network wide.
-	 * @param callable $method Callable method for each site.
-	 * @param array    $args Array of extra args.
+	 * @param bool                $network_wide Weather to do it network wide.
+	 * @param callable            $method Callable method for each site.
+	 * @param array<string,mixed> $args Array of extra args.
+	 *
+	 * @return void
 	 */
 	private static function do_multisite( $network_wide, $method, $args = [] ) {
 		global $wpdb;
@@ -88,6 +96,8 @@ class Install {
 
 	/**
 	 * Activate on single site.
+	 *
+	 * @return void
 	 */
 	public static function activate_site() {
 		// Add a temporary option that will fire a hookable action on next load.
@@ -109,12 +119,16 @@ class Install {
 
 	/**
 	 * Deactivate on single site.
+	 *
+	 * @return void
 	 */
 	public static function deactivate_site() {
 	}
 
 	/**
 	 * Uninstall single site.
+	 *
+	 * @return void
 	 */
 	public static function uninstall_site() {
 	}

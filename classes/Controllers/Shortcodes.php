@@ -31,8 +31,8 @@ class Shortcodes extends Controller {
 	/**
 	 * Process the [content_control] shortcode.
 	 *
-	 * @param array  $atts Array or shortcode attributes.
-	 * @param string $content Content inside shortcode.
+	 * @param array<string,string|int|null> $atts Array or shortcode attributes.
+	 * @param string                        $content Content inside shortcode.
 	 *
 	 * @return string
 	 */
@@ -72,11 +72,8 @@ class Shortcodes extends Controller {
 			$match_type = 'match';
 		}
 
-		$classes = $atts['class'];
-
-		if ( ! is_array( $classes ) ) {
-			$classes = ! empty( $classes ) ? explode( ' ', $classes ) : [];
-		}
+		// Convert classes to array.
+		$classes = ! empty( $atts['class'] ) ? explode( ' ', $atts['class'] ) : [];
 
 		$classes[] = 'content-control-container';
 		// @deprecated 2.0.0
@@ -104,9 +101,9 @@ class Shortcodes extends Controller {
 	 *
 	 * These are typically valueless boolean attributes.
 	 *
-	 * @param array $atts Array of shortcode attributes.
+	 * @param array<string|int,string|int|null> $atts Array of shortcode attributes.
 	 *
-	 * @return mixed
+	 * @return array<string,string|int|bool|null>
 	 */
 	public function normalize_empty_atts( $atts = [] ) {
 		if ( ! is_array( $atts ) ) {

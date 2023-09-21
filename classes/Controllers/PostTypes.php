@@ -61,14 +61,13 @@ class PostTypes extends Controller {
 			'can_export'          => true,
 			'rewrite'             => false,
 			'query_var'           => false,
-			'supports'            => [ 'title' ],
+			'supports'            => [ 'title', 'excerpt' ],
 			'show_in_graphql'     => false,
 			'capabilities'        => [
 				'create_posts' => $this->container->get_permission( 'edit_restrictions' ),
 				'edit_posts'   => $this->container->get_permission( 'edit_restrictions' ),
 				'delete_posts' => $this->container->get_permission( 'edit_restrictions' ),
 			],
-
 		];
 
 		register_post_type( 'cc_restriction', $args );
@@ -111,7 +110,7 @@ class PostTypes extends Controller {
 
 		register_rest_field( 'cc_restriction', 'description', [
 			'get_callback'    => function ( $obj ) {
-				return get_the_excerpt( $obj['id'] );
+				return $obj['excerpt']['raw'];
 			},
 			'update_callback' => function ( $value, $obj ) {
 				wp_update_post( [
@@ -182,9 +181,9 @@ class PostTypes extends Controller {
 	/**
 	 * Add data version meta to new restrictions.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 * @param bool     $update  Whether this is an existing post being updated or not.
 	 *
 	 * @return void
 	 */
@@ -199,9 +198,9 @@ class PostTypes extends Controller {
 	/**
 	 * Prevent access to restrictions endpoint.
 	 *
-	 * @param mixed           $result Response to replace the requested version with.
-	 * @param WP_REST_Server  $server Server instance.
-	 * @param WP_REST_Request $request  Request used to generate the response.
+	 * @param mixed                                 $result Response to replace the requested version with.
+	 * @param \WP_REST_Server                       $server Server instance.
+	 * @param \WP_REST_Request<array<string,mixed>> $request  Request used to generate the response.
 	 * @return mixed
 	 */
 	public function rest_pre_dispatch( $result, $server, $request ) {

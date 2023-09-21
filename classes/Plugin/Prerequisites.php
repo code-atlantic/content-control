@@ -19,28 +19,28 @@ class Prerequisites {
 	/**
 	 * Cache accessible across instances.
 	 *
-	 * @var array
+	 * @var array<string,array<string,mixed>>
 	 */
 	public static $cache = [];
 
 	/**
 	 * Array of checks to perform.
 	 *
-	 * @var array
+	 * @var array{type:string,version:string}[]
 	 */
 	protected $checks = [];
 
 	/**
 	 * Array of detected failures.
 	 *
-	 * @var array
+	 * @var array{type:string,version:string}[]
 	 */
 	protected $failures = [];
 
 	/**
 	 * Instantiate prerequisite checker.
 	 *
-	 * @param array $requirements Array of requirements.
+	 * @param array{type:string,version:string}[] $requirements Array of requirements.
 	 */
 	public function __construct( $requirements = [] ) {
 		foreach ( $requirements as $arguments ) {
@@ -111,6 +111,8 @@ class Prerequisites {
 
 	/**
 	 * Render notices when appropriate.
+	 *
+	 * @return void
 	 */
 	public function setup_notices() {
 		add_action( 'admin_notices', [ $this, 'render_notices' ] );
@@ -119,7 +121,7 @@ class Prerequisites {
 	/**
 	 * Handle individual checks by mapping them to methods.
 	 *
-	 * @param array $check Requirement check arguments.
+	 * @param array{type:string,version:string} $check Requirement check arguments.
 	 *
 	 * @return bool
 	 */
@@ -130,7 +132,9 @@ class Prerequisites {
 	/**
 	 * Report failure notice to the queue.
 	 *
-	 * @param array $check_args Array of check arguments.
+	 * @param array{type:string,version:string} $check_args Array of check arguments.
+	 *
+	 * @return void
 	 */
 	public function report_failure( $check_args ) {
 		$this->failures[] = $check_args;
@@ -139,7 +143,7 @@ class Prerequisites {
 	/**
 	 * Get a list of failures.
 	 *
-	 * @return array
+	 * @return array{type:string,version:string}[]
 	 */
 	public function get_failures() {
 		return $this->failures;
@@ -148,7 +152,7 @@ class Prerequisites {
 	/**
 	 * Check PHP version against args.
 	 *
-	 * @param array $check_args Array of args.
+	 * @param array{type:string,version:string} $check_args Array of args.
 	 *
 	 * @return bool
 	 */
@@ -165,7 +169,7 @@ class Prerequisites {
 	/**
 	 * Check PHP version against args.
 	 *
-	 * @param array $check_args Array of args.
+	 * @param array{type:string,version:string} $check_args Array of args.
 	 *
 	 * @return bool
 	 */
@@ -183,7 +187,7 @@ class Prerequisites {
 	/**
 	 * Check plugin requirements.
 	 *
-	 * @param array $check_args Array of args.
+	 * @param array{type:string,version:string,name:string,slug:string,version:string,check_installed:bool,dep_label:string} $check_args Array of args.
 	 *
 	 * @return bool
 	 */
@@ -202,7 +206,7 @@ class Prerequisites {
 		 */
 		if ( true === $active ) {
 			// If required version is set & plugin is active, check that first.
-			if ( isset( $check_args['version'] ) ) {
+			if ( ! empty( $check_args['version'] ) ) {
 				$version = $this->get_plugin_data( $check_args['slug'], 'Version' );
 
 				// If its higher than the required version, we can bail now > true.
@@ -298,7 +302,7 @@ class Prerequisites {
 	/**
 	 * Get php error message.
 	 *
-	 * @param array $failed_check_args Check arguments.
+	 * @param array{type:string,version:string} $failed_check_args Check arguments.
 	 *
 	 * @return string
 	 */
@@ -314,7 +318,7 @@ class Prerequisites {
 	/**
 	 * Get wp error message.
 	 *
-	 * @param array $failed_check_args Check arguments.
+	 * @param array{type:string,version:string} $failed_check_args Check arguments.
 	 *
 	 * @return string
 	 */
@@ -331,7 +335,7 @@ class Prerequisites {
 	/**
 	 * Get plugin error message.
 	 *
-	 * @param array $failed_check_args Get helpful error message.
+	 * @param array{type:string,version:string,name:string,slug:string,version:string,check_installed:bool,dep_label:string,not_activated?:bool|null,not_updated?:bool|null} $failed_check_args Get helpful error message.
 	 *
 	 * @return string
 	 */

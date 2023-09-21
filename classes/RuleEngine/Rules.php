@@ -7,6 +7,10 @@
 
 namespace ContentControl\RuleEngine;
 
+defined( 'ABSPATH' ) || exit;
+
+use ContentControl\Models\RuleEngine\Rule;
+
 /**
  * Rules registry
  */
@@ -15,7 +19,7 @@ class Rules {
 	/**
 	 * Array of rules.
 	 *
-	 * @var array
+	 * @var array<string,array<string,mixed>>
 	 */
 	private $data = [];
 
@@ -38,6 +42,7 @@ class Rules {
 		}
 
 		$this->current_rule = $rule;
+		return $rule;
 	}
 
 	/**
@@ -56,7 +61,7 @@ class Rules {
 	/**
 	 * Register new rule type.
 	 *
-	 * @param array $rule New rule to register.
+	 * @param array<string,mixed> $rule New rule to register.
 	 * @return void
 	 */
 	public function register_rule( $rule ) {
@@ -85,17 +90,17 @@ class Rules {
 	/**
 	 * Check if rule is valid.
 	 *
-	 * @param array $rule Rule to test.
+	 * @param array<string,mixed> $rule Rule to test.
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
-		return ! empty( $rule ) && true;
+		return ! empty( $rule );
 	}
 
 	/**
 	 * Get array of all registered rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_rules() {
 		if ( ! did_action( 'content_control/rule_engine/register_rules' ) ) {
@@ -109,7 +114,7 @@ class Rules {
 	 * Get a rule definition by name.
 	 *
 	 * @param string $rule_name Rule definition or null.
-	 * @return array|null
+	 * @return array<string,mixed>|null
 	 */
 	public function get_rule( $rule_name ) {
 		$rules = $this->get_rules();
@@ -119,7 +124,7 @@ class Rules {
 	/**
 	 * Get array of registered rules filtered for the block-editor.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_block_editor_rules() {
 		$rules = $this->get_rules();
@@ -137,7 +142,7 @@ class Rules {
 	/**
 	 * Get list of verbs.
 	 *
-	 * @return array List of verbs with translatable text.
+	 * @return array<string,string> List of verbs with translatable text.
 	 */
 	public function get_verbs() {
 		return [
@@ -175,9 +180,9 @@ class Rules {
 		/**
 		 * Allow registering additional rules quickly.
 		 *
-		 * @param array $rules Rules.
+		 * @param array<string,array<string,mixed>> $rules Rules.
 		 *
-		 * @return array
+		 * @return array<string,array<string,mixed>>
 		 */
 		$rules = apply_filters( 'content_control/rule_engine/rules', $rules );
 
@@ -188,7 +193,7 @@ class Rules {
 		/**
 		 * Allow manipulating registered rules.
 		 *
-		 * @param Rules $this Rules instance.
+		 * @param Rules $rules Rules instance.
 		 *
 		 * @return void
 		 */
@@ -198,7 +203,7 @@ class Rules {
 	/**
 	 * Get a list of user rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_user_rules() {
 		$verbs = $this->get_verbs();
@@ -235,7 +240,7 @@ class Rules {
 	/**
 	 * Get a list of general content rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_general_content_rules() {
 		$rules = [];
@@ -297,7 +302,7 @@ class Rules {
 	/**
 	 * Get a list of WP post type rules.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_post_type_rules() {
 		$verbs = $this->get_verbs();
@@ -305,8 +310,9 @@ class Rules {
 		$rules      = [];
 		$post_types = get_post_types( [ 'public' => true ], 'objects' );
 
-		foreach ( $post_types as $name => $post_type ) {
+		foreach ( $post_types as  $post_type ) {
 			$type_rules = [];
+			$name       = $post_type->name;
 
 			if ( $post_type->has_archive || 'post' === $name ) {
 				$type_rules[ "content_is_{$name}_archive" ] = [
@@ -432,28 +438,40 @@ class Rules {
 	 *
 	 * @param string $name Post type name.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_post_type_tax_rules( $name ) {
 		$verbs = $this->get_verbs();
 
-		$post_type  = get_post_type_object( $name );
+		$post_type = get_post_type_object( $name );
+		/**
+		 * Taxnomies array.
+		 *
+		 * @var \WP_Taxonomy[]
+		 */
 		$taxonomies = get_object_taxonomies( $name, 'object' );
 		$rules      = [];
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
 			$rules[ "content_is_{$name}_with_{$tax_name}" ] = [
 				'name'     => "content_is_{$name}_with_{$tax_name}",
-				/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
-				'label'    => sprintf( _x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ), $post_type->labels->singular_name, $taxonomy->labels->singular_name ),
+				'label'    => sprintf(
+					/* translators: %1$s: Post type singular name, %2$s: Taxonomy singular name */
+					_x( 'A %1$s with %2$s', 'condition: post type plural and taxonomy singular label ie. A Post With Category', 'content-control' ),
+					$post_type->labels->singular_name,
+					$taxonomy->labels->singular_name
+				),
 				'context'  => [ 'content', "posttype:{$name}", "taxonomy:{$tax_name}" ],
 				'category' => __( 'Content', 'content-control' ),
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'fields'   => [
 					'selected' => [
-						/* translators: %s: Taxonomy singular name */
-						'placeholder' => sprintf( _x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'placeholder' => sprintf(
+							/* translators: %s: Taxonomy singular name */
+							_x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ),
+							strtolower( $taxonomy->labels->name )
+						),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
@@ -473,7 +491,7 @@ class Rules {
 	/**
 	 * Generates conditions for all public taxonomies.
 	 *
-	 * @return array
+	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_taxonomy_rules() {
 		$rules      = [];
@@ -536,7 +554,7 @@ class Rules {
 	/**
 	 * Get an array of rule default values.
 	 *
-	 * @return array Array of rule default values.
+	 * @return array<string,mixed> Array of rule default values.
 	 */
 	public function get_rule_defaults() {
 		$verbs = $this->get_verbs();
@@ -583,8 +601,8 @@ class Rules {
 	/**
 	 * Parse rules that are still registered using the older deprecated methods.
 	 *
-	 * @param array $old_rules Array of old rules to manipulate.
-	 * @return array
+	 * @param array<string,mixed> $old_rules Array of old rules to manipulate.
+	 * @return array<string,mixed>
 	 */
 	public function parse_old_rules( $old_rules ) {
 		$new_rules = [];
@@ -599,8 +617,8 @@ class Rules {
 	/**
 	 * Remaps keys & values from an old `condition` into a new `rule`.
 	 *
-	 * @param array $old_rule Old rule definition.
-	 * @return array New rule definition.
+	 * @param array<string,mixed> $old_rule Old rule definition.
+	 * @return array<string,mixed> New rule definition.
 	 */
 	public function remap_old_rule( $old_rule ) {
 		$old_rule = wp_parse_args( $old_rule, $this->get_old_rule_defaults() );
@@ -633,7 +651,7 @@ class Rules {
 	/**
 	 * Get an array of old rule default values.
 	 *
-	 * @return array Array of old rule default values.
+	 * @return array<string,mixed> Array of old rule default values.
 	 */
 	private function get_old_rule_defaults() {
 		return [

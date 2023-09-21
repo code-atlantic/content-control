@@ -8,7 +8,7 @@
 
 namespace ContentControl\RestAPI;
 
-use WP_Rest_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
+use WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 use function ContentControl\get_block_types;
 use function ContentControl\sanitize_block_type;
 use function ContentControl\update_block_types;
@@ -36,6 +36,8 @@ class BlockTypes extends WP_REST_Controller {
 
 	/**
 	 * Register API endpoint routes.
+	 *
+	 * @return void
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -51,7 +53,7 @@ class BlockTypes extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'update_block_types' ],
 					'permission_callback' => [ $this, 'update_block_types_permissions' ],
-					'args'                => $this->get_endpoint_args_for_item_schema( true ),
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
 				],
 				'schema' => [ $this, 'get_schema' ],
 			]
@@ -76,12 +78,18 @@ class BlockTypes extends WP_REST_Controller {
 	/**
 	 * Update plugin settings.
 	 *
-	 * @param WP_REST_Request $request Request object.
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
-	 * @return WP_Error|WP_REST_Response
+	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_block_types( $request ) {
 		// Get request json params.
+
+		/**
+		 * Block types.
+		 *
+		 * @var array<int,array<string,string|string[]>> $block_types
+		 */
 		$block_types = $request->get_json_params();
 
 		$error_message = __( 'Something went wrong, the block types could not be updated.', 'content-control' );
@@ -90,12 +98,12 @@ class BlockTypes extends WP_REST_Controller {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
 
-		// Add or update incoming block types into the array.
-		foreach ( $block_types as $type ) {
+		foreach ( $block_types as $key => $type ) {
 			// Sanitize each new block type.
-			$block_types[ sanitize_key( $type['name'] ) ] = sanitize_block_type( $type );
+			$block_types[ $key ] = sanitize_block_type( $type );
 		}
 
+		// Add or update incoming block types into the array.
 		update_block_types( $block_types );
 
 		$new_block_types = get_block_types();
@@ -119,7 +127,7 @@ class BlockTypes extends WP_REST_Controller {
 	/**
 	 * Get settings schema.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function get_schema() {
 		if ( $this->schema ) {

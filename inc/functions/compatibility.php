@@ -36,6 +36,8 @@ function is_func_disabled( $func ) {
  *
  * @returns boolean
  * @author matzeeable
+ *
+ * @return bool
  */
 function is_rest() {
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
@@ -45,17 +47,23 @@ function is_rest() {
 			return true;
 	}
 
-	// (#3)
-	global $wp_rewrite;
-	if ( null === $wp_rewrite ) {
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$wp_rewrite = new \WP_Rewrite();
-	}
-
 	// (#4)
 	$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
 	$current_url = wp_parse_url( add_query_arg( [] ) );
-	return strpos( $current_url['path'] ? $current_url['path'] : '/', $rest_url['path'], 0 ) === 0;
+
+	if ( ! $rest_url || ! $current_url ) {
+		return false;
+	}
+
+	$current_path = isset( $current_url['path'] ) ? $current_url['path'] : false;
+	$rest_path    = isset( $rest_url['path'] ) ? $rest_url['path'] : false;
+
+	// If one of the URLs failed to parse, then the current request isn't a REST request.
+	if ( ! $current_path || ! $rest_path ) {
+		return false;
+	}
+
+	return strpos( $current_path, $rest_path, 0 ) === 0;
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 }
 
@@ -83,11 +91,6 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
-	/**
-	 * WP Query.
-	 *
-	 * @var \WP_Query $query
-	 */
 	$query = get_query();
 
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
@@ -97,11 +100,11 @@ function is_frontend() {
 		is_cron() ||
 		is_ajax() ||
 		is_admin() ||
-		$query->is_admin() ||
-		$query->is_favicon() ||
-		strpos( $request_uri, 'favicon.ico' ) ||
-		$query->is_robots() ||
-		strpos( $request_uri, 'robots.txt' )
+		( $query && $query->is_admin ) ||
+		( $query && $query->is_favicon() ) ||
+		strpos( $request_uri, 'favicon.ico' ) !== false ||
+		( $query && $query->is_robots() ) ||
+		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;
 	}
@@ -126,9 +129,9 @@ function camel_case_to_snake_case( $str ) {
  *
  * Gets rid of Closure and other invalid data types.
  *
- * @param array $arr Array to clean.
+ * @param array<mixed> $arr Array to clean.
  *
- * @return array Cleaned array.
+ * @return array<mixed> Cleaned array.
  */
 function deep_clean_array( $arr ) {
 	// Clean \Closure values deeply.

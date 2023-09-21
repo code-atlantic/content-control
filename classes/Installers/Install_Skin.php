@@ -23,11 +23,13 @@ class Install_Skin extends PluginSilentUpgraderSkin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param array $errors Array of errors with the install process.
+	 * @param string|\WP_Error $errors Array of errors with the install process.
 	 */
 	public function error( $errors ) {
 		if ( ! empty( $errors ) ) {
-			wp_send_json_error( $errors );
+			return wp_send_json_error( $errors );
 		}
+
+		return $errors;
 	}
 }

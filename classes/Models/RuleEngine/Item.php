@@ -27,7 +27,7 @@ abstract class Item {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array
+	 * @return array<mixed>
 	 */
 	abstract public function get_check_info();
 }

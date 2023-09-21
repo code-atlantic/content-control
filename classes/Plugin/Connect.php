@@ -20,9 +20,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Connect {
 
-	const API_URL    = 'https://upgrade.contentcontrolplugin.com/';
-	const DEBUG_MODE = false;
-
+	const API_URL           = 'https://upgrade.contentcontrolplugin.com/';
 	const TOKEN_OPTION_NAME = 'content_control_connect_token';
 	const NONCE_OPTION_NAME = 'content_control_connect_nonce';
 
@@ -50,12 +48,21 @@ class Connect {
 	}
 
 	/**
+	 * Check if debug mode is enabled.
+	 *
+	 * @return bool
+	 */
+	public function debug_mode_enabled() {
+		return defined( '\WP_DEBUG' ) && \WP_DEBUG;
+	}
+
+	/**
 	 * Generate a new authorizatin token.
 	 *
 	 * @return string
 	 */
 	public function generate_token() {
-		$token = hash( 'sha512', wp_rand() );
+		$token = hash( 'sha512', (string) wp_rand() );
 
 		\update_option( self::TOKEN_OPTION_NAME, $token );
 
@@ -89,9 +96,11 @@ class Connect {
 	 *
 	 * @param string $message Message.
 	 * @param string $type    Type.
+	 *
+	 * @return void
 	 */
 	public function debug_log( $message, $type = 'INFO' ) {
-		if ( self::DEBUG_MODE ) {
+		if ( $this->debug_mode_enabled() ) {
 			plugin( 'logging' )->log( "Plugin\Connect.$type: $message" );
 		}
 	}
@@ -157,7 +166,7 @@ class Connect {
 	 *
 	 * @param string $license_key License key.
 	 *
-	 * @return string
+	 * @return array{url:string,back_url:string}
 	 */
 	public function get_connect_info( $license_key ) {
 		$token    = $this->generate_token();
@@ -206,13 +215,23 @@ class Connect {
 	/**
 	 * Kill the connection with no permission.
 	 *
-	 * @param int    $error_no Error number.
-	 * @param string $message Error message.
+	 * @param int          $error_no Error number.
+	 * @param string|false $message Error message.
+	 *
+	 * @return void
 	 */
 	public function kill_connection( $error_no = self::ERROR_REFERRER, $message = false ) {
 		$this->debug_log( "Killing connection with error ($error_no) message: " . $message, 'ERROR' );
 
-		wp_die( esc_html( self::DEBUG_MODE && $message ? $message : __( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' ) ), esc_attr( $error_no ), [ 'response' => 403 ] );
+		wp_die(
+			esc_html(
+				$this->debug_mode_enabled() && $message ?
+					$message :
+						__( 'Sorry, You Are Not Allowed to Access This Page.', 'content-control' )
+			),
+			esc_attr( (string) $error_no ),
+			[ 'response' => 403 ]
+		);
 	}
 
 	/**
@@ -261,6 +280,8 @@ class Connect {
 	 * Verify the nonce.
 	 *
 	 * @deprecated 2.0.0 Don't use, it doesn't work as its a separate server making request.
+	 *
+	 * @return void
 	 */
 	public function verify_nonce() {
 		$token = $this->get_access_token();
@@ -301,8 +322,8 @@ class Connect {
 	/**
 	 * Generate signature hash.
 	 *
-	 * @param array|string $data Data to hash.
-	 * @param string       $token Token to hash with.
+	 * @param array<string,mixed>|string $data Data to hash.
+	 * @param string                     $token Token to hash with.
 	 * @return string
 	 */
 	public function generate_hash( $data, $token ) {
@@ -387,7 +408,7 @@ class Connect {
 	/**
 	 * Get the webhook args.
 	 *
-	 * @return array
+	 * @return array{file:string,type:string,slug:string,force:boolean}
 	 */
 	public function get_webhook_args() {
 		$args = [
@@ -407,7 +428,7 @@ class Connect {
 	/**
 	 * Verify and return webhook args.
 	 *
-	 * @param array $args The webhook args.
+	 * @param array{file:string,type:string,slug:string,force:bool} $args The webhook args.
 	 *
 	 * @return void
 	 */
@@ -441,7 +462,7 @@ class Connect {
 		$args = $this->get_webhook_args();
 
 		// 3. Delete the token to prevent abuse.
-		if ( ! self::DEBUG_MODE ) {
+		if ( ! $this->debug_mode_enabled() ) {
 			$this->debug_log( 'Deleting token', 'DEBUG' );
 			\delete_option( self::TOKEN_OPTION_NAME );
 		}
@@ -465,7 +486,7 @@ class Connect {
 	/**
 	 * Install a plugin.
 	 *
-	 * @param array $args The file args.
+	 * @param array{file:string,type:string,slug:string,force:bool} $args The file args.
 	 * @return void
 	 */
 	public function install_plugin( $args ) {

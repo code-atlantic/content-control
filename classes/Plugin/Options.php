@@ -33,7 +33,7 @@ class Options {
 	/**
 	 * Keeps static copy of the options during runtime.
 	 *
-	 * @var null|array
+	 * @var null|array<string,mixed>
 	 */
 	private $data;
 
@@ -54,7 +54,7 @@ class Options {
 	 *
 	 * Retrieves all plugin settings
 	 *
-	 * @return array settings
+	 * @return array<string,mixed> settings
 	 */
 	public function get_all() {
 		$settings = \get_option( $this->prefix . 'settings' );
@@ -92,6 +92,7 @@ class Options {
 		 *
 		 * @param mixed $value Option value.
 		 * @param string $key Option key.
+		 * @param mixed $default_value Default value.
 		 *
 		 * @return mixed
 		 */
@@ -176,7 +177,7 @@ class Options {
 	/**
 	 * Update many values at once.
 	 *
-	 * @param array $new_options Array of new replacement options.
+	 * @param array<string,mixed> $new_options Array of new replacement options.
 	 *
 	 * @return bool
 	 */
@@ -257,7 +258,7 @@ class Options {
 	/**
 	 * Remaps option keys.
 	 *
-	 * @param array $remap_array an array of $old_key => $new_key values.
+	 * @param array<string,string> $remap_array an array of $old_key => $new_key values.
 	 *
 	 * @return bool
 	 */

@@ -91,8 +91,8 @@ class PostContent extends Controller {
 	/**
 	 * Filter post excerpt when needed.
 	 *
-	 * @param string  $post_excerpt The post excerpt.
-	 * @param WP_Post $post         Post object.
+	 * @param string   $post_excerpt The post excerpt.
+	 * @param \WP_Post $post         Post object.
 	 *
 	 * @return string
 	 */

@@ -82,8 +82,6 @@ function content_is_home_page() {
 
 			return (int) $page_id === (int) $post->ID;
 	}
-
-	return false;
 }
 
 /**
@@ -113,8 +111,6 @@ function content_is_blog_index() {
 
 			return (int) $page_for_posts === (int) $post->ID;
 	}
-
-	return false;
 }
 
 /**
@@ -161,8 +157,6 @@ function content_is_post_type() {
 		case 'blocks':
 			return is_post_type( $post_type );
 	}
-
-	return false;
 }
 
 /**
@@ -195,8 +189,6 @@ function content_is_selected_post() {
 		case 'blocks':
 			return is_post_type( $post_type ) && in_array( $post->ID, $selected, true );
 	}
-
-	return false;
 }
 
 /**
@@ -402,8 +394,6 @@ function content_is_post_with_tax_term() {
 		default:
 			return \has_term( $selected, $taxonomy, $post_id );
 	}
-
-	return false;
 }
 
 /**
@@ -427,8 +417,6 @@ function content_is_taxonomy_archive() {
 		default:
 			return $main_query->is_tax( $taxonomy );
 	}
-
-	return false;
 }
 
 /**
@@ -455,6 +443,4 @@ function content_is_selected_term() {
 		default:
 			return $main_query->is_tax( $taxonomy, $selected );
 	}
-
-	return false;
 }

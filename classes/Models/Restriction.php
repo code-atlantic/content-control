@@ -51,14 +51,14 @@ class Restriction {
 	/**
 	 * Restriction description.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $description;
 
 	/**
 	 * Restriction Message.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	public $message;
 
@@ -200,7 +200,7 @@ class Restriction {
 	/**
 	 * Restriction Settings: Conditions.
 	 *
-	 * @var array
+	 * @var array{logicalOperator:string,items:array<array<string,mixed>>}
 	 */
 	public $conditions;
 
@@ -214,7 +214,7 @@ class Restriction {
 	/**
 	 * Build a restriction.
 	 *
-	 * @param \WP_Post $restriction Restriction data.
+	 * @param \WP_Post|array<string,mixed> $restriction Restriction data.
 	 */
 	public function __construct( $restriction ) {
 		if ( ! is_a( $restriction, '\WP_Post' ) ) {
@@ -260,7 +260,9 @@ class Restriction {
 	/**
 	 * Map old v1 restriction to new v2 restriction object.
 	 *
-	 * @param array $restriction Restriction data.
+	 * @param array<string,mixed> $restriction Restriction data.
+	 *
+	 * @return void
 	 */
 	public function setup_v1_restriction( $restriction ) {
 		static $index = 0;
@@ -415,7 +417,7 @@ class Restriction {
 	/**
 	 * Convert this restriction to an array.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function to_array() {
 		return [
@@ -451,7 +453,7 @@ class Restriction {
 	/**
 	 * Convert this restriction to a v1 array.
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function to_v1_array() {
 		return [

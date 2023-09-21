@@ -35,7 +35,7 @@ class Rule extends Item {
 	/**
 	 * Rule options.
 	 *
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	public $options;
 
@@ -51,7 +51,7 @@ class Rule extends Item {
 	 *
 	 * Such as post type or taxnomy like meta.
 	 *
-	 * @var array
+	 * @var array<string,mixed>
 	 */
 	public $extras = [];
 
@@ -65,7 +65,7 @@ class Rule extends Item {
 	/**
 	 * Rule definition.
 	 *
-	 * @var array
+	 * @var array<string,mixed>|null
 	 */
 	public $definition;
 
@@ -79,7 +79,7 @@ class Rule extends Item {
 	/**
 	 * Build a rule.
 	 *
-	 * @param array $rule Rule data.
+	 * @param array{id:string,name:string,notOperand:bool,options:array<string,mixed>,extras:array<string,mixed>} $rule Rule data.
 	 */
 	public function __construct( $rule ) {
 		$rule = wp_parse_args( $rule, [
@@ -100,7 +100,7 @@ class Rule extends Item {
 
 		if ( ! $this->definition ) {
 			/* translators: 1. Rule name. */
-			plugin( 'logging' )->log( 'ERROR: ' . sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
+			plugin( 'logging' )->log_unique( 'ERROR: ' . sprintf( __( 'Rule `%s` not found.', 'content-control' ), $name ) );
 		}
 
 		$extras = isset( $this->definition['extras'] ) ? $this->definition['extras'] : [];
@@ -116,8 +116,8 @@ class Rule extends Item {
 	/**
 	 * Parse rule options based on rule definitions.
 	 *
-	 * @param array $options Array of rule opions.
-	 * @return array
+	 * @param array<string,mixed> $options Array of rule opions.
+	 * @return array<string,mixed>
 	 */
 	public function parse_options( $options = [] ) {
 		return $options;
@@ -148,13 +148,13 @@ class Rule extends Item {
 
 		if ( ! $callback ) {
 			/* translators: 1. Rule name. */
-			plugin( 'logging' )->log( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) ) );
+			plugin( 'logging' )->log_unique( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%s` has no callback.', 'content-control' ), $this->name ) ) );
 			return false;
 		}
 
 		if ( ! is_callable( $callback ) ) {
 			/* translators: 1. Rule name. 2. Callback name. */
-			plugin( 'logging' )->log( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) ) );
+			plugin( 'logging' )->log_unique( 'ERROR: ' . esc_html( sprintf( __( 'Rule `%1$s` callback is not callable (%2$s).', 'content-control' ), $this->name, $callback ) ) );
 			return false;
 		}
 
@@ -211,7 +211,7 @@ class Rule extends Item {
 	 *
 	 * Useful for debugging.
 	 *
-	 * @return array|null
+	 * @return array<string,mixed>|null
 	 */
 	public function get_check_info() {
 		if ( $this->is_js_rule() ) {

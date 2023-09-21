@@ -33,8 +33,8 @@ class Handler {
 	/**
 	 * Build a list of sets.
 	 *
-	 * @param array  $sets Set data.
-	 * @param string $any_all_none Whether require `any`|`all`|`none` sets to pass checks.
+	 * @param array{id:string,label:string,query:array<mixed>}[] $sets Set data.
+	 * @param string                                             $any_all_none Whether require `any`|`all`|`none` sets to pass checks.
 	 */
 	public function __construct( $sets, $any_all_none = 'all' ) {
 		$this->any_all_none = $any_all_none;

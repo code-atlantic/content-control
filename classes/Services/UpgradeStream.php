@@ -21,7 +21,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Upgrade status.
 	 *
-	 * @var array
+	 * @var array{total:int,progress:int,currentTask:null|array{name:string,total:int,progress:int}}|null
 	 */
 	public $status = [
 		'total'       => 0,
@@ -32,9 +32,11 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Update the status of the upgrade.
 	 *
-	 * @param array $status Status to update.
+	 * @param array{total?:int|null,progress?:int|null,curentTask?:string|null} $status Status to update.
+	 *
+	 * @return void
 	 */
-	public function update_status( $status = [] ) {
+	public function update_status( $status ) {
 		$defaults = [
 			'total'       => 0,
 			'progress'    => 0,
@@ -54,9 +56,11 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	/**
 	 * Update the status of the current task.
 	 *
-	 * @param array|null $task_status Status to update.
+	 * @param array{total?:int,progress?:int,curentTask?:string}|null $task_status Status to update.
+	 *
+	 * @return void
 	 */
-	public function update_task_status( $task_status = [] ) {
+	public function update_task_status( $task_status ) {
 		$defaults = [
 			'name'     => '',
 			'total'    => 0,
@@ -82,7 +86,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Send an event to the client.
 	 *
 	 * @param string $event Event name.
-	 * @param array  $data Data to send.
+	 * @param mixed  $data Data to send.
 	 *
 	 * @return void
 	 */
@@ -94,7 +98,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 			plugin( 'logging' )->log( $data['message'] );
 		}
 
-		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
+		$data = \wp_json_encode( $data );
 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "event: {$event}" . PHP_EOL;
@@ -110,6 +114,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 *
 	 * @param int    $total Number of upgrades.
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function start_upgrades( $total, $message = null ) {
 		$this->update_status( [
@@ -127,6 +133,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Complete the upgrade process.
 	 *
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function complete_upgrades( $message = null ) {
 		$this->update_status( [
@@ -145,6 +153,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * @param string $name Task name.
 	 * @param int    $task_steps Number of steps in the task.
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function start_task( $name, $task_steps = 1, $message = null ) {
 		$this->update_task_status( [
@@ -162,6 +172,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Update the progress of the current task.
 	 *
 	 * @param int $progress Progress of the task.
+	 *
+	 * @return void
 	 */
 	public function update_task_progress( $progress ) {
 		$this->update_task_status( [
@@ -175,6 +187,8 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 	 * Complete the current task.
 	 *
 	 * @param string $message Message to send.
+	 *
+	 * @return void
 	 */
 	public function complete_task( $message = null ) {
 		$task_status = $this->status['currentTask'];

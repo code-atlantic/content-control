@@ -47,9 +47,9 @@ function get_rule_name() {
 /**
  * Get the current rule options.
  *
- * @param array $defaults Default options.
+ * @param array<string,mixed> $defaults Default options.
  *
- * @return array
+ * @return array<string,mixed>
  */
 function get_rule_options( $defaults = [] ) {
 	$rule = current_rule();
@@ -62,7 +62,7 @@ function get_rule_options( $defaults = [] ) {
 /**
  * Get the current rule extras.
  *
- * @return array
+ * @return array<string,mixed>
  */
 function get_rule_extras() {
 	$rule = current_rule();

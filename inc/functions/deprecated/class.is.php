@@ -22,8 +22,8 @@ class Is {
 	/**
 	 * Check if a content is accessible to current user.
 	 *
-	 * @param string $who logged_in or logged_out.
-	 * @param array  $roles array of roles to check.
+	 * @param string                               $who logged_in or logged_out.
+	 * @param string[]|array<string,string>|string $roles array of roles to check.
 	 *
 	 * @return bool
 	 *
@@ -36,8 +36,8 @@ class Is {
 	/**
 	 * Check if a content is blocked to current user.
 	 *
-	 * @param string $who logged_in or logged_out.
-	 * @param array  $roles array of roles to check.
+	 * @param string                               $who logged_in or logged_out.
+	 * @param string[]|array<string,string>|string $roles array of roles to check.
 	 *
 	 * @return boolean
 	 *

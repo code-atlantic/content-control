@@ -3,7 +3,7 @@
  * Plugin Name: Content Control
  * Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=plugin-uri
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
- * Version: 2.0.6
+ * Version: 2.0.7
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=author-uri
  * Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=donate-link
@@ -23,12 +23,14 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Define plugin's global configuration.
+ *
+ * @return array<string,string|bool>
  */
 function get_plugin_config() {
 	return [
 		'name'          => \__( 'Content Control', 'content-control' ),
 		'slug'          => 'content-control',
-		'version'       => '2.0.6',
+		'version'       => '2.0.7',
 		'option_prefix' => 'content_control',
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
@@ -72,6 +74,8 @@ if ( ! Plugin\Autoloader::init( config( 'name' ), config( 'path' ) ) ) {
 
 /**
  * Check plugin prerequisites.
+ *
+ * @return bool
  */
 function check_prerequisites() {
 

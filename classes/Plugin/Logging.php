@@ -18,16 +18,9 @@ class Logging {
 	const LOG_FILE_PREFIX = 'content-control-';
 
 	/**
-	 * Container.
-	 *
-	 * @var \ContentControl\Base\Container
-	 */
-	private $c;
-
-	/**
 	 * Whether the log file is writable.
 	 *
-	 * @var bool
+	 * @var bool|null
 	 */
 	private $is_writable;
 
@@ -48,25 +41,21 @@ class Logging {
 	/**
 	 * File system API.
 	 *
-	 * @var WP_Filesystem_Base
+	 * @var \WP_Filesystem_Base|null
 	 */
 	private $fs;
 
 	/**
 	 * Log file content.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $content;
 
 	/**
 	 * Initialize logging.
-	 *
-	 * @param \ContentControl\Base\Container $c Container.
 	 */
-	public function __construct( $c ) {
-		$this->c = $c;
-
+	public function __construct() {
 		$this->init();
 
 		$this->register_hooks();
@@ -74,6 +63,8 @@ class Logging {
 
 	/**
 	 * Register hooks.
+	 *
+	 * @return void
 	 */
 	public function register_hooks() {
 		// On shutdown, save the log file.
@@ -83,14 +74,14 @@ class Logging {
 	/**
 	 * Gets the Uploads directory
 	 *
-	 * @return bool|array An associated array with baseurl and basedir or false on failure
+	 * @return bool|array{path: string, url: string, subdir: string, basedir: string, baseurl: string, error: string|false} An associated array with baseurl and basedir or false on failure
 	 */
 	public function get_upload_dir() {
-		if ( defined( '\IS_WPCOM' ) && \IS_WPCOM ) {
-			$wp_upload_dir = wp_get_upload_dir();
-		} else {
-			$wp_upload_dir = wp_upload_dir();
-		}
+		// Used if you only need to fetch data, not create missing folders.
+		$wp_upload_dir = wp_get_upload_dir();
+
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
+		// $wp_upload_dir = wp_upload_dir(); // Disable this on IS_WPCOM if used.
 
 		if ( isset( $wp_upload_dir['error'] ) && false !== $wp_upload_dir['error'] ) {
 			return false;
@@ -127,13 +118,15 @@ class Logging {
 	 * @return bool
 	 */
 	public function enabled() {
-		return ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) || ! CONTENT_CONTROL_DISABLE_LOGGING && $this->is_writable();
+		$disabled = defined( '\CONTENT_CONTROL_DISABLE_LOGGING' ) && true === \CONTENT_CONTROL_DISABLE_LOGGING;
+
+		return ! $disabled && $this->is_writable();
 	}
 
 	/**
 	 * Get working WP Filesystem instance
 	 *
-	 * @return WP_Filesystem_Base|false
+	 * @return \WP_Filesystem_Base|false
 	 */
 	public function fs() {
 		if ( isset( $this->fs ) ) {
@@ -188,6 +181,8 @@ class Logging {
 
 	/**
 	 * Get things started
+	 *
+	 * @return void
 	 */
 	public function init() {
 		$upload_dir  = $this->get_upload_dir();
@@ -199,7 +194,7 @@ class Logging {
 
 		$file_token = \get_option( 'content_control_debug_log_token' );
 		if ( false === $file_token ) {
-			$file_token = uniqid( wp_rand(), true );
+			$file_token = uniqid( (string) wp_rand(), true );
 			\update_option( 'content_control_debug_log_token', $file_token );
 		}
 
@@ -230,7 +225,7 @@ class Logging {
 	/**
 	 * Retrieves the url to the file
 	 *
-	 * @returns string|bool The url to the file or false on failure
+	 * @return string|bool The url to the file or false on failure
 	 */
 	public function get_file_url() {
 		if ( ! $this->enabled() ) {
@@ -269,6 +264,8 @@ class Logging {
 	 * Log message to file
 	 *
 	 * @param string $message The message to log.
+	 *
+	 * @return void
 	 */
 	public function log( $message = '' ) {
 		$this->write_to_log( wp_date( 'Y-n-d H:i:s' ) . ' - ' . $message );
@@ -278,6 +275,8 @@ class Logging {
 	 * Log unique message to file.
 	 *
 	 * @param string $message The unique message to log.
+	 *
+	 * @return void
 	 */
 	public function log_unique( $message = '' ) {
 		$contents = $this->get_log_content();
@@ -346,6 +345,8 @@ class Logging {
 	 * Write the log message
 	 *
 	 * @param string $message The message to write.
+	 *
+	 * @return void
 	 */
 	protected function write_to_log( $message = '' ) {
 		if ( ! $this->enabled() ) {
@@ -364,6 +365,8 @@ class Logging {
 
 	/**
 	 * Save the current contents to file.
+	 *
+	 * @return void
 	 */
 	public function save_logs() {
 		$file_system = $this->fs();
@@ -389,6 +392,8 @@ class Logging {
 
 	/**
 	 * Truncates a log file to maximum of 250 lines.
+	 *
+	 * @return void
 	 */
 	public function truncate_log() {
 		$content           = $this->get_log_content();
@@ -409,6 +414,8 @@ class Logging {
 
 	/**
 	 * Delete the log file.
+	 *
+	 * @return void
 	 */
 	public function clear_log() {
 		$file_system = $this->fs();
@@ -432,6 +439,8 @@ class Logging {
 	 * @param string $func_name Function name.
 	 * @param string $version Versoin deprecated.
 	 * @param string $replacement Replacement function (optional).
+	 *
+	 * @return void
 	 */
 	public function log_deprecated_notice( $func_name, $version, $replacement = null ) {
 		if ( ! is_null( $replacement ) ) {

@@ -42,7 +42,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Run the migration.
 	 *
-	 * @return void|WP_Error|false
+	 * @return void|\WP_Error|false
 	 */
 	public function run() {
 		global $wpdb;
