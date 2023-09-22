@@ -104,16 +104,17 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
  * @return bool True if query can be ignored, false if not.
  */
 function query_can_be_ignored( $query = null ) {
-	$post_types_to_ignore = [
+	if ( $query->get( 'ignore_restrictions', false ) ) {
+		return true;
+	}
+
+	$post_types_to_ignore = apply_filters( 'content_control/post_types_to_ignore', [
 		'cc_restriction',
 		'wp_template',
 		'wp_template_part',
 		'wp_global_styles',
-	];
-
-	if ( $query->get( 'ignore_restrictions', false ) ) {
-		return true;
-	}
+		'oembed_cache',
+	] );
 
 	// Ignore specific core post types.
 	if ( in_array( $query->get( 'post_type' ), $post_types_to_ignore, true ) ) {
