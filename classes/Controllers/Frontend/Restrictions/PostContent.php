@@ -42,6 +42,8 @@ class PostContent extends Controller {
 	/**
 	 * Filter post content when needed.
 	 *
+	 * NOTE: This also serves as the default fallback protection method if all others fail.
+	 *
 	 * @param string $content Content of post being checked.
 	 *
 	 * @return string

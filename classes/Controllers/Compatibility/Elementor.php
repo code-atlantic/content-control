@@ -21,6 +21,7 @@ class Elementor extends Controller {
 	 * @return void
 	 */
 	public function init() {
+		add_filter( 'content_control/post_types_to_ignore', [ $this, 'post_types_to_ignore' ] );
 		add_filter( 'content_control/protection_is_disabled', [ $this, 'protection_is_disabled' ] );
 	}
 
@@ -36,6 +37,21 @@ class Elementor extends Controller {
 		}
 
 		return $protection_is_disabled;
+	}
+
+	/**
+	 * Add Elementor font post type to ignored post types.
+	 *
+	 * @param string[] $post_types Post types to ignore.
+	 * @return string[]
+	 */
+	public function post_types_to_ignore( $post_types ) {
+		$post_types[] = 'elementor_font';
+		$post_types[] = 'elementor_icons';
+		$post_types[] = 'elementor_library';
+		$post_types[] = 'elementor_snippet';
+
+		return $post_types;
 	}
 
 	/**

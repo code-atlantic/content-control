@@ -6,9 +6,9 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 Requires PHP: 5.6
-License: GPLv3 or Any Later Version
+License: GPLv3 (or later)
 
 Unleash your WordPress content's potential! With Content Control, restrict your content, pages, posts, widgets, and even individual blocks with precision, based on user status, roles, device type & more.
 
@@ -80,6 +80,12 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.8 - 09/22/2023 =
+
+- Tweak: Ignore many Elementor queries from being restricted.
+- Fix: Error when required upgrade was marked as complete.
+- Fix: Bug that caused secondary queries to be handled like main queries.
 
 = v2.0.7 - 09/21/2023 =
 

@@ -135,22 +135,27 @@ class Upgrades extends Controller {
 	 */
 	private function sort_upgrades_by_prerequisites( $upgrades ) {
 		// Build the graph of upgrades and their dependencies.
-		$graph           = [];
+		$graph = [];
+		// Build a lookup table of upgrades by name.
 		$upgrade_by_name = [];
+
+		// Build the graph & lookup tables.
 		foreach ( $upgrades as $upgrade ) {
 			$updgrade_name = get_upgrade_name( $upgrade );
 
+			// Add the upgrade to the graph with its dependencies.
 			$graph[ $updgrade_name ] = $upgrade->get_dependencies();
 
+			// Add the upgrade to the lookup table.
 			$upgrade_by_name[ $updgrade_name ] = $upgrade;
 		}
 
 		// Perform a topological sort on the graph.
 		$sorted = $this->topological_sort( $graph );
 
-		// Rebuild the list of upgrades in the sorted order.
-		foreach ( $sorted as $key => $value ) {
-			$sorted[ $key ] = $upgrade_by_name[ $value ];
+		// Map the sorted ugprade list with the upgrade from the lookup table.
+		foreach ( $sorted as $key => $upgrade_name ) {
+			$sorted[ $key ] = isset( $upgrade_by_name[ $upgrade_name ] ) ? $upgrade_by_name[ $upgrade_name ] : null;
 		}
 
 		// Remove null values, these are upgrades that have been marked as done.

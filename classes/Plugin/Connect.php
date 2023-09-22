@@ -16,6 +16,10 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Connection management.
  *
+ * NOTE: For wordpress.org admins: This is not called in the free, hosted version. This is only used if:
+ * - The user explicitly entered a license key.
+ * - This then opens a window to our site allowing the user to authorize the connection & installation of pro.
+ *
  * @package ContentControl
  */
 class Connect {
@@ -322,6 +326,10 @@ class Connect {
 	/**
 	 * Generate signature hash.
 	 *
+	 * This must match the hash generated on the server.
+	 *
+	 * @see \ontentControlUpgrader\App::generate_hash()
+	 *
 	 * @param array<string,mixed>|string $data Data to hash.
 	 * @param string                     $token Token to hash with.
 	 * @return string
@@ -346,6 +354,7 @@ class Connect {
 		// Generate the hash binary.
 		$hash = hash_hmac( 'sha256', $data, $token, true );
 
+		// The only deviation from ServerSide is that we optionally log the hash if debug mode is enabled.
 		$this->debug_log( 'Hash: ' . $hash, 'DEBUG' );
 		$this->debug_log( 'Data: ' . $data, 'DEBUG' );
 

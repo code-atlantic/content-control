@@ -12,7 +12,6 @@ defined( 'ABSPATH' ) || exit;
 use function __;
 use function add_post_meta;
 use function wp_parse_args;
-use function sanitize_url;
 use function wp_insert_post;
 use function ContentControl\remap_conditions_to_query;
 use function ContentControl\get_default_restriction_settings;
@@ -169,7 +168,7 @@ class Restrictions_2 extends \ContentControl\Base\Upgrade {
 			'overrideMessage'  => $restriction['override_default_message'],
 			'customMessage'    => $restriction['custom_message'],
 			'redirectType'     => $restriction['redirect_type'],
-			'redirectUrl'      => esc_url( $restriction['redirect_url'] ),
+			'redirectUrl'      => esc_url_raw( $restriction['redirect_url'] ),
 			'conditions'       => remap_conditions_to_query( $restriction['conditions'] ),
 		], get_default_restriction_settings() );
 

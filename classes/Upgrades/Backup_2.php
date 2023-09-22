@@ -160,12 +160,7 @@ class Backup_2 extends \ContentControl\Base\Upgrade {
 			'post_status'    => 'inherit',
 		];
 
-		/**
-		 * Attachment ID.
-		 *
-		 * @var int|\WP_Error $attach_id
-		 */
-		$attach_id = wp_insert_attachment( $attachment, $file_path );
+		$attach_id = wp_insert_attachment( $attachment, $file_path, 0, true );
 
 		if ( ! is_wp_error( $attach_id ) ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
