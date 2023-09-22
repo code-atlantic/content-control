@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v2.0.8 - 09/22/2023
+
+-   Tweak: Ignore many Elementor queries from being restricted.
+-   Fix: Error when required upgrade was marked as complete.
+-   Fix: Bug that caused secondary queries to be handled like main queries.
+
 ## v2.0.7 - 09/21/2023
 
 -   Tweak: Only log each unique plugin debug notice once to prevent filling log files quickly.
