@@ -10,7 +10,13 @@ namespace ContentControl\Plugin;
 use ContentControl\Base\Container;
 
 /**
- * Undocumented class
+ * Upgrader class.
+ *
+ * NOTE: For wordpress.org admins: This is only used if:
+ * - The user explicitly entered a license key.
+ * - They further opened a window to our site allowing the user to authorize the connection & installation of the pro upgrade.
+ *
+ * @package ContentControl
  */
 class Upgrader {
 

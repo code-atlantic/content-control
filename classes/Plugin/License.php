@@ -14,6 +14,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * License management.
  *
+ * NOTE: For wordpress.org admins: This is only used if:
+ * - The user explicitly entered a license key.
+ *
  * @package ContentControl
  */
 class License {
