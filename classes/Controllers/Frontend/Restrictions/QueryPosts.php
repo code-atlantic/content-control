@@ -81,7 +81,9 @@ class QueryPosts extends Controller {
 			 */
 			do_action( 'content_control/restrict_archive_post', $restriction, $post_id );
 
-			switch ( $restriction->archive_handling ) {
+			$handling = $query->is_main_query() ? $restriction->archive_handling : $restriction->additional_query_handling;
+
+			switch ( $handling ) {
 				case 'filter_post_content':
 					// Filter the title/excerpt/contents of the restricted items.
 					break;
