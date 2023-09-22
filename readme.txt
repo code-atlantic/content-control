@@ -8,7 +8,7 @@ Requires at least: 5.6
 Tested up to: 6.3.1
 Stable tag: 2.0.7
 Requires PHP: 5.6
-License: GPLv3 or Any Later Version
+License: GPLv3 (or later)
 
 Unleash your WordPress content's potential! With Content Control, restrict your content, pages, posts, widgets, and even individual blocks with precision, based on user status, roles, device type & more.
 
