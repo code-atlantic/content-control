@@ -153,16 +153,19 @@ class Upgrades extends Controller {
 		// Perform a topological sort on the graph.
 		$sorted = $this->topological_sort( $graph );
 
+		$sorted_upgrades = [];
+
 		// Map the sorted ugprade list with the upgrade from the lookup table.
-		foreach ( $sorted as $key => $upgrade_name ) {
-			$sorted[ $key ] = isset( $upgrade_by_name[ $upgrade_name ] ) ? $upgrade_by_name[ $upgrade_name ] : null;
+		foreach ( $sorted as $upgrade_name ) {
+			$upgrade           = isset( $upgrade_by_name[ $upgrade_name ] ) ? $upgrade_by_name[ $upgrade_name ] : null;
+			$sorted_upgrades[] = $upgrade;
 		}
 
 		// Remove null values, these are upgrades that have been marked as done.
-		$sorted = array_filter( $sorted );
+		$sorted_upgrades = array_filter( $sorted_upgrades );
 
 		// Return the sorted upgrades.
-		return $sorted;
+		return $sorted_upgrades;
 	}
 
 	/**
@@ -441,9 +444,7 @@ class Upgrades extends Controller {
 
 			<div class="notice-content">
 				<p>
-					<strong>
-					<?php esc_html_e( 'Content Control has been updated and needs to run some database upgrades.', 'content-control' ); ?>
-					</strong>
+					<strong><?php esc_html_e( 'Content Control has been updated and needs to run some database upgrades.', 'content-control' ); ?></strong>
 				</p>
 				<ul class="notice-actions">
 					<li>
