@@ -28,15 +28,16 @@ class Elementor extends Controller {
 	/**
 	 * Conditionally disable Content Control for Elementor builder.
 	 *
-	 * @param boolean $protection_is_disabled Whether protection is disabled.
+	 * @param boolean $is_disabled Whether protection is disabled.
 	 * @return boolean
 	 */
-	public function protection_is_disabled( $protection_is_disabled ) {
-		if ( did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active() ) {
-			return true;
+	public function protection_is_disabled( $is_disabled ) {
+		// If already disabled, no reason to continue.
+		if ( $is_disabled ) {
+			return $is_disabled;
 		}
 
-		return $protection_is_disabled;
+		return did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active();
 	}
 
 	/**
