@@ -70,14 +70,31 @@ export interface RestrictionSettings {
 	[ key: string ]: any;
 }
 
-export interface Restriction {
+export interface BaseRestriction {
+	id: number;
+	title: string | { raw: string; rendered: string };
+	content: string | { raw: string; rendered: string };
+	description?: string;
+	status: 'publish' | 'draft' | 'pending' | 'trash';
+	priority: number;
+	settings: RestrictionSettings;
+	[ key: string ]: any;
+}
+export interface Restriction extends BaseRestriction {
 	id: number;
 	title: string;
+	content: string;
 	description: string;
 	status: 'publish' | 'draft' | 'pending' | 'trash';
 	priority: number;
 	settings: RestrictionSettings;
 	[ key: string ]: any;
+}
+
+export interface ApiRestriction extends BaseRestriction {
+	excerpt: string | { raw: string; rendered: string };
+	// title: { raw: string; rendered: string };
+	// content: { raw: string; rendered: string };
 }
 
 export type RestrictionStatuses = Restriction[ 'status' ] | 'all' | string;
