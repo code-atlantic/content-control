@@ -16,14 +16,14 @@ export const getResourcePath = (
 
 export const convertApiRestriction = ( {
 	title,
-	content,
+	// content,
 	excerpt,
 	...restriction
 }: ApiRestriction ): Restriction => {
 	const newRestriction = {
 		...restriction,
 		title: typeof title === 'string' ? title : title.raw,
-		content: typeof content === 'string' ? content : content.raw,
+		// content: typeof content === 'string' ? content : content.raw,
 		description: typeof excerpt === 'string' ? excerpt : excerpt.raw,
 	};
 

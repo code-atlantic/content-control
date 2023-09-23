@@ -73,7 +73,7 @@ export interface RestrictionSettings {
 export interface BaseRestriction {
 	id: number;
 	title: string | { raw: string; rendered: string };
-	content: string | { raw: string; rendered: string };
+	// content: string | { raw: string; rendered: string };
 	description?: string;
 	status: 'publish' | 'draft' | 'pending' | 'trash';
 	priority: number;
@@ -83,7 +83,7 @@ export interface BaseRestriction {
 export interface Restriction extends BaseRestriction {
 	id: number;
 	title: string;
-	content: string;
+	// content: string;
 	description: string;
 	status: 'publish' | 'draft' | 'pending' | 'trash';
 	priority: number;

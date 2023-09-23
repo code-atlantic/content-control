@@ -61,7 +61,11 @@ class PostTypes extends Controller {
 			'can_export'          => true,
 			'rewrite'             => false,
 			'query_var'           => false,
-			'supports'            => [ 'title', 'excerpt' ],
+			'supports'            => [
+				'title',
+				'excerpt',
+				// 'editor',
+			],
 			'show_in_graphql'     => false,
 			'capabilities'        => [
 				'create_posts' => $this->container->get_permission( 'edit_restrictions' ),
