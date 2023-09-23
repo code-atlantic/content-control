@@ -29,7 +29,9 @@ function content_has_restrictions( $post_id = null ) {
 	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions( $post_id );
 
 	// Clear post if we overloaded it.
-	clear_post( $overload_post );
+	if ( $overload_post ) {
+		clear_post();
+	}
 
 	/**
 	 * Filter whether content has restrictions.
