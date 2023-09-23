@@ -80,6 +80,28 @@ class PostContent extends Controller {
 			return $content;
 		}
 
+		$message = '';
+
+		/**
+		 * If the restriction has a custom message, use it.
+		 *
+		 * We could check $restriction->replacement_type, but we need a safe default for
+		 * all cases. Further we do content filtering for all sub queries and currently
+		 * don't offer a way to override the message for those.
+		 *
+		 * In this way currently users can change to content replacement, set the override
+		 * message, then change back to page replacement and the override message will still
+		 * be used for the post in sub queries.
+		 */
+		if ( $restriction->override_message ) {
+			$message = $restriction->get_message();
+		}
+
+		// If the message is empty, use the global default message.
+		if ( empty( $message ) ) {
+			$message = \ContentControl\get_default_denial_message();
+		}
+
 		/**
 		 * Filter the message to display when a post is restricted.
 		 *
@@ -90,7 +112,8 @@ class PostContent extends Controller {
 		 */
 		return apply_filters(
 			$filter_name,
-			$restriction->get_message(),
+			// If the default message is empty, show a generic message.
+			! empty( $message ) ? $message : __( 'This content is restricted.', 'content-control' ),
 			$restriction
 		);
 	}
