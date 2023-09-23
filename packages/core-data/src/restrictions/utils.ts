@@ -1,4 +1,4 @@
-import type { Restriction } from './types';
+import type { ApiRestriction, Restriction } from './types';
 
 /**
  * Get resuource path for various configs.
@@ -12,4 +12,32 @@ export const getResourcePath = (
 	const root = `content-control/v2/restrictions`;
 
 	return id ? `${ root }/${ id }` : root;
+};
+
+export const convertApiRestriction = ( {
+	title,
+	content,
+	excerpt,
+	...restriction
+}: ApiRestriction ): Restriction => {
+	const newRestriction = {
+		...restriction,
+		title: typeof title === 'string' ? title : title.raw,
+		content: typeof content === 'string' ? content : content.raw,
+		description: typeof excerpt === 'string' ? excerpt : excerpt.raw,
+	};
+
+	return newRestriction;
+};
+
+export const convertRestrictionToApi = ( {
+	description,
+	...restriction
+}: Partial< Restriction > ): Partial< ApiRestriction > => {
+	const newRestriction = {
+		...restriction,
+		excerpt: description,
+	};
+
+	return newRestriction;
 };
