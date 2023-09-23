@@ -5,7 +5,11 @@ import { fetch } from '../controls';
 import { getErrorMessage } from '../utils';
 import { Status, Statuses } from '../constants';
 
-import { getResourcePath } from './utils';
+import {
+	getResourcePath,
+	convertApiRestriction,
+	convertRestrictionToApi,
+} from './utils';
 import { validateRestriction } from './validation';
 import { ACTION_TYPES, STORE_NAME } from './constants';
 
@@ -13,6 +17,7 @@ import type {
 	AppNotice,
 	EditorId,
 	Restriction,
+	ApiRestriction,
 	RestrictionsState,
 	RestrictionsStore,
 } from './types';
@@ -211,9 +216,9 @@ export function* createRestriction( restriction: Restriction ) {
 
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const result: Restriction = yield fetch( getResourcePath(), {
+		const result: ApiRestriction = yield fetch( getResourcePath(), {
 			method: 'POST',
-			body: noIdRestriction,
+			body: convertRestrictionToApi( noIdRestriction ),
 		} );
 
 		if ( result ) {
@@ -228,7 +233,7 @@ export function* createRestriction( restriction: Restriction ) {
 
 			const returnAction = {
 				type: CREATE,
-				restriction: result,
+				restriction: convertApiRestriction( result ),
 			};
 
 			if ( editorId === 'new' ) {
@@ -315,11 +320,11 @@ export function* updateRestriction( restriction: Restriction ) {
 			restriction.id
 		);
 
-		const result: Restriction = yield fetch(
+		const result: ApiRestriction = yield fetch(
 			getResourcePath( canonicalRestriction.id ),
 			{
 				method: 'POST',
-				body: restriction,
+				body: convertRestrictionToApi( restriction ),
 			}
 		);
 
@@ -344,7 +349,7 @@ export function* updateRestriction( restriction: Restriction ) {
 
 			return {
 				type: UPDATE,
-				restriction,
+				restriction: convertApiRestriction( result ),
 			};
 		}
 
