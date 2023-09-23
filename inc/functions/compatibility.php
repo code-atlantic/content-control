@@ -98,14 +98,14 @@ function is_frontend() {
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	if (
-		is_rest() ||
-		is_cron() ||
-		is_ajax() ||
 		is_admin() ||
+		is_ajax() ||
+		is_cron() ||
+		is_rest() ||
 		( $query && $query->is_admin ) ||
 		( $query && $query->is_favicon() ) ||
-		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		( $query && $query->is_robots() ) ||
+		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;
