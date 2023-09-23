@@ -2,8 +2,16 @@
 
 ## Unreleased
 
--   Improvement: Added new filter `content_control/query_filter_init_hook` to allow developers to change the hook used to register the query filter.
--   Tweak: Don't filter queries until `init` action by default.
+-   Improvement: Added new filter `content_control/query_filter_init_hook` to allow delaying query filtering for compatibility with plugins that make custom queries before `template_redirect` action.
+
+```php
+add_filter( 'content_control/query_filter_init_hook', function () {
+    return 'init'; // Try setup_theme, after_theme_setup, init or wp_loaded
+} );
+```
+-   Tweak: Ensure our restriction checks work within a nested post loop.
+-   Fix: Bug where override message wasn't used.
+-   Fix: Bug where Elementor Post loop would render incorrectly when using ACF fields in the loop template.
 
 ## v2.0.8 - 09/22/2023
 
