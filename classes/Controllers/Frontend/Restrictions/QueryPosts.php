@@ -25,8 +25,35 @@ class QueryPosts extends Controller {
 
 	/**
 	 * Initiate functionality.
+	 *
+	 * @return void
 	 */
 	public function init() {
+		/**
+		 * Use this filter to change the hook used to add query post filtering.
+		 *
+		 * @param string $init_hook The hook to use to add the query post filtering.
+		 * @return string The hook to use, should be: setup_theme, after_theme_setup, init or wp_loaded
+		 */
+		$init_hook = apply_filters( 'content_control/query_filter_init_hook', 'init' );
+
+		/**
+		 * Use this filter to change the priority used to add query post filtering.
+		 *
+		 * @param int $init_priority The priority to use to add the query post filtering.
+		 * @return int The priority to use.
+		 */
+		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 10 );
+
+		add_action( $init_hook, [ $this, 'late_hooks' ], $init_priority );
+	}
+
+	/**
+	 * Late hooks.
+	 *
+	 * @return void
+	 */
+	public function late_hooks() {
 		add_filter( 'the_posts', [ $this, 'restrict_query_posts' ], 10, 2 );
 	}
 

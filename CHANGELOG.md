@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+-   Improvement: Added new filter `content_control/query_filter_init_hook` to allow developers to change the hook used to register the query filter.
+-   Tweak: Don't filter queries until `init` action by default.
+
 ## v2.0.8 - 09/22/2023
 
 -   Tweak: Ignore many Elementor queries from being restricted.
