@@ -182,10 +182,10 @@ function set_rules_query( $query ) {
  * @return bool
  */
 function setup_post( $post_id = null ) {
-	global $post, $content_control_last_post_id;
+	global $post, $content_control_last_post;
 
-	if ( ! isset( $content_control_last_post_id ) ) {
-		$content_control_last_post_id = [];
+	if ( ! isset( $content_control_last_post ) ) {
+		$content_control_last_post = [];
 	}
 
 	if ( is_null( $post_id ) ) {
@@ -199,7 +199,7 @@ function setup_post( $post_id = null ) {
 		( is_int( $post_id ) && $post_id !== $current_post_id );
 
 	if ( $overload_post ) {
-		$content_control_last_post_id[] = $current_post_id;
+		$content_control_last_post[] = isset( $post ) ? $post : $current_post_id;
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = get_post( $post_id );
 		setup_postdata( $post );
@@ -214,14 +214,13 @@ function setup_post( $post_id = null ) {
  * @return void
  */
 function clear_post() {
-	global $post, $content_control_last_post_id;
-	if ( ! empty( $content_control_last_post_id ) ) {
+	global $post, $content_control_last_post;
+	if ( ! empty( $content_control_last_post ) ) {
 		// Get the last post ID from the array.
-		$post_id = array_pop( $content_control_last_post_id );
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$post = array_pop( $content_control_last_post );
 
 		// Reset global post object.
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post = get_post( $post_id );
 		setup_postdata( $post );
 	}
 }
