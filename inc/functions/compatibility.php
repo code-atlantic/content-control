@@ -19,7 +19,9 @@ defined( 'ABSPATH' ) || exit;
  * @return bool Whether or not function is disabled.
  */
 function is_func_disabled( $func ) {
-	$disabled = explode( ',', ini_get( 'disable_functions' ) );
+	$disabled_functions = ini_get( 'disable_functions' );
+
+	$disabled = $disabled_functions ? explode( ',', $disabled_functions ) : [];
 
 	return in_array( $func, $disabled, true );
 }
