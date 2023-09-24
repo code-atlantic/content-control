@@ -8,14 +8,16 @@
 >
     <!-- project configuration -->
     <projectFiles>
-        <directory name="classes" />
-        <directory name="inc" />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
+        <directory name="bin/" />
+        <directory name="classes/" />
+        <directory name="inc/" />
         <file name="content-control.php" />
         <file name="uninstall.php" />
     </projectFiles>
+
+    <stubs>
+        <file name="bin/stubs/elementor.php" />
+    </stubs>
 
     <plugins>
         <pluginClass class="PsalmWordPress\Plugin">
