@@ -56,11 +56,11 @@
 		"@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
 		"@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
 		"@nrwl/nx-cloud": "^16.3.0",
-		"@wordpress/prettier-config": "^2.24.0",
-		"@wordpress/scripts": "^26.12.0",
+		"@wordpress/prettier-config": "^2.25.0",
+		"@wordpress/scripts": "^26.13.0",
 		"nx": "16.7.4",
 		"path": "^0.12.7",
-		"prettier": "npm:wp-prettier@latest",
+		"prettier": "npm:wp-prettier@2.8.5",
 		"wp-pot-cli": "^1.5.0"
 	},
 	"scripts": {
