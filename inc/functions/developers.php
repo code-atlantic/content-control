@@ -138,7 +138,9 @@ function get_applicable_restriction( $post_id = null ) {
 	$restriction = plugin( 'restrictions' )->get_applicable_restriction( $post_id );
 
 	// Clear post if we overloaded it.
-	clear_post( $overload_post );
+	if ( $overload_post ) {
+		clear_post();
+	}
 
 	return $restriction;
 }
