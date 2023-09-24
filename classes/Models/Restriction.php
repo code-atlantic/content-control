@@ -229,7 +229,7 @@ class Restriction {
 			 */
 			$settings = get_post_meta( $restriction->ID, 'restriction_settings', true );
 
-			if ( ! $settings || empty( $settings ) ) {
+			if ( ! $settings ) {
 				$settings = [];
 			}
 
