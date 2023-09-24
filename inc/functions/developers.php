@@ -29,7 +29,9 @@ function content_has_restrictions( $post_id = null ) {
 	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions( $post_id );
 
 	// Clear post if we overloaded it.
-	clear_post( $overload_post );
+	if ( $overload_post ) {
+		clear_post();
+	}
 
 	/**
 	 * Filter whether content has restrictions.
@@ -136,7 +138,9 @@ function get_applicable_restriction( $post_id = null ) {
 	$restriction = plugin( 'restrictions' )->get_applicable_restriction( $post_id );
 
 	// Clear post if we overloaded it.
-	clear_post( $overload_post );
+	if ( $overload_post ) {
+		clear_post();
+	}
 
 	return $restriction;
 }
@@ -146,7 +150,7 @@ function get_applicable_restriction( $post_id = null ) {
  *
  * @param \WP_Query $query Query object.
  *
- * @return array<array{restriction:Object,post_ids:int[]}>|false
+ * @return array<array{restriction:\ContentControl\Models\Restriction,post_ids:int[]}>|false
  *
  * @since 2.0.0
  */
@@ -163,7 +167,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
 	static $restrictions;
 
 	// Generate cache key from hasing $wp_query.
-	$cache_key = md5( wp_json_encode( $query ) );
+	$cache_key = md5( (string) wp_json_encode( $query ) );
 
 	if ( isset( $restrictions[ $cache_key ] ) ) {
 		return $restrictions[ $cache_key ];

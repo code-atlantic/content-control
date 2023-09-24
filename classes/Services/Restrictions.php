@@ -69,7 +69,7 @@ class Restrictions {
 	 *
 	 * @param int|string|Restriction $restriction Restriction ID, slug or object.
 	 *
-	 * @return Restriction|false
+	 * @return Restriction|null
 	 */
 	public function get_restriction( $restriction ) {
 		if ( $restriction instanceof Restriction ) {
@@ -104,7 +104,7 @@ class Restrictions {
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -240,7 +240,7 @@ class Restrictions {
 	public function user_meets_requirements( $restriction ) {
 		$restriction = $this->get_restriction( $restriction );
 
-		if ( false === $restriction ) {
+		if ( null === $restriction ) {
 			return false;
 		}
 

@@ -222,10 +222,19 @@ class Restriction {
 		} else {
 			$this->post = $restriction;
 
+			/**
+			 * Restriction settings.
+			 *
+			 * @var array<string,mixed>|false $settings
+			 */
 			$settings = get_post_meta( $restriction->ID, 'restriction_settings', true );
 
+			if ( ! $settings ) {
+				$settings = [];
+			}
+
 			$settings = wp_parse_args(
-				is_array( $settings ) ? $settings : [],
+				$settings,
 				get_default_restriction_settings()
 			);
 
@@ -367,24 +376,26 @@ class Restriction {
 	 * @uses \get_the_content()
 	 * @uses \ContentControl\get_default_denial_message()
 	 *
+	 * @param string $context Context. 'display' or 'raw'.
+	 *
 	 * @return string
 	 */
-	public function get_message() {
+	public function get_message( $context = 'display' ) {
 		if ( ! isset( $this->message ) ) {
-			if ( ! empty( $this->post->post_content ) ) {
-				$message = \get_the_content( null, false, $this->id );
-			} elseif ( 'message' === $this->replacement_type && $this->override_message && ! empty( $this->custom_message ) ) {
+			$message = '';
+
+			if ( ! empty( $this->custom_message ) ) {
 				$message = $this->custom_message;
-			} else {
-				$message = \ContentControl\get_default_denial_message();
+			} elseif ( ! empty( $this->post->post_content ) ) {
+				$message = 'display' === $context
+					? \get_the_content( null, false, $this->id )
+					: $this->post->post_content;
 			}
 
-			$this->message = ! empty( $message ) ?
-				$message :
-				__( 'This content is restricted.', 'content-control' );
+			$this->message = $message;
 		}
 
-		return $this->message;
+		return sanitize_post_field( 'post_content', $this->message, $this->id, $context );
 	}
 
 	/**

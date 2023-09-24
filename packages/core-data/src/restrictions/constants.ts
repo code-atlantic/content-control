@@ -41,6 +41,7 @@ export const noticeDefaults: AppNotice = {
 export const restrictionDefaults: Restriction = {
 	id: 0,
 	title: '',
+	// content: '',
 	description: '',
 	status: 'draft',
 	priority: 0,

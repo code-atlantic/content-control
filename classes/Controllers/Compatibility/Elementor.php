@@ -28,15 +28,16 @@ class Elementor extends Controller {
 	/**
 	 * Conditionally disable Content Control for Elementor builder.
 	 *
-	 * @param boolean $protection_is_disabled Whether protection is disabled.
+	 * @param boolean $is_disabled Whether protection is disabled.
 	 * @return boolean
 	 */
-	public function protection_is_disabled( $protection_is_disabled ) {
-		if ( did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active() ) {
-			return true;
+	public function protection_is_disabled( $is_disabled ) {
+		// If already disabled, no reason to continue.
+		if ( $is_disabled ) {
+			return $is_disabled;
 		}
 
-		return $protection_is_disabled;
+		return did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active();
 	}
 
 	/**
@@ -60,10 +61,44 @@ class Elementor extends Controller {
 	 * @return boolean
 	 */
 	public function elementor_builder_is_active() {
-		return class_exists( '\Elementor\Plugin' ) &&
-			isset( \Elementor\Plugin::$instance ) &&
-			isset( \Elementor\Plugin::$instance->preview ) &&
-			method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode' ) &&
-			\Elementor\Plugin::$instance->preview->is_preview_mode();
+		// Check if this is the admin theme builder app.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended Simple & direct string comparison.
+		if (
+			is_admin() &&
+			// Disable notices as this is a generic string comparison to prevent doing a lot of work.
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			! empty( $_GET['page'] ) &&
+			'elementor-app' === $_GET['page']
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			) {
+			return true;
+		}
+
+		if ( ! class_exists( '\Elementor\Plugin' ) ||
+			! isset( \Elementor\Plugin::$instance )
+				) {
+			return false;
+		}
+
+		/**
+		 * Elementor instance.
+		 *
+		 * @var \Elementor\Plugin $elementor
+		 */
+		$elementor = \Elementor\Plugin::$instance;
+
+		/**
+		 * Elementor preview instance.
+		 *
+		 * @var \Elementor\Preview|(object{is_preview_mod:\Closure}&\stdClass)|false $preview
+		 */
+		$preview = isset( $elementor->preview ) ? $elementor->preview : false;
+
+		if ( false === $preview || ! method_exists( $preview, 'is_preview_mode' ) ) {
+			return false;
+		}
+
+		// Check if the page builder is active.
+		return $preview->is_preview_mode();
 	}
 }

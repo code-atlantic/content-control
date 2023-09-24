@@ -4,9 +4,9 @@ import { fetch } from '../controls';
 import { appendUrlParams, getErrorMessage } from '../utils';
 import { hydrate } from './actions';
 import { ACTION_TYPES } from './constants';
-import { getResourcePath } from './utils';
+import { convertApiRestriction, getResourcePath } from './utils';
 
-import type { Restriction } from './types';
+import type { Restriction, ApiRestriction } from './types';
 
 const { UPDATE, RESTRICTIONS_FETCH_ERROR } = ACTION_TYPES;
 
@@ -20,17 +20,21 @@ export function* getRestrictions() {
 	try {
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const restrictions: Restriction[] = yield fetch(
+		const restrictions: ApiRestriction[] = yield fetch(
 			appendUrlParams( getResourcePath(), {
 				status: [ 'any', 'trash', 'auto-draft' ],
 				per_page: 100,
+				context: 'edit',
 			} )
 		);
 
 		if ( restrictions ) {
+			// Parse restrictions, replacing title & content with the API context versions.
+			const parsedResrictions = restrictions.map( convertApiRestriction );
+
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
-			return hydrate( restrictions );
+			return hydrate( parsedResrictions );
 		}
 
 		// if execution arrives here, then thing didn't update in the state so return
@@ -63,14 +67,16 @@ export function* getRestriction( restrictionId: Restriction[ 'id' ] ) {
 	try {
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const restriction: Restriction = yield fetch(
-			getResourcePath( restrictionId )
+		const restriction: ApiRestriction = yield fetch(
+			appendUrlParams( getResourcePath( restrictionId ), {
+				context: 'edit',
+			} )
 		);
 
 		if ( restriction ) {
 			return {
 				type: UPDATE,
-				restriction,
+				restriction: convertApiRestriction( restriction ),
 			};
 		}
 

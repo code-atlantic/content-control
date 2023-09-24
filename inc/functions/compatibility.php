@@ -19,7 +19,9 @@ defined( 'ABSPATH' ) || exit;
  * @return bool Whether or not function is disabled.
  */
 function is_func_disabled( $func ) {
-	$disabled = explode( ',', ini_get( 'disable_functions' ) );
+	$disabled_functions = ini_get( 'disable_functions' );
+
+	$disabled = $disabled_functions ? explode( ',', $disabled_functions ) : [];
 
 	return in_array( $func, $disabled, true );
 }
@@ -96,14 +98,14 @@ function is_frontend() {
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	if (
-		is_rest() ||
-		is_cron() ||
-		is_ajax() ||
 		is_admin() ||
+		is_ajax() ||
+		is_cron() ||
+		is_rest() ||
 		( $query && $query->is_admin ) ||
 		( $query && $query->is_favicon() ) ||
-		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		( $query && $query->is_robots() ) ||
+		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;

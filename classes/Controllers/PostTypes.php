@@ -25,6 +25,8 @@ class PostTypes extends Controller {
 		add_action( 'init', [ $this, 'register_rest_fields' ] );
 		add_action( 'save_post_cc_restriction', [ $this, 'save_post' ], 10, 3 );
 		add_filter( 'rest_pre_dispatch', [ $this, 'rest_pre_dispatch' ], 10, 3 );
+		add_filter( 'content_control/sanitize_restriction_settings', [ $this, 'sanitize_restriction_settings' ], 10, 2 );
+		add_filter( 'content_control/validate_restriction_settings', [ $this, 'validate_restriction_settings' ], 10, 2 );
 	}
 
 	/**
@@ -61,7 +63,11 @@ class PostTypes extends Controller {
 			'can_export'          => true,
 			'rewrite'             => false,
 			'query_var'           => false,
-			'supports'            => [ 'title', 'excerpt' ],
+			'supports'            => [
+				'title',
+				'excerpt',
+				// 'editor',
+			],
 			'show_in_graphql'     => false,
 			'capabilities'        => [
 				'create_posts' => $this->container->get_permission( 'edit_restrictions' ),
@@ -79,68 +85,65 @@ class PostTypes extends Controller {
 	 * @return void
 	 */
 	public function register_rest_fields() {
-		register_rest_field( 'cc_restriction', 'title', [
-			'get_callback'    => function ( $obj ) {
-				// remove get_the_title character encoding escape.
-				remove_filter( 'the_title', 'wptexturize' );
-				$title = get_the_title( $obj['id'] );
-				add_filter( 'the_title', 'wptexturize' );
-				return $title;
-			},
-			'update_callback' => function ( $value, $obj ) {
-				wp_update_post( [
-					'ID'         => $obj->ID,
-					'post_title' => $value,
-				] );
-			},
-			'schema'          => [
-				'type'        => 'string',
-				'arg_options' => [
-					'sanitize_callback' => function ( $value ) {
-						// Make the value safe for storage.
-						return sanitize_text_field( $value );
-					},
-					'validate_callback' => function ( $value ) {
-						// Validate title based on post_title.
-						return is_string( $value );
-					},
-				],
-			],
-		] );
-
-		register_rest_field( 'cc_restriction', 'description', [
-			'get_callback'    => function ( $obj ) {
-				return $obj['excerpt']['raw'];
-			},
-			'update_callback' => function ( $value, $obj ) {
-				wp_update_post( [
-					'ID'           => $obj->ID,
-					'post_excerpt' => sanitize_text_field( $value ),
-				] );
-			},
-			'schema'          => [
-				'type'        => 'string',
-				'arg_options' => [
-					'sanitize_callback' => function ( $value ) {
-						// Make the value safe for storage.
-						return sanitize_text_field( $value );
-					},
-					'validate_callback' => function ( $value ) {
-						// Validate title based on post_title.
-						return is_string( $value );
-					},
-				],
-			],
-		] );
-
 		register_rest_field( 'cc_restriction', 'settings', [
-			'get_callback'        => function ( $obj ) {
-				return get_post_meta( $obj['id'], 'restriction_settings', true );
+			'get_callback'        => function ( $obj, $field, $request ) {
+				$settings = get_post_meta( $obj['id'], 'restriction_settings', true );
+
+				// Backfill from content if empty.
+				if ( empty( $settings['customMessage'] ) ) {
+					$settings['customMessage'] = get_post_field( 'post_content', $obj['id'], 'raw' );
+				}
+
+				if ( ! empty( $settings['customMessage'] ) ) {
+					// Change output based on context.
+					$settings['customMessage'] = 'edit' === $request->get_param( 'context' ) ?
+						sanitize_post_field( 'post_content', $settings['customMessage'], $obj['id'], 'raw' ) :
+						sanitize_post_field( 'post_content', $settings['customMessage'], $obj['id'], 'display' );
+				}
+
+				return $settings;
 			},
 			'update_callback'     => function ( $value, $obj ) {
+				$custom_message = ! empty( $value['customMessage'] ) ? $value['customMessage'] : '';
+
+				// Save custom message to restriction content for now.
+				wp_update_post( [
+					'ID'           => $obj->ID,
+					'post_content' => $custom_message,
+				] );
+
 				// Update the field/meta value.
 				update_post_meta( $obj->ID, 'restriction_settings', $value );
 			},
+			'schema'              => [
+				'type'        => 'object',
+				'arg_options' => [
+					'sanitize_callback' => function ( $settings, $request ) {
+						/**
+						 * Sanitize the restriction settings.
+						 *
+						 * @param array<string,mixed> $settings The settings to sanitize.
+						 * @param int   $id       The restriction ID.
+						 * @param \WP_REST_Request $request The request object.
+						 *
+						 * @return array<string,mixed> The sanitized settings.
+						 */
+						return apply_filters( 'content_control/sanitize_restriction_settings', $settings, $request->get_param( 'id' ), $request );
+					},
+					'validate_callback' => function ( $settings, $request ) {
+						/**
+						 * Validate the restriction settings.
+						 *
+						 * @param array<string,mixed> $settings The settings to validate.
+						 * @param int   $id       The restriction ID.
+						 * @param \WP_REST_Request $request The request object.
+						 *
+						 * @return bool|\WP_Error True if valid, WP_Error if not.
+						 */
+						return apply_filters( 'content_control/validate_restriction_settings', $settings, $request->get_param( 'id' ), $request );
+					},
+				],
+			],
 			'permission_callback' => function () {
 				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
@@ -148,12 +151,9 @@ class PostTypes extends Controller {
 
 		register_rest_field( 'cc_restriction', 'priority', [
 			'get_callback'        => function ( $obj ) {
-				$priority = get_post_field( 'menu_order', $obj['id'] );
-
-				return $priority >= 0 ? $priority : 0;
+				return (int) get_post_field( 'menu_order', $obj['id'], 'raw' );
 			},
 			'update_callback'     => function ( $value, $obj ) {
-				// Update the posts menu order.
 				wp_update_post( [
 					'ID'         => $obj->ID,
 					'menu_order' => $value,
@@ -162,6 +162,17 @@ class PostTypes extends Controller {
 			'permission_callback' => function () {
 				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
+			'schema'              => [
+				'type'        => 'integer',
+				'arg_options' => [
+					'sanitize_callback' => function ( $priority ) {
+						return absint( $priority );
+					},
+					'validate_callback' => function ( $priority ) {
+						return is_int( $priority );
+					},
+				],
+			],
 		] );
 
 		register_rest_field( 'cc_restriction', 'data_version', [
@@ -177,6 +188,38 @@ class PostTypes extends Controller {
 			},
 		] );
 	}
+
+	/**
+	 * Sanitize restriction settings.
+	 *
+	 * @param array<string,mixed> $settings The settings to sanitize.
+	 * @param int                 $id       The restriction ID.
+	 *
+	 * @return array<string,mixed> The sanitized settings.
+	 */
+	public function sanitize_restriction_settings( $settings, $id ) {
+
+		// Sanitize custom message.
+		if ( ! empty( $settings['customMessage'] ) ) {
+			$settings['customMessage'] = sanitize_post_field( 'post_content', $settings['customMessage'], $id, 'db' );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Validate restriction settings.
+	 *
+	 * @param array<string,mixed> $settings The settings to validate.
+	 * @param int                 $id       The restriction ID.
+	 *
+	 * @return bool|\WP_Error True if valid, WP_Error if not.
+	 */
+	public function validate_restriction_settings( $settings, $id ) {
+		// TODO Validate all known settings by type.
+		return true;
+	}
+
 
 	/**
 	 * Add data version meta to new restrictions.

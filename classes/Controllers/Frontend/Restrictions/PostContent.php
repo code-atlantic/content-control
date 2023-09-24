@@ -42,7 +42,8 @@ class PostContent extends Controller {
 	/**
 	 * Filter post content when needed.
 	 *
-	 * NOTE: This also serves as the default fallback protection method if all others fail.
+	 * NOTE: If we got this far with restricted content, this is the last attempt to protect
+	 * it. This serves as the default fallback protection method if all others fail.
 	 *
 	 * @param string $content Content of post being checked.
 	 *
@@ -67,12 +68,38 @@ class PostContent extends Controller {
 
 		$restriction = get_applicable_restriction();
 
+		if ( false === $restriction ) {
+			return $content;
+		}
+
 		// If this is a replacement page, bail.
 		if (
 			( 'replace' === $restriction->protection_method && 'page' === $restriction->replacement_type && is_page( $restriction->replacement_page ) ) ||
 			( 'replace_archive_page' === $restriction->archive_handling && is_page( $restriction->archive_replacement_page ) )
 		) {
 			return $content;
+		}
+
+		$message = '';
+
+		/**
+		 * If the restriction has a custom message, use it.
+		 *
+		 * We could check $restriction->replacement_type, but we need a safe default for
+		 * all cases. Further we do content filtering for all sub queries and currently
+		 * don't offer a way to override the message for those.
+		 *
+		 * In this way currently users can change to content replacement, set the override
+		 * message, then change back to page replacement and the override message will still
+		 * be used for the post in sub queries.
+		 */
+		if ( $restriction->override_message ) {
+			$message = $restriction->get_message();
+		}
+
+		// If the message is empty, use the global default message.
+		if ( empty( $message ) ) {
+			$message = \ContentControl\get_default_denial_message();
 		}
 
 		/**
@@ -85,7 +112,8 @@ class PostContent extends Controller {
 		 */
 		return apply_filters(
 			$filter_name,
-			$restriction->get_message(),
+			// If the default message is empty, show a generic message.
+			! empty( $message ) ? $message : __( 'This content is restricted.', 'content-control' ),
 			$restriction
 		);
 	}

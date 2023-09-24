@@ -11,6 +11,19 @@ namespace ContentControl;
 
 defined( 'ABSPATH' ) || exit;
 
+use function ContentControl\plugin;
+
+/**
+ * Get restriction, by ID, slug or object.
+ *
+ * @param int|string|\ContentControl\Models\Restriction $restriction Restriction ID, slug or object.
+ *
+ * @return \ContentControl\Models\Restriction|null
+ */
+function get_restriction( $restriction ) {
+	return plugin( 'restrictions' )->get_restriction( $restriction );
+}
+
 /**
  * Check if admins are excluded from restrictions.
  *

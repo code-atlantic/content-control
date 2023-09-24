@@ -11,6 +11,9 @@ namespace ContentControl\Base;
 
 defined( 'ABSPATH' ) || exit;
 
+use Closure;
+use stdClass;
+
 /**
  * Base Upgrade class.
  */
@@ -127,7 +130,20 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	/**
 	 * Return the stream.
 	 *
-	 * @return \ContentControl\Services\UpgradeStream|Object $stream Stream.
+	 * If no stream is available it returns a mock object with no-op methods to prevent errors.
+	 *
+	 * @return \ContentControl\Services\UpgradeStream|(object{
+	 *      send_event: Closure,
+	 *      send_error: Closure,
+	 *      send_data: Closure,
+	 *      update_status: Closure,
+	 *      update_task_status: Closure,
+	 *      start_upgrades: Closure,
+	 *      complete_upgrades: Closure,
+	 *      start_task: Closure,
+	 *      update_task_progress:Closure,
+	 *      complete_task: Closure
+	 * }&stdClass) Stream.
 	 */
 	public function stream() {
 		$noop = function () {};
