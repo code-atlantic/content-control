@@ -12,6 +12,8 @@ add_filter( 'content_control/query_filter_init_hook', function () {
 ```
 
 -   Tweak: Ensure our restriction checks work within a nested post loop.
+-   Tweak: Change how restriction title & descriptions were sent/received over Rest API.
+-   Fix: Bug that caused some shortcodes to not render properly.
 -   Fix: Bug where override message wasn't used.
 -   Fix: Bug where Elementor Post loop would render incorrectly when using ACF fields in the loop template.
 
