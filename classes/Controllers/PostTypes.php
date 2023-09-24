@@ -98,12 +98,9 @@ class PostTypes extends Controller {
 
 		register_rest_field( 'cc_restriction', 'priority', [
 			'get_callback'        => function ( $obj ) {
-				$priority = get_post_field( 'menu_order', $obj['id'] );
-
-				return $priority >= 0 ? $priority : 0;
+				return (int) get_post_field( 'menu_order', $obj['id'], 'raw' );
 			},
 			'update_callback'     => function ( $value, $obj ) {
-				// Update the posts menu order.
 				wp_update_post( [
 					'ID'         => $obj->ID,
 					'menu_order' => $value,
@@ -112,6 +109,17 @@ class PostTypes extends Controller {
 			'permission_callback' => function () {
 				return current_user_can( $this->container->get_permission( 'edit_restrictions' ) );
 			},
+			'schema'              => [
+				'type'        => 'integer',
+				'arg_options' => [
+					'sanitize_callback' => function ( $priority ) {
+						return absint( $priority );
+					},
+					'validate_callback' => function ( $priority ) {
+						return is_int( $priority );
+					},
+				],
+			],
 		] );
 
 		register_rest_field( 'cc_restriction', 'data_version', [
