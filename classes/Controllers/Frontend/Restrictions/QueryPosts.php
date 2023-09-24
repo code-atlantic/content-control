@@ -32,13 +32,14 @@ class QueryPosts extends Controller {
 		/**
 		 * Use this filter to change the hook used to add query post filtering.
 		 *
-		 * @param null $init_hook The hook to use to add the query post filtering.
-		 * @return null|string The hook to use, should be: setup_theme, after_theme_setup, init or wp_loaded
+		 * @param null|string $init_hook The hook to use to add the query post filtering.
+		 * @return null|string The hook to use, should be: setup_theme, after_theme_setup, init or wp_loaded.
 		 */
 		$init_hook = apply_filters( 'content_control/query_filter_init_hook', null );
 
 		if ( is_null( $init_hook ) ) {
 			$this->late_hooks();
+			return;
 		}
 
 		/**
@@ -49,7 +50,7 @@ class QueryPosts extends Controller {
 		 */
 		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 10 );
 
-		add_action( $init_hook, [ $this, 'late_hooks' ], $init_priority );
+		add_action( (string) $init_hook, [ $this, 'late_hooks' ], (int) $init_priority );
 	}
 
 	/**
