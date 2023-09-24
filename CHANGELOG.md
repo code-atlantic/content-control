@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.9 - 09/24/2023
+
 -   Improvement: Better handling of restriction titles & content. Admins with priv can insert any content into the restriction messages.
 -   Improvement: Added new filter `content_control/query_filter_init_hook` to allow delaying query filtering for compatibility with plugins that make custom queries before `template_redirect` action.
 
