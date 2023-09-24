@@ -14,7 +14,7 @@ Unleash your WordPress content's potential! With Content Control, restrict your 
 
 == Description ==
 
-Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual blocks. Your content, your rules, executed with precision!
+Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visiblity. Your content, your rules, executed with precision!
 
 Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
 
@@ -24,6 +24,8 @@ Content Control is packed with features that allow you to:
 
 - Full control over your sites content, pages, posts, widgets, and even individual blocks.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
+  - Responsive block controls with customizable breakpoints.
+  - Control block visibility by user status, roles, device type & more.
 - Restrict access to pages, posts, widgets, and individual blocks based on user status, roles, device type & more.
 - Manage access to [media attachment pages](https://www.hongkiat.com/blog/wordpress-attachment-pages/), tags, categories, formats for logged in/out users or specific user roles.
 - Display a custom message to users who do not have permission to view the content
@@ -87,9 +89,11 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 - Improvement: Added new filter `content_control/query_filter_init_hook` to allow delaying query filtering for compatibility with plugins that make custom queries before `template_redirect` action.
 
 ```php
+
 add_filter( 'content_control/query_filter_init_hook', function () {
     return 'init'; // Try setup_theme, after_theme_setup, init or wp_loaded
 } );
+
 ```
 
 - Tweak: Ensure our restriction checks work within a nested post loop.
