@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    errorLevel="7"
+>
+    <!-- project configuration -->
+    <projectFiles>
+        <directory name="classes" />
+        <directory name="inc" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+        <file name="content-control.php" />
+        <file name="uninstall.php" />
+    </projectFiles>
+
+    <plugins>
+        <pluginClass class="PsalmWordPress\Plugin">
+            <!--  Customize goes here: https://github.com/psalm/psalm-plugin-wordpress#configuration -->
+        </pluginClass>
+    </plugins>
+</psalm>
