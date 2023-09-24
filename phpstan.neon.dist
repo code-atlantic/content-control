@@ -8,6 +8,8 @@ parameters:
         - uninstall.php
     bootstrapFiles:
         - bin/phpstan-bootstrap.php
+    scanDirectories:
+        - bin/stubs/
     dynamicConstantNames:
         - 'IS_WPCOM'
         - 'CONTENT_CONTROL_LICENSE_KEY'
