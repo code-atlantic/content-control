@@ -14,7 +14,7 @@ Unleash your WordPress content's potential! With Content Control, restrict your 
 
 == Description ==
 
-Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visiblity. Your content, your rules, executed with precision!
+Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visbility. Your content, your rules, executed with precision!
 
 Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
 
