@@ -1,38 +1,44 @@
 <?php
 /**
- * PHPUnit bootstrap file.
+ * PHPUnit bootstrap file
  *
- * @package Content_Control
+ * @package ContentControl
  */
 
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
+define( 'ABSPATH', true );
 
-if ( ! $_tests_dir ) {
-	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
+define( 'MINUTE_IN_SECONDS', 60 );
+define( 'HOUR_IN_SECONDS', 3600 );
+define( 'DAY_IN_SECONDS', 86400 );
+define( 'WEEK_IN_SECONDS', 604800 );
+define( 'MONTH_IN_SECONDS', 2592000 );
+define( 'YEAR_IN_SECONDS', 31536000 );
+
+define( 'DB_HOST', 'nowhere' );
+define( 'DB_NAME', 'none' );
+define( 'DB_USER', 'nobody' );
+define( 'DB_PASSWORD', 'nothing' );
+
+if ( class_exists( 'opcache_reset' ) ) {
+	opcache_reset();
 }
 
-// Forward custom PHPUnit Polyfills configuration to PHPUnit bootstrap file.
-$_phpunit_polyfills_path = getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' );
-if ( false !== $_phpunit_polyfills_path ) {
-	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $_phpunit_polyfills_path );
-}
 
-if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
-	echo "Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	exit( 1 );
-}
+spl_autoload_register(function ( $classname ) {
+	$prefix   = 'ContentControl\\Tests\\';
+	$base_dir = __DIR__ . '/';  // Assuming bootstrap is in the tests directory.
 
-// Give access to tests_add_filter() function.
-require_once "{$_tests_dir}/includes/functions.php";
+	$len = strlen( $prefix );
+	if ( strncmp( $prefix, $classname, $len ) !== 0 ) {
+		return;  // Not our class.
+	}
 
-/**
- * Manually load the plugin being tested.
- */
-function _manually_load_plugin() {
-	require dirname( __DIR__ ) . '/content-control.php';
-}
+	$relative_class = substr( $classname, $len );
+	$file           = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
 
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+	if ( file_exists( $file ) ) {
+		require $file;
+	}
+});
 
-// Start up the WP testing environment.
-require "{$_tests_dir}/includes/bootstrap.php";
+require_once __DIR__ . '/../vendor/autoload.php';
