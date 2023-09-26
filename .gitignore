@@ -16,6 +16,9 @@ project.properties
 .sublimelinterrc
 .wp-env.override.json
 
+# Tests & cache
+.phpunit.result.cache
+
 # Built code
 **/build/
 **/build/**/*
