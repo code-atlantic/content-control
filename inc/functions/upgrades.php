@@ -80,8 +80,6 @@ function get_data_version( $key ) {
 	return isset( $versioning[ $key ] ) ? $versioning[ $key ] : false;
 }
 
-add_action( 'content_control/update_version', __NAMESPACE__ . '\maybe_force_v2_migrations' );
-
 /**
  * Checks if user is upgrading from < 2.0.0.
  *
