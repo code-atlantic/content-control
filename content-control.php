@@ -123,6 +123,7 @@ function plugin_instance() {
 
 	if ( ! $plugin instanceof \ContentControl\Plugin\Core ) {
 		require_once __DIR__ . '/inc/functions.php';
+		require_once __DIR__ . '/inc/deprecated.php';
 		$plugin = new Plugin\Core( get_plugin_config() );
 	}
 
