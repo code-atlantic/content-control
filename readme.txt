@@ -86,7 +86,7 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 - Improvement: Better handling of restriction titles & content. Admins with priv can insert any content into the restriction messages.
 - Improvement: Added new filter `content_control/query_filter_init_hook` to allow delaying query filtering for compatibility with plugins that make custom queries before `template_redirect` action.
 
-```php
+```
 add_filter( 'content_control/query_filter_init_hook', function () {
     return 'init'; // Try setup_theme, after_theme_setup, init or wp_loaded
 } );
