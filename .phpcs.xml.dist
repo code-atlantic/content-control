@@ -3,22 +3,23 @@
 	<description>Sniffs for WordPress plugins</description>
 
 	<file>.</file>
-	<exclude-pattern type="relative">classes/Installers/*</exclude-pattern>
+	<!-- <exclude-pattern type="relative">classes/Installers/*</exclude-pattern> -->
+	<exclude-pattern type="relative">build/*</exclude-pattern>
 	<exclude-pattern type="relative">dist</exclude-pattern>
-	<exclude-pattern type="relative">build</exclude-pattern>
-	<exclude-pattern type="relative">packages</exclude-pattern>
-	<exclude-pattern type="relative">tests</exclude-pattern>
-	<exclude-pattern type="relative">vendor</exclude-pattern>
+	<exclude-pattern type="relative">vendor/*</exclude-pattern>
 	<exclude-pattern type="relative">vendor-prefixed</exclude-pattern>
+	<exclude-pattern type="relative">tests</exclude-pattern>
 
-	<arg name="extensions" value="php"/>
+	<arg name="extensions" value="php" />
 	<!-- Show progress and sniff codes in all reports -->
-	<arg value="ps"/>
+	<arg value="ps" />
 
-	<!-- https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-	<config name="testVersion" value="5.6-"/>
-	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
-	<config name="minimum_supported_wp_version" value="5.6"/>
+	<!--
+	https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
+	<config name="testVersion" value="5.6-" />
+	<!--
+	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
+	<config name="minimum_supported_wp_version" value="5.6" />
 
 	<config name="text_domain" value="content-control, default" />
 
