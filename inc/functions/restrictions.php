@@ -57,8 +57,13 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 		return false;
 	}
 
-	// If roles is string, convert to array.
-	if ( is_string( $user_roles ) ) {
+	if ( ! in_array( $user_status, [ 'logged_in', 'logged_out' ], true ) ) {
+		// Invalid user status.
+		return false;
+	}
+
+	if ( ! is_array( $user_roles ) ) {
+		// If roles is string, convert to array.
 		$user_roles = explode( ',', $user_roles );
 		$user_roles = array_map( 'trim', $user_roles );
 		$user_roles = array_map( 'strtolower', $user_roles );
@@ -88,7 +93,12 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 				return true;
 			}
 
-			// true for match, false for exclude.
+			if ( ! in_array( $role_match, [ 'match', 'exclude' ], true ) ) {
+				// Invalid role match.
+				return false;
+			}
+
+			// True for match, false for exclude.
 			$match_value = 'match' === $role_match ? true : false;
 
 			// Checks all roles, any match will return.
