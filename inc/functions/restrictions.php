@@ -113,9 +113,6 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 
 		case 'logged_out':
 			return ! $logged_in;
-
-		default:
-			return false;
 	}
 }
 
