@@ -9,9 +9,9 @@ project.properties
 .project
 .settings*
 .idea
-# .vscode/*
-# !.vscode/content-control.code-workspace
 *.code-workspace
+.vscode/*
+!.vscode/*.code-workspace
 *.sublime-project
 *.sublime-workspace
 .sublimelinterrc

@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"phpstan.rootDir": "./",
+		"phpstan.configFile": "phpstan.neon.dist",
+		"phpunit.args": [
+			"--configuration tests/unit/phpunit.xml",
+			"--colors=always",
+			"--no-coverage"
+		],
+		"phpunit.phpunit": "vendor/bin/phpunit",
+		"phpsab.executablePathCBF": "vendor/bin/phpcbf",
+		"phpsab.executablePathCS": "vendor/bin/phpcs"
+	}
+}
