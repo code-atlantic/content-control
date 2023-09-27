@@ -10,6 +10,7 @@ project.properties
 .settings*
 .idea
 .vscode
+!.vscode/*.code-workspace
 *.code-workspace
 *.sublime-project
 *.sublime-workspace
@@ -27,6 +28,9 @@ project.properties
 node_modules
 release
 dist
+
+# Coverage
+/coverage
 
 # Logs
 /logs
