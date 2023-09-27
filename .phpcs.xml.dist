@@ -5,10 +5,9 @@
 	<file>.</file>
 	<!-- <exclude-pattern type="relative">classes/Installers/*</exclude-pattern> -->
 	<exclude-pattern type="relative">build/*</exclude-pattern>
-	<exclude-pattern type="relative">dist</exclude-pattern>
+	<exclude-pattern type="relative">dist/*</exclude-pattern>
 	<exclude-pattern type="relative">vendor/*</exclude-pattern>
-	<exclude-pattern type="relative">vendor-prefixed</exclude-pattern>
-	<exclude-pattern type="relative">tests</exclude-pattern>
+	<exclude-pattern type="relative">vendor-prefixed/*</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<!-- Show progress and sniff codes in all reports -->
@@ -25,4 +24,21 @@
 
 	<!-- Force short syntax arrays. -->
 	<rule ref="CodeAtlantic" />
+
+	<!-- Disable the following rules only for the tests directory
+	WordPress.NamingConventions.ValidVariableName.NotSnakeCase
+	Squiz.Commenting.FunctionComment.Missing
+	-->
+	<rule ref="PHPCompatibility">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
 </ruleset>
