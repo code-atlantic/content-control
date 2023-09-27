@@ -24,7 +24,7 @@ abstract class PluginTestCase extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		Monkey\setUp();
-		require_once __DIR__ . '/../inc/functions.php';
+		require_once __DIR__ . '/../../inc/functions.php';
 	}
 
 	/**
