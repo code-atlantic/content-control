@@ -35,9 +35,9 @@ function jp_content_control() {
 	return \ContentControl\plugin();
 }
 
-add_filter( 'content_control/old_conditions', function ( $conditions ) {
+add_filter( 'content_control/rule_engine/deprecated_rules', function ( $conditions ) {
 	if ( has_filter( 'jp_cc_registered_conditions' ) ) {
-		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_registered_conditions', '2.0.0', 'filter:content_control/old_conditions' );
+		plugin( 'logging' )->log_deprecated_notice( 'filter:jp_cc_registered_conditions', '2.0.0', 'filter:content_control/rule_engine/deprecated_rules' );
 		/**
 		 * Filter the registered conditions.
 		 *

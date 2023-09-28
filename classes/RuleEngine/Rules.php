@@ -586,7 +586,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		$old_rules = apply_filters( 'content_control/old_conditions', [] );
+		$old_rules = apply_filters( 'content_control/rule_engine/deprecated_rules', [] );
 
 		if ( ! empty( $old_rules ) ) {
 			$old_rules = $this->parse_old_rules( $old_rules );
