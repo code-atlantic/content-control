@@ -94,7 +94,7 @@ class Rules {
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
-		return ! empty( $rule );
+		return is_array( $rule ) && ! empty( $rule );
 	}
 
 	/**
@@ -127,8 +127,6 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_block_editor_rules() {
-		$rules = $this->get_rules();
-
 		/**
 		 * Filter the rules.
 		 *
@@ -136,7 +134,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		return apply_filters( 'content_control/rule_engine/get_block_editor_rules', $rules );
+		return apply_filters( 'content_control/rule_engine/get_block_editor_rules', $this->get_rules() );
 	}
 
 	/**
