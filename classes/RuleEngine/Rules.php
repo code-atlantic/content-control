@@ -169,7 +169,7 @@ class Rules {
 	 *
 	 * @return void
 	 */
-	private function register_built_in_rules() {
+	protected function register_built_in_rules() {
 		$rules = array_merge(
 			$this->get_user_rules(),
 			$this->get_general_content_rules(),
@@ -205,7 +205,7 @@ class Rules {
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
-	public function get_user_rules() {
+	protected function get_user_rules() {
 		$verbs = $this->get_verbs();
 		return [
 			'user_is_logged_in' => [
@@ -242,7 +242,7 @@ class Rules {
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
-	public function get_general_content_rules() {
+	protected function get_general_content_rules() {
 		$rules = [];
 		$verbs = $this->get_verbs();
 
@@ -304,7 +304,7 @@ class Rules {
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
-	public function get_post_type_rules() {
+	protected function get_post_type_rules() {
 		$verbs = $this->get_verbs();
 
 		$rules      = [];
@@ -440,7 +440,7 @@ class Rules {
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
-	public function get_post_type_tax_rules( $name ) {
+	protected function get_post_type_tax_rules( $name ) {
 		$verbs = $this->get_verbs();
 
 		$post_type = get_post_type_object( $name );
@@ -493,7 +493,7 @@ class Rules {
 	 *
 	 * @return array<string,array<string,mixed>>
 	 */
-	public function get_taxonomy_rules() {
+	protected function get_taxonomy_rules() {
 		$rules      = [];
 		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
 		$verbs      = $this->get_verbs();
@@ -576,7 +576,7 @@ class Rules {
 	 *
 	 * @return void
 	 */
-	public function register_deprecated_rules() {
+	protected function register_deprecated_rules() {
 		/**
 		 * Filters the old conditions to be registered as rules.
 		 *
