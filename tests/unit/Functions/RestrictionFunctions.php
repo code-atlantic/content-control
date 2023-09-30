@@ -5,24 +5,26 @@
  * @package ContentControl\Tests
  */
 
-namespace ContentControl\Tests\FunctionTests;
+namespace ContentControl\Tests\Functions;
 
 use Mockery;
-use Brain\Monkey\Functions;
-use Brain\Monkey\Actions;
 use Brain\Monkey\Filters;
+use Brain\Monkey\Functions;
 use ContentControl\Tests\PluginTestCase;
 
+
 use function ContentControl\get_restriction;
-use function ContentControl\admins_are_excluded;
 use function ContentControl\user_is_excluded;
-use function ContentControl\user_meets_requirements;
+use function ContentControl\admins_are_excluded;
 use function ContentControl\query_can_be_ignored;
+use function ContentControl\user_meets_requirements;
 
 /**
- * Restriction function tests.
+ * Restrictions function tests.
+ *
+ * @see inc/functions/restrictions.php
  */
-class RestrictionFunctionTests extends PluginTestCase {
+class RestrictionFunctions extends PluginTestCase {
 
 	/**
 	 * Test get_restriction().
