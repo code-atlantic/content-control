@@ -43,7 +43,8 @@
 			"packages": [
 				"pimple/pimple",
 				"trustedlogin/client"
-			]
+			],
+			"delete_vendor_packages": true
 		}
 	},
 	"prefer-stable": true,
@@ -85,6 +86,7 @@
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"composer/installers": true,
 			"phpstan/extension-installer": true
-		}
+		},
+		"optimize-autoloader": true
 	}
 }
