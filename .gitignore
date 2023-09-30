@@ -2,7 +2,7 @@
 /classes/Dependencies/
 
 # Languages folder (built at release).
-/languages/
+/languages/*
 
 # Editors
 project.xml
