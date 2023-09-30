@@ -127,6 +127,8 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	public function get_block_editor_rules() {
+		$rules = $this->get_rules();
+
 		/**
 		 * Filter the rules.
 		 *
@@ -134,7 +136,7 @@ class Rules {
 		 *
 		 * @return array
 		 */
-		return apply_filters( 'content_control/rule_engine/get_block_editor_rules', $this->get_rules() );
+		return apply_filters( 'content_control/rule_engine/get_block_editor_rules', $rules );
 	}
 
 	/**
