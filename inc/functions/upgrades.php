@@ -77,6 +77,38 @@ function set_data_versions( $versioning ) {
 function get_data_version( $key ) {
 	$versioning = get_data_versions();
 
+	switch ( $key ) {
+		// Fallthrough.
+		case 'restrictions':
+			// If set to v1 and there are no v1 restrictions, set to v2.
+			if ( 1 === $versioning[ $key ] ) {
+				$v1_restrictions = get_v1_restrictions();
+
+				if ( false === $v1_restrictions ) {
+					$versioning[ $key ] = 2;
+					set_data_versions( $versioning );
+					return 2;
+				}
+			}
+
+			break;
+
+		case 'settings':
+			// If set to v1 and there are no v1 settings, set to v2.
+			if ( 1 === $versioning[ $key ] ) {
+				$v1_settings = \get_option( 'jp_cc_settings', [] );
+
+				if ( empty( $v1_settings ) ) {
+					$versioning[ $key ]   = 2;
+					$versioning['backup'] = 2; // Backup is always the same as settings.
+					set_data_versions( $versioning );
+					return 2;
+				}
+			}
+
+			break;
+	}
+
 	return isset( $versioning[ $key ] ) ? $versioning[ $key ] : false;
 }
 
