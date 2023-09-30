@@ -30,7 +30,7 @@ class QueryPosts extends Controller {
 	 */
 	public function init() {
 		// We delay this until functions.php is loaded, so that users can use the content_control/query_filter_init_hook filter.
-		add_action( 'after_setup_theme', [ $this, 'register_hooks' ], 11 );
+		add_action( 'init', [ $this, 'register_hooks' ], 999999 );
 	}
 
 	/**
@@ -49,7 +49,7 @@ class QueryPosts extends Controller {
 		 * - Register later for more compatibility with other plugins that late register post types.
 		 *
 		 * @param null|string $init_hook The hook to use to add the query post filtering.
-		 * @return null|string The hook to use, should be: init, wp_loaded, or maybe even parse_query or wp (if you know what you're doing).
+		 * @return null|string The hook to use, should be: wp_loaded, or maybe even parse_query or wp (if you know what you're doing).
 		 */
 		$init_hook = apply_filters( 'content_control/query_filter_init_hook', null );
 
@@ -61,7 +61,7 @@ class QueryPosts extends Controller {
 		 */
 		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 999 );
 
-		if ( is_null( $init_hook ) ) {
+		if ( is_null( $init_hook ) || ! did_action( $init_hook ) ) {
 			// If the user has not specified a hook, we'll use the default (now).
 			$this->enable_query_filtering();
 			return;
