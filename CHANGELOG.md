@@ -8,6 +8,7 @@
 - Tweak: Fix issue in build that caused autoloader to not fully use optimized classmap, should result in improved performance.
 - Fix: Ensure `$wp_rewrite` is available before calling `is_rest()` -> `get_rest_url()`. This should prevent errors when using the plugin with **WP CLI** and when plugins make `WP_Query` calls during `plugins_loaded`.
 - Fix: Don't attempt to initialize side query filtering until after_theme_setup hook. This should prevent errors when plugins make `WP_Query` calls during `plugins_loaded`, and allow further delaying initialization if needed from themes `functions.php` file.
+- Fix: Backward compatibility issue with WP versions <6.2 that made settings page not render.
 
 ## v2.0.9 - 09/24/2023
 
