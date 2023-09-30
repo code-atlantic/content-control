@@ -1,6 +1,9 @@
 # Composer Dependencies
 /classes/Dependencies/
 
+# Languages folder (built at release).
+/languages/
+
 # Editors
 project.xml
 project.properties
