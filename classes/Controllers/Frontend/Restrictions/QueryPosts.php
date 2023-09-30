@@ -37,11 +37,6 @@ class QueryPosts extends Controller {
 		 */
 		$init_hook = apply_filters( 'content_control/query_filter_init_hook', null );
 
-		if ( is_null( $init_hook ) ) {
-			$this->late_hooks();
-			return;
-		}
-
 		/**
 		 * Use this filter to change the priority used to add query post filtering.
 		 *
@@ -49,6 +44,11 @@ class QueryPosts extends Controller {
 		 * @return int The priority to use.
 		 */
 		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 10 );
+
+		if ( is_null( $init_hook ) ) {
+			$init_hook     = 'plugins_loaded';
+			$init_priority = 999999;
+		}
 
 		add_action( (string) $init_hook, [ $this, 'late_hooks' ], (int) $init_priority );
 	}
