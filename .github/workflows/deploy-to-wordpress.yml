@@ -31,17 +31,11 @@ jobs:
             - name: Install dependencies
               run: |
                   npm i
-                  composer install --no-dev --classmap-authoritative
 
             # Build release assets
-            - name: Build release assets
+            - name: Build release assets and copy to build directory
               run: |
-                  npm run build
-
-            # Copy build directory
-            - name: Prepare build directory
-              run: |
-                  npm run copy-build
+                  npm run build:release
 
             # Deploy to WordPress.org
             - name: WordPress Plugin Deploy
