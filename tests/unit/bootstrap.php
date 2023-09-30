@@ -23,23 +23,5 @@ if ( class_exists( 'opcache_reset' ) ) {
 	opcache_reset();
 }
 
-// Register custom autoloader for tests.
-spl_autoload_register(function ( $classname ) {
-	$prefix   = 'ContentControl\\Tests\\';
-	$base_dir = __DIR__ . '/';  // Assuming bootstrap is in the tests directory.
-
-	$len = strlen( $prefix );
-	if ( strncmp( $prefix, $classname, $len ) !== 0 ) {
-		return;  // Not our class.
-	}
-
-	$relative_class = substr( $classname, $len );
-	$file           = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
-
-	if ( file_exists( $file ) ) {
-		require $file;
-	}
-});
-
 // Load plugin autoloader.
 require_once __DIR__ . '/../../vendor/autoload.php';
