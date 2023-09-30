@@ -21,7 +21,7 @@ type Props = {
 	tabs: TabComponent[];
 };
 
-const { adminUrl } = contentControlSettingsPage;
+const { adminUrl, wpVersion } = contentControlSettingsPage;
 
 /**
  * The following section covers notifying users of unsaved changes during
@@ -139,28 +139,38 @@ const Header = ( { tabs }: Props ) => {
 				<DropdownMenu
 					label={ __( 'Support', 'content-control' ) }
 					icon={ lifesaver }
-					toggleProps={ {
-						as: ( { onClick } ) => (
-							<Button
-								icon={ lifesaver }
-								variant="link"
-								onClick={ onClick }
-								className="components-tab-panel__tabs-item support-link"
-							>
-								<span ref={ btnRef }>
-									{ __( 'Support', 'content-control' ) }
-								</span>
-							</Button>
-						),
-					} }
+					toggleProps={
+						wpVersion >= 6.2
+							? {
+									as: ( { onClick } ) => (
+										<Button
+											icon={ lifesaver }
+											variant="link"
+											onClick={ onClick }
+											className="components-tab-panel__tabs-item support-link"
+										>
+											<span ref={ btnRef }>
+												{ __(
+													'Support',
+													'content-control'
+												) }
+											</span>
+										</Button>
+									),
+							  }
+							: undefined
+					}
 					popoverProps={ {
 						noArrow: false,
 						position: 'bottom left',
 						className: 'cc-settings-page__support-menu',
-						anchor: {
-							getBoundingClientRect: () =>
-								btnRef?.current?.getBoundingClientRect(),
-						} as Element,
+						anchor:
+							wpVersion >= 6.2
+								? ( {
+										getBoundingClientRect: () =>
+											btnRef?.current?.getBoundingClientRect(),
+								  } as Element )
+								: undefined,
 					} }
 				>
 					{ ( { onClose } ) => (
