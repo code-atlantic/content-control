@@ -293,6 +293,9 @@ class Upgrades extends Controller {
 					}
 				}
 
+				// Filter out any upgrades that have fail counts of 0.
+				$failed_upgrades = array_filter( $failed_upgrades );
+
 				if ( ! empty( $failed_upgrades ) ) {
 					$stream->send_error( [
 						'message' => __( 'Some upgrades failed to complete.', 'content-control' ),
