@@ -29,6 +29,11 @@
 			"vendor-prefixed"
 		]
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"ContentControl\\Tests\\": "tests/unit/"
+		}
+	},
 	"extra": {
 		"strauss": {
 			"target_directory": "/vendor-prefixed/",
