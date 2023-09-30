@@ -5,7 +5,9 @@
 - Improvement: If no v1 global restrictions existed, skip the migration step entirely.
 - Improvement: Default to late init of post query filtering until after plugins_loaded should be finished. This should prevent help prevent random errors due to restrictions being checked before plugins have had a chance to register their post types, and thus restrictions won't properly match those post type rules.
 - Improvement: Add check to prevent restriction checks for **WP CLI** requests.
+- Tweak: Fix issue in build that caused autoloader to not fully use optimized classmap, should result in improved performance.
 - Fix: Ensure `$wp_rewrite` is available before calling `is_rest()` -> `get_rest_url()`. This should prevent errors when using the plugin with **WP CLI** and when plugins make `WP_Query` calls during `plugins_loaded`.
+- Fix: Don't attempt to initialize side query filtering until after_theme_setup hook. This should prevent errors when plugins make `WP_Query` calls during `plugins_loaded`, and allow further delaying initialization if needed from themes `functions.php` file.
 
 ## v2.0.9 - 09/24/2023
 
