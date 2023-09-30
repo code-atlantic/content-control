@@ -98,6 +98,9 @@ function is_frontend() {
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	if (
+		// Check if is CLI.
+		( defined( 'WP_CLI' ) && WP_CLI ) ||
+		// Check if is REST.
 		is_admin() ||
 		is_ajax() ||
 		is_cron() ||
