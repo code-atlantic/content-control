@@ -73,8 +73,8 @@
 			"@install-strauss",
 			"@php strauss.phar"
 		],
-		"test:unit": "phpunit --configuration tests/unit/phpunit.xml",
-		"coverage:report": "phpunit --configuration tests/unit/phpunit.xml --coverage-html coverage/unit/",
+		"test:unit": "phpunit --configuration tests/unit/phpunit.xml --no-coverage",
+		"coverage": "phpunit --configuration tests/unit/phpunit.xml --coverage-html coverage/unit/",
 		"test:watch": "phpunit-watcher watch < /dev/tty"
 	},
 	"config": {
