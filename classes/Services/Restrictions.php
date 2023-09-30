@@ -40,6 +40,10 @@ class Restrictions {
 					$restriction['id']        = (int) $key;
 					$all_restrictions[ $key ] = new Restriction( $restriction );
 				}
+
+				if ( ! empty( $all_restrictions ) ) {
+					\ContentControl\set_data_version( 'restrictions', 2 );
+				}
 			}
 
 			// This should run safely if no v1 rules are found, or if they don't exist.
