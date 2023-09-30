@@ -30,6 +30,7 @@ class QueryPosts extends Controller {
 	 */
 	public function init() {
 		// We delay this until functions.php is loaded, so that users can use the content_control/query_filter_init_hook filter.
+		// The assumption is that most code should be registered by init 999999, so we'll use that as the default.
 		add_action( 'init', [ $this, 'register_hooks' ], 999999 );
 	}
 
