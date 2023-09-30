@@ -40,6 +40,8 @@
 			<directory prefix="test-" suffix=".php">.</directory>
 			<directory suffix="Test.php">.</directory>
 			<directory suffix="Tests.php">.</directory>
+			<directory suffix=".php">./Classes</directory>
+			<directory suffix=".php">./Functions</directory>
 			<exclude>../../vendor/</exclude>
 			<exclude>../../vendor-prefixed/</exclude>
 		</testsuite>
