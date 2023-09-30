@@ -211,6 +211,14 @@ class Restriction {
 	 */
 	public $query;
 
+
+	/**
+	 * Data version.
+	 *
+	 * @var int
+	 */
+	public $data_version;
+
 	/**
 	 * Build a restriction.
 	 *
@@ -258,6 +266,13 @@ class Restriction {
 				$settings
 			);
 
+			$this->data_version = get_post_meta( $restriction->ID, 'data_version', true );
+
+			if ( ! $this->data_version ) {
+				$this->data_version = 2;
+				update_post_meta( $restriction->ID, 'data_version', 2 );
+			}
+
 			foreach ( $properties as $key => $value ) {
 				$this->$key = $value;
 			}
@@ -288,6 +303,8 @@ class Restriction {
 			'redirect_url'             => '',
 			'conditions'               => '',
 		] );
+
+		$this->data_version = 1;
 
 		$this->id          = 0;
 		$this->slug        = '';
