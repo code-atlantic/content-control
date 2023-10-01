@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.0.10 - 10/01/2023
+
 - Improvement: If no v1 global restrictions existed, skip the migration step entirely.
 - Improvement: Default to late init of post query filtering until after plugins_loaded should be finished. This should prevent help prevent random errors due to restrictions being checked before plugins have had a chance to register their post types, and thus restrictions won't properly match those post type rules.
 - Improvement: Add check to prevent restriction checks for **WP CLI** requests.
