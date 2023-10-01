@@ -39,7 +39,7 @@ function admins_are_excluded() {
  * @return bool True if user is excluded, false if not.
  */
 function user_is_excluded() {
-	return admins_are_excluded() && current_user_can( plugin()->get_permission( 'manage_settings' ) );
+	return admins_are_excluded() && \current_user_can( plugin()->get_permission( 'manage_settings' ) );
 }
 
 /**
@@ -57,8 +57,13 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 		return false;
 	}
 
-	// If roles is string, convert to array.
-	if ( is_string( $user_roles ) ) {
+	if ( ! in_array( $user_status, [ 'logged_in', 'logged_out' ], true ) ) {
+		// Invalid user status.
+		return false;
+	}
+
+	if ( ! is_array( $user_roles ) ) {
+		// If roles is string, convert to array.
 		$user_roles = explode( ',', $user_roles );
 		$user_roles = array_map( 'trim', $user_roles );
 		$user_roles = array_map( 'strtolower', $user_roles );
@@ -69,7 +74,7 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 		$user_roles = array_keys( $user_roles );
 	}
 
-	$logged_in = is_user_logged_in();
+	$logged_in = \is_user_logged_in();
 
 	switch ( $user_status ) {
 		case 'logged_in':
@@ -88,12 +93,17 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 				return true;
 			}
 
-			// true for match, false for exclude.
+			if ( ! in_array( $role_match, [ 'match', 'exclude' ], true ) ) {
+				// Invalid role match.
+				return false;
+			}
+
+			// True for match, false for exclude.
 			$match_value = 'match' === $role_match ? true : false;
 
 			// Checks all roles, any match will return.
 			foreach ( $user_roles as $role ) {
-				if ( current_user_can( $role ) ) {
+				if ( \current_user_can( $role ) ) {
 					return $match_value;
 				}
 			}
@@ -103,9 +113,6 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 
 		case 'logged_out':
 			return ! $logged_in;
-
-		default:
-			return false;
 	}
 }
 
@@ -121,7 +128,7 @@ function query_can_be_ignored( $query = null ) {
 		return true;
 	}
 
-	$post_types_to_ignore = apply_filters( 'content_control/post_types_to_ignore', [
+	$post_types_to_ignore = \apply_filters( 'content_control/post_types_to_ignore', [
 		'cc_restriction',
 		'wp_template',
 		'wp_template_part',
@@ -134,5 +141,5 @@ function query_can_be_ignored( $query = null ) {
 		return true;
 	}
 
-	return false !== apply_filters( 'content_control/ignoreable_query', false, $query );
+	return false !== \apply_filters( 'content_control/ignoreable_query', false, $query );
 }

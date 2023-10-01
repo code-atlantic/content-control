@@ -43,6 +43,10 @@ class Assets extends Controller {
 			$permissions[ $permission ] = current_user_can( $cap );
 		}
 
+		$wp_version = get_bloginfo( 'version' );
+		// Strip last number from version as they won't be breaking changes.
+		$wp_version = preg_replace( '/\.\d+$/', '', $wp_version );
+
 		$packages = [
 			'block-editor'  => [
 				'handle'   => 'content-control-block-editor',
@@ -50,6 +54,7 @@ class Assets extends Controller {
 				'varsName' => 'contentControlBlockEditor',
 				'vars'     => [
 					'adminUrl'       => admin_url(),
+					'wpVersion'      => $wp_version,
 					'pluginUrl'      => $this->container->get_url(),
 					'advancedMode'   => $this->container->get_option( 'advanced_mode', false ),
 					'allowedBlocks'  => [],
@@ -95,6 +100,7 @@ class Assets extends Controller {
 				'varsName' => 'contentControlSettingsPage',
 				'vars'     => [
 					'pluginUrl'    => $this->container->get( 'url' ),
+					'wpVersion'    => $wp_version,
 					'adminUrl'     => admin_url(),
 					'restBase'     => 'content-control/v2',
 					'userRoles'    => allowed_user_roles(),

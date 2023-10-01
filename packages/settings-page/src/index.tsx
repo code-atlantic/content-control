@@ -6,13 +6,14 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
 import { registry } from '@content-control/data';
 import { RegistryProvider } from '@wordpress/data';
-import { createRoot } from '@wordpress/element';
+import { render, createRoot } from '@wordpress/element';
 
 import App from './App';
 
 /* Global Var Declarations */
 declare global {
 	const contentControlSettingsPage: {
+		wpVersion: number;
 		adminUrl: string;
 		pluginUrl: string;
 		logUrl: string | false;
@@ -41,14 +42,10 @@ declare global {
 	};
 }
 
-export const init = () => {
-	const root = document.getElementById( 'content-control-root-container' );
+const { wpVersion } = contentControlSettingsPage;
 
-	if ( ! root ) {
-		return;
-	}
-
-	createRoot( root ).render(
+const renderer = () => {
+	return (
 		// <StrictMode>
 		<BrowserRouter>
 			<QueryParamProvider adapter={ ReactRouter6Adapter }>
@@ -59,4 +56,19 @@ export const init = () => {
 		</BrowserRouter>
 		// </StrictMode>
 	);
+};
+
+export const init = () => {
+	const root = document.getElementById( 'content-control-root-container' );
+
+	if ( ! root ) {
+		return;
+	}
+
+	// createRoot was added in WP 6.2, so we need to check for it first.
+	if ( wpVersion >= 6.2 || typeof createRoot === 'function' ) {
+		createRoot( root ).render( renderer() );
+	} else {
+		render( renderer(), root );
+	}
 };

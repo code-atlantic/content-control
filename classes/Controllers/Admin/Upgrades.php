@@ -43,6 +43,7 @@ class Upgrades extends Controller {
 		add_action( 'admin_init', [ $this, 'hooks' ] );
 		add_action( 'wp_ajax_content_control_upgrades', [ $this, 'ajax_handler' ] );
 		add_filter( 'content_control/settings-page_localized_vars', [ $this, 'localize_vars' ] );
+		add_action( 'content_control/update_version', '\\ContentControl\\maybe_force_v2_migrations' );
 	}
 
 	/**
@@ -291,6 +292,9 @@ class Upgrades extends Controller {
 						++$failed_upgrades[ $upgrade_name ];
 					}
 				}
+
+				// Filter out any upgrades that have fail counts of 0.
+				$failed_upgrades = array_filter( $failed_upgrades );
 
 				if ( ! empty( $failed_upgrades ) ) {
 					$stream->send_error( [

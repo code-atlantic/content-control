@@ -35,6 +35,16 @@ if ( ! defined( 'CONTENT_CONTROL_DISABLE_LOGGING' ) ) {
 	define( 'CONTENT_CONTROL_DISABLE_LOGGING', false );
 }
 
+if ( ! defined( 'WP_CLI' ) ) {
+	/**
+	 * WP CLI.
+	 *
+	 * @phpstan-type bool $wp_cli
+	 * @var bool $wp_cli
+	 */
+	define( 'WP_CLI', false );
+}
+
 if ( ! defined( 'IS_WPCOM' ) ) {
 	/**
 	 * Is WPCOM.

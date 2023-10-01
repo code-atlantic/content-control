@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.9
+Stable tag: 2.0.10
 Requires PHP: 5.6
 License: GPLv3 (or later)
 
@@ -83,17 +83,27 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 == Changelog ==
 
+= v2.0.10 - 10/01/2023 =
+
+- Improvement: If no v1 global restrictions existed, skip the migration step entirely.
+- Improvement: Default to late init of post query filtering until after plugins_loaded should be finished. This should prevent help prevent random errors due to restrictions being checked before plugins have had a chance to register their post types, and thus restrictions won't properly match those post type rules.
+- Improvement: Add check to prevent restriction checks for **WP CLI** requests.
+- Improvement: Add notice to indicate is when waiting for post/page search results in the restriction editor fields.
+- Tweak: Fix issue in build that caused autoloader to not fully use optimized classmap, should result in improved performance.
+- Fix: Ensure `$wp_rewrite` is available before calling `is_rest()` -> `get_rest_url()`. This should prevent errors when using the plugin with **WP CLI** and when plugins make `WP_Query` calls during `plugins_loaded`.
+- Fix: Don't attempt to initialize side query filtering until after_theme_setup hook. This should prevent errors when plugins make `WP_Query` calls during `plugins_loaded`, and allow further delaying initialization if needed from themes `functions.php` file.
+- Fix: Backward compatibility issue with WP versions <6.2 that made settings page not render.
+- Fix: Bug where Block Controls didn't work on WooCommerce pages. This was filtering `pre_render_block` but not returning a value. Now we run our check after theirs to ensure that bug has no effect on our plugin. [Report](https://github.com/woocommerce/woocommerce-blocks/issues/11077)
+
 = v2.0.9 - 09/24/2023 =
 
 - Improvement: Better handling of restriction titles & content. Admins with priv can insert any content into the restriction messages.
 - Improvement: Added new filter `content_control/query_filter_init_hook` to allow delaying query filtering for compatibility with plugins that make custom queries before `template_redirect` action.
 
-```php
-
+```
 add_filter( 'content_control/query_filter_init_hook', function () {
     return 'init'; // Try setup_theme, after_theme_setup, init or wp_loaded
 } );
-
 ```
 
 - Tweak: Ensure our restriction checks work within a nested post loop.

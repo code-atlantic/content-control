@@ -12,6 +12,11 @@ env:
 jobs:
     draft:
         runs-on: ubuntu-latest
+
+        # Define outputs for the job
+        outputs:
+            release_url: ${{ steps.create_release.outputs.html_url }}
+
         steps:
             # Checkout code
             - name: Checkout code
@@ -61,6 +66,11 @@ jobs:
                   release_name: Release ${{ github.ref }}
                   draft: true
 
+            # Display link to draft release visually
+            - name: Display Release Link
+              run: |
+                  echo "Draft release URL: ${{ steps.create_release.outputs.html_url }}"
+
             # Upload release asset
             - name: Upload Release Asset
               id: upload-release-asset
@@ -72,3 +82,12 @@ jobs:
                   asset_path: ${{ env.SLUG }}_${{ github.ref_name }}.zip
                   asset_name: ${{ env.SLUG }}_${{ github.ref_name }}.zip
                   asset_content_type: application/zip
+
+    # Additional job to display the link prominently at the end
+    display:
+        needs: draft
+        runs-on: ubuntu-latest
+        steps:
+            - name: Print Release URL
+              run: |
+                  echo "The draft release can be found at: ${{ needs.draft.outputs.release_url }}"

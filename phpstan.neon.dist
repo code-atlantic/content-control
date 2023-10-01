@@ -10,8 +10,11 @@ parameters:
         - bin/phpstan-bootstrap.php
     scanDirectories:
         - bin/stubs/
+    excludePaths:
+        - tests/
     dynamicConstantNames:
         - 'IS_WPCOM'
+        - 'WP_CLI'
         - 'CONTENT_CONTROL_LICENSE_KEY'
         - 'CONTENT_CONTROL_DISABLE_LOGGING'
         - 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING'

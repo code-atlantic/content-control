@@ -34,13 +34,18 @@ class Restrictions {
 			$all_restrictions = [];
 
 			if ( \ContentControl\get_data_version( 'restrictions' ) === 1 ) {
-				$restrictions = \ContentControl\get_v1_restrictions();
+				$old_restrictions = \ContentControl\get_v1_restrictions();
 
-				foreach ( $restrictions as $key => $restriction ) {
-					$restriction['id']        = (int) $key;
-					$all_restrictions[ $key ] = new Restriction( $restriction );
+				if ( false !== $old_restrictions ) {
+					foreach ( $old_restrictions as $key => $restriction ) {
+						$restriction['id']        = (int) $key;
+						$all_restrictions[ $key ] = new Restriction( $restriction );
+					}
 				}
-			} else {
+			}
+
+			// This should run safely if no v1 rules are found, or if they don't exist.
+			if ( empty( $all_restrictions ) ) {
 				// Query restriction post type.
 				$restrictions = get_posts(
 					[

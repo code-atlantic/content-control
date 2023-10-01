@@ -12,13 +12,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Get v1 restrictions from wp_options.
  *
- * @return array<string,string|bool|int|array<mixed>>[]
+ * @return array<string,string|bool|int|array<mixed>>[]|false
  */
 function get_v1_restrictions() {
 	$settings = \get_option( 'jp_cc_settings', [] );
 
-	if ( ! isset( $settings['restrictions'] ) ) {
-		return [];
+	if ( ! isset( $settings['restrictions'] ) || empty( $settings['restrictions'] ) ) {
+		return false;
 	}
 
 	return $settings['restrictions'];

@@ -29,28 +29,46 @@ class QueryPosts extends Controller {
 	 * @return void
 	 */
 	public function init() {
+		// We delay this until functions.php is loaded, so that users can use the content_control/query_filter_init_hook filter.
+		// The assumption is that most code should be registered by init 999999, so we'll use that as the default.
+		add_action( 'init', [ $this, 'register_hooks' ], 999999 );
+	}
+
+	/**
+	 * Register hooks.
+	 *
+	 * @return void
+	 */
+	public function register_hooks() {
 		/**
 		 * Use this filter to change the hook used to add query post filtering.
 		 *
+		 * This only applies to alternate queries, not the main query, and is used for removing
+		 * posts from the query that are restricted.
+		 *
+		 * - Register earlier for more restriction coverage.
+		 * - Register later for more compatibility with other plugins that late register post types.
+		 *
 		 * @param null|string $init_hook The hook to use to add the query post filtering.
-		 * @return null|string The hook to use, should be: setup_theme, after_theme_setup, init or wp_loaded.
+		 * @return null|string The hook to use, should be: wp_loaded, or maybe even parse_query or wp (if you know what you're doing).
 		 */
 		$init_hook = apply_filters( 'content_control/query_filter_init_hook', null );
-
-		if ( is_null( $init_hook ) ) {
-			$this->late_hooks();
-			return;
-		}
 
 		/**
 		 * Use this filter to change the priority used to add query post filtering.
 		 *
 		 * @param int $init_priority The priority to use to add the query post filtering.
-		 * @return int The priority to use.
+		 * @return int The priority to use. Default: 999.
 		 */
-		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 10 );
+		$init_priority = apply_filters( 'content_control/query_filter_init_priority', 999 );
 
-		add_action( (string) $init_hook, [ $this, 'late_hooks' ], (int) $init_priority );
+		if ( is_null( $init_hook ) || ! did_action( $init_hook ) ) {
+			// If the user has not specified a hook, we'll use the default (now).
+			$this->enable_query_filtering();
+			return;
+		}
+
+		add_action( (string) $init_hook, [ $this, 'enable_query_filtering' ], (int) $init_priority );
 	}
 
 	/**
@@ -58,7 +76,7 @@ class QueryPosts extends Controller {
 	 *
 	 * @return void
 	 */
-	public function late_hooks() {
+	public function enable_query_filtering() {
 		add_filter( 'the_posts', [ $this, 'restrict_query_posts' ], 10, 2 );
 	}
 

@@ -1,6 +1,9 @@
 # Composer Dependencies
 /classes/Dependencies/
 
+# Languages folder (built at release).
+/languages/*
+
 # Editors
 project.xml
 project.properties
@@ -9,12 +12,16 @@ project.properties
 .project
 .settings*
 .idea
-.vscode
 *.code-workspace
+.vscode/*
+!.vscode/*.code-workspace
 *.sublime-project
 *.sublime-workspace
 .sublimelinterrc
 .wp-env.override.json
+
+# Tests & cache
+.phpunit.result.cache
 
 # Built code
 **/build/
@@ -24,6 +31,9 @@ project.properties
 node_modules
 release
 dist
+
+# Coverage
+/coverage
 
 # Logs
 /logs

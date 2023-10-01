@@ -1,6 +1,6 @@
 {
 	"name": "content-control",
-	"version": "2.0.9",
+	"version": "2.0.10",
 	"description": "",
 	"author": "Code Atlantic",
 	"license": "GPL-2.0-or-later",
@@ -96,7 +96,7 @@
 		"pretest:unit:php": "wp-env start",
 		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
 		"translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
-		"release": "composer install --no-dev --classmap-authoritative && npm run build && npm run translate && npm run plugin-zip"
+		"build:release": "composer install -o --no-dev && npm run build && npm run copy-build"
 	},
 	"babel": {},
 	"workspaces": [
