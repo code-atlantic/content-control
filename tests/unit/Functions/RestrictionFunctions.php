@@ -277,8 +277,7 @@ class RestrictionFunctions extends PluginTestCase {
 	 */
 	public function userMeetsRequirementsProvider() {
 		return [
-			// [ bool $expectedResult, array $args, array|null $stubs, string $message ]
-
+			// [ bool $expectedResult, array $args, array|null $stubs, string $message ].
 			// 1. Empty $user_status
 			// - should always return false.
 			'Empty $user_status should always return false.' => [
@@ -519,8 +518,7 @@ class RestrictionFunctions extends PluginTestCase {
 	 */
 	public function queryCanBeIgnoredProvider() {
 		return [
-			// [ bool $expectedResult, array $args, array|null $stubs, string $message ]
-
+			// [ bool $expectedResult, array $args, array|null $stubs, string $message ].
 			// 1. $query->get( 'ignore_restrictions', false ) === true
 			// - should return true.
 			'Query with ignore_restrictions = true should return true.' => [
@@ -595,8 +593,7 @@ class RestrictionFunctions extends PluginTestCase {
 	 */
 	public function queryCanBeIgnoredProviderFilterProvider() {
 		return [
-			// [ bool $expectedResult, array $args, string $message ]
-
+			// [ bool $expectedResult, array $args, string $message ].
 			// 1. content_control/post_types_to_ignore
 			// - if filter appends 'post', should return true.
 			'Query with post_type = "post" and post_types_to_ignore includes "post" should return true.' => [
