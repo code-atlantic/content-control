@@ -10,6 +10,7 @@
 - Fix: Ensure `$wp_rewrite` is available before calling `is_rest()` -> `get_rest_url()`. This should prevent errors when using the plugin with **WP CLI** and when plugins make `WP_Query` calls during `plugins_loaded`.
 - Fix: Don't attempt to initialize side query filtering until after_theme_setup hook. This should prevent errors when plugins make `WP_Query` calls during `plugins_loaded`, and allow further delaying initialization if needed from themes `functions.php` file.
 - Fix: Backward compatibility issue with WP versions <6.2 that made settings page not render.
+- Fix: Bug where Block Controls didn't work on WooCommerce pages. This was filtering `pre_render_block` but not returning a value. Now we run our check after theirs to ensure that bug has no effect on our plugin. [Report](https://github.com/woocommerce/woocommerce-blocks/issues/11077)
 
 ## v2.0.9 - 09/24/2023
 
