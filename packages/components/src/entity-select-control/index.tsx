@@ -41,32 +41,42 @@ const EntitySelectControl = <
 
 	const { prefill = [] } = useSelect(
 		( select ) => ( {
-			// @ts-ignore
-			prefill: select( coreDataStore ).getEntityRecords(
-				entityKind,
-				entityType,
-				{
-					context: 'view',
-					include: value,
-					per_page: -1,
-				}
-			) as ObjectOption[],
+			prefill: value
+				? ( select( coreDataStore ).getEntityRecords(
+						entityKind,
+						entityType,
+						{
+							context: 'view',
+							include: value,
+							per_page: -1,
+						}
+				  ) as ObjectOption[] )
+				: [],
 		} ),
 		[ value, entityKind, entityType ]
 	);
 
-	const { suggestions = [] } = useSelect(
+	const { suggestions = [], isSearching = false } = useSelect(
 		( select ) => ( {
-			// @ts-ignore
 			suggestions: select( coreDataStore ).getEntityRecords(
 				entityKind,
 				entityType,
 				{
 					context: 'view',
 					search: queryText,
-					per_page: 10,
+					per_page: -1,
 				}
 			) as ObjectOption[],
+			// @ts-ignore This exists and is being used as documented.
+			isSearching: select( 'core/data' ).isResolving(
+				'core',
+				'getEntityRecords',
+				[
+					entityKind,
+					entityType,
+					{ context: 'view', search: queryText, per_page: -1 },
+				]
+			),
 		} ),
 		[ entityKind, entityType, queryText ]
 	);
@@ -177,6 +187,16 @@ const EntitySelectControl = <
 								return option?.id.toString() ?? false;
 						  } )
 						: []
+				}
+				messages={
+					isSearching
+						? {
+								noSuggestions: __(
+									'Searching…',
+									'content-control'
+								),
+						  }
+						: undefined
 				}
 			/>
 		</div>
