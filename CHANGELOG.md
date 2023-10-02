@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Tweak: Ensure upgrade stream doesn't send headers if they were already sent.
+
 ## v2.0.10 - 10/01/2023
 
 - Improvement: If no v1 global restrictions existed, skip the migration step entirely.
