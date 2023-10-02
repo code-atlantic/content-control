@@ -45,6 +45,11 @@ class Stream {
 	 * @return void
 	 */
 	public function start() {
+		if ( headers_sent() ) {
+			// Do not start the stream if headers have already been sent.
+			return;
+		}
+
 		// Disable default disconnect checks.
 		ignore_user_abort( true );
 

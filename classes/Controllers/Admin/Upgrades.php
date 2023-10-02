@@ -230,13 +230,13 @@ class Upgrades extends Controller {
 		}
 
 		try {
-			$stream   = new \ContentControl\Services\UpgradeStream( 'upgrades' );
 			$upgrades = $this->get_required_upgrades();
 			$count    = count( $upgrades );
+			$stream   = new \ContentControl\Services\UpgradeStream( 'upgrades' );
+			$stream->start();
 
 			// First do/while loop starts the stream and breaks if connection aborted.
 			do {
-				$stream->start();
 				$stream->start_upgrades( $count, __( 'Upgrades started', 'content-control' ) );
 
 				$failed_upgrades = [];
