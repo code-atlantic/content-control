@@ -62,14 +62,17 @@ function user_can_view_content( $post_id = null ) {
 
 	$can_view = true;
 
+	$restrictions = [];
+
 	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
 		$restriction = get_applicable_restriction( $post_id );
 
 		if ( null !== $restriction ) {
-			$can_view = $restriction->user_meets_requirements();
+			$can_view       = $restriction->user_meets_requirements();
+			$restrictions[] = $restriction;
 		}
 	} else {
-		$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $post_id );
+		$restrictions = get_all_applicable_restrictions( $post_id );
 
 		if ( count( $restrictions ) ) {
 			$checks = [];
@@ -88,12 +91,13 @@ function user_can_view_content( $post_id = null ) {
 	 *
 	 * @param bool $can_view Whether user can view content.
 	 * @param int|null $post_id Post ID.
+	 * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
 	 *
 	 * @return bool
 	 *
 	 * @since 2.0.0
 	 */
-	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id );
+	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id, $restrictions );
 }
 
 /**
@@ -143,6 +147,28 @@ function get_applicable_restriction( $post_id = null ) {
 	}
 
 	return $restriction;
+}
+
+/**
+ * Get all applicable restrictions.
+ *
+ * @param int|null $post_id Post ID.
+ *
+ * @return \ContentControl\Models\Restriction[]
+ *
+ * @since 2.0.11
+ */
+function get_all_applicable_restrictions( $post_id = null ) {
+	$overload_post = setup_post( $post_id );
+
+	$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $post_id );
+
+	// Clear post if we overloaded it.
+	if ( $overload_post ) {
+		clear_post();
+	}
+
+	return $restrictions;
 }
 
 /**
