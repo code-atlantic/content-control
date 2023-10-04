@@ -8,6 +8,7 @@ import { __ } from '@wordpress/i18n';
 import { home, link, login } from '@wordpress/icons';
 
 import type { Restriction } from '@content-control/core-data';
+import { applyFilters } from '@wordpress/hooks';
 
 export const userStatusOptions: {
 	value: Restriction[ 'settings' ][ 'userStatus' ];
@@ -28,24 +29,27 @@ export const userStatusOptions: {
 	},
 ];
 
-export const protectionMethodOptions: {
+type protectionMethodOptionsType = {
 	value: Restriction[ 'settings' ][ 'protectionMethod' ];
 	label: string;
 	[ key: string ]: any;
-}[] = [
-	{
-		value: 'redirect',
-		label: __( 'Redirect', 'content-control' ),
-		icon: protectedRedirect,
-		// iconSize: 18,
-	},
-	{
-		value: 'replace',
-		label: __( 'Replace Content', 'content-control' ),
-		icon: protectedMessage,
-		// iconSize: 18,
-	},
-];
+};
+
+export const protectionMethodOptions: protectionMethodOptionsType[] =
+	applyFilters( 'contentControl.restrictionEditor.protectionMethodOptions', [
+		{
+			value: 'redirect',
+			label: __( 'Redirect', 'content-control' ),
+			icon: protectedRedirect,
+			// iconSize: 18,
+		},
+		{
+			value: 'replace',
+			label: __( 'Replace Content', 'content-control' ),
+			icon: protectedMessage,
+			// iconSize: 18,
+		},
+	] ) as protectionMethodOptionsType[];
 
 export const redirectTypeOptions: {
 	value: Restriction[ 'settings' ][ 'redirectType' ];
