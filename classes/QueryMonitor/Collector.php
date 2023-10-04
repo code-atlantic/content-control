@@ -36,15 +36,6 @@ class Collector extends QM_DataCollector {
 	protected $data;
 
 	/**
-	 * Data to expose on the Query Monitor debug bar.
-	 *
-	 * @return Data
-	 */
-	public function get_storage() {
-		return new Data();
-	}
-
-	/**
 	 * Name of the output class.
 	 *
 	 * @return string
