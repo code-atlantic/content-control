@@ -12,6 +12,7 @@ namespace ContentControl\Controllers;
 use ContentControl\Base\Controller;
 use ContentControl\Controllers\Compatibility\Divi;
 use ContentControl\Controllers\Compatibility\Elementor;
+use ContentControl\Controllers\Compatibility\QueryMonitor;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,8 +30,9 @@ class Compatibility extends Controller {
 	 */
 	public function init() {
 		$this->container->register_controllers( [
-			'Compatibility\Divi'      => new Divi( $this->container ),
-			'Compatibility\Elementor' => new Elementor( $this->container ),
+			'Compatibility\Divi'         => new Divi( $this->container ),
+			'Compatibility\Elementor'    => new Elementor( $this->container ),
+			'Compatibility\QueryMonitor' => new QueryMonitor( $this->container ),
 		] );
 	}
 }

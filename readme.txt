@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 Requires PHP: 5.6
 License: GPLv3 (or later)
 
@@ -82,6 +82,16 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.11 - 10/04/2023 =
+
+- Improvement: Query Monitor integration to show which restrictions are active on a page.
+  - Shows global settings that may be affecting the page.
+  - Shows which restrictions are active on the page.
+  - Shows which posts are being filtered out of queries and by which restriction.
+- Tweak: Ensure upgrade stream doesn't send headers if they were already sent.
+- Tweak: Make second arg on get_the_excerpt filter optional to prevent errors with some plugins.
+- Fix: Bug when using `content_control/check_all_restrictions` filter that caused rules to not compare properly.
 
 = v2.0.10 - 10/01/2023 =
 

@@ -1,5 +1,13 @@
 <?php
+/**
+ * Tests for the Rules class.
+ *
+ * @package    ContentControl\Tests
+ */
 
+/**
+ * Tests for the Rules class.
+ */
 class RulesTest extends \WP_UnitTestCase {
 	public function testOldRuleConversion() {
 		$rules = new \ContentControl\Rules();

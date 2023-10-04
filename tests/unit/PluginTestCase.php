@@ -36,11 +36,14 @@ abstract class PluginTestCase extends TestCase {
 		parent::tearDown();
 	}
 
+	/**
+	 * Mock the plugin instance.
+	 */
 	protected function createPluginMock( $getters = null ) {
 		static $plugin;
 
 		if ( ! isset( $plugin ) ) {
-			$plugin = Mockery::mock( '\ContentControl\Plugin' ); // replace 'PluginClass' with the actual class name
+			$plugin = Mockery::mock( '\ContentControl\Plugin' );
 
 			$plugin->shouldReceive( 'get' )
 			->withNoArgs()
@@ -66,15 +69,15 @@ abstract class PluginTestCase extends TestCase {
 		return $plugin;
 	}
 
-		/**
-		 * Mock the plugin Rules instance.
-		 *
-		 * @return \Mockery\MockInterface|\Mockery\LegacyMockInterface
-		 */
+	/**
+	 * Mock the plugin Rules instance.
+	 *
+	 * @return \Mockery\MockInterface|\Mockery\LegacyMockInterface
+	 */
 	protected function createRulesMock() {
 		$plugin = $this->createPluginMock();
 
-		$rulesMock = Mockery::mock( 'overload:\ContentControl\RuleEngine\Rules' ); // replace 'RulesClass' with the actual class name
+		$rulesMock = Mockery::mock( 'overload:\ContentControl\RuleEngine\Rules' );
 
 		$plugin->shouldReceive( 'get' )
 			->with( 'rules' )
