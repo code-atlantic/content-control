@@ -126,7 +126,7 @@ class PostContent extends Controller {
 	 *
 	 * @return string
 	 */
-	public function filter_the_excerpt_if_restricted( $post_excerpt, $post ) {
+	public function filter_the_excerpt_if_restricted( $post_excerpt, $post = null ) {
 		$filter_name = 'content_control/restricted_post_excerpt';
 
 		if ( doing_filter( $filter_name ) ) {
