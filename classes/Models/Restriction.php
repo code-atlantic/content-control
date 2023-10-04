@@ -443,6 +443,19 @@ class Restriction {
 	}
 
 	/**
+	 * Get edit link.
+	 *
+	 * @return string
+	 */
+	public function get_edit_link() {
+		if ( current_user_can( 'edit_post', $this->id ) ) {
+			return admin_url( 'options-general.php?page=content-control-settings&view=restrictions&edit=' . $this->id );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Convert this restriction to an array.
 	 *
 	 * @return array<string,mixed>
