@@ -1,4 +1,4 @@
-=== Content Control - The Ultimate User Access Restriction Plugin ===
+=== Content Control - The Ultimate Content Restriction Plugin! Restrict Content, Create Conditional Blocks & More ===
 Contributors: codeatlantic, danieliser
 Author URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=plugins-page&utm_medium=plugin-ui&utm_content=action-links-upgrade-text
 Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
