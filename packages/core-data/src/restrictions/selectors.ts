@@ -1,3 +1,5 @@
+import { applyFilters } from '@wordpress/hooks';
+
 import { Status } from '../constants';
 import { restrictionDefaults } from './constants';
 
@@ -113,8 +115,13 @@ export const getRestrictionDefaults = (
 ): Restriction => {
 	const priority = getNextPriority( state );
 
+	const defaults = applyFilters(
+		'contentControl.defaultRestrictionValues',
+		restrictionDefaults
+	) as Restriction;
+
 	return {
-		...restrictionDefaults,
+		...defaults,
 		priority,
 	};
 };

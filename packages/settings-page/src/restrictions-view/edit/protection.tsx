@@ -307,8 +307,8 @@ addFilter(
 addFilter(
 	'contentControl.restrictionEditor.fieldIsVisible',
 	'content-control',
-	( show, field, settings ) => {
-		switch ( field ) {
+	( show, fieldId, settings ) => {
+		switch ( fieldId ) {
 			case 'redirectType':
 				return 'redirect' === settings.protectionMethod;
 

@@ -49,7 +49,7 @@ export interface RestrictionSettings {
 	userStatus: 'logged_in' | 'logged_out';
 	roleMatch: 'any' | 'match' | 'exclude';
 	userRoles: string[];
-	protectionMethod: 'redirect' | 'replace';
+	protectionMethod: 'redirect' | 'replace' | string;
 	redirectType: 'login' | 'home' | 'custom';
 	redirectUrl: string;
 	replacementType: 'page' | 'message';
