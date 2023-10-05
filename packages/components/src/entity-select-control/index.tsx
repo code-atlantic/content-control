@@ -164,7 +164,7 @@ const EntitySelectControl = <
 					}
 
 					return 'postType' === entityKind
-						? suggestion.title.rendered
+						? suggestion.title.rendered ?? suggestion.title.raw
 						: suggestion.name;
 				} }
 				renderSuggestion={ ( item ) => {
@@ -176,7 +176,8 @@ const EntitySelectControl = <
 					return (
 						<>
 							{ 'postType' === entityKind
-								? suggestion.title.rendered
+								? suggestion.title.rendered ??
+								  suggestion.title.raw
 								: suggestion.name }
 						</>
 					);
