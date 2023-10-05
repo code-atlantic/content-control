@@ -1,9 +1,9 @@
-=== Content Control - The Ultimate User Access Restriction Plugin ===
+=== Content Control - The Ultimate Content Restriction Plugin! Restrict Content, Create Conditional Blocks & More ===
 Contributors: codeatlantic, danieliser
 Author URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=plugins-page&utm_medium=plugin-ui&utm_content=action-links-upgrade-text
 Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
-Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget
+Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility
 Requires at least: 5.6
 Tested up to: 6.3.1
 Stable tag: 2.0.11
@@ -14,7 +14,7 @@ Unleash your WordPress content's potential! With Content Control, restrict your 
 
 == Description ==
 
-Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual blocks. Your content, your rules, executed with precision!
+Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visibility. Your content, your rules, executed with precision!
 
 Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
 
@@ -24,6 +24,8 @@ Content Control is packed with features that allow you to:
 
 - Full control over your sites content, pages, posts, widgets, and even individual blocks.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
+  - Responsive block controls with customizable breakpoints.
+  - Control block visibility by user status, roles, device type & more.
 - Restrict access to pages, posts, widgets, and individual blocks based on user status, roles, device type & more.
 - Manage access to [media attachment pages](https://www.hongkiat.com/blog/wordpress-attachment-pages/), tags, categories, formats for logged in/out users or specific user roles.
 - Display a custom message to users who do not have permission to view the content
