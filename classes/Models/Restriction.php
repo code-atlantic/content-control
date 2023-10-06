@@ -9,6 +9,8 @@
 namespace ContentControl\Models;
 
 use ContentControl\Models\RuleEngine\Query;
+
+use function ContentControl\fetch_key_from_array;
 use function ContentControl\get_default_restriction_settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -16,9 +18,19 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Model for restriction sets.
  *
+ * @version 3.0.0
+ * @since   2.1.0
+ *
  * @package ContentControl\Models
  */
 class Restriction {
+
+	/**
+	 * Current model version.
+	 *
+	 * @var int
+	 */
+	const MODEL_VERSION = 3;
 
 	/**
 	 * Post object.
@@ -211,6 +223,12 @@ class Restriction {
 	 */
 	public $query;
 
+	/**
+	 * Restriction Settings.
+	 *
+	 * @var array<string,mixed>
+	 */
+	public $settings;
 
 	/**
 	 * Data version.
@@ -245,6 +263,8 @@ class Restriction {
 				$settings,
 				get_default_restriction_settings()
 			);
+
+			$this->settings = $settings;
 
 			// Convert keys to snake_case using camel_case_to_snake_case().
 			$settings = array_combine(
@@ -336,6 +356,70 @@ class Restriction {
 		$this->query = new Query( $this->conditions );
 
 		++$index;
+	}
+
+	/**
+	 * Get the restriction settings array.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function get_settings() {
+		return $this->settings;
+	}
+
+	/**
+	 * Get a restriction setting.
+	 *
+	 * Settings are stored in JS based camelCase. But WP prefers snake_case.
+	 *
+	 * This method supports camelCase based dot.notation, as well as snake_case.
+	 *
+	 * @param string $key Setting key.
+	 * @param mixed  $default_value Default value.
+	 *
+	 * @return mixed
+	 */
+	public function get_setting( $key, $default_value = null ) {
+		// Support camelCase, snake_case, and dot.notation.
+		// Check for camelKeys & dot.notation.
+		$value = $this->fetch_key_from_array( $key, $this->settings );
+
+		if ( null !== $value ) {
+			return $value;
+		}
+
+		// Check if key is snake_case & convert to camelCase.
+		$camel_case_key = \ContentControl\snake_case_to_camel_case( $key );
+
+		return isset( $this->settings[ $camel_case_key ] ) ? $this->settings[ $camel_case_key ] : $default_value;
+	}
+
+	/**
+	 * Get array values using dot.notation.
+	 *
+	 * @param string              $key Key to fetch.
+	 * @param array<string,mixed> $arr Array to fetch from.
+	 *
+	 * @return mixed|null
+	 */
+	private function fetch_key_from_array( $key, $arr ) {
+		// If key is .notation, then we need to traverse the array.
+		$dotted_keys = explode( '.', $key );
+
+		if ( 1 === count( $dotted_keys ) ) {
+			return isset( $arr[ $key ] ) ? $arr[ $key ] : null;
+		}
+
+		// Get the first key.
+		$key = array_shift( $dotted_keys );
+
+		// If the key exists and is an array, then we need to traverse it.
+		if ( isset( $arr[ $key ] ) && is_array( $arr[ $key ] ) ) {
+			return fetch_key_from_array( implode( '.', $dotted_keys ), $arr[ $key ] );
+		}
+
+		// If the key doesn't exists, or is not an array, then we can return it.
+		return null;
 	}
 
 	/**
