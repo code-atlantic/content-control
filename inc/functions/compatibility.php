@@ -130,6 +130,44 @@ function camel_case_to_snake_case( $str ) {
 	return strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $str ) );
 }
 
+/**
+ * Change snake_case to camelCase.
+ *
+ * @param string $str String to convert.
+ *
+ * @return string Converted string.
+ */
+function snake_case_to_camel_case( $str ) {
+	return lcfirst( str_replace( '_', '', ucwords( $str, '_' ) ) );
+}
+
+/**
+ * Get array values using dot.notation.
+ *
+ * @param string              $key Key to fetch.
+ * @param array<string,mixed> $arr Array to fetch from.
+ *
+ * @return mixed|null
+ */
+function fetch_key_from_array( $key, $arr ) {
+	// If key is .notation, then we need to traverse the array.
+	$dotted_keys = explode( '.', $key );
+
+	if ( 1 === count( $dotted_keys ) ) {
+		return isset( $arr[ $key ] ) ? $arr[ $key ] : null;
+	}
+
+	// Get the first key.
+	$key = array_shift( $dotted_keys );
+
+	// If the key exists and is an array, then we need to traverse it.
+	if ( isset( $arr[ $key ] ) && is_array( $arr[ $key ] ) ) {
+		return fetch_key_from_array( implode( '.', $dotted_keys ), $arr[ $key ] );
+	}
+
+	// If the key doesn't exists, or is not an array, then we can return it.
+	return null;
+}
 
 /**
  * Function that deeply cleans arrays for wp_maybe_serialize
