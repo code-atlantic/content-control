@@ -69,6 +69,12 @@ class Assets extends Controller {
 			'components'    => [
 				'handle' => 'content-control-components',
 				'styles' => true,
+				'deps'   => [
+					// This is required for tinymce components.
+					'wp-tinymce',
+					// This is required for all tinyMCE plugins.
+					'wp-block-library',
+				],
 			],
 			'core-data'     => [
 				'handle' => 'content-control-core-data',
