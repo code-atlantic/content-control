@@ -22,7 +22,7 @@
 	"main": "build/index",
 	"types": "build-types",
 	"dependencies": {
-		"@wordpress/primitives": "^3.39.0"
+		"@wordpress/primitives": "^3.41.0"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0"
