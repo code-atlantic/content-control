@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@content-control/core-data": "*",
 		"@content-control/utils": "*",
-		"@wordpress/base-styles": "^4.32.0",
+		"@wordpress/base-styles": "^4.34.0",
 		"@wordpress/components": "^25.7.0",
 		"@wordpress/compose": "^6.18.0",
 		"@wordpress/core-data": "^6.18.0",
