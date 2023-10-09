@@ -170,6 +170,33 @@ function fetch_key_from_array( $key, $arr ) {
 }
 
 /**
+ * Convert hex to rgba.
+ *
+ * @param string $hex_code Hex code to convert.
+ * @param float  $opacity Opacity to use.
+ *
+ * @return string Converted rgba string.
+ */
+function convert_hex_to_rgba( $hex_code, $opacity = 1 ) {
+	$hex = str_replace( '#', '', $hex_code );
+
+	if ( strlen( $hex ) == 3 ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+
+	$r = hexdec( substr( $hex, 0, 2 ) );
+	$g = hexdec( substr( $hex, 2, 2 ) );
+	$b = hexdec( substr( $hex, 4, 2 ) );
+
+	/* Backward compatibility for whole number based opacity values. */
+	if ( $opacity > 1 && $opacity <= 100 ) {
+		$opacity = $opacity / 100;
+	}
+
+	return "rgba($r,$g,$b,$opacity)";
+}
+
+/**
  * Function that deeply cleans arrays for wp_maybe_serialize
  *
  * Gets rid of Closure and other invalid data types.
