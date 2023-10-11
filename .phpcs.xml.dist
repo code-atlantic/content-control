@@ -30,14 +30,17 @@
 	Squiz.Commenting.FunctionComment.Missing
 	-->
 	<rule ref="PHPCompatibility">
+		<exclude-pattern>bin/*</exclude-pattern>
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<exclude-pattern>bin/*</exclude-pattern>
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
 	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>bin/*</exclude-pattern>
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
