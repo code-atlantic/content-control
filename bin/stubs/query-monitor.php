@@ -101,8 +101,6 @@ class QM_Output_Html {
 	 * Constructor.
 	 *
 	 * @param QM_Collector $collector The collector to associate with this output.
-	 *
-	 * @phpstan-ignore-next-line
 	 */
 	public function __construct( $collector ) {}
 
