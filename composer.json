@@ -18,7 +18,7 @@
 		"phpunit/phpunit": "^9.6",
 		"mockery/mockery": "^1.6",
 		"brain/monkey": "^2.6",
-		"php-stubs/generator": "^0.8.4"
+		"php-stubs/woocommerce-stubs": "^8.2"
 	},
 	"autoload": {
 		"psr-4": {
@@ -50,8 +50,7 @@
 	"scripts": {
 		"format": "vendor/bin/phpcbf --standard=.phpcs.xml.dist --report-summary --report-source",
 		"lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
-		"test": "bash bin/generate-stubs.sh",
-		"test1": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=./stubs/stubs.php --stats --force --include-inaccessible-class-nodes",
+		"generate-stubs": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=./stubs/stubs.php --stats --force --include-inaccessible-class-nodes",
 		"install-strauss": [
 			"curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/latest/download/strauss.phar"
 		],
@@ -70,6 +69,9 @@
 		],
 		"phpstan": [
 			"vendor/bin/phpstan analyse --memory-limit=2048M"
+		],
+		"psalm": [
+			"vendor/bin/psalm --threads=4"
 		],
 		"strauss": [
 			"@install-strauss",
