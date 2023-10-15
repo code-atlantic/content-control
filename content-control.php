@@ -40,7 +40,7 @@ function get_plugin_config() {
 		'file'          => __FILE__,
 		'basename'      => \plugin_basename( __FILE__ ),
 		'url'           => \plugin_dir_url( __FILE__ ),
-		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
+		'path'          => \plugin_dir_path( __FILE__ ) . \DIRECTORY_SEPARATOR,
 		'api_url'       => 'https://contentcontrolplugin.com/',
 		'is_pro'        => class_exists( 'ContentControlPro\Plugin\Core' ),
 	];
