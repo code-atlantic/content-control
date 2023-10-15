@@ -6,10 +6,12 @@
  */
 
 // You'll need the Composer Autoloader.
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // You may alias the classnames for convenience.
 use StubsGenerator\{StubsGenerator, Finder};
+
+$generator = new StubsGenerator( StubsGenerator::ALL );
 
 return Finder::create()
 	->in( dirname( __DIR__ ) . '/build' )

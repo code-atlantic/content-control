@@ -2,7 +2,9 @@
 
 HEADER=$'/**\n * Generated stub declarations for Content Control.\n * @see https://contentcontrolplugin.com/\n * @see https://github.com/php-stubs/content-control-stubs\n */'
 
-FILE="./stubs.php"
+FILE="./content-control.stub"
+FILE="../content-control-pro/bin/stubs/content-control.stub"
+
 
 set -e
 
@@ -14,9 +16,5 @@ test -f "$FILE"
     --force \
     --finder=bin/generate-stubs.php \
     --header="$HEADER" \
-    --functions \
-    --classes \
-    --interfaces \
-    --traits \
     --out="$FILE"
 
