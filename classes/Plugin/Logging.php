@@ -238,7 +238,7 @@ class Logging {
 	/**
 	 * Retrieve the log data
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	public function get_log() {
 		return $this->get_log_content();
@@ -291,7 +291,7 @@ class Logging {
 	/**
 	 * Get the log file contents.
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	public function get_log_content() {
 		if ( ! isset( $this->content ) ) {
@@ -321,7 +321,7 @@ class Logging {
 	 *
 	 * @param string|boolean $file File to get contents of.
 	 *
-	 * @return string
+	 * @return false|string
 	 */
 	protected function get_file( $file = false ) {
 		$file = $file ? $file : $this->file;

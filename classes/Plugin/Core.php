@@ -160,31 +160,73 @@ class Core {
 		 */
 		$GLOBALS['content_control'] = $this->container;
 
-		$this->container['options'] = function ( $c ) {
+		$this->container['options'] =
+		/**
+		 * Get plugin options.
+		 *
+		 * @return Options
+		 */
+		function ( $c ) {
 			return new Options( $c->get( 'option_prefix' ) );
 		};
 
-		$this->container['connect'] = function ( $c ) {
+		$this->container['connect'] =
+		/**
+		 * Get plugin connect.
+		 *
+		 * @return Connect
+		 */
+		function ( $c ) {
 			return new \ContentControl\Plugin\Connect( $c );
 		};
 
-		$this->container['license'] = function () {
+		$this->container['license'] =
+		/**
+		 * Get plugin license.
+		 *
+		 * @return License
+		 */
+		function () {
 			return new \ContentControl\Plugin\License();
 		};
 
-		$this->container['logging'] = function () {
+		$this->container['logging'] =
+		/**
+		 * Get plugin logging.
+		 *
+		 * @return Logging
+		 */
+		function () {
 			return new \ContentControl\Plugin\Logging();
 		};
 
-		$this->container['upgrader'] = function ( $c ) {
+		$this->container['upgrader'] =
+		/**
+		 * Get plugin upgrader.
+		 *
+		 * @return Upgrader
+		 */
+		function ( $c ) {
 			return new \ContentControl\Plugin\Upgrader( $c );
 		};
 
-		$this->container['rules'] = function () {
+		$this->container['rules'] =
+		/**
+		 * Get plugin rules.
+		 *
+		 * @return \ContentControl\RuleEngine\Rules
+		 */
+		function () {
 			return new \ContentControl\RuleEngine\Rules();
 		};
 
-		$this->container['restrictions'] = function () {
+		$this->container['restrictions'] =
+		/**
+		 * Get plugin restrictions.
+		 *
+		 * @return \ContentControl\Services\Restrictions
+		 */
+		function () {
 			return new \ContentControl\Services\Restrictions();
 		};
 

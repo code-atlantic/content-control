@@ -103,7 +103,9 @@ class Shortcodes extends Controller {
 	 *
 	 * @param array<string|int,string|int|null> $atts Array of shortcode attributes.
 	 *
-	 * @return array<string,string|int|bool|null>
+	 * @return (int|null|string|true)[]
+	 *
+	 * @psalm-return array<int|string, int|null|string|true>
 	 */
 	public function normalize_empty_atts( $atts = [] ) {
 		if ( ! is_array( $atts ) ) {

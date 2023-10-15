@@ -112,7 +112,7 @@ class Connect {
 	/**
 	 * Get header Authorization
 	 *
-	 * @return string
+	 * @return null|string
 	 */
 	public function get_request_authorization_header() {
 		$headers = null;
