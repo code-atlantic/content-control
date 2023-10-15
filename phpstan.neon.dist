@@ -6,10 +6,18 @@ parameters:
         - inc/
         - content-control.php
         - uninstall.php
+    scanDirectories:
+        - bin/
+        - classes/
+        - inc/
+    scanFiles:
+        - content-control.php
     bootstrapFiles:
         - bin/phpstan-bootstrap.php
-    scanDirectories:
-        - bin/stubs/
+    stubFiles:
+        - bin/stubs/elementor.php
+        - bin/stubs/query-monitor.php
+        - vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
     excludePaths:
         - tests/
     dynamicConstantNames:
