@@ -39,7 +39,9 @@ class Autoloader {
 			return false;
 		}
 
-		return require $autoloader;
+		require_once $autoloader;
+
+		return true;
 	}
 
 	/**
@@ -51,13 +53,17 @@ class Autoloader {
 	 */
 	protected static function missing_autoloader( $plugin_name = '' ) {
 		/* translators: 1. Plugin name */
-		$message = sprintf( esc_html__( 'Your installation of %1$s is incomplete. If you installed %1$s from GitHub, please refer to this document to set up your development environment.', 'content-control' ), $plugin_name );
+		$text = __( 'Your installation of %1$s is incomplete. If you installed %1$s from GitHub, please refer to this document to set up your development environment.', 'content-control' );
+
+		$message = sprintf( $text, $plugin_name );
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log(  // phpcs:ignore
-				$message
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log(
+				esc_html( $message )
 			);
 		}
+
 		add_action(
 			'admin_notices',
 			function () use ( $message ) {
