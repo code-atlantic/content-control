@@ -2,7 +2,15 @@
 
 ## Unreleased
 
+## v2.0.11 - 10/04/2023
+
+- Improvement: Query Monitor integration to show which restrictions are active on a page.
+  - Shows global settings that may be affecting the page.
+  - Shows which restrictions are active on the page.
+  - Shows which posts are being filtered out of queries and by which restriction.
 - Tweak: Ensure upgrade stream doesn't send headers if they were already sent.
+- Tweak: Make second arg on get_the_excerpt filter optional to prevent errors with some plugins.
+- Fix: Bug when using `content_control/check_all_restrictions` filter that caused rules to not compare properly.
 
 ## v2.0.10 - 10/01/2023
 
