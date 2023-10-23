@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.
+
 ## v2.0.11 - 10/04/2023
 
 - Improvement: Query Monitor integration to show which restrictions are active on a page.
