@@ -115,7 +115,10 @@ function the_excerpt_filters( $excerpt ) {
  */
 function get_current_page_url() {
 	global $wp;
+
+	$current_page = trailingslashit( home_url( $wp->request ) );
+
 	/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
-	return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+	return add_query_arg( $_SERVER['QUERY_STRING'], '', $current_page );
 	/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
 }
