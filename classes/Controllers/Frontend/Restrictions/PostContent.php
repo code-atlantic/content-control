@@ -80,7 +80,9 @@ class PostContent extends Controller {
 			return $content;
 		}
 
-		$message = '';
+		$default_message = \ContentControl\get_default_denial_message();
+
+		$message = ! empty( $default_message ) ? $default_message : __( 'This content is restricted.', 'content-control' );
 
 		/**
 		 * If the restriction has a custom message, use it.
@@ -95,11 +97,6 @@ class PostContent extends Controller {
 		 */
 		if ( $restriction->override_message ) {
 			$message = $restriction->get_message();
-		}
-
-		// If the message is empty, use the global default message.
-		if ( empty( $message ) ) {
-			$message = \ContentControl\get_default_denial_message();
 		}
 
 		/**
