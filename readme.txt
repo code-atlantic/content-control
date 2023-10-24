@@ -10,7 +10,7 @@ Stable tag: 2.0.11
 Requires PHP: 5.6
 License: GPLv3 (or later)
 
-Unleash your WordPress content's potential! With Content Control, restrict your content, pages, posts, widgets, and even individual blocks with precision, based on user status, roles, device type & more. Perfect for creating "coming soon" pages, putting your site in "maintenance mode", or setting up a content paywall.
+Restrict content based on login status, user roles, device type & more. Monetize your content with a paywall or members-only content.
 
 == Description ==
 
