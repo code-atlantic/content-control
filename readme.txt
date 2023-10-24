@@ -50,7 +50,7 @@ Coming soon: Content Control Pro, with advanced features like:
 
 - Content Teasers for Paywalls, giving your users a sneak peek, leaving them wanting more.
 - Optimize your WooCommerce & Easy Digital Downloads (EDD) experiences with advanced rules.
-- Schedule blocks, controlling content visibility timings.
+- Schedule blocks, controlling content visibility timings using customizable scheduling rules.
 - Dive deeper with advanced block rules and a boolean editor.
 - Customize login, registration & recovery page urls. Custom login urls give a more personalized user experience.
 
