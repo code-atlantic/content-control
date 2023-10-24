@@ -22,7 +22,8 @@ Content Control is intuitive and powerful, designed for all users—whether logg
 
 Discover what Content Control brings to your table:
 
-- Full control over your site's content, from general user access to specifics like "coming soon" pages or maintenance mode scenarios.
+- Full control over your site's content, restrict user access with ease!.
+- Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
   - Responsive block controls with customizable breakpoints.
   - Control block visibility by user status, roles, device type & more.
@@ -39,9 +40,8 @@ Discover what Content Control brings to your table:
 - Redirect users without access permission to a login page, website homepage, or a custom URL.
 - Highlight subscriber-only content for premium users.
 - Use the `[content_control]` shortcode to protect content inline and cater to subscriber preferences.
-- Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access
 - Control widget visibility by selecting the user type that can view each widget.
-- Set up a seamless paywall for your content, prompting them to purchase access.
+- Conditionally show coming soon or maintenance mode pages based on various rules.
 
 [Content Control Documentation](https://contentcontrolplugin.com/docs/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=documentation-link)
 
