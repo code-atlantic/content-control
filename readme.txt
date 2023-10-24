@@ -14,13 +14,13 @@ Unleash your WordPress content's potential! With Content Control, restrict your 
 
 == Description ==
 
-Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visibility. Your content, your rules, executed with precision!
+Content Control is a transformative plugin, allowing you to fine-tune every aspect of your WordPress website's content. Decide who gets to see what, where, and when - be it pages, posts, widgets, or individual block visibility using our handy shortcode. Your content, your rules, executed perfectly!
 
-Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Want an effective content restriction or access manager for your website? Content Control has got you covered. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
+Content Control is intuitive and powerful, designed for all users—whether logged in, holding specific roles, or even guests. Need top-tier content restriction or a dependable access manager for your site? Look no further. We've expanded our controls to include Gutenberg and Full Site Editor, giving you unmatched command.
 
 = Key Features =
 
-Content Control is packed with features that allow you to:
+Discover what Content Control brings to your table:
 
 - Full control over your site's content, from general user access to specifics like "coming soon" pages or maintenance mode scenarios.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
@@ -35,12 +35,10 @@ Content Control is packed with features that allow you to:
 - Safeguard specific categories, tags, custom post types, and custom taxonomies.
 - Manage access to [media attachment pages](https://www.hongkiat.com/blog/wordpress-attachment-pages/) for logged in/out users or specific user roles.
 - Display a custom message to users who do not have permission to view the content.
-- Redirect users without access permission to a login page, website homepage, or a custom URL.
 - Display specific content on a page or post to logged in users only, specific user roles, or logged out users.
 - Redirect users without access permission to a login page, website homepage, or a custom URL.
 - Highlight subscriber-only content for premium users.
 - Use the `[content_control]` shortcode to protect content inline and cater to subscriber preferences.
-- Control widget visibility by selecting the user type that can view each widget.
 - Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access
 - Control widget visibility by selecting the user type that can view each widget.
 
@@ -50,22 +48,22 @@ Content Control is packed with features that allow you to:
 
 Coming soon: Content Control Pro, with advanced features like:
 
-- Content Teasers for Paywalls, giving your users a sneak peek at what's behind the paywall.
-- Advanced WooCommerce & Easy Digital Downloads (EDD) rules to fine-tune your e-commerce experience.
-- Block scheduling, letting you control when specific blocks of content are visible.
-- Advanced block rules with a boolean editor for intricate configurations.
-- Customize login URL, registration URL & recovery URL overrides for a more personalized user experience.
+- Content Teasers for Paywalls, giving your users a sneak peek, leaving them wanting more.
+- Optimize your WooCommerce & Easy Digital Downloads (EDD) experiences with advanced rules.
+- Schedule blocks, controlling content visibility timings.
+- Dive deeper with advanced block rules and a boolean editor.
+- Customize login, registration & recovery page urls. Custom login urls give a more personalized user experience.
 
-**Note: Content Control restricts media access at the content level via media attachment pages. It does not restrict server-level access to actual media files (e.g.: .jpg, .gif, .pdf, .webp files).**
+**Note**: Content Control handles media access via content on media attachment pages but won't restrict direct server-level access to media files.
 
-= Brought to You by Code Atlantic =
+= Passionately Crafted by Code Atlantic =
 
-Content Control is a [Code Atlantic][codeatlantic] product. We pride ourselves on creating high-quality WordPress plugins designed to help your WordPress sites thrive.
+At [Code Atlantic][codeatlantic], we're passionate about crafting tools that empower your digital journey. Content Control is a testament to our commitment to quality.
 
-Explore some of our most popular plugins:
+Dive into some of our renowned plugins:
 
-- **[Popup Maker][popupmaker]** - #1 Popup & Marketing Plugin for WordPress
-- **[User Menus][usermenus]** - Show, Hide & Customize Menu Items For Different Users
+- **[Popup Maker][popupmaker]** - The #1 Popup & Marketing Plugin for WordPress
+- **[User Menus][usermenus]** - Innovatively Show, Hide & Customize Menu Items
 
 [codeatlantic]: https://code-atlantic.com "Code Atlantic - High Quality WordPress Plugins"
 [popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
