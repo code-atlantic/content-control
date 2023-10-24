@@ -16,30 +16,40 @@ Unleash your WordPress content's potential! With Content Control, restrict your 
 
 Content Control v2.0 is a transformative plugin, enabling you to fine-tune every aspect of your WordPress website's content. Dictate who sees what, where and when - whether it's pages, posts, widgets, using our shortcode, or even individual block visibility. Your content, your rules, executed with precision!
 
-Want an effective content restriction or access manager for your website? Content Control has got you covered. Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
+Content Control is user-friendly, yet powerful, catering to logged in users, specific user roles or logged out users. Want an effective content restriction or access manager for your website? Content Control has got you covered. Our controls even extend to the block level, providing unparalleled control for Gutenberg and Full Site Editor users.
 
 = Key Features =
 
 Content Control is packed with features that allow you to:
 
-- Full control over your sites content, pages, posts, widgets, and even individual blocks.
+- Full control over your site's content, from general user access to specifics like "coming soon" pages or maintenance mode scenarios.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
   - Responsive block controls with customizable breakpoints.
   - Control block visibility by user status, roles, device type & more.
 - Restrict access to pages, posts, widgets, and individual blocks based on user status, roles, device type & more.
-- Act as an effective access manager, ensuring that only authorized users can access specific sections of your site.
+- Offer membership tools for crafting membership access and members-only content.
+- Provide responsive block designs that adapt to varying device sizes.
+- Lockdown content selectively for improved user experiences.
+- Implement role-based redirections to guide users effectively.
+- Unlock the power of subscription content and monetization strategies.
+- Safeguard specific categories, tags, custom post types, and custom taxonomies.
+- Manage access to [media attachment pages](https://www.hongkiat.com/blog/wordpress-attachment-pages/) for logged in/out users or specific user roles.
 - Display a custom message to users who do not have permission to view the content.
 - Redirect users without access permission to a login page, website homepage, or a custom URL.
 - Display specific content on a page or post to logged in users only, specific user roles, or logged out users.
-- Use the `[content_control]` shortcode to protect content inline.
+- Redirect users without access permission to a login page, website homepage, or a custom URL.
+- Highlight subscriber-only content for premium users.
+- Use the `[content_control]` shortcode to protect content inline and cater to subscriber preferences.
 - Control widget visibility by selecting the user type that can view each widget.
-- Set up a seamless paywall for your content, prompting them to purchase access.
+- Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access
+- Control widget visibility by selecting the user type that can view each widget.
 
 [Content Control Documentation](https://contentcontrolplugin.com/docs/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=documentation-link)
 
 = Pro Features = 
 
 Coming soon: Content Control Pro, with advanced features like:
+
 - Content Teasers for Paywalls, giving your users a sneak peek at what's behind the paywall.
 - Advanced WooCommerce & Easy Digital Downloads (EDD) rules to fine-tune your e-commerce experience.
 - Block scheduling, letting you control when specific blocks of content are visible.
