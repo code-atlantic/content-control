@@ -5,8 +5,8 @@ Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility, user access, coming soon, maintenance mode, access manager, paywall
 Requires at least: 5.6
-Tested up to: 6.3.1
-Stable tag: 2.0.11
+Tested up to: 6.4
+Stable tag: 2.0.12
 Requires PHP: 5.6
 License: GPLv3 (or later)
 
@@ -101,6 +101,11 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.12 - 10/26/2023 =
+
+- Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.
+- Fix: Issue with Custom Message replacement not always working on pages built with Elementor.
 
 = v2.0.11 - 10/04/2023 =
 
