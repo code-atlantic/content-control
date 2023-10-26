@@ -21,7 +21,7 @@ export const RulesInspectorSlot = ( { children }: Props ) => {
 				<Slot>
 					{ /* @ts-ignore */ }
 					{ ( fills ) => {
-						return fills.length > 0 ? (
+						return fills ? (
 							fills
 						) : (
 							<p>

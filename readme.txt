@@ -5,8 +5,8 @@ Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility, user access, coming soon, maintenance mode, access manager, paywall
 Requires at least: 5.6
-Tested up to: 6.3.1
-Stable tag: 2.0.11
+Tested up to: 6.4
+Stable tag: 2.0.12
 Requires PHP: 5.6
 License: GPLv3 (or later)
 
@@ -22,7 +22,8 @@ Content Control is intuitive and powerful, designed for all users—whether logg
 
 Discover what Content Control brings to your table:
 
-- Full control over your site's content, from general user access to specifics like "coming soon" pages or maintenance mode scenarios.
+- Full control over your site's content, restrict user access with ease!.
+- Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access.
 - Per block controls for Gutenberg and Full Site Editor, including user roles, device type, and more.
   - Responsive block controls with customizable breakpoints.
   - Control block visibility by user status, roles, device type & more.
@@ -39,8 +40,8 @@ Discover what Content Control brings to your table:
 - Redirect users without access permission to a login page, website homepage, or a custom URL.
 - Highlight subscriber-only content for premium users.
 - Use the `[content_control]` shortcode to protect content inline and cater to subscriber preferences.
-- Set up a seamless paywall for your content, providing teasers for users and prompting them to purchase access
 - Control widget visibility by selecting the user type that can view each widget.
+- Conditionally show coming soon or maintenance mode pages based on various rules.
 
 [Content Control Documentation](https://contentcontrolplugin.com/docs/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=documentation-link)
 
@@ -100,6 +101,11 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.0.12 - 10/26/2023 =
+
+- Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.
+- Fix: Issue with Custom Message replacement not always working on pages built with Elementor.
 
 = v2.0.11 - 10/04/2023 =
 
