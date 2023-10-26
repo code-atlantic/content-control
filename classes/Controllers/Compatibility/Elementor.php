@@ -70,7 +70,7 @@ class Elementor extends Controller {
 			! empty( $_GET['page'] ) &&
 			'elementor-app' === $_GET['page']
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
-			) {
+		) {
 			return true;
 		}
 
