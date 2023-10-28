@@ -10,6 +10,7 @@ namespace ContentControl\Controllers;
 
 use ContentControl\Base\Controller;
 
+use function ContentControl\get_all_plugin_options;
 use function ContentControl\Rules\allowed_user_roles;
 
 defined( 'ABSPATH' ) || exit;
@@ -77,9 +78,13 @@ class Assets extends Controller {
 				],
 			],
 			'core-data'     => [
-				'handle' => 'content-control-core-data',
-				'deps'   => [
+				'handle'   => 'content-control-core-data',
+				'deps'     => [
 					'wp-api',
+				],
+				'varsName' => 'contentControlCoreData',
+				'vars'     => [
+					'currentSettings' => get_all_plugin_options(),
 				],
 			],
 			'data'          => [

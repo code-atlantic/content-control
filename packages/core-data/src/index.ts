@@ -1,8 +1,14 @@
+import type { Settings } from './settings';
+
 /* Global Var Declarations */
 declare global {
 	const wpApiSettings: {
 		root: string;
 		nonce: string;
+	};
+
+	const contentControlCoreData: {
+		currentSettings: Settings;
 	};
 }
 

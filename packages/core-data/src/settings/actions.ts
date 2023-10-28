@@ -66,7 +66,7 @@ export function* updateSettings( settings: Partial< Settings > ) {
 
 		const result: Settings = yield fetch( getResourcePath(), {
 			method: 'PUT',
-			body: { ...currentSettings, ...settings },
+			body: { settings: { ...currentSettings, ...settings } },
 		} );
 
 		if ( result ) {
@@ -126,7 +126,7 @@ export function* saveSettings() {
 
 		const result: Settings = yield fetch( getResourcePath(), {
 			method: 'PUT',
-			body: { ...currentSettings, ...unsavedChanges },
+			body: { settings: { ...currentSettings, ...unsavedChanges } },
 		} );
 
 		if ( result ) {
