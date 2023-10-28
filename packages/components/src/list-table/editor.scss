@@ -114,6 +114,11 @@ $border-options: solid #c3c4c7;
 	.check-column {
 		.components-checkbox-control__input[type="checkbox"] {
 			border-color: #c3c4c7;
+			z-index: 1;
+		}
+
+		svg {
+			z-index: 2;
 		}
 
 		.components-base-control__field {
