@@ -4,10 +4,10 @@ Author URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=pl
 Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility
-Requires at least: 5.6
+Requires at least: 6.1
 Tested up to: 6.3.1
 Stable tag: 2.0.11
-Requires PHP: 5.6
+Requires PHP: 7.4
 License: GPLv3 (or later)
 
 Unleash your WordPress content's potential! With Content Control, restrict your content, pages, posts, widgets, and even individual blocks with precision, based on user status, roles, device type & more.
