@@ -1,7 +1,6 @@
 parameters:
     level: 6
     paths:
-        - bin/
         - classes/
         - inc/
         - content-control.php
