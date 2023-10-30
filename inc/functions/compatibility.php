@@ -180,7 +180,7 @@ function fetch_key_from_array( $key, $arr ) {
 function convert_hex_to_rgba( $hex_code, $opacity = 1 ) {
 	$hex = str_replace( '#', '', $hex_code );
 
-	if ( strlen( $hex ) == 3 ) {
+	if ( strlen( $hex ) === 3 ) {
 		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 	}
 
