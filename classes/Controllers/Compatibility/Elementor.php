@@ -33,11 +33,11 @@ class Elementor extends Controller {
 	 */
 	public function protection_is_disabled( $is_disabled ) {
 		// If already disabled, no reason to continue.
-		if ( $is_disabled ) {
+		if ( $is_disabled || ! did_action( 'elementor/loaded' ) ) {
 			return $is_disabled;
 		}
 
-		return did_action( 'elementor/loaded' ) && $this->elementor_builder_is_active();
+		return $this->elementor_builder_is_active();
 	}
 
 	/**
@@ -70,13 +70,11 @@ class Elementor extends Controller {
 			! empty( $_GET['page'] ) &&
 			'elementor-app' === $_GET['page']
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
-			) {
+		) {
 			return true;
 		}
 
-		if ( ! class_exists( '\Elementor\Plugin' ) ||
-			! isset( \Elementor\Plugin::$instance )
-				) {
+		if ( ! class_exists( '\Elementor\Plugin' ) || ! isset( \Elementor\Plugin::$instance ) ) {
 			return false;
 		}
 

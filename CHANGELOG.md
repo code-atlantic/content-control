@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v2.0.12 - 10/26/2023
+
+- Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.
+- Fix: Issue with Custom Message replacement not always working on pages built with Elementor.
+
 ## v2.0.11 - 10/04/2023
 
 - Improvement: Query Monitor integration to show which restrictions are active on a page.

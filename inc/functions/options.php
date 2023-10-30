@@ -132,5 +132,7 @@ function get_default_denial_message() {
 		return isset( $settings['default_denial_message'] ) ? $settings['default_denial_message'] : '';
 	}
 
-	return get_plugin_option( 'defaultDenialMessage', '' );
+	$default = __( 'This content is restricted.', 'content-control' );
+
+	return get_plugin_option( 'defaultDenialMessage', $default );
 }
