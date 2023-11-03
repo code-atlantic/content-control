@@ -11,6 +11,7 @@ parameters:
         - inc/
     scanFiles:
         - content-control.php
+        - uninstall.php
     bootstrapFiles:
         - bin/phpstan-bootstrap.php
     stubFiles:
