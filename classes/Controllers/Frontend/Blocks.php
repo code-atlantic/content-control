@@ -208,11 +208,12 @@ class Blocks extends Controller {
 		 * Filter the classes to be added to the block.
 		 *
 		 * @param array $classes Classes to be added.
+		 * @param array $controls Controls for the block.
 		 * @param array $block Block to get classes for.
 		 *
 		 * @return string[]
 		 */
-		$classes = apply_filters( 'content_control/get_block_control_classes', $classes, $block );
+		$classes = apply_filters( 'content_control/get_block_control_classes', $classes, $controls, $block );
 
 		return array_unique( $classes );
 	}
