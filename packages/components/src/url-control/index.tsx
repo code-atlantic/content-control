@@ -39,6 +39,7 @@ type State = {
 };
 
 type Props = {
+	id?: string;
 	label?: string;
 	value?: string | WPLinkSearchResult;
 	onChange?: ( value: WPLinkSearchResult ) => void;
@@ -55,7 +56,13 @@ const defaultSuggestion: WPLinkSearchResult = {
 };
 
 const URLControl = (
-	{ label, value: currentValue, onChange = () => {}, className = '' }: Props,
+	{
+		id,
+		label,
+		value: currentValue,
+		onChange = () => {},
+		className = '',
+	}: Props,
 	ref: React.ForwardedRef< HTMLInputElement | null >
 ) => {
 	// Set up instance ID & refs.
@@ -89,7 +96,7 @@ const URLControl = (
 	const { value, query, isFocused, isEditing, selected, showSuggestions } =
 		state;
 
-	const inputId = `url-input-control-${ instanceId }`;
+	const inputId = id ? id : `url-input-control-${ instanceId }`;
 	const suggestionsListId = `url-input-control-suggestions-${ instanceId }`;
 	const suggestionOptionIdPrefix = `url-input-${ instanceId }-sug-`;
 
