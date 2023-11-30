@@ -18,7 +18,8 @@
 		"phpunit/phpunit": "^10.4.0",
 		"mockery/mockery": "^1.6.6",
 		"brain/monkey": "^2.6.1",
-		"php-stubs/woocommerce-stubs": "^8.2"
+		"php-stubs/woocommerce-stubs": "^8.2",
+		"php-stubs/generator": "^0.8.4"
 	},
 	"autoload": {
 		"psr-4": {
@@ -50,7 +51,7 @@
 	"scripts": {
 		"format": "vendor/bin/phpcbf --standard=.phpcs.xml.dist --report-summary --report-source",
 		"lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
-		"generate-stubs": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=./stubs/stubs.php --stats --force --include-inaccessible-class-nodes",
+		"generate-stubs": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=content-control.stub --stats --force --include-inaccessible-class-nodes",
 		"install-strauss": [
 			"test -f strauss.phar || curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/latest/download/strauss.phar"
 		],
