@@ -2,14 +2,10 @@
 	"extends": "./tsconfig.base.json",
 	"compilerOptions": {
 		"baseUrl": "./src",
-		"paths": {},
+		"paths": {}
 	},
-	"include": [
-		"src/**/*"
-	],
-	"exclude": [
-		"**/node_modules/**"
-	],
+	"include": [ "src/**/*" ],
+	"exclude": [ "**/node_modules/**" ],
 	"references": [
 		{
 			"path": "packages/block-editor"
@@ -38,5 +34,5 @@
 		{
 			"path": "packages/utils"
 		}
-	],
+	]
 }
