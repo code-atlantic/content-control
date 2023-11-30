@@ -42,7 +42,6 @@ function get_plugin_config() {
 		'url'           => \plugin_dir_url( __FILE__ ),
 		'path'          => \plugin_dir_path( __FILE__ ) . \DIRECTORY_SEPARATOR,
 		'api_url'       => 'https://contentcontrolplugin.com/',
-		'is_pro'        => class_exists( 'ContentControlPro\Plugin\Core' ),
 	];
 }
 
