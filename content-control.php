@@ -105,11 +105,16 @@ function check_prerequisites() {
 	return true;
 }
 
-add_action( 'plugins_loaded', function () {
-	if ( check_prerequisites() ) {
-		plugin_instance();
-	}
-}, 11 );
+add_action(
+	'plugins_loaded',
+	function () {
+		if ( check_prerequisites() ) {
+			plugin_instance();
+		}
+	},
+	// Core plugin loads at 11, Pro loads at 12 & addons load at 13.
+	11
+);
 
 /**
  * Initiates and/or retrieves an encapsulated container for the plugin.
