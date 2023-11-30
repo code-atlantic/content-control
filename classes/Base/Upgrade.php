@@ -143,7 +143,7 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	 *      start_task: Closure,
 	 *      update_task_progress:Closure,
 	 *      complete_task: Closure
-	 * }&stdClass) Stream.
+	 * }&\stdClass) Stream.
 	 */
 	public function stream() {
 		$noop =
