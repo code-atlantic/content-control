@@ -10,7 +10,7 @@ import {
 	TextareaControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 
 import {
 	protectionMethodOptions,
@@ -50,7 +50,11 @@ addFilter(
 							onChange={ ( protectionMethod ) =>
 								updateSettings( { protectionMethod } )
 							}
-							options={ protectionMethodOptions }
+							options={ ( () =>
+								applyFilters(
+									'contentControl.restrictionEditor.protectionMethodOptions',
+									protectionMethodOptions
+								) as typeof protectionMethodOptions )() }
 						/>
 					),
 				},
