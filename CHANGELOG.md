@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: Block scanner running for all users, not just admins, triggered AJAX events that were denied every time author entered block editor.
+
 ## v2.0.12 - 10/26/2023
 
 - Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.
