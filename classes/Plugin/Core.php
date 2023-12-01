@@ -357,12 +357,19 @@ class Core {
 	 * @return mixed Current value of the item.
 	 */
 	public function get( $id ) {
-		if ( ! $this->container->offsetExists( $id ) ) {
+		// 1. Check if the item exists in the container.
+		if ( $this->container->offsetExists( $id ) ) {
+			return $this->container->get( $id );
+		}
+
+		// 2. Check if the item exists in the controllers container.
+		if ( $this->controllers->offsetExists( $id ) ) {
 			return $this->controllers->get( $id );
 		}
 
-		// If this is an addon, check if the service exists in the core plugin.
+		// 3. Check if the item exists in the global space.
 		if ( is_subclass_of( $this, __CLASS__ ) ) {
+			// If this is an addon, check if the service exists in the core plugin.
 			// Get core plugin container and see if the service exists there.
 			$plugin_service = \ContentControl\plugin( $id );
 
@@ -371,7 +378,8 @@ class Core {
 			}
 		}
 
-		return $this->container->get( $id );
+		// 5. Return null, item not found.
+		return null;
 	}
 
 	/**
