@@ -85,7 +85,7 @@ class Options {
 	 * @return mixed|void
 	 */
 	public function get( $key = '', $default_value = false ) {
-		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default_value;
+		$value = $this->get_notation( $key, $default_value );
 
 		/**
 		 * Filter the option.
