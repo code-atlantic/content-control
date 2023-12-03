@@ -39,7 +39,7 @@ const useSettings = () => {
 	 */
 	const getSetting = <
 		K extends keyof Settings,
-		D extends Settings[ K ] | undefined | false
+		D extends Settings[ K ] | undefined | false,
 	>(
 		name: K,
 		defaultValue: D
