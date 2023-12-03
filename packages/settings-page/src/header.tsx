@@ -21,7 +21,7 @@ type Props = {
 	tabs: TabComponent[];
 };
 
-const { adminUrl, wpVersion } = contentControlSettingsPage;
+const { pluginUrl, adminUrl, wpVersion } = contentControlSettingsPage;
 
 /**
  * The following section covers notifying users of unsaved changes during
@@ -113,6 +113,7 @@ const Header = ( { tabs }: Props ) => {
 		<>
 			<div className="cc-settings-page__header">
 				<h1 className="branding wp-heading-inline">
+					<img src={ `${ pluginUrl }assets/images/logo.svg` } />
 					{ __( 'Content Control', 'content-control' ) }
 				</h1>
 				<ControlledTabPanel
