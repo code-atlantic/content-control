@@ -12,7 +12,9 @@ declare global {
 	};
 }
 
+export * from './types';
 export * from './controls';
+export { default as localControls } from './controls';
 export * from './utils';
 
 export * from './license';
