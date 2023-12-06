@@ -4,6 +4,7 @@
 .cc-rule-engine-item-wrapper {
 	@include flexColumn();
 	padding: $spacing 0;
+	align-items: normal;
 
 	> .cc-rule-engine-logical-operator {
 		min-width: 65px;
