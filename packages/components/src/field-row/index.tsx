@@ -1,3 +1,5 @@
+import classNames, { type Argument as ClassNameType } from 'classnames';
+
 import './editor.scss';
 
 /**
@@ -13,10 +15,10 @@ const FieldRow = ( {
 	label: string;
 	id?: string;
 	description?: string;
-	className?: string;
-	children: React.ReactNode;
+	className?: ClassNameType;
+	children: JSX.Element;
 } ) => (
-	<div className={ `components-field-row ${ className }` }>
+	<div className={ classNames( [ 'components-field-row', className ] ) }>
 		<div className="components-base-control">
 			<label
 				htmlFor={ id }
