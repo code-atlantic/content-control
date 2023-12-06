@@ -46,13 +46,13 @@ export type EditorId = 'new' | number | undefined;
  * @see /includes/functions/install.php:get_default_restriction_settings()
  */
 export interface RestrictionSettings {
-	userStatus: 'logged_in' | 'logged_out';
+	userStatus: 'logged_in' | 'logged_out' | string;
 	roleMatch: 'any' | 'match' | 'exclude';
 	userRoles: string[];
 	protectionMethod: 'redirect' | 'replace' | string;
 	redirectType: 'login' | 'home' | 'custom';
 	redirectUrl: string;
-	replacementType: 'page' | 'message';
+	replacementType: 'page' | 'message' | 'wp_block' | string;
 	replacementPage?: number;
 	archiveHandling:
 		| 'filter_post_content'
@@ -80,6 +80,7 @@ export interface BaseRestriction {
 	settings: RestrictionSettings;
 	[ key: string ]: any;
 }
+
 export interface Restriction extends BaseRestriction {
 	id: number;
 	title: string;
