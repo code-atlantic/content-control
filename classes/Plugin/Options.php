@@ -85,7 +85,15 @@ class Options {
 	 * @return mixed|void
 	 */
 	public function get( $key = '', $default_value = false ) {
-		$value = $this->get_notation( $key, $default_value );
+		$data = $this->get_all();
+
+		// Fetch key from array, converting to camelcase (how data is stored). Supports dot.notation.
+		$value = \ContentControl\fetch_key_from_array( $key, $data, 'camelCase' );
+
+		// If no value, return default.
+		if ( null === $value ) {
+			$value = $default_value;
+		}
 
 		/**
 		 * Filter the option.
@@ -97,29 +105,6 @@ class Options {
 		 * @return mixed
 		 */
 		return apply_filters( $this->namespace . 'get_option', $value, $key, $default_value );
-	}
-
-	/**
-	 * Get an option using a dot notation key.
-	 *
-	 * @param string $key Option key in dot notation.
-	 * @param bool   $default_value Default value.
-	 *
-	 * @return mixed|void
-	 */
-	public function get_notation( $key = '', $default_value = false ) {
-		$keys = explode( '.', $key );
-		$data = $this->get_all();
-
-		foreach ( $keys as $key ) {
-			if ( ! isset( $data[ $key ] ) ) {
-				return $default_value;
-			}
-
-			$data = $data[ $key ];
-		}
-
-		return $data;
 	}
 
 	/**
