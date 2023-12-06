@@ -92,8 +92,8 @@ class PostContent extends Controller {
 
 		// If this is a replacement page, bail.
 		if (
-			( 'replace' === $restriction->protection_method && 'page' === $restriction->replacement_type && is_page( $restriction->replacement_page ) ) ||
-			( 'replace_archive_page' === $restriction->archive_handling && is_page( $restriction->archive_replacement_page ) )
+			( 'replace' === $restriction->get_setting( 'protectionMethod' ) && 'page' === $restriction->get_setting( 'replacementType' ) && is_page( $restriction->get_setting( 'replacementPage' ) ) ) ||
+			( 'replace_archive_page' === $restriction->get_setting( 'archiveHandling' ) && is_page( $restriction->get_setting( 'archiveReplacementPage' ) ) )
 		) {
 			return $content;
 		}
@@ -111,7 +111,7 @@ class PostContent extends Controller {
 		 * message, then change back to page replacement and the override message will still
 		 * be used for the post in sub queries.
 		 */
-		if ( $restriction->override_message ) {
+		if ( $restriction->get_setting( 'overrideMessage' ) ) {
 			$message = $restriction->get_message();
 		}
 
