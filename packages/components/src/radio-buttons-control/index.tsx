@@ -18,6 +18,7 @@ type Props< T extends string | number = string | number > = {
 	orientation?: 'horizontal' | 'vertical';
 	equalWidth?: boolean;
 	spacing?: string | number;
+	hideLabelFromVision?: boolean;
 };
 
 const RadioButtonControl = < T extends string | number = string | number >( {
@@ -29,6 +30,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 	orientation = 'horizontal',
 	equalWidth = false,
 	spacing,
+	hideLabelFromVision = false,
 }: Props< T > ) => {
 	const instanceId = useInstanceId( RadioButtonControl );
 
@@ -42,6 +44,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 				equalWidth && 'equal-width',
 				className
 			) }
+			hideLabelFromVision={ hideLabelFromVision }
 		>
 			<div
 				className="options"

@@ -20,7 +20,7 @@
 
 			.cc-rule-engine-item-wrapper--rule {
 				@include flexRow();
-
+				align-items: baseline;
 				padding: 0;
 
 				.cc-rule-engine-rule {
@@ -39,8 +39,16 @@
 		> .cc-rule-engine-item-list.has-items
 			> .cc-rule-engine-item-wrapper--rule
 			> .cc-rule-engine-rule {
-			flex-grow: initial;
+			// flex-grow: initial;
 			justify-content: left;
+
+			.if-text-column {
+				min-width: 60px;
+				flex: 1 1 60px;
+			}
+
+			.actions-column {
+			}
 		}
 	}
 }
@@ -75,7 +83,8 @@
 	align-items: center;
 	vertical-align: middle;
 
-	h3, .components-base-control__label {
+	h3,
+	.components-base-control__label {
 		margin: 0;
 	}
 
