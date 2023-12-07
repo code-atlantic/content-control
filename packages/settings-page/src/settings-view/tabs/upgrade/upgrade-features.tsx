@@ -5,7 +5,7 @@ import { __, sprintf } from '@wordpress/i18n';
 const featureList = [
 	{
 		text: __(
-			'WooCommerce Integration - Create membership sites, drip content, and more',
+			'Block Scheduling - Schedule blocks on specific dates & times or recurring days.',
 			'content-control'
 		),
 	},
@@ -16,10 +16,24 @@ const featureList = [
 		),
 	},
 	{
+		text: __( 'Custom User Restrictions:', 'content-control' ),
+		items: [
+			__( 'Go beyond logged in & user roles', 'content-control' ),
+			__(
+				'WooCommerce - Create membership sites, restrict content based on purchase history, cart contents, and more.',
+				'content-control'
+			),
+			__(
+				'EDD - Restrict access unless have an active license or subscription',
+				'content-control'
+			),
+		],
+	},
+	{
 		text: __( 'Advanced Block Rules:', 'content-control' ),
 		items: [
 			__(
-				'Scheduling - Schedule blocks on specific dates & times.',
+				'Dozens of advanced rule types, no limits.',
 				'content-control'
 			),
 			__(
@@ -27,11 +41,19 @@ const featureList = [
 				'content-control'
 			),
 			__(
-				'Presets - Create and save rule presets for easy reuse',
+				'WooCommerce rule types, inluding customer purchase history or subscription status.',
 				'content-control'
 			),
 			__(
-				'Custom Breakpoints & Media Queries - Control responsive blocks.',
+				'Easy Digital Downloads rule types, including cart contents & purchase history.',
+				'content-control'
+			),
+			__(
+				'Presets - Create and save rule presets for easy reuse (coming soon).',
+				'content-control'
+			),
+			__(
+				'Custom Breakpoints & Media Queries - Control responsive blocks. (coming soon)',
 				'content-control'
 			),
 		],

@@ -126,60 +126,65 @@ const DeviceMediaQueries = () => {
 				);
 			} ) }
 
-			<div className="field-group">
-				<div className="field-group__label">
-					<h3>
-						{ __( 'Advanced Breakpoints', 'content-control' ) }
-						<span className="branding-pro-tag">
-							{ __( 'Pro', 'content-control' ) }
-						</span>
-					</h3>
-					<p>
-						{ __(
-							'Custom breakpoints & pure custom media queries',
-							'content-control'
-						) }
-					</p>
-				</div>
+			{ false && (
+				<div className="field-group">
+					<div className="field-group__label">
+						<h3>
+							{ __( 'Advanced Breakpoints', 'content-control' ) }
+							<span className="branding-pro-tag">
+								{ __( 'Pro', 'content-control' ) }
+							</span>
+						</h3>
+						<p>
+							{ __(
+								'Custom breakpoints & pure custom media queries',
+								'content-control'
+							) }
+						</p>
+					</div>
 
-				<div className="field-group__controls">
-					<Tooltip
-						text={ __(
-							'Upgrade to pro to use these features',
-							'content-control'
-						) }
-						position="bottom left"
-					>
-						<span
-							style={ {
-								position: 'relative',
-								display: 'inline-block',
-							} }
+					<div className="field-group__controls">
+						<Tooltip
+							text={ __(
+								'Upgrade to pro to use these features',
+								'content-control'
+							) }
+							position="bottom left"
 						>
-							<ToggleControl
-								label={ __(
-									'Enable Advanced Breakpoints',
-									'content-control'
-								) }
-								checked={ false }
-								onChange={ () => {} }
-							/>
-							<Button
-								href="https://contentcontrolplugin.com/pricing/?utm_campaign=pro-features&utm_source=block-controls-tab&utm_medium=plugin-ui&utm_content=advanced-breakpoints-learn-more"
-								variant="link"
-								onClick={ ( event ) => {
-									event.preventDefault();
-									setParams( {
-										tab: 'license-and-updates',
-										view: 'settings',
-									} );
+							<span
+								style={ {
+									position: 'relative',
+									display: 'inline-block',
 								} }
-								text={ __( 'Learn more…', 'content-control' ) }
-							/>
-						</span>
-					</Tooltip>
+							>
+								<ToggleControl
+									label={ __(
+										'Enable Advanced Breakpoints',
+										'content-control'
+									) }
+									checked={ false }
+									onChange={ () => {} }
+								/>
+								<Button
+									href="https://contentcontrolplugin.com/pricing/?utm_campaign=pro-features&utm_source=block-controls-tab&utm_medium=plugin-ui&utm_content=advanced-breakpoints-learn-more"
+									variant="link"
+									onClick={ ( event ) => {
+										event.preventDefault();
+										setParams( {
+											tab: 'license-and-updates',
+											view: 'settings',
+										} );
+									} }
+									text={ __(
+										'Learn more…',
+										'content-control'
+									) }
+								/>
+							</span>
+						</Tooltip>
+					</div>
 				</div>
-			</div>
+			) }
 		</>
 	);
 };
