@@ -297,6 +297,13 @@ class Restriction {
 	 * @return bool
 	 */
 	public function user_meets_requirements() {
+		// Filter to allow override user status check early.
+		$bypass = \apply_filters( 'content_control/restriction/bypass_user_requirements', null, $this );
+
+		if ( null !== $bypass ) {
+			return $bypass;
+		}
+
 		return \ContentControl\user_meets_requirements( $this->get_setting( 'userStatus' ), $this->get_setting( 'userRoles' ), $this->get_setting( 'roleMatch' ) );
 	}
 
@@ -394,13 +401,13 @@ class Restriction {
 		$settings = $this->get_settings();
 
 		return array_merge( [
-			'id'                      => $this->id,
-			'slug'                    => $this->slug,
-			'title'                   => $this->title,
-			'description'             => $this->get_description(),
-			'message'                 => $this->get_message(),
-			'status'                  => $this->status,
-			'priority'                => $this->priority,
+			'id'          => $this->id,
+			'slug'        => $this->slug,
+			'title'       => $this->title,
+			'description' => $this->get_description(),
+			'message'     => $this->get_message(),
+			'status'      => $this->status,
+			'priority'    => $this->priority,
 		], $settings );
 	}
 
