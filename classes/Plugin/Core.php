@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * Class Plugin
  *
  * @package ContentControl\Plugin
- * 
+ *
  * @version 2.0.0
  */
 class Core {
