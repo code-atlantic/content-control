@@ -9,8 +9,8 @@
  * Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=donate-link
  * Text Domain: content-control
  *
- * Minimum PHP: 5.6
- * Minimum WP: 5.6
+ * Minimum PHP: 7.4
+ * Minimum WP: 6.2
  *
  * @package    Content Control
  * @author     Code Atlantic
@@ -35,8 +35,8 @@ function get_plugin_config() {
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
 		'fullname'      => \__( 'Content Control', 'content-control' ),
-		'min_php_ver'   => '5.6.0',
-		'min_wp_ver'    => '5.6.0',
+		'min_php_ver'   => '7.4.0',
+		'min_wp_ver'    => '6.2.0',
 		'file'          => __FILE__,
 		'basename'      => \plugin_basename( __FILE__ ),
 		'url'           => \plugin_dir_url( __FILE__ ),
