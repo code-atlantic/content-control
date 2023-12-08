@@ -357,7 +357,6 @@ class License {
 			'edd_action'  => 'activate_license',
 			'license'     => $key,
 			'item_id'     => self::ID,
-			// 'item_name'   => rawurlencode( 'Content Control' ),
 			'url'         => home_url(),
 			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production',
 		];
