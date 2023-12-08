@@ -449,7 +449,7 @@ class Rules {
 		 *
 		 * @var \WP_Taxonomy[]
 		 */
-		$taxonomies = get_object_taxonomies( $name, 'object' );
+		$taxonomies = get_object_taxonomies( $name, 'objects' );
 		$rules      = [];
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
