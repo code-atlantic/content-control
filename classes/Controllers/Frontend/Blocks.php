@@ -20,7 +20,9 @@ defined( 'ABSPATH' ) || exit;
 class Blocks extends Controller {
 
 	/**
-	 * Initialize Hooks & Filters
+	 * Initialize Hooks & Filters.
+	 * 
+	 * @return void
 	 */
 	public function init() {
 		if ( is_admin() ) {
