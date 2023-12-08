@@ -7,6 +7,7 @@ import { useInstanceId } from '@wordpress/compose';
 import { ButtonProps } from '@wordpress/components/build-types/button/types';
 
 type Props< T extends string | number = string | number > = {
+	id?: string;
 	value: T;
 	onChange: ( value: T ) => void;
 	label?: string | JSX.Element;
@@ -22,6 +23,7 @@ type Props< T extends string | number = string | number > = {
 };
 
 const RadioButtonControl = < T extends string | number = string | number >( {
+	id,
 	label,
 	value,
 	onChange,
@@ -36,7 +38,7 @@ const RadioButtonControl = < T extends string | number = string | number >( {
 
 	return (
 		<BaseControl
-			id={ `radio-button-control-${ instanceId }` }
+			id={ id ? id : `radio-button-control-${ instanceId }` }
 			label={ label }
 			className={ classnames(
 				'components-radio-button-control',

@@ -218,6 +218,7 @@ export type IntermediaryFieldProps =
 export type FieldPropsMap = {
 	checkbox: CheckboxFieldProps;
 	color: CheckboxFieldProps;
+	date: TextFieldProps;
 	email: TextFieldProps;
 	hidden: HiddenFieldProps;
 	license_key: LicenseKeyFieldProps;
