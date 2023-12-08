@@ -1,12 +1,12 @@
 import { BaseControl } from '@wordpress/components';
 
-import type { TextFieldProps, WithOnChange } from '../types';
+import type { DateFieldProps, WithOnChange } from '../types';
 
 const DateField = ( {
 	value,
 	onChange,
 	...fieldProps
-}: WithOnChange< TextFieldProps > ) => {
+}: WithOnChange< DateFieldProps > ) => {
 	return (
 		<>
 			<BaseControl

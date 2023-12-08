@@ -136,6 +136,10 @@ export interface TextFieldProps extends InputFieldProps< string > {
 	type: 'text' | 'email' | 'tel' | 'password';
 }
 
+export interface DateFieldProps extends InputFieldProps< string > {
+	type: 'date';
+}
+
 export interface TextareaFieldProps extends InputFieldProps< string > {
 	type: 'textarea';
 	rows?: number;
@@ -158,6 +162,7 @@ export interface TokenSelectFieldProps extends FieldBaseProps {
  */
 export type FieldProps =
 	| CheckboxFieldProps
+	| DateFieldProps
 	| HexColorFieldProps
 	| HiddenFieldProps
 	| LicenseKeyFieldProps
@@ -195,6 +200,7 @@ export type PartialFieldProps = AtLeast< FieldProps, MinFieldProps >;
  */
 export type IntermediaryFieldProps =
 	| AtLeast< CheckboxFieldProps, MinFieldProps >
+	| AtLeast< DateFieldProps, MinFieldProps >
 	| AtLeast< HexColorFieldProps, MinFieldProps >
 	| AtLeast< HiddenFieldProps, MinFieldProps >
 	| AtLeast< LicenseKeyFieldProps, MinFieldProps >
@@ -218,7 +224,7 @@ export type IntermediaryFieldProps =
 export type FieldPropsMap = {
 	checkbox: CheckboxFieldProps;
 	color: CheckboxFieldProps;
-	date: TextFieldProps;
+	date: DateFieldProps;
 	email: TextFieldProps;
 	hidden: HiddenFieldProps;
 	license_key: LicenseKeyFieldProps;
