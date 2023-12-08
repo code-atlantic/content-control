@@ -143,10 +143,16 @@ abstract class Upgrade implements \ContentControl\Interfaces\Upgrade {
 	 *      start_task: Closure,
 	 *      update_task_progress:Closure,
 	 *      complete_task: Closure
-	 * }&stdClass) Stream.
+	 * }&\stdClass) Stream.
 	 */
 	public function stream() {
-		$noop = function () {};
+		$noop =
+		/**
+		 * No-op.
+		 *
+		 * @return void
+		 */
+		function () {};
 
 		return is_a( $this->stream, '\ContentControl\Services\UpgradeStream' ) ? $this->stream : (object) [
 			'send_event'           => $noop,

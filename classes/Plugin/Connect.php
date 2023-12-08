@@ -68,7 +68,7 @@ class Connect {
 	public function generate_token() {
 		$token = hash( 'sha512', (string) wp_rand() );
 
-		\update_option( self::TOKEN_OPTION_NAME, $token );
+		\set_site_transient( self::TOKEN_OPTION_NAME, $token, HOUR_IN_SECONDS );
 
 		return $token;
 	}
@@ -79,7 +79,7 @@ class Connect {
 	 * @return string|false
 	 */
 	public function get_access_token() {
-		return \get_option( self::TOKEN_OPTION_NAME, false );
+		return \get_site_transient( self::TOKEN_OPTION_NAME );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Connect {
 	/**
 	 * Get header Authorization
 	 *
-	 * @return string
+	 * @return null|string
 	 */
 	public function get_request_authorization_header() {
 		$headers = null;
@@ -470,13 +470,7 @@ class Connect {
 		// 2. Get the webhook data.
 		$args = $this->get_webhook_args();
 
-		// 3. Delete the token to prevent abuse.
-		if ( ! $this->debug_mode_enabled() ) {
-			$this->debug_log( 'Deleting token', 'DEBUG' );
-			\delete_option( self::TOKEN_OPTION_NAME );
-		}
-
-		// 4. Validate license key.
+		// 3. Validate license key.
 		if ( ! plugin( 'license' )->is_license_active() ) {
 			$this->debug_log( 'License not active', 'DEBUG' );
 			wp_send_json_error( $error );
@@ -485,10 +479,17 @@ class Connect {
 		// Set the current screen to avoid undefined notices.
 		set_current_screen( 'settings_page_content-control-settings' );
 
+		// 4. Install the plugin.
 		switch ( $args['type'] ) {
 			case 'plugin':
 				$this->install_plugin( $args );
 				break;
+		}
+
+		// 5. Delete the token to prevent abuse. Doing so last means it should be possible to retry if something goes wrong.
+		if ( ! $this->debug_mode_enabled() ) {
+			$this->debug_log( 'Deleting token', 'DEBUG' );
+			\delete_site_transient( self::TOKEN_OPTION_NAME );
 		}
 	}
 

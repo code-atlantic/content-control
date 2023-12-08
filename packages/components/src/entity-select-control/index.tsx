@@ -12,6 +12,7 @@ export type Props< T extends number | number[] > = Omit<
 	SmartTokenControlProps,
 	'value' | 'onChange' | 'suggestions'
 > & {
+	id?: string;
 	value?: T;
 	onChange: ( value: T ) => void;
 	multiple?: boolean;
@@ -22,8 +23,9 @@ export type Props< T extends number | number[] > = Omit<
 interface ObjectOption extends Post< 'edit' >, Taxonomy< 'edit' > {}
 
 const EntitySelectControl = <
-	T extends number | number[] = number | number[]
+	T extends number | number[] = number | number[],
 >( {
+	id,
 	label,
 	value,
 	onChange,
@@ -81,11 +83,11 @@ const EntitySelectControl = <
 		[ entityKind, entityType, queryText ]
 	);
 
-	const findSuggestion = ( id: number | string ) => {
+	const findSuggestion = ( _id: number | string ) => {
 		const found =
 			suggestions &&
 			suggestions.find(
-				( suggestion ) => suggestion.id.toString() === id.toString()
+				( suggestion ) => suggestion.id.toString() === _id.toString()
 			);
 
 		if ( found ) {
@@ -95,7 +97,7 @@ const EntitySelectControl = <
 		return (
 			prefill &&
 			prefill.find(
-				( suggestion ) => suggestion.id.toString() === id.toString()
+				( suggestion ) => suggestion.id.toString() === _id.toString()
 			)
 		);
 	};
@@ -121,6 +123,7 @@ const EntitySelectControl = <
 	return (
 		<div className="cc-object-search-field">
 			<SmartTokenControl
+				id={ id }
 				label={
 					label
 						? label
@@ -164,7 +167,7 @@ const EntitySelectControl = <
 					}
 
 					return 'postType' === entityKind
-						? suggestion.title.rendered
+						? suggestion.title.rendered ?? suggestion.title.raw
 						: suggestion.name;
 				} }
 				renderSuggestion={ ( item ) => {
@@ -176,7 +179,8 @@ const EntitySelectControl = <
 					return (
 						<>
 							{ 'postType' === entityKind
-								? suggestion.title.rendered
+								? suggestion.title.rendered ??
+								  suggestion.title.raw
 								: suggestion.name }
 						</>
 					);

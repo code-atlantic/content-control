@@ -11,6 +11,7 @@ export type BlockControlGroupsContextType<
 > = {
 	groupId: K;
 	icon: IconType;
+	iconSize: number;
 	label: string;
 };
 

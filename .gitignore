@@ -1,8 +1,37 @@
-# Composer Dependencies
-/classes/Dependencies/
-
 # Languages folder (built at release).
 /languages/*
+
+# Tests & cache
+.phpunit.result.cache
+
+# Built code
+**/build/
+**/build/**/*
+**/build-types/
+**/build-types/**/*
+node_modules
+release
+dist
+vendor
+vendor-prefixed
+
+# Coverage
+coverage
+
+# Logs
+logs
+
+# OS & generated files.
+yarn-error.log
+.php_cs.cache
+*.tsbuildinfo
+lerna-debug.log
+npm-debug.log
+packages/*/lib
+.idea
+strauss.phar
+*.zip
+.DS_Store
 
 # Editors
 project.xml
@@ -19,38 +48,3 @@ project.properties
 *.sublime-workspace
 .sublimelinterrc
 .wp-env.override.json
-
-# Tests & cache
-.phpunit.result.cache
-
-# Built code
-**/build/
-**/build/**/*
-**/build-types/
-**/build-types/**/*
-node_modules
-release
-dist
-
-# Coverage
-/coverage
-
-# Logs
-/logs
-
-# Composer
-/vendor/
-/vendor-prefixed/
-
-/yarn-error.log
-
-.php_cs.cache
-
-*.tsbuildinfo
-lerna-debug.log
-npm-debug.log
-packages/*/lib
-.idea
-strauss.phar
-*.zip
-.DS_Store

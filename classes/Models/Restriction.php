@@ -9,6 +9,8 @@
 namespace ContentControl\Models;
 
 use ContentControl\Models\RuleEngine\Query;
+
+use function ContentControl\fetch_key_from_array;
 use function ContentControl\get_default_restriction_settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -16,9 +18,19 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Model for restriction sets.
  *
+ * @version 3.0.0
+ * @since   2.1.0
+ *
  * @package ContentControl\Models
  */
 class Restriction {
+
+	/**
+	 * Current model version.
+	 *
+	 * @var int
+	 */
+	const MODEL_VERSION = 3;
 
 	/**
 	 * Post object.
@@ -77,140 +89,18 @@ class Restriction {
 	public $priority;
 
 	/**
-	 * Restriction Setting: Required user status.
-	 *
-	 * @var string 'logged_in' | 'logged_out';
-	 */
-	public $user_status;
-
-	/**
-	 * Restriction Setting: Which roles.
-	 *
-	 * @deprecated 2.0.0 Use user_roles instead.
-	 *
-	 * @var string[]
-	 */
-	public $roles;
-
-	/**
-	 * Restriction Setting: Chosen user roles.
-	 *
-	 * @var string[]
-	 */
-	public $user_roles;
-
-	/**
-	 * Restriction Setting: Role match method.
-	 *
-	 * @var string 'any' | 'match' | 'exclude';
-	 */
-	public $role_match;
-
-	/**
-	 * Restriction Setting: Protection method.
-	 *
-	 * @var string 'redirect' | 'replace'
-	 */
-	public $protection_method;
-
-	/**
-	 * Restriction Setting: Redirect type.
-	 *
-	 * @var string 'login' | 'home' | 'custom'
-	 */
-	public $redirect_type;
-
-	/**
-	 * Restriction Setting: Redirect url.
-	 *
-	 * @var string
-	 */
-	public $redirect_url;
-
-	/**
-	 * Restriction Setting: Replacement type.
-	 *
-	 * @var string 'message' | 'page'
-	 */
-	public $replacement_type;
-
-	/**
-	 * Restriction Setting: Replacement page.
-	 *
-	 * @var int
-	 */
-	public $replacement_page = 0;
-
-	/**
-	 * Restriction Setting: Archive handling.
-	 *
-	 * @var string 'filter_post_content' | 'replace_archive_page' | 'redirect' | 'hide'
-	 */
-	public $archive_handling;
-
-	/**
-	 * Restriction Setting: Archive replacement page.
-	 *
-	 * @var int
-	 */
-	public $archive_replacement_page = 0;
-
-	/**
-	 * Restriction Setting: Redirect type.
-	 *
-	 * @var string 'login' | 'home' | 'custom'
-	 */
-	public $archive_redirect_type;
-
-	/**
-	 * Restriction Setting: Redirect url.
-	 *
-	 * @var string
-	 */
-	public $archive_redirect_url;
-
-	/**
-	 * Restriction Setting: Additional query handling.
-	 *
-	 * @var string 'filter_post_content' | 'hide'
-	 */
-	public $additional_query_handling;
-
-	/**
-	 * Restriction Settings: Show Excerpts.
-	 *
-	 * @var bool
-	 */
-	public $show_excerpts;
-
-	/**
-	 * Restriction Settings: Override Default Message.
-	 *
-	 * @var bool
-	 */
-	public $override_message;
-
-	/**
-	 * Restriction Settings: Custom Message.
-	 *
-	 * @var string
-	 */
-	public $custom_message;
-
-	/**
-	 * Restriction Settings: Conditions.
-	 *
-	 * @var array{logicalOperator:string,items:array<array<string,mixed>>}
-	 */
-	public $conditions;
-
-	/**
 	 * Restriction Condition Query.
 	 *
 	 * @var Query
 	 */
 	public $query;
 
+	/**
+	 * Restriction Settings.
+	 *
+	 * @var array<string,mixed>
+	 */
+	public $settings;
 
 	/**
 	 * Data version.
@@ -246,25 +136,22 @@ class Restriction {
 				get_default_restriction_settings()
 			);
 
-			// Convert keys to snake_case using camel_case_to_snake_case().
-			$settings = array_combine(
-				array_map( 'ContentControl\camel_case_to_snake_case', array_keys( $settings ) ),
-				array_values( $settings )
-			);
+			$this->settings = $settings;
 
-			$properties = array_merge(
-				[
-					'id'          => $restriction->ID,
-					'slug'        => $restriction->post_name,
-					'title'       => $restriction->post_title,
-					'status'      => $restriction->post_status,
-					'priority'    => $restriction->menu_order,
-					// We set this late.. on first use.
-					'description' => null,
-					'message'     => null,
-				],
-				$settings
-			);
+			$properties = [
+				'id'          => $restriction->ID,
+				'slug'        => $restriction->post_name,
+				'title'       => $restriction->post_title,
+				'status'      => $restriction->post_status,
+				'priority'    => $restriction->menu_order,
+				// We set this late.. on first use.
+				'description' => null,
+				'message'     => null,
+			];
+
+			foreach ( $properties as $key => $value ) {
+				$this->$key = $value;
+			}
 
 			$this->data_version = get_post_meta( $restriction->ID, 'data_version', true );
 
@@ -273,11 +160,7 @@ class Restriction {
 				update_post_meta( $restriction->ID, 'data_version', 2 );
 			}
 
-			foreach ( $properties as $key => $value ) {
-				$this->$key = $value;
-			}
-
-			$this->query = new Query( $this->conditions );
+			$this->query = new Query( $this->get_setting( 'conditions' ) );
 		}
 	}
 
@@ -315,27 +198,74 @@ class Restriction {
 
 		$user_roles = is_array( $restriction['roles'] ) ? $restriction['roles'] : [];
 
-		$this->user_status               = $restriction['who'];
-		$this->role_match                = count( $user_roles ) > 0 ? 'match' : 'any';
-		$this->user_roles                = $user_roles;
-		$this->protection_method         = 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect';
-		$this->redirect_type             = $restriction['redirect_type'];
-		$this->redirect_url              = $restriction['redirect_url'];
-		$this->replacement_type          = 'message';
-		$this->replacement_page          = 0;
-		$this->archive_handling          = 'filter_post_content';
-		$this->archive_replacement_page  = 0;
-		$this->archive_redirect_type     = $restriction['redirect_type'];
-		$this->archive_redirect_url      = $restriction['redirect_url'];
-		$this->additional_query_handling = 'filter_post_content';
-		$this->override_message          = $restriction['override_default_message'];
-		$this->custom_message            = $restriction['custom_message'];
-		$this->show_excerpts             = $restriction['show_excerpts'];
-		$this->conditions                = \ContentControl\remap_conditions_to_query( $restriction['conditions'] );
+		$settings = [
+			'userStatus'              => $restriction['who'],
+			'roleMatch'               => count( $user_roles ) > 0 ? 'match' : 'any',
+			'userRoles'               => $user_roles,
+			'protectionMethod'        => 'custom_message' === $restriction['protection_method'] ? 'replace' : 'redirect',
+			'redirectType'            => $restriction['redirect_type'],
+			'redirectUrl'             => $restriction['redirect_url'],
+			'replacementType'         => 'message',
+			'replacementPage'         => 0,
+			'archiveHandling'         => 'filter_post_content',
+			'archiveReplacementPage'  => 0,
+			'archiveRedirectType'     => $restriction['redirect_type'],
+			'archiveRedirectUrl'      => $restriction['redirect_url'],
+			'additionalQueryHandling' => 'filter_post_content',
+			'overrideMessage'         => $restriction['override_default_message'],
+			'customMessage'           => $restriction['custom_message'],
+			'showExcerpts'            => $restriction['show_excerpts'],
+			'conditions'              => \ContentControl\remap_conditions_to_query( $restriction['conditions'] ),
+		];
 
-		$this->query = new Query( $this->conditions );
+		$this->settings = $settings;
+
+		$this->query = new Query( $settings['conditions'] );
 
 		++$index;
+	}
+
+	/**
+	 * Get the restriction settings array.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function get_settings() {
+		return $this->settings;
+	}
+
+	/**
+	 * Get a restriction setting.
+	 *
+	 * Settings are stored in JS based camelCase. But WP prefers snake_case.
+	 *
+	 * This method supports camelCase based dot.notation, as well as snake_case.
+	 *
+	 * @param string $key Setting key.
+	 * @param mixed  $default_value Default value.
+	 *
+	 * @return mixed|false
+	 */
+	public function get_setting( $key, $default_value = false ) {
+		// Support camelCase, snake_case, and dot.notation.
+		// Check for camelKeys & dot.notation.
+		$value = \ContentControl\fetch_key_from_array( $key, $this->settings, 'camelCase' );
+
+		if ( null === $value ) {
+			$value = $default_value;
+		}
+
+		/**
+		 * Filter the option.
+		 *
+		 * @param mixed $value Option value.
+		 * @param string $key Option key.
+		 * @param mixed $default_value Default value.
+		 * @param int $restriction_id Restriction ID.
+		 *
+		 * @return mixed
+		 */
+		return apply_filters( 'content_control/get_restriction_setting', $value, $key, $default_value, $this->id );
 	}
 
 	/**
@@ -367,7 +297,14 @@ class Restriction {
 	 * @return bool
 	 */
 	public function user_meets_requirements() {
-		return \ContentControl\user_meets_requirements( $this->user_status, $this->user_roles, $this->role_match );
+		// Filter to allow override user status check early.
+		$bypass = \apply_filters( 'content_control/restriction/bypass_user_requirements', null, $this );
+
+		if ( null !== $bypass ) {
+			return $bypass;
+		}
+
+		return \ContentControl\user_meets_requirements( $this->get_setting( 'userStatus' ), $this->get_setting( 'userRoles' ), $this->get_setting( 'roleMatch' ) );
 	}
 
 	/**
@@ -401,8 +338,8 @@ class Restriction {
 		if ( ! isset( $this->message ) ) {
 			$message = '';
 
-			if ( ! empty( $this->custom_message ) ) {
-				$message = $this->custom_message;
+			if ( ! empty( $this->get_setting( 'customMessage' ) ) ) {
+				$message = $this->get_setting( 'customMessage' );
 			} elseif ( ! empty( $this->post->post_content ) ) {
 				$message = 'display' === $context
 					? \get_the_content( null, false, $this->id )
@@ -421,7 +358,7 @@ class Restriction {
 	 * @return bool
 	 */
 	public function show_excerpts() {
-		return (bool) $this->show_excerpts;
+		return (bool) $this->get_setting( 'showExcerpts' );
 	}
 
 	/**
@@ -430,7 +367,7 @@ class Restriction {
 	 * @return bool
 	 */
 	public function uses_redirect_method() {
-		return 'redirect' === $this->protection_method;
+		return 'redirect' === $this->get_setting( 'protectionMethod' );
 	}
 
 	/**
@@ -439,7 +376,7 @@ class Restriction {
 	 * @return bool
 	 */
 	public function uses_replace_method() {
-		return 'replace' === $this->protection_method;
+		return 'replace' === $this->get_setting( 'protectionMethod' );
 	}
 
 	/**
@@ -461,34 +398,17 @@ class Restriction {
 	 * @return array<string,mixed>
 	 */
 	public function to_array() {
-		return [
-			'id'                      => $this->id,
-			'slug'                    => $this->slug,
-			'title'                   => $this->title,
-			'description'             => $this->get_description(),
-			'message'                 => $this->get_message(),
-			'status'                  => $this->status,
-			'priority'                => $this->priority,
-			// Options include logged_in, logged_out.
-			'userStatus'              => $this->user_status,
-			// Options include any, match, exclude.
-			'roleMatch'               => $this->role_match,
-			'userRoles'               => $this->user_roles,
-			'protectionMethod'        => $this->protection_method,
-			'redirectType'            => $this->redirect_type,
-			'redirectUrl'             => $this->redirect_url,
-			'replacementType'         => $this->replacement_type,
-			'replacementPage'         => $this->replacement_page,
-			'archiveHandling'         => $this->archive_handling,
-			'archiveReplacementPage'  => $this->archive_replacement_page,
-			'archiveRedirectType'     => $this->archive_redirect_type,
-			'archiveRedirectUrl'      => $this->archive_redirect_url,
-			'additionalQueryHandling' => $this->additional_query_handling,
-			'overrideMessage'         => $this->override_message,
-			'customMessage'           => $this->custom_message,
-			'showExcerpts'            => $this->show_excerpts,
-			'conditions'              => $this->conditions,
-		];
+		$settings = $this->get_settings();
+
+		return array_merge( [
+			'id'          => $this->id,
+			'slug'        => $this->slug,
+			'title'       => $this->title,
+			'description' => $this->get_description(),
+			'message'     => $this->get_message(),
+			'status'      => $this->status,
+			'priority'    => $this->priority,
+		], $settings );
 	}
 
 	/**
@@ -500,15 +420,15 @@ class Restriction {
 		return [
 			'id'                       => $this->id,
 			'title'                    => $this->title,
-			'who'                      => $this->user_status,
-			'roles'                    => $this->user_roles,
-			'protection_method'        => $this->protection_method,
-			'show_excerpts'            => $this->show_excerpts,
-			'override_default_message' => $this->override_message,
-			'custom_message'           => $this->custom_message,
-			'redirect_type'            => $this->redirect_type,
-			'redirect_url'             => $this->redirect_url,
-			'conditions'               => $this->conditions,
+			'who'                      => $this->get_setting( 'userStatus' ),
+			'roles'                    => $this->get_setting( 'userRoles' ),
+			'protection_method'        => $this->get_setting( 'protectionMethod' ),
+			'show_excerpts'            => $this->get_setting( 'showExcerpts' ),
+			'override_default_message' => $this->get_setting( 'overrideMessage' ),
+			'custom_message'           => $this->get_setting( 'customMessage' ),
+			'redirect_type'            => $this->get_setting( 'redirectType' ),
+			'redirect_url'             => $this->get_setting( 'redirectUrl' ),
+			'conditions'               => $this->get_setting( 'conditions' ),
 		];
 	}
 }

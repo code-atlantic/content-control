@@ -27,9 +27,17 @@ class PostContent extends Controller {
 	 * Initiate functionality.
 	 */
 	public function init() {
+		$this->enable_filters();
+	}
+
+	/**
+	 * Enable filters.
+	 *
+	 * @return void
+	 */
+	public function enable_filters() {
 		add_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
 		add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
-
 		// phpcs:disable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar -- These are for future use.
 		// add_filter( 'the_title', [ $this, 'filter_the_title_if_restricted'], 1000, 2 );
 		// add_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000, 2 );
@@ -37,6 +45,16 @@ class PostContent extends Controller {
 		// add_filter( 'post_password_required', [ $this, 'require_password_if_restricted' ], 1000, 2 );
 		// add_filter( 'the_password_form', [ $this, 'filter_password_form_if_restricted' ], 1000, 2 );
 		// phpcs:enable Squiz.PHP.CommentedOutCode.Found, Squiz.Commenting.InlineComment.InvalidEndChar
+	}
+
+	/**
+	 * Disable filters.
+	 *
+	 * @return void
+	 */
+	public function disable_filters() {
+		remove_filter( 'the_content', [ $this, 'filter_the_content_if_restricted' ], 1000 );
+		remove_filter( 'get_the_excerpt', [ $this, 'filter_the_excerpt_if_restricted' ], 1000 );
 	}
 
 	/**
@@ -52,17 +70,17 @@ class PostContent extends Controller {
 	public function filter_the_content_if_restricted( $content ) {
 		$filter_name = 'content_control/restricted_post_content';
 
-		// Ensure we don't get into an infinite loop.
-		if ( doing_filter( $filter_name ) || doing_filter( 'get_the_excerpt' ) ) {
-			return $content;
-		}
-
 		// If this isn't a post type that can be restricted, bail.
 		if ( protection_is_disabled() ) {
 			return $content;
 		}
 
 		if ( ! content_is_restricted() ) {
+			return $content;
+		}
+
+		// Ensure we don't get into an infinite loop.
+		if ( doing_filter( $filter_name ) || doing_filter( 'get_the_excerpt' ) ) {
 			return $content;
 		}
 
@@ -74,8 +92,8 @@ class PostContent extends Controller {
 
 		// If this is a replacement page, bail.
 		if (
-			( 'replace' === $restriction->protection_method && 'page' === $restriction->replacement_type && is_page( $restriction->replacement_page ) ) ||
-			( 'replace_archive_page' === $restriction->archive_handling && is_page( $restriction->archive_replacement_page ) )
+			( 'replace' === $restriction->get_setting( 'protectionMethod' ) && 'page' === $restriction->get_setting( 'replacementType' ) && is_page( $restriction->get_setting( 'replacementPage' ) ) ) ||
+			( 'replace_archive_page' === $restriction->get_setting( 'archiveHandling' ) && is_page( $restriction->get_setting( 'archiveReplacementPage' ) ) )
 		) {
 			return $content;
 		}
@@ -93,7 +111,7 @@ class PostContent extends Controller {
 		 * message, then change back to page replacement and the override message will still
 		 * be used for the post in sub queries.
 		 */
-		if ( $restriction->override_message ) {
+		if ( $restriction->get_setting( 'overrideMessage' ) ) {
 			$message = $restriction->get_message();
 		}
 
@@ -124,16 +142,16 @@ class PostContent extends Controller {
 	public function filter_the_excerpt_if_restricted( $post_excerpt, $post = null ) {
 		$filter_name = 'content_control/restricted_post_excerpt';
 
-		if ( doing_filter( $filter_name ) ) {
-			return $post_excerpt;
-		}
-
 		// If this isn't a post type that can be restricted, bail.
 		if ( protection_is_disabled() ) {
 			return $post_excerpt;
 		}
 
 		if ( ! content_is_restricted( $post->ID ) ) {
+			return $post_excerpt;
+		}
+
+		if ( doing_filter( $filter_name ) ) {
 			return $post_excerpt;
 		}
 

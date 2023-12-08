@@ -40,9 +40,8 @@ function get_plugin_config() {
 		'file'          => __FILE__,
 		'basename'      => \plugin_basename( __FILE__ ),
 		'url'           => \plugin_dir_url( __FILE__ ),
-		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
+		'path'          => \plugin_dir_path( __FILE__ ) . \DIRECTORY_SEPARATOR,
 		'api_url'       => 'https://contentcontrolplugin.com/',
-		'is_pro'        => class_exists( 'ContentControlPro\Plugin\Core' ),
 	];
 }
 
@@ -105,11 +104,16 @@ function check_prerequisites() {
 	return true;
 }
 
-add_action( 'plugins_loaded', function () {
-	if ( check_prerequisites() ) {
-		plugin_instance();
-	}
-}, 11 );
+add_action(
+	'plugins_loaded',
+	function () {
+		if ( check_prerequisites() ) {
+			plugin_instance();
+		}
+	},
+	// Core plugin loads at 11, Pro loads at 12 & addons load at 13.
+	11
+);
 
 /**
  * Initiates and/or retrieves an encapsulated container for the plugin.

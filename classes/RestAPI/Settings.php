@@ -68,7 +68,7 @@ class Settings extends WP_REST_Controller {
 		$settings = get_all_plugin_options();
 
 		if ( $settings ) {
-			return new WP_REST_Response( $settings, 200 );
+			return new WP_REST_Response( [ 'settings' => $settings ], 200 );
 		} else {
 			return new WP_Error( '404', __( 'Something went wrong, the settings could not be found.', 'content-control' ), [ 'status' => 404 ] );
 		}
@@ -82,7 +82,7 @@ class Settings extends WP_REST_Controller {
 	 * @return \WP_Error|\WP_REST_Response
 	 */
 	public function update_settings( $request ) {
-		$settings = $request->get_params();
+		$settings = $request->get_param( 'settings' );
 
 		$error_message = __( 'Something went wrong, the settings could not be updated.', 'content-control' );
 
@@ -127,32 +127,8 @@ class Settings extends WP_REST_Controller {
 				'title'      => 'settings',
 				'type'       => 'object',
 				'properties' => [
-					'block_controls' => [
-						'type'       => 'object',
-						'properties' => [
-							'enable'          => [
-								'type' => 'boolean',
-							],
-							'controls'        => [
-								'type'       => 'object',
-								'properties' => [
-									'device_rules' => [
-										'type'       => 'object',
-										'properties' => [
-											'enable' => [
-												'type' => 'boolean',
-											],
-										],
-									],
-								],
-							],
-							'disabled_blocks' => [
-								'type'  => 'array',
-								'items' => [
-									'type' => 'string',
-								],
-							],
-						],
+					'settings' => [
+						'type' => 'object',
 					],
 				],
 			]

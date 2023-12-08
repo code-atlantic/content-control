@@ -87,14 +87,16 @@ class MainQuery extends Controller {
 			 */
 			do_action( 'content_control/restrict_main_query', $restriction );
 
-			switch ( $restriction->protection_method ) {
+			$method = $restriction->get_setting( 'protectionMethod' );
+
+			switch ( $method ) {
 				case 'redirect':
-					redirect( $restriction->redirect_type, $restriction->redirect_url );
+					redirect( $restriction->get_setting( 'redirectType' ), $restriction->get_setting( 'redirectUrl' ) );
 					return;
 
 				case 'replace':
-					if ( 'page' === $restriction->replacement_type ) {
-						set_query_to_page( $restriction->replacement_page );
+					if ( 'page' === $restriction->get_setting( 'replacementType' ) ) {
+						set_query_to_page( $restriction->get_setting( 'replacementPage' ) );
 						return;
 					}
 			}
@@ -141,7 +143,7 @@ class MainQuery extends Controller {
 			 */
 			$restriction = $post_restriction['restriction'];
 
-			if ( 'redirect' === $restriction->archive_handling || 'replace_archive_page' === $restriction->archive_handling ) {
+			if ( 'redirect' === $restriction->get_setting( 'archiveHandling' ) || 'replace_archive_page' === $restriction->get_setting( 'archiveHandling' ) ) {
 				$restriction_match = $post_restriction;
 				break;
 			}
@@ -180,12 +182,12 @@ class MainQuery extends Controller {
 		 */
 		do_action( 'content_control/restrict_main_query_post', $restriction, $post_ids );
 
-		switch ( $restriction->archive_handling ) {
+		switch ( $restriction->get_setting( 'archiveHandling' ) ) {
 			case 'replace_archive_page':
-				set_query_to_page( $restriction->archive_replacement_page );
+				set_query_to_page( $restriction->get_setting( 'archiveReplacementPage' ) );
 				break;
 			case 'redirect':
-				redirect( $restriction->archive_redirect_type, $restriction->archive_redirect_url );
+				redirect( $restriction->get_setting( 'archiveRedirectType' ), $restriction->get_setting( 'archiveRedirectUrl' ) );
 				break;
 		}
 	}

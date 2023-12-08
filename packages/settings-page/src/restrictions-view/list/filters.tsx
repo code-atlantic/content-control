@@ -27,6 +27,7 @@ const ListFilters = () => {
 		filters = {},
 		setFilters,
 		bulkSelection = [],
+		restrictions = [],
 		filteredRestrictions = [],
 	} = useList();
 
@@ -35,6 +36,20 @@ const ListFilters = () => {
 
 	const filterButtonRefs = useRef< Record< string, HTMLButtonElement > >(
 		{}
+	);
+
+	// List of unique statuses from all items.
+	const totalStatusCounts = useMemo(
+		() =>
+			restrictions.reduce< Record< RestrictionStatuses, number > >(
+				( s, r ) => {
+					s[ r.status ] = ( s[ r.status ] ?? 0 ) + 1;
+					s.all++;
+					return s;
+				},
+				{ all: 0 }
+			),
+		[ restrictions ]
 	);
 
 	// List of unique statuses from all items.
@@ -215,7 +230,12 @@ const ListFilters = () => {
 					selected={ filters?.status ?? '' }
 					options={ Object.entries( statusOptionLabels )
 						// Filter statuses with 0 items.
-						.filter( ( [ value ] ) => isStatusActive( value ) )
+						.filter( ( [ value ] ) =>
+							// If the current status has no items, show all statuses that have items.
+							totalStatusCounts[ filters?.status ?? '' ] > 0
+								? isStatusActive( value )
+								: totalStatusCounts[ value ] > 0
+						)
 						// Map statuses to options.
 						.map( ( [ value, label ] ) => {
 							return {

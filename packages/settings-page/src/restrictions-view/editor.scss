@@ -133,7 +133,7 @@ $gap4: $gap * 4;
 
 		.components-tab-panel__tabs {
 			text-align: left;
-			flex: 1 1 200px;
+			flex: 1 0 150px;
 			.components-tab-panel__tabs-item {
 				&.is-active {
 					background-color: #f0f0f0;
@@ -143,6 +143,8 @@ $gap4: $gap * 4;
 
 		.components-tab-panel__tab-content {
 			flex: 3 1 100%;
+			// max-width: calc(100% - 160px);
+			// overflow-x: hidden;
 		}
 	}
 
@@ -194,7 +196,8 @@ $gap4: $gap * 4;
 
 				&:not(:disabled) {
 					&:focus {
-						box-shadow: inset 0 0 0 2px #007cba,
+						box-shadow:
+							inset 0 0 0 2px #007cba,
 							0 0 0 var(--wp-admin-border-width-focus)
 								var(--wp-admin-theme-color);
 						outline: 3px solid #0000;
@@ -212,7 +215,8 @@ $gap4: $gap * 4;
 
 				&:not(:disabled) {
 					&:focus {
-						box-shadow: inset 0 0 0 2px #fff,
+						box-shadow:
+							inset 0 0 0 2px #fff,
 							0 0 0 var(--wp-admin-border-width-focus)
 								var(--wp-admin-theme-color);
 						outline: 3px solid #0000;
@@ -233,12 +237,6 @@ $gap4: $gap * 4;
 	}
 
 	.general-tab {
-		.components-base-control {
-			&:not(.title-field, .description-field) {
-				margin-bottom: $gap2;
-			}
-		}
-
 		.title-field {
 			.components-text-control__input {
 				height: auto;
@@ -297,7 +295,7 @@ $gap4: $gap * 4;
 
 		.component-smart-token-control__input {
 			width: fit-content;
-			min-width: 300px;
+			min-width: 200px;
 			min-height: 42px;
 			vertical-align: middle;
 		}

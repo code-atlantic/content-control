@@ -165,7 +165,8 @@ const ObjectSelectField = ( {
 					return (
 						<>
 							{ 'postType' === entityKind
-								? suggestion.title.rendered
+								? suggestion.title.rendered ??
+								  suggestion.title.raw
 								: suggestion.name }
 						</>
 					);

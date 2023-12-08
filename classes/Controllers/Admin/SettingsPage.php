@@ -70,6 +70,9 @@ class SettingsPage extends Controller {
 			return;
 		}
 
+		wp_enqueue_editor();
+		wp_tinymce_inline_scripts();
+
 		wp_enqueue_script( 'content-control-settings-page' );
 	}
 

@@ -50,10 +50,6 @@ function get_options( $widget_id ) {
  * @return array<string,mixed>
  */
 function parse_options( $options = [] ) {
-	if ( ! is_array( $options ) ) {
-		$options = [];
-	}
-
 	return wp_parse_args( $options, [
 		'which_users' => '',
 		'roles'       => [],

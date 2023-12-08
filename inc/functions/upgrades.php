@@ -7,7 +7,9 @@
 
 namespace ContentControl;
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 use function wp_parse_args;
 use function apply_filters;

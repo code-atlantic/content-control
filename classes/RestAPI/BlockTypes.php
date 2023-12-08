@@ -9,6 +9,7 @@
 namespace ContentControl\RestAPI;
 
 use WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
+use function ContentControl\plugin;
 use function ContentControl\get_block_types;
 use function ContentControl\sanitize_block_type;
 use function ContentControl\update_block_types;
@@ -121,7 +122,9 @@ class BlockTypes extends WP_REST_Controller {
 	 * @return WP_Error|bool
 	 */
 	public function update_block_types_permissions() {
-		return current_user_can( 'manage_options' ) || current_user_can( 'activate_plugins' );
+		return current_user_can( plugin()->get_permission( 'manage_settings' ) )
+			|| current_user_can( 'manage_options' )
+			|| current_user_can( 'activate_plugins' );
 	}
 
 	/**

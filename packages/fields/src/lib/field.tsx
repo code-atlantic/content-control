@@ -5,6 +5,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import {
 	CheckboxField,
 	ColorField,
+	DateField,
 	MeasureField,
 	MulticheckField,
 	NumberField,
@@ -28,6 +29,8 @@ const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 			return <CheckboxField { ...fieldProps } />;
 		case 'color':
 			return <ColorField { ...fieldProps } />;
+		case 'date':
+			return <DateField { ...fieldProps } />;
 		case 'measure':
 			return <MeasureField { ...fieldProps } />;
 		case 'multicheck':

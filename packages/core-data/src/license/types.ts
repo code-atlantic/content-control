@@ -17,7 +17,7 @@ export type LicenseStatus = {
 	site_count: number;
 	expires: string | Date;
 	activations_left: number;
-	price_id?: number | string;
+	price_id?: number | string | boolean;
 	error?: string;
 	error_message?: string;
 };

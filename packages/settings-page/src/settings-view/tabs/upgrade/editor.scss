@@ -9,7 +9,7 @@
 }
 
 .content-control__upgrade-notice {
-	max-width: 600px;
+	// max-width: 600px;
 
 	.upgrade-notice__title {
 		margin: 0;
@@ -27,55 +27,57 @@
 	}
 
 	.upgrade-features {
-		background: rgba(0, 124, 186, 0.1);
-		border-radius: 3px;
-		padding: 24px;
-		margin: 0 0 16px;
-
-		> * {
-			font-size: 14px;
-			color: #344054;
-		}
+		font-size: 15px;
 
 		p {
-			font-weight: 500;
-			margin: 0 0 8px;
+			// font-weight: 400;
+			// margin: 0 0 8px;
+
+			strong {
+				font-weight: 900;
+			}
 
 			a {
 				font-weight: 700;
 			}
 		}
 
+		h3 {
+			font-size: 1.2em;
+			margin-bottom: 1em;
+		}
+
+		.upgrade-notice__feature {
+			background: rgba(0, 124, 186, 0.1);
+			border-radius: 3px;
+			padding: 20px;
+			margin: 0 0 20px;
+		}
+
+		> * {
+			// font-size: 14px;
+			color: #344054;
+		}
+
 		ul {
 			margin: 0;
 			li {
-				margin-bottom: 4px;
-				line-height: 1;
+				margin-bottom: 16px;
+				line-height: 1.4;
+				vertical-align: baseline;
+
 				&:last-child {
 					margin-bottom: 0;
 				}
 
-				ul {
-					margin-top: 4px;
-					padding-left: 2em;
-				}
-
 				font-weight: 300;
 
-				strong {
-					font-weight: 400;
-				}
-
 				svg {
-					margin: -2px 5px -2px 0;
+					margin: -2px 2px -8px 0;
 
 					path {
 						fill: #007cba;
 					}
-				}
-
-				> * {
-					vertical-align: middle;
 				}
 			}
 		}

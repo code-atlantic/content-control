@@ -26,6 +26,7 @@ addFilter(
 							groupId="device"
 							label={ __( 'Device Rules', 'content-control' ) }
 							icon={ tablet }
+							iconSize={ 24 }
 						>
 							<DeviceRules />
 						</RuleGroup>
@@ -50,6 +51,7 @@ addFilter(
 							groupId="user"
 							label={ __( 'User Rules', 'content-controls' ) }
 							icon={ lockedUser }
+							iconSize={ 19 }
 						>
 							<UserRules />
 						</RuleGroup>

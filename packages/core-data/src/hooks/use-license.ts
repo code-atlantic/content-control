@@ -118,10 +118,39 @@ const useLicense = () => {
 		isGeneralError,
 	] );
 
+	const licenseLevel = useMemo( () => {
+		// Price ID as an int
+		let price_id = licenseStatus?.price_id ?? null;
+
+		if ( null === price_id ) {
+			return -1;
+		}
+
+		if ( 'string' === typeof price_id ) {
+			price_id = parseInt( price_id, 10 );
+		}
+
+		switch ( price_id ) {
+			default:
+				return -1;
+
+			case false:
+			case 0:
+				return 0;
+
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				return price_id;
+		}
+	}, [ licenseStatus?.price_id ] );
+
 	return {
 		connectInfo,
 		licenseKey,
 		licenseStatus,
+		licenseLevel,
 		activateLicense,
 		deactivateLicense,
 		checkLicenseStatus,
