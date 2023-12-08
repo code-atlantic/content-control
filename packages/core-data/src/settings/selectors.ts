@@ -31,7 +31,7 @@ export const getKnownBlockTypes = (
  */
 export const getSetting = <
 	K extends keyof Settings,
-	D extends Settings[ K ] | undefined | false
+	D extends Settings[ K ] | undefined | false,
 >(
 	state: SettingsState,
 	name: K,

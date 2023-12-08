@@ -7,7 +7,7 @@ import type { BlockControlGroups, ControlGroups } from '../types';
 import type { IconType } from '@wordpress/components';
 
 export type BlockControlGroupsContextType<
-	K extends BlockControlGroups = any
+	K extends BlockControlGroups = any,
 > = {
 	groupId: K;
 	icon: IconType;
