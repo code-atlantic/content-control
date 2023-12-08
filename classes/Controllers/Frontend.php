@@ -52,6 +52,11 @@ class Frontend extends Controller {
 	 * @return void
 	 */
 	private function replicate_core_content_filters() {
+		/**
+		 * Instance of WP_Embed class.
+		 *
+		 * @var \WP_Embed $wp_embed
+		 */
 		global $wp_embed;
 
 		$the_content = 'content_control/restricted_post_content';

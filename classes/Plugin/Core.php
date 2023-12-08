@@ -114,7 +114,8 @@ class Core {
 	 */
 	protected function process_version_data_migration( $data ) {
 		// This class can be extended for addons, only do the following if this is core and not an extended class.
-		if ( ! is_subclass_of( $this, __CLASS__ ) ) {
+		// If the current instance is not an extended class, check if old settings exist.
+		if ( get_called_class() === __CLASS__ ) {
 			// Check if old settings exist.
 			$has_old_settings_data = \get_option( 'content_control_settings', false );
 			$has_old_install_date  = \get_option( 'content_control_installed_on', false );
@@ -178,7 +179,7 @@ class Core {
 		 */
 		$GLOBALS[ $this->get( 'option_prefix' ) ] = $this->container;
 
-		if ( ! is_subclass_of( $this, __CLASS__ ) ) {
+		if ( get_called_class() === __CLASS__ ) {
 			$this->container['options'] =
 				/**
 				 * Get plugin options.
@@ -260,15 +261,15 @@ class Core {
 	 */
 	protected function registered_controllers() {
 		return [
-			'PostTypes'     => new \ContentControl\Controllers\PostTypes( $this ),
-			'Assets'        => new \ContentControl\Controllers\Assets( $this ),
-			'Admin'         => new \ContentControl\Controllers\Admin( $this ),
-			'Compatibility' => new \ContentControl\Controllers\Compatibility( $this ),
-			'RestAPI'       => new \ContentControl\Controllers\RestAPI( $this ),
-			'BlockEditor'   => new \ContentControl\Controllers\BlockEditor( $this ),
-			'Frontend'      => new \ContentControl\Controllers\Frontend( $this ),
-			'Shortcodes'    => new \ContentControl\Controllers\Shortcodes( $this ),
-			'TrustedLogin'  => new \ContentControl\Controllers\TrustedLogin( $this ),
+			'PostTypes'              => new \ContentControl\Controllers\PostTypes( $this ),
+			'Assets'                 => new \ContentControl\Controllers\Assets( $this ),
+			'Admin'                  => new \ContentControl\Controllers\Admin( $this ),
+			'Compatibility'          => new \ContentControl\Controllers\Compatibility( $this ),
+			'RestAPI'                => new \ContentControl\Controllers\RestAPI( $this ),
+			'BlockEditor'            => new \ContentControl\Controllers\BlockEditor( $this ),
+			'Frontend'               => new \ContentControl\Controllers\Frontend( $this ),
+			'Shortcodes'             => new \ContentControl\Controllers\Shortcodes( $this ),
+			'TrustedLoginController' => new \ContentControl\Controllers\TrustedLogin( $this ),
 		];
 	}
 
@@ -368,7 +369,7 @@ class Core {
 		}
 
 		// 3. Check if the item exists in the global space.
-		if ( is_subclass_of( $this, __CLASS__ ) ) {
+		if ( get_called_class() !== __CLASS__ ) {
 			// If this is an addon, check if the service exists in the core plugin.
 			// Get core plugin container and see if the service exists there.
 			$plugin_service = \ContentControl\plugin( $id );

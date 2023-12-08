@@ -122,8 +122,8 @@ export const ListProvider = ( { value = {}, children }: ProviderProps ) => {
 			.filter( ( r ) =>
 				! filterRoles.length
 					? true
-					: filterRoles.some( ( role ) =>
-							r.settings.userRoles?.includes( role )
+					: filterRoles.some(
+							( role ) => r.settings.userRoles?.includes( role )
 					  )
 			)
 			.filter( ( r ) => {
