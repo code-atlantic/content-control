@@ -31,13 +31,6 @@ class Options {
 	public $namespace;
 
 	/**
-	 * Keeps static copy of the options during runtime.
-	 *
-	 * @var null|array<string,mixed>
-	 */
-	private $data;
-
-	/**
 	 * Initialize Options on run.
 	 *
 	 * @param string $prefix Settings key prefix.
@@ -46,7 +39,6 @@ class Options {
 		// Set the prefix on init.
 		$this->prefix    = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
 		$this->namespace = ! empty( $prefix ) ? trim( $prefix, '_/' ) . '/' : '';
-		$this->data      = $this->get_all();
 	}
 
 	/**
@@ -85,7 +77,15 @@ class Options {
 	 * @return mixed|void
 	 */
 	public function get( $key = '', $default_value = false ) {
-		$value = isset( $this->data[ $key ] ) ? $this->data[ $key ] : $default_value;
+		$data = $this->get_all();
+
+		// Fetch key from array, converting to camelcase (how data is stored). Supports dot.notation.
+		$value = \ContentControl\fetch_key_from_array( $key, $data, 'camelCase' );
+
+		// If no value, return default.
+		if ( null === $value ) {
+			$value = $default_value;
+		}
 
 		/**
 		 * Filter the option.
@@ -97,29 +97,6 @@ class Options {
 		 * @return mixed
 		 */
 		return apply_filters( $this->namespace . 'get_option', $value, $key, $default_value );
-	}
-
-	/**
-	 * Get an option using a dot notation key.
-	 *
-	 * @param string $key Option key in dot notation.
-	 * @param bool   $default_value Default value.
-	 *
-	 * @return mixed|void
-	 */
-	public function get_notation( $key = '', $default_value = false ) {
-		$keys = explode( '.', $key );
-		$data = $this->get_all();
-
-		foreach ( $keys as $key ) {
-			if ( ! isset( $data[ $key ] ) ) {
-				return $default_value;
-			}
-
-			$data = $data[ $key ];
-		}
-
-		return $data;
 	}
 
 	/**
@@ -166,11 +143,6 @@ class Options {
 		$options[ $key ] = $value;
 		$did_update      = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data[ $key ] = $value;
-		}
-
 		return $did_update;
 	}
 
@@ -211,11 +183,6 @@ class Options {
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
-
 		return $did_update;
 	}
 
@@ -247,11 +214,6 @@ class Options {
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
-
 		return $did_update;
 	}
 
@@ -278,11 +240,6 @@ class Options {
 		}
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
-
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
 
 		return $did_update;
 	}

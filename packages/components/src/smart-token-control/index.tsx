@@ -25,6 +25,7 @@ export type Token =
 	  };
 
 export type Props< T extends Token = Token > = {
+	id?: string;
 	value: T[];
 	onChange: ( value: T[] ) => void;
 	label?: string | JSX.Element;
@@ -105,6 +106,7 @@ const defaultClasses: Required< Props[ 'classes' ] > = {
 
 const SmartTokenControl = < T extends Token = string >(
 	{
+		id,
 		value,
 		onChange,
 		label,
@@ -134,7 +136,7 @@ const SmartTokenControl = < T extends Token = string >(
 	const elClasses = { ...defaultClasses, ...classes };
 
 	const minQueryLength = 1;
-	const id = useInstanceId( SmartTokenControl );
+	const instanceId = useInstanceId( SmartTokenControl );
 	const wrapperRef = useRef< Element | null >( null );
 	const inputRef = useRef< HTMLInputElement >( null );
 	const selectedRef = useRef< HTMLDivElement | null >( null );
@@ -370,7 +372,11 @@ const SmartTokenControl = < T extends Token = string >(
 	return (
 		<KeyboardShortcuts shortcuts={ keyboardShortcuts }>
 			<div
-				id={ `component-smart-token-control-${ id }-wrapper` }
+				id={
+					id
+						? `${ id }-wrapper`
+						: `component-smart-token-control-${ instanceId }-wrapper`
+				}
 				className={ classNames( [
 					elClasses.container,
 					isFocused && 'is-focused',
@@ -399,7 +405,11 @@ const SmartTokenControl = < T extends Token = string >(
 				} }
 			>
 				<BaseControl
-					id={ `component-smart-token-control-${ id }` }
+					id={
+						id
+							? id
+							: `component-smart-token-control-${ instanceId }`
+					}
 					label={ label }
 					hideLabelFromVision={ hideLabelFromVision }
 				>
@@ -432,7 +442,11 @@ const SmartTokenControl = < T extends Token = string >(
 							</div>
 						) }
 						<input
-							id={ `component-smart-token-control-${ id }` }
+							id={
+								id
+									? id
+									: `component-smart-token-control-${ instanceId }`
+							}
 							type="text"
 							className={ classNames( [ elClasses.textInput ] ) }
 							placeholder={ placeholder }
@@ -444,7 +458,11 @@ const SmartTokenControl = < T extends Token = string >(
 							}
 							autoComplete="off"
 							aria-autocomplete="list"
-							aria-controls={ `${ id }-listbox` }
+							aria-controls={
+								id
+									? `${ id }-listbox`
+									: `${ instanceId }-listbox`
+							}
 							aria-activedescendant={ `sug-${ currentIndex }` }
 							onFocus={ () => {
 								setState( {

@@ -7,6 +7,7 @@
 		position: relative;
 
 		@include flexRow();
+		align-items: first baseline;
 		margin-top: $spacing;
 
 		// Ensure this row fills all space.
@@ -17,7 +18,9 @@
 
 		.if-text-column {
 			display: block;
-			min-width: 65px;
+			flex: 1 1 auto;
+			font-weight: 900;
+			text-transform: uppercase;
 		}
 
 		.add-rule-column {
@@ -25,22 +28,28 @@
 		}
 
 		.controls-column {
-			flex-grow: 1;
+			flex: 3 1 100%;
 
 			.editable-area {
-				@include flexRow(20px);
+				@include flexColumn();
+				align-items: "baseline";
 				background-color: #fff;
 				border: 1px solid #ddd;
-				padding: calc($spacing / 2);
+				padding: $spacing / 2 $spacing;
 				width: fit-content;
+				box-sizing: border-box;
 
 				.rule-label {
+					// Along with padding & border above, this gives us 36px of vertical space, matching the action buttons.
+					line-height: 22px;
 					width: fit-content;
 					white-space: nowrap;
+					font-weight: 500;
 				}
 
 				.rule-fields {
 					flex-grow: auto;
+					margin-bottom: $spacing / 2;
 				}
 
 				.components-base-control__field {
@@ -54,8 +63,15 @@
 			}
 
 			.rule-fields {
-				@include flexRow(4px);
+				@include flexRow(12px);
+				align-items: first baseline;
 			}
+		}
+
+		.actions-column {
+			flex: 1 1 auto;
+			margin-right: auto;
+			align-self: flex-start;
 		}
 	}
 

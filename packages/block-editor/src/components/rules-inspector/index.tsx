@@ -1,6 +1,6 @@
-import { createSlotFill } from '@wordpress/components';
-import { Children } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { Children } from '@wordpress/element';
+import { createSlotFill } from '@wordpress/components';
 
 const { Fill, Slot } = createSlotFill( 'ContentControlBlockRules' );
 
@@ -19,7 +19,6 @@ export const RulesInspectorSlot = ( { children }: Props ) => {
 				) ) }
 
 				<Slot>
-					{ /* @ts-ignore */ }
 					{ ( fills ) => {
 						return fills ? (
 							fills

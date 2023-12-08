@@ -318,6 +318,7 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				orientation="vertical"
 				initialTabName={ tab ?? 'general' }
 				onSelect={ setTab }
+				// @ts-ignore This is a bug in the @types/wordpress__components package.
 				tabs={ tabs }
 				className="editor-tabs"
 			>

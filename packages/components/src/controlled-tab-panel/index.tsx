@@ -7,7 +7,7 @@ import TabButton from './tab-button';
 
 type Tab = {
 	name: string;
-	title: string;
+	title: string | JSX.Element;
 	className: string | string[];
 	[ key: string ]: any;
 };

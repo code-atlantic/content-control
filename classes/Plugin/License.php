@@ -157,6 +157,38 @@ class License {
 	}
 
 	/**
+	 * Get license level.
+	 *
+	 * Only used in pro version.
+	 *
+	 * @return int Integer representing license level.
+	 */
+	public function get_license_level() {
+		$license_status = $this->get_license_status();
+
+		if ( empty( $license_status ) ) {
+			return -1;
+		}
+
+		$price_id = isset( $license_status['price_id'] ) ? $license_status['price_id'] : null;
+
+		switch ( $price_id ) {
+			default:
+				return -1;
+
+			case false:
+			case 0:
+				return 0;
+
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				return absint( $price_id );
+		}
+	}
+
+	/**
 	 * Update license data.
 	 *
 	 * @param array{key:string|null,status:array<string,mixed>|null} $license_data License data.
@@ -325,7 +357,6 @@ class License {
 			'edd_action'  => 'activate_license',
 			'license'     => $key,
 			'item_id'     => self::ID,
-			'item_name'   => rawurlencode( 'Content Control' ),
 			'url'         => home_url(),
 			'environment' => function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production',
 		];

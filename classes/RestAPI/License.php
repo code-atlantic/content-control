@@ -135,7 +135,11 @@ class License extends WP_REST_Controller {
 	 * Clean license status.
 	 *
 	 * @param array{key:string,status:array<string,mixed>} $license_status License status.
-	 * @return array{key:string,status:array<string,mixed>}
+	 *
+	 * @return (array|string)[]
+	 *
+	 * @psalm-return array<'key'|'status', array<string, mixed>|string>
+	 * @phpstan-return array{key: string, status: array<string, mixed>|string}
 	 */
 	public function clean_license_status( $license_status ) {
 		// Remove customer_email, customer_name, payment_id, ..., checksum keys from status array.

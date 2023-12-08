@@ -8,31 +8,35 @@ import { __ } from '@wordpress/i18n';
 import { home, link, login } from '@wordpress/icons';
 
 import type { Restriction } from '@content-control/core-data';
+import { applyFilters } from '@wordpress/hooks';
 
-export const userStatusOptions: {
-	value: Restriction[ 'settings' ][ 'userStatus' ];
-	label: string;
-	[ key: string ]: any;
-}[] = [
-	{
-		value: 'logged_in',
-		label: __( 'Logged In Users', 'content-control' ),
-		icon: lockedUser,
-		// iconSize: 18,
-	},
-	{
-		value: 'logged_out',
-		label: __( 'Logged Out Users', 'content-control' ),
-		icon: incognito,
-		// iconSize: 18,
-	},
-];
+export const userStatusOptions = () =>
+	applyFilters( 'contentControl.restrictionEditor.userStatusOptions', [
+		{
+			value: 'logged_in',
+			label: __( 'Logged In Users', 'content-control' ),
+			icon: lockedUser,
+			// iconSize: 18,
+		},
+		{
+			value: 'logged_out',
+			label: __( 'Logged Out Users', 'content-control' ),
+			icon: incognito,
+			// iconSize: 18,
+		},
+	] ) as {
+		value: 'logged_in' | 'logged_out';
+		label: string;
+		[ key: string ]: any;
+	}[];
 
-export const protectionMethodOptions: {
+type protectionMethodOptionsType = {
 	value: Restriction[ 'settings' ][ 'protectionMethod' ];
 	label: string;
 	[ key: string ]: any;
-}[] = [
+};
+
+export const protectionMethodOptions: protectionMethodOptionsType[] = [
 	{
 		value: 'redirect',
 		label: __( 'Redirect', 'content-control' ),
@@ -45,7 +49,7 @@ export const protectionMethodOptions: {
 		icon: protectedMessage,
 		// iconSize: 18,
 	},
-];
+] as protectionMethodOptionsType[];
 
 export const redirectTypeOptions: {
 	value: Restriction[ 'settings' ][ 'redirectType' ];

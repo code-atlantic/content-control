@@ -229,8 +229,6 @@ const LicenseTab = () => {
 					} }
 				/>
 
-				{ ! isLicenseKeyValid && <UpgradeFeatures /> }
-
 				<p
 					dangerouslySetInnerHTML={ {
 						__html: sprintf(
@@ -357,6 +355,14 @@ const LicenseTab = () => {
 					className="content-control-license-status"
 					dangerouslySetInnerHTML={ { __html: statusMessage() } }
 				/>
+
+				{ ! isLicenseKeyValid && (
+					<>
+						<br />
+						<hr />
+						<UpgradeFeatures />
+					</>
+				) }
 			</div>
 
 			{ /* <pre>{ JSON.stringify( licenseStatus, null, 2 ) }</pre> */ }

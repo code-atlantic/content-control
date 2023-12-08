@@ -6,7 +6,7 @@ import type { IconType } from '@wordpress/components';
 
 type Props = {
 	name?: string;
-	title: string;
+	title: string | JSX.Element;
 	badge?: string | JSX.Element;
 	icon?: IconType;
 	children: React.ReactNode;

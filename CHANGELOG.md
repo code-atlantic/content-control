@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+## v2.1.0 - 12/08/2023
+
+NOTE: Plugin now requires PHP 7.4+ & WP 6.2+. The plugin may still work on older versions, but it is no longer tested or supported.
+
+- Improvement: Preloaded plugin settings on admin pages to decrease delay before settings are available to JS. This should help settings not showing up in the editor when first loading the page.
+- Tweak: Changed `'content_control/get_block_control_classes'` filter to include the $controls found in the block.
+- Tweak: Various style improvements to admin pages for consistency.
+- Fix: Typo in fetching of taxonomy labels for rule generation. This could have led to rule search results not being shown with proper labels (or empty labels).
+- Fix: Block scanner running for all users, not just admins, triggered AJAX events that were denied every time author entered block editor.
+- Fix: Styling issues with WP 6.4 checkbox changes.
+- Fix: Bug when filtering restrictions in the list view and no results remained, causing the filters to not work properly witoout a page refresh.
+- Developer: Core plugin class now is extendible to allow addons to get full access to plugin internals.
+- Developer: Added useFields api which will be used in future versions of the plugin to allow 3rd party plugins to add their own fields to the restriction editor.
+- Developer: Added multiple new components for field organization and layout: `FieldRow`, `FieldPanel`.
+- Developer: Added new `'content-control.data.registry'` hook in JavaScript to allow addons to register their own data stores for use in the editor & settings pages.
+- Developer: Added new `'content_control/restriction/bypass_user_requirements'` PHP filter to allow addons to bypass user requirements for more specific restrictions.
+
 ## v2.0.12 - 10/26/2023
 
 - Fix: Prevent extra 301 redirect due to missing trailing slash on some URLs.

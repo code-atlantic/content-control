@@ -12,14 +12,13 @@ import OptionalGroupOptions from './optional-group-options';
 const RuleGroupHeader = () => {
 	const {
 		icon,
+		iconSize = 24,
 		isOpened,
 		label,
 		setGroupRules,
 		groupDefaults,
 		additionalOptions = [],
 	} = useBlockControlsForGroup();
-
-	const iconSize = 24;
 
 	if ( ! label ) {
 		return <></>;
@@ -35,7 +34,11 @@ const RuleGroupHeader = () => {
 			>
 				{ label }
 				{ icon && (
-					<Icon className="cc__rules-group__icon" icon={ icon } />
+					<Icon
+						className="cc__rules-group__icon"
+						icon={ icon }
+						size={ iconSize }
+					/>
 				) }
 			</h2>
 

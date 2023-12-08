@@ -4,10 +4,10 @@ Author URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=pl
 Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility, user access, coming soon, maintenance mode, access manager, paywall
-Requires at least: 5.6
+Requires at least: 6.2
 Tested up to: 6.4
-Stable tag: 2.0.12
-Requires PHP: 5.6
+Stable tag: 2.1.0
+Requires PHP: 7.4
 License: GPLv3 (or later)
 
 Restrict content based on login status, user roles, device type & more. Monetize your content with a paywall or members-only content.
@@ -47,13 +47,15 @@ Discover what Content Control brings to your table:
 
 = Pro Features = 
 
-Coming soon: Content Control Pro, with advanced features like:
+Content Control Pro, with advanced features like:
 
 - Content Teasers for Paywalls, giving your users a sneak peek, leaving them wanting more.
 - Optimize your WooCommerce & Easy Digital Downloads (EDD) experiences with advanced rules.
 - Schedule blocks, controlling content visibility timings using customizable scheduling rules.
 - Dive deeper with advanced block rules and a boolean editor.
 - Customize login, registration & recovery page urls. Custom login urls give a more personalized user experience.
+
+[Upgrade to Content Control Pro](https://contentcontrolplugin.com/pricing/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=upgrade-link)
 
 **Note**: Content Control handles media access via content on media attachment pages but won't restrict direct server-level access to media files.
 
@@ -101,6 +103,24 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.1.0 - 12/08/2023 =
+
+**NOTE**: Plugin now requires PHP 7.4+ & WP 6.2+. The plugin likely still works on older versions, but now only officialy support these versions and up.
+
+- Improvement: Preloaded plugin settings on admin pages to decrease delay before settings are available to JS. This should help settings not showing up in the editor when first loading the page.
+- Tweak: Changed `'content_control/get_block_control_classes'` filter to include the $controls found in the block.
+- Tweak: Various style improvements to admin pages for consistency.
+- Fix: Typo in fetching of taxonomy labels for rule generation. This could have led to rule search results not being shown with proper labels (or empty labels).
+- Fix: Block scanner running for all users, not just admins, triggered AJAX events that were denied every time author entered block editor.
+- Fix: Styling issues with WP 6.4 checkbox changes.
+- Fix: Bug when filtering restrictions in the list view and no results remained, causing the filters to not work properly witoout a page refresh.
+- Developer: Core plugin class now is extendible to allow addons to get full access to plugin internals.
+- Developer: Added useFields api which will be used in future versions of the plugin to allow 3rd party plugins to add their own fields to the restriction editor.
+- Developer: Added multiple new components for field organization and layout: `FieldRow`, `FieldPanel`.
+- Developer: Added new `'content-control.data.registry'` hook in JavaScript to allow addons to register their own data stores for use in the editor & settings pages.
+- Developer: Added new `'content_control/restriction/bypass_user_requirements'` PHP filter to allow addons to bypass user requirements for more specific restrictions.
+
 
 = v2.0.12 - 10/26/2023 =
 

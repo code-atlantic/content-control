@@ -62,7 +62,9 @@ const Editor = ( { ruleDef, value: ruleProps, onChange }: Props ) => {
 								<Field
 									key={ id }
 									{ ...field }
-									value={ ruleOptions[ id ] }
+									value={
+										ruleOptions[ id ] ?? field.default ?? ''
+									}
 									onChange={ ( newValue: F[ 'value' ] ) =>
 										updateOption( id, newValue )
 									}

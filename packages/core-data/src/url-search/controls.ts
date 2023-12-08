@@ -158,7 +158,7 @@ export default {
 							// decodeEntities(
 							isMedia
 								? // @ts-ignore fix when we make this a TS file
-								  result.title.rendered
+								  result.title.rendered ?? suggestion.title.raw
 								: result.title ||
 								  '' ||
 								  /* ) */ __( '(no title)' ),

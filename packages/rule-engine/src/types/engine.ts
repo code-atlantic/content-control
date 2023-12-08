@@ -10,7 +10,7 @@ type EngineFieldRecord< T extends EngineField > = {
 export interface EngineRuleType {
 	name: string;
 	label: string;
-	context: string;
+	context: string | string[];
 	category: string;
 	format: string;
 	fields?: EngineFieldRecord< EngineField >;

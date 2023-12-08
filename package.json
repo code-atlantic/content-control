@@ -1,6 +1,6 @@
 {
 	"name": "content-control",
-	"version": "2.0.12",
+	"version": "2.1.0",
 	"description": "",
 	"author": "Code Atlantic",
 	"license": "GPL-2.0-or-later",
@@ -55,9 +55,9 @@
 		"@code-atlantic/stylelint-config": "^1.2.0",
 		"@content-control/custom-templated-path-webpack-plugin": "file:./packages/custom-templated-path-webpack-plugin",
 		"@content-control/dependency-extraction-webpack-plugin": "file:./packages/dependency-extraction-webpack-plugin",
-		"@nrwl/nx-cloud": "^16.4.0",
-		"@wordpress/prettier-config": "^3.0.0",
-		"@wordpress/scripts": "^26.14.0",
+		"@nrwl/nx-cloud": "^16.5.2",
+		"@wordpress/prettier-config": "^3.4.0",
+		"@wordpress/scripts": "^26.18.0",
 		"nx": "16.10.0",
 		"path": "^0.12.7",
 		"prettier": "npm:wp-prettier@3.0.3",
@@ -96,7 +96,8 @@
 		"pretest:unit:php": "wp-env start",
 		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
 		"translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
-		"build:release": "composer install -o --no-dev && npm run build && npm run copy-build"
+		"build:release": "composer install -o --no-dev && npm run build && npm run copy-build",
+		"zip:release": "npm run build:release && mv ./build ./content-control && zip -r content-control.zip ./content-control && rm -rf ./content-control"
 	},
 	"babel": {},
 	"workspaces": [

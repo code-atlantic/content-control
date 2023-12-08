@@ -37,6 +37,7 @@ type RuleGroupProps = React.PropsWithChildren< {
 	label: string;
 	groupId: BlockControlGroups;
 	icon: IconType;
+	iconSize?: number;
 } >;
 
 /**
@@ -46,11 +47,18 @@ type RuleGroupProps = React.PropsWithChildren< {
  * @param {RuleGroupProps} props Props.
  * @return {React.ReactElement}  RuleGroup.
  */
-const RuleGroup = ( { label, groupId, icon, children }: RuleGroupProps ) => {
+const RuleGroup = ( {
+	label,
+	groupId,
+	icon,
+	iconSize = 24,
+	children,
+}: RuleGroupProps ) => {
 	return (
 		<BlockControlsGroupContextProvider
 			groupId={ groupId }
 			icon={ icon }
+			iconSize={ iconSize }
 			label={ label }
 		>
 			<RuleGroupWrapper>{ children }</RuleGroupWrapper>

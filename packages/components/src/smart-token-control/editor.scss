@@ -28,7 +28,8 @@
 				border-radius: 4px;
 				border: 1px solid #8c8f94;
 				background-color: #eee;
-				width: max-content;
+				width: fit-content;
+				text-wrap: balance;
 
 				.component-smart-token-control__token-label {
 					display: inline-block;

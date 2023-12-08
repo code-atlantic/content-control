@@ -1,6 +1,8 @@
 import { store as coreStore } from '@wordpress/core-data';
 import { createRegistry } from '@wordpress/data';
 
+import { doAction } from '@wordpress/hooks';
+
 import {
 	restrictionsStore,
 	licenseStore,
@@ -31,5 +33,11 @@ registry.register( licenseStore );
 registry.register( settingsStore );
 registry.register( restrictionsStore );
 registry.register( urlSearchStore );
+
+// On document ready
+document.addEventListener( 'DOMContentLoaded', () => {
+	// Allow other scripts to hook into the registry.
+	doAction( 'content-control.data.registry', registry );
+} );
 
 export { registry };

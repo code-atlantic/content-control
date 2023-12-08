@@ -19,6 +19,8 @@ defined( 'ABSPATH' ) || exit;
  * Class Plugin
  *
  * @package ContentControl\Plugin
+ *
+ * @version 2.0.0
  */
 class Core {
 
@@ -48,6 +50,7 @@ class Core {
 		$this->controllers = new Container();
 
 		$this->register_services();
+		$this->define_paths();
 		$this->initiate_controllers();
 
 		$this->check_version();
@@ -60,9 +63,9 @@ class Core {
 	 *
 	 * @return void
 	 */
-	private function check_version() {
+	protected function check_version() {
 		$version    = $this->get( 'version' );
-		$option_key = 'content_control_version';
+		$option_key = "{$this->get( 'option_prefix' )}_version";
 
 		$current_data = \get_option( $option_key, false );
 
@@ -91,7 +94,7 @@ class Core {
 			 *
 			 * @param string $version The new version.
 			 */
-			do_action( 'content_control/update_version', $data['version'] );
+			do_action( "{$this->get( 'option_prefix' )}/update_version", $data['version'] );
 
 			// Save Upgraded From option.
 			$data['upgraded_from'] = $data['version'];
@@ -109,17 +112,33 @@ class Core {
 	 * @param array<string,string|null> $data Array of data.
 	 * @return array<string,string|null>
 	 */
-	private function process_version_data_migration( $data ) {
-		$has_old_settings_data = \get_option( 'jp_cc_settings', false );
-		$has_old_install_date  = \get_option( 'jp_cc_reviews_installed_on', false );
+	protected function process_version_data_migration( $data ) {
+		// This class can be extended for addons, only do the following if this is core and not an extended class.
+		// If the current instance is not an extended class, check if old settings exist.
+		if ( get_called_class() === __CLASS__ ) {
+			// Check if old settings exist.
+			$has_old_settings_data = \get_option( 'content_control_settings', false );
+			$has_old_install_date  = \get_option( 'content_control_installed_on', false );
 
-		// Check if old settings exist.
-		if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {
-			$data = [
-				'version'         => '1.1.9',
-				'upgraded_from'   => null,
-				'initial_version' => '1.1.9',
-			];
+			if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {
+				$data = [
+					'version'         => '1.1.9',
+					'upgraded_from'   => null,
+					'initial_version' => '1.1.9',
+				];
+			}
+
+			$has_old_settings_data = \get_option( 'jp_cc_settings', false );
+			$has_old_install_date  = \get_option( 'jp_cc_reviews_installed_on', false );
+
+			// Check if old settings exist.
+			if ( false !== $has_old_settings_data || false !== $has_old_install_date ) {
+				$data = [
+					'version'         => '1.1.9',
+					'upgraded_from'   => null,
+					'initial_version' => '1.1.9',
+				];
+			}
 		}
 
 		if ( empty( $data['initial_version'] ) ) {
@@ -158,37 +177,100 @@ class Core {
 		/**
 		 * Attach our container to the global.
 		 */
-		$GLOBALS['content_control'] = $this->container;
+		$GLOBALS[ $this->get( 'option_prefix' ) ] = $this->container;
 
-		$this->container['options'] = function ( $c ) {
-			return new Options( $c->get( 'option_prefix' ) );
-		};
+		if ( get_called_class() === __CLASS__ ) {
+			$this->container['options'] =
+				/**
+				 * Get plugin options.
+				 *
+				 * @return Options
+				 */
+				function ( $c ) {
+					return new Options( $c->get( 'option_prefix' ) );
+				};
 
-		$this->container['connect'] = function ( $c ) {
-			return new \ContentControl\Plugin\Connect( $c );
-		};
+			$this->container['connect'] =
+				/**
+				 * Get plugin connect.
+				 *
+				 * @return Connect
+				 */
+				function ( $c ) {
+					return new \ContentControl\Plugin\Connect( $c );
+				};
 
-		$this->container['license'] = function () {
-			return new \ContentControl\Plugin\License();
-		};
+			$this->container['license'] =
+				/**
+				 * Get plugin license.
+				 *
+				 * @return License
+				 */
+				function () {
+					return new \ContentControl\Plugin\License();
+				};
 
-		$this->container['logging'] = function () {
-			return new \ContentControl\Plugin\Logging();
-		};
+			$this->container['logging'] =
+				/**
+				 * Get plugin logging.
+				 *
+				 * @return Logging
+				 */
+				function () {
+					return new \ContentControl\Plugin\Logging();
+				};
 
-		$this->container['upgrader'] = function ( $c ) {
-			return new \ContentControl\Plugin\Upgrader( $c );
-		};
+			$this->container['upgrader'] =
+				/**
+				 * Get plugin upgrader.
+				 *
+				 * @return Upgrader
+				 */
+				function ( $c ) {
+					return new \ContentControl\Plugin\Upgrader( $c );
+				};
 
-		$this->container['rules'] = function () {
-			return new \ContentControl\RuleEngine\Rules();
-		};
+			$this->container['rules'] =
+				/**
+				 * Get plugin rules.
+				 *
+				 * @return \ContentControl\RuleEngine\Rules
+				 */
+				function () {
+					return new \ContentControl\RuleEngine\Rules();
+				};
 
-		$this->container['restrictions'] = function () {
-			return new \ContentControl\Services\Restrictions();
-		};
+			$this->container['restrictions'] =
+				/**
+				 * Get plugin restrictions.
+				 *
+				 * @return \ContentControl\Services\Restrictions
+				 */
+				function () {
+					return new \ContentControl\Services\Restrictions();
+				};
+		}
 
-		apply_filters( 'content_control/register_services', $this->container, $this );
+		apply_filters( "{$this->get( 'option_prefix' )}/register_services", $this->container, $this );
+	}
+
+	/**
+	 * Update & track version info.
+	 *
+	 * @return array<string,\ContentControl\Base\Controller>
+	 */
+	protected function registered_controllers() {
+		return [
+			'PostTypes'              => new \ContentControl\Controllers\PostTypes( $this ),
+			'Assets'                 => new \ContentControl\Controllers\Assets( $this ),
+			'Admin'                  => new \ContentControl\Controllers\Admin( $this ),
+			'Compatibility'          => new \ContentControl\Controllers\Compatibility( $this ),
+			'RestAPI'                => new \ContentControl\Controllers\RestAPI( $this ),
+			'BlockEditor'            => new \ContentControl\Controllers\BlockEditor( $this ),
+			'Frontend'               => new \ContentControl\Controllers\Frontend( $this ),
+			'Shortcodes'             => new \ContentControl\Controllers\Shortcodes( $this ),
+			'TrustedLoginController' => new \ContentControl\Controllers\TrustedLogin( $this ),
+		];
 	}
 
 	/**
@@ -196,20 +278,8 @@ class Core {
 	 *
 	 * @return void
 	 */
-	private function initiate_controllers() {
-		$this->define_paths();
-
-		$this->register_controllers( [
-			'PostTypes'     => new \ContentControl\Controllers\PostTypes( $this ),
-			'Assets'        => new \ContentControl\Controllers\Assets( $this ),
-			'Admin'         => new \ContentControl\Controllers\Admin( $this ),
-			'Compatibility' => new \ContentControl\Controllers\Compatibility( $this ),
-			'RestAPI'       => new \ContentControl\Controllers\RestAPI( $this ),
-			'BlockEditor'   => new \ContentControl\Controllers\BlockEditor( $this ),
-			'Frontend'      => new \ContentControl\Controllers\Frontend( $this ),
-			'Shortcodes'    => new \ContentControl\Controllers\Shortcodes( $this ),
-			'TrustedLogin'  => new \ContentControl\Controllers\TrustedLogin( $this ),
-		] );
+	protected function initiate_controllers() {
+		$this->register_controllers( $this->registered_controllers() );
 	}
 
 	/**
@@ -249,7 +319,7 @@ class Core {
 	 *
 	 * @return void
 	 */
-	private function define_paths() {
+	protected function define_paths() {
 		/**
 		 * Attach utility functions.
 		 */
@@ -288,11 +358,29 @@ class Core {
 	 * @return mixed Current value of the item.
 	 */
 	public function get( $id ) {
-		if ( ! $this->container->offsetExists( $id ) ) {
+		// 1. Check if the item exists in the container.
+		if ( $this->container->offsetExists( $id ) ) {
+			return $this->container->get( $id );
+		}
+
+		// 2. Check if the item exists in the controllers container.
+		if ( $this->controllers->offsetExists( $id ) ) {
 			return $this->controllers->get( $id );
 		}
 
-		return $this->container->get( $id );
+		// 3. Check if the item exists in the global space.
+		if ( get_called_class() !== __CLASS__ ) {
+			// If this is an addon, check if the service exists in the core plugin.
+			// Get core plugin container and see if the service exists there.
+			$plugin_service = \ContentControl\plugin( $id );
+
+			if ( $plugin_service ) {
+				return $plugin_service;
+			}
+		}
+
+		// 5. Return null, item not found.
+		return null;
 	}
 
 	/**
@@ -367,7 +455,7 @@ class Core {
 	 * @return boolean
 	 */
 	public function is_pro_active() {
-		return $this->is_pro_installed() && class_exists( '\ContentControlPro\Plugin\Core' );
+		return $this->is_pro_installed() && function_exists( '\ContentControl\Pro\plugin' );
 	}
 
 	/**

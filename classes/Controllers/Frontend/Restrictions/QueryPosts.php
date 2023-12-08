@@ -131,7 +131,7 @@ class QueryPosts extends Controller {
 			 */
 			do_action( 'content_control/restrict_archive_post', $restriction, $post_id );
 
-			$handling = $query->is_main_query() ? $restriction->archive_handling : $restriction->additional_query_handling;
+			$handling = $query->is_main_query() ? $restriction->get_setting( 'archiveHandling' ) : $restriction->get_setting( 'additionalQueryHandling' );
 
 			switch ( $handling ) {
 				case 'filter_post_content':

@@ -65,7 +65,7 @@ class Output extends QM_Output_Html {
 	 *
 	 * @param array<string,string> $classes Array of QM classes.
 	 *
-	 * @return array<string,string>
+	 * @return array<int<0,max>|string,string>
 	 */
 	public function admin_class( $classes ) {
 		$classes[] = 'qm-content-control';

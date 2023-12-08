@@ -32,12 +32,12 @@ const ContentTab = ( { values, updateSettings }: EditTabProps ) => {
 						groups: true,
 					},
 					rulesFilter: ( rule ) => {
-						// Skip user rules for this editor.
-						if ( Array.isArray( rule.context ) ) {
-							return ! rule.context.includes( 'user' );
-						}
+						const context = Array.isArray( rule.context )
+							? rule.context
+							: rule.context.split( ' ' );
 
-						return [ 'user' ].indexOf( rule.context ) === -1;
+						// Only content rules for this editor.
+						return context.indexOf( 'content' ) >= 0;
 					},
 				} }
 			/>

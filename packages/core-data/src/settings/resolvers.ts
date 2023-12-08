@@ -15,12 +15,15 @@ export function* getSettings() {
 	try {
 		// execution will pause here until the `FETCH` control function's return
 		// value has resolved.
-		const results: Settings = yield fetch( getResourcePath(), {
-			method: 'GET',
-		} );
+		const { settings }: { settings: Settings } = yield fetch(
+			getResourcePath(),
+			{
+				method: 'GET',
+			}
+		);
 
-		if ( results ) {
-			return hydrate( results );
+		if ( settings ) {
+			return hydrate( settings );
 		}
 
 		// if execution arrives here, then thing didn't update in the state so return

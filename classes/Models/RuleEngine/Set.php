@@ -74,7 +74,7 @@ class Set {
 	/**
 	 * Get the check array for further post processing.
 	 *
-	 * @return array<bool|null|array<bool|null>> Array of check values.
+	 * @return array<bool|null|array<bool|null>>
 	 */
 	public function get_checks() {
 		return $this->query->get_checks();

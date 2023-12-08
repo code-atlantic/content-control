@@ -3,14 +3,14 @@
  * Plugin Name: Content Control
  * Plugin URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=plugin-uri
  * Description: Restrict content to logged in/out users or specific user roles. Restrict access to certain parts of a page/post. Control the visibility of widgets.
- * Version: 2.0.12
+ * Version: 2.1.0
  * Author: Code Atlantic
  * Author URI: https://code-atlantic.com/?utm_campaign=plugin-info&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=author-uri
  * Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=php-file-header&utm_medium=plugin-ui&utm_content=donate-link
  * Text Domain: content-control
  *
- * Minimum PHP: 5.6
- * Minimum WP: 5.6
+ * Minimum PHP: 7.4
+ * Minimum WP: 6.2
  *
  * @package    Content Control
  * @author     Code Atlantic
@@ -30,19 +30,18 @@ function get_plugin_config() {
 	return [
 		'name'          => \__( 'Content Control', 'content-control' ),
 		'slug'          => 'content-control',
-		'version'       => '2.0.12',
+		'version'       => '2.1.0',
 		'option_prefix' => 'content_control',
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
 		'fullname'      => \__( 'Content Control', 'content-control' ),
-		'min_php_ver'   => '5.6.0',
-		'min_wp_ver'    => '5.6.0',
+		'min_php_ver'   => '7.4.0',
+		'min_wp_ver'    => '6.2.0',
 		'file'          => __FILE__,
 		'basename'      => \plugin_basename( __FILE__ ),
 		'url'           => \plugin_dir_url( __FILE__ ),
-		'path'          => \realpath( \plugin_dir_path( __FILE__ ) ) . \DIRECTORY_SEPARATOR,
+		'path'          => \plugin_dir_path( __FILE__ ) . \DIRECTORY_SEPARATOR,
 		'api_url'       => 'https://contentcontrolplugin.com/',
-		'is_pro'        => class_exists( 'ContentControlPro\Plugin\Core' ),
 	];
 }
 
@@ -105,11 +104,16 @@ function check_prerequisites() {
 	return true;
 }
 
-add_action( 'plugins_loaded', function () {
-	if ( check_prerequisites() ) {
-		plugin_instance();
-	}
-}, 11 );
+add_action(
+	'plugins_loaded',
+	function () {
+		if ( check_prerequisites() ) {
+			plugin_instance();
+		}
+	},
+	// Core plugin loads at 11, Pro loads at 12 & addons load at 13.
+	11
+);
 
 /**
  * Initiates and/or retrieves an encapsulated container for the plugin.

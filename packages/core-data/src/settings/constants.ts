@@ -58,7 +58,9 @@ export const settingsDefaults: Settings =
 		},
 	} ) as Settings;
 
+const { currentSettings = settingsDefaults } = contentControlCoreData;
+
 export const initialState: SettingsState = {
-	settings: settingsDefaults,
+	settings: currentSettings,
 	unsavedChanges: {},
 };

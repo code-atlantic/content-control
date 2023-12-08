@@ -10,6 +10,7 @@ namespace ContentControl\Controllers;
 
 use ContentControl\Base\Controller;
 
+use function ContentControl\get_all_plugin_options;
 use function ContentControl\Rules\allowed_user_roles;
 
 defined( 'ABSPATH' ) || exit;
@@ -69,11 +70,21 @@ class Assets extends Controller {
 			'components'    => [
 				'handle' => 'content-control-components',
 				'styles' => true,
+				'deps'   => [
+					// This is required for tinymce components.
+					'wp-tinymce',
+					// This is required for all tinyMCE plugins.
+					'wp-block-library',
+				],
 			],
 			'core-data'     => [
-				'handle' => 'content-control-core-data',
-				'deps'   => [
+				'handle'   => 'content-control-core-data',
+				'deps'     => [
 					'wp-api',
+				],
+				'varsName' => 'contentControlCoreData',
+				'vars'     => [
+					'currentSettings' => get_all_plugin_options(),
 				],
 			],
 			'data'          => [

@@ -130,6 +130,80 @@ function camel_case_to_snake_case( $str ) {
 	return strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $str ) );
 }
 
+/**
+ * Change snake_case to camelCase.
+ *
+ * @param string $str String to convert.
+ *
+ * @return string Converted string.
+ */
+function snake_case_to_camel_case( $str ) {
+	return lcfirst( str_replace( '_', '', ucwords( $str, '_' ) ) );
+}
+
+/**
+ * Get array values using dot.notation.
+ *
+ * @param string              $key Key to fetch.
+ * @param array<string,mixed> $data Array to fetch from.
+ * @param string|null         $key_case Case to use for key (snake_case|camelCase).
+ *
+ * @return mixed|null
+ */
+function fetch_key_from_array( $key, $data, $key_case = null ) {
+	// If key is .notation, then we need to traverse the array.
+	$dotted_keys = explode( '.', $key );
+
+	foreach ( $dotted_keys as $key ) {
+		if ( $key_case ) {
+			switch ( $key_case ) {
+				case 'snake_case':
+					// Check if key is camelCase & convert to snake_case.
+					$key = camel_case_to_snake_case( $key );
+					break;
+				case 'camelCase':
+					// Check if key is snake_case & convert to camelCase.
+					$key = snake_case_to_camel_case( $key );
+					break;
+			}
+		}
+
+		if ( ! isset( $data[ $key ] ) ) {
+			return null;
+		}
+
+		$data = $data[ $key ];
+	}
+
+	return $data ? $data : null;
+}
+
+/**
+ * Convert hex to rgba.
+ *
+ * @param string $hex_code Hex code to convert.
+ * @param float  $opacity Opacity to use.
+ *
+ * @return string Converted rgba string.
+ */
+function convert_hex_to_rgba( $hex_code, $opacity = 1 ) {
+	$hex = str_replace( '#', '', $hex_code );
+
+	if ( strlen( $hex ) === 3 ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+
+	$r = hexdec( substr( $hex, 0, 2 ) );
+	$g = hexdec( substr( $hex, 2, 2 ) );
+	$b = hexdec( substr( $hex, 4, 2 ) );
+
+	/* Backward compatibility for whole number based opacity values. */
+	if ( $opacity > 1 && $opacity <= 100 ) {
+		$opacity = $opacity / 100;
+	}
+
+	return "rgba($r,$g,$b,$opacity)";
+}
 
 /**
  * Function that deeply cleans arrays for wp_maybe_serialize
