@@ -31,13 +31,6 @@ class Options {
 	public $namespace;
 
 	/**
-	 * Keeps static copy of the options during runtime.
-	 *
-	 * @var null|array<string,mixed>
-	 */
-	private $data;
-
-	/**
 	 * Initialize Options on run.
 	 *
 	 * @param string $prefix Settings key prefix.
@@ -46,7 +39,6 @@ class Options {
 		// Set the prefix on init.
 		$this->prefix    = ! empty( $prefix ) ? trim( $prefix, '_' ) . '_' : '';
 		$this->namespace = ! empty( $prefix ) ? trim( $prefix, '_/' ) . '/' : '';
-		$this->data      = $this->get_all();
 	}
 
 	/**
@@ -151,11 +143,6 @@ class Options {
 		$options[ $key ] = $value;
 		$did_update      = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data[ $key ] = $value;
-		}
-
 		return $did_update;
 	}
 
@@ -196,11 +183,6 @@ class Options {
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
-
 		return $did_update;
 	}
 
@@ -232,11 +214,6 @@ class Options {
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
 
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
-
 		return $did_update;
 	}
 
@@ -263,11 +240,6 @@ class Options {
 		}
 
 		$did_update = \update_option( $this->prefix . 'settings', $options );
-
-		// If it updated, let's update the global variable.
-		if ( $did_update ) {
-			$this->data = $options;
-		}
 
 		return $did_update;
 	}
