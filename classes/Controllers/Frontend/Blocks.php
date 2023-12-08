@@ -21,7 +21,7 @@ class Blocks extends Controller {
 
 	/**
 	 * Initialize Hooks & Filters.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function init() {
