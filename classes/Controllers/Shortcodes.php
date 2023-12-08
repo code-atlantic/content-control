@@ -108,10 +108,8 @@ class Shortcodes extends Controller {
 	 * @psalm-return array<int|string, int|null|string|true>
 	 */
 	public function normalize_empty_atts( $atts = [] ) {
-		if ( ! is_array( $atts ) ) {
-			if ( empty( $atts ) ) {
-				$atts = [];
-			}
+		if ( ! is_array( $atts ) || empty( $atts ) ) {
+			$atts = [];
 		}
 
 		foreach ( $atts as $attribute => $value ) {
