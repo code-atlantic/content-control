@@ -39,6 +39,8 @@ declare global {
 			[ key: string ]: boolean;
 		};
 		version: string;
+		isProInstalled?: boolean;
+		isProActivated?: boolean;
 	};
 }
 
