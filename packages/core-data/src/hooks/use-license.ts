@@ -4,23 +4,29 @@ import { useDispatch, useSelect } from '@wordpress/data';
 
 const useLicense = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
-	const { connectInfo, licenseKey, licenseStatus, isSaving } = useSelect(
-		( select ) => {
-			const storeSelect = select( licenseStore );
-			return {
-				connectInfo: storeSelect.getConnectInfo(),
-				licenseKey: storeSelect.getLicenseKey(),
-				licenseStatus: storeSelect.getLicenseStatus(),
-				isSaving:
-					storeSelect.isDispatching( 'activateLicense' ) ||
-					storeSelect.isDispatching( 'deactivateLicense' ) ||
-					storeSelect.isDispatching( 'checkLicenseStatus' ) ||
-					storeSelect.isDispatching( 'updateLicenseKey' ) ||
-					storeSelect.isDispatching( 'removeLicense' ),
-			};
-		},
-		[]
-	);
+	const {
+		connectInfo,
+		licenseKey,
+		licenseStatus,
+		isSaving,
+		proWasActivated,
+		isActivatingPro,
+	} = useSelect( ( select ) => {
+		const storeSelect = select( licenseStore );
+		return {
+			connectInfo: storeSelect.getConnectInfo(),
+			licenseKey: storeSelect.getLicenseKey(),
+			licenseStatus: storeSelect.getLicenseStatus(),
+			isSaving:
+				storeSelect.isDispatching( 'activateLicense' ) ||
+				storeSelect.isDispatching( 'deactivateLicense' ) ||
+				storeSelect.isDispatching( 'checkLicenseStatus' ) ||
+				storeSelect.isDispatching( 'updateLicenseKey' ) ||
+				storeSelect.isDispatching( 'removeLicense' ),
+			isActivatingPro: storeSelect.isDispatching( 'activatePro' ),
+			proWasActivated: storeSelect.hasDispatched( 'activatePro' ),
+		};
+	}, [] );
 
 	// Grab needed action dispatchers.
 	const {
@@ -29,6 +35,7 @@ const useLicense = () => {
 		checkLicenseStatus,
 		updateLicenseKey,
 		removeLicense,
+		activatePro,
 	} = useDispatch( licenseStore );
 
 	// Create some helper variables.
@@ -156,8 +163,11 @@ const useLicense = () => {
 		checkLicenseStatus,
 		updateLicenseKey,
 		removeLicense,
+		activatePro,
 		getLicenseStatusName,
 		isSaving,
+		isActivatingPro,
+		proWasActivated,
 		isLicenseKeyValid,
 		isLicenseActive,
 		isLicenseDeactivated,
