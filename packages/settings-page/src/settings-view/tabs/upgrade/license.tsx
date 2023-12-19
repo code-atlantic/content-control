@@ -28,6 +28,9 @@ const LicenseTab = () => {
 		deactivateLicense,
 		checkLicenseStatus,
 		removeLicense,
+		activatePro,
+		isActivatingPro,
+		proWasActivated,
 		getLicenseStatusName,
 		isLicenseKeyValid,
 		isLicenseActive,
@@ -42,9 +45,20 @@ const LicenseTab = () => {
 	const { expires, error_message: errorMessage } = licenseStatus;
 	const [ value, setValue ] = useState< LicenseKey >( licenseKey );
 	const [ isActivating, setIsActivating ] = useState( false );
+	const [ isInstalling, setIsInstalling ] = useState( false );
 
 	const connectPopup = useRef< Window | null >( null );
 	const [ showConnectNotice, setShowConnectNotice ] = useState( false );
+
+	const [ proStatus, setProStatus ] = useState< {
+		installed?: boolean;
+		activated?: boolean;
+	} >( {
+		installed: contentControlSettingsPage?.isProInstalled === '1',
+		activated:
+			contentControlSettingsPage?.isProInstalled === '1' &&
+			contentControlSettingsPage?.isProActivated === '1',
+	} );
 
 	const keyHasChanged = value !== licenseKey;
 
@@ -79,6 +93,14 @@ const LicenseTab = () => {
 		}, 1000 );
 	}, [ connectInfo, checkLicenseStatus ] );
 
+	useEffect( () => {
+		if ( proWasActivated ) {
+			setTimeout( () => {
+				window.location.reload();
+			}, 1000 );
+		}
+	}, [ proWasActivated ] );
+
 	// Listen for changes from the license store and update the local state.
 	useEffect( () => {
 		if ( keyHasChanged ) {
@@ -91,6 +113,16 @@ const LicenseTab = () => {
 			setIsActivating( false );
 		}
 	}, [ isSaving, isActivating ] );
+
+	useEffect( () => {
+		if ( isInstalling && ! isSaving ) {
+			setIsInstalling( false );
+			setProStatus( {
+				...proStatus,
+				installed: true,
+			} );
+		}
+	}, [ isSaving, isInstalling ] );
 
 	const statusMessage = () => {
 		if ( isLicenseMissing ) {
@@ -190,6 +222,8 @@ const LicenseTab = () => {
 
 	const buttonVariant = 'tertiary';
 
+	const showActivateButton = proStatus.installed && ! proStatus.activated;
+
 	return (
 		<>
 			{ showConnectNotice && (
@@ -286,6 +320,80 @@ const LicenseTab = () => {
 						} }
 					/>
 					<ButtonGroup>
+						{ isLicenseActive && (
+							<>
+								{ ! proStatus.installed && (
+									<Button
+										className="install-pro"
+										variant={ 'primary' }
+										onClick={ () => {
+											setIsInstalling( true );
+											activateLicense(
+												isLicenseMissing
+													? value
+													: undefined
+											);
+										} }
+										title={ __(
+											'Install Pro',
+											'content-control'
+										) }
+									>
+										{ ! isInstalling ? (
+											<span>
+												{ __(
+													'Install Pro',
+													'content-control'
+												) }
+											</span>
+										) : (
+											<>
+												<span>
+													{ __(
+														'Installing…',
+														'content-control'
+													) }
+												</span>
+												<Spinner />
+											</>
+										) }
+									</Button>
+								) }
+								{ showActivateButton && (
+									<Button
+										className="activate-pro"
+										variant={ 'primary' }
+										onClick={ () => {
+											activatePro();
+										} }
+										title={ __(
+											'Activate Pro',
+											'content-control'
+										) }
+									>
+										{ ! isActivatingPro &&
+										! proWasActivated ? (
+											<span>
+												{ __(
+													'Activate Pro',
+													'content-control'
+												) }
+											</span>
+										) : (
+											<>
+												<span>
+													{ __(
+														'Activating…',
+														'content-control'
+													) }
+												</span>
+												<Spinner />
+											</>
+										) }
+									</Button>
+								) }
+							</>
+						) }
 						<Button
 							className="activate-license"
 							variant={ 'primary' }
