@@ -48,6 +48,8 @@ class Assets extends Controller {
 		// Strip last number from version as they won't be breaking changes.
 		$wp_version = preg_replace( '/\.\d+$/', '', $wp_version );
 
+		$is_pro_installed = \ContentControl\is_plugin_installed( 'content-control-pro/content-control-pro.php' );
+
 		$packages = [
 			'block-editor'  => [
 				'handle'   => 'content-control-block-editor',
@@ -119,8 +121,8 @@ class Assets extends Controller {
 					'rolesAndCaps'   => wp_roles()->roles,
 					'version'        => $this->container->get( 'version' ),
 					'permissions'    => $permissions,
-					'isProInstalled' => \ContentControl\is_plugin_installed( 'content-control-pro/content-control-pro.php' ),
-					'isProActivated' => is_plugin_active( 'content-control-pro/content-control-pro.php' ),
+					'isProInstalled' => $is_pro_installed,
+					'isProActivated' => $is_pro_installed && is_plugin_active( 'content-control-pro/content-control-pro.php' ),
 				],
 				'styles'   => true,
 			],
