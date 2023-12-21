@@ -91,6 +91,46 @@ class Blocks extends Controller {
 	}
 
 	/**
+	 * Check block rules to see if it should be hidden from user.
+	 *
+	 * @param array<string,mixed> $block Block to be checked.
+	 *
+	 * @return boolean Whether the block should be hidden.
+	 */
+	public function should_hide_block( $block ) {
+		if ( protection_is_disabled() ) {
+			return false;
+		}
+
+		if ( ! $this->has_block_controls( $block ) ) {
+			return false;
+		}
+
+		$controls = $this->get_block_controls( $block );
+
+		if ( ! $controls['enabled'] ) {
+			return false;
+		}
+
+		/**
+		 * Filter whether to hide the block.
+		 *
+		 * @param bool  $should_hide Whether the block should be hidden.
+		 * @param array $rules  Rules to check.
+		 * @param array $block  The block being rendered.
+		 * @return bool
+		 */
+		$should_hide = apply_filters(
+			'content_control/should_hide_block',
+			false,
+			$controls['rules'],
+			$block
+		);
+
+		return $should_hide;
+	}
+
+	/**
 	 * Short curcuit block rendering for hidden blocks.
 	 *
 	 * @param string|null         $pre_render   The pre-rendered content. Default null.
@@ -100,50 +140,7 @@ class Blocks extends Controller {
 	 * @return string|null
 	 */
 	public function pre_render_block( $pre_render, $parsed_block, $parent_block ) {
-		if ( 'core/navigation' === $parsed_block['blockName'] ) {
-			$nav_menu_ref = ! empty( $parsed_block['attrs']['ref'] ) ? $parsed_block['attrs']['ref'] : 0;
-
-			if ( $nav_menu_ref ) {
-				$navigation_post = get_post( $nav_menu_ref );
-				$parsed_blocks   = parse_blocks( $navigation_post->post_content );
-			}
-
-			// TODO for some reason, controls applied to core/navigation-link are not being saved, or not appearing in attrs.
-		}
-
-		if ( ! isset( $parsed_block['attrs']['contentControls'] ) ) {
-			return $pre_render;
-		}
-
-		if ( protection_is_disabled() ) {
-			return $pre_render;
-		}
-
-		$controls = wp_parse_args( $parsed_block['attrs']['contentControls'], [
-			'enabled' => false,
-			'rules'   => [],
-		] );
-
-		if ( ! $controls['enabled'] ) {
-			return $pre_render;
-		}
-
-		/**
-		 * Filter whether to hide the block.
-		 *
-		 * @param bool  $should_hide Whether the block should be hidden.
-		 * @param array $rules  Rules to check.
-		 * @param array $parsed_block  The block being rendered.
-		 * @return bool
-		 */
-		$should_hide = apply_filters(
-			'content_control/should_hide_block',
-			false,
-			$controls['rules'],
-			$parsed_block
-		);
-
-		return $should_hide ? '' : $pre_render;
+		return $this->should_hide_block( $parsed_block ) ? '' : $pre_render;
 	}
 
 	/**
@@ -236,6 +233,13 @@ class Blocks extends Controller {
 	public function render_block( $block_content, $block ) {
 		if ( ! $this->has_block_controls( $block ) ) {
 			return $block_content;
+		}
+
+		// If the block should be hidden, return an empty string.
+		// This catches blocks that should be hidden but were missed by pre_render_block.
+		// This applies to core/navigation-link blocks for example.
+		if ( $this->should_hide_block( $block ) ) {
+			return '';
 		}
 
 		$classes = $this->get_block_control_classes( $block );
