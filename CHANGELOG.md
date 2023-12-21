@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: Nav Menu Link user rule not working properly.
+
 ## v2.1.0 - 12/08/2023
 
 NOTE: Plugin now requires PHP 7.4+ & WP 6.2+. The plugin may still work on older versions, but it is no longer tested or supported.
