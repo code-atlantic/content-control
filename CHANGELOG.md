@@ -3,6 +3,8 @@
 ## Unreleased
 
 - Fix: Nav Menu Link user rule not working properly.
+- Fix: Prevent "Required Upgrade" notices on new installs.
+- Tweak: Only show "Required Upgrade" notices to admins with plugin management permissions.
 
 ## v2.1.0 - 12/08/2023
 
