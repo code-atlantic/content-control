@@ -5,6 +5,7 @@
 - Fix: Nav Menu Link user rule not working properly.
 - Fix: Prevent "Required Upgrade" notices on new installs.
 - Tweak: Only show "Required Upgrade" notices to admins with plugin management permissions.
+- Dev:: Added new field type `userselect` for choosing users with search.
 
 ## v2.1.0 - 12/08/2023
 
