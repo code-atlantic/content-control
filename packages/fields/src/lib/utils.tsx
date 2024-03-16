@@ -196,6 +196,7 @@ export const parseOldArgsToProps = (
 		case 'objectselect':
 		case 'postselect':
 		case 'taxonomyselect':
+		case 'userselect':
 			fieldProps.type = 'objectselect';
 			// @ts-ignore
 			fieldProps.multiple = args?.multiple ?? false;
@@ -211,6 +212,9 @@ export const parseOldArgsToProps = (
 			} else if ( args.type === 'taxonomyselect' ) {
 				entityKind = 'taxonomy';
 				entityType = args?.taxonomy ?? 'category';
+			} else if ( args.type === 'userselect' ) {
+				entityKind = 'user';
+				entityType = 'user';
 			} else {
 				// @ts-ignore
 				entityKind = args?.post_type ? 'postType' : 'taxonomy';
@@ -374,6 +378,9 @@ export function isOldFieldType( props: any ): boolean {
 		typeof cast === 'object' &&
 		// @ts-ignore It exists.
 		( typeof cast?.std !== 'undefined' ||
+			typeof cast?.user_roles !== 'undefined' ||
+			( typeof cast?.type !== 'undefined' &&
+				cast?.type === 'userselect' ) ||
 			typeof cast?.taxonomy !== 'undefined' ||
 			typeof cast?.post_type !== 'undefined' )
 	) {
@@ -433,6 +440,7 @@ export const parseFieldProps = (
 		case 'objectselect':
 		case 'postselect':
 		case 'taxonomyselect':
+		case 'userselect':
 			return {
 				...fieldProps,
 				entityKind: fieldProps.entityKind ?? '',

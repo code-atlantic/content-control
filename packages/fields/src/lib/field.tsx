@@ -41,6 +41,7 @@ const FieldComponent = ( fieldProps: FieldPropsWithOnChange ): JSX.Element => {
 		case 'objectselect':
 		case 'postselect':
 		case 'taxonomyselect':
+		case 'userselect':
 			return <ObjectSelectField { ...fieldProps } />;
 		case 'radio':
 			return <RadioField { ...fieldProps } />;

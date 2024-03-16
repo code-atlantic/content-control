@@ -127,10 +127,11 @@ export interface OldSelect2Field extends Omit< OldSelectField, 'type' > {
 }
 
 export interface OldObjectSelectField extends Omit< OldSelect2Field, 'type' > {
-	type: 'objectselect' | 'postselect' | 'taxonomyselect';
-	object_type?: 'post' | 'taxonomy';
+	type: 'objectselect' | 'postselect' | 'taxonomyselect' | 'userselect';
+	object_type?: 'post' | 'taxonomy' | 'user';
 	post_type?: string;
 	taxonomy?: string;
+	user_roles?: string[];
 }
 
 export interface OldPostSelectField extends OldObjectSelectField {
@@ -143,6 +144,12 @@ export interface OldTaxnomySelectField extends OldObjectSelectField {
 	type: 'taxonomyselect';
 	object_type?: 'taxonomy';
 	taxonomy: string;
+}
+
+export interface OldUserSelectField extends OldObjectSelectField {
+	type: 'userselect';
+	object_type?: 'user';
+	user_roles?: string[];
 }
 
 export interface OldCheckboxField extends OldFieldBase {
@@ -170,7 +177,8 @@ export type OldFieldProps =
 	| OldPostSelectField
 	| OldTaxnomySelectField
 	| OldCheckboxField
-	| OldTextareaField;
+	| OldTextareaField
+	| OldUserSelectField;
 
 /**
  * Union of FieldProps converted to partials that still require `type`.
@@ -198,6 +206,7 @@ export type OldFieldMap = {
 	taxonomyselect: OldTaxnomySelectField;
 	text: OldTextField;
 	textarea: OldTextareaField;
+	userselect: OldUserSelectField;
 };
 
 export type OldFieldValueMap = {
@@ -221,6 +230,7 @@ export type OldFieldValueMap = {
 	taxonomyselect: number | string | number[] | string[];
 	text: string;
 	textarea: string;
+	userselect: number | string | number[] | string[];
 };
 
 // Catch all union of field types & values.

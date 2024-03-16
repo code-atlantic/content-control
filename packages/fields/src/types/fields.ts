@@ -92,7 +92,7 @@ export interface NumberFieldProps extends InputFieldProps< number > {
 }
 
 export interface ObjectSelectFieldProps extends FieldBaseProps {
-	type: 'objectselect' | 'postselect' | 'taxonomyselect';
+	type: 'objectselect' | 'postselect' | 'taxonomyselect' | 'userselect';
 	placeholder?: string;
 	value?: number | number[];
 	multiple?: boolean;
@@ -110,6 +110,12 @@ export interface TaxonomySelectFieldProps
 	extends Omit< ObjectSelectFieldProps, 'type' > {
 	type: 'taxonomyselect';
 	entityKind: 'taxonomy';
+}
+
+export interface UserSelectFieldProps
+	extends Omit< ObjectSelectFieldProps, 'type' > {
+	type: 'userselect';
+	entityKind: 'user';
 }
 
 export interface RadioFieldProps extends FieldBaseProps {
@@ -173,6 +179,7 @@ export type FieldProps =
 	| ObjectSelectFieldProps
 	| PostSelectFieldProps
 	| TaxonomySelectFieldProps
+	| UserSelectFieldProps
 	| RadioFieldProps
 	| RangesliderFieldProps
 	| SelectFieldProps
@@ -214,6 +221,7 @@ export type IntermediaryFieldProps =
 	  >
 	| AtLeast< PostSelectFieldProps, MinFieldProps | 'entityType' >
 	| AtLeast< TaxonomySelectFieldProps, MinFieldProps | 'entityType' >
+	| AtLeast< UserSelectFieldProps, MinFieldProps | 'entityType' >
 	| AtLeast< RadioFieldProps, MinFieldProps | 'options' >
 	| AtLeast< RangesliderFieldProps, MinFieldProps >
 	| AtLeast< SelectFieldProps, MinFieldProps | 'options' >
@@ -243,4 +251,5 @@ export type FieldPropsMap = {
 	text: TextFieldProps;
 	textarea: TextareaFieldProps;
 	tokenselect: TokenSelectFieldProps;
+	userselect: UserSelectFieldProps;
 };
