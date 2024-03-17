@@ -48,6 +48,8 @@ class Assets extends Controller {
 		// Strip last number from version as they won't be breaking changes.
 		$wp_version = preg_replace( '/\.\d+$/', '', $wp_version );
 
+		$is_pro_installed = \ContentControl\is_plugin_installed( 'content-control-pro/content-control-pro.php' );
+
 		$packages = [
 			'block-editor'  => [
 				'handle'   => 'content-control-block-editor',
@@ -110,15 +112,17 @@ class Assets extends Controller {
 				'handle'   => 'content-control-settings-page',
 				'varsName' => 'contentControlSettingsPage',
 				'vars'     => [
-					'pluginUrl'    => $this->container->get( 'url' ),
-					'wpVersion'    => $wp_version,
-					'adminUrl'     => admin_url(),
-					'restBase'     => 'content-control/v2',
-					'userRoles'    => allowed_user_roles(),
-					'logUrl'       => current_user_can( 'manage_options' ) ? $this->container->get( 'logging' )->get_file_url() : false,
-					'rolesAndCaps' => wp_roles()->roles,
-					'version'      => $this->container->get( 'version' ),
-					'permissions'  => $permissions,
+					'pluginUrl'      => $this->container->get( 'url' ),
+					'wpVersion'      => $wp_version,
+					'adminUrl'       => admin_url(),
+					'restBase'       => 'content-control/v2',
+					'userRoles'      => allowed_user_roles(),
+					'logUrl'         => current_user_can( 'manage_options' ) ? $this->container->get( 'logging' )->get_file_url() : false,
+					'rolesAndCaps'   => wp_roles()->roles,
+					'version'        => $this->container->get( 'version' ),
+					'permissions'    => $permissions,
+					'isProInstalled' => $is_pro_installed,
+					'isProActivated' => $is_pro_installed && is_plugin_active( 'content-control-pro/content-control-pro.php' ),
 				],
 				'styles'   => true,
 			],

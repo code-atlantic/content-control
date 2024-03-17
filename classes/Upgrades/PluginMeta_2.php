@@ -38,6 +38,34 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 	}
 
 	/**
+	 * Get the remaps for this upgrade.
+	 *
+	 * @var array<string,string>
+	 */
+	private $remaps = [
+		'jp_cc_reviews_installed_on' => 'content_control_installed_on',
+	];
+
+	/**
+	 * Check if the upgrade is required.
+	 *
+	 * @return bool
+	 */
+	public function is_required() {
+		$remaps = $this->remaps;
+
+		foreach ( $remaps as $key => $new_key ) {
+			$value = \get_option( $key, null );
+
+			if ( null !== $value ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Run the upgrade.
 	 *
 	 * @return void
@@ -48,9 +76,7 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 
 		$stream->start_task( __( 'Migrating plugin meta', 'content-control' ) );
 
-		$remaps = [
-			'jp_cc_reviews_installed_on' => 'content_control_installed_on',
-		];
+		$remaps = $this->remaps;
 
 		foreach ( $remaps as $key => $new_key ) {
 			$value = \get_option( $key, null );

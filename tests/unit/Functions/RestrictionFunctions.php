@@ -239,7 +239,7 @@ class RestrictionFunctions extends PluginTestCase {
 		$stubs = array_merge( [
 			'userIsLoggedIn' => false,
 			'userIsExcluded' => false,
-			'userCan'        => function ( $role ) {
+			'userCan'        => function ( $role ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 				return false;
 			},
 		], $stubs ?? [] );

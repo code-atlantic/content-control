@@ -326,6 +326,51 @@ export function* removeLicense() {
 }
 
 /**
+ * Activate pro version if installed.
+ *
+ * @return {Generator} Action object.
+ */
+export function* activatePro() {
+	const actionName = 'activatePro';
+
+	try {
+		yield changeActionStatus( actionName, Status.Resolving );
+
+		const result: boolean = yield fetch(
+			getResourcePath( 'activate-pro' ),
+			{
+				method: 'POST',
+			}
+		);
+
+		if ( result ) {
+			// thing was successfully updated so return the action object that will
+			// update the saved thing in the state.
+			return changeActionStatus( actionName, Status.Success );
+		}
+
+		// if execution arrives here, then thing didn't update in the state so return
+		// action object that will add an error to the state about this.
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			__(
+				'An error occurred, license were not saved.',
+				'content-control'
+			)
+		);
+	} catch ( error ) {
+		// returning an action object that will save the update error to the state.
+		return changeActionStatus(
+			actionName,
+			Status.Error,
+			getErrorMessage( error )
+		);
+	}
+}
+
+/**
  * Hydrate license data.
  *
  * @param {License} license

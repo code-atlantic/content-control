@@ -11,6 +11,7 @@ import type {
 	ObjectSelectFieldProps,
 	PostSelectFieldProps,
 	TaxonomySelectFieldProps,
+	UserSelectFieldProps,
 	WithOnChange,
 } from '../types';
 
@@ -24,7 +25,10 @@ const ObjectSelectField = ( {
 	entityType = 'post',
 	multiple = false,
 }: WithOnChange<
-	ObjectSelectFieldProps | PostSelectFieldProps | TaxonomySelectFieldProps
+	| ObjectSelectFieldProps
+	| PostSelectFieldProps
+	| TaxonomySelectFieldProps
+	| UserSelectFieldProps
 > ) => {
 	const [ queryText, setQueryText ] = useState( '' );
 
@@ -51,25 +55,61 @@ const ObjectSelectField = ( {
 
 	const { suggestions = [], isSearching = false } = useSelect(
 		( select ) => ( {
-			suggestions: select( coreDataStore ).getEntityRecords(
-				entityKind,
-				entityType,
-				{
-					context: 'view',
-					search: queryText,
-					per_page: -1,
+			suggestions: ( () => {
+				if ( entityKind === 'user' ) {
+					return (
+						select( coreDataStore )
+							// @ts-ignore This exists and is being used as documented.
+							.getUsers( {
+								context: 'view',
+								search: queryText,
+								per_page: -1,
+							} ) as ObjectOption[]
+					);
 				}
-			) as ObjectOption[],
-			// @ts-ignore This exists and is being used as documented.
-			isSearching: select( 'core/data' ).isResolving(
-				'core',
-				'getEntityRecords',
-				[
+
+				return select( coreDataStore ).getEntityRecords(
 					entityKind,
 					entityType,
-					{ context: 'view', search: queryText, per_page: -1 },
-				]
-			),
+					{
+						context: 'view',
+						search: queryText,
+						per_page: -1,
+					}
+				) as ObjectOption[];
+			} )(),
+			// @ts-ignore This exists and is being used as documented.
+			isSearching: ( () => {
+				if ( entityKind === 'user' ) {
+					return (
+						select( 'core/data' )
+							// @ts-ignore This exists and is being used as documented.
+							.isResolving( 'core', 'getUsers', [
+								entityKind,
+								entityType,
+								{
+									context: 'view',
+									search: queryText,
+									per_page: -1,
+								},
+							] )
+					);
+				}
+
+				return (
+					select( 'core/data' )
+						// @ts-ignore This exists and is being used as documented.
+						.isResolving( 'core', 'getEntityRecords', [
+							entityKind,
+							entityType,
+							{
+								context: 'view',
+								search: queryText,
+								per_page: -1,
+							},
+						] )
+				);
+			} )(),
 		} ),
 		[ queryText, entityKind, entityType ]
 	);

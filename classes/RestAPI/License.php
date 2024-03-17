@@ -55,7 +55,7 @@ class License extends WP_REST_Controller {
 					'args'                => [
 						'licenseKey' => [
 							'required'          => true,
-							'validate_callback' => function ( $param, $request, $key ) {
+							'validate_callback' => function ( $param, $request, $key ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 								return is_string( $param );
 							},
 						],
@@ -80,7 +80,7 @@ class License extends WP_REST_Controller {
 					'args'                => [
 						'licenseKey' => [
 							'required'          => false,
-							'validate_callback' => function ( $param, $request, $key ) {
+							'validate_callback' => function ( $param, $request, $key ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 								return is_string( $param );
 							},
 						],
@@ -116,6 +116,18 @@ class License extends WP_REST_Controller {
 					'permission_callback' => [ $this, 'manage_license_permissions' ],
 				],
 			]
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->base . '/activate-pro',
+			[
+				[
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'activate_pro' ],
+					'permission_callback' => [ $this, 'manage_license_permissions' ],
+				],
+			],
 		);
 	}
 
@@ -267,6 +279,36 @@ class License extends WP_REST_Controller {
 
 			return new WP_Error( '404', $message, [ 'status' => 404 ] );
 		}
+	}
+
+	/**
+	 * Activate pro plugin.
+	 *
+	 * @return \WP_Error|\WP_REST_Response
+	 */
+	public function activate_pro() {
+		// Check if its installed.
+		if ( ! plugin()->is_pro_installed() ) {
+			return new WP_Error( '404', __( 'Pro plugin is not installed.', 'content-control' ), [ 'status' => 404 ] );
+		}
+
+		// Check if its active.
+		if ( plugin()->is_pro_active() ) {
+			return new WP_Error( '404', __( 'Pro plugin is already active.', 'content-control' ), [ 'status' => 404 ] );
+		}
+
+		// // Activate pro plugin.
+		if ( ! function_exists( 'activate_plugin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$activate = \activate_plugin( 'content-control-pro/content-control-pro.php', '', false, true );
+
+		if ( is_wp_error( $activate ) ) {
+			return new WP_Error( '404', __( 'Something went wrong, the pro plugin could not be activated.', 'content-control' ), [ 'status' => 404 ] );
+		}
+
+		return new WP_REST_Response( true, 200 );
 	}
 
 	/**

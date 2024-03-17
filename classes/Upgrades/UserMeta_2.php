@@ -40,6 +40,36 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 	}
 
 	/**
+	 * Get the remaps for this upgrade.
+	 *
+	 * @var array<string,string>
+	 */
+	private $remaps = [
+		'_jp_cc_reviews_already_did'        => 'content_control_reviews_already_did',
+		'_jp_cc_reviews_dismissed_triggers' => 'content_control_reviews_dismissed_triggers',
+		'_jp_cc_reviews_last_dismissed'     => 'content_control_reviews_last_dismissed',
+	];
+
+	/**
+	 * Check if the upgrade is required.
+	 *
+	 * @return bool
+	 */
+	public function is_required() {
+		$remaps = $this->remaps;
+
+		foreach ( $remaps as $key => $new_key ) {
+			$value = \get_user_meta( get_current_user_id(), $key, true );
+
+			if ( [] !== $value && '' !== $value && ! is_null( $value ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Run the migration.
 	 *
 	 * @return void
@@ -52,11 +82,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 
 		$stream->start_task( __( 'Migrating user meta', 'content-control' ) );
 
-		$remapped_keys = [
-			'_jp_cc_reviews_already_did'        => 'content_control_reviews_already_did',
-			'_jp_cc_reviews_dismissed_triggers' => 'content_control_reviews_dismissed_triggers',
-			'_jp_cc_reviews_last_dismissed'     => 'content_control_reviews_last_dismissed',
-		];
+		$remapped_keys = $this->remaps;
 
 		// Update all keys via $wpdb.
 		foreach ( $remapped_keys as $old_key => $new_key ) {

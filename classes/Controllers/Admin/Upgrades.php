@@ -389,7 +389,7 @@ class Upgrades extends Controller {
 	 * @return void
 	 */
 	public function admin_notices() {
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
 			return;
 		}
 
@@ -470,7 +470,7 @@ class Upgrades extends Controller {
 	 * @return array<string,mixed>
 	 */
 	public function localize_vars( $vars ) {
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || ! current_user_can( $this->container->get_permission( 'manage_settings' ) ) ) {
 			return $vars;
 		}
 

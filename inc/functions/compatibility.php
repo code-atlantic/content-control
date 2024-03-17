@@ -70,6 +70,26 @@ function is_rest() {
 }
 
 /**
+ * Check if this is a core WP REST namespace.
+ *
+ * @return boolean
+ *
+ * @since 2.2.0
+ */
+function is_wp_core_rest_namespace() {
+	if ( ! is_rest() ) {
+		return false;
+	}
+
+	global $wp;
+
+	$rest_route = isset( $wp->query_vars['rest_route'] ) ? $wp->query_vars['rest_route'] : '';
+
+	// Check if this is core WP REST namespace.
+	return strpos( $rest_route, '/wp/v2' ) === 0;
+}
+
+/**
  * Check if this is a cron request.
  *
  * @return boolean
@@ -93,8 +113,6 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
-	global $wp_rewrite;
-
 	$query = get_query();
 
 	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
@@ -110,8 +128,7 @@ function is_frontend() {
 		( $query && $query->is_favicon() ) ||
 		( $query && $query->is_robots() ) ||
 		strpos( $request_uri, 'favicon.ico' ) !== false ||
-		strpos( $request_uri, 'robots.txt' ) !== false ||
-		( $wp_rewrite && is_rest() )
+		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		return false;
 	}
