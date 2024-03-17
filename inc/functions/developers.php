@@ -233,6 +233,33 @@ function get_restriction_matches_for_queried_posts( $query ) {
 }
 
 /**
+ * Check if the referrer is the sites admin area.
+ *
+ * @return bool
+ *
+ * @since 2.2.0
+ */
+function check_referrer_is_admin() {
+	$ref = wp_get_raw_referer();
+
+	if ( empty( $ref ) ) {
+		return false;
+	}
+
+	$ref = wp_parse_url( $ref );
+
+	if ( empty( $ref['host'] ) ) {
+		return false;
+	}
+
+	$ref_host = strtolower( $ref['host'] );
+
+	$admin_url = strtolower( wp_parse_url( admin_url(), PHP_URL_HOST ) );
+
+	return $ref_host === $admin_url;
+}
+
+/**
  * Check if protection methods should be disabled.
  *
  * Generally used to bypass protections when using page editors.
