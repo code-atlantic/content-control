@@ -98,10 +98,7 @@ export const archiveHandlingOptions: {
 	[ key: string ]: any;
 }[] = [
 	{
-		label: __(
-			"Filter the restricted items' title, excerpt, and content.",
-			'content-control'
-		),
+		label: __( "Filter the restricted items' content.", 'content-control' ),
 		value: 'filter_post_content',
 	},
 	{
@@ -130,10 +127,7 @@ export const additionalQueryHandlingOptions: {
 	[ key: string ]: any;
 }[] = [
 	{
-		label: __(
-			"Filter the restricted items' title, excerpt, and content.",
-			'content-control'
-		),
+		label: __( "Filter the restricted items' content.", 'content-control' ),
 		value: 'filter_post_content',
 	},
 	{
