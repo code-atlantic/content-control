@@ -70,6 +70,26 @@ function is_rest() {
 }
 
 /**
+ * Check if this is a core WP REST namespace.
+ *
+ * @return boolean
+ *
+ * @since 2.2.0
+ */
+function is_wp_core_rest_namespace() {
+	if ( ! is_rest() ) {
+		return false;
+	}
+
+	global $wp;
+
+	$rest_route = isset( $wp->query_vars['rest_route'] ) ? $wp->query_vars['rest_route'] : '';
+
+	// Check if this is core WP REST namespace.
+	return strpos( $rest_route, '/wp/v2' ) === 0;
+}
+
+/**
  * Check if this is a cron request.
  *
  * @return boolean
