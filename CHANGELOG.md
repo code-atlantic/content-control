@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.2.0 - 03/17/2024
+
 - Feature: Add support for [restricing content in the REST API](https://contentcontrolplugin.com/features/rest-api/).
 - Feature: Add support for terms in WP term queries.
 - Fix: Nav Menu Link user rule not working properly.
