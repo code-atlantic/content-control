@@ -14,6 +14,7 @@ use ContentControl\Base\Controller;
 
 use WP_Customize_Manager;
 
+use function ContentControl\is_rest;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\user_meets_requirements;
 use function ContentControl\Widgets\get_options as get_widget_options;
@@ -38,7 +39,7 @@ class Widgets extends Controller {
 	 * @return array<string,array<string>> The modified $widget_area array.
 	 */
 	public function exclude_widgets( $widget_areas ) {
-		if ( protection_is_disabled() || $this->is_customize_preview() ) {
+		if ( ( ! is_rest() && protection_is_disabled() ) || $this->is_customize_preview() ) {
 			return $widget_areas;
 		}
 
