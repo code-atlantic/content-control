@@ -40,7 +40,7 @@ class PluginMeta_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Get the remaps for this upgrade.
 	 *
-	 * @var array
+	 * @var array<string,string>
 	 */
 	private $remaps = [
 		'jp_cc_reviews_installed_on' => 'content_control_installed_on',

@@ -86,12 +86,12 @@ class QueryTerms extends Controller {
 	 * NOTE. This is only for filtering terms, and should not
 	 *       be used to redirect or replace the entire page.
 	 *
-	 * @param array          $terms      Array of terms to filter.
-	 * @param string         $taxonomy   The taxonomy.
-	 * @param array          $query_vars Array of query vars.
-	 * @param \WP_Term_Query $query The WP_Query instance (passed by reference).
+	 * @param \WP_Term[]          $terms      Array of terms to filter.
+	 * @param string              $taxonomy   The taxonomy.
+	 * @param array<string,mixed> $query_vars Array of query vars.
+	 * @param \WP_Term_Query      $query The WP_Query instance (passed by reference).
 	 *
-	 * @return array
+	 * @return \WP_Term[]
 	 */
 	public function restrict_query_terms( $terms, $taxonomy, $query_vars, $query ) {
 		if ( protection_is_disabled() ) {
@@ -143,9 +143,7 @@ class QueryTerms extends Controller {
 						}
 					}
 
-					// Update the query's post count.
-					$query->count = count( $terms );
-					// Reset post indexes.
+					// Reset term indexes.
 					$query->terms = array_values( $terms );
 					break;
 			}

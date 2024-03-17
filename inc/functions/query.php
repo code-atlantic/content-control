@@ -301,7 +301,7 @@ function clear_tax_object() {
 /**
  * Get the endpoints for a registered post types.
  *
- * @return array
+ * @return array<string,string>
  */
 function get_post_type_endpoints() {
 	$endpoints  = [];
@@ -318,7 +318,7 @@ function get_post_type_endpoints() {
 /**
  * Get the endpoints for a registered taxonomies.
  *
- * @return array
+ * @return array<string,string>
  */
 function get_taxonomy_endpoints() {
 	$endpoints  = [];
@@ -338,7 +338,7 @@ function get_taxonomy_endpoints() {
  * @param string|null $key     Key to return.
  * @param mixed       $_default Default value.
  *
- * @return array
+ * @return array{type:string,name:string,id:bool,index:bool,search:bool}|string|bool
  */
 function get_rest_api_intent( $key = null, $_default = null ) {
 	global $wp;

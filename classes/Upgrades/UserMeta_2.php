@@ -42,7 +42,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 	/**
 	 * Get the remaps for this upgrade.
 	 *
-	 * @var array
+	 * @var array<string,string>
 	 */
 	private $remaps = [
 		'_jp_cc_reviews_already_did'        => 'content_control_reviews_already_did',
@@ -61,7 +61,7 @@ class UserMeta_2 extends \ContentControl\Base\Upgrade {
 		foreach ( $remaps as $key => $new_key ) {
 			$value = \get_user_meta( get_current_user_id(), $key, true );
 
-			if ( [] !== $value && '' !== $value && null !== $value && ! is_null( $value ) ) {
+			if ( [] !== $value && '' !== $value && ! is_null( $value ) ) {
 				return true;
 			}
 		}

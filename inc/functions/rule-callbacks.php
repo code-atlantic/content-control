@@ -198,7 +198,7 @@ function content_is_post_type() {
 				return true;
 			}
 
-			return get_post_type( $rest_intent['id'] ) === $post_type;
+			return get_post_type( $rest_intent['id'] > 0 ? $rest_intent['id'] : 0 ) === $post_type;
 
 		case 'restapi/posts':
 			global $post;

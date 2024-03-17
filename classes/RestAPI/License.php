@@ -55,7 +55,7 @@ class License extends WP_REST_Controller {
 					'args'                => [
 						'licenseKey' => [
 							'required'          => true,
-							'validate_callback' => function ( $param, $request, $key ) {
+							'validate_callback' => function ( $param, $request, $key ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 								return is_string( $param );
 							},
 						],
@@ -80,7 +80,7 @@ class License extends WP_REST_Controller {
 					'args'                => [
 						'licenseKey' => [
 							'required'          => false,
-							'validate_callback' => function ( $param, $request, $key ) {
+							'validate_callback' => function ( $param, $request, $key ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 								return is_string( $param );
 							},
 						],
