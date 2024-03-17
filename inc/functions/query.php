@@ -132,7 +132,7 @@ function current_query_context( $query = null ) {
 	}
 
 	$query   = get_query( $query );
-	$is_main = $query->is_main_query();
+	$is_main = is_a( $query, '\WP_Query' ) && $query->is_main_query();
 
 	// Blocks in the main page or other locations.
 	if ( doing_filter( 'content_control/should_hide_block' ) ) {
@@ -158,7 +158,7 @@ function current_query_context( $query = null ) {
  * Because we check posts in `the_posts`, we can't trust the global $wp_query
  * has been set yet, so we need to manage global state ourselves.
  *
- * @param \WP_Query|null $query WP_Query object.
+ * @param \WP_Query|\WP_Term_Query|null $query WP_Query object.
  *
  * @return void
  */
@@ -166,7 +166,7 @@ function set_rules_query( $query ) {
 	/**
 	 * Current query object.
 	 *
-	 * @var null|\WP_Query $cc_current_query
+	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
 	 */
 	global $cc_current_query;
 	$cc_current_query = $query;
@@ -182,6 +182,12 @@ function set_rules_query( $query ) {
  * @return bool
  */
 function setup_post( $post_id = null ) {
+	$context = current_query_context();
+
+	if ( 'restapi/terms' === $context || 'terms' === $context ) {
+		return setup_tax_object( $post_id );
+	}
+
 	global $post, $content_control_last_post;
 
 	if ( ! isset( $content_control_last_post ) ) {
@@ -209,11 +215,52 @@ function setup_post( $post_id = null ) {
 }
 
 /**
+ * Check and overload global term if needed.
+ *
+ * This has no effect when checking global queries ($term_id = null).
+ *
+ * @param int|\WP_Term|null $term_id Term ID.
+ *
+ * @return bool
+ */
+function setup_tax_object( $term_id = null ) {
+	global $cc_term, $content_control_last_term;
+
+	if ( ! isset( $content_control_last_term ) ) {
+		$content_control_last_term = [];
+	}
+
+	if ( is_null( $term_id ) ) {
+		return false;
+	}
+
+	$current_term_id = isset( $cc_term ) ? $cc_term->term_id : null;
+
+	$overload_term =
+		( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
+		( is_int( $term_id ) && $term_id !== $current_term_id );
+
+	if ( $overload_term ) {
+		$content_control_last_term[] = isset( $cc_term ) ? $cc_term : $current_term_id;
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$cc_term = get_term( $term_id );
+	}
+
+	return $overload_term;
+}
+
+/**
  * Check and clear global post if needed.
  *
  * @return void
  */
 function clear_post() {
+	$context = current_query_context();
+
+	if ( 'restapi/terms' === $context || 'terms' === $context ) {
+		clear_tax_object();
+	}
+
 	global $post, $content_control_last_post;
 	if ( ! empty( $content_control_last_post ) ) {
 		// Get the last post ID from the array.
@@ -224,3 +271,18 @@ function clear_post() {
 		setup_postdata( $post );
 	}
 }
+
+/**
+ * Check and clear global term if needed.
+ *
+ * @return void
+ */
+function clear_tax_object() {
+	global $cc_term, $content_control_last_term;
+	if ( ! empty( $content_control_last_term ) ) {
+		// Get the last post ID from the array.
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$cc_term = array_pop( $content_control_last_term );
+	}
+}
+

@@ -119,26 +119,47 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
 /**
  * Check if a given query can be ignored.
  *
- * @param \WP_Query $query Query object.
+ * @param \WP_Query|\WP_Term_Query $query Query object.
  *
  * @return bool True if query can be ignored, false if not.
+ *
+ * @since 2.2.0 Added support for WP_Term_Query.
  */
 function query_can_be_ignored( $query = null ) {
-	if ( $query->get( 'ignore_restrictions', false ) ) {
-		return true;
+	if ( is_a( $query, '\WP_Query' ) ) {
+		if ( $query->get( 'ignore_restrictions', false ) ) {
+			return true;
+		}
+
+		$post_types_to_ignore = \apply_filters( 'content_control/post_types_to_ignore', [
+			'cc_restriction',
+			'wp_template',
+			'wp_template_part',
+			'wp_global_styles',
+			'oembed_cache',
+		] );
+
+		// Ignore specific core post types.
+		if ( in_array( $query->get( 'post_type' ), $post_types_to_ignore, true ) ) {
+			return true;
+		}
 	}
 
-	$post_types_to_ignore = \apply_filters( 'content_control/post_types_to_ignore', [
-		'cc_restriction',
-		'wp_template',
-		'wp_template_part',
-		'wp_global_styles',
-		'oembed_cache',
-	] );
+	if ( is_a( $query, '\WP_Term_Query' ) ) {
+		// Ignore specific core taxonomies.
+		$test                 = '123';
+		$taxonomies_to_ignore = \apply_filters( 'content_control/taxonomies_to_ignore', [
+			'nav_menu',
+			'link_category',
+			'post_format',
+			'wp_theme',
+		] );
 
-	// Ignore specific core post types.
-	if ( in_array( $query->get( 'post_type' ), $post_types_to_ignore, true ) ) {
-		return true;
+		foreach ( (array) $taxonomies_to_ignore as $taxonomy ) {
+			if ( in_array( $taxonomy, $query->query_vars['taxonomy'], true ) ) {
+				return true;
+			}
+		}
 	}
 
 	return false !== \apply_filters( 'content_control/ignoreable_query', false, $query );

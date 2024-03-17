@@ -233,6 +233,62 @@ function get_restriction_matches_for_queried_posts( $query ) {
 }
 
 /**
+ * Check if query has restrictions.
+ *
+ * @param \WP_Term_Query $query Query object.
+ *
+ * @return array<array{restriction:\ContentControl\Models\Restriction,term_ids:int[]}>|false
+ *
+ * @since 2.0.0
+ */
+function get_restriction_matches_for_queried_terms( $query ) {
+	if ( empty( $query->terms ) ) {
+		return false;
+	}
+
+	static $restrictions;
+
+	// Generate cache key from hasing $wp_query.
+	$cache_key = md5( (string) wp_json_encode( $query ) );
+
+	if ( isset( $restrictions[ $cache_key ] ) ) {
+		return $restrictions[ $cache_key ];
+	}
+
+	set_rules_query( $query );
+
+	foreach ( $query->terms as $term ) {
+		if ( content_is_restricted( $term->term_id ) ) {
+			$restriction = get_applicable_restriction( $term->term_id );
+
+			if ( ! isset( $restrictions[ $cache_key ][ $restriction->priority ] ) ) {
+				// Handles deduplication & sorting.
+				$restrictions[ $cache_key ][ $restriction->priority ] = [
+					'restriction' => $restriction,
+					'term_ids'    => [],
+				];
+			}
+
+			// Add term to restriction.
+			$restrictions[ $cache_key ][ $restriction->priority ]['term_ids'][] = $term->term_id;
+		}
+	}
+
+	set_rules_query( null );
+
+	if ( empty( $restrictions[ $cache_key ] ) ) {
+		$restrictions[ $cache_key ] = false;
+	} else {
+		// Sort by priority.
+		ksort( $restrictions[ $cache_key ] );
+		// Remove priority keys.
+		$restrictions[ $cache_key ] = array_values( $restrictions[ $cache_key ] );
+	}
+
+	return $restrictions[ $cache_key ];
+}
+
+/**
  * Check if the referrer is the sites admin area.
  *
  * @return bool
