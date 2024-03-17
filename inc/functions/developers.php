@@ -327,11 +327,17 @@ function check_referrer_is_admin() {
 function protection_is_disabled() {
 	$checks = [
 		// Disable protection when not on the frontend.
-		! \ContentControl\is_frontend(),
+		! \ContentControl\is_frontend() && ! \ContentControl\is_rest(),
 		// Disable protection when user is excluded.
 		user_is_excluded(),
 		// Disable protection when viewing post previews.
 		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
+		// If this is rest request and not core wp namespace.
+		is_rest() && ! is_wp_core_rest_namespace(),
+		// Check if doing ADMIN AJAX from valid admin referrer.
+		defined( 'DOING_AJAX' ) && DOING_AJAX && check_referrer_is_admin(),
+		// Check if doing REST API from valid admin referrer.
+		is_rest() && check_referrer_is_admin(),
 	];
 
 	/**

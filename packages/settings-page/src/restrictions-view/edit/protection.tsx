@@ -5,11 +5,12 @@ import {
 } from '@content-control/components';
 import { clamp } from '@content-control/utils';
 import {
+	BaseControl,
 	CheckboxControl,
 	RadioControl,
 	TextareaControl,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { addFilter, applyFilters } from '@wordpress/hooks';
 
 import {
@@ -300,6 +301,70 @@ addFilter(
 								} )
 							}
 						/>
+					),
+				},
+				{
+					id: 'restApiQueryHandling',
+					priority: 13,
+					component: (
+						<BaseControl
+							label={ __(
+								'Handling matches in REST API requests',
+								'content-control'
+							) }
+						>
+							<p>
+								<strong>
+									{ __(
+										'By default restricted posts in a REST API list will follow "everywhere else" rules set above, single posts & taxonomies will show restricted access notices.',
+										'content-control'
+									) }
+								</strong>
+							</p>
+							<p
+								dangerouslySetInnerHTML={ {
+									__html: sprintf(
+										__(
+											'If you need more control over your REST API, try %sContent Control Pro%s:'
+										),
+										'<a href="https://contentcontrolplugin.com/features/rest-api/" target="_blank">',
+										'</a>'
+									),
+								} }
+							></p>
+							<ul className="ul-disc">
+								<li>
+									{ __(
+										'Granular control over who has REST API access, including user roles, purchase history or even subscriptions.',
+										'content-control'
+									) }
+								</li>
+								<li>
+									{ __(
+										'REST API specific rules for targeting namespaces, endpoints, and methods',
+										'content-control'
+									) }
+								</li>
+								<li>
+									{ __(
+										"Masking REST endpoints as if they don't exist.",
+										'content-control'
+									) }
+								</li>
+								<li>
+									{ __(
+										'Replace restricted contents with upsell notices.',
+										'content-control'
+									) }
+								</li>
+								<li>
+									{ __(
+										'Custom REST API error messages.',
+										'content-control'
+									) }
+								</li>
+							</ul>
+						</BaseControl>
 					),
 				},
 				...( fields.protection ?? [] ),
