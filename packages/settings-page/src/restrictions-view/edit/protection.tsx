@@ -332,38 +332,6 @@ addFilter(
 									),
 								} }
 							></p>
-							<ul className="ul-disc">
-								<li>
-									{ __(
-										'Granular control over who has REST API access, including user roles, purchase history or even subscriptions.',
-										'content-control'
-									) }
-								</li>
-								<li>
-									{ __(
-										'REST API specific rules for targeting namespaces, endpoints, and methods',
-										'content-control'
-									) }
-								</li>
-								<li>
-									{ __(
-										"Masking REST endpoints as if they don't exist.",
-										'content-control'
-									) }
-								</li>
-								<li>
-									{ __(
-										'Replace restricted contents with upsell notices.',
-										'content-control'
-									) }
-								</li>
-								<li>
-									{ __(
-										'Custom REST API error messages.',
-										'content-control'
-									) }
-								</li>
-							</ul>
 						</BaseControl>
 					),
 				},
