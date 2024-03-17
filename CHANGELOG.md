@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Feature: Add support for [restricing content in the REST API](https://contentcontrolplugin.com/features/rest-api/).
+- Feature: Add support for terms in WP term queries.
 - Fix: Nav Menu Link user rule not working properly.
 - Fix: Prevent "Required Upgrade" notices on new installs.
 - Tweak: Only show "Required Upgrade" notices to admins with plugin management permissions.
@@ -32,9 +34,9 @@ NOTE: Plugin now requires PHP 7.4+ & WP 6.2+. The plugin may still work on older
 ## v2.0.11 - 10/04/2023
 
 - Improvement: Query Monitor integration to show which restrictions are active on a page.
-  - Shows global settings that may be affecting the page.
-  - Shows which restrictions are active on the page.
-  - Shows which posts are being filtered out of queries and by which restriction.
+    - Shows global settings that may be affecting the page.
+    - Shows which restrictions are active on the page.
+    - Shows which posts are being filtered out of queries and by which restriction.
 - Tweak: Ensure upgrade stream doesn't send headers if they were already sent.
 - Tweak: Make second arg on get_the_excerpt filter optional to prevent errors with some plugins.
 - Fix: Bug when using `content_control/check_all_restrictions` filter that caused rules to not compare properly.
@@ -118,9 +120,9 @@ add_filter( 'content_control/query_filter_init_hook', function () {
 - Feature: Restrict blocks by device type with customizable breakpoints.
 - Feature: Restrict blocks by user status & role.
 - Feature: Global restrictions now offer more control over how restricted content is handled.
-  - Choose to redirect or replace content with a custom page.
-  - Filter or hide posts in archives or custom loops.
-  - Secondary controls for posts if found in an archive.
+    - Choose to redirect or replace content with a custom page.
+    - Filter or hide posts in archives or custom loops.
+    - Secondary controls for posts if found in an archive.
 - Improvement: Match or exclude specific roles.
 - Improvement: Updated interface with intuitive and responsive controls.
 - Improvement: Boolean editor improvements.
