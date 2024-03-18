@@ -145,7 +145,7 @@ function query_can_be_ignored( $query = null ) {
 		}
 	}
 
-	if ( is_a( $query, '\WP_Term_Query' ) ) {
+	if ( $query instanceof \WP_Term_Query ) {
 		// Ignore specific core taxonomies.
 		$test                 = '123';
 		$taxonomies_to_ignore = \apply_filters( 'content_control/taxonomies_to_ignore', [
@@ -155,8 +155,10 @@ function query_can_be_ignored( $query = null ) {
 			'wp_theme',
 		] );
 
+		$query_taxonomies = isset( $query->query_vars['taxonomy'] ) ? (array) $query->query_vars['taxonomy'] : [];
+
 		foreach ( (array) $taxonomies_to_ignore as $taxonomy ) {
-			if ( in_array( $taxonomy, $query->query_vars['taxonomy'], true ) ) {
+			if ( in_array( $taxonomy, $query_taxonomies, true ) ) {
 				return true;
 			}
 		}

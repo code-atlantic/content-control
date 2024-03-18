@@ -39,7 +39,11 @@ function user_has_role() {
 	// Get Enabled Roles to check for.
 	$user_roles = array_keys( allowed_user_roles() );
 
-	// Get the roles that are both enabled and required.
+	/**
+	 * Get the roles that are both enabled and required.
+	 *
+	 * @var string[] $required_roles
+	 */
 	$required_roles = array_intersect( $user_roles, $roles );
 
 	if ( count( $required_roles ) === 0 ) {
@@ -198,7 +202,9 @@ function content_is_post_type() {
 				return true;
 			}
 
-			return get_post_type( $rest_intent['id'] > 0 ? $rest_intent['id'] : 0 ) === $post_type;
+			$post_id = $rest_intent['id'] > 0 ? $rest_intent['id'] : 0;
+
+			return get_post_type( $post_id ) === $post_type;
 
 		case 'restapi/posts':
 			global $post;

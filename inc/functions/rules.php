@@ -130,5 +130,10 @@ function allowed_user_roles() {
  */
 function is_post_type( $post_type ) {
 	global $post;
-	return is_object( $post ) && ( is_singular( $post_type ) || $post->post_type === $post_type );
+
+	if ( ! is_a( $post, '\WP_Post' ) ) {
+		return false;
+	}
+
+	return is_singular( $post_type ) || $post->post_type === $post_type;
 }

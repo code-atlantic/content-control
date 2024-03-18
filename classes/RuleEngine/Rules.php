@@ -68,6 +68,11 @@ class Rules {
 		if ( $this->is_rule_valid( $rule ) ) {
 			$rule = wp_parse_args( $rule, $this->get_rule_defaults() );
 
+			/**
+			 * Rule index.
+			 *
+			 * @var string $index
+			 */
 			$index = $rule['name'];
 			/**
 			 * In the case multiple conditions are registered with the same
