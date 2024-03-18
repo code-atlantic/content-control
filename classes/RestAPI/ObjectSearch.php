@@ -311,6 +311,11 @@ class ObjectSearch extends WP_REST_Controller {
 
 			$posts = [];
 			foreach ( $query->posts as $post ) {
+				/**
+				 * The post object.
+				 *
+				 * @var \WP_Post $post
+				 */
 				$posts[ $post->ID ] = $post->post_title;
 			}
 
