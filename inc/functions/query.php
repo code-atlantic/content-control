@@ -335,61 +335,60 @@ function get_taxonomy_endpoints() {
 /**
  * Get the intent of the current REST API request.
  *
- * @param string|null $key     Key to return.
- * @param mixed       $_default Default value.
- *
- * @return array{type:string,name:string,id:bool,index:bool,search:bool}|string|bool
+ * @return array{type:'post_type'|'taxonomy'|'unknown',name:string,id:int,index:bool,search:string|false}
  */
-function get_rest_api_intent( $key = null, $_default = null ) {
+function get_rest_api_intent() {
 	global $wp;
 
-	$result = [
-		'type'   => 'unknown',
-		'name'   => '',
-		'id'     => false,
-		'index'  => false,
-		'search' => false,
-	];
+	static $intent = null;
 
-	if ( ! empty( $wp->query_vars['rest_route'] ) ) {
-		$rest_route          = $wp->query_vars['rest_route'];
-		$post_type_endpoints = get_post_type_endpoints();
-		$taxonomy_endpoints  = get_taxonomy_endpoints();
+	if ( is_null( $intent ) ) {
+		$result = [
+			'type'   => 'unknown',
+			'name'   => '',
+			'id'     => 0,
+			'index'  => false,
+			'search' => false,
+		];
 
-		if ( strpos( $rest_route, '/wp/v2/' ) !== 0 ) {
-			// We have no way of really dealing with non WP REST requests.
-			return $result;
+		if ( ! empty( $wp->query_vars['rest_route'] ) ) {
+			$rest_route          = $wp->query_vars['rest_route'];
+			$post_type_endpoints = get_post_type_endpoints();
+			$taxonomy_endpoints  = get_taxonomy_endpoints();
+
+			if ( strpos( $rest_route, '/wp/v2/' ) !== 0 ) {
+				// We have no way of really dealing with non WP REST requests.
+				return $result;
+			}
+
+			$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
+
+			// If we have a post type or taxonomy, the name is the first part (posts, categories).
+			$result['name'] = sanitize_key( $endpoint_parts[0] );
+
+			if ( count( $endpoint_parts ) > 1 ) {
+				// If we have an ID, then the second part is the ID.
+				$result['id'] = absint( $endpoint_parts[1] );
+			} else {
+				// If we have no ID, then we are either searching or indexing.
+				$result['index']  = true;
+				$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+			}
+
+			// Build a matching route.
+			$endpoint_route = "/wp/v2/{$result['name']}";
+
+			if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
+				$result['type'] = 'post_type';
+			}
+
+			if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
+				$result['type'] = 'taxonomy';
+			}
 		}
 
-		$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
-
-		// If we have a post type or taxonomy, the name is the first part (posts, categories).
-		$result['name'] = $endpoint_parts[0];
-
-		if ( count( $endpoint_parts ) > 1 ) {
-			// If we have an ID, then the second part is the ID.
-			$result['id'] = $endpoint_parts[1];
-		} else {
-			// If we have no ID, then we are either searching or indexing.
-			$result['index']  = true;
-			$result['search'] = isset( $wp->query_vars['s'] ) ? $wp->query_vars['s'] : false;
-		}
-
-		// Build a matching route.
-		$endpoint_route = "/wp/v2/{$endpoint_parts[0]}";
-
-		if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
-			$result['type'] = 'post_type';
-		}
-
-		if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
-			$result['type'] = 'taxonomy';
-		}
+		$intent = $result;
 	}
 
-	if ( is_null( $key ) ) {
-		return $result;
-	}
-
-	return isset( $result[ $key ] ) ? $result[ $key ] : $_default;
+	return $intent;
 }
