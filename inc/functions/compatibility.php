@@ -124,9 +124,9 @@ function is_frontend() {
 		is_admin() ||
 		is_ajax() ||
 		is_cron() ||
-		( $query && $query->is_admin ) ||
-		( $query && $query->is_favicon() ) ||
-		( $query && $query->is_robots() ) ||
+		( is_a( $query, '\WP_Query' ) && $query->is_admin ) ||
+		( is_a( $query, '\WP_Query' ) && $query->is_favicon() ) ||
+		( is_a( $query, '\WP_Query' ) && $query->is_robots() ) ||
 		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
