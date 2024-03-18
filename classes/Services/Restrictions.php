@@ -124,7 +124,7 @@ class Restrictions {
 		$context = current_query_context();
 
 		try {
-			$hash_vars = deep_clean_array( $query->query_vars );
+			$hash_vars = deep_clean_array( $query ? $query->query_vars : [] );
 
 			$query_hash = md5( maybe_serialize( $hash_vars ) );
 		} catch ( \Exception $e ) {

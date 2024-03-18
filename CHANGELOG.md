@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v2.2.1 - 03/18/2024
+
+- Fix: Bug where the plugin had errors on taxonomy pages or queries.
+- Fix: Error when Term query taxonomy arg was not an array.
+
 ## v2.2.0 - 03/17/2024
 
 - Feature: Add support for [restricing content in the REST API](https://contentcontrolplugin.com/features/rest-api/).
