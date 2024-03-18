@@ -7555,9 +7555,9 @@ namespace ContentControl {
     /**
      * Get the current query.
      *
-     * @param \WP_Query|null $query Query object.
+     * @param \WP_Query|\WP_Term_Query|null $query Query object.
      *
-     * @return \WP_Query|null
+     * @return \WP_Query|\WP_Term_Query|null
      */
     function get_query($query = null)
     {

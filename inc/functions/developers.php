@@ -67,7 +67,7 @@ function user_can_view_content( $post_id = null ) {
 	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
 		$restriction = get_applicable_restriction( $post_id );
 
-		if ( null !== $restriction ) {
+		if ( $restriction ) {
 			$can_view       = $restriction->user_meets_requirements();
 			$restrictions[] = $restriction;
 		}
@@ -202,8 +202,17 @@ function get_restriction_matches_for_queried_posts( $query ) {
 	set_rules_query( $query );
 
 	foreach ( $query->posts as $post ) {
+		/**
+		 * Post ID.
+		 *
+		 * @var \WP_Post $post
+		 */
 		if ( content_is_restricted( $post->ID ) ) {
 			$restriction = get_applicable_restriction( $post->ID );
+
+			if ( ! $restriction ) {
+				continue;
+			}
 
 			if ( ! isset( $restrictions[ $cache_key ][ $restriction->priority ] ) ) {
 				// Handles deduplication & sorting.
@@ -261,6 +270,10 @@ function get_restriction_matches_for_queried_terms( $query ) {
 		if ( content_is_restricted( $term->term_id ) ) {
 			$restriction = get_applicable_restriction( $term->term_id );
 
+			if ( ! $restriction ) {
+				continue;
+			}
+
 			if ( ! isset( $restrictions[ $cache_key ][ $restriction->priority ] ) ) {
 				// Handles deduplication & sorting.
 				$restrictions[ $cache_key ][ $restriction->priority ] = [
@@ -310,7 +323,14 @@ function check_referrer_is_admin() {
 
 	$ref_host = strtolower( $ref['host'] );
 
-	$admin_url = strtolower( wp_parse_url( admin_url(), PHP_URL_HOST ) );
+	/**
+	 *  Admin root URL.
+	 *
+	 * @var string $admin_url
+	 */
+	$admin_url = wp_parse_url( admin_url(), PHP_URL_HOST );
+
+	$admin_url = strtolower( $admin_url );
 
 	return $ref_host === $admin_url;
 }

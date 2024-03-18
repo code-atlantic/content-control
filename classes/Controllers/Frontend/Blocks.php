@@ -84,16 +84,23 @@ class Blocks extends Controller {
 			return null;
 		}
 
-		return wp_parse_args( $block['attrs']['contentControls'], [
+		/**
+		 * Controls for the block.
+		 *
+		 * @var array{enabled:bool,rules:array<string,mixed>} $controls
+		 */
+		$controls = wp_parse_args( $block['attrs']['contentControls'], [
 			'enabled' => false,
 			'rules'   => [],
 		] );
+
+		return $controls;
 	}
 
 	/**
 	 * Check block rules to see if it should be hidden from user.
 	 *
-	 * @param array<string,mixed> $block Block to be checked.
+	 * @param array{attrs:array<string,mixed>} $block Block to get controls for.
 	 *
 	 * @return boolean Whether the block should be hidden.
 	 */
@@ -173,7 +180,7 @@ class Blocks extends Controller {
 	/**
 	 * Get any classes to be added to the outer block element.
 	 *
-	 * @param array<string,mixed> $block Block to get classes for.
+	 * @param array{attrs:array<string,mixed>} $block Block to get controls for.
 	 * @return null|string[]
 	 */
 	public function get_block_control_classes( $block ) {

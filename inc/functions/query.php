@@ -55,15 +55,15 @@ function get_current_wp_query() {
 /**
  * Get the current query.
  *
- * @param \WP_Query|null $query Query object.
+ * @param \WP_Query|\WP_Term_Query|null $query Query object.
  *
- * @return \WP_Query|null
+ * @return \WP_Query|\WP_Term_Query|null
  */
 function get_query( $query = null ) {
 	/**
 	 * Current query object.
 	 *
-	 * @var null|\WP_Query $cc_current_query
+	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
 	 */
 	global $cc_current_query;
 
@@ -72,7 +72,7 @@ function get_query( $query = null ) {
 			/**
 			 * WP Query object.
 			 *
-			 * @var \WP_Query $query
+			 * @var \WP_Query|\WP_Term_Query $query
 			 */
 			$query = $cc_current_query;
 		} else {
@@ -197,6 +197,11 @@ function setup_post( $post_id = null ) {
 	$context = current_query_context();
 
 	if ( 'restapi/terms' === $context || 'terms' === $context ) {
+		/**
+		 * Term ID.
+		 *
+		 * @var int|\WP_Term|null $post_id
+		 */
 		return setup_tax_object( $post_id );
 	}
 
@@ -325,7 +330,12 @@ function get_taxonomy_endpoints() {
 	$taxonomies = get_taxonomies();
 
 	foreach ( $taxonomies as $taxonomy ) {
-		$object                                     = get_taxonomy( $taxonomy );
+		$object = get_taxonomy( $taxonomy );
+
+		if ( ! $object ) {
+			continue;
+		}
+
 		$endpoints[ "/wp/v2/{$object->rest_base}" ] = $taxonomy;
 	}
 
