@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: Bug when modified WP_Term_Query->terms arrays of ints were passed instead of epxected term objects.
+
 ## v2.2.2 - 03/19/2024
 
 - Fix: Bug with new taxonomy query filter. For now this is limited to the REST API only.
