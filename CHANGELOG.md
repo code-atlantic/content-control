@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.2.2 - 03/19/2024
+
+- Fix: Bug with new taxonomy query filter. For now this is limited to the REST API only.
+
 ## v2.2.1 - 03/18/2024
 
 - Fix: Bug where the plugin had errors on taxonomy pages or queries.
