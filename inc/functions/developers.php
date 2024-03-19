@@ -267,8 +267,16 @@ function get_restriction_matches_for_queried_terms( $query ) {
 	set_rules_query( $query );
 
 	foreach ( $query->terms as $term ) {
-		if ( content_is_restricted( $term->term_id ) ) {
-			$restriction = get_applicable_restriction( $term->term_id );
+		$term_id = false;
+
+		if ( is_object( $term ) && isset( $term->term_id ) ) {
+			$term_id = (int) $term->term_id;
+		} elseif ( is_numeric( $term ) ) {
+			$term_id = absint( $term );
+		}
+
+		if ( $term_id > 0 && content_is_restricted( $term_id ) ) {
+			$restriction = get_applicable_restriction( $term_id );
 
 			if ( ! $restriction ) {
 				continue;
@@ -283,7 +291,7 @@ function get_restriction_matches_for_queried_terms( $query ) {
 			}
 
 			// Add term to restriction.
-			$restrictions[ $cache_key ][ $restriction->priority ]['term_ids'][] = $term->term_id;
+			$restrictions[ $cache_key ][ $restriction->priority ]['term_ids'][] = $term_id;
 		}
 	}
 
