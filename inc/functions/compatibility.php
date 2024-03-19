@@ -113,6 +113,14 @@ function is_ajax() {
  * @return boolean
  */
 function is_frontend() {
+	// Cached.
+	static $is_frontend;
+
+	if ( isset( $is_frontend ) ) {
+		// Not fully tested, but if we have a cached value, we can return it.
+		// return $is_frontend;
+	}
+
 	$query = get_query();
 
 	$wp_query = $query instanceof \WP_Query ? $query : null;
@@ -132,10 +140,12 @@ function is_frontend() {
 		strpos( $request_uri, 'favicon.ico' ) !== false ||
 		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
-		return false;
+		$is_frontend = false;
 	}
 
-	return true;
+	$is_frontend = true;
+
+	return $is_frontend;
 }
 
 /**

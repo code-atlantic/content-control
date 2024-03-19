@@ -13,6 +13,7 @@ use ContentControl\Base\Controller;
 use function ContentControl\query_can_be_ignored;
 use function ContentControl\protection_is_disabled;
 use function ContentControl\get_restriction_matches_for_queried_terms;
+use function ContentControl\is_rest;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -77,6 +78,11 @@ class QueryTerms extends Controller {
 	 * @return void
 	 */
 	public function enable_query_filtering() {
+		if ( is_rest() ) {
+			// Until we understand why this filter is causing memory leaks or other issues, we'll disable it for anything other than REST requests.
+			return;
+		}
+
 		add_filter( 'get_terms', [ $this, 'restrict_query_terms' ], 10, 4 );
 	}
 
