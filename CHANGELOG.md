@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix: Enforced strict versioning in autoload build tool that auto updated and issued a new release. Tool update caused the autoloader to suddenly leak unprefixed classes in recent releases causing random issues in combination with [incompatible autoloading by other plugins](https://pressidium.com/blog/wordpress-plugin-conflicts-how-to-prevent-composer-dependency-hell/).
+
 ## v2.2.3 - 03/19/2024
 
 - Fix: Recurssion error with taxonomy queries due to calling setup_post during get_terms query. WooCommerce then setup global $product, which called another taxonomy query, and so on.
