@@ -147,7 +147,6 @@ function query_can_be_ignored( $query = null ) {
 
 	if ( $query instanceof \WP_Term_Query ) {
 		// Ignore specific core taxonomies.
-		$test                 = '123';
 		$taxonomies_to_ignore = \apply_filters( 'content_control/taxonomies_to_ignore', [
 			'nav_menu',
 			'link_category',
@@ -162,6 +161,19 @@ function query_can_be_ignored( $query = null ) {
 				return true;
 			}
 		}
+
+		static $last_term_query = null;
+
+		if ( $last_term_query && doing_filter( 'get_terms' ) &&
+		(
+			$query === $last_term_query ||
+			wp_json_encode( $query->query_vars ) === wp_json_encode( $last_term_query->query_vars )
+		)
+		) {
+			return true;
+		}
+
+		$last_term_query = $query;
 	}
 
 	return false !== \apply_filters( 'content_control/ignoreable_query', false, $query );
