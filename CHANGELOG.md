@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Fix: Enforced strict versioning in autoload build tool that auto updated and issued a new release. Tool update caused the autoloader to suddenly leak unprefixed classes in recent releases causing random issues in combination with [incompatible autoloading by other plugins](https://pressidium.com/blog/wordpress-plugin-conflicts-how-to-prevent-composer-dependency-hell/).
+## v2.2.4 - 03/20/2024
+
+- Fix: Enforced strict versioning in autoload build tool that recently auto updated causing the autoloader to suddenly leak unprefixed classes. This was causing random issues in combination with [incompatible autoloading by other plugins](https://pressidium.com/blog/wordpress-plugin-conflicts-how-to-prevent-composer-dependency-hell/).
 
 ## v2.2.3 - 03/19/2024
 

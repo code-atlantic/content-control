@@ -3,10 +3,10 @@ Contributors: codeatlantic, danieliser
 Plugin URI: https://code-atlantic.com/?utm_campaign=upgrade-to-pro&utm_source=plugins-page&utm_medium=plugin-ui&utm_content=action-links-upgrade-text
 Author URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_source=readme-header&utm_medium=plugin-ui&utm_content=author-uri
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
-Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility, user access, coming soon, maintenance mode, access manager, paywall
+Tags: membership, access control, members only, content restriction, maintenance mode, block visibility, paywall
 Requires at least: 6.2
 Tested up to: 6.5.0
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -104,6 +104,10 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.2.4 - 03/20/2024 =
+
+- Fix: Enforced strict versioning in autoload build tool that recently auto updated causing the autoloader to suddenly leak unprefixed classes. This was causing random issues in combination with [incompatible autoloading by other plugins](https://pressidium.com/blog/wordpress-plugin-conflicts-how-to-prevent-composer-dependency-hell/).
 
 = v2.2.3 - 03/19/2024 =
 
