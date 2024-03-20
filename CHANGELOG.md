@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fix: Recurssion error with taxonomy queries due to calling setup_post during get_terms query. WooCommerce then setup global $product, which called another taxonomy query, and so on.
 - Fix: Bug when modified WP_Term_Query->terms arrays of ints were passed instead of epxected term objects.
 
 ## v2.2.2 - 03/19/2024
