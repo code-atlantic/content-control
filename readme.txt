@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: access control, content, content restriction, permission, private, restrict, restrict access, restriction, user, visibility, widget, block visibility, user access, coming soon, maintenance mode, access manager, paywall
 Requires at least: 6.2
 Tested up to: 6.5.0
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -104,6 +104,11 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.2.3 - 03/19/2024 =
+
+- Fix: Recurssion error with taxonomy queries due to calling setup_post during get_terms query. WooCommerce then setup global $product, which called another taxonomy query, and so on.
+- Fix: Bug when modified WP_Term_Query->terms arrays of ints were passed instead of epxected term objects.
 
 = v2.2.2 - 03/19/2024 =
 
