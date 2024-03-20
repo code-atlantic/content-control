@@ -1,6 +1,6 @@
 {
 	"name": "code-atlantic/content-control",
-	"version": "2.2.3",
+	"version": "2.2.4",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"minimum-stability": "dev",
@@ -53,7 +53,7 @@
 		"lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
 		"generate-stubs": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=content-control.stub --stats --force --include-inaccessible-class-nodes",
 		"install-strauss": [
-			"test -f strauss.phar || curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/latest/download/strauss.phar"
+			"test -f strauss.phar || curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.16.0/strauss.phar"
 		],
 		"clean-vendor-prefix-folder": [
 			"rm -rf vendor-prefixed/**/*"
