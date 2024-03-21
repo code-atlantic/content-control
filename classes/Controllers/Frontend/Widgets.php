@@ -39,7 +39,7 @@ class Widgets extends Controller {
 	 * @return array<string,array<string>> The modified $widget_area array.
 	 */
 	public function exclude_widgets( $widget_areas ) {
-		if ( ( ! is_rest() && protection_is_disabled() ) || $this->is_customize_preview() ) {
+		if ( is_rest() || protection_is_disabled() || $this->is_customize_preview() ) {
 			return $widget_areas;
 		}
 
