@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.2.6 - 03/20/2024
+
+- Improvement: Add plugin preview blueprint support.
+
 ## v2.2.5 - 03/20/2024
 
 - Improvement: Logic for protection being disabled was improved to be more efficient.
