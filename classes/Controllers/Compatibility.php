@@ -31,9 +31,9 @@ class Compatibility extends Controller {
 	 */
 	public function init() {
 		$this->container->register_controllers( [
-			'Compatibility\Divi'         => new Divi( $this->container ),
-			'Compatibility\Elementor'    => new Elementor( $this->container ),
-			'Compatibility\QueryMonitor' => new QueryMonitor( $this->container ),
+			'Compatibility\Divi'              => new Divi( $this->container ),
+			'Compatibility\Elementor'         => new Elementor( $this->container ),
+			'Compatibility\QueryMonitor'      => new QueryMonitor( $this->container ),
 			'Compatibility\TheEventsCalendar' => new TheEventsCalendar( $this->container ),
 		] );
 	}
