@@ -11,6 +11,8 @@ namespace ContentControl;
 
 use function ContentControl\plugin;
 use function ContentControl\set_rules_query;
+use function ContentControl\is_frontend;
+use function ContentControl\is_rest;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -353,21 +355,33 @@ function check_referrer_is_admin() {
  * @since 2.0.0
  */
 function protection_is_disabled() {
-	$checks = [
-		// Disable protection when not on the frontend.
-		! \ContentControl\is_frontend() && ! \ContentControl\is_rest(),
-		// Disable protection when user is excluded.
-		user_is_excluded(),
-		// Disable protection when viewing post previews.
-		is_preview() && current_user_can( 'edit_post', get_the_ID() ),
-		// If this is rest request and not core wp namespace.
-		is_rest() && ! is_wp_core_rest_namespace(),
-		// Check if doing ADMIN AJAX from valid admin referrer.
-		defined( 'DOING_AJAX' ) && DOING_AJAX && check_referrer_is_admin(),
-		// Check if doing REST API from valid admin referrer.
-		is_rest() && check_referrer_is_admin(),
-	];
+	$is_disabled = false;
 
+	if (
+		// Disable protection when user is excluded.
+		( user_is_excluded() ) ||
+
+		// Check if doing cron.
+		( defined( 'DOING_CRON' ) && DOING_CRON ) ||
+
+		// Check if doing ADMIN AJAX from valid admin referrer.
+		( defined( 'DOING_AJAX' ) && DOING_AJAX && check_referrer_is_admin() ) ||
+
+		// Check if doing REST API from valid admin referrer.
+		( is_rest() && check_referrer_is_admin() ) ||
+
+		// If this is rest request and not core wp namespace.
+		( is_rest() && ! is_wp_core_rest_namespace() ) ||
+		
+		// Disable protection when viewing post previews.
+		( is_preview() && current_user_can( 'edit_post', get_the_ID() ) ) ||
+
+		// Disable protection when not on the frontend.
+		( ! is_frontend() && ! is_rest() )
+	 ) {
+		$is_disabled = true;
+	}
+ 
 	/**
 	 * Filter whether protection is disabled.
 	 *
@@ -377,8 +391,5 @@ function protection_is_disabled() {
 	 *
 	 * @since 2.0.0
 	 */
-	return apply_filters(
-		'content_control/protection_is_disabled',
-		in_array( true, $checks, true )
-	);
+	return apply_filters( 'content_control/protection_is_disabled', $is_disabled );
 }
