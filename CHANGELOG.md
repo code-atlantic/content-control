@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.2.7 - 03/20/2024
+
+- Improvement: Fix plugin preview blueprint file location.
+
 ## v2.2.6 - 03/20/2024
 
 - Improvement: Add plugin preview blueprint support.
