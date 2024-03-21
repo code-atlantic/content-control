@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Improvement: Logic for protection being disabled was improved to be more efficient.
+- Fix: Bug with The Events Calendar showing blank screen when using Redirect restriction.
+- Fix: Bug where redirect based restrictions failed on The Events Calendar pages.
+- Fix: Typo in order of widget REST API check conditionals.
+
+
 ## v2.2.4 - 03/20/2024
 
 - Fix: Enforced strict versioning in autoload build tool that recently auto updated causing the autoloader to suddenly leak unprefixed classes. This was causing random issues in combination with [incompatible autoloading by other plugins](https://pressidium.com/blog/wordpress-plugin-conflicts-how-to-prevent-composer-dependency-hell/).
