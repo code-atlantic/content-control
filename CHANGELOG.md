@@ -2,11 +2,12 @@
 
 ## Unreleased
 
+## v2.2.5 - 03/20/2024
+
 - Improvement: Logic for protection being disabled was improved to be more efficient.
 - Fix: Bug with The Events Calendar showing blank screen when using Redirect restriction.
 - Fix: Bug where redirect based restrictions failed on The Events Calendar pages.
 - Fix: Typo in order of widget REST API check conditionals.
-
 
 ## v2.2.4 - 03/20/2024
 

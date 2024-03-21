@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 6.5.0
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -104,6 +104,13 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.2.5 - 03/20/2024 =
+
+- Improvement: Logic for protection being disabled was improved to be more efficient.
+- Fix: Bug with The Events Calendar showing blank screen when using Redirect restriction.
+- Fix: Bug where redirect based restrictions failed on The Events Calendar pages.
+- Fix: Typo in order of widget REST API check conditionals.
 
 = v2.2.4 - 03/20/2024 =
 
