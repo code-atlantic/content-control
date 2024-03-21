@@ -141,9 +141,9 @@ function is_frontend() {
 		strpos( $request_uri, 'robots.txt' ) !== false
 	) {
 		$is_frontend = false;
+	} else {
+		$is_frontend = true;
 	}
-
-	$is_frontend = true;
 
 	return $is_frontend;
 }
