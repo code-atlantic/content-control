@@ -319,30 +319,18 @@ function get_restriction_matches_for_queried_terms( $query ) {
  * @since 2.2.0
  */
 function check_referrer_is_admin() {
-	$ref = wp_get_raw_referer();
-
-	if ( empty( $ref ) ) {
+	$referrer = wp_get_raw_referer();
+	if ( empty( $referrer ) ) {
 		return false;
 	}
 
-	$ref = wp_parse_url( $ref );
+	$admin_url = admin_url();
+	// Normalize URLs for comparison.
+	$normalized_referrer  = strtolower( $referrer );
+	$normalized_admin_url = strtolower( $admin_url );
 
-	if ( empty( $ref['host'] ) ) {
-		return false;
-	}
-
-	$ref_host = strtolower( $ref['host'] );
-
-	/**
-	 *  Admin root URL.
-	 *
-	 * @var string $admin_url
-	 */
-	$admin_url = wp_parse_url( admin_url(), PHP_URL_HOST );
-
-	$admin_url = strtolower( $admin_url );
-
-	return $ref_host === $admin_url;
+	// Compare the beginning of the referrer with the admin URL.
+	return str_starts_with( $normalized_referrer, $normalized_admin_url );
 }
 
 /**
