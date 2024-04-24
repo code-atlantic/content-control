@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Fix: Issue causing some non-admin AJAX requests to the REST API from being run through protection checks.
+* Fix: Error when using page template rules & global $post is not set properly.
+
 ## v2.2.7 - 03/20/2024
 
 - Improvement: Fix plugin preview blueprint file location.
