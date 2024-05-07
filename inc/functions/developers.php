@@ -360,16 +360,16 @@ function protection_is_disabled() {
 
 		// If this is rest request and not core wp namespace.
 		( is_rest() && ! is_wp_core_rest_namespace() ) ||
-		
+
 		// Disable protection when viewing post previews.
 		( is_preview() && current_user_can( 'edit_post', get_the_ID() ) ) ||
 
 		// Disable protection when not on the frontend.
 		( ! is_frontend() && ! is_rest() )
-	 ) {
+	) {
 		$is_disabled = true;
 	}
- 
+
 	/**
 	 * Filter whether protection is disabled.
 	 *
