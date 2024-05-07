@@ -5,8 +5,8 @@ Author URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
-Tested up to: 6.5.0
-Stable tag: 2.2.7
+Tested up to: 6.5.2
+Stable tag: 2.2.8
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -104,6 +104,11 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.2.8 - 05/07/2024 =
+
+- Fix: Issue causing some non-admin AJAX requests to the REST API from being run through protection checks.
+- Fix: Error when using page template rules & global $post is not set properly.
 
 = v2.2.7 - 03/20/2024 =
 
