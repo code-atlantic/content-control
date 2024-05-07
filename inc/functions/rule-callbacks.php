@@ -427,11 +427,12 @@ function content_is_ancestor_of_post() {
  * @since 2.0.0
  */
 function content_is_post_with_template() {
-	global $post;
 
 	$context = current_query_context();
 
 	$selected = get_rule_option( 'selected', [] );
+
+	$page_template = '';
 
 	switch ( $context ) {
 		case 'main':
@@ -445,7 +446,11 @@ function content_is_post_with_template() {
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
-			$page_template = get_page_template_slug( $post->ID );
+			global $post;
+
+			if ( $post && is_a( $post, '\WP_Post' ) ) {
+				$page_template = get_page_template_slug( $post->ID );
+			}
 			break;
 	}
 

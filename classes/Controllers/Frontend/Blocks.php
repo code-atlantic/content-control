@@ -70,7 +70,7 @@ class Blocks extends Controller {
 			'enabled' => false,
 		] );
 
-		return ! ! $controls['enabled'];
+		return (bool) $controls['enabled'];
 	}
 
 	/**

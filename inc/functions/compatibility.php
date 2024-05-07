@@ -43,9 +43,9 @@ function is_func_disabled( $func ) {
  */
 function is_rest() {
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
-	if ( defined( 'REST_REQUEST' ) && REST_REQUEST // (#1)
-			|| isset( $_GET['rest_route'] ) // (#2)
-					&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) {
+	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST )// (#1)
+			|| ( isset( $_GET['rest_route'] ) // (#2)
+					&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) ) {
 			return true;
 	}
 
@@ -120,6 +120,7 @@ function is_frontend() {
 	if ( isset( $is_frontend ) ) {
 		// Not fully tested, but if we have a cached value, we can return it.
 		// return $is_frontend;.
+		$temp = $is_frontend;
 	}
 
 	$query = get_query();
