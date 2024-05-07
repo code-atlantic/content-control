@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.2.8 - 05/07/2024
+
 * Fix: Issue causing some non-admin AJAX requests to the REST API from being run through protection checks.
 * Fix: Error when using page template rules & global $post is not set properly.
 
