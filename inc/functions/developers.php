@@ -334,6 +334,71 @@ function check_referrer_is_admin() {
 }
 
 /**
+ * Check if request is excluded.
+ *
+ * @return bool
+ *
+ * @since 2.3.0
+ */
+function request_is_excluded() {
+	static $is_excluded;
+
+	if ( isset( $is_excluded ) ) {
+		return $is_excluded;
+	}
+
+	$is_excluded = false;
+
+	if (
+		// Check if doing cron.
+		is_cron()
+
+		// If this is rest request and not core wp namespace.
+		// || ( is_rest() && ! is_wp_core_rest_namespace() ).
+
+		// Disable protection when not on the frontend.
+		// || ( ! is_frontend() && ! is_rest() ).
+	) {
+		$is_excluded = true;
+	}
+
+	return $is_excluded;
+}
+
+/**
+ * Check if the request is for a priveleged user in the admin area.
+ *
+ * @return bool
+ *
+ * @since 2.3.0
+ */
+function request_for_user_is_excluded() {
+	// Check if user has permission to manage settings and is on the admin area.
+	if ( user_is_excludable() ) {
+		if (
+			// Is in the admin area.
+			is_admin() ||
+			// Is an ajax request from the admin area.
+			(
+				( is_ajax() || is_rest() ) &&
+				check_referrer_is_admin()
+			)
+		) {
+			return true;
+		}
+	}
+
+	$post_id = get_the_ID();
+
+	// Disable protection when viewing post previews or editing a post.
+	if ( ( $post_id > 0 || is_preview() ) && current_user_can( 'edit_post', $post_id ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Check if protection methods should be disabled.
  *
  * Generally used to bypass protections when using page editors.
@@ -343,32 +408,7 @@ function check_referrer_is_admin() {
  * @since 2.0.0
  */
 function protection_is_disabled() {
-	$is_disabled = false;
-
-	if (
-		// Disable protection when user is excluded.
-		( user_is_excluded() ) ||
-
-		// Check if doing cron.
-		( defined( 'DOING_CRON' ) && DOING_CRON ) ||
-
-		// Check if doing ADMIN AJAX from valid admin referrer.
-		( defined( 'DOING_AJAX' ) && DOING_AJAX && check_referrer_is_admin() ) ||
-
-		// Check if doing REST API from valid admin referrer.
-		( is_rest() && check_referrer_is_admin() ) ||
-
-		// If this is rest request and not core wp namespace.
-		( is_rest() && ! is_wp_core_rest_namespace() ) ||
-
-		// Disable protection when viewing post previews.
-		( is_preview() && current_user_can( 'edit_post', get_the_ID() ) ) ||
-
-		// Disable protection when not on the frontend.
-		( ! is_frontend() && ! is_rest() )
-	) {
-		$is_disabled = true;
-	}
+	$is_disabled = user_is_excluded() || request_is_excluded() || request_for_user_is_excluded();
 
 	/**
 	 * Filter whether protection is disabled.
