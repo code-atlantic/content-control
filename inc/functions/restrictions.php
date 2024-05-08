@@ -38,8 +38,17 @@ function admins_are_excluded() {
  *
  * @return bool True if user is excluded, false if not.
  */
+function user_is_excludable() {
+	return \current_user_can( plugin()->get_permission( 'manage_settings' ) );
+}
+
+/**
+ * Current user is excluded from restrictions.
+ *
+ * @return bool True if user is excluded, false if not.
+ */
 function user_is_excluded() {
-	return admins_are_excluded() && \current_user_can( plugin()->get_permission( 'manage_settings' ) );
+	return admins_are_excluded() && user_is_excludable();
 }
 
 /**
