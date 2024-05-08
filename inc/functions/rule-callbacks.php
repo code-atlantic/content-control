@@ -150,10 +150,8 @@ function content_is_post_type_archive() {
 				return false;
 			}
 
-			$post_type_objeect = get_post_type_object( $post_type );
-
 			// First be sure this is for a post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -190,11 +188,10 @@ function content_is_post_type() {
 			return is_post_type( $post_type );
 
 		case 'restapi':
-			$rest_intent       = get_rest_api_intent();
-			$post_type_objeect = get_post_type_object( $post_type );
+			$rest_intent = get_rest_api_intent();
 
 			// First be sure this is for a singular post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -248,10 +245,7 @@ function content_is_selected_post() {
 		case 'restapi/posts':
 			$rest_intent = get_rest_api_intent();
 
-			$post_type_objeect = get_post_type_object( $post_type );
-
-			// First be sure this is for a singular post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -318,10 +312,7 @@ function content_is_child_of_post() {
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
 
-			$post_type_objeect = get_post_type_object( $post_type );
-
-			// First be sure this is for a singular post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -393,10 +384,7 @@ function content_is_ancestor_of_post() {
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
 
-			$post_type_objeect = get_post_type_object( $post_type );
-
-			// First be sure this is for a singular post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -509,10 +497,8 @@ function content_is_post_with_tax_term() {
 
 			$rest_intent = get_rest_api_intent();
 
-			$post_type_objeect = get_post_type_object( $post_type );
-
-			// First be sure this is for a singular post type of the right kind.
-			if ( 'post_type' !== $rest_intent['type'] || $post_type_objeect->rest_base !== $rest_intent['name'] ) {
+			// Bail if we didn't detect a post type in the intent, or the post type is not the same as the one we're checking.
+			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
 			}
 
@@ -521,7 +507,7 @@ function content_is_post_with_tax_term() {
 					$post_id = (int) $rest_intent['id'];
 				}
 			} elseif ( $post && $post->ID > 0 ) {
-					$post_id = $post->ID;
+				$post_id = $post->ID;
 			}
 			break;
 
@@ -567,13 +553,7 @@ function content_is_taxonomy_archive() {
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
 
-			if ( 'taxonomy' !== $rest_intent['type'] ) {
-				return false;
-			}
-
-			$taxonomy_object = get_taxonomy( $taxonomy );
-
-			return $taxonomy_object && $rest_intent['name'] === $taxonomy_object->rest_base;
+			return rest_intent_matches_taxonomy( $taxonomy, $rest_intent );
 
 		case 'restapi/terms':
 			// This is a term query, so we we aren't checking against a taxonomy archive.
@@ -635,15 +615,7 @@ function content_is_selected_term() {
 			global $cc_term;
 			$rest_intent = get_rest_api_intent();
 
-			// Check if this is a taxonomy endpoint.
-			if ( 'taxonomy' !== $rest_intent['type'] ) {
-				return false;
-			}
-
-			// Get taxonomy object for the rest base.
-			$taxonomy_object = get_taxonomy( $taxonomy );
-
-			if ( ! $taxonomy_object || $rest_intent['name'] !== $taxonomy_object->rest_base ) {
+			if ( ! rest_intent_matches_taxonomy( $taxonomy, $rest_intent ) ) {
 				return false;
 			}
 
@@ -660,4 +632,111 @@ function content_is_selected_term() {
 			// Always return false if no ID is set.
 			return false;
 	}
+}
+
+
+
+/**
+ * Check if post type matches.
+ *
+ * @param string       $type Type to check (post type or taxonomy key).
+ * @param string|array $matches Type matches against. Array or string of comma separated values.
+ *
+ * @return bool
+ *
+ * @since 2.3.0
+ */
+function check_type_match( $type, $matches ) {
+	// Deal with 'any' and 'all' values.
+	if (
+		// Check if any or all is in $mathces array.
+		(
+			is_array( $matches ) &&
+			(
+				in_array( 'any', $matches, true ) ||
+				in_array( 'all', $matches, true )
+			)
+		) ||
+		'any' === $matches ||
+		'all' === $matches
+	) {
+		return true;
+	}
+
+	if ( is_string( $matches ) ) {
+		$matches = explode( ',', $matches );
+	}
+
+	return in_array( $type, $matches, true );
+}
+
+
+/**
+ * Simplifies checking if a post type matches a rest intent.
+ *
+ * @param string     $post_type Post type to check.
+ * @param array|null $rest_intent Rest intent to check.
+ *
+ * @return bool
+ *
+ * @since 2.3.0
+ */
+function rest_intent_matches_post_type( $post_type, $rest_intent = null ) {
+	if ( ! $rest_intent ) {
+		$rest_intent = get_rest_api_intent();
+	}
+
+	// Fill in defaults to prevent errors.
+	wp_parse_args( $rest_intent, [
+		'type' => '',
+		'name' => '',
+	] );
+
+	// Check if this is a post type intent.
+	if ( 'post_type' !== $rest_intent['type'] ) {
+		return false;
+	}
+
+	$post_type_object = get_post_type_object( $post_type );
+
+	// Check that rest_base or selected name match.
+	return // Check the rest_base for the selected post type matches the intent.
+		check_type_match( $post_type_object->rest_base, $rest_intent['name'] ) ||
+		// Check the post type matches the intent.
+		check_type_match( $post_type, $rest_intent['name'] );
+}
+
+/**
+ * Simplifies checking if a taxonomy matches a rest intent.
+ *
+ * @param string     $taxonomy Taxonomy to check.
+ * @param array|null $rest_intent Rest intent to check.
+ *
+ * @return bool
+ *
+ * @since 2.3.0
+ */
+function rest_intent_matches_taxonomy( $taxonomy, $rest_intent = null ) {
+	if ( ! $rest_intent ) {
+		$rest_intent = get_rest_api_intent();
+	}
+
+	// Fill in defaults to prevent errors.
+	wp_parse_args( $rest_intent, [
+		'type' => '',
+		'name' => '',
+	] );
+
+	// Check if this is a taxonomy intent.
+	if ( 'taxonomy' !== $rest_intent['type'] ) {
+		return false;
+	}
+
+	$taxonomy_object = get_taxonomy( $taxonomy );
+
+	// Check that rest_base or selected name match.
+	return // Check the rest_base for the selected taxonomy matches the intent.
+		check_type_match( $taxonomy_object->rest_base, $rest_intent['name'] ) ||
+		// Check the taxonomy matches the intent.
+		check_type_match( $taxonomy, $rest_intent['name'] );
 }
