@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+* Improvement: Added more full coverage of all query types for for restriction handling. This helps catch more custom/3rd party AJAX search queries that were not being filtered.
+* Improvement: Added better handling for excluding queries and admin views from restrictions.
+* Improvement: Added filters for easier compatibility fixes with 3rd party plugins.
+* Improvement: Added support/fixes for BetterDocs custom AJAX searching.
+* Improvement: Added support/fixes for Blocksy theme custom AJAX searching.
+* Developer: Added new filter `content_control/get_rest_api_intent` to allow 3rd party plugins to modify the REST API intent used in rule checks.
+
 ## v2.2.8 - 05/07/2024
 
 * Fix: Issue causing some non-admin AJAX requests to the REST API from being run through protection checks.
