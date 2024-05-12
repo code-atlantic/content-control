@@ -84,8 +84,9 @@ function content_is_home_page() {
 		// Check based on current post.
 		default:
 			$page_id = 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ? get_option( 'page_on_front' ) : -1;
+			$post_id = $post && $post->ID > 0 ? $post->ID : 0;
 
-			return (int) $page_id === (int) $post->ID;
+			return (int) $page_id === (int) $post_id;
 	}
 }
 
@@ -113,8 +114,9 @@ function content_is_blog_index() {
 		// Check based on current post.
 		default:
 			$page_for_posts = 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_option( 'page_for_posts' ) : -1;
+			$post_id = $post && $post->ID > 0 ? $post->ID : 0;
 
-			return (int) $page_for_posts === (int) $post->ID;
+			return (int) $page_for_posts === (int) $post_id;
 	}
 }
 
@@ -229,6 +231,8 @@ function content_is_selected_post() {
 		get_rule_option( 'selected', [] )
 	);
 
+	$post_id = $post && $post->ID > 0 ? $post->ID : null;
+
 	switch ( $context ) {
 		case 'main':
 		case 'main/blocks':
@@ -239,7 +243,7 @@ function content_is_selected_post() {
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
-			return is_post_type( $post_type ) && in_array( $post->ID, $selected, true );
+			return is_post_type( $post_type ) && in_array( $post_id, $selected, true );
 
 		case 'restapi':
 		case 'restapi/posts':
@@ -249,14 +253,10 @@ function content_is_selected_post() {
 				return false;
 			}
 
-			$post_id = null;
-
 			if ( 'restapi' === $context ) {
 				if ( $rest_intent['id'] > 0 ) {
 					$post_id = (int) $rest_intent['id'];
 				}
-			} elseif ( $post && $post->ID > 0 ) {
-					$post_id = $post->ID;
 			}
 
 			return in_array( $post_id, $selected, true );
@@ -476,7 +476,7 @@ function content_is_post_with_tax_term() {
 		get_rule_option( 'selected', [] )
 	);
 
-	$post_id = null;
+	$post_id = $post && $post->ID > 0 ? $post->ID : null;
 
 	switch ( $context ) {
 		case 'main':
@@ -493,8 +493,6 @@ function content_is_post_with_tax_term() {
 
 		case 'restapi':
 		case 'restapi/posts':
-			global $post;
-
 			$rest_intent = get_rest_api_intent();
 
 			// Bail if we didn't detect a post type in the intent, or the post type is not the same as the one we're checking.
@@ -506,8 +504,6 @@ function content_is_post_with_tax_term() {
 				if ( $rest_intent['id'] > 0 ) {
 					$post_id = (int) $rest_intent['id'];
 				}
-			} elseif ( $post && $post->ID > 0 ) {
-				$post_id = $post->ID;
 			}
 			break;
 
@@ -518,8 +514,6 @@ function content_is_post_with_tax_term() {
 			if ( ! is_post_type( $post_type ) ) {
 				return false;
 			}
-
-			$post_id = $post->ID;
 			break;
 	}
 
