@@ -116,6 +116,7 @@ function is_frontend() {
 	// Cached.
 	static $is_frontend;
 
+	// phpcs:ignore
 	if ( isset( $is_frontend ) ) {
 		// Not fully tested, but if we have a cached value, we can return it.
 		// return $is_frontend;.

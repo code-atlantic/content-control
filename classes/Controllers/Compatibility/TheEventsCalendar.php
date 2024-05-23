@@ -1,6 +1,6 @@
 <?php
 /**
- * TheEventsCalendar controller class.
+ * The Events Calendar
  *
  * @package ContentControl
  */
