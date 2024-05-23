@@ -97,7 +97,10 @@
 		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
 		"translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
 		"build:release": "composer install -o --no-dev && npm run build && npm run copy-build",
-		"zip:release": "npm run build:release && mv ./build ./content-control && zip -r content-control.zip ./content-control && rm -rf ./content-control"
+		"zip:release": "npm run build:release && mv ./build ./content-control && zip -r content-control.zip ./content-control && rm -rf ./content-control",
+		"release:start": "git flow release start",
+		"release:finish": "git flow release finish",
+		"release:publish": "git push origin master --tags && git push origin master"
 	},
 	"babel": {},
 	"workspaces": [
