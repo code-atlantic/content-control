@@ -400,5 +400,5 @@ function get_rest_api_intent() {
 		$intent = $result;
 	}
 
-	return $intent;
+	return apply_filters( 'content_control/get_rest_api_intent', $intent );
 }
