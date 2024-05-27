@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Fix: Bug with restricting logged in users from content when the user had post_edit permissions for the post.
+
 ## v2.3.0 - 05/23/2024
 
 * Improvement: Added more full coverage of all query types for for restriction handling. This helps catch more custom/3rd party AJAX search queries that were not being filtered.

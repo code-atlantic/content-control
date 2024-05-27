@@ -351,8 +351,9 @@ function request_is_excluded() {
 
 	if (
 		// Check if doing cron.
-		is_cron()
+		is_cron() ||
 
+		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] )
 		// If this is rest request and not core wp namespace.
 		// || ( is_rest() && ! is_wp_core_rest_namespace() ).
 
@@ -378,6 +379,7 @@ function request_for_user_is_excluded() {
 		if (
 			// Is in the admin area.
 			is_admin() ||
+			( is_preview() && current_user_can( 'edit_post', get_the_ID() ) ) ||
 			// Is an ajax request from the admin area.
 			(
 				( is_ajax() || is_rest() ) &&
@@ -386,13 +388,6 @@ function request_for_user_is_excluded() {
 		) {
 			return true;
 		}
-	}
-
-	$post_id = get_the_ID();
-
-	// Disable protection when viewing post previews or editing a post.
-	if ( ( $post_id > 0 || is_preview() ) && current_user_can( 'edit_post', $post_id ) ) {
-		return true;
 	}
 
 	return false;
