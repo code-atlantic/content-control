@@ -84,7 +84,7 @@ function content_is_home_page() {
 		// Check based on current post.
 		default:
 			$page_id = 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ? get_option( 'page_on_front' ) : -1;
-			$post_id = $post && $post->ID > 0 ? $post->ID : 0;
+			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
 
 			return (int) $page_id === (int) $post_id;
 	}
@@ -114,7 +114,7 @@ function content_is_blog_index() {
 		// Check based on current post.
 		default:
 			$page_for_posts = 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_option( 'page_for_posts' ) : -1;
-			$post_id = $post && $post->ID > 0 ? $post->ID : 0;
+			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
 
 			return (int) $page_for_posts === (int) $post_id;
 	}
@@ -231,7 +231,7 @@ function content_is_selected_post() {
 		get_rule_option( 'selected', [] )
 	);
 
-	$post_id = $post && $post->ID > 0 ? $post->ID : null;
+	$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : null;
 
 	switch ( $context ) {
 		case 'main':
@@ -436,8 +436,10 @@ function content_is_post_with_template() {
 		case 'blocks':
 			global $post;
 
-			if ( $post && is_a( $post, '\WP_Post' ) ) {
-				$page_template = get_page_template_slug( $post->ID );
+			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : null;
+
+			if ( $post_id ) {
+				$page_template = get_page_template_slug( $post_id );
 			}
 			break;
 	}
@@ -476,7 +478,7 @@ function content_is_post_with_tax_term() {
 		get_rule_option( 'selected', [] )
 	);
 
-	$post_id = $post && $post->ID > 0 ? $post->ID : null;
+	$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : null;
 
 	switch ( $context ) {
 		case 'main':
