@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
 
 use ContentControl\Models\RuleEngine\Rule;
 
+use function ContentControl\plugin;
+
 /**
  * Rules registry
  */
@@ -312,8 +314,13 @@ class Rules {
 	protected function get_post_type_rules() {
 		$verbs = $this->get_verbs();
 
+		// Skip post types that are not public.
+		$should_skip_private_pt = ! plugin()->get_option( 'includePrivatePostTypes', false );
+
+		$args = $should_skip_private_pt ? [ 'public' => true ] : [];
+
 		$rules      = [];
-		$post_types = get_post_types( [ 'public' => true ], 'objects' );
+		$post_types = get_post_types( $args, 'objects' );
 
 		foreach ( $post_types as  $post_type ) {
 			$type_rules = [];
@@ -457,7 +464,14 @@ class Rules {
 		$taxonomies = get_object_taxonomies( $name, 'objects' );
 		$rules      = [];
 
+		// Skip taxonomies that are not public.
+		$should_skip_private_tax = ! plugin()->get_option( 'includePrivateTaxonomies', false );
+
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
+			if ( $should_skip_private_tax && ! $taxonomy->public ) {
+				continue;
+			}
+
 			$rules[ "content_is_{$name}_with_{$tax_name}" ] = [
 				'name'     => "content_is_{$name}_with_{$tax_name}",
 				'label'    => sprintf(
@@ -499,8 +513,13 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function get_taxonomy_rules() {
+		// Skip taxonomies that are not public.
+		$should_skip_private_tax = ! plugin()->get_option( 'includePrivateTaxonomies', false );
+
+		$args = $should_skip_private_tax ? [ 'public' => true ] : [];
+
 		$rules      = [];
-		$taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+		$taxonomies = get_taxonomies( $args, 'objects' );
 		$verbs      = $this->get_verbs();
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
