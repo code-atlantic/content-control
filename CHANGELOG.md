@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Improvement: Optimized the order we determine if we can skip checking restrictions for any give content type.
 * Fix: Bug with restricting logged in users from content when the user had post_edit permissions for the post.
 
 ## v2.3.0 - 05/23/2024
