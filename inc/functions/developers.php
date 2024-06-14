@@ -337,6 +337,24 @@ function check_referrer_is_admin() {
  *
  * @return bool
  *
+ * @since 2.3.1
+ */
+function request_is_excluded_rest_endpoint() {
+	/**
+	 * Filter whether to exclude a request from being restricted.
+	 *
+	 * @param bool $is_excluded Whether to exclude the request.
+	 *
+	 * @return bool
+	 */
+	return apply_filters( 'content_control/request_is_excluded_rest_endpoint', ! is_wp_core_rest_namespace() );
+}
+
+/**
+ * Check if request is excluded.
+ *
+ * @return bool
+ *
  * @since 2.3.0
  */
 function request_is_excluded() {
@@ -351,14 +369,10 @@ function request_is_excluded() {
 	if (
 		// Check if doing cron.
 		is_cron() ||
-
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] )
+		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] ) ||
 		// If this is rest request and not core wp namespace.
-		// || ( is_rest() && ! is_wp_core_rest_namespace() ).
-
-		// Disable protection when not on the frontend.
-		// || ( ! is_frontend() && ! is_rest() ).
+		( is_rest() && request_is_excluded_rest_endpoint() )
 	) {
 		$is_excluded = true;
 	}
