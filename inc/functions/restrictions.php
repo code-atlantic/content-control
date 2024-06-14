@@ -135,6 +135,12 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
  * @since 2.2.0 Added support for WP_Term_Query.
  */
 function query_can_be_ignored( $query = null ) {
+	// Early bypass.
+	$bypass = \apply_filters( 'content_control/pre_query_can_be_ignored', null, $query );
+	if ( null !== $bypass ) {
+		return $bypass;
+	}
+
 	if ( $query instanceof \WP_Query ) {
 		if ( $query->get( 'ignore_restrictions', false ) ) {
 			return true;
