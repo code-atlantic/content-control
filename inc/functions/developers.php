@@ -11,7 +11,6 @@ namespace ContentControl;
 
 use function ContentControl\plugin;
 use function ContentControl\set_rules_query;
-use function ContentControl\is_frontend;
 use function ContentControl\is_rest;
 
 defined( 'ABSPATH' ) || exit;
