@@ -25,6 +25,8 @@ import useFields from '../use-fields';
 import type { Restriction } from '@content-control/core-data';
 import type { EditTabProps } from '.';
 
+const { isProActivated = false } = contentControlSettingsPage;
+
 addFilter(
 	'contentControl.restrictionEditor.tabFields',
 	'content-control',
@@ -321,17 +323,19 @@ addFilter(
 									) }
 								</strong>
 							</p>
-							<p
-								dangerouslySetInnerHTML={ {
-									__html: sprintf(
-										__(
-											'If you need more control over your REST API, try %sContent Control Pro%s:'
+							{ ! isProActivated && (
+								<p
+									dangerouslySetInnerHTML={ {
+										__html: sprintf(
+											__(
+												'If you need more control over your REST API, try %sContent Control Pro%s:'
+											),
+											'<a href="https://contentcontrolplugin.com/features/rest-api/" target="_blank">',
+											'</a>'
 										),
-										'<a href="https://contentcontrolplugin.com/features/rest-api/" target="_blank">',
-										'</a>'
-									),
-								} }
-							></p>
+									} }
+								></p>
+							) }
 						</BaseControl>
 					),
 				},
