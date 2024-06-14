@@ -25,12 +25,17 @@ class QueryMonitor extends Controller {
 	 * @return void
 	 */
 	public function init() {
-		if ( ! class_exists( 'QueryMonitor' ) ) {
-			return;
-		}
-
 		$this->register_collector();
 		add_filter( 'qm/outputter/html', [ $this, 'register_output_html' ], 10 );
+	}
+
+	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return class_exists( 'QueryMonitor' );
 	}
 
 	/**

@@ -26,6 +26,15 @@ class Elementor extends Controller {
 	}
 
 	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return class_exists( '\Elementor\Plugin' ) || did_action( 'elementor/loaded' );
+	}
+
+	/**
 	 * Conditionally disable Content Control for Elementor builder.
 	 *
 	 * @param boolean $is_disabled Whether protection is disabled.

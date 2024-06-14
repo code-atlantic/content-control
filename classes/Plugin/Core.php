@@ -291,7 +291,9 @@ class Core {
 	public function register_controllers( $controllers = [] ) {
 		foreach ( $controllers as $name => $controller ) {
 			if ( $controller instanceof Controller ) {
-				$controller->init();
+				if ( $controller->controller_enabled() ) {
+					$controller->init();
+				}
 				$this->controllers->set( $name, $controller );
 			}
 		}

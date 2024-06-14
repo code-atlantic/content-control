@@ -22,4 +22,11 @@ interface Controller {
 	 * @return void
 	 */
 	public function init();
+
+	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled();
 }

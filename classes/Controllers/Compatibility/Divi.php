@@ -25,6 +25,15 @@ class Divi extends Controller {
 	}
 
 	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return defined( 'ET_CORE_VERSION' );
+	}
+
+	/**
 	 * Conditionally disable Content Control for Divi builder.
 	 *
 	 * @param boolean $protection_is_disabled Whether protection is disabled.

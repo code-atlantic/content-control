@@ -24,6 +24,15 @@ class BetterDocs extends Controller {
 	}
 
 	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return defined( 'BETTERDOCS_PLUGIN_FILE' );
+	}
+
+	/**
 	 * Get intent for BetterDocs.
 	 *
 	 * @param array<string,mixed> $intent Intent.
@@ -32,10 +41,6 @@ class BetterDocs extends Controller {
 	 */
 	public function get_rest_api_intent( $intent ) {
 		global $wp;
-
-		if ( ! defined( 'BETTERDOCS_PLUGIN_FILE' ) ) {
-			return $intent;
-		}
 
 		$rest_route     = $wp->query_vars['rest_route'];
 		$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
