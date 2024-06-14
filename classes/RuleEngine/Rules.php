@@ -407,7 +407,7 @@ class Rules {
 			}
 
 			if ( 'page' === $name ) {
-				$templates = wp_get_theme()->get_page_templates();
+				$templates = is_admin() ? wp_get_theme()->get_page_templates() : [];
 
 				if ( ! empty( $templates ) ) {
 					$type_rules[ "content_is_{$name}_with_template" ] = [
