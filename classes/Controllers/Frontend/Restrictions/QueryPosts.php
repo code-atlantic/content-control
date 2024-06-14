@@ -95,7 +95,7 @@ class QueryPosts extends Controller {
 		if ( query_can_be_ignored( $query ) ) {
 			return $posts;
 		}
-		
+
 		if ( protection_is_disabled() ) {
 			return $posts;
 		}

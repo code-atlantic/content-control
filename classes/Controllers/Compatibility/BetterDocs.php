@@ -20,7 +20,7 @@ class BetterDocs extends Controller {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'content_control/get_rest_api_intent', [ $this, 'get_rest_api_intent' ], 10 );
+		add_filter( 'content_control/get_rest_api_intent', [ $this, 'get_rest_api_intent' ], 10 );
 	}
 
 	/**
@@ -32,7 +32,6 @@ class BetterDocs extends Controller {
 	 */
 	public function get_rest_api_intent( $intent ) {
 		global $wp;
-		
 
 		if ( ! defined( 'BETTERDOCS_PLUGIN_FILE' ) ) {
 			return $intent;

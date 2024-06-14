@@ -26,3 +26,5 @@ parameters:
         - 'CONTENT_CONTROL_LICENSE_KEY'
         - 'CONTENT_CONTROL_DISABLE_LOGGING'
         - 'CONTENT_CONTROL_UPGRADE_DEBUG_LOGGING'
+    ignoreErrors:
+        - '#Method ContentControl\\Controllers\\Admin\\WidgetEditor::fields\(\) has parameter \$widget with generic class WP_Widget but does not specify its types: T#'

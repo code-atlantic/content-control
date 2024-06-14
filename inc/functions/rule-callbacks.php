@@ -114,7 +114,7 @@ function content_is_blog_index() {
 		// Check based on current post.
 		default:
 			$page_for_posts = 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_option( 'page_for_posts' ) : -1;
-			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
+			$post_id        = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
 
 			return (int) $page_for_posts === (int) $post_id;
 	}
@@ -635,8 +635,8 @@ function content_is_selected_term() {
 /**
  * Check if post type matches.
  *
- * @param string       $type Type to check (post type or taxonomy key).
- * @param string|array $matches Type matches against. Array or string of comma separated values.
+ * @param string          $type Type to check (post type or taxonomy key).
+ * @param string|string[] $matches Type matches against. Array or string of comma separated values.
  *
  * @return bool
  *
@@ -670,8 +670,8 @@ function check_type_match( $type, $matches ) {
 /**
  * Simplifies checking if a post type matches a rest intent.
  *
- * @param string     $post_type Post type to check.
- * @param array|null $rest_intent Rest intent to check.
+ * @param string                             $post_type Post type to check.
+ * @param array<string,bool|string|int>|null $rest_intent Rest intent to check.
  *
  * @return bool
  *
@@ -705,8 +705,8 @@ function rest_intent_matches_post_type( $post_type, $rest_intent = null ) {
 /**
  * Simplifies checking if a taxonomy matches a rest intent.
  *
- * @param string     $taxonomy Taxonomy to check.
- * @param array|null $rest_intent Rest intent to check.
+ * @param string                             $taxonomy Taxonomy to check.
+ * @param array<string,bool|string|int>|null $rest_intent Rest intent to check.
  *
  * @return bool
  *

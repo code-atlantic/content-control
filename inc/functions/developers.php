@@ -353,6 +353,7 @@ function request_is_excluded() {
 		// Check if doing cron.
 		is_cron() ||
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] )
 		// If this is rest request and not core wp namespace.
 		// || ( is_rest() && ! is_wp_core_rest_namespace() ).
