@@ -406,22 +406,24 @@ class Rules {
 				];
 			}
 
-			$templates = wp_get_theme()->get_page_templates();
+			if ( 'page' === $name ) {
+				$templates = wp_get_theme()->get_page_templates();
 
-			if ( 'page' === $name && ! empty( $templates ) ) {
-				$type_rules[ "content_is_{$name}_with_template" ] = [
-					'name'     => "content_is_{$name}_with_template",
-					/* translators: %s: Post type singular name */
-					'label'    => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
-					'fields'   => [
-						'selected' => [
-							'type'     => 'tokenselect',
-							'multiple' => true,
-							'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
+				if ( ! empty( $templates ) ) {
+					$type_rules[ "content_is_{$name}_with_template" ] = [
+						'name'     => "content_is_{$name}_with_template",
+						/* translators: %s: Post type singular name */
+						'label'    => sprintf( __( 'A %s With Template', 'content-control' ), $post_type->labels->singular_name ),
+						'fields'   => [
+							'selected' => [
+								'type'     => 'tokenselect',
+								'multiple' => true,
+								'options'  => array_merge( [ 'default' => __( 'Default', 'content-control' ) ], $templates ),
+							],
 						],
-					],
-					'callback' => '\ContentControl\Rules\content_is_post_with_template',
-				];
+						'callback' => '\ContentControl\Rules\content_is_post_with_template',
+					];
+				}
 			}
 
 			foreach ( $type_rules as $rule ) {
