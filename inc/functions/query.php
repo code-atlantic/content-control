@@ -352,6 +352,8 @@ function get_rest_api_intent() {
 
 	static $intent = null;
 
+	$rest_route = null;
+
 	if ( is_null( $intent ) ) {
 		$result = [
 			'type'   => 'unknown',
@@ -361,44 +363,47 @@ function get_rest_api_intent() {
 			'search' => false,
 		];
 
+		// Handle built-in REST API endpoints.
 		if ( ! empty( $wp->query_vars['rest_route'] ) ) {
-			$rest_route          = $wp->query_vars['rest_route'];
-			$post_type_endpoints = get_post_type_endpoints();
-			$taxonomy_endpoints  = get_taxonomy_endpoints();
+			$rest_route = $wp->query_vars['rest_route'];
 
-			if ( strpos( $rest_route, '/wp/v2/' ) !== 0 ) {
-				// We have no way of really dealing with non WP REST requests.
-				return $result;
-			}
+			if ( strpos( $rest_route, '/wp/v2/' ) === 0 ) {
+				$post_type_endpoints = get_post_type_endpoints();
+				$taxonomy_endpoints  = get_taxonomy_endpoints();
 
-			$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
+				$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
 
-			// If we have a post type or taxonomy, the name is the first part (posts, categories).
-			$result['name'] = sanitize_key( $endpoint_parts[0] );
+				// If we have a post type or taxonomy, the name is the first part (posts, categories).
+				$result['name'] = sanitize_key( $endpoint_parts[0] );
 
-			if ( count( $endpoint_parts ) > 1 ) {
-				// If we have an ID, then the second part is the ID.
-				$result['id'] = absint( $endpoint_parts[1] );
+				if ( count( $endpoint_parts ) > 1 ) {
+					// If we have an ID, then the second part is the ID.
+					$result['id'] = absint( $endpoint_parts[1] );
+				} else {
+					// If we have no ID, then we are either searching or indexing.
+					$result['index']  = true;
+					$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+				}
+
+				// Build a matching route.
+				$endpoint_route = "/wp/v2/{$result['name']}";
+
+				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
+					$result['type'] = 'post_type';
+				}
+
+				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
+					$result['type'] = 'taxonomy';
+				}
 			} else {
-				// If we have no ID, then we are either searching or indexing.
-				$result['index']  = true;
-				$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
-			}
-
-			// Build a matching route.
-			$endpoint_route = "/wp/v2/{$result['name']}";
-
-			if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
-				$result['type'] = 'post_type';
-			}
-
-			if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
-				$result['type'] = 'taxonomy';
+				// We currently have no way of really dealing with non WP REST requests.
+				// This filter allows us or others to correctly handle these requests in the future.
+				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $result, $rest_route );
 			}
 		}
 
 		$intent = $result;
 	}
 
-	return apply_filters( 'content_control/get_rest_api_intent', $intent );
+	return apply_filters( 'content_control/get_rest_api_intent', $intent, $rest_route );
 }
