@@ -148,6 +148,10 @@ function content_is_post_type_archive() {
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
 
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
+
 			if ( ! $rest_intent['index'] ) {
 				return false;
 			}
@@ -191,6 +195,10 @@ function content_is_post_type() {
 
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			// First be sure this is for a singular post type of the right kind.
 			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
@@ -248,6 +256,10 @@ function content_is_selected_post() {
 		case 'restapi':
 		case 'restapi/posts':
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
@@ -311,6 +323,10 @@ function content_is_child_of_post() {
 
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
@@ -383,6 +399,10 @@ function content_is_ancestor_of_post() {
 
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
@@ -497,6 +517,10 @@ function content_is_post_with_tax_term() {
 		case 'restapi/posts':
 			$rest_intent = get_rest_api_intent();
 
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
+
 			// Bail if we didn't detect a post type in the intent, or the post type is not the same as the one we're checking.
 			if ( ! rest_intent_matches_post_type( $post_type, $rest_intent ) ) {
 				return false;
@@ -548,6 +572,10 @@ function content_is_taxonomy_archive() {
 		// Handle detection of rest taxonomy endpoint.
 		case 'restapi':
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			return rest_intent_matches_taxonomy( $taxonomy, $rest_intent );
 
@@ -610,6 +638,10 @@ function content_is_selected_term() {
 		case 'restapi/terms':
 			global $cc_term;
 			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
 
 			if ( ! rest_intent_matches_taxonomy( $taxonomy, $rest_intent ) ) {
 				return false;
