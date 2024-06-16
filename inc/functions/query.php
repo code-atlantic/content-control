@@ -60,21 +60,14 @@ function get_current_wp_query() {
  * @return \WP_Query|\WP_Term_Query|null
  */
 function get_query( $query = null ) {
-	/**
-	 * Current query object.
-	 *
-	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
-	 */
-	global $cc_current_query;
-
 	if ( is_null( $query ) ) {
-		if ( isset( $cc_current_query ) ) {
+		if ( ! global_is_empty( 'current_query' ) ) {
 			/**
 			 * WP Query object.
 			 *
 			 * @var \WP_Query|\WP_Term_Query $query
 			 */
-			$query = $cc_current_query;
+			$query = get_global( 'current_query' );
 		} else {
 			$query = get_current_wp_query();
 		}
@@ -91,8 +84,7 @@ function get_query( $query = null ) {
  * @return void
  */
 function override_query_context( $context ) {
-	global $cc_current_query_context;
-	$cc_current_query_context = $context;
+	set_global( 'current_query_context', $context );
 }
 
 /**
@@ -101,12 +93,11 @@ function override_query_context( $context ) {
  * @return void
  */
 function reset_query_context() {
-	global $cc_current_query_context;
-	unset( $cc_current_query_context );
+	reset_global( 'current_query_context' );
 }
 
 /**
- * Get or set the current rule (globaly accessible).
+ * Get or set the current rule context (globaly accessible).
  *
  * 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`
  *
@@ -125,10 +116,8 @@ function reset_query_context() {
  * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
  */
 function current_query_context( $query = null ) {
-	global $cc_current_query_context;
-
-	if ( isset( $cc_current_query_context ) ) {
-		return $cc_current_query_context;
+	if ( ! global_is_empty( 'current_query_context' ) ) {
+		return get_global( 'current_query_context' );
 	}
 
 	$query   = get_query( $query );
@@ -175,13 +164,9 @@ function current_query_context( $query = null ) {
  * @return void
  */
 function set_rules_query( $query ) {
-	/**
-	 * Current query object.
-	 *
-	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
-	 */
-	global $cc_current_query;
-	$cc_current_query = $query;
+	set_global( 'current_query', $query );
+}
+
 }
 
 /**
@@ -205,12 +190,9 @@ function setup_post( $post_id = null ) {
 		return setup_tax_object( $post_id );
 	}
 
-	global $post, $content_control_last_post;
-
-	if ( ! isset( $content_control_last_post ) ) {
-		$content_control_last_post = [];
-	}
-
+	global $post;
+	
+	// Return early if we don't have a post ID.
 	if ( is_null( $post_id ) ) {
 		return false;
 	}
@@ -222,7 +204,10 @@ function setup_post( $post_id = null ) {
 		( is_int( $post_id ) && $post_id !== $current_post_id );
 
 	if ( $overload_post ) {
-		$content_control_last_post[] = isset( $post ) ? $post : $current_post_id;
+		// Push the current $post to the stack so we can restore it later.
+		push_to_global( 'overloaded_posts', $post ?? $current_post_id );
+
+		// Overload the globals so conditionals work properly.
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = get_post( $post_id );
 		setup_postdata( $post );
@@ -241,12 +226,9 @@ function setup_post( $post_id = null ) {
  * @return bool
  */
 function setup_tax_object( $term_id = null ) {
-	global $cc_term, $content_control_last_term;
+	global $cc_term;
 
-	if ( ! isset( $content_control_last_term ) ) {
-		$content_control_last_term = [];
-	}
-
+	// Return early if we don't have a term ID.
 	if ( is_null( $term_id ) ) {
 		return false;
 	}
@@ -258,9 +240,13 @@ function setup_tax_object( $term_id = null ) {
 		( is_int( $term_id ) && $term_id !== $current_term_id );
 
 	if ( $overload_term ) {
-		$content_control_last_term[] = isset( $cc_term ) ? $cc_term : $current_term_id;
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		// Push the current $post to the stack so we can restore it later.
+		push_to_global( 'overloaded_terms', $cc_term ?? $current_term_id );
+
+		// Overload the globals so conditionals work properly.
 		$cc_term = get_term( $term_id );
+		// Set the global term object (forward compatibility).
+		set_global( 'term', $cc_term ?? $current_term_id );
 	}
 
 	return $overload_term;
@@ -271,22 +257,16 @@ function setup_tax_object( $term_id = null ) {
  *
  * @return void
  */
-function clear_post() {
-	$context = current_query_context();
-
-	if ( 'restapi/terms' === $context || 'terms' === $context ) {
-		clear_tax_object();
+	if ( global_is_empty( 'overloaded_posts' ) ) {
+		return;
 	}
 
-	global $post, $content_control_last_post;
-	if ( ! empty( $content_control_last_post ) ) {
-		// Get the last post ID from the array.
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post = array_pop( $content_control_last_post );
+	global $post;
 
-		// Reset global post object.
-		setup_postdata( $post );
-	}
+	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+	$post = pop_from_global( 'overloaded_posts' );
+	// Reset global post object.
+	setup_postdata( $post );
 }
 
 /**
@@ -294,13 +274,17 @@ function clear_post() {
  *
  * @return void
  */
-function clear_tax_object() {
-	global $cc_term, $content_control_last_term;
-	if ( ! empty( $content_control_last_term ) ) {
-		// Get the last post ID from the array.
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$cc_term = array_pop( $content_control_last_term );
+function reset_term() {
+	if ( global_is_empty( 'overloaded_terms' ) ) {
+		set_global( 'term', null );
+		return;
 	}
+
+	global $cc_term;
+
+	// Reset global post object.
+	$cc_term = pop_from_global( 'overloaded_terms' );
+	set_global( 'term', $cc_term );
 }
 
 /**
@@ -350,7 +334,7 @@ function get_taxonomy_endpoints() {
 function get_rest_api_intent() {
 	global $wp;
 
-	static $intent = null;
+	$intent = get_global( 'rest_intent' );
 
 	$rest_route = null;
 
@@ -402,7 +386,7 @@ function get_rest_api_intent() {
 			}
 		}
 
-		$intent = $result;
+		set_global( 'rest_intent', $result );
 	}
 
 	return apply_filters( 'content_control/get_rest_api_intent', $intent, $rest_route );
