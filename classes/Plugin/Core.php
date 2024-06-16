@@ -249,6 +249,16 @@ class Core {
 				function () {
 					return new \ContentControl\Services\Restrictions();
 				};
+
+			$this->container['globals'] =
+				/**
+				 * Get plugin global manager.
+				 *
+				 * @return \ContentControl\Services\Globals
+				 */
+				function () {
+					return new \ContentControl\Services\Globals();
+				};
 		}
 
 		apply_filters( "{$this->get( 'option_prefix' )}/register_services", $this->container, $this );
