@@ -23,16 +23,23 @@ defined( 'ABSPATH' ) || exit;
 class Restrictions {
 
 	/**
+	 * Array of all restrictions by ID.
+	 *
+	 * @var array<int,Restriction>
+	 */
+	public $restrictions;
+
+
+	/**
 	 * Get a list of all restrictions.
 	 *
-	 * @return Restriction[]
+	 * @var array<int,Restriction>
 	 */
 	public function get_restrictions() {
-		static $all_restrictions;
-
-		if ( ! isset( $all_restrictions ) ) {
+		if ( ! isset( $this->restrictions ) ) {
 			$all_restrictions = [];
 
+			// Passively check for old restrictions, load them if found.
 			if ( \ContentControl\get_data_version( 'restrictions' ) === 1 ) {
 				$old_restrictions = \ContentControl\get_v1_restrictions();
 
@@ -43,7 +50,6 @@ class Restrictions {
 					}
 				}
 			}
-
 			// This should run safely if no v1 rules are found, or if they don't exist.
 			if ( empty( $all_restrictions ) ) {
 				// Query restriction post type.
@@ -64,9 +70,12 @@ class Restrictions {
 					$all_restrictions[ $restriction->ID ] = new Restriction( $restriction );
 				}
 			}
+
+			// Sort by priority.
+			$this->restrictions = $this->sort_restrictions_by_priority( $all_restrictions );
 		}
 
-		return $all_restrictions;
+		return $this->restrictions;
 	}
 
 	/**
