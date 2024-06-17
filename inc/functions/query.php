@@ -173,6 +173,28 @@ function set_rules_query( $query ) {
 	set_global( 'current_query', $query );
 }
 
+/**
+ * Setup the current content.
+ *
+ * @param int|\WP_Post|\WP_Term|null $content_id Content ID.
+ *
+ * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
+ */
+function setup_content_globals( $content_id ) {
+	// Return early if we don't have a post ID.
+	if ( is_null( $content_id ) ) {
+		return false;
+	}
+
+	switch ( current_query_context() ) {
+		case 'terms':
+		case 'restapi/terms':
+			return setup_term_globals( $content_id );
+		default:
+			return setup_post_globals( $content_id );
+	}
 }
 
 /**
@@ -183,30 +205,25 @@ function set_rules_query( $query ) {
  * @param int|\WP_Post|null $post_id Post ID.
  *
  * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function setup_post( $post_id = null ) {
-	$context = current_query_context();
-
-	if ( 'restapi/terms' === $context || 'terms' === $context ) {
-		/**
-		 * Term ID.
-		 *
-		 * @var int|\WP_Term|null $post_id
-		 */
-		return setup_tax_object( $post_id );
-	}
-
+function setup_post_globals( $post_id = null ) {
 	global $post;
-	
+
 	// Return early if we don't have a post ID.
 	if ( is_null( $post_id ) ) {
 		return false;
 	}
 
-	$current_post_id = isset( $post ) ? $post->ID : null;
+	// Set current post id baesd on global $post.
+	$current_post_id = $post->ID ?? null;
 
+	// Check if we should overload the post. This means its not the current post.
 	$overload_post =
+		// If we have a post ID, check if it's different from the current post ID.
 		( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
+		// If we have an int, check if it's different from the current post ID.
 		( is_int( $post_id ) && $post_id !== $current_post_id );
 
 	if ( $overload_post ) {
@@ -230,24 +247,32 @@ function setup_post( $post_id = null ) {
  * @param int|\WP_Term|null $term_id Term ID.
  *
  * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function setup_tax_object( $term_id = null ) {
-	global $cc_term;
+function setup_term_globals( $term_id = null ) {
+	global $cc_term; // Backward compatibility.
+
+	$current_term = get_global( 'term' ); // Used instead of global $cc_term.
 
 	// Return early if we don't have a term ID.
 	if ( is_null( $term_id ) ) {
 		return false;
 	}
 
-	$current_term_id = isset( $cc_term ) ? $cc_term->term_id : null;
+	// Set current post id baesd on global $current_term.
+	$current_term_id = $current_term->term_id ?? null;
 
+	// Check if we should overload the post. This means its not the current post.
 	$overload_term =
-		( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
-		( is_int( $term_id ) && $term_id !== $current_term_id );
+	// If we have a term ID, check if it's different from the current term ID.
+	( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
+	// If we have an int, check if it's different from the current term ID.
+	( is_int( $term_id ) && $term_id !== $current_term_id );
 
 	if ( $overload_term ) {
 		// Push the current $post to the stack so we can restore it later.
-		push_to_global( 'overloaded_terms', $cc_term ?? $current_term_id );
+		push_to_global( 'overloaded_terms', $current_term ?? $current_term_id );
 
 		// Overload the globals so conditionals work properly.
 		$cc_term = get_term( $term_id );
@@ -259,10 +284,34 @@ function setup_tax_object( $term_id = null ) {
 }
 
 /**
- * Check and clear global post if needed.
+ * Setup the current content.
  *
  * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
+function reset_content_globals() {
+	switch ( current_query_context() ) {
+		case 'terms':
+		case 'restapi/terms':
+			reset_term_globals();
+			break;
+		default:
+			reset_post_globals();
+			break;
+	}
+}
+
+/**
+ * Check and clear global post if needed.
+ *
+ * @global \WP_Post $post
+ *
+ * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
+ */
+function reset_post_globals() {
 	if ( global_is_empty( 'overloaded_posts' ) ) {
 		return;
 	}
@@ -279,18 +328,71 @@ function setup_tax_object( $term_id = null ) {
  * Check and clear global term if needed.
  *
  * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function reset_term() {
+function reset_term_globals() {
 	if ( global_is_empty( 'overloaded_terms' ) ) {
-		set_global( 'term', null );
+		// Reset global term object since it never really existed.
+		reset_global( 'term' );
 		return;
 	}
 
-	global $cc_term;
+	global $cc_term; // Backward compatibility.
 
 	// Reset global post object.
 	$cc_term = pop_from_global( 'overloaded_terms' );
 	set_global( 'term', $cc_term );
+}
+
+/**
+ * Set up the post globals.
+ *
+ * @param int|\WP_Post|null $post_id Post ID.
+ *
+ * @return boolean
+ *
+ * @deprecated 2.4.0 - Use `setup_content_globals() or `setup_post_globals()` instead.
+ */
+function setup_post( $post_id = null ) {
+	return setup_content_globals( $post_id );
+}
+
+/**
+ * Set up the term globals.
+ *
+ * @param int|\WP_Term|null $term_id Term ID.
+ *
+ * @return boolean
+ *
+ * @deprecated 2.4.0 - Use `setup_term_globals()` instead.
+ */
+function setup_term_object( $term_id = null ) {
+	return setup_term_globals( $term_id );
+}
+
+/**
+ * Check and clear global post if needed.
+ *
+ * @global \WP_Post $post
+ *
+ * @return void
+ *
+ * @deprecated 2.4.0 - Use `reset_post_globals()` instead.
+ */
+function reset_post() {
+	reset_post_globals();
+}
+
+/**
+ * Check and clear global term if needed.
+ *
+ * @return void
+ *
+ * @deprecated 2.4.0 - Use `reset_term_globals()` instead.
+ */
+function reset_term_object() {
+	reset_term_globals();
 }
 
 /**
