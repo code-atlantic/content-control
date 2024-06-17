@@ -633,11 +633,20 @@ function content_is_selected_term() {
 					return $main_query->is_tax( $taxonomy, $selected );
 			}
 
+		case 'terms':
+			$term = get_global( 'term' ); // Used instead of global $cc_term.
+
+			// Check if we have a term object from the term query.
+			if ( $term && $term->term_id > 0 ) {
+				return in_array( (int) $term->term_id, $selected, true );
+			}
+			break;
+
 			// Handles REST API querys.
 		case 'restapi':
 		case 'restapi/terms':
-			global $cc_term;
 			$rest_intent = get_rest_api_intent();
+			$term        = get_global( 'term' ); // Used instead of global $cc_term.
 
 			if ( 'unknown' === $rest_intent['type'] ) {
 				return false;
@@ -653,16 +662,14 @@ function content_is_selected_term() {
 			}
 
 			// Check if we have a term object from the term query.
-			if ( $cc_term && $cc_term->term_id > 0 ) {
-				return in_array( (int) $cc_term->term_id, $selected, true );
+			if ( $term && $term->term_id > 0 ) {
+				return in_array( (int) $term->term_id, $selected, true );
 			}
 
 			// Always return false if no ID is set.
 			return false;
 	}
 }
-
-
 
 /**
  * Check if post type matches.

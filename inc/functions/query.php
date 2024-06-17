@@ -133,6 +133,7 @@ function current_query_context( $query = null ) {
 		return 'main';
 	}
 
+	// Before we process plain queries, we need to check if we're in a REST API request.
 	if ( is_rest() ) {
 		if ( doing_filter( 'get_terms' ) ) {
 			return 'restapi/terms';
@@ -143,6 +144,11 @@ function current_query_context( $query = null ) {
 		}
 
 		return 'restapi';
+	}
+
+	// Process plain queries.
+	if ( doing_filter( 'get_terms' ) ) {
+		return 'terms';
 	}
 
 	if ( doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' ) ) {
