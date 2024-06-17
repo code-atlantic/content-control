@@ -164,11 +164,11 @@ class Globals {
 	 */
 	public function push_to_stack( $key, $value ) {
 		if ( property_exists( $this, $key ) ) {
-			if ( ! is_array( $this->$key ) ) {
-				$this->$key = [];
-			}
+			$values = $this->get( $key, [] );
 
-			$this->{$key}[] = $value;
+			$values[] = $value;
+
+			$this->set( $key, $values );
 		}
 	}
 
@@ -181,9 +181,17 @@ class Globals {
 	 */
 	public function pop_from_stack( $key ) {
 		if ( property_exists( $this, $key ) ) {
-			if ( is_array( $this->$key ) && count( $this->$key ) ) {
-				return array_pop( $this->$key );
+			$values = $this->get( $key, [] );
+
+			if ( empty( $values ) ) {
+				return null;
 			}
+
+			$value = array_pop( $values );
+
+			$this->set( $key, $values );
+
+			return $value;
 		}
 
 		return null;
@@ -197,11 +205,8 @@ class Globals {
 	 * @return bool
 	 */
 	public function is_empty( $key ) {
-		if ( property_exists( $this, $key ) ) {
-			if ( ! empty( $this->$key ) ) {
-				return false;
-			}
-		}
-		return true;
+		$value = $this->get( $key );
+
+		return ! isset( $value ) || empty( $value );
 	}
 }
