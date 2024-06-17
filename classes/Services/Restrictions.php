@@ -129,45 +129,66 @@ class Restrictions {
 	 * @return string
 	 */
 	public function get_cache_key( $post_id = null ) {
-		$query   = get_query();
 		$context = current_query_context();
 
-		try {
-			$hash_vars = deep_clean_array( $query ? $query->query_vars : [] );
+		// Ensure user ID is accounted for.
+		$user_id = get_current_user_id();
 
-			$query_hash = md5( maybe_serialize( $hash_vars ) );
-		} catch ( \Exception $e ) {
-			$query_hash = md5( (string) wp_rand( 0, 100000 ) );
-			plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
-		}
-
+		// Set post ID if not provided. Likely a main query.
 		if ( is_null( $post_id ) ) {
-			$post_id = \get_the_ID();
+			$post_id = get_the_ID();
 		}
 
 		switch ( $context ) {
-			case 'main':
-				$cache_key = 'main';
-				break;
-
 			case 'main/posts':
 			case 'restapi/posts':
 			case 'posts':
-				$cache_key = 'post-' . $post_id;
+				$cache_key = "post-{$post_id}";
 				break;
 
 			case 'main/terms':
 			case 'restapi/terms':
 			case 'terms':
-				$cache_key = 'term-' . $post_id;
+				$cache_key = "term-{$post_id}";
 				break;
 
+			case 'main':
 			default:
-				$cache_key = $context . '_' . $query_hash . ( $post_id ? ( '_post-' . $post_id ) : '' );
+				try {
+					$query      = get_query();
+					$hash_vars  = deep_clean_array( $query->query_vars ?? [] );
+					$query_hash = md5( maybe_serialize( $hash_vars ) );
+				} catch ( \Exception $e ) {
+					$query_hash = md5( (string) wp_rand( 0, 100000 ) );
+					plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
+				}
+
+				$cache_key = "main_{$query_hash}";
+
+				if ( ! is_null( $post_id ) ) {
+					$cache_key .= "_post-{$post_id}";
+				}
 				break;
 		}
 
-		return $cache_key;
+		// Add user ID to cache key. Those without will be for logged out users.
+		if ( $user_id > 0 ) {
+			$cache_key .= "_user-{$user_id}";
+		}
+
+		/**
+		 * Filter the cache key.
+		 *
+		 * @param string $cache_key Cache key.
+		 * @param int|null $post_id Post ID.
+		 * @param int|null $user_id User ID.
+		 * @param string $context Context.
+		 *
+		 * @return string
+		 *
+		 * @since 2.4.0
+		 */
+		return apply_filters( 'content_control/get_cache_key', $cache_key, $post_id, $user_id, $context );
 	}
 
 	/**
