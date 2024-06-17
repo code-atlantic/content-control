@@ -151,8 +151,15 @@ class Restrictions {
 				break;
 
 			case 'main/posts':
+			case 'restapi/posts':
 			case 'posts':
 				$cache_key = 'post-' . $post_id;
+				break;
+
+			case 'main/terms':
+			case 'restapi/terms':
+			case 'terms':
+				$cache_key = 'term-' . $post_id;
 				break;
 
 			default:
