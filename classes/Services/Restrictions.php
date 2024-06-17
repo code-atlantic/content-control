@@ -29,6 +29,12 @@ class Restrictions {
 	 */
 	public $restrictions;
 
+	/**
+	 * Simple internal request based cache.
+	 *
+	 * @var array<string,mixed>
+	 */
+	private $restrictions_cache;
 
 	/**
 	 * Get a list of all restrictions.
@@ -190,6 +196,60 @@ class Restrictions {
 		 */
 		return apply_filters( 'content_control/get_cache_key', $cache_key, $post_id, $user_id, $context );
 	}
+
+	/**
+	 * Get from cache.
+	 *
+	 * @param string $cache_key Cache key.
+	 *
+	 * @return mixed|null
+	 */
+	public function get_from_cache( $cache_key ) {
+		/**
+		 * Allow preloading from cache.
+		 *
+		 * @param mixed|null $cache Cache.
+		 * @param string $cache_key Cache key.
+		 * @param Restrictions $this Restrictions instance.
+		 *
+		 * @return mixed|null
+		 *
+		 * @since 2.4.0
+		 */
+		$cache = apply_filters( 'content_control/get_restrictions_from_cache', null, $cache_key, $this );
+
+		if ( $cache ) {
+			return $cache;
+		}
+
+		return $this->restrictions_cache[ $cache_key ] ?? null;
+	}
+
+	/**
+	 * Set in cache.
+	 *
+	 * @param string $cache_key Cache key.
+	 * @param mixed  $value Value to set.
+	 *
+	 * @return void
+	 */
+	public function set_in_cache( $cache_key, $value ) {
+		$this->restrictions_cache[ $cache_key ] = $value;
+
+		/**
+		 * Filter the cache.
+		 *
+		 * @param array<string,mixed> $cache Cache.
+		 * @param string $cache_key Cache key.
+		 * @param Restrictions $this Restrictions instance.
+		 *
+		 * @return array<string,mixed>
+		 *
+		 * @since 2.4.0
+		 */
+		do_action( 'content_control/set_restrictions_in_cache', $cache_key, $value, $this );
+	}
+
 
 	/**
 	 * Get all applicable restrictions for the current post.
