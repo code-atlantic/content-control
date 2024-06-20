@@ -66,14 +66,16 @@ function user_can_view_content( $content_id = null ) {
 	$restrictions = [];
 
 	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $content_id ) ) {
-		$restriction = get_applicable_restriction( $content_id );
+		// Fetch first applicable restriction.
+		$restriction = get_applicable_restrictions( $content_id, true );
 
 		if ( $restriction ) {
 			$can_view       = $restriction->user_meets_requirements();
 			$restrictions[] = $restriction;
 		}
 	} else {
-		$restrictions = get_all_applicable_restrictions( $content_id );
+		// Fetch all applicable restrictions.
+		$restrictions = get_applicable_restrictions( $content_id, false );
 
 		if ( count( $restrictions ) ) {
 			$checks = [];
@@ -129,6 +131,32 @@ function content_is_restricted( $content_id = null ) {
 }
 
 /**
+ * Get applicable restrictions for the given content.
+ *
+ * If $single is true, return the first applicable restriction. If false, return all applicable restrictions.
+ * Sorted by priority and cached internally.
+ *
+ * @param int|null $content_id Content ID.
+ * @param bool     $single     Whether to return a single match or an array of matches.
+ *
+ * @return Restriction|Restriction[]|false
+ *
+ * @since 2.4.0
+ */
+function get_applicable_restrictions( $content_id = null, $single = true ) {
+	$overload_content = setup_content_globals( $content_id );
+
+	$restriction = plugin( 'restrictions' )->get_applicable_restrictions( $content_id, $single );
+
+	// Clear content if we overloaded it.
+	if ( $overload_content ) {
+		reset_content_globals();
+	}
+
+	return $restriction;
+}
+
+/**
  * Get applicable restriction.
  *
  * @param int|null $content_id Content ID.
@@ -138,16 +166,7 @@ function content_is_restricted( $content_id = null ) {
  * @since 2.0.0
  */
 function get_applicable_restriction( $content_id = null ) {
-	$overload_content = setup_content_globals( $content_id );
-
-	$restriction = plugin( 'restrictions' )->get_applicable_restriction( $content_id );
-
-	// Clear content if we overloaded it.
-	if ( $overload_content ) {
-		reset_content_globals();
-	}
-
-	return $restriction;
+	return get_applicable_restrictions( $content_id, true );
 }
 
 /**
@@ -160,16 +179,7 @@ function get_applicable_restriction( $content_id = null ) {
  * @since 2.0.11
  */
 function get_all_applicable_restrictions( $content_id = null ) {
-	$overload_content = setup_content_globals( $content_id );
-
-	$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $content_id );
-
-	// Clear content if we overloaded it.
-	if ( $overload_content ) {
-		reset_content_globals();
-	}
-
-	return $restrictions;
+	return get_applicable_restrictions( $content_id, false );
 }
 
 /**
@@ -209,6 +219,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
 		 * @var \WP_Post $post
 		 */
 		if ( content_is_restricted( $post->ID ) ) {
+			// TODO This needs to likely respect the filter for checking all applicable restrictions.
 			$restriction = get_applicable_restriction( $post->ID );
 
 			if ( ! $restriction ) {
@@ -249,7 +260,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
  *
  * @return array<array{restriction:\ContentControl\Models\Restriction,term_ids:int[]}>|false
  *
- * @since 2.0.0
+ * @since 2.2.0
  */
 function get_restriction_matches_for_queried_terms( $query ) {
 	if ( empty( $query->terms ) ) {
@@ -277,7 +288,8 @@ function get_restriction_matches_for_queried_terms( $query ) {
 		}
 
 		if ( $term_id > 0 && content_is_restricted( $term_id ) ) {
-			$restriction = get_applicable_restriction( $term_id );
+			// TODO This needs to likely respect the filter for checking all applicable restrictions.
+			$restriction = get_applicable_restrictions( $term_id, true );
 
 			if ( ! $restriction ) {
 				continue;
