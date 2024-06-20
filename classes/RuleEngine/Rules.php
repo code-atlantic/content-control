@@ -152,7 +152,13 @@ class Rules {
 	 * @return array<string,string> List of verbs with translatable text.
 	 */
 	public function get_verbs() {
-		return [
+		static $verbs;
+
+		if ( isset( $verbs ) ) {
+			return $verbs;
+		}
+
+		$verbs = [
 			'are'         => __( 'Are', 'content-control' ),
 			'arenot'      => __( 'Are Not', 'content-control' ),
 			'is'          => __( 'Is', 'content-control' ),
@@ -169,6 +175,31 @@ class Rules {
 			'were'        => __( 'Were', 'content-control' ),
 			'werenot'     => __( 'Were Not', 'content-control' ),
 		];
+
+		return $verbs;
+	}
+
+	/**
+	 * Get a list of common text strings.
+	 *
+	 * @return array<string,string>
+	 */
+	protected function get_common_text_strings() {
+		static $text_strings;
+
+		if ( ! isset( $text_strings ) ) {
+			$text_strings = [
+				'User'          => __( 'User', 'content-control' ),
+				'Role(s)'       => __( 'Role(s)', 'content-control' ),
+				'Content'       => __( 'Content', 'content-control' ),
+				/* translators: %s: Post type plural name */
+				'Select %s'     => __( 'Select %s', 'content-control' ),
+				/* translators: %s: Post type singular name */
+				'A Selected %s' => __( 'A Selected %s', 'content-control' ),
+			];
+		}
+
+		return $text_strings;
 	}
 
 	/**
@@ -213,27 +244,28 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function get_user_rules() {
-		$verbs = $this->get_verbs();
+		$verbs   = $this->get_verbs();
+		$strings = $this->get_common_text_strings();
 		return [
 			'user_is_logged_in' => [
 				'name'     => 'user_is_logged_in',
 				'label'    => __( 'Logged In', 'content-control' ),
 				'context'  => [ 'user' ],
-				'category' => __( 'User', 'content-control' ),
+				'category' => $strings['User'],
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'callback' => '\is_user_logged_in',
 			],
 			'user_has_role'     => [
 				'name'     => 'user_has_role',
-				'label'    => __( 'Role(s)', 'content-control' ),
+				'label'    => $strings['Role(s)'],
 				'context'  => [ 'user' ],
-				'category' => __( 'User', 'content-control' ),
+				'category' => $strings['User'],
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['has'], $verbs['doesnothave'] ],
 				'fields'   => [
 					'roles' => [
-						'label'    => __( 'Role(s)', 'content-control' ),
+						'label'    => $strings['Role(s)'],
 						'type'     => 'tokenselect',
 						'multiple' => true,
 						'options'  => wp_roles()->get_names(),
@@ -250,14 +282,15 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function get_general_content_rules() {
-		$rules = [];
-		$verbs = $this->get_verbs();
+		$rules   = [];
+		$verbs   = $this->get_verbs();
+		$strings = $this->get_common_text_strings();
 
 		$rules['entire_site'] = [
 			'name'     => 'entire_site',
 			'label'    => __( 'Entire Site (Any Page, Post, or Archive)', 'content-control' ),
 			'context'  => [ 'content' ],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'callback' => '__return_true',
@@ -267,7 +300,7 @@ class Rules {
 			'name'     => 'content_is_front_page',
 			'label'    => __( 'The Home Page', 'content-control' ),
 			'context'  => [ 'content' ],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'callback' => '\ContentControl\Rules\content_is_home_page',
@@ -277,7 +310,7 @@ class Rules {
 			'name'     => 'content_is_blog_index',
 			'label'    => __( 'The Blog Index', 'content-control' ),
 			'context'  => [ 'content', 'posttype:post' ],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'callback' => '\ContentControl\Rules\content_is_blog_index',
@@ -287,7 +320,7 @@ class Rules {
 			'name'     => 'content_is_search_results',
 			'label'    => __( 'A Search Result Page', 'content-control' ),
 			'context'  => [ 'content', 'search' ],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'callback' => '\is_search',
@@ -297,7 +330,7 @@ class Rules {
 			'name'     => 'content_is_404_page',
 			'label'    => __( 'A 404 Error Page', 'content-control' ),
 			'context'  => [ 'content', '404' ],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'callback' => '\is_404',
@@ -312,7 +345,8 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function get_post_type_rules() {
-		$verbs = $this->get_verbs();
+		$verbs   = $this->get_verbs();
+		$strings = $this->get_common_text_strings();
 
 		// Skip post types that are not public.
 		$should_skip_private_pt = ! plugin()->get_option( 'includePrivatePostTypes', false );
@@ -345,11 +379,11 @@ class Rules {
 			$type_rules[ "content_is_selected_{$name}" ] = [
 				'name'     => "content_is_selected_{$name}",
 				/* translators: %s: Post type singular name */
-				'label'    => sprintf( __( 'A Selected %s', 'content-control' ), $post_type->labels->singular_name ),
+				'label'    => sprintf( $strings['A Selected %s'], $post_type->labels->singular_name ),
 				'fields'   => [
 					'selected' => [
 						/* translators: %s: Post type plurals name */
-						'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+						'placeholder' => sprintf( $strings['Select %s'], strtolower( $post_type->labels->name ) ),
 						'type'        => 'postselect',
 						'post_type'   => $name,
 						'multiple'    => true,
@@ -379,8 +413,8 @@ class Rules {
 					'label'    => sprintf( __( 'A Child of Selected %s', 'content-control' ), $post_type->labels->name ),
 					'fields'   => [
 						'selected' => [
-							/* translators: %s: Post type plural name */
-							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+
+							'placeholder' => sprintf( $strings['Select %s'], strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
@@ -396,7 +430,7 @@ class Rules {
 					'fields'   => [
 						'selected' => [
 							/* translators: %s: Post type plural name */
-							'placeholder' => sprintf( __( 'Select %s.', 'content-control' ), strtolower( $post_type->labels->name ) ),
+							'placeholder' => sprintf( $strings['Select %s'], strtolower( $post_type->labels->name ) ),
 							'type'        => 'postselect',
 							'post_type'   => $name,
 							'multiple'    => true,
@@ -429,7 +463,7 @@ class Rules {
 			foreach ( $type_rules as $rule ) {
 				// Merge defaults.
 				$type_rules[ $rule['name'] ] = wp_parse_args( $rule, [
-					'category' => __( 'Content', 'content-control' ),
+					'category' => $strings['Content'],
 					'context'  => [ 'content', "posttype:{$name}" ],
 					'format'   => '{category} {verb} {label}',
 					'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
@@ -455,7 +489,8 @@ class Rules {
 	 * @return array<string,array<string,mixed>>
 	 */
 	protected function get_post_type_tax_rules( $name ) {
-		$verbs = $this->get_verbs();
+		$verbs   = $this->get_verbs();
+		$strings = $this->get_common_text_strings();
 
 		$post_type = get_post_type_object( $name );
 		/**
@@ -483,14 +518,14 @@ class Rules {
 					$taxonomy->labels->singular_name
 				),
 				'context'  => [ 'content', "posttype:{$name}", "taxonomy:{$tax_name}" ],
-				'category' => __( 'Content', 'content-control' ),
+				'category' => $strings['Content'],
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 				'fields'   => [
 					'selected' => [
 						'placeholder' => sprintf(
 							/* translators: %s: Taxonomy singular name */
-							_x( 'Select %s.', 'condition: post type plural label ie. Select categories', 'content-control' ),
+							$strings['Select %s'],
 							strtolower( $taxonomy->labels->name )
 						),
 						'type'        => 'taxonomyselect',
@@ -523,10 +558,11 @@ class Rules {
 		$rules      = [];
 		$taxonomies = get_taxonomies( $args, 'objects' );
 		$verbs      = $this->get_verbs();
+		$strings    = $this->get_common_text_strings();
 
 		foreach ( $taxonomies as $tax_name => $taxonomy ) {
 			$tax_defaults = [
-				'category' => __( 'Content', 'content-control' ),
+				'category' => $strings['Content'],
 				'context'  => [ 'content', "taxonomy:{$tax_name}" ],
 				'format'   => '{category} {verb} {label}',
 				'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
@@ -546,11 +582,10 @@ class Rules {
 			$rules[ "content_is_selected_tax_{$tax_name}" ] = wp_parse_args( [
 				'name'     => "content_is_selected_tax_{$tax_name}",
 				/* translators: %s: Taxonomy plural name */
-				'label'    => sprintf( _x( 'A Selected %s', 'condition: taxonomy plural label ie. A Selected Category', 'content-control' ), $taxonomy->labels->singular_name ),
+				'label'    => sprintf( $strings['A Selected %s'], $taxonomy->labels->singular_name ),
 				'fields'   => [
 					'selected' => [
-						/* translators: %s: Taxonomy plural name */
-						'placeholder' => sprintf( _x( 'Select %s.', 'condition: taxonomy plural label ie. Select Categories', 'content-control' ), strtolower( $taxonomy->labels->name ) ),
+						'placeholder' => sprintf( $strings['Select %s'], strtolower( $taxonomy->labels->name ) ),
 						'type'        => 'taxonomyselect',
 						'taxonomy'    => $tax_name,
 						'multiple'    => true,
@@ -583,18 +618,28 @@ class Rules {
 	 * @return array<string,mixed> Array of rule default values.
 	 */
 	public function get_rule_defaults() {
-		$verbs = $this->get_verbs();
-		return [
+		static $rule_defaults;
+
+		if ( isset( $rule_defaults ) ) {
+			return $rule_defaults;
+		}
+
+		$verbs   = $this->get_verbs();
+		$strings = $this->get_common_text_strings();
+
+		$rule_defaults = [
 			'name'     => '',
 			'label'    => '',
 			'context'  => [],
-			'category' => __( 'Content', 'content-control' ),
+			'category' => $strings['Content'],
 			'format'   => '{category} {verb} {label}',
 			'verbs'    => [ $verbs['is'], $verbs['isnot'] ],
 			'fields'   => [],
 			'callback' => null,
 			'frontend' => false,
 		];
+
+		return $rule_defaults;
 	}
 
 	/**
