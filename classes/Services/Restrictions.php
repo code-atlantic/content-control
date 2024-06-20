@@ -152,195 +152,44 @@ class Restrictions {
 	}
 
 	/**
-	 * Get cache key for restrictions.
+	 * Get applicable restrictions for the given content.
 	 *
-	 * @param int|null $post_id Post ID.
+	 * If $single is true, return the first applicable restriction. If false, return all applicable restrictions.
+	 * Sorted by priority and cached internally.
 	 *
-	 * @return string
+	 * @param int|null $content_id Content ID.
+	 * @param bool     $single     Whether to return a single match or an array of matches.
+	 *
+	 * @return Restriction|Restriction[]|false
 	 */
-	public function get_cache_key( $post_id = null ) {
-		$context = current_query_context();
+	public function get_applicable_restrictions( $content_id = null, $single = true ) {
+		// Check if we have a match in memory.
+		$matches = $this->get_restriction_matches_from_cache( $content_id, $single );
 
-		// Ensure user ID is accounted for.
-		$user_id = get_current_user_id();
+		if ( is_null( $matches ) ) {
+			$matches      = [];
+			$restrictions = $this->get_restrictions();
 
-		// Set post ID if not provided. Likely a main query.
-		if ( is_null( $post_id ) ) {
-			$post_id = get_the_ID();
-		}
-
-		switch ( $context ) {
-			case 'main/posts':
-			case 'restapi/posts':
-			case 'posts':
-				$cache_key = "post-{$post_id}";
-				break;
-
-			case 'main/terms':
-			case 'restapi/terms':
-			case 'terms':
-				$cache_key = "term-{$post_id}";
-				break;
-
-			case 'main':
-			default:
-				try {
-					$query      = get_query();
-					$hash_vars  = deep_clean_array( $query->query_vars ?? [] );
-					$query_hash = md5( maybe_serialize( $hash_vars ) );
-				} catch ( \Exception $e ) {
-					$query_hash = md5( (string) wp_rand( 0, 100000 ) );
-					plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
-				}
-
-				$cache_key = "main_{$query_hash}";
-
-				if ( ! is_null( $post_id ) ) {
-					$cache_key .= "_post-{$post_id}";
-				}
-				break;
-		}
-
-		// Add user ID to cache key. Those without will be for logged out users.
-		if ( $user_id > 0 ) {
-			$cache_key .= "_user-{$user_id}";
-		}
-
-		/**
-		 * Filter the cache key.
-		 *
-		 * @param string $cache_key Cache key.
-		 * @param int|null $post_id Post ID.
-		 * @param int|null $user_id User ID.
-		 * @param string $context Context.
-		 *
-		 * @return string
-		 *
-		 * @since 2.4.0
-		 */
-		return apply_filters( 'content_control/get_cache_key', $cache_key, $post_id, $user_id, $context );
-	}
-
-	/**
-	 * Get from cache.
-	 *
-	 * @param string $cache_key Cache key.
-	 *
-	 * @return mixed|null
-	 */
-	public function get_from_cache( $cache_key ) {
-		/**
-		 * Allow preloading from cache.
-		 *
-		 * @param mixed|null $cache Cache.
-		 * @param string $cache_key Cache key.
-		 * @param Restrictions $this Restrictions instance.
-		 *
-		 * @return mixed|null
-		 *
-		 * @since 2.4.0
-		 */
-		$cache = apply_filters( 'content_control/get_restrictions_from_cache', null, $cache_key, $this );
-
-		if ( $cache ) {
-			return $cache;
-		}
-
-		return $this->restrictions_cache[ $cache_key ] ?? null;
-	}
-
-	/**
-	 * Set in cache.
-	 *
-	 * @param string $cache_key Cache key.
-	 * @param mixed  $value Value to set.
-	 *
-	 * @return void
-	 */
-	public function set_in_cache( $cache_key, $value ) {
-		$this->restrictions_cache[ $cache_key ] = $value;
-
-		/**
-		 * Filter the cache.
-		 *
-		 * @param array<string,mixed> $cache Cache.
-		 * @param string $cache_key Cache key.
-		 * @param Restrictions $this Restrictions instance.
-		 *
-		 * @return array<string,mixed>
-		 *
-		 * @since 2.4.0
-		 */
-		do_action( 'content_control/set_restrictions_in_cache', $cache_key, $value, $this );
-	}
-
-
-	/**
-	 * Get all applicable restrictions for the current post.
-	 *
-	 * Careful, this could be very unperformant if you have a lot of restrictions.
-	 *
-	 * @param int|null $post_id Post ID.
-	 *
-	 * @return Restriction[]
-	 */
-	public function get_all_applicable_restrictions( $post_id = null ) {
-		static $cache = [];
-		$cache_key    = $this->get_cache_key( $post_id );
-
-		if ( isset( $cache[ $cache_key ] ) ) {
-			return $cache[ $cache_key ];
-		}
-
-		$restrictions = $this->get_restrictions();
-
-		if ( ! empty( $restrictions ) ) {
-			foreach ( $restrictions as $key => $restriction ) {
-				if ( ! $restriction->check_rules() ) {
-					unset( $restrictions[ $key ] );
+			if ( ! empty( $restrictions ) ) {
+				foreach ( $restrictions as $restriction ) {
+					if ( $restriction->check_rules() ) {
+						$matches[] = $restriction;
+						if ( $single ) {
+							break;
+						}
+					}
 				}
 			}
+
+			// Cache the matches.
+			$this->set_restriction_matches_in_cache( $content_id, $matches, $single );
 		}
 
-		$cache[ $cache_key ] = $restrictions;
-
-		return $restrictions;
-	}
-
-	/**
-	 * Get the first applicable restriction for the current post.
-	 *
-	 * Performant version that breaks on first applicable restriction. Sorted by priority.
-	 * cached internally.
-	 *
-	 * @param int|null $post_id Post ID.
-	 *
-	 * @return Restriction|false
-	 */
-	public function get_applicable_restriction( $post_id = null ) {
-		static $cache = [];
-		$cache_key    = $this->get_cache_key( $post_id );
-
-		if ( isset( $cache[ $cache_key ] ) ) {
-			return $cache[ $cache_key ];
+		if ( $single ) {
+			return $matches[0] ?? false;
 		}
 
-		$cache[ $cache_key ] = false;
-
-		$restrictions = $this->get_restrictions();
-
-		$restrictions = $this->sort_restrictions_by_priority( $restrictions );
-
-		if ( ! empty( $restrictions ) ) {
-			foreach ( $restrictions as $restriction ) {
-				if ( $restriction->check_rules() ) {
-					$cache[ $cache_key ] = $restriction;
-					break;
-				}
-			}
-		}
-
-		return $cache[ $cache_key ];
+		return ! empty( $matches ) ? $matches : false;
 	}
 
 	/**
@@ -353,7 +202,7 @@ class Restrictions {
 	 * @return boolean
 	 */
 	public function has_applicable_restrictions( $post_id = null ) {
-		return false !== $this->get_applicable_restriction( $post_id );
+		return false !== $this->get_applicable_restrictions( $post_id, true );
 	}
 
 	/**
