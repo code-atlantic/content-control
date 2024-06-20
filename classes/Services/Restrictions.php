@@ -23,9 +23,9 @@ defined( 'ABSPATH' ) || exit;
 class Restrictions {
 
 	/**
-	 * Array of all restrictions by ID.
+	 * Array of all restrictions sorted by priority.
 	 *
-	 * @var array<int,Restriction>
+	 * @var Restriction[]|null
 	 */
 	public $restrictions;
 
