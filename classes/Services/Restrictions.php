@@ -41,7 +41,18 @@ class Restrictions {
 	 *
 	 * @var array<string,mixed>
 	 */
-	private $restrictions_cache;
+	/**
+	 * Initialize the service.
+	 *
+	 * @since 2.4.0
+	 */
+	public function __construct() {
+		// Load restrictions.
+		$this->get_restrictions();
+
+		// Fire action to dependent services to initialize.
+		do_action( 'content_control/services/restrictions/init', $this );
+	}
 
 	/**
 	 * Get a list of all restrictions sorted by priority.
