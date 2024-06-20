@@ -669,6 +669,8 @@ function content_is_selected_term() {
 			// Always return false if no ID is set.
 			return false;
 	}
+
+	return false;
 }
 
 /**
