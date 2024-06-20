@@ -30,6 +30,13 @@ class Restrictions {
 	public $restrictions;
 
 	/**
+	 * Array of all restrictions by ID.
+	 *
+	 * @var array<int,Restriction>|null
+	 */
+	public $restrictions_by_id;
+
+	/**
 	 * Simple internal request based cache.
 	 *
 	 * @var array<string,mixed>
@@ -37,27 +44,26 @@ class Restrictions {
 	private $restrictions_cache;
 
 	/**
-	 * Get a list of all restrictions.
+	 * Get a list of all restrictions sorted by priority.
 	 *
-	 * @var array<int,Restriction>
+	 * @return array<int,Restriction>
 	 */
 	public function get_restrictions() {
 		if ( ! isset( $this->restrictions ) ) {
-			$all_restrictions = [];
-
 			// Passively check for old restrictions, load them if found.
 			if ( \ContentControl\get_data_version( 'restrictions' ) === 1 ) {
 				$old_restrictions = \ContentControl\get_v1_restrictions();
 
 				if ( false !== $old_restrictions ) {
 					foreach ( $old_restrictions as $key => $restriction ) {
-						$restriction['id']        = (int) $key;
-						$all_restrictions[ $key ] = new Restriction( $restriction );
+						$restriction['id']                = (int) $key;
+						$this->restrictions_by_id[ $key ] = new Restriction( $restriction );
 					}
 				}
 			}
+
 			// This should run safely if no v1 rules are found, or if they don't exist.
-			if ( empty( $all_restrictions ) ) {
+			if ( empty( $this->restrictions_by_id ) ) {
 				// Query restriction post type.
 				$restrictions = get_posts(
 					[
@@ -72,13 +78,14 @@ class Restrictions {
 					]
 				);
 
+				// Store the restrictions by ID for quick lookups.
 				foreach ( $restrictions as $restriction ) {
-					$all_restrictions[ $restriction->ID ] = new Restriction( $restriction );
+					$this->restrictions_by_id[ $restriction->ID ] = new Restriction( $restriction );
 				}
 			}
 
 			// Sort by priority.
-			$this->restrictions = $this->sort_restrictions_by_priority( $all_restrictions );
+			$this->restrictions = $this->sort_restrictions_by_priority( $this->restrictions_by_id ?? [] );
 		}
 
 		return $this->restrictions;
