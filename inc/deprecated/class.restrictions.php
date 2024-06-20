@@ -8,7 +8,7 @@
 
 namespace JP\CC\Site;
 
-use function ContentControl\plugin;
+use function ContentControl\get_applicable_restriction;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,7 +30,7 @@ class Restrictions {
 	 * @return string
 	 */
 	public static function restricted_content() {
-		$restriction = plugin( 'restrictions' )->get_applicable_restriction();
+		$restriction = get_applicable_restriction();
 		return false !== $restriction ? $restriction->to_v1_array() : false;
 	}
 }
