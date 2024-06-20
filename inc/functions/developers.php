@@ -429,7 +429,13 @@ function request_for_user_is_excluded() {
  * @since 2.0.0
  */
 function protection_is_disabled() {
-	$is_disabled = user_is_excluded() || request_is_excluded() || request_for_user_is_excluded();
+	static $protection_disabled;
+
+	if ( isset( $protection_disabled ) ) {
+		return $protection_disabled;
+	}
+
+	$protection_disabled = user_is_excluded() || request_is_excluded() || request_for_user_is_excluded();
 
 	/**
 	 * Filter whether protection is disabled.
@@ -440,5 +446,7 @@ function protection_is_disabled() {
 	 *
 	 * @since 2.0.0
 	 */
-	return apply_filters( 'content_control/protection_is_disabled', $is_disabled );
+	$protection_disabled = apply_filters( 'content_control/protection_is_disabled', $protection_disabled );
+
+	return $protection_disabled;
 }
