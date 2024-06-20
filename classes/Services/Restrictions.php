@@ -14,6 +14,7 @@ use function ContentControl\plugin;
 use function ContentControl\get_query;
 use function ContentControl\current_query_context;
 use function ContentControl\deep_clean_array;
+use function ContentControl\get_the_content_id;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,8 +40,10 @@ class Restrictions {
 	/**
 	 * Simple internal request based cache.
 	 *
-	 * @var array<string,mixed>
+	 * @var array<string,Restriction[]>
 	 */
+	public $restriction_matches_cache = [];
+
 	/**
 	 * Initialize the service.
 	 *
@@ -395,5 +398,136 @@ class Restrictions {
 		});
 
 		return $restrictions;
+	}
+
+	/**
+	 * Generate cache key for restrictions.
+	 *
+	 * @param int|null $content_id Content ID.
+	 *
+	 * @return string
+	 */
+	public function generate_restriction_matches_cache_key( $content_id ) {
+		$context    = current_query_context();
+		$content_id = $content_id ?? get_the_content_id();
+
+		if ( strpos( $context, 'posts' ) !== false ) {
+			$cache_key = "post-{$content_id}";
+		} elseif ( strpos( $context, 'terms' ) !== false ) {
+			$cache_key = "term-{$content_id}";
+		} elseif ( 'main' === $context || 'restapi' === $context ) {
+			try {
+				$query      = get_query();
+				$hash_vars  = deep_clean_array( $query->query_vars ?? [] );
+				$query_hash = md5( maybe_serialize( $hash_vars ) );
+			} catch ( \Exception $e ) {
+				$query_hash = md5( (string) wp_rand( 0, 100000 ) );
+				plugin( 'logging' )->log_unique( 'ERROR: ' . $e->getMessage() );
+			}
+
+			// Append query hash to cache key to allow persisting across requests.
+			$cache_key = "{$context}_{$query_hash}";
+
+			if ( $content_id ) {
+				$cache_key .= "_post-{$content_id}";
+			}
+		} else {
+			$cache_key = "unknown-{$context}";
+		}
+
+		/**
+		 * Filter the cache key.
+		 *
+		 * @param string $cache_key Cache key.
+		 * @param string $context Context.
+		 * @param int|null $content_id Content ID.
+		 *
+		 * @return string
+		 *
+		 * @since 2.4.0
+		 */
+		return apply_filters( 'content_control/generate_restriction_matches_cache_key', $cache_key, $context, $content_id );
+	}
+
+	/**
+	 * Get matches from cache.
+	 *
+	 * @param int|null $content_id Content ID.
+	 * @param bool     $single    Whether to return a single match or an array of matches.
+	 *
+	 * @return Restriction[]|false|null
+	 */
+	public function get_restriction_matches_from_cache( $content_id = null, $single = true ) {
+		// Get cache key.
+		$cache_key = $this->generate_restriction_matches_cache_key( $content_id );
+
+		/**
+		 * Restrictions that match the content ID.
+		 *
+		 * @var Restriction[]|false|null Restriction cache for the given content ID.
+		 */
+		$matches = $this->restriction_matches_cache[ $single ][ $cache_key ] ?? null;
+
+		// If no match for single, fallback on non-single and return that instead.
+		if ( $single && is_null( $matches ) && isset( $this->restriction_matches_cache[ ! $single ][ $cache_key ] ) ) {
+			$matches = $this->restriction_matches_cache[ ! $single ][ $cache_key ] ?? null;
+		}
+
+		if ( is_null( $matches ) ) {
+			/**
+			 * Allow loading from persistent cache.
+			 *
+			 * @param Restriction[]|false|null $matches Restriction cache for the given content ID.
+			 * @param string                   $cache_key Cache key.
+			 * @param Restrictions             $restriction_service Restrictions instance.
+			 *
+			 * @return Restriction[]|false|null
+			 *
+			 * @since 2.4.0
+			 */
+			$matches = apply_filters( 'content_control/get_restriction_matches_from_cache', null, $cache_key . ( $single ? '--single' : '' ), $this, $content_id );
+
+			// If we have a match, store it in memory rather than reaching out to object DB again.
+			if ( ! is_null( $matches ) ) {
+				$this->restriction_matches_cache[ $single ][ $cache_key ] = $matches;
+			}
+		}
+
+		return $matches;
+	}
+
+	/**
+	 * Set in cache for matches.
+	 *
+	 * @param int|null                        $content_id Content ID.
+	 * @param Restriction|Restriction[]|false $matches Value to set.
+	 * @param bool                            $single    Whether to return a single match or an array of matches.
+	 *
+	 * @return void
+	 */
+	public function set_restriction_matches_in_cache( $content_id = null, $matches = false, $single = true ) {
+		// Get cache key.
+		$cache_key = $this->generate_restriction_matches_cache_key( $content_id );
+
+		// Store the matches in memory for the remainder of the request.
+		$this->restriction_matches_cache[ $single ][ $cache_key ] = $matches;
+
+		/**
+		 * Allow persisting to cache.
+		 *
+		 * @param int|null      $content_id Content ID.
+		 * @param array<int|null,Restriction|Restriction[]|false> $matches Value to set.
+		 * @param bool          $single Whether to return a single match or an array of matches.
+		 * @param Restrictions  $restriction_service Restrictions instance.
+		 *
+		 * @return void
+		 *
+		 * @since 2.4.0
+		 *
+		 * @return array<string,mixed>
+		 *
+		 * @since 2.4.0
+		 */
+		do_action( 'content_control/set_restriction_matches_in_cache', $cache_key . ( $single ? '--single' : '' ), $matches, $this );
 	}
 }
