@@ -117,11 +117,14 @@ class Restrictions {
 			return $restriction;
 		}
 
-		$restrictions = $this->get_restrictions();
+		// If we don't have restrictions, get them.
+		if ( ! isset( $this->restrictions ) ) {
+			$this->get_restrictions();
+		}
 
 		// If restriction is an ID, get the object.
-		if ( is_numeric( $restriction ) && isset( $restrictions[ $restriction ] ) ) {
-			return $restrictions[ $restriction ];
+		if ( is_numeric( $restriction ) && isset( $this->restrictions_by_id[ $restriction ] ) ) {
+			return $this->restrictions_by_id[ $restriction ];
 		}
 
 		// If restriction is a slug, get the object.
@@ -130,7 +133,7 @@ class Restrictions {
 			$slug = sanitize_title( $restriction );
 
 			if ( $slug === $restriction ) {
-				foreach ( $restrictions as $restriction_obj ) {
+				foreach ( $this->restrictions as $restriction_obj ) {
 					if ( $restriction_obj->slug === $restriction ) {
 						return $restriction_obj;
 					}
@@ -138,7 +141,7 @@ class Restrictions {
 			}
 
 			// Check if string is a title.
-			foreach ( $restrictions as $restriction_obj ) {
+			foreach ( $this->restrictions as $restriction_obj ) {
 				if ( $restriction_obj->title === $restriction ) {
 					return $restriction_obj;
 				}
