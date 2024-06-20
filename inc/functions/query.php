@@ -346,6 +346,25 @@ function reset_term_globals() {
 }
 
 /**
+ * Get the content ID for the current query item (post, term, etc).
+ *
+ * @return int|null
+ */
+function get_the_content_id() {
+	$context = current_query_context();
+
+	switch ( $context ) {
+		case 'terms':
+		case 'restapi/terms':
+			$term = get_global( 'term' ); // Used instead of global $cc_term.
+			return $term->term_id ?? null;
+
+		default:
+			return get_the_ID();
+	}
+}
+
+/**
  * Set up the post globals.
  *
  * @param int|\WP_Post|null $post_id Post ID.
