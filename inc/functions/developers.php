@@ -11,7 +11,6 @@ namespace ContentControl;
 
 use function ContentControl\plugin;
 use function ContentControl\set_rules_query;
-use function ContentControl\is_frontend;
 use function ContentControl\is_rest;
 
 defined( 'ABSPATH' ) || exit;
@@ -19,46 +18,46 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Check if content has restrictions.
  *
- * @param int|null $post_id Post ID.
+ * @param int|null $content_id Content ID.
  *
  * @return bool
  *
  * @since 2.0.0
  */
-function content_has_restrictions( $post_id = null ) {
-	$overload_post = setup_post( $post_id );
+function content_has_restrictions( $content_id = null ) {
+	$overload_content = setup_content_globals( $content_id );
 
-	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions( $post_id );
+	$has_restrictions = plugin( 'restrictions' )->has_applicable_restrictions( $content_id );
 
-	// Clear post if we overloaded it.
-	if ( $overload_post ) {
-		clear_post();
+	// Clear content if we overloaded it.
+	if ( $overload_content ) {
+		reset_content_globals();
 	}
 
 	/**
 	 * Filter whether content has restrictions.
 	 *
 	 * @param bool $has_restrictions Whether content has restrictions.
-	 * @param int|null $post_id Post ID.
+	 * @param int|null $content_id Content ID.
 	 *
 	 * @return bool
 	 *
 	 * @since 2.0.0
 	 */
-	return (bool) apply_filters( 'content_control/content_has_restriction', $has_restrictions, $post_id );
+	return (bool) apply_filters( 'content_control/content_has_restrictions', $has_restrictions, $content_id );
 }
 
 /**
  * Check if user can access content.
  *
- * @param int|null $post_id Post ID.
+ * @param int|null $content_id Content ID.
  *
  * @return bool True if user meets requirements, false if not.
  *
  * @since 2.0.0
  */
-function user_can_view_content( $post_id = null ) {
-	if ( ! content_has_restrictions( $post_id ) ) {
+function user_can_view_content( $content_id = null ) {
+	if ( ! content_has_restrictions( $content_id ) ) {
 		return true;
 	}
 
@@ -66,15 +65,17 @@ function user_can_view_content( $post_id = null ) {
 
 	$restrictions = [];
 
-	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $post_id ) ) {
-		$restriction = get_applicable_restriction( $post_id );
+	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $content_id ) ) {
+		// Fetch first applicable restriction.
+		$restriction = get_applicable_restrictions( $content_id, true );
 
 		if ( $restriction ) {
 			$can_view       = $restriction->user_meets_requirements();
 			$restrictions[] = $restriction;
 		}
 	} else {
-		$restrictions = get_all_applicable_restrictions( $post_id );
+		// Fetch all applicable restrictions.
+		$restrictions = get_applicable_restrictions( $content_id, false );
 
 		if ( count( $restrictions ) ) {
 			$checks = [];
@@ -92,85 +93,93 @@ function user_can_view_content( $post_id = null ) {
 	 * Filter whether user can view content.
 	 *
 	 * @param bool $can_view Whether user can view content.
-	 * @param int|null $post_id Post ID.
+	 * @param int|null $content_id Content ID.
 	 * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
 	 *
 	 * @return bool
 	 *
 	 * @since 2.0.0
 	 */
-	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $post_id, $restrictions );
+	return (bool) apply_filters( 'content_control/user_can_view_content', $can_view, $content_id, $restrictions );
 }
 
 /**
- * Helper that checks if given or current post is restricted or not.
+ * Helper that checks if given or current content is restricted or not.
  *
  * @see \ContentControl\user_can_view_content() to check if user can view content.
  *
- * @param int|null $post_id Post ID.
+ * @param int|null $content_id Content ID.
  *
  * @return bool
  *
  * @since 2.0.0
  */
-function content_is_restricted( $post_id = null ) {
-	$is_restricted = ! user_can_view_content( $post_id );
+function content_is_restricted( $content_id = null ) {
+	$is_restricted = ! user_can_view_content( $content_id );
 
 	/**
 	 * Filter whether content is restricted.
 	 *
 	 * @param bool $is_restricted Whether content is restricted.
-	 * @param int|null $post_id Post ID.
+	 * @param int|null $content_id Content ID.
 	 *
 	 * @return bool
 	 *
 	 * @since 2.0.0
 	 */
-	return (bool) apply_filters( 'content_control/content_is_restricted', $is_restricted, $post_id );
+	return (bool) apply_filters( 'content_control/content_is_restricted', $is_restricted, $content_id );
 }
 
 /**
- * Get applicable restriction.
+ * Get applicable restrictions for the given content.
  *
- * @param int|null $post_id Post ID.
+ * If $single is true, return the first applicable restriction. If false, return all applicable restrictions.
+ * Sorted by priority and cached internally.
  *
- * @return \ContentControl\Models\Restriction|false
+ * @param int|null $content_id Content ID.
+ * @param bool     $single     Whether to return a single match or an array of matches.
  *
- * @since 2.0.0
+ * @return Restriction|Restriction[]|false
+ *
+ * @since 2.4.0
  */
-function get_applicable_restriction( $post_id = null ) {
-	$overload_post = setup_post( $post_id );
+function get_applicable_restrictions( $content_id = null, $single = true ) {
+	$overload_content = setup_content_globals( $content_id );
 
-	$restriction = plugin( 'restrictions' )->get_applicable_restriction( $post_id );
+	$restriction = plugin( 'restrictions' )->get_applicable_restrictions( $content_id, $single );
 
-	// Clear post if we overloaded it.
-	if ( $overload_post ) {
-		clear_post();
+	// Clear content if we overloaded it.
+	if ( $overload_content ) {
+		reset_content_globals();
 	}
 
 	return $restriction;
 }
 
 /**
+ * Get applicable restriction.
+ *
+ * @param int|null $content_id Content ID.
+ *
+ * @return \ContentControl\Models\Restriction|false
+ *
+ * @since 2.0.0
+ */
+function get_applicable_restriction( $content_id = null ) {
+	return get_applicable_restrictions( $content_id, true );
+}
+
+/**
  * Get all applicable restrictions.
  *
- * @param int|null $post_id Post ID.
+ * @param int|null $content_id Content ID.
  *
  * @return \ContentControl\Models\Restriction[]
  *
  * @since 2.0.11
  */
-function get_all_applicable_restrictions( $post_id = null ) {
-	$overload_post = setup_post( $post_id );
-
-	$restrictions = plugin( 'restrictions' )->get_all_applicable_restrictions( $post_id );
-
-	// Clear post if we overloaded it.
-	if ( $overload_post ) {
-		clear_post();
-	}
-
-	return $restrictions;
+function get_all_applicable_restrictions( $content_id = null ) {
+	return get_applicable_restrictions( $content_id, false );
 }
 
 /**
@@ -210,6 +219,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
 		 * @var \WP_Post $post
 		 */
 		if ( content_is_restricted( $post->ID ) ) {
+			// TODO This needs to likely respect the filter for checking all applicable restrictions.
 			$restriction = get_applicable_restriction( $post->ID );
 
 			if ( ! $restriction ) {
@@ -250,7 +260,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
  *
  * @return array<array{restriction:\ContentControl\Models\Restriction,term_ids:int[]}>|false
  *
- * @since 2.0.0
+ * @since 2.2.0
  */
 function get_restriction_matches_for_queried_terms( $query ) {
 	if ( empty( $query->terms ) ) {
@@ -278,7 +288,8 @@ function get_restriction_matches_for_queried_terms( $query ) {
 		}
 
 		if ( $term_id > 0 && content_is_restricted( $term_id ) ) {
-			$restriction = get_applicable_restriction( $term_id );
+			// TODO This needs to likely respect the filter for checking all applicable restrictions.
+			$restriction = get_applicable_restrictions( $term_id, true );
 
 			if ( ! $restriction ) {
 				continue;
@@ -338,6 +349,24 @@ function check_referrer_is_admin() {
  *
  * @return bool
  *
+ * @since 2.3.1
+ */
+function request_is_excluded_rest_endpoint() {
+	/**
+	 * Filter whether to exclude a request from being restricted.
+	 *
+	 * @param bool $is_excluded Whether to exclude the request.
+	 *
+	 * @return bool
+	 */
+	return apply_filters( 'content_control/request_is_excluded_rest_endpoint', ! is_wp_core_rest_namespace() );
+}
+
+/**
+ * Check if request is excluded.
+ *
+ * @return bool
+ *
  * @since 2.3.0
  */
 function request_is_excluded() {
@@ -351,13 +380,11 @@ function request_is_excluded() {
 
 	if (
 		// Check if doing cron.
-		is_cron()
-
+		is_cron() ||
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] ) ||
 		// If this is rest request and not core wp namespace.
-		// || ( is_rest() && ! is_wp_core_rest_namespace() ).
-
-		// Disable protection when not on the frontend.
-		// || ( ! is_frontend() && ! is_rest() ).
+		( is_rest() && request_is_excluded_rest_endpoint() )
 	) {
 		$is_excluded = true;
 	}
@@ -378,6 +405,7 @@ function request_for_user_is_excluded() {
 		if (
 			// Is in the admin area.
 			is_admin() ||
+			( is_preview() && current_user_can( 'edit_post', get_the_ID() ) ) ||
 			// Is an ajax request from the admin area.
 			(
 				( is_ajax() || is_rest() ) &&
@@ -386,13 +414,6 @@ function request_for_user_is_excluded() {
 		) {
 			return true;
 		}
-	}
-
-	$post_id = get_the_ID();
-
-	// Disable protection when viewing post previews or editing a post.
-	if ( ( $post_id > 0 || is_preview() ) && current_user_can( 'edit_post', $post_id ) ) {
-		return true;
 	}
 
 	return false;
@@ -408,7 +429,13 @@ function request_for_user_is_excluded() {
  * @since 2.0.0
  */
 function protection_is_disabled() {
-	$is_disabled = user_is_excluded() || request_is_excluded() || request_for_user_is_excluded();
+	static $protection_disabled;
+
+	if ( isset( $protection_disabled ) ) {
+		return $protection_disabled;
+	}
+
+	$protection_disabled = user_is_excluded() || request_is_excluded() || request_for_user_is_excluded();
 
 	/**
 	 * Filter whether protection is disabled.
@@ -419,5 +446,7 @@ function protection_is_disabled() {
 	 *
 	 * @since 2.0.0
 	 */
-	return apply_filters( 'content_control/protection_is_disabled', $is_disabled );
+	$protection_disabled = apply_filters( 'content_control/protection_is_disabled', $protection_disabled );
+
+	return $protection_disabled;
 }

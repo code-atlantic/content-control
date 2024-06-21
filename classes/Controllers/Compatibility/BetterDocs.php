@@ -20,7 +20,16 @@ class BetterDocs extends Controller {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'content_control/get_rest_api_intent', [ $this, 'get_rest_api_intent' ], 10 );
+		add_filter( 'content_control/get_rest_api_intent', [ $this, 'get_rest_api_intent' ], 10 );
+	}
+
+	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return defined( 'BETTERDOCS_PLUGIN_FILE' );
 	}
 
 	/**
@@ -32,11 +41,6 @@ class BetterDocs extends Controller {
 	 */
 	public function get_rest_api_intent( $intent ) {
 		global $wp;
-		
-
-		if ( ! defined( 'BETTERDOCS_PLUGIN_FILE' ) ) {
-			return $intent;
-		}
 
 		$rest_route     = $wp->query_vars['rest_route'];
 		$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );

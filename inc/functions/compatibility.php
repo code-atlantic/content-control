@@ -42,31 +42,42 @@ function is_func_disabled( $func ) {
  * @return bool
  */
 function is_rest() {
-	// phpcs:disable WordPress.Security.NonceVerification.Recommended
-	if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST )// (#1)
+	static $is_rest;
+
+	if ( ! isset( $is_rest ) ) {
+		return $is_rest;
+	}
+
+	// Callback to avoid duplicative $is_rest assignments, only runs once.
+	$is_rest = ( function () {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST )// (#1)
 			|| ( isset( $_GET['rest_route'] ) // (#2)
 					&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) ) {
-			return true;
-	}
+				return true;
+		}
 
-	// (#4)
-	$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
-	$current_url = wp_parse_url( add_query_arg( [] ) );
+		// (#4)
+		$rest_url    = wp_parse_url( trailingslashit( rest_url() ) );
+		$current_url = wp_parse_url( add_query_arg( [] ) );
 
-	if ( ! $rest_url || ! $current_url ) {
-		return false;
-	}
+		if ( ! $rest_url || ! $current_url ) {
+			return false;
+		}
 
-	$current_path = isset( $current_url['path'] ) ? $current_url['path'] : false;
-	$rest_path    = isset( $rest_url['path'] ) ? $rest_url['path'] : false;
+		$current_path = isset( $current_url['path'] ) ? $current_url['path'] : false;
+		$rest_path    = isset( $rest_url['path'] ) ? $rest_url['path'] : false;
 
-	// If one of the URLs failed to parse, then the current request isn't a REST request.
-	if ( ! $current_path || ! $rest_path ) {
-		return false;
-	}
+		// If one of the URLs failed to parse, then the current request isn't a REST request.
+		if ( ! $current_path || ! $rest_path ) {
+			return false;
+		}
 
-	return strpos( $current_path, $rest_path, 0 ) === 0;
-	// phpcs:enable WordPress.Security.NonceVerification.Recommended
+		return strpos( $current_path, $rest_path, 0 ) === 0;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+	} )();
+
+	return $is_rest;
 }
 
 /**

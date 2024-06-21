@@ -32,4 +32,13 @@ abstract class Controller implements \ContentControl\Interfaces\Controller {
 	public function __construct( $container ) {
 		$this->container = $container;
 	}
+
+	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return true;
+	}
 }

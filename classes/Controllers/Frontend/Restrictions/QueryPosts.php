@@ -92,11 +92,11 @@ class QueryPosts extends Controller {
 	 * @return \WP_Post[]
 	 */
 	public function restrict_query_posts( $posts, $query ) {
-		if ( protection_is_disabled() ) {
+		if ( query_can_be_ignored( $query ) ) {
 			return $posts;
 		}
 
-		if ( query_can_be_ignored( $query ) ) {
+		if ( protection_is_disabled() ) {
 			return $posts;
 		}
 

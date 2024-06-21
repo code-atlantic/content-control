@@ -30,6 +30,7 @@ namespace PHPSTORM_META;
     'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
+    'globals'      => \ContentControl\Services\Globals::class,
     'Frontend\Restrictions\PostContent' => \ContentControl\Controllers\Frontend\Restrictions\PostContent::class,
   ] ) );
 
@@ -47,6 +48,7 @@ namespace PHPSTORM_META;
     'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
+    'globals'      => \ContentControl\Services\Globals::class,
     'Frontend\Restrictions\PostContent' => \ContentControl\Controllers\Frontend\Restrictions\PostContent::class,
   ] ) );
 
@@ -64,6 +66,7 @@ namespace PHPSTORM_META;
     'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
+    'globals'      => \ContentControl\Services\Globals::class,
     'Frontend\Restrictions\PostContent' => \ContentControl\Controllers\Frontend\Restrictions\PostContent::class,
   ] ) );
 
@@ -81,5 +84,6 @@ override ( \ContentControl\Base\Container::offsetGet(0), map( [
   'upgrader'     => \ContentControl\Plugin\Upgrader::class,
   'rules'        => \ContentControl\RuleEngine\Rules::class,
   'restrictions' => \ContentControl\Services\Restrictions::class,
+  'globals'      => \ContentControl\Services\Globals::class,
   'Frontend\Restrictions\PostContent' => \ContentControl\Controllers\Frontend\Restrictions\PostContent::class,
   ] ) );

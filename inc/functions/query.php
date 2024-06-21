@@ -60,21 +60,14 @@ function get_current_wp_query() {
  * @return \WP_Query|\WP_Term_Query|null
  */
 function get_query( $query = null ) {
-	/**
-	 * Current query object.
-	 *
-	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
-	 */
-	global $cc_current_query;
-
 	if ( is_null( $query ) ) {
-		if ( isset( $cc_current_query ) ) {
+		if ( ! global_is_empty( 'current_query' ) ) {
 			/**
 			 * WP Query object.
 			 *
 			 * @var \WP_Query|\WP_Term_Query $query
 			 */
-			$query = $cc_current_query;
+			$query = get_global( 'current_query' );
 		} else {
 			$query = get_current_wp_query();
 		}
@@ -91,8 +84,7 @@ function get_query( $query = null ) {
  * @return void
  */
 function override_query_context( $context ) {
-	global $cc_current_query_context;
-	$cc_current_query_context = $context;
+	set_global( 'current_query_context', $context );
 }
 
 /**
@@ -101,12 +93,11 @@ function override_query_context( $context ) {
  * @return void
  */
 function reset_query_context() {
-	global $cc_current_query_context;
-	unset( $cc_current_query_context );
+	reset_global( 'current_query_context' );
 }
 
 /**
- * Get or set the current rule (globaly accessible).
+ * Get or set the current rule context (globaly accessible).
  *
  * 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`
  *
@@ -125,10 +116,8 @@ function reset_query_context() {
  * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
  */
 function current_query_context( $query = null ) {
-	global $cc_current_query_context;
-
-	if ( isset( $cc_current_query_context ) ) {
-		return $cc_current_query_context;
+	if ( ! global_is_empty( 'current_query_context' ) ) {
+		return get_global( 'current_query_context' );
 	}
 
 	$query   = get_query( $query );
@@ -144,6 +133,7 @@ function current_query_context( $query = null ) {
 		return 'main';
 	}
 
+	// Before we process plain queries, we need to check if we're in a REST API request.
 	if ( is_rest() ) {
 		if ( doing_filter( 'get_terms' ) ) {
 			return 'restapi/terms';
@@ -154,6 +144,11 @@ function current_query_context( $query = null ) {
 		}
 
 		return 'restapi';
+	}
+
+	// Process plain queries.
+	if ( doing_filter( 'get_terms' ) ) {
+		return 'terms';
 	}
 
 	if ( doing_filter( 'pre_get_posts' ) || doing_filter( 'the_posts' ) ) {
@@ -175,13 +170,31 @@ function current_query_context( $query = null ) {
  * @return void
  */
 function set_rules_query( $query ) {
-	/**
-	 * Current query object.
-	 *
-	 * @var null|\WP_Query|\WP_Term_Query $cc_current_query
-	 */
-	global $cc_current_query;
-	$cc_current_query = $query;
+	set_global( 'current_query', $query );
+}
+
+/**
+ * Setup the current content.
+ *
+ * @param int|\WP_Post|\WP_Term|null $content_id Content ID.
+ *
+ * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
+ */
+function setup_content_globals( $content_id ) {
+	// Return early if we don't have a post ID.
+	if ( is_null( $content_id ) ) {
+		return false;
+	}
+
+	switch ( current_query_context() ) {
+		case 'terms':
+		case 'restapi/terms':
+			return setup_term_globals( $content_id );
+		default:
+			return setup_post_globals( $content_id );
+	}
 }
 
 /**
@@ -192,37 +205,32 @@ function set_rules_query( $query ) {
  * @param int|\WP_Post|null $post_id Post ID.
  *
  * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function setup_post( $post_id = null ) {
-	$context = current_query_context();
+function setup_post_globals( $post_id = null ) {
+	global $post;
 
-	if ( 'restapi/terms' === $context || 'terms' === $context ) {
-		/**
-		 * Term ID.
-		 *
-		 * @var int|\WP_Term|null $post_id
-		 */
-		return setup_tax_object( $post_id );
-	}
-
-	global $post, $content_control_last_post;
-
-	if ( ! isset( $content_control_last_post ) ) {
-		$content_control_last_post = [];
-	}
-
+	// Return early if we don't have a post ID.
 	if ( is_null( $post_id ) ) {
 		return false;
 	}
 
-	$current_post_id = isset( $post ) ? $post->ID : null;
+	// Set current post id baesd on global $post.
+	$current_post_id = $post->ID ?? null;
 
+	// Check if we should overload the post. This means its not the current post.
 	$overload_post =
+		// If we have a post ID, check if it's different from the current post ID.
 		( is_object( $post_id ) && $post_id->ID !== $current_post_id ) ||
+		// If we have an int, check if it's different from the current post ID.
 		( is_int( $post_id ) && $post_id !== $current_post_id );
 
 	if ( $overload_post ) {
-		$content_control_last_post[] = isset( $post ) ? $post : $current_post_id;
+		// Push the current $post to the stack so we can restore it later.
+		push_to_global( 'overloaded_posts', $post ?? $current_post_id );
+
+		// Overload the globals so conditionals work properly.
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post = get_post( $post_id );
 		setup_postdata( $post );
@@ -239,68 +247,171 @@ function setup_post( $post_id = null ) {
  * @param int|\WP_Term|null $term_id Term ID.
  *
  * @return bool
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function setup_tax_object( $term_id = null ) {
-	global $cc_term, $content_control_last_term;
+function setup_term_globals( $term_id = null ) {
+	global $cc_term; // Backward compatibility.
 
-	if ( ! isset( $content_control_last_term ) ) {
-		$content_control_last_term = [];
-	}
+	$current_term = get_global( 'term' ); // Used instead of global $cc_term.
 
+	// Return early if we don't have a term ID.
 	if ( is_null( $term_id ) ) {
 		return false;
 	}
 
-	$current_term_id = isset( $cc_term ) ? $cc_term->term_id : null;
+	// Set current post id baesd on global $current_term.
+	$current_term_id = $current_term->term_id ?? null;
 
+	// Check if we should overload the post. This means its not the current post.
 	$overload_term =
-		( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
-		( is_int( $term_id ) && $term_id !== $current_term_id );
+	// If we have a term ID, check if it's different from the current term ID.
+	( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
+	// If we have an int, check if it's different from the current term ID.
+	( is_int( $term_id ) && $term_id !== $current_term_id );
 
 	if ( $overload_term ) {
-		$content_control_last_term[] = isset( $cc_term ) ? $cc_term : $current_term_id;
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		// Push the current $post to the stack so we can restore it later.
+		push_to_global( 'overloaded_terms', $current_term ?? $current_term_id );
+
+		// Overload the globals so conditionals work properly.
 		$cc_term = get_term( $term_id );
+		// Set the global term object (forward compatibility).
+		set_global( 'term', $cc_term ?? $current_term_id );
 	}
 
 	return $overload_term;
 }
 
 /**
- * Check and clear global post if needed.
+ * Setup the current content.
  *
  * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function clear_post() {
-	$context = current_query_context();
+function reset_content_globals() {
+	switch ( current_query_context() ) {
+		case 'terms':
+		case 'restapi/terms':
+			reset_term_globals();
+			break;
+		default:
+			reset_post_globals();
+			break;
+	}
+}
 
-	if ( 'restapi/terms' === $context || 'terms' === $context ) {
-		clear_tax_object();
+/**
+ * Check and clear global post if needed.
+ *
+ * @global \WP_Post $post
+ *
+ * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
+ */
+function reset_post_globals() {
+	if ( global_is_empty( 'overloaded_posts' ) ) {
+		return;
 	}
 
-	global $post, $content_control_last_post;
-	if ( ! empty( $content_control_last_post ) ) {
-		// Get the last post ID from the array.
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post = array_pop( $content_control_last_post );
+	global $post;
 
-		// Reset global post object.
-		setup_postdata( $post );
-	}
+	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+	$post = pop_from_global( 'overloaded_posts' );
+	// Reset global post object.
+	setup_postdata( $post );
 }
 
 /**
  * Check and clear global term if needed.
  *
  * @return void
+ *
+ * @since 2.4.0 - Added support for `terms` context.
  */
-function clear_tax_object() {
-	global $cc_term, $content_control_last_term;
-	if ( ! empty( $content_control_last_term ) ) {
-		// Get the last post ID from the array.
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$cc_term = array_pop( $content_control_last_term );
+function reset_term_globals() {
+	if ( global_is_empty( 'overloaded_terms' ) ) {
+		// Reset global term object since it never really existed.
+		reset_global( 'term' );
+		return;
 	}
+
+	global $cc_term; // Backward compatibility.
+
+	// Reset global post object.
+	$cc_term = pop_from_global( 'overloaded_terms' );
+	set_global( 'term', $cc_term );
+}
+
+/**
+ * Get the content ID for the current query item (post, term, etc).
+ *
+ * @return int|null
+ */
+function get_the_content_id() {
+	$context = current_query_context();
+
+	switch ( $context ) {
+		case 'terms':
+		case 'restapi/terms':
+			$term = get_global( 'term' ); // Used instead of global $cc_term.
+			return $term->term_id ?? null;
+
+		default:
+			return get_the_ID();
+	}
+}
+
+/**
+ * Set up the post globals.
+ *
+ * @param int|\WP_Post|null $post_id Post ID.
+ *
+ * @return boolean
+ *
+ * @deprecated 2.4.0 - Use `setup_content_globals() or `setup_post_globals()` instead.
+ */
+function setup_post( $post_id = null ) {
+	return setup_content_globals( $post_id );
+}
+
+/**
+ * Set up the term globals.
+ *
+ * @param int|\WP_Term|null $term_id Term ID.
+ *
+ * @return boolean
+ *
+ * @deprecated 2.4.0 - Use `setup_term_globals()` instead.
+ */
+function setup_term_object( $term_id = null ) {
+	return setup_term_globals( $term_id );
+}
+
+/**
+ * Check and clear global post if needed.
+ *
+ * @global \WP_Post $post
+ *
+ * @return void
+ *
+ * @deprecated 2.4.0 - Use `reset_post_globals()` instead.
+ */
+function reset_post() {
+	reset_post_globals();
+}
+
+/**
+ * Check and clear global term if needed.
+ *
+ * @return void
+ *
+ * @deprecated 2.4.0 - Use `reset_term_globals()` instead.
+ */
+function reset_term_object() {
+	reset_term_globals();
 }
 
 /**
@@ -350,7 +461,9 @@ function get_taxonomy_endpoints() {
 function get_rest_api_intent() {
 	global $wp;
 
-	static $intent = null;
+	$intent = get_global( 'rest_intent' );
+
+	$rest_route = null;
 
 	if ( is_null( $intent ) ) {
 		$result = [
@@ -361,44 +474,47 @@ function get_rest_api_intent() {
 			'search' => false,
 		];
 
+		// Handle built-in REST API endpoints.
 		if ( ! empty( $wp->query_vars['rest_route'] ) ) {
-			$rest_route          = $wp->query_vars['rest_route'];
-			$post_type_endpoints = get_post_type_endpoints();
-			$taxonomy_endpoints  = get_taxonomy_endpoints();
+			$rest_route = $wp->query_vars['rest_route'];
 
-			if ( strpos( $rest_route, '/wp/v2/' ) !== 0 ) {
-				// We have no way of really dealing with non WP REST requests.
-				return $result;
-			}
+			if ( strpos( $rest_route, '/wp/v2/' ) === 0 ) {
+				$post_type_endpoints = get_post_type_endpoints();
+				$taxonomy_endpoints  = get_taxonomy_endpoints();
 
-			$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
+				$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
 
-			// If we have a post type or taxonomy, the name is the first part (posts, categories).
-			$result['name'] = sanitize_key( $endpoint_parts[0] );
+				// If we have a post type or taxonomy, the name is the first part (posts, categories).
+				$result['name'] = sanitize_key( $endpoint_parts[0] );
 
-			if ( count( $endpoint_parts ) > 1 ) {
-				// If we have an ID, then the second part is the ID.
-				$result['id'] = absint( $endpoint_parts[1] );
+				if ( count( $endpoint_parts ) > 1 ) {
+					// If we have an ID, then the second part is the ID.
+					$result['id'] = absint( $endpoint_parts[1] );
+				} else {
+					// If we have no ID, then we are either searching or indexing.
+					$result['index']  = true;
+					$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+				}
+
+				// Build a matching route.
+				$endpoint_route = "/wp/v2/{$result['name']}";
+
+				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
+					$result['type'] = 'post_type';
+				}
+
+				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
+					$result['type'] = 'taxonomy';
+				}
 			} else {
-				// If we have no ID, then we are either searching or indexing.
-				$result['index']  = true;
-				$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
-			}
-
-			// Build a matching route.
-			$endpoint_route = "/wp/v2/{$result['name']}";
-
-			if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
-				$result['type'] = 'post_type';
-			}
-
-			if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
-				$result['type'] = 'taxonomy';
+				// We currently have no way of really dealing with non WP REST requests.
+				// This filter allows us or others to correctly handle these requests in the future.
+				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $result, $rest_route );
 			}
 		}
 
-		$intent = $result;
+		set_global( 'rest_intent', $result );
 	}
 
-	return apply_filters( 'content_control/get_rest_api_intent', $intent );
+	return apply_filters( 'content_control/get_rest_api_intent', $intent, $rest_route );
 }

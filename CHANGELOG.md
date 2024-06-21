@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## v2.4.0 - 06/21/2024
+
+* Improvement: Optimized the order we determine if we can skip checking restrictions for any givem content type. Thanks to PolyLang team for the suggestion.
+* Improvement: Better coverage for taxonomy query detection & filtering.
+* Improvement: Added inertnal function caches to drastically reduce overhead of checking restrictions. This may result in a significant performance increase for large sites or sites with many restrictions.
+* Improvement: Only generate list of page template types for rules when in the admin, saving potential DB query.
+* Tweak: Explicitly bail on rule checks for unknown Rest API endpoints as we don't currently fully support them. Filter below added to allow modifying this behavior.
+* Tweak: Remove upsell message when pro version is active.
+* Fix: Bug with restricting logged in users from content when the user had post_edit permissions for the post.
+* Developer: Added new internal globals variable handler instead of using `global $vars` directly. Set of helper functions available to get/set/push/pop global variables.
+* Developer: Made controllers more efficient by conditionally loading them only when needed.
+* Developer: Added new filter `content_control/determine_uknonwn_rest_api_intent` to allow 3rd party plugins to modify the REST API intent used in rule checks specifically for unknown intents.
+* Developer: Added new filter `content_control/request_is_excluded_rest_endpoint` to allow 3rd party plugins to exclude/include custom REST API endpoints from restriction checks.
+* Developer: Added new filter `'content_control/pre_query_can_be_ignored` allowing early return for known ignorable queries.
+* Developer: Added second paramter to the`content_control/get_rest_api_intent` filter pass the `$rest_route`.
+
 ## v2.3.0 - 05/23/2024
 
 * Improvement: Added more full coverage of all query types for for restriction handling. This helps catch more custom/3rd party AJAX search queries that were not being filtered.

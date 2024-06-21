@@ -135,9 +135,39 @@ function user_meets_requirements( $user_status, $user_roles = [], $role_match = 
  * @since 2.2.0 Added support for WP_Term_Query.
  */
 function query_can_be_ignored( $query = null ) {
-	if ( is_a( $query, '\WP_Query' ) ) {
+	// Early bypass.
+	$bypass = \apply_filters( 'content_control/pre_query_can_be_ignored', null, $query );
+	if ( null !== $bypass ) {
+		return $bypass;
+	}
+
+	if ( $query instanceof \WP_Query ) {
 		if ( $query->get( 'ignore_restrictions', false ) ) {
 			return true;
+		}
+
+		// Skip post types that are not public.
+		if ( $query->get( 'post_type' ) ) {
+			$post_types = $query->get( 'post_type' );
+
+			// If post type is a string, convert to array.
+			if ( is_string( $post_types ) ) {
+				$post_types = explode( ',', $post_types );
+			}
+
+			foreach ( $post_types as $post_type ) {
+				// Check if post type exists.
+				if ( ! post_type_exists( $post_type ) ) {
+					continue;
+				}
+
+				$post_type_object = get_post_type_object( $post_type );
+
+				// Check if post type is public.
+				if ( ! $post_type_object->public ) {
+					return true;
+				}
+			}
 		}
 
 		$post_types_to_ignore = \apply_filters( 'content_control/post_types_to_ignore', [
@@ -155,6 +185,30 @@ function query_can_be_ignored( $query = null ) {
 	}
 
 	if ( $query instanceof \WP_Term_Query ) {
+		// Skip taxonomies that are not public.
+		if ( isset( $query->query_vars['taxonomy'] ) ) {
+			$taxonomies = $query->query_vars['taxonomy'];
+
+			// If taxonomy is a string, convert to array.
+			if ( is_string( $taxonomies ) ) {
+				$taxonomies = explode( ',', $taxonomies );
+			}
+
+			foreach ( $taxonomies as $taxonomy ) {
+				// Check if taxonomy exists.
+				if ( ! taxonomy_exists( $taxonomy ) ) {
+					continue;
+				}
+
+				$taxonomy_object = get_taxonomy( $taxonomy );
+
+				// Check if taxonomy is public.
+				if ( ! $taxonomy_object->public ) {
+					return true;
+				}
+			}
+		}
+
 		// Ignore specific core taxonomies.
 		$taxonomies_to_ignore = \apply_filters( 'content_control/taxonomies_to_ignore', [
 			'nav_menu',

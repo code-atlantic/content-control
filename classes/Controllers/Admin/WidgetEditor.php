@@ -10,6 +10,7 @@
 
 namespace ContentControl\Controllers\Admin;
 
+use WP_Widget;
 use ContentControl\Base\Controller;
 
 use function ContentControl\Rules\allowed_user_roles;

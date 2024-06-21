@@ -25,6 +25,15 @@ class TheEventsCalendar extends Controller {
 	}
 
 	/**
+	 * Check if controller is enabled.
+	 *
+	 * @return bool
+	 */
+	public function controller_enabled() {
+		return class_exists( '\Tribe__Events__Main' ) && defined( 'TRIBE_EVENTS_FILE' );
+	}
+
+	/**
 	 * Handle restrictions on the main query.
 	 *
 	 * When the main query is set to be redirected, TEC was cancelling the redirect. Returing true will allow the redirect to happen.
@@ -32,11 +41,6 @@ class TheEventsCalendar extends Controller {
 	 * @return void
 	 */
 	public function restrict_main_query() {
-		// If TEC is active.
-		if ( ! class_exists( '\Tribe__Events__Main' ) && ! defined( 'TRIBE_EVENTS_FILE' ) ) {
-			return;
-		}
-
 		// If during the main query, a redirect is called on the events page, we need to allow it to happen.
 		add_filter( 'wp_redirect', function ( $location ) {
 			// Only call this filter within the redirect filter. Limiting the scope of the filter.

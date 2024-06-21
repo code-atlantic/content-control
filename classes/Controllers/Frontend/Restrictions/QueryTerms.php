@@ -95,11 +95,11 @@ class QueryTerms extends Controller {
 	 * @return \WP_Term[]
 	 */
 	public function restrict_query_terms( $terms, $taxonomy, $query_vars, $query ) {
-		if ( protection_is_disabled() ) {
+		if ( query_can_be_ignored( $query ) ) {
 			return $terms;
 		}
 
-		if ( query_can_be_ignored( $query ) ) {
+		if ( protection_is_disabled() ) {
 			return $terms;
 		}
 
