@@ -31,6 +31,6 @@ class Restrictions {
 	 */
 	public static function restricted_content() {
 		$restriction = get_applicable_restriction();
-		return false !== $restriction ? $restriction->to_v1_array() : false;
+		return false !== $restriction ? $restriction->get_message() : false;
 	}
 }
