@@ -44,7 +44,7 @@ function is_func_disabled( $func ) {
 function is_rest() {
 	static $is_rest;
 
-	if ( ! isset( $is_rest ) ) {
+	if ( isset( $is_rest ) ) {
 		return $is_rest;
 	}
 

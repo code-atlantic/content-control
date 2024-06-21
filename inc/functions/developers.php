@@ -9,6 +9,8 @@
 
 namespace ContentControl;
 
+use ContentControl\Models\Restriction;
+
 use function ContentControl\plugin;
 use function ContentControl\set_rules_query;
 use function ContentControl\is_rest;
@@ -66,7 +68,11 @@ function user_can_view_content( $content_id = null ) {
 	$restrictions = [];
 
 	if ( false === (bool) apply_filters( 'content_control/check_all_restrictions', false, $content_id ) ) {
-		// Fetch first applicable restriction.
+		/**
+		 * Fetch first applicable restriction.
+		 *
+		 * @var Restriction|false $restriction
+		 */
 		$restriction = get_applicable_restrictions( $content_id, true );
 
 		if ( $restriction ) {
@@ -74,7 +80,11 @@ function user_can_view_content( $content_id = null ) {
 			$restrictions[] = $restriction;
 		}
 	} else {
-		// Fetch all applicable restrictions.
+		/**
+		 * Fetch all applicable restrictions.
+		 *
+		 * @var Restriction[]|false $restrictions
+		 */
 		$restrictions = get_applicable_restrictions( $content_id, false );
 
 		if ( count( $restrictions ) ) {
@@ -94,7 +104,7 @@ function user_can_view_content( $content_id = null ) {
 	 *
 	 * @param bool $can_view Whether user can view content.
 	 * @param int|null $content_id Content ID.
-	 * @param \ContentControl\Models\Restriction[] $restrictions Restrictions.
+	 * @param Restriction[] $restrictions Restrictions.
 	 *
 	 * @return bool
 	 *
@@ -161,7 +171,7 @@ function get_applicable_restrictions( $content_id = null, $single = true ) {
  *
  * @param int|null $content_id Content ID.
  *
- * @return \ContentControl\Models\Restriction|false
+ * @return Restriction|false
  *
  * @since 2.0.0
  */
@@ -174,7 +184,7 @@ function get_applicable_restriction( $content_id = null ) {
  *
  * @param int|null $content_id Content ID.
  *
- * @return \ContentControl\Models\Restriction[]
+ * @return Restriction[]
  *
  * @since 2.0.11
  */
@@ -187,7 +197,7 @@ function get_all_applicable_restrictions( $content_id = null ) {
  *
  * @param \WP_Query $query Query object.
  *
- * @return array<array{restriction:\ContentControl\Models\Restriction,post_ids:int[]}>|false
+ * @return array<array{restriction:Restriction,post_ids:int[]}>|false
  *
  * @since 2.0.0
  */
@@ -258,7 +268,7 @@ function get_restriction_matches_for_queried_posts( $query ) {
  *
  * @param \WP_Term_Query $query Query object.
  *
- * @return array<array{restriction:\ContentControl\Models\Restriction,term_ids:int[]}>|false
+ * @return array<array{restriction:Restriction,term_ids:int[]}>|false
  *
  * @since 2.2.0
  */

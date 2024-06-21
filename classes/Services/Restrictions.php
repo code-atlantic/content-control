@@ -40,7 +40,7 @@ class Restrictions {
 	/**
 	 * Simple internal request based cache.
 	 *
-	 * @var array<string,Restriction[]>
+	 * @var array<int,array<string,Restriction[]|false>>
 	 */
 	public $restriction_matches_cache = [];
 
@@ -181,6 +181,11 @@ class Restrictions {
 				}
 			}
 
+			// If no matches, return false.
+			if ( empty( $matches ) ) {
+				$matches = false;
+			}
+
 			// Cache the matches.
 			$this->set_restriction_matches_in_cache( $content_id, $matches, $single );
 		}
@@ -302,6 +307,19 @@ class Restrictions {
 	}
 
 	/**
+	 * Prime restriction matches cache.
+	 *
+	 * @param array<int,array<string,Restriction[]|false>> $restriction_matches_cache Restriction matches cache.
+	 *
+	 * @return void
+	 *
+	 * @since 2.4.0
+	 */
+	public function prime_restriction_matches_cache( $restriction_matches_cache = null ) {
+		$this->restriction_matches_cache = $restriction_matches_cache ?? $this->restriction_matches_cache;
+	}
+
+	/**
 	 * Get matches from cache.
 	 *
 	 * @param int|null $content_id Content ID.
@@ -321,8 +339,8 @@ class Restrictions {
 		$matches = $this->restriction_matches_cache[ $single ][ $cache_key ] ?? null;
 
 		// If no match for single, fallback on non-single and return that instead.
-		if ( $single && is_null( $matches ) && isset( $this->restriction_matches_cache[ ! $single ][ $cache_key ] ) ) {
-			$matches = $this->restriction_matches_cache[ ! $single ][ $cache_key ] ?? null;
+		if ( $single && is_null( $matches ) && isset( $this->restriction_matches_cache[ false ][ $cache_key ] ) ) {
+			$matches = $this->restriction_matches_cache[ false ][ $cache_key ];
 		}
 
 		if ( is_null( $matches ) ) {
@@ -331,13 +349,14 @@ class Restrictions {
 			 *
 			 * @param Restriction[]|false|null $matches Restriction cache for the given content ID.
 			 * @param string                   $cache_key Cache key.
+			 * @param int|null                 $content_id Content ID.
 			 * @param Restrictions             $restriction_service Restrictions instance.
 			 *
 			 * @return Restriction[]|false|null
 			 *
 			 * @since 2.4.0
 			 */
-			$matches = apply_filters( 'content_control/get_restriction_matches_from_cache', null, $cache_key . ( $single ? '--single' : '' ), $this, $content_id );
+			$matches = apply_filters( 'content_control/get_restriction_matches_from_cache', null, $cache_key . ( $single ? '--single' : '' ), $content_id, $this );
 
 			// If we have a match, store it in memory rather than reaching out to object DB again.
 			if ( ! is_null( $matches ) ) {
@@ -351,9 +370,9 @@ class Restrictions {
 	/**
 	 * Set in cache for matches.
 	 *
-	 * @param int|null                        $content_id Content ID.
-	 * @param Restriction|Restriction[]|false $matches Value to set.
-	 * @param bool                            $single    Whether to return a single match or an array of matches.
+	 * @param int|null            $content_id Content ID.
+	 * @param Restriction[]|false $matches Value to set.
+	 * @param bool                $single    Whether to return a single match or an array of matches.
 	 *
 	 * @return void
 	 */
@@ -367,19 +386,15 @@ class Restrictions {
 		/**
 		 * Allow persisting to cache.
 		 *
-		 * @param int|null      $content_id Content ID.
-		 * @param array<int|null,Restriction|Restriction[]|false> $matches Value to set.
-		 * @param bool          $single Whether to return a single match or an array of matches.
-		 * @param Restrictions  $restriction_service Restrictions instance.
+		 * @param string                $cache_key Cache key.
+		 * @param Restriction[]|false   $matches Value to set.
+		 * @param int|null              $content_id Content ID.
+		 * @param Restrictions          $restriction_service Restrictions instance.
 		 *
 		 * @return void
 		 *
 		 * @since 2.4.0
-		 *
-		 * @return array<string,mixed>
-		 *
-		 * @since 2.4.0
 		 */
-		do_action( 'content_control/set_restriction_matches_in_cache', $cache_key . ( $single ? '--single' : '' ), $matches, $this );
+		do_action( 'content_control/set_restriction_matches_in_cache', $cache_key . ( $single ? '--single' : '' ), $matches, $content_id, $this );
 	}
 }
