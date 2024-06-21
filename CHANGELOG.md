@@ -4,6 +4,7 @@
 
 * Improvement: Optimized the order we determine if we can skip checking restrictions for any givem content type. Thanks to PolyLang team for the suggestion.
 * Improvement: Better coverage for taxonomy query detection & filtering.
+* Improvement: Added inertnal function caches to drastically reduce overhead of checking restrictions. This may result in a significant performance increase for large sites or sites with many restrictions.
 * Improvement: Only generate list of page template types for rules when in the admin, saving potential DB query.
 * Tweak: Explicitly bail on rule checks for unknown Rest API endpoints as we don't currently fully support them. Filter below added to allow modifying this behavior.
 * Tweak: Remove upsell message when pro version is active.
