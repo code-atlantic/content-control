@@ -466,7 +466,7 @@ function get_rest_api_intent() {
 	$rest_route = null;
 
 	if ( is_null( $intent ) ) {
-		$result = [
+		$intent = [
 			'type'   => 'unknown',
 			'name'   => '',
 			'id'     => 0,
@@ -485,35 +485,35 @@ function get_rest_api_intent() {
 				$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
 
 				// If we have a post type or taxonomy, the name is the first part (posts, categories).
-				$result['name'] = sanitize_key( $endpoint_parts[0] );
+				$intent['name'] = sanitize_key( $endpoint_parts[0] );
 
 				if ( count( $endpoint_parts ) > 1 ) {
 					// If we have an ID, then the second part is the ID.
-					$result['id'] = absint( $endpoint_parts[1] );
+					$intent['id'] = absint( $endpoint_parts[1] );
 				} else {
 					// If we have no ID, then we are either searching or indexing.
-					$result['index']  = true;
-					$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+					$intent['index']  = true;
+					$intent['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
 				}
 
 				// Build a matching route.
-				$endpoint_route = "/wp/v2/{$result['name']}";
+				$endpoint_route = "/wp/v2/{$intent['name']}";
 
 				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
-					$result['type'] = 'post_type';
+					$intent['type'] = 'post_type';
 				}
 
 				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
-					$result['type'] = 'taxonomy';
+					$intent['type'] = 'taxonomy';
 				}
 			} else {
 				// We currently have no way of really dealing with non WP REST requests.
 				// This filter allows us or others to correctly handle these requests in the future.
-				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $result, $rest_route );
+				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $intent, $rest_route );
 			}
 		}
 
-		set_global( 'rest_intent', $result );
+		set_global( 'rest_intent', $intent );
 	}
 
 	return apply_filters( 'content_control/get_rest_api_intent', $intent, $rest_route );
