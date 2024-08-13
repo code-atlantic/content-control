@@ -157,6 +157,10 @@ class PostContent extends Controller {
 
 		$restriction = get_applicable_restriction();
 
+		if ( false === $restriction ) {
+			return $post_excerpt;
+		}
+
 		/**
 		 * Filter the excerpt to display when a post is restricted.
 		 *
