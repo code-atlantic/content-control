@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Improvement: Change rule processing to be more explicit for each context/rule type, improving performance & reliability of how rules are handled in some edge cases.
+* Fix: Error due to invalid return value variable name.
+
 ## v2.4.0 - 06/21/2024
 
 * Improvement: Optimized the order we determine if we can skip checking restrictions for any givem content type. Thanks to PolyLang team for the suggestion.
