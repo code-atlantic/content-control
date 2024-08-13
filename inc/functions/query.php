@@ -111,9 +111,24 @@ function reset_query_context() {
  *  3. Alternate query posts are checked in the_posts or pre_get_posts & ! $wp_query->is_main_query().
  *  4. Blocks are checked in the content_control/should_hide_block filter.
  *
+ *  switch ( current_query_context() ) {
+ *      // Catch all known contexts.
+ *      case 'main':
+ *      case 'main/blocks':
+ *      case 'main/posts':
+ *      case 'posts':
+ *      case 'blocks':
+ *      case 'restapi/posts':
+ *      case 'restapi':
+ *      case 'restapi/terms':
+ *      case 'terms':
+ *      case 'unknown':
+ *          return false;
+ *  }
+ *
  * @param \WP_Query|null $query Query object.
  *
- * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
+ * @return 'main'|'main/posts'|'posts'|'main/blocks'|'blocks'|'restapi'|'restapi/posts'|'restapi/terms'|'terms'|'unknown'
  */
 function current_query_context( $query = null ) {
 	if ( ! global_is_empty( 'current_query_context' ) ) {

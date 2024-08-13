@@ -17,6 +17,9 @@ use function ContentControl\current_query_context;
 use function ContentControl\get_rest_api_intent;
 use function ContentControl\Rules\allowed_user_roles;
 
+// TODO add support for "Main Query Only" option for Rules & rule processing.
+
+
 /**
  * Checks if a user has one of the selected roles.
  *
@@ -68,9 +71,9 @@ function user_has_role() {
  * @return bool
  *
  * @since 2.0.0
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_home_page() {
-	global $post;
 
 	$context = current_query_context();
 
@@ -79,15 +82,31 @@ function content_is_home_page() {
 		case 'main':
 		case 'main/blocks':
 			$main_query = get_main_wp_query();
+
 			return $main_query->is_front_page();
 
-		// Check based on current post.
-		default:
+		// Check based on current post & context.
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
+		case 'restapi/posts':
+			global $post;
+
 			$page_id = 'page' === get_option( 'show_on_front' ) && get_option( 'page_on_front' ) ? get_option( 'page_on_front' ) : -1;
 			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
 
 			return (int) $page_id === (int) $post_id;
+
+		// Catch all known contexts.
+		case 'terms':
+		case 'restapi':
+		case 'restapi/terms':
+		case 'unknown':
+			return false;
 	}
+
+	// Catch all unknown contexts.
+	return false;
 }
 
 /**
@@ -98,10 +117,9 @@ function content_is_home_page() {
  * @return bool
  *
  * @since 2.0.0
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_blog_index() {
-	global $post;
-
 	$context = current_query_context();
 
 	switch ( $context ) {
@@ -109,15 +127,30 @@ function content_is_blog_index() {
 		case 'main':
 		case 'main/blocks':
 			$main_query = get_main_wp_query();
+
 			return $main_query->is_home();
 
-		// Check based on current post.
-		default:
+		// Check based on current post & context.
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
+		case 'restapi/posts':
+			global $post;
+
 			$page_for_posts = 'page' === get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ? get_option( 'page_for_posts' ) : -1;
 			$post_id        = $post && is_a( $post, '\WP_Post' ) ? $post->ID : 0;
 
 			return (int) $page_for_posts === (int) $post_id;
+
+		// Catch all known contexts.
+		case 'restapi':
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
+
+	return false;
 }
 
 /**
@@ -127,6 +160,7 @@ function content_is_blog_index() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_post_type_archive() {
 	$context = current_query_context();
@@ -136,7 +170,8 @@ function content_is_post_type_archive() {
 	$post_type = get_rule_extra( 'post_type', '' );
 
 	switch ( $context ) {
-		default:
+		case 'main':
+		case 'main/blocks':
 			// For posts we need to check a few different things.
 			if ( 'post' === $post_type ) {
 				return ( $query->is_home() || $query->is_category() || $query->is_tag() || $query->is_date() || $query->is_author() );
@@ -163,10 +198,18 @@ function content_is_post_type_archive() {
 
 			return true;
 
+		// This is for main query only.
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
 		case 'restapi/posts':
-			// This is for main query only.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
 			return false;
 	}
+
+	return false;
 }
 
 /**
@@ -176,6 +219,7 @@ function content_is_post_type_archive() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_post_type() {
 	$context   = current_query_context();
@@ -187,7 +231,6 @@ function content_is_post_type() {
 			$main_query = get_main_wp_query();
 			return $main_query->is_singular( $post_type );
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
@@ -217,7 +260,15 @@ function content_is_post_type() {
 			global $post;
 
 			return $post && $post->post_type === $post_type;
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
+
+	return false;
 }
 
 /**
@@ -227,6 +278,7 @@ function content_is_post_type() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_selected_post() {
 	global $post;
@@ -247,7 +299,6 @@ function content_is_selected_post() {
 			$main_query = get_main_wp_query();
 			return $main_query->is_singular( $post_type ) && in_array( $main_query->get_queried_object_id(), $selected, true );
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
@@ -272,7 +323,15 @@ function content_is_selected_post() {
 			}
 
 			return in_array( $post_id, $selected, true );
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
+
+	return false;
 }
 
 /**
@@ -282,6 +341,7 @@ function content_is_selected_post() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_child_of_post() {
 	global $post;
@@ -310,7 +370,6 @@ function content_is_child_of_post() {
 			}
 			break;
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
@@ -336,6 +395,12 @@ function content_is_child_of_post() {
 				$the_post = get_post( (int) $rest_intent['id'] );
 			}
 			break;
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			break;
 	}
 
 	if ( ! $the_post ) {
@@ -358,6 +423,7 @@ function content_is_child_of_post() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_ancestor_of_post() {
 	global $post;
@@ -386,7 +452,6 @@ function content_is_ancestor_of_post() {
 			}
 			break;
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
@@ -413,6 +478,12 @@ function content_is_ancestor_of_post() {
 			}
 
 			break;
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
 
 	// Ancestors of the current page.
@@ -433,6 +504,7 @@ function content_is_ancestor_of_post() {
  * @return bool
  *
  * @since 2.0.0
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_post_with_template() {
 
@@ -450,10 +522,10 @@ function content_is_post_with_template() {
 			$page_template = get_page_template_slug( $main_query->get_queried_object_id() );
 			break;
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
+		case 'restapi/posts':
 			global $post;
 
 			$post_id = $post && is_a( $post, '\WP_Post' ) ? $post->ID : null;
@@ -462,6 +534,26 @@ function content_is_post_with_template() {
 				$page_template = get_page_template_slug( $post_id );
 			}
 			break;
+
+		case 'restapi':
+			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] ) {
+				return false;
+			}
+
+			$the_post = $rest_intent['id'] > 0 ? get_post( (int) $rest_intent['id'] ) : null;
+
+			if ( $the_post ) {
+				$page_template = get_page_template_slug( $the_post );
+			}
+			break;
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
 
 	if ( empty( $selected ) ) {
@@ -484,6 +576,7 @@ function content_is_post_with_template() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_post_with_tax_term() {
 	global $post;
@@ -533,7 +626,6 @@ function content_is_post_with_tax_term() {
 			}
 			break;
 
-		default:
 		case 'main/posts':
 		case 'posts':
 		case 'blocks':
@@ -541,16 +633,23 @@ function content_is_post_with_tax_term() {
 				return false;
 			}
 			break;
+
+		// Catch all known contexts.
+		case 'restapi/terms':
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
 
-	switch ( $taxonomy ) {
-		case 'category':
-			return \has_category( $selected, $post_id );
-		case 'post_tag':
-			return \has_tag( $selected, $post_id );
-		default:
-			return \has_term( $selected, $taxonomy, $post_id );
+	if ( 'category' === $taxonomy ) {
+		return \has_category( $selected, $post_id );
 	}
+
+	if ( 'post_tag' === $taxonomy ) {
+		return \has_tag( $selected, $post_id );
+	}
+
+	return \has_term( $selected, $taxonomy, $post_id );
 }
 
 /**
@@ -560,6 +659,9 @@ function content_is_post_with_tax_term() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
+ *
+ * @todo This needs to allow for option to check main query only.
  */
 function content_is_taxonomy_archive() {
 	// Get settings from the current rule.
@@ -583,19 +685,32 @@ function content_is_taxonomy_archive() {
 			// This is a term query, so we we aren't checking against a taxonomy archive.
 			return false;
 
-		default:
+		// Hanlde main query only.
+		case 'main':
+		case 'main/blocks':
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
+		case 'restapi/posts':
+			// TODO This needs to allow for option to check main query only.
 			$main_query = get_main_wp_query();
 
 			// No context needed, always looking for main query only.
-			switch ( $taxonomy ) {
-				case 'category':
-					return $main_query->is_category();
-				case 'post_tag':
-					return $main_query->is_tag();
-				default:
-					return $main_query->is_tax( $taxonomy );
+			if ( 'category' === $taxonomy ) {
+				return $main_query->is_category();
+			} elseif ( 'post_tag' === $taxonomy ) {
+				return $main_query->is_tag();
 			}
+
+			return $main_query->is_tax( $taxonomy );
+
+		// Catch all known contexts.
+		case 'terms':
+		case 'unknown':
+			return false;
 	}
+
+	return false;
 }
 
 /**
@@ -605,6 +720,7 @@ function content_is_taxonomy_archive() {
  *
  * @since 2.0.0
  * @since 2.2.0 Added support for REST API.
+ * @since 2.5.0 Use explicit contexts.
  */
 function content_is_selected_term() {
 	// Get settings from the current rule.
@@ -619,8 +735,9 @@ function content_is_selected_term() {
 
 	// Handle detection of rest taxonomy endpoint.
 	switch ( $context ) {
-		default:
-			// Get main query for 'main' context.
+		case 'main':
+		case 'main/blocks':
+				// Get main query for 'main' context.
 			$main_query = get_main_wp_query();
 
 			// Handle everything else.
@@ -667,6 +784,13 @@ function content_is_selected_term() {
 			}
 
 			// Always return false if no ID is set.
+			return false;
+
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
+		case 'restapi/posts':
+		case 'unknown':
 			return false;
 	}
 
