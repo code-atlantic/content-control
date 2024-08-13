@@ -78,6 +78,31 @@ function get_block_types() {
 }
 
 /**
+ * Delete block types cache.
+ *
+ * @return void
+ */
+function delete_block_types_cache() {
+	\delete_option( 'content_control_known_blockTypes' );
+}
+
+/**
+ * Purge block types cache on update.
+ *
+ * @param string $old_version The old version.
+ * @param string $new_version The new version.
+ *
+ * @return void
+ */
+function purge_block_types_cache_on_update( $old_version, $new_version ) {
+	if ( version_compare( '2.5.0', $new_version, '>=' ) && version_compare( $old_version, '2.5.0', '<' ) ) {
+		delete_block_types_cache();
+	}
+}
+
+add_action( 'content_control/update_version', 'purge_block_types_cache_on_update' )
+
+/**
  * Sanitize expetced block type data.
  *
  * @param array<string,string|string[]> $type Block type definition.

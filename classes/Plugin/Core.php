@@ -92,9 +92,10 @@ class Core {
 			 *
 			 * Note: Old version is still available in options.
 			 *
-			 * @param string $version The new version.
+			 * @param string $old_version The old version.
+			 * @param string $new_version The new version.
 			 */
-			do_action( "{$this->get( 'option_prefix' )}/update_version", $data['version'] );
+			do_action( "{$this->get( 'option_prefix' )}/update_version", $data['version'], $version );
 
 			// Save Upgraded From option.
 			$data['upgraded_from'] = $data['version'];
