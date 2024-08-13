@@ -209,15 +209,26 @@ class Output extends QM_Output_Html {
 			if ( 'main' === $post_id ) {
 				continue;
 			}
-			$post = get_post( $post_id );
+
+			if ( strpos( $post_data['context'], 'terms' ) !== false ) {
+				$term = get_term( $post_id );
+				$name = $term->name;
+				$type = 'TAX: ' . $term->taxonomy;
+			} elseif ( strpos( $post_data['context'], 'posts' ) !== false ) {
+				$post = get_post( $post_id );
+				$name = $post->post_title;
+				$type = 'PT: ' . $post->post_type;
+			} else {
+				continue;
+			}
 
 			$user_can_view = $post_data['user_can_view'] ? 'Yes' : 'No';
 			$restrictions  = $post_data['restrictions'] ? $post_data['restrictions'] : [];
 
 			echo '<tr>';
 			echo '<td>' . esc_html( $post_id ) . '</td>';
-			echo '<td>' . esc_html( $post->post_title ) . '</td>';
-			echo '<td>' . esc_html( $post->post_type ) . '</td>';
+			echo '<td>' . esc_html( $name ) . '</td>';
+			echo '<td>' . esc_html( $type ) . '</td>';
 			echo '<td>' . esc_html( $post_data['context'] ) . '</td>';
 			echo '<td>' . esc_html( $user_can_view ) . '</td>';
 
