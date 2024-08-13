@@ -100,7 +100,7 @@ function purge_block_types_cache_on_update( $old_version, $new_version ) {
 	}
 }
 
-add_action( 'content_control/update_version', 'purge_block_types_cache_on_update' )
+add_action( 'content_control/update_version', __NAMESPACE__ . '\\purge_block_types_cache_on_update', 10, 2 );
 
 /**
  * Sanitize expetced block type data.
