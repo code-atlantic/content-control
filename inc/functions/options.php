@@ -117,7 +117,7 @@ function update_block_types( $incoming_block_types = [] ) {
 	// Flatten values to a simple array for storage.
 	$block_types = array_values( $block_types );
 
-	\update_option( 'content_control_known_blockTypes', $block_types );
+	\update_option( 'content_control_known_blockTypes', $block_types, false );
 }
 
 /**
