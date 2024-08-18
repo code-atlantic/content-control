@@ -5,8 +5,8 @@ Author URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
-Tested up to: 6.6.0
-Stable tag: 2.4.0
+Tested up to: 6.6.1
+Stable tag: 2.5.0
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -105,7 +105,14 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 == Changelog ==
 
-= v2.4.0 - Performance Matters - 06/21/2024
+= v2.5.0 - Restriction Check Improvements - 08/18/2024 =
+
+* Improvement: Change rule processing to be more explicit for each context/rule type, improving performance & reliability of how rules are handled in some edge cases.
+* Improvement: Update `content_control_known_blockTypes` option to not be autoloaded.
+* Improvement: Update QueryMonitor output to differentiate between terms & posts.
+* Fix: Error due to invalid return value variable name.
+
+= v2.4.0 - Performance Matters - 06/21/2024 =
 
 * Improvement: Optimized the order we determine if we can skip checking restrictions for any givem content type. Thanks to PolyLang team for the suggestion.
 * Improvement: Better coverage for taxonomy query detection & filtering.

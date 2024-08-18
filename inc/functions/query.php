@@ -111,9 +111,24 @@ function reset_query_context() {
  *  3. Alternate query posts are checked in the_posts or pre_get_posts & ! $wp_query->is_main_query().
  *  4. Blocks are checked in the content_control/should_hide_block filter.
  *
+ *  switch ( current_query_context() ) {
+ *      // Catch all known contexts.
+ *      case 'main':
+ *      case 'main/blocks':
+ *      case 'main/posts':
+ *      case 'posts':
+ *      case 'blocks':
+ *      case 'restapi/posts':
+ *      case 'restapi':
+ *      case 'restapi/terms':
+ *      case 'terms':
+ *      case 'unknown':
+ *          return false;
+ *  }
+ *
  * @param \WP_Query|null $query Query object.
  *
- * @return string 'main', 'main/posts', 'posts', 'main/blocks', 'blocks`.
+ * @return 'main'|'main/posts'|'posts'|'main/blocks'|'blocks'|'restapi'|'restapi/posts'|'restapi/terms'|'terms'|'unknown'
  */
 function current_query_context( $query = null ) {
 	if ( ! global_is_empty( 'current_query_context' ) ) {
@@ -417,6 +432,9 @@ function reset_term_object() {
 /**
  * Get the endpoints for a registered post types.
  *
+ * @since 2.2.0
+ * @since 2.5.0 Use `rest_get_route_for_post_type_items()` instead of `get_post_type_object()->rest_base`.
+ *
  * @return array<string,string>
  */
 function get_post_type_endpoints() {
@@ -424,8 +442,20 @@ function get_post_type_endpoints() {
 	$post_types = get_post_types();
 
 	foreach ( $post_types as $post_type ) {
-		$object                                     = get_post_type_object( $post_type );
-		$endpoints[ "/wp/v2/{$object->rest_base}" ] = $post_type;
+		$endpoint = rest_get_route_for_post_type_items( $post_type );
+
+		// Possible if show_in_rest is false or if the post type is not registered.
+		if ( '' === $endpoint ) {
+			$object = get_post_type_object( $post_type );
+
+			if ( ! $object ) {
+				continue;
+			}
+
+			$endpoint = "/wp/v2/{$object->rest_base}";
+		}
+
+		$endpoints[ $endpoint ] = $post_type;
 	}
 
 	return $endpoints;
@@ -434,6 +464,9 @@ function get_post_type_endpoints() {
 /**
  * Get the endpoints for a registered taxonomies.
  *
+ * @since 2.2.0
+ * @since 2.5.0 Use `rest_get_route_for_taxonomy_items()` instead of `get_taxonomy_object()->rest_base`.
+ *
  * @return array<string,string>
  */
 function get_taxonomy_endpoints() {
@@ -441,13 +474,20 @@ function get_taxonomy_endpoints() {
 	$taxonomies = get_taxonomies();
 
 	foreach ( $taxonomies as $taxonomy ) {
-		$object = get_taxonomy( $taxonomy );
+		$endpoint = rest_get_route_for_taxonomy_items( $taxonomy );
 
-		if ( ! $object ) {
-			continue;
+		// Possible if show_in_rest is false or if the taxonomy is not registered.
+		if ( '' === $endpoint ) {
+			$object = get_taxonomy( $taxonomy );
+
+			if ( ! $object ) {
+				continue;
+			}
+
+			$endpoint = "/wp/v2/{$object->rest_base}";
 		}
 
-		$endpoints[ "/wp/v2/{$object->rest_base}" ] = $taxonomy;
+		$endpoints[ $endpoint ] = $taxonomy;
 	}
 
 	return $endpoints;
@@ -455,6 +495,10 @@ function get_taxonomy_endpoints() {
 
 /**
  * Get the intent of the current REST API request.
+ *
+ * @since 2.2.0
+ * @since 2.3.0 - Added filter to allow overriding the intent.
+ * @since 2.4.0 - Added second paramter to the`content_control/get_rest_api_intent` filter pass the `$rest_route`.
  *
  * @return array{type:'post_type'|'taxonomy'|'unknown',name:string,id:int,index:bool,search:string|false}
  */
@@ -466,7 +510,7 @@ function get_rest_api_intent() {
 	$rest_route = null;
 
 	if ( is_null( $intent ) ) {
-		$result = [
+		$intent = [
 			'type'   => 'unknown',
 			'name'   => '',
 			'id'     => 0,
@@ -485,35 +529,35 @@ function get_rest_api_intent() {
 				$endpoint_parts = explode( '/', str_replace( '/wp/v2/', '', $rest_route ) );
 
 				// If we have a post type or taxonomy, the name is the first part (posts, categories).
-				$result['name'] = sanitize_key( $endpoint_parts[0] );
+				$intent['name'] = sanitize_key( $endpoint_parts[0] );
 
 				if ( count( $endpoint_parts ) > 1 ) {
 					// If we have an ID, then the second part is the ID.
-					$result['id'] = absint( $endpoint_parts[1] );
+					$intent['id'] = absint( $endpoint_parts[1] );
 				} else {
 					// If we have no ID, then we are either searching or indexing.
-					$result['index']  = true;
-					$result['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+					$intent['index']  = true;
+					$intent['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
 				}
 
 				// Build a matching route.
-				$endpoint_route = "/wp/v2/{$result['name']}";
+				$endpoint_route = "/wp/v2/{$intent['name']}";
 
 				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
-					$result['type'] = 'post_type';
+					$intent['type'] = 'post_type';
 				}
 
 				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
-					$result['type'] = 'taxonomy';
+					$intent['type'] = 'taxonomy';
 				}
 			} else {
 				// We currently have no way of really dealing with non WP REST requests.
 				// This filter allows us or others to correctly handle these requests in the future.
-				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $result, $rest_route );
+				apply_filters( 'content_control/determine_uknonwn_rest_api_intent', $intent, $rest_route );
 			}
 		}
 
-		set_global( 'rest_intent', $result );
+		set_global( 'rest_intent', $intent );
 	}
 
 	return apply_filters( 'content_control/get_rest_api_intent', $intent, $rest_route );
