@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.5.0 - 08/18/2024
+
 * Improvement: Change rule processing to be more explicit for each context/rule type, improving performance & reliability of how rules are handled in some edge cases.
 * Improvement: Update `content_control_known_blockTypes` option to not be autoloaded.
 * Improvement: Update QueryMonitor output to differentiate between terms & posts.
