@@ -432,6 +432,9 @@ function reset_term_object() {
 /**
  * Get the endpoints for a registered post types.
  *
+ * @since 2.2.0
+ * @since 2.5.0 Use `rest_get_route_for_post_type_items()` instead of `get_post_type_object()->rest_base`.
+ *
  * @return array<string,string>
  */
 function get_post_type_endpoints() {
@@ -439,8 +442,20 @@ function get_post_type_endpoints() {
 	$post_types = get_post_types();
 
 	foreach ( $post_types as $post_type ) {
-		$object                                     = get_post_type_object( $post_type );
-		$endpoints[ "/wp/v2/{$object->rest_base}" ] = $post_type;
+		$endpoint = rest_get_route_for_post_type_items( $post_type );
+
+		// Possible if show_in_rest is false or if the post type is not registered.
+		if ( '' === $endpoint ) {
+			$object = get_post_type_object( $post_type );
+
+			if ( ! $object ) {
+				continue;
+			}
+
+			$endpoint = "/wp/v2/{$object->rest_base}";
+		}
+
+		$endpoints[ $endpoint ] = $post_type;
 	}
 
 	return $endpoints;
@@ -449,6 +464,9 @@ function get_post_type_endpoints() {
 /**
  * Get the endpoints for a registered taxonomies.
  *
+ * @since 2.2.0
+ * @since 2.5.0 Use `rest_get_route_for_taxonomy_items()` instead of `get_taxonomy_object()->rest_base`.
+ *
  * @return array<string,string>
  */
 function get_taxonomy_endpoints() {
@@ -456,13 +474,20 @@ function get_taxonomy_endpoints() {
 	$taxonomies = get_taxonomies();
 
 	foreach ( $taxonomies as $taxonomy ) {
-		$object = get_taxonomy( $taxonomy );
+		$endpoint = rest_get_route_for_taxonomy_items( $taxonomy );
 
-		if ( ! $object ) {
-			continue;
+		// Possible if show_in_rest is false or if the taxonomy is not registered.
+		if ( '' === $endpoint ) {
+			$object = get_taxonomy( $taxonomy );
+
+			if ( ! $object ) {
+				continue;
+			}
+
+			$endpoint = "/wp/v2/{$object->rest_base}";
 		}
 
-		$endpoints[ "/wp/v2/{$object->rest_base}" ] = $taxonomy;
+		$endpoints[ $endpoint ] = $taxonomy;
 	}
 
 	return $endpoints;
@@ -470,6 +495,10 @@ function get_taxonomy_endpoints() {
 
 /**
  * Get the intent of the current REST API request.
+ *
+ * @since 2.2.0
+ * @since 2.3.0 - Added filter to allow overriding the intent.
+ * @since 2.4.0 - Added second paramter to the`content_control/get_rest_api_intent` filter pass the `$rest_route`.
  *
  * @return array{type:'post_type'|'taxonomy'|'unknown',name:string,id:int,index:bool,search:string|false}
  */
