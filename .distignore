@@ -20,6 +20,7 @@
 .jshintrc
 .npmrc
 .nvmrc
+.php-version
 .phpcs.xml.dist
 .phpstorm.meta.php
 .prettierrc.js
@@ -29,8 +30,8 @@
 .travis.yml
 .wp-env.json
 apigen.neon
-babel.config.js
 CHANGELOG.md
+babel.config.js
 composer.json
 composer.lock
 gulpfile.js
