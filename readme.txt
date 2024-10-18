@@ -5,7 +5,7 @@ Author URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Stable tag: 2.5.0
 Requires PHP: 7.4
 License: GPLv3 (or later)
