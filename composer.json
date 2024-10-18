@@ -3,11 +3,15 @@
 	"version": "2.5.0",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
+	"homepage": "https://contentcontrolplugin.com/",
+	"support": {
+		"issues": "https://contentcontrolplugin.com/support"
+	},
 	"minimum-stability": "dev",
 	"require": {
 		"composer/installers": "~2.2.0",
-		"pimple/pimple": "~3.5",
-		"trustedlogin/client": "v1.7.0"
+		"pimple/pimple": "~3.5.0",
+		"trustedlogin/client": "v1.8.0"
 	},
 	"require-dev": {
 		"code-atlantic/coding-standards": "^1.1.0",
@@ -32,19 +36,6 @@
 	"autoload-dev": {
 		"psr-4": {
 			"ContentControl\\Tests\\": "tests/unit/"
-		}
-	},
-	"extra": {
-		"strauss": {
-			"target_directory": "/vendor-prefixed/",
-			"namespace_prefix": "ContentControl\\Vendor\\",
-			"classmap_prefix": "ContentControl_",
-			"constant_prefix": "CONTENTCONTROL_",
-			"packages": [
-				"pimple/pimple",
-				"trustedlogin/client"
-			],
-			"delete_vendor_packages": true
 		}
 	},
 	"prefer-stable": true,
@@ -81,6 +72,19 @@
 		"test:unit": "phpunit --configuration tests/unit/phpunit.xml --no-coverage",
 		"coverage": "phpunit --configuration tests/unit/phpunit.xml --coverage-html coverage/unit/",
 		"test:watch": "phpunit-watcher watch < /dev/tty"
+	},
+	"extra": {
+		"strauss": {
+			"target_directory": "/vendor-prefixed/",
+			"namespace_prefix": "ContentControl\\Vendor\\",
+			"classmap_prefix": "ContentControl_",
+			"constant_prefix": "CONTENTCONTROL_",
+			"packages": [
+				"pimple/pimple",
+				"trustedlogin/client"
+			],
+			"delete_vendor_packages": true
+		}
 	},
 	"config": {
 		"allow-plugins": {
