@@ -127,17 +127,17 @@ const useLicense = () => {
 
 	const licenseLevel = useMemo( () => {
 		// Price ID as an int
-		let price_id = licenseStatus?.price_id ?? null;
+		let priceId = licenseStatus?.price_id ?? null;
 
-		if ( null === price_id ) {
+		if ( null === priceId ) {
 			return -1;
 		}
 
-		if ( 'string' === typeof price_id ) {
-			price_id = parseInt( price_id, 10 );
+		if ( 'string' === typeof priceId ) {
+			priceId = parseInt( priceId, 10 );
 		}
 
-		switch ( price_id ) {
+		switch ( priceId ) {
 			default:
 				return -1;
 
@@ -149,7 +149,7 @@ const useLicense = () => {
 			case 2:
 			case 3:
 			case 4:
-				return price_id;
+				return priceId;
 		}
 	}, [ licenseStatus?.price_id ] );
 
