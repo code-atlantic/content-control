@@ -66,6 +66,7 @@ export interface RestrictionSettings {
 	showExcerpts: boolean;
 	overrideMessage: boolean;
 	customMessage: string;
+	showInSearch: boolean;
 	conditions: Query;
 	[ key: string ]: any;
 }

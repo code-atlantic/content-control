@@ -9,9 +9,11 @@ import {
 	CheckboxControl,
 	RadioControl,
 	TextareaControl,
+	Popover,
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { addFilter, applyFilters } from '@wordpress/hooks';
+import { useState } from 'react';
 
 import {
 	protectionMethodOptions,
@@ -194,8 +196,18 @@ addFilter(
 					),
 				},
 				{
-					id: 'archiveHandling',
+					id: 'showInSearch',
 					priority: 9,
+					component: (
+						<SearchWarning
+							settings={ settings }
+							updateSettings={ updateSettings }
+						/>
+					),
+				},
+				{
+					id: 'archiveHandling',
+					priority: 10,
 					component: (
 						<RadioControl
 							label={ __(
@@ -219,7 +231,7 @@ addFilter(
 				},
 				{
 					id: 'archiveReplacementPage',
-					priority: 10,
+					priority: 11,
 					component: (
 						<EntitySelectControl
 							label={ __(
@@ -245,7 +257,7 @@ addFilter(
 				},
 				{
 					id: 'archiveRedirectType',
-					priority: 11,
+					priority: 12,
 					component: (
 						<RadioButtonControl<
 							Restriction[ 'archiveRedirectType' ]
@@ -264,7 +276,7 @@ addFilter(
 				},
 				{
 					id: 'archiveRedirectUrl',
-					priority: 12,
+					priority: 13,
 					component: (
 						<URLControl
 							label={ __(
@@ -283,7 +295,7 @@ addFilter(
 				},
 				{
 					id: 'additionalQueryHandling',
-					priority: 13,
+					priority: 14,
 					component: (
 						<RadioControl
 							label={ __(
@@ -307,13 +319,14 @@ addFilter(
 				},
 				{
 					id: 'restApiQueryHandling',
-					priority: 13,
+					priority: 15,
 					component: (
 						<BaseControl
 							label={ __(
 								'Handling matches in REST API requests',
 								'content-control'
 							) }
+							id="restApiQueryHandling"
 						>
 							<p>
 								<strong>
@@ -327,8 +340,9 @@ addFilter(
 								<p
 									dangerouslySetInnerHTML={ {
 										__html: sprintf(
+											// translators: 1: Content Control Pro, 2: </a>
 											__(
-												'If you need more control over your REST API, try %sContent Control Pro%s:'
+												'If you need more control over your REST API, try %1$sContent Control Pro%2$s:'
 											),
 											'<a href="https://contentcontrolplugin.com/features/rest-api/" target="_blank">',
 											'</a>'
@@ -374,6 +388,12 @@ addFilter(
 					'message' === settings.replacementType
 				);
 
+			case 'showInSearch':
+				return (
+					'replace' === settings.protectionMethod &&
+					'message' === settings.replacementType
+				);
+
 			case 'overrideMessage':
 				return (
 					'replace' === settings.protectionMethod &&
@@ -413,6 +433,138 @@ addFilter(
 		}
 	}
 );
+
+interface SearchWarningProps {
+	settings: {
+		showInSearch: boolean;
+	};
+	updateSettings: ( settings: { showInSearch: boolean } ) => void;
+}
+
+const SearchWarning = ( { settings, updateSettings }: SearchWarningProps ) => {
+	const [ isPopoverVisible, setIsPopoverVisible ] = useState( false );
+
+	return (
+		<>
+			<CheckboxControl
+				label={ __( 'Show in search results?', 'content-control' ) }
+				help={
+					<div>
+						<p>
+							{ __(
+								'When enabled, restricted items will appear in search results but with a restricted access message. Disable to completely hide from search.',
+								'content-control'
+							) }
+						</p>
+						{ settings.showInSearch && (
+							<div
+								className="cc-warning-icon"
+								style={ {
+									marginTop: '8px',
+									color: '#757575',
+									display: 'inline-flex',
+									alignItems: 'center',
+									gap: '4px',
+									cursor: 'help',
+								} }
+								onMouseEnter={ () =>
+									setIsPopoverVisible( true )
+								}
+								onMouseLeave={ () =>
+									setIsPopoverVisible( false )
+								}
+							>
+								<span>
+									⚠️{ ' ' }
+									{ __(
+										'Warning: Enabling this option may expose restricted content',
+										'content-control'
+									) }
+								</span>
+								{ isPopoverVisible && (
+									<Popover
+										position="bottom center"
+										focusOnMount={ false }
+										noArrow={ false }
+										animate={ false }
+									>
+										<div
+											className="cc-warning-popover"
+											style={ {
+												padding: '16px',
+												maxWidth: '450px',
+												minWidth: '450px',
+											} }
+										>
+											<h4 style={ { marginTop: 0 } }>
+												Security Consideration
+											</h4>
+											<p>
+												Only enable this if you fully
+												understand the risks or have
+												properly mitigated them.
+											</p>
+											<p>
+												WordPress search can reveal
+												parts of your protected content
+												through simple trial and error
+												searching.
+											</p>
+											<p>
+												For example: If your protected
+												post contains &quot;Annual
+												Revenue: $500,000&quot;, someone
+												could discover this by searching
+												for &quot;An&quot;, then
+												&quot;Ann&quot;, then
+												&quot;Annu&quot;, and so on.
+												Each successful search confirms
+												more of the content, even if
+												they cannot access the full
+												post.
+											</p>
+											<p>
+												With simple scripts a bot can
+												discover restricted content in
+												seconds if there is no brute
+												force protection in place such
+												as rate limiting.
+											</p>
+											<p>
+												The issue can be mitigated, but
+												not fully eliminated with rate
+												limiting and/or blocking IPs
+												with an active firewall.
+											</p>
+											<p
+												style={ {
+													margin: '0',
+												} }
+											>
+												Learn more in{ ' ' }
+												<a
+													href="https://contentcontrolplugin.com/docs/security/preventing-bots-from-discovering-restricted-content/?utm_source=plugin&utm_medium=settings-page&utm_campaign=show-in-search-warning"
+													target="_blank"
+													rel="noreferrer"
+												>
+													our documentation
+												</a>
+											</p>
+										</div>
+									</Popover>
+								) }
+							</div>
+						) }
+					</div>
+				}
+				checked={ settings.showInSearch }
+				onChange={ ( showInSearch ) =>
+					updateSettings( { showInSearch } )
+				}
+			/>
+		</>
+	);
+};
 
 const ProtectionTab = ( _props: EditTabProps ) => {
 	const { getTabFields } = useFields();
