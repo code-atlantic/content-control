@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.0 - 03/11/2025
+
 * Feature: Added new setting to control restricted content visibility in search results
   * Site owners can now choose to completely hide restricted content from search results
   * Includes detailed security guidance when enabling search visibility
