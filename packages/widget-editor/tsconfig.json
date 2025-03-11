@@ -5,11 +5,7 @@
 		"outDir": "build",
 		"declarationDir": "build-types"
 	},
-	"include": [
-		"./src/**/*"
-	],
+	"include": [ "./src/**/*" ],
 	// jquery global
-	"types": [
-		"jquery"
-	],
+	"types": [ "jquery" ]
 }

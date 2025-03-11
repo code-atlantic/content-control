@@ -4,6 +4,13 @@ import './editor.scss';
 
 /**
  * Render a field with custom label and description in a row based flexbox.
+ *
+ * @param {Object}      props             - The component props.
+ * @param {string}      props.id          - The ID of the field.
+ * @param {string}      props.label       - The label of the field.
+ * @param {string}      props.description - The description of the field.
+ * @param {string}      props.className   - The class name of the field.
+ * @param {JSX.Element} props.children    - The children of the field.
  */
 const FieldRow = ( {
 	id,
