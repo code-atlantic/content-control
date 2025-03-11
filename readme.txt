@@ -110,6 +110,13 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 
 == Changelog ==
 
+= v2.6.0 - 03/11/2025 =
+
+* Feature: Added new setting to control restricted content visibility in search results
+  * Site owners can now choose to completely hide restricted content from search results
+  * Includes detailed security guidance when enabling search visibility
+  * Helps prevent unintended exposure of sensitive information through search
+
 = v2.5.0 - Restriction Check Improvements - 08/18/2024 =
 
 * Improvement: Change rule processing to be more explicit for each context/rule type, improving performance & reliability of how rules are handled in some edge cases.
