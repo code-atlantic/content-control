@@ -35,19 +35,11 @@ jobs:
 
             # Install dependencies & build release assets
             - name: Install dependencies
-              run: |
-                  npm i
-                  composer install --no-dev --classmap-authoritative
+              run: npm i
 
-            # Build release assets
+            # Build release assets using our release:build script
             - name: Build release assets
-              run: |
-                  npm run build
-
-            # Copy build directory
-            - name: Prepare build directory
-              run: |
-                  npm run copy-build
+              run: npm run release:build
 
             # zip the build folder into slug.zip
             - name: Prepare zip file

@@ -27,15 +27,13 @@ jobs:
               with:
                   node-version: 16
 
-            # Install dependencies & build release assets
+            # Install dependencies
             - name: Install dependencies
-              run: |
-                  npm i
+              run: npm i
 
-            # Build release assets
-            - name: Build release assets and copy to build directory
-              run: |
-                  npm run build:release
+            # Build release assets using our release:build script
+            - name: Build release assets
+              run: npm run release:build
 
             # Deploy to WordPress.org
             - name: WordPress Plugin Deploy
