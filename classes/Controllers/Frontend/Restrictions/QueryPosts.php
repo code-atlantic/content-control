@@ -133,6 +133,11 @@ class QueryPosts extends Controller {
 
 			$handling = $query->is_main_query() ? $restriction->get_setting( 'archiveHandling' ) : $restriction->get_setting( 'additionalQueryHandling' );
 
+			// If this is a search query and showInSearch is false, hide the post.
+			if ( $query->is_search() && false === $restriction->get_setting( 'showInSearch' ) ) {
+				$handling = 'hide';
+			}
+
 			switch ( $handling ) {
 				case 'filter_post_content':
 					// Filter the title/excerpt/contents of the restricted items.
