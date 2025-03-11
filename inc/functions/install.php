@@ -85,6 +85,7 @@ function get_default_restriction_settings() {
 		'showExcerpts'            => false,
 		'overrideMessage'         => false,
 		'customMessage'           => '',
+		'showInSearch'            => false,
 		'conditions'              => [
 			'logicalOperator' => 'and',
 			'items'           => [],

@@ -62,6 +62,7 @@ export const restrictionDefaults: Restriction = {
 		showExcerpts: false,
 		overrideMessage: false,
 		customMessage: '',
+		showInSearch: false,
 		conditions: {
 			logicalOperator: 'or',
 			items: [],

@@ -122,7 +122,7 @@ const LicenseTab = () => {
 				installed: true,
 			} );
 		}
-	}, [ isSaving, isInstalling ] );
+	}, [ isSaving, isInstalling, proStatus ] );
 
 	const statusMessage = () => {
 		if ( isLicenseMissing ) {

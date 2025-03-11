@@ -6,7 +6,7 @@ export type QueryBuilderField = {
 	name: string;
 	value?: any;
 	default?: any;
-	options?: [  ];
+	options?: [];
 };
 
 export type QueryRuleType = {

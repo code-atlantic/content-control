@@ -33,4 +33,4 @@ export type QuerySet = {
 	id: Identifier;
 	label: string;
 	query: Query;
-}
+};

@@ -111,8 +111,7 @@ export const useFields = <
 				 * @param {JSX.Element} component The current field component.
 				 * @param {string}      id        The field name.
 				 * @param {FieldDef}    field     The current tab name.
-				 *
-				 * @return {JSX.Element} The new field component.
+				 * @return   {JSX.Element}                   The new field component.
 				 */
 				const component = applyFilters(
 					`${ context }.renderField`,
@@ -130,9 +129,10 @@ export const useFields = <
 		/**
 		 * Allow external overrides via a filter with null default.
 		 *
-		 * @param {F[]} fields The current fields.
+		 * @template F - The field definition type extending BaseFieldDef
+		 * @param {F[]}          fields  The current fields.
 		 * @param {FieldFilters} filters The current filters.
-		 * @return {F[]} The new fields.
+		 * @return {F[]}                 The new fields.
 		 */
 		return applyFilters(
 			`${ context }.getFields`,
@@ -152,12 +152,12 @@ export const useFields = <
 		/**
 		 * Allow external overrides via a filter with null default.
 		 *
-		 * @param {boolean|undefined}       show     The current value of the field.
-		 * @param {string}                  field    The field name.
-		 * @param {V}             values   The current values.
-		 * @return {boolean|undefined} The new value of the field.
+		 * @template V - The field values type extending BaseFieldValues
+		 * @param {boolean|undefined} show   The current value of the field.
+		 * @param {string}            field  The field name.
+		 * @param {V}                 values The current values.
+		 * @return   {boolean|undefined}         The new value of the field.
 		 */
-
 		const show = applyFilters(
 			`${ context }.fieldIsVisible`,
 			undefined,
