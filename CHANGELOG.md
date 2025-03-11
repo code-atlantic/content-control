@@ -2,10 +2,12 @@
 
 ## Unreleased
 
-* Feature: Added new setting to control restricted content visibility in search results
-  * Site owners can now choose to completely hide restricted content from search results
-  * Includes detailed security guidance when enabling search visibility
-  * Helps prevent unintended exposure of sensitive information through search
+* Feature: Added new setting to control restricted content visibility in search results.
+  * Site owners can now choose to completely hide restricted content from search results.
+  * Includes detailed security guidance when enabling search visibility.
+  * Helps prevent unintended exposure of sensitive information through search.
+  * Resolves concerns addressed in CVE-2024-11153 by default, now requiring explicit admin consent to show items in search results.
+* Performance: Improved asset minification.
 
 ## v2.5.0 - 08/18/2024
 
