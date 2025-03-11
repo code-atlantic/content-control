@@ -5,7 +5,7 @@ Author URI: https://contentcontrolplugin.com/?utm_campaign=plugin-info&utm_sourc
 Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source=readme-header&utm_medium=plugin-ui&utm_content=donate-link
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
-Tested up to: 6.6.2
+Tested up to: 6.7.2
 Stable tag: 2.5.0
 Requires PHP: 7.4
 License: GPLv3 (or later)
@@ -47,7 +47,7 @@ Discover what Content Control brings to your table:
 
 [Content Control Documentation](https://contentcontrolplugin.com/docs/?utm_campaign=plugin-info&utm_source=readme-description&utm_medium=wordpress&utm_content=documentation-link)
 
-= Pro Features = 
+= Pro Features =
 
 Content Control Pro, with advanced features like:
 
@@ -109,6 +109,13 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.6.0 - 03/11/2025 =
+
+* Feature: Added new setting to control restricted content visibility in search results
+  * Site owners can now choose to completely hide restricted content from search results
+  * Includes detailed security guidance when enabling search visibility
+  * Helps prevent unintended exposure of sensitive information through search
 
 = v2.5.0 - Restriction Check Improvements - 08/18/2024 =
 
