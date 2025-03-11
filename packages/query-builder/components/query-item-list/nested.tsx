@@ -107,8 +107,8 @@ const NestedQuery = ( {
 						 *
 						 * Return reference to child list for each parent index.
 						 */
-						const closestParentList: QueryGroupItem[ 'query' ][ 'items' ] = parentIndexs.reduce(
-							( arr, i ) => {
+						const closestParentList: QueryGroupItem[ 'query' ][ 'items' ] =
+							parentIndexs.reduce( ( arr, i ) => {
 								const nextParentGroup = arr[ i ];
 
 								if ( ! ( 'query' in nextParentGroup ) ) {
@@ -116,9 +116,7 @@ const NestedQuery = ( {
 									throw "Item's parent is not a group!";
 								}
 								return nextParentGroup.query.items;
-							},
-							rootListCopy
-						);
+							}, rootListCopy );
 
 						const closestParentGroup =
 							closestParentList[ currentListIndex ];

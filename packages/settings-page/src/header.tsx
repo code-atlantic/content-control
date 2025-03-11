@@ -116,8 +116,12 @@ const Header = ( { tabs }: Props ) => {
 					<a
 						href="https://contentcontrolplugin.com?utm_campaign=plugin-info&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=header-logo"
 						target="_blank"
+						rel="noopener noreferrer"
 					>
-						<img src={ `${ pluginUrl }assets/images/logo.svg` } />
+						<img
+							src={ `${ pluginUrl }assets/images/logo.svg` }
+							alt={ __( 'Content Control', 'content-control' ) }
+						/>
 						{ __( 'Content Control', 'content-control' ) }
 					</a>
 				</h1>
