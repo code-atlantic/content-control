@@ -2,18 +2,17 @@ name: CI - PHPUnit
 
 on:
     push:
-        branches: [ develop ]
+        branches: [develop]
     pull_request:
-        branches: [ master, develop ]
+        branches: [master, develop]
 
 jobs:
     build:
-
         runs-on: ubuntu-latest
         name: PHPUnit tests on PHP ${{ matrix.php-version }}
         strategy:
             matrix:
-                php-version: [ '7.1', '7.2', '7.3', '7.4' ]
+                php-version: ['7.1', '7.2', '7.3', '7.4']
 
         container:
             image: junaidbhura/wp-tests:php-${{ matrix.php-version }}

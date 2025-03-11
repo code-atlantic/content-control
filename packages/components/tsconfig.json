@@ -1,19 +1,17 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build",
-        "declarationDir": "build-types"
-    },
-    "include": [
-        "./src/**/*"
-    ],
-    "references": [
-        {
-            "path": "../core-data"
-        },
-        {
-            "path": "../utils"
-        }
-    ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "build",
+		"declarationDir": "build-types"
+	},
+	"include": [ "./src/**/*" ],
+	"references": [
+		{
+			"path": "../core-data"
+		},
+		{
+			"path": "../utils"
+		}
+	]
 }

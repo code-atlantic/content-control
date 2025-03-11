@@ -5,9 +5,7 @@
 		"outDir": "build",
 		"declarationDir": "build-types"
 	},
-	"include": [
-		"./src/**/*"
-	],
+	"include": [ "./src/**/*" ],
 	"references": [
 		{
 			"path": "../components"
@@ -18,5 +16,5 @@
 		{
 			"path": "../utils"
 		}
-	],
+	]
 }
