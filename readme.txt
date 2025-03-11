@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 6.7.2
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
