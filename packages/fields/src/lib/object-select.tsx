@@ -36,6 +36,28 @@ const ObjectSelectField = ( {
 		setQueryText( text );
 	}, 300 );
 
+	const fields = () => {
+		if ( entityKind === 'user' ) {
+			// return null;
+		}
+
+		if ( 'postType' === entityKind ) {
+			return 'id,title,name,type';
+		}
+
+		if ( 'taxonomy' === entityKind ) {
+			return 'id,name,slug,taxonomy';
+		}
+
+		return null;
+	};
+
+	const defaultParams = {
+		context: 'view',
+		per_page: -1,
+		...( null !== fields() ? { _fields: fields() } : {} ),
+	};
+
 	const { prefill = [] } = useSelect(
 		( select ) => ( {
 			prefill: value
@@ -43,9 +65,8 @@ const ObjectSelectField = ( {
 						entityKind,
 						entityType,
 						{
-							context: 'view',
+							...defaultParams,
 							include: value,
-							per_page: -1,
 						}
 				  ) as ObjectOption[] )
 				: [],
@@ -61,9 +82,8 @@ const ObjectSelectField = ( {
 						select( coreDataStore )
 							// @ts-ignore This exists and is being used as documented.
 							.getUsers( {
-								context: 'view',
+								...defaultParams,
 								search: queryText,
-								per_page: -1,
 							} ) as ObjectOption[]
 					);
 				}
@@ -72,9 +92,8 @@ const ObjectSelectField = ( {
 					entityKind,
 					entityType,
 					{
-						context: 'view',
+						...defaultParams,
 						search: queryText,
-						per_page: -1,
 					}
 				) as ObjectOption[];
 			} )(),
@@ -88,9 +107,8 @@ const ObjectSelectField = ( {
 								entityKind,
 								entityType,
 								{
-									context: 'view',
+									...defaultParams,
 									search: queryText,
-									per_page: -1,
 								},
 							] )
 					);
@@ -103,9 +121,8 @@ const ObjectSelectField = ( {
 							entityKind,
 							entityType,
 							{
-								context: 'view',
+								...defaultParams,
 								search: queryText,
-								per_page: -1,
 							},
 						] )
 				);
