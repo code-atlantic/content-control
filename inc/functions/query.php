@@ -530,14 +530,15 @@ function get_rest_api_intent() {
 
 				// If we have a post type or taxonomy, the name is the first part (posts, categories).
 				$intent['name'] = sanitize_key( $endpoint_parts[0] );
+				// Check if this is a search request.
+				$intent['search'] = isset( $wp->query_vars['search'] ) ? sanitize_title( $wp->query_vars['search'] ) : false;
 
 				if ( count( $endpoint_parts ) > 1 ) {
 					// If we have an ID, then the second part is the ID.
 					$intent['id'] = absint( $endpoint_parts[1] );
 				} else {
 					// If we have no ID, then we are either searching or indexing.
-					$intent['index']  = true;
-					$intent['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+					$intent['index'] = true;
 				}
 
 				// Build a matching route.
@@ -545,10 +546,10 @@ function get_rest_api_intent() {
 
 				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
 					$intent['type'] = 'post_type';
-				}
-
-				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
+				} elseif ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
 					$intent['type'] = 'taxonomy';
+				} elseif ( 'search' === $intent['name'] ) {
+					$intent['type'] = 'search';
 				}
 			} else {
 				// We currently have no way of really dealing with non WP REST requests.
