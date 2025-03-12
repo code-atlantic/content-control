@@ -84,8 +84,10 @@ class RestAPI extends Controller {
 			return $args;
 		}
 
+		$is_public = isset( $args['public'] ) && $args['public'];
+
 		// Check if this is a private taxonomy.
-		if ( true !== $args['public'] ) {
+		if ( ! $is_public ) {
 			if ( $include_private ) {
 				$args['show_in_rest'] = true; // Enable REST API.
 			}
