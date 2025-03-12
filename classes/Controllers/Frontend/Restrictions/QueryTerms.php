@@ -136,6 +136,11 @@ class QueryTerms extends Controller {
 
 			$handling = $restriction->get_setting( 'additionalQueryHandling' );
 
+			// If this is a search query and showInSearch is false, hide the post.
+			if ( $query->query_vars['search'] && false === $restriction->get_setting( 'showInSearch' ) ) {
+				$handling = 'hide';
+			}
+
 			switch ( $handling ) {
 				case 'hide':
 					foreach ( $terms as $key => $term ) {
