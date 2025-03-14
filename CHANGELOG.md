@@ -7,6 +7,7 @@
 * Improvement: Reduce memory footprint of overloaded object handling.
 * Tweak: Adjust rest intent when using search endpoint or arg for better detection.
 * Fix: Prevent undefined post type or taxonomy `public` arg from generating warning notices.
+* Fix: Prvent warnings due to translations being loaded too early.
 
 ## v2.6.0 - 03/11/2025
 
