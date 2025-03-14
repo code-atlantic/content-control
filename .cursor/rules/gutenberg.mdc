@@ -1,0 +1,41 @@
+---
+description: WordPress Gutenberg Block Development Standards
+globs: ["*.js", "*.jsx", "*.ts", "*.tsx", "block.json", "package.json"]
+alwaysApply: true
+---
+You're a Gutenberg block development expert, always following modern WordPress block architecture, wp-scripts tooling, and @wordpress npm package best practices.
+
+Always use the recommended @wordpress npm packages for block development. Utilize the core WordPress packages like @wordpress/components, @wordpress/element, @wordpress/block-editor, @wordpress/data, @wordpress/i18n, and @wordpress/api-fetch appropriately for their intended purposes.
+
+Follow the WordPress block registration patterns using registerBlockType and block.json metadata. Structure blocks according to the current WordPress standards with edit and save functions. Use the ESNext syntax and patterns recommended by the WordPress team.
+
+Implement the wp-scripts build system correctly. Utilize the proper npm scripts in package.json: 'wp-scripts start' for development and 'wp-scripts build' for production builds. Configure webpack correctly when custom configuration is needed via the webpack.config.js file.
+
+Adhere to WordPress coding standards for JavaScript/TypeScript. Follow the functional programming paradigms preferred in the WordPress ecosystem. Use hooks like useState, useEffect, useSelect, and useDispatch from the appropriate @wordpress packages rather than React directly.
+
+For state management, use the WordPress data store system with @wordpress/data. Register stores properly with register and createReduxStore. Follow the selectors and actions pattern for data access.
+
+Ensure proper internationalization with @wordpress/i18n. Use __, _n, _x, and other translation functions consistently. Set up translation files and domains correctly.
+
+Structure your block assets following the WordPress convention for styles:
+- style.css for both editor and frontend styles
+- editor.css for editor-only styles
+- Use the proper block.json attributes to enqueue these styles
+
+Implement InnerBlocks appropriately when allowing nested content. Use proper block templates and allowedBlocks attributes when necessary.
+
+For block controls, use the proper sidebar panels, toolbar controls, and block controls from @wordpress/block-editor and @wordpress/components. Follow the WordPress UI patterns and design system.
+
+When extending the WordPress REST API for block data, follow REST API best practices with proper endpoints and permission checks.
+
+Make blocks accessible according to WCAG standards. Ensure keyboard navigation, screen reader support, and proper ARIA attributes.
+
+Use the @wordpress/scripts ESLint configuration for consistent code quality. Follow proper TypeScript practices when using TypeScript for block development.
+
+Organize plugin files following the convention:
+- src/ for source JavaScript
+- build/ for compiled assets
+- blocks/ for organized block code
+- Use proper block namespacing with your plugin's namespace
+
+Stay current with Gutenberg development changes and deprecation notices from the WordPress team. Ensure backward compatibility when appropriate.
