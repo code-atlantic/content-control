@@ -26,7 +26,16 @@ class TrustedLogin extends Controller {
 	 * TrustedLogin init.
 	 */
 	public function init() {
-		$this->hooks();
+		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		add_action( 'init', [ $this, 'initiate_trustedlogin' ] );
+	}
+
+	/**
+	 * Hooks.
+	 *
+	 * @return void
+	 */
+	public function initiate_trustedlogin() {
 
 		$config = [
 			'auth'        => [
@@ -80,15 +89,6 @@ class TrustedLogin extends Controller {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			\error_log( $exception->getMessage() );
 		}
-	}
-
-	/**
-	 * Hooks.
-	 *
-	 * @return void
-	 */
-	public function hooks() {
-		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 	}
 
 	/**
