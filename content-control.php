@@ -28,13 +28,13 @@ defined( 'ABSPATH' ) || exit;
  */
 function get_plugin_config() {
 	return [
-		'name'          => \__( 'Content Control', 'content-control' ),
+		'name'          => 'Content Control',
 		'slug'          => 'content-control',
 		'version'       => '2.6.0',
 		'option_prefix' => 'content_control',
 		// Maybe remove this and simply prefix `name` with `'Popup Maker'`.
 		'text_domain'   => 'content-control',
-		'fullname'      => \__( 'Content Control', 'content-control' ),
+		'fullname'      => 'Content Control',
 		'min_php_ver'   => '7.4.0',
 		'min_wp_ver'    => '6.2.0',
 		'file'          => __FILE__,
