@@ -19,6 +19,12 @@ vendor-prefixed
 # Coverage
 coverage
 
+# Ignore top level cursor rules as local dev rules.
+.cursor/rules/*.mdc
+
+# Documentation
+docs
+
 # Logs
 logs
 
