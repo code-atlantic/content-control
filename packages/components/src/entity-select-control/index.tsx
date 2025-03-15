@@ -41,6 +41,28 @@ const EntitySelectControl = <
 		setQueryText( text );
 	}, 300 );
 
+	const fields = () => {
+		// if ( entityKind === 'user' ) {
+		// return null;
+		// }
+
+		if ( 'postType' === entityKind ) {
+			return 'id,title,name,type';
+		}
+
+		if ( 'taxonomy' === entityKind ) {
+			return 'id,name,slug,taxonomy';
+		}
+
+		return null;
+	};
+
+	const defaultParams = {
+		context: 'view',
+		per_page: -1,
+		...( null !== fields() ? { _fields: fields() } : {} ),
+	};
+
 	const { prefill = [] } = useSelect(
 		( select ) => ( {
 			prefill: value
@@ -48,9 +70,8 @@ const EntitySelectControl = <
 						entityKind,
 						entityType,
 						{
-							context: 'view',
+							...defaultParams,
 							include: value,
-							per_page: -1,
 						}
 				  ) as ObjectOption[] )
 				: [],
@@ -64,9 +85,8 @@ const EntitySelectControl = <
 				entityKind,
 				entityType,
 				{
-					context: 'view',
+					...defaultParams,
 					search: queryText,
-					per_page: -1,
 				}
 			) as ObjectOption[],
 			// @ts-ignore This exists and is being used as documented.
@@ -76,7 +96,10 @@ const EntitySelectControl = <
 				[
 					entityKind,
 					entityType,
-					{ context: 'view', search: queryText, per_page: -1 },
+					{
+						...defaultParams,
+						search: queryText,
+					},
 				]
 			),
 		} ),

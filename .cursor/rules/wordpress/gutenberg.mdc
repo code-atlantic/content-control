@@ -1,0 +1,128 @@
+---
+description: WordPress Gutenberg Block Development Standards with Content Control specifics
+globs: *.js, *.jsx,*.ts,*.tsx,block.json,package.json
+alwaysApply: false
+---
+# Gutenberg Block Development Standards
+
+These rules provide guidance for working with Gutenberg blocks, particularly focusing on the Content Control plugin's block editor integration.
+
+## Core Gutenberg Development Principles
+
+-   **Modern Block Architecture:** Follow WordPress block architecture, wp-scripts tooling, and @wordpress npm package best practices.
+-   **WordPress Packages:** Utilize the recommended @wordpress npm packages for block development:
+    -   `@wordpress/components` for UI components
+    -   `@wordpress/element` for React elements
+    -   `@wordpress/block-editor` for editor components
+    -   `@wordpress/data` for state management
+    -   `@wordpress/i18n` for internationalization
+    -   `@wordpress/api-fetch` for API requests
+-   **Block Registration:** Follow WordPress block registration patterns using `registerBlockType` and `block.json` metadata.
+-   **ESNext Syntax:** Use modern JavaScript/TypeScript syntax and patterns recommended by the WordPress team.
+-   **Build System:** Implement the wp-scripts build system correctly with proper npm scripts.
+-   **State Management:** Use the WordPress data store system with `@wordpress/data` for state management.
+-   **Internationalization:** Ensure proper internationalization with `@wordpress/i18n`.
+-   **Asset Structure:** Follow WordPress conventions for styles (style.css, editor.css).
+-   **Accessibility:** Make blocks accessible according to WCAG standards with proper keyboard navigation and ARIA attributes.
+
+## Content Control Block Integration Specifics
+
+### Block Extensions vs. Custom Blocks
+
+Content Control primarily uses **Block Extensions** rather than creating new block types. This is implemented through the `block-editor` package:
+
+-   **Location:** `packages/block-editor/src/block-extensions/`
+-   **Purpose:** Extends existing blocks with Content Control settings rather than creating new block types.
+-   **Integration Point:** Uses the Block Inspector sidebar to add Content Control settings to blocks.
+
+### Key Components and Files
+
+-   **Block Controls (`packages/block-editor/src/block-extensions/block-controls/`):**
+    -   `attributes.ts`: Defines the `contentControls` attribute added to all blocks.
+    -   `edit.tsx`: Main component that adds UI to the block editor using `createHigherOrderComponent`.
+    -   `block-classes.tsx`: Adds CSS classes to blocks based on Content Control settings.
+-   **Rule Components (`packages/block-editor/src/components/`):**
+    -   `rule-group/` - Components for different rule types.
+    -   `rule-groups/` - Implementations of specific rule groups.
+    -   `rules-inspector/` - Container for rules UI in the sidebar.
+-   **Contexts (`packages/block-editor/src/contexts/`):**
+    -   `controls.tsx` - Provides access to block control state.
+    -   `group.tsx` - Context for individual rule groups.
+
+### Block Extension Implementation
+
+Content Control uses the `@wordpress/hooks` API to extend blocks:
+
+```javascript
+addFilter(
+    'editor.BlockEdit',
+    'content-control/block-controls',
+    withBlockControls
+);
+
+addFilter(
+    'blocks.registerBlockType',
+    'content-control/attributes',
+    addContentControlAttributes
+);
+
+addFilter(
+    'editor.BlockListBlock',
+    'content-control/block-classes',
+    withBlockClasses
+);
+```
+
+### Block Attribute Structure
+
+Content Control adds a `contentControls` attribute to blocks, structured as:
+
+```javascript
+contentControls: {
+    enabled: boolean,
+    rules: {
+        logicalOperator: 'and' | 'or',
+        items: Array<Rule | Group>
+    }
+}
+```
+
+### Block Scanner
+
+Content Control includes a Block Scanner (`packages/block-editor/src/block-scanner.ts`) that:
+-   Sends a list of registered block types to the server.
+-   Helps determine which blocks can have Content Control settings applied.
+-   Supports the block settings in the admin interface.
+
+### State Management
+
+Content Control uses contexts for state management in the block editor:
+-   React Context API for component state (e.g., rule groups, controls).
+-   Hooks like `useState`, `useContext`, `useEffect` for local component state.
+-   `@wordpress/data` stores for global state.
+
+## Best Practices for Content Control Block Integration
+
+-   **Follow Extension Pattern:** Use the established pattern of extending existing blocks rather than creating new ones.
+-   **Maintain Sidebar UI:** Keep Content Control settings in the Block Inspector sidebar consistent with WordPress design patterns.
+-   **Use Contexts Appropriately:** Leverage the provided React contexts for state management.
+-   **Handle Block Attributes:** Properly manage the `contentControls` attribute in block registration and editing.
+-   **React Best Practices:** Follow React best practices for component design, state management, and performance.
+-   **TypeScript:** Leverage TypeScript for type safety in component props, state, and functions.
+-   **Test Compatibility:** Test with a variety of core and third-party blocks to ensure compatibility.
+
+## Gutenberg-specific Guidelines and Best Practices
+
+-   **Block Registration:** Register blocks using `registerBlockType` and `block.json` metadata.
+-   **Block Attributes:** Define block attributes using `attributes` property in `block.json`.
+-   **Block Variations:** Use block variations to provide alternative block configurations.
+-   **Block Styles:** Implement block styles for custom styling options.
+-   **Block Supports:** Utilize block supports for additional features (e.g., alignments, colors).
+-   **Block Extensions:** Extend existing blocks with additional functionality using `@wordpress/hooks`.
+-   **Block Inspector:** Use the Block Inspector sidebar for block settings and controls.
+-   **Block Editor Components:** Utilize `@wordpress/block-editor` components for block development.
+-   **Block Editor Hooks:** Use `@wordpress/block-editor` hooks for block-specific functionality.
+-   **Block Editor Data:** Use `@wordpress/data` for block-specific data management.
+-   **Block Editor Internationalization:** Use `@wordpress/i18n` for block-specific internationalization.
+-   **Block Editor API Fetch:** Use `@wordpress/api-fetch` for block-specific API requests.
+-   **Block Editor Accessibility:** Ensure blocks are accessible according to WCAG standards.

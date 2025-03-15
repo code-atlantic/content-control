@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 6.7.2
-Stable tag: 2.6.0
+Stable tag: 2.6.1
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -109,6 +109,15 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.6.1 - 03/15/2025 =
+
+* Improvement: Only fetch titles & ids when loading posts/taxonomy for the Restriction Editor. Reducing request overhead.
+* Improvement: Ensure taxonomies are also removed from search appropriately.
+* Improvement: Reduce memory footprint of overloaded object handling.
+* Tweak: Adjust rest intent when using search endpoint or arg for better detection.
+* Fix: Prevent undefined post type or taxonomy `public` arg from generating warning notices.
+* Fix: Prvent warnings due to translations being loaded too early.
 
 = v2.6.0 - 03/11/2025 =
 

@@ -1,0 +1,90 @@
+---
+description: Rules for the JavaScript/React codebase of the Content Control Plugin
+globs: ["packages/**/*.{js,jsx,ts,tsx}"]
+alwaysApply: false
+---
+
+# Content Control Plugin - JavaScript/React Codebase Rules
+
+These rules are specific to the JavaScript/React codebase of the Content Control plugin, providing guidance for AI agents working with the frontend logic and user interface components.
+
+## JavaScript/React Architecture Overview
+
+The Content Control plugin utilizes React and WordPress's `@wordpress/scripts` build tooling for its admin user interface. The frontend codebase is located within the `packages/` directory and is structured as a monorepo managed by NX.
+
+### Key Packages
+
+-   **`packages/block-editor/`**: Contains code related to Block Editor (Gutenberg) integration.
+    -   **`src/block-extensions/`**: Extends existing blocks with Content Control settings.
+    -   **`src/components/`**: Reusable React components specific to the block editor integration.
+    -   **`src/contexts/`**: React Contexts for managing state within the block editor UI.
+-   **`packages/components/`**: Contains reusable React components used throughout the plugin's admin UI (Settings Page, Block Editor, etc.). These are general-purpose components.
+-   **`packages/core-data/`**: Implements Redux-like data stores using `@wordpress/data` for managing client-side application state. Stores are organized by feature (license, restrictions, settings, url-search).
+-   **`packages/data/`**: A wrapper around `@wordpress/data`, potentially for custom extensions or utilities.
+-   **`packages/fields/`**: React components for rendering various form field types used in settings and rule configurations.
+-   **`packages/icons/`**: Custom SVG icons used in the React UI.
+-   **`packages/query-builder/`**: Contains React components, contexts, and reducers for building the visual rule query builder UI.
+-   **`packages/settings-page/`**: The main React application for the plugin's settings page.
+    -   **`src/restrictions-view/`**: Components for managing and displaying restrictions within the settings page.
+    -   **`src/settings-view/`**: Components for displaying and managing general plugin settings.
+    -   **`src/upgrades-view/`**: Components related to plugin upgrades and license management.
+-   **`packages/utils/`**: General JavaScript utility functions used across packages.
+-   **`packages/widget-editor/`**: Code for integration with the legacy widget editor (if applicable).
+
+### Important JavaScript/React Components and Modules
+
+-   **`packages/settings-page/src/App.tsx`**: The main entry point for the Settings Page React application.
+-   **`packages/block-editor/src/block-extensions/block-controls/edit.tsx`**:  The main component that adds Content Control UI to the Block Editor inspector controls.
+-   **`packages/core-data/src/*/index.ts`**: Entry points for each data store slice (e.g., `restrictions`, `settings`, `license`).
+-   **`packages/components/src/entity-select-control/`**: Reusable component for selecting WordPress entities (posts, terms, users) with search and multi-select capabilities.
+-   **`packages/query-builder/src/components/`**: Components that make up the rule query builder UI (groups, rules, operators, etc.).
+-   **`packages/components/src/controlled-tab-panel/`**: Reusable tab panel component used in the settings page.
+
+### Coding Standards and Best Practices (JavaScript/React)
+
+-   **React Best Practices:** Follow established React best practices for component design, state management, and performance.
+    -   Use functional components and hooks where appropriate.
+    -   Keep components small, focused, and reusable.
+    -   Optimize component rendering and avoid unnecessary re-renders.
+    -   Use keys for lists of components.
+-   **WordPress JavaScript Coding Standards:** Adhere to WordPress JavaScript coding standards.
+    -   Use spaces for indentation (typically 2 spaces).
+    -   Use single quotes for strings.
+    -   Avoid long lines of code.
+    -   Document components and functions with JSDoc-style comments.
+-   **TypeScript:** The codebase uses TypeScript. Write type-safe code and utilize TypeScript features effectively.
+    -   Define clear interfaces and types for components, data structures, and API interactions.
+    -   Use type checking to catch errors early in development.
+-   **`@wordpress/scripts` Build Tooling:** Utilize the tools and configurations provided by `@wordpress/scripts` for building, linting, and testing JavaScript code.
+    -   Use `npm run start` for development with hot reloading.
+    -   Use `npm run build` for production builds.
+    -   Use `npm run lint:js` for JavaScript linting.
+    -   Use `npm run format:js` for code formatting.
+-   **State Management with `@wordpress/data`:** Understand and utilize `@wordpress/data` for managing application state.
+    -   Use `useSelect` to access data from stores.
+    -   Use `useDispatch` to dispatch actions to stores.
+    -   Define clear selectors and actions for data store interactions.
+-   **Component Reusability:** Design and build reusable components in the `packages/components/` directory to promote code sharing and consistency across the UI.
+-   **Context API for State Management:** Utilize React Context API for managing component-level or feature-specific state, especially within the Block Editor and Query Builder packages.
+
+### Important JavaScript/React Functions and Hooks
+
+-   **React Hooks:** Utilize common React hooks like `useState`, `useEffect`, `useContext`, `useCallback`, `useMemo`.
+-   **`@wordpress/data` Hooks:**
+    -   `useSelect`: Hook to select data from WordPress data stores.
+    -   `useDispatch`: Hook to dispatch actions to WordPress data stores.
+    -   `withSelect`: Higher-order component for connecting components to data stores (less common in modern React).
+    -   `withDispatch`: Higher-order component for connecting components to dispatch actions (less common in modern React).
+-   **WordPress Components (`@wordpress/components`):** Utilize pre-built WordPress components from the `@wordpress/components` library for UI elements (buttons, inputs, selects, modals, etc.).
+-   **WordPress Block Editor APIs (`@wordpress/block-editor`, `@wordpress/blocks`):** When working with Block Editor integration, use APIs from `@wordpress/block-editor` and `@wordpress/blocks` to extend blocks, register block attributes, and interact with the editor.
+-   **REST API Interactions:** Use `wp.apiFetch` (or standard `fetch` API) for making requests to WordPress REST API endpoints.
+
+### Debugging JavaScript/React Code
+
+-   **Browser Developer Tools:** Use browser developer tools (Chrome DevTools, Firefox Developer Tools) extensively for debugging JavaScript code.
+    -   **Console:** Use `console.log()`, `console.warn()`, `console.error()` for logging messages.
+    -   **Debugger:** Set breakpoints in the code and step through execution.
+    -   **React Developer Tools Extension:** Use the React Developer Tools browser extension to inspect React component trees, props, and state.
+    -   **Network Tab:** Inspect network requests to REST API endpoints.
+-   **`WP_DEBUG` (WordPress):** Enabling `WP_DEBUG` in `wp-config.php` can sometimes provide additional JavaScript error information in the browser console.
+-   **Source Maps:** Ensure source maps are enabled in development builds to debug against the original source code instead of bundled code.

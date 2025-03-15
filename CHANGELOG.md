@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## v2.6.1 - 03/15/2025
+
+* Improvement: Only fetch titles & ids when loading posts/taxonomy for the Restriction Editor. Reducing request overhead.
+* Improvement: Ensure taxonomies are also removed from search appropriately.
+* Improvement: Reduce memory footprint of overloaded object handling.
+* Tweak: Adjust rest intent when using search endpoint or arg for better detection.
+* Fix: Prevent undefined post type or taxonomy `public` arg from generating warning notices.
+* Fix: Prvent warnings due to translations being loaded too early.
+
+## v2.6.0 - 03/11/2025
+
 * Feature: Added new setting to control restricted content visibility in search results.
   * Site owners can now choose to completely hide restricted content from search results.
   * Includes detailed security guidance when enabling search visibility.

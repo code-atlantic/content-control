@@ -1,0 +1,28 @@
+---
+description: AAA WordPress Plugin Development Standards
+globs: *.php,*.js,*.tsx,*.ts,*.jsx
+alwaysApply: true
+---
+You're a AAA #1 rated plugin developer, always following WordPress standards, security, caching, performance & hosting best practices.
+
+Always adhere to WordPress coding standards for PHP and JavaScript/TypeScript. Follow security practices including proper data sanitization, validation, and escaping. Use nonce verification for forms and AJAX. Implement capability checks for all administrative actions.
+
+Use prepared statements for database queries via $wpdb->prepare(). Never allow direct SQL injections or unvalidated user input in queries.
+
+Prioritize performance through proper asset enqueuing, conditional loading, and efficient database queries. Implement caching strategies using WordPress Transient API and Object Cache when appropriate.
+
+Follow WordPress plugin architecture best practices with class-based designs, proper namespacing, and separation of concerns. Use hooks appropriately rather than directly modifying core.
+
+For frontend, properly enqueue scripts with dependencies and versions. Use localization for all user-facing strings with proper text domains.
+
+Always include plugin header documentation and follow WordPress standards for file organization and naming conventions.
+
+Ensure compatibility with various hosting environments by using WordPress path functions, checking for minimum requirements, and handling errors gracefully.
+
+Strive to do things the WordPress way until it becomes unreasonable or overly complicates the solution. Balance modern development techniques with WordPress core compatibility.
+
+For REST API integrations, implement proper endpoint registration, authentication, and permission callbacks. Validate and sanitize all incoming data.
+
+Focus on creating accessible interfaces that follow WCAG guidelines and use proper ARIA attributes when needed.
+
+When debugging, respect WP_DEBUG settings and provide helpful error messages without exposing sensitive information.

@@ -231,7 +231,7 @@ function setup_post_globals( $post_id = null ) {
 		return false;
 	}
 
-	// Set current post id baesd on global $post.
+	// Set current post id based on global $post.
 	$current_post_id = $post->ID ?? null;
 
 	// Check if we should overload the post. This means its not the current post.
@@ -243,7 +243,7 @@ function setup_post_globals( $post_id = null ) {
 
 	if ( $overload_post ) {
 		// Push the current $post to the stack so we can restore it later.
-		push_to_global( 'overloaded_posts', $post ?? $current_post_id );
+		push_to_global( 'overloaded_posts', $current_post_id );
 
 		// Overload the globals so conditionals work properly.
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -275,24 +275,24 @@ function setup_term_globals( $term_id = null ) {
 		return false;
 	}
 
-	// Set current post id baesd on global $current_term.
+	// Set current term id based on global $current_term.
 	$current_term_id = $current_term->term_id ?? null;
 
-	// Check if we should overload the post. This means its not the current post.
+	// Check if we should overload the term.
 	$overload_term =
-	// If we have a term ID, check if it's different from the current term ID.
-	( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
-	// If we have an int, check if it's different from the current term ID.
-	( is_int( $term_id ) && $term_id !== $current_term_id );
+		// If we have a term ID, check if it's different from the current term ID.
+		( is_object( $term_id ) && $term_id->term_id !== $current_term_id ) ||
+		// If we have an int, check if it's different from the current term ID.
+		( is_int( $term_id ) && $term_id !== $current_term_id );
 
 	if ( $overload_term ) {
-		// Push the current $post to the stack so we can restore it later.
-		push_to_global( 'overloaded_terms', $current_term ?? $current_term_id );
+		// Store only the ID of the current term for later restoration.
+		push_to_global( 'overloaded_terms', $current_term_id );
 
 		// Overload the globals so conditionals work properly.
 		$cc_term = get_term( $term_id );
 		// Set the global term object (forward compatibility).
-		set_global( 'term', $cc_term ?? $current_term_id );
+		set_global( 'term', $cc_term );
 	}
 
 	return $overload_term;
@@ -333,8 +333,9 @@ function reset_post_globals() {
 
 	global $post;
 
+	$stored_post_id = pop_from_global( 'overloaded_posts' );
 	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	$post = pop_from_global( 'overloaded_posts' );
+	$post = get_post( $stored_post_id );
 	// Reset global post object.
 	setup_postdata( $post );
 }
@@ -355,8 +356,9 @@ function reset_term_globals() {
 
 	global $cc_term; // Backward compatibility.
 
+	$stored_term_id = pop_from_global( 'overloaded_terms' );
 	// Reset global post object.
-	$cc_term = pop_from_global( 'overloaded_terms' );
+	$cc_term = get_term( $stored_term_id );
 	set_global( 'term', $cc_term );
 }
 
@@ -530,14 +532,15 @@ function get_rest_api_intent() {
 
 				// If we have a post type or taxonomy, the name is the first part (posts, categories).
 				$intent['name'] = sanitize_key( $endpoint_parts[0] );
+				// Check if this is a search request.
+				$intent['search'] = isset( $wp->query_vars['search'] ) ? sanitize_title( $wp->query_vars['search'] ) : false;
 
 				if ( count( $endpoint_parts ) > 1 ) {
 					// If we have an ID, then the second part is the ID.
 					$intent['id'] = absint( $endpoint_parts[1] );
 				} else {
 					// If we have no ID, then we are either searching or indexing.
-					$intent['index']  = true;
-					$intent['search'] = isset( $wp->query_vars['s'] ) ? sanitize_title( $wp->query_vars['s'] ) : false;
+					$intent['index'] = true;
 				}
 
 				// Build a matching route.
@@ -545,10 +548,10 @@ function get_rest_api_intent() {
 
 				if ( isset( $post_type_endpoints[ $endpoint_route ] ) ) {
 					$intent['type'] = 'post_type';
-				}
-
-				if ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
+				} elseif ( isset( $taxonomy_endpoints[ $endpoint_route ] ) ) {
 					$intent['type'] = 'taxonomy';
+				} elseif ( 'search' === $intent['name'] ) {
+					$intent['type'] = 'search';
 				}
 			} else {
 				// We currently have no way of really dealing with non WP REST requests.

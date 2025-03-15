@@ -64,7 +64,7 @@ class RestAPI extends Controller {
 					// Mimic a rest_forbidden response.
 					return new \WP_Error(
 						'rest_forbidden',
-						$restriction->get_setting( 'restApiQueryMessage', __( 'You do not have permission to do this.', 'content-control' ), ),
+						$restriction->get_setting( 'restApiQueryMessage', __( 'You do not have permission to do this.', 'content-control' ) ),
 						[ 'status' => 403 ]
 					);
 			}
