@@ -1,0 +1,74 @@
+---
+description: UX design within the WordPress admin & block editor
+globs:
+alwaysApply: false
+---
+
+# WordPress User Experience (UX) and Admin UI Rules
+
+These rules are designed to guide AI agents in understanding and maintaining the user experience and admin UI of WordPress projects, specifically within the Content Control plugin context.
+
+## General WordPress UX Principles
+
+-   **Simplicity and Clarity:** WordPress admin UI should be intuitive and easy to navigate. Aim for clear labels, concise instructions, and logical workflows.
+-   **Consistency:** Maintain consistency in UI patterns, terminology, and design across the WordPress admin dashboard and plugin interfaces. Follow WordPress UI conventions.
+-   **Accessibility:** Adhere to WCAG guidelines to ensure the admin UI is accessible to all users, including those with disabilities. Use ARIA attributes, semantic HTML, and provide keyboard navigation.
+-   **Responsiveness:** The admin UI should be fully responsive and work seamlessly across different screen sizes and devices.
+-   **Performance:** Optimize UI performance to ensure fast loading times and smooth interactions. Avoid unnecessary JavaScript or complex UI elements that can slow down the admin interface.
+-   **User Feedback:** Provide clear feedback to users on their actions, such as success messages, error messages, and loading indicators.
+-   **Progressive Enhancement:** Build UI with progressive enhancement in mind, ensuring basic functionality is available even with limited JavaScript or CSS support.
+
+## Content Control Plugin Specific UX Rules
+
+-   **Settings Page Structure:** The Content Control settings page should be logically organized into tabs or sections, grouping related settings together. Use clear headings and descriptions for each section and setting.
+-   **Restriction Management UI:** The UI for creating and managing restrictions should be intuitive and efficient.
+    -   Use clear labels for restriction titles, rules, and protection methods.
+    -   Provide a visual rule builder for creating complex rule logic.
+    -   Allow users to easily duplicate, edit, and delete restrictions.
+    -   Use list tables to display restrictions in an organized manner with search and filtering capabilities.
+-   **Block Editor Integration UX:** The integration with the Block Editor should be seamless and unobtrusive.
+    -   Add Content Control settings to the Block Inspector sidebar for relevant blocks.
+    -   Use clear and concise labels for block control settings.
+    -   Provide visual cues or indicators in the editor to show when content is restricted.
+-   **Rule Configuration UI:** The UI for configuring individual rules should be user-friendly and context-aware.
+    -   Display relevant options based on the selected rule type.
+    -   Provide helpful descriptions or tooltips for rule options.
+    -   Use appropriate input types (select, text, checkboxes, etc.) for rule options.
+-   **Error Handling and User Feedback:** Provide informative error messages when users make mistakes or encounter issues in the admin UI. Display success messages to confirm actions. Use loading indicators for long-running processes.
+-   **Accessibility within Plugin UI:** Ensure all plugin-specific UI elements are accessible, following WCAG guidelines. Pay attention to:
+    -   Keyboard navigation
+    -   Screen reader compatibility
+    -   Color contrast
+    -   Form labels and ARIA attributes
+
+## Relevant WordPress UI Components and APIs
+
+-   **`@wordpress/components`:** Utilize WordPress UI components from the `@wordpress/components` library for consistent styling and accessibility. Examples:
+    -   `Button`
+    -   `TextControl`
+    -   `SelectControl`
+    -   `CheckboxControl`
+    -   `RadioControl`
+    -   `TabPanel`
+    -   `PanelBody`
+    -   `Notice`
+    -   `Spinner`
+    -   [Full Component List](mdc:https:/developer.wordpress.org/block-editor/components)
+-   **WordPress Admin Menu API:** Use `add_menu_page()` and `add_submenu_page()` to create admin menu items for the plugin.
+-   **Settings API:** Use the Settings API (`register_setting()`, `add_settings_section()`, `add_settings_field()`) for creating settings pages (though React settings page is used in Content Control).
+-   **List Tables (`WP_List_Table`):** Use `WP_List_Table` class to create sortable and filterable list tables in the admin UI (used for Restrictions list).
+-   **Meta Boxes (for legacy interfaces):**  While less relevant for modern block-based UI, understand meta boxes for potential legacy code or custom post type interfaces.
+
+## Code Examples and Best Practices (React & PHP)
+
+-   **React Components:** Create reusable React components for UI elements and sections within the plugin admin. Follow component best practices (props, state, hooks).
+-   **State Management (`@wordpress/data`):** Utilize `@wordpress/data` for managing application state in React components, especially for settings and restriction data.
+-   **REST API Interactions:** Use `wp.apiFetch` to interact with WordPress REST API endpoints for saving and retrieving data from the server.
+-   **PHP for Backend Logic:** Implement backend logic in PHP, following WordPress coding standards and security best practices. Separate UI-related logic from backend data processing.
+-   **AJAX (if needed for non-REST interfaces):** Use WordPress AJAX API (`wp_ajax_*` actions) for any admin UI interactions that are not using the REST API (though REST API is preferred).
+
+## Accessibility Resources
+
+-   **WCAG (Web Content Accessibility Guidelines):** [https://www.w3.org/WAI/standards-guidelines/wcag/](mdc:https:/www.w3.org/WAI/standards-guidelines/wcag)
+-   **WordPress Accessibility Coding Standards:** [https://make.wordpress.org/core/handbook/best-practices/accessibility/](mdc:https:/make.wordpress.org/core/handbook/best-practices/accessibility)
+-   **Accessibility in WordPress Plugins:** [https://developer.wordpress.org/plugins/plugin-development/accessibility/](mdc:https:/developer.wordpress.org/plugins/plugin-development/accessibility)

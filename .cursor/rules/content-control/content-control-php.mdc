@@ -1,0 +1,85 @@
+---
+description: Rules for the PHP codebase of the Content Control Plugin
+globs: ["**/*.php"]
+alwaysApply: false
+---
+# Content Control Plugin - PHP Codebase Rules
+
+These rules are specific to the PHP codebase of the Content Control plugin and provide guidance for AI agents working with the backend logic.
+
+## PHP Architecture Overview
+
+The Content Control plugin's backend is primarily written in PHP, following WordPress coding standards and best practices. The architecture is modular and object-oriented, with a clear separation of concerns.
+
+### Key Directories
+
+-   **`classes/`**: Contains the core PHP logic of the plugin, organized into subdirectories based on functionality.
+    -   **`Base/`**: Abstract base classes and the dependency injection container.
+    -   **`Controllers/`**: Handles specific areas of functionality (Admin, Frontend, Compatibility, REST API).
+    -   **`Installers/`**: Classes for plugin installation and upgrades.
+    -   **`Interfaces/`**: Defines interfaces for controllers and upgrades.
+    -   **`Models/`**: Data models representing plugin entities (Restriction, Rule, Group).
+    -   **`Plugin/`**: Core plugin classes (Core, Autoloader, License, Connect, etc.).
+    -   **`QueryMonitor/`**: Integration with the Query Monitor plugin.
+    -   **`RestAPI/`**: REST API endpoint implementations.
+    -   **`RuleEngine/`**: Classes related to the Rule Engine logic.
+    -   **`Services/`**: Reusable services and utilities.
+    -   **`Upgrades/`**: Classes for specific upgrade routines (data migrations).
+-   **`inc/`**: Contains utility functions, organized into subdirectories.
+    -   **`functions/`**: Various function files (compatibility, content, developers, options, rules, etc.).
+    -   **`deprecated/`**: Deprecated classes and functions.
+-   **`bin/`**: Utility scripts, including stub generation scripts.
+-   **`tests/`**: PHPUnit tests for the plugin.
+
+### Important PHP Classes
+
+-   **`classes/Plugin/Core.php`**: The main plugin class, responsible for initialization, service registration, and defining plugin paths.
+-   **`classes/RuleEngine/RuleEngine.php`**: (Note: Class name might be `Handler.php` or `Rules.php`) The core Rule Engine class that evaluates rules and restrictions.
+-   **`classes/Models/Restriction.php`**: The data model for a Restriction, handling loading settings, checking rules, and providing access to restriction data.
+-   **`classes/Controllers/Admin/*.php`**: Controllers for admin-related functionality (Settings Page, Upgrades, Reviews).
+-   **`classes/Controllers/Frontend/*.php`**: Controllers for frontend restriction logic (Main Query, Post Content, REST API).
+-   **`classes/RestAPI/*.php`**: REST API endpoint controllers.
+-   **`classes/Services/*.php`**: Service classes like `Restrictions.php`, `Options.php`, `Logging.php`, `UpgradeStream.php`.
+-   **`classes/Base/Container.php`**: Dependency injection container (Pimple).
+
+### Coding Standards and Best Practices (PHP)
+
+-   **WordPress Coding Standards for PHP:** Strictly adhere to the WordPress PHP coding standards.
+    -   Use spaces for indentation, not tabs.
+    -   Follow WordPress PHPDoc standards for documentation.
+    -   Use lowercase with hyphens for function names.
+    -   Use underscores for class and method names (in many legacy parts, but new code should aim for camelCase).
+    -   Sanitize and escape data properly to prevent security vulnerabilities.
+    -   Use nonces for form submissions and AJAX requests.
+-   **Object-Oriented Programming (OOP):** Utilize OOP principles for code organization and reusability.
+-   **Dependency Injection (DI):** Leverage the simple DI container (`classes/Base/Container.php`) for managing services and dependencies.
+-   **Modularity and Separation of Concerns:** Keep code modular and separate concerns into different classes and functions.
+-   **Code Documentation:** Write clear and comprehensive PHPDoc comments for all classes, methods, and functions.
+-   **Performance Optimization:** Write efficient code, optimize database queries, and use caching where appropriate.
+-   **Error Handling and Logging:** Implement proper error handling and use the `Logging` service for logging important events and errors.
+-   **Security Best Practices:** Follow WordPress security best practices to prevent vulnerabilities.
+
+### Important PHP Functions and Hooks
+
+-   **WordPress Options API:** Use `get_option()`, `update_option()`, `delete_option()` for managing plugin settings.
+-   **WordPress Custom Post Types API:** Use `register_post_type()` to register the `cc_restriction` custom post type.
+-   **WordPress REST API Functions:** Use `register_rest_route()` to register REST API endpoints.
+-   **WordPress Filters and Actions:** Utilize WordPress action and filter hooks for extending plugin functionality and integrating with WordPress core and other plugins.
+    -   `the_content` filter: Used to filter post content and apply restrictions.
+    -   `pre_get_posts` action: Used to modify the main query and apply restrictions to content listings.
+    -   `rest_api_init` action: Used to register REST API endpoints.
+    -   Numerous custom action and filter hooks within the plugin codebase.
+-   **Plugin API Functions (in `inc/functions/developers.php`):**
+    -   `content_has_restrictions()`: Checks if content has any restrictions applied.
+    -   `user_can_view_content()`: Checks if the current user can view specific content.
+    -   `content_is_restricted()`: Checks if content is currently restricted for the current user.
+    -   `get_applicable_restriction()`: Gets the most applicable restriction for the current context.
+    -   `get_all_applicable_restrictions()`: Gets all applicable restrictions for the current context.
+
+### Debugging PHP Code
+
+-   **`error_log()`:** Use `error_log()` to write debug messages to the PHP error log.
+-   **`WP_DEBUG`:** Enable `WP_DEBUG` in `wp-config.php` for more detailed error reporting.
+-   **`Logging` Service:** Use the `plugin('logging')->log()` method to log messages using the plugin's logging service.
+-   **Xdebug:** Consider using Xdebug for step-by-step debugging and code inspection.
+-   **Query Monitor Plugin:** Use the Query Monitor plugin to inspect database queries, PHP errors, hooks, and other aspects of WordPress execution.

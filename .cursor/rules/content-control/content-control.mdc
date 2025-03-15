@@ -1,0 +1,78 @@
+---
+description: Rules for the Content Control Plugin
+globs:
+alwaysApply: true
+---
+# Content Control Plugin - AI Agent Rules
+
+These rules provide context and guidance for AI agents working with the Content Control plugin codebase.
+
+## Plugin Description
+
+Content Control is a WordPress plugin designed to provide fine-grained control over content visibility. It allows administrators to restrict access to various parts of their WordPress site based on a flexible rule engine. Restrictions can be applied based on user roles, login status, specific dates/times, device types, and custom rules.
+
+The plugin is built with a modular architecture, utilizing both PHP for the backend and React for the admin user interface. It leverages WordPress best practices and coding standards, aiming for performance, security, and extensibility.
+
+## Key Features
+
+-   **Rule-Based Restrictions:** Define complex rules using a combination of conditions and logical operators (AND/OR).
+-   **Multiple Restriction Types:** Restrict content based on user roles, login status, date/time, device type, and more.
+-   **Flexible Protection Methods:** Choose how restricted content is handled: redirect to another page, replace content with a message, or hide content entirely.
+-   **Block-Level Control:** Apply restrictions directly to individual Gutenberg blocks within post content.
+-   **Widget Restrictions:** Control the visibility of WordPress widgets based on rules.
+-   **REST API Control:** Secure WordPress REST API endpoints by applying content restrictions.
+-   **Extensibility:** Developers can extend the plugin by creating custom rules and integrations.
+-   **Settings Page:** A comprehensive settings page built with React for managing plugin options and restrictions.
+-   **Developer-Friendly:** Well-documented codebase with clear architecture, making it easy for developers to understand and contribute.
+
+## Architecture Overview
+
+The plugin follows a modular architecture with distinct components for the backend (PHP) and frontend (React).
+
+### PHP Backend
+
+-   **Rule Engine:** Core logic for evaluating rules and applying restrictions (`classes/RuleEngine/`).
+-   **Restrictions CPT:** Restrictions are stored as a custom post type (`cc_restriction`).
+-   **Controllers:** Handle specific functionalities like admin settings, frontend restrictions, and REST API endpoints (`classes/Controllers/`).
+-   **Models:** Represent data structures like `Restriction` and `Rule` (`classes/Models/`).
+-   **Services:** Provide reusable business logic and utilities (`classes/Services/`).
+-   **REST API Endpoints:** Expose plugin functionality via WordPress REST API (`classes/RestAPI/`).
+
+### React Admin UI
+
+-   **Settings Page:** React application for managing plugin settings and restrictions (`packages/settings-page/`).
+-   **Block Editor UI:** Integrations with Gutenberg block editor for block-level restrictions (`packages/block-editor/`).
+-   **Data Stores:** Uses `@wordpress/data` for client-side state management (`packages/core-data/`).
+-   **Reusable Components:** React components used across the admin UI (`packages/components/`).
+-   **Query Builder UI:** React-based UI for building complex rule queries (`packages/query-builder/`).
+
+## Key Concepts
+
+-   **Restrictions:** Saved configurations that combine rules and protection settings to control content access.
+-   **Rules:** Individual conditions evaluated by the Rule Engine (e.g., "User Role is Administrator").
+-   **Rule Engine:** The system that processes restrictions and determines if they should be applied.
+-   **Contexts:** Define the environment in which rules are evaluated (e.g., 'main', 'blocks', 'restapi').
+-   **Protection Methods:** Actions taken when a restriction's rules are met (e.g., redirect, replace content).
+
+## Coding Standards and Best Practices
+
+-   **WordPress Coding Standards:** Adheres to WordPress PHP and JavaScript coding standards.
+-   **Security:** Implements security best practices, including data sanitization, validation, and nonce verification.
+-   **Performance:** Optimized for performance with efficient queries and asset management.
+-   **Accessibility:** Follows WCAG guidelines for accessible user interfaces.
+-   **Internationalization:** Uses WordPress internationalization functions for translatable strings.
+-   **Modular Design:** Code is organized into modules with clear separation of concerns.
+-   **Object-Oriented Programming (PHP):** Utilizes OOP principles in PHP codebase.
+-   **React and `@wordpress/scripts` (JavaScript):** Uses modern React practices and WordPress `@wordpress/scripts` build tooling for JavaScript development.
+
+## Important File Locations
+
+-   **Plugin Entry Point:** `content-control.php`
+-   **Main Plugin Class:** `classes/Plugin/Core.php`
+-   **Rule Engine Classes:** `classes/RuleEngine/`
+-   **Restriction Model:** `classes/Models/Restriction.php`
+-   **Settings Page React App:** `packages/settings-page/src/App.tsx`
+-   **Block Editor Integration:** `packages/block-editor/src/`
+-   **Core Data Stores:** `packages/core-data/src/`
+-   **Reusable Components:** `packages/components/src/`
+-   **Documentation Files:** `docs/`

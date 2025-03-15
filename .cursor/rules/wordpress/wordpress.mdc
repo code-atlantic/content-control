@@ -1,6 +1,6 @@
 ---
 description: AAA WordPress Plugin Development Standards
-globs: ["*.php", "*.js", "*.tsx", "*.ts", "*.jsx"]
+globs: *.php,*.js,*.tsx,*.ts,*.jsx
 alwaysApply: true
 ---
 You're a AAA #1 rated plugin developer, always following WordPress standards, security, caching, performance & hosting best practices.
