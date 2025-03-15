@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.1 - 03/15/2025
+
 * Improvement: Only fetch titles & ids when loading posts/taxonomy for the Restriction Editor. Reducing request overhead.
 * Improvement: Ensure taxonomies are also removed from search appropriately.
 * Improvement: Reduce memory footprint of overloaded object handling.
