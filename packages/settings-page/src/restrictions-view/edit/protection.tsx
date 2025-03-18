@@ -448,120 +448,101 @@ const SearchWarning = ( { settings, updateSettings }: SearchWarningProps ) => {
 		<>
 			<CheckboxControl
 				label={ __( 'Show in search results?', 'content-control' ) }
-				help={
-					<div>
-						<p>
-							{ __(
-								'When enabled, restricted items will appear in search results but with a restricted access message. Disable to completely hide from search.',
-								'content-control'
-							) }
-						</p>
-						{ settings.showInSearch && (
-							<div
-								className="cc-warning-icon"
-								style={ {
-									marginTop: '8px',
-									color: '#757575',
-									display: 'inline-flex',
-									alignItems: 'center',
-									gap: '4px',
-									cursor: 'help',
-								} }
-								onMouseEnter={ () =>
-									setIsPopoverVisible( true )
-								}
-								onMouseLeave={ () =>
-									setIsPopoverVisible( false )
-								}
-							>
-								<span>
-									⚠️{ ' ' }
-									{ __(
-										'Warning: Enabling this option may expose restricted content',
-										'content-control'
-									) }
-								</span>
-								{ isPopoverVisible && (
-									<Popover
-										position="bottom center"
-										focusOnMount={ false }
-										noArrow={ false }
-										animate={ false }
-									>
-										<div
-											className="cc-warning-popover"
-											style={ {
-												padding: '16px',
-												maxWidth: '450px',
-												minWidth: '450px',
-											} }
-										>
-											<h4 style={ { marginTop: 0 } }>
-												Security Consideration
-											</h4>
-											<p>
-												Only enable this if you fully
-												understand the risks or have
-												properly mitigated them.
-											</p>
-											<p>
-												WordPress search can reveal
-												parts of your protected content
-												through simple trial and error
-												searching.
-											</p>
-											<p>
-												For example: If your protected
-												post contains &quot;Annual
-												Revenue: $500,000&quot;, someone
-												could discover this by searching
-												for &quot;An&quot;, then
-												&quot;Ann&quot;, then
-												&quot;Annu&quot;, and so on.
-												Each successful search confirms
-												more of the content, even if
-												they cannot access the full
-												post.
-											</p>
-											<p>
-												With simple scripts a bot can
-												discover restricted content in
-												seconds if there is no brute
-												force protection in place such
-												as rate limiting.
-											</p>
-											<p>
-												The issue can be mitigated, but
-												not fully eliminated with rate
-												limiting and/or blocking IPs
-												with an active firewall.
-											</p>
-											<p
-												style={ {
-													margin: '0',
-												} }
-											>
-												Learn more in{ ' ' }
-												<a
-													href="https://contentcontrolplugin.com/docs/security/preventing-bots-from-discovering-restricted-content/?utm_source=plugin&utm_medium=settings-page&utm_campaign=show-in-search-warning"
-													target="_blank"
-													rel="noreferrer"
-												>
-													our documentation
-												</a>
-											</p>
-										</div>
-									</Popover>
-								) }
-							</div>
-						) }
-					</div>
-				}
+				help={ __(
+					'When enabled, restricted items will appear in search results but with a restricted access message. Disable to completely hide from search.',
+					'content-control'
+				) }
 				checked={ settings.showInSearch }
 				onChange={ ( showInSearch ) =>
 					updateSettings( { showInSearch } )
 				}
 			/>
+			{ settings.showInSearch && (
+				<div
+					className="cc-warning-icon"
+					style={ {
+						marginTop: '-20px',
+						marginBottom: '32px',
+						color: '#757575',
+						cursor: 'help',
+					} }
+					onMouseEnter={ () => setIsPopoverVisible( true ) }
+					onMouseLeave={ () => setIsPopoverVisible( false ) }
+				>
+					<span>
+						⚠️{ ' ' }
+						{ __(
+							'Warning: Enabling this option may expose restricted content',
+							'content-control'
+						) }
+					</span>
+					{ isPopoverVisible && (
+						<Popover
+							offset={ 10 }
+							position="bottom right"
+							focusOnMount={ false }
+							noArrow={ false }
+							animate={ false }
+						>
+							<div
+								className="cc-warning-popover"
+								style={ {
+									padding: '16px',
+									maxWidth: '450px',
+									minWidth: '450px',
+								} }
+							>
+								<h4 style={ { marginTop: 0 } }>
+									Security Consideration
+								</h4>
+								<p>
+									Only enable this if you fully understand the
+									risks or have properly mitigated them.
+								</p>
+								<p>
+									WordPress search can reveal parts of your
+									protected content through simple trial and
+									error searching.
+								</p>
+								<p>
+									For example: If your protected post contains
+									&quot;Annual Revenue: $500,000&quot;,
+									someone could discover this by searching for
+									&quot;An&quot;, then &quot;Ann&quot;, then
+									&quot;Annu&quot;, and so on. Each successful
+									search confirms more of the content, even if
+									they cannot access the full post.
+								</p>
+								<p>
+									With simple scripts a bot can discover
+									restricted content in seconds if there is no
+									brute force protection in place such as rate
+									limiting.
+								</p>
+								<p>
+									The issue can be mitigated, but not fully
+									eliminated with rate limiting and/or
+									blocking IPs with an active firewall.
+								</p>
+								<p
+									style={ {
+										margin: '0',
+									} }
+								>
+									Learn more in{ ' ' }
+									<a
+										href="https://contentcontrolplugin.com/docs/security/preventing-bots-from-discovering-restricted-content/?utm_source=plugin&utm_medium=settings-page&utm_campaign=show-in-search-warning"
+										target="_blank"
+										rel="noreferrer"
+									>
+										our documentation
+									</a>
+								</p>
+							</div>
+						</Popover>
+					) }
+				</div>
+			) }
 		</>
 	);
 };
