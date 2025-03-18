@@ -44,6 +44,8 @@ declare global {
 	};
 }
 
+export type { EditTabProps } from './restrictions-view/edit';
+
 const { wpVersion } = contentControlSettingsPage;
 
 const renderer = () => {
