@@ -98,6 +98,22 @@ class PostContent extends Controller {
 			return $content;
 		}
 
+		/**
+		 * Prevent the default restriction message from being shown by returning a custom
+		 * message or content.
+		 *
+		 * @param null|string $pre_restrict_content The content to display.
+		 * @param string $content     The content.
+		 * @param \ContentControl\Models\Restriction $restriction The restriction.
+		 *
+		 * @return string
+		 */
+		$pre_restrict_content = apply_filters( 'content_control/pre_restrict_content', null, $content, $restriction );
+
+		if ( null !== $pre_restrict_content ) {
+			return $pre_restrict_content;
+		}
+
 		$message = \ContentControl\get_default_denial_message();
 
 		/**
@@ -118,8 +134,8 @@ class PostContent extends Controller {
 		/**
 		 * Filter the message to display when a post is restricted.
 		 *
-		 * @param string $message     Message to display.
-		 * @param object $restriction Restriction object.
+		 * @param string                             $message     Message to display.
+		 * @param \ContentControl\Models\Restriction $restriction The restriction.
 		 *
 		 * @return string
 		 */
