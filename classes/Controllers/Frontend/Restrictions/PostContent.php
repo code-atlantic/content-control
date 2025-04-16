@@ -171,10 +171,25 @@ class PostContent extends Controller {
 			return $post_excerpt;
 		}
 
-		$restriction = get_applicable_restriction();
+		$restriction = get_applicable_restriction( $post->ID );
 
 		if ( false === $restriction ) {
 			return $post_excerpt;
+		}
+
+		/**
+		 * Filter to bypass the default restriction message for excerpts.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param null|string                        $pre_excerpt      Return a non-null value to bypass.
+		 * @param string                             $post_excerpt     The original excerpt.
+		 * @param \ContentControl\Models\Restriction $restriction    The restriction object.
+		 */
+		$pre_excerpt = apply_filters( 'content_control/pre_restrict_excerpt', null, $post_excerpt, $restriction );
+
+		if ( null !== $pre_excerpt ) {
+			return $pre_excerpt;
 		}
 
 		/**
