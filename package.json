@@ -1,6 +1,6 @@
 {
 	"name": "content-control",
-	"version": "2.6.1",
+	"version": "2.6.2",
 	"description": "",
 	"author": "Code Atlantic LLC",
 	"license": "GPL-2.0-or-later",
@@ -100,7 +100,9 @@
 		"release:zip": "mv build content-control && zip -r content-control_$(node -p \"require('./package.json').version\").zip content-control && rm -rf content-control",
 		"release:start": "git flow release start",
 		"release:finish": "git flow release finish",
-		"release:publish": "git push origin master --tags && git push origin master"
+		"release:publish": "git push origin master --tags && git push origin master",
+		"update-version": "node bin/update-versions.js",
+		"update-changelog": "node bin/update-changelog.js"
 	},
 	"babel": {},
 	"workspaces": [

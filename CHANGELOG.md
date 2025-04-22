@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.2 - 04/22/2025
+
 -   Security: Escaped `[content_control]` `message` attribute.
 -   Fix: Misc JS bugs in admin.
 -   Developer: Added new `content_control/pre_restrict_content` & `content_control/pre_restrict_excerpt` filters to allow overloading/short curcuiting the default restriction application.
