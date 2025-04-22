@@ -247,7 +247,8 @@ const Edit = ( { onSave = noop, onClose = noop }: EditProps ) => {
 				title: __( 'Content', 'content-control' ),
 				comp: () => <ContentTab { ...componentProps } />,
 			},
-		]
+		],
+		componentProps
 	) as TabComponent[];
 
 	if ( typeof errorMessage === 'object' && errorMessage?.tabName?.length ) {
