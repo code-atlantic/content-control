@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-   Fix: Excerpt rendering when custom message wasn't set.
+
 ## v2.6.2 - 04/22/2025
 
 -   Security: Escaped `[content_control]` `message` attribute.
