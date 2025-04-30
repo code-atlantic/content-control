@@ -24,4 +24,8 @@ function remove_wp_options_data() {
 		'content_control_known_blockTypes',
 		'content_control_completed_upgrades',
 	];
+
+	foreach ( $keys as $key ) {
+		delete_option( $key );
+	}
 }

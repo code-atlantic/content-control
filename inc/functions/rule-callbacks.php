@@ -102,11 +102,9 @@ function content_is_home_page() {
 		case 'restapi':
 		case 'restapi/terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	// Catch all unknown contexts.
-	return false;
 }
 
 /**
@@ -147,10 +145,9 @@ function content_is_blog_index() {
 		case 'restapi/terms':
 		case 'terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**
@@ -206,10 +203,9 @@ function content_is_post_type_archive() {
 		case 'restapi/terms':
 		case 'terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**
@@ -265,10 +261,9 @@ function content_is_post_type() {
 		case 'restapi/terms':
 		case 'terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**
@@ -328,10 +323,9 @@ function content_is_selected_post() {
 		case 'restapi/terms':
 		case 'terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**
@@ -707,10 +701,9 @@ function content_is_taxonomy_archive() {
 		// Catch all known contexts.
 		case 'terms':
 		case 'unknown':
+		default:
 			return false;
 	}
-
-	return false;
 }
 
 /**

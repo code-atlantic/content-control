@@ -95,6 +95,8 @@ class BlockTypes extends WP_REST_Controller {
 
 		$error_message = __( 'Something went wrong, the block types could not be updated.', 'content-control' );
 
+		// Following line is sanity check to ensure get_block_types() returns an array to prevent runtime errors.
+		// @phpstan-ignore-next-line .
 		if ( ! is_array( get_block_types() ) ) {
 			return new WP_Error( '500', $error_message, [ 'status' => 500 ] );
 		}
