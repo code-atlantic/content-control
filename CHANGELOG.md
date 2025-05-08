@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.3 - 05/08/2025
+
 -   Fix: Excerpt rendering when custom message wasn't set.
 
 ## v2.6.2 - 04/22/2025
