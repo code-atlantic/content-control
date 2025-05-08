@@ -1,6 +1,6 @@
 {
 	"name": "content-control",
-	"version": "2.6.2",
+	"version": "2.6.3",
 	"description": "",
 	"author": "Code Atlantic LLC",
 	"license": "GPL-2.0-or-later",
@@ -72,7 +72,6 @@
 		"packages-update-deep": "nx run-many --target=packages-update",
 		"check-engines": "wp-scripts check-engines",
 		"check-licenses": "wp-scripts check-licenses",
-		"composer": "wp-env run cli --env-cwd=wp-content/plugins/content-control composer",
 		"copy-build": "node bin/copy-build.js",
 		"format": "wp-scripts format",
 		"format:packages": "wp-scripts format ./packages/**/src",

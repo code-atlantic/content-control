@@ -101,7 +101,7 @@ class Rules {
 	 * @return boolean
 	 */
 	public function is_rule_valid( $rule ) {
-		return is_array( $rule ) && ! empty( $rule );
+		return ! empty( $rule );
 	}
 
 	/**
@@ -479,6 +479,7 @@ class Rules {
 			 *
 			 * @param array<string,array<string,mixed>> $type_rules Post type rules.
 			 * @param string $name Post type name.
+			 * @param \WP_Post_Type $post_type Post type object.
 			 *
 			 * @return array<string,array<string,mixed>>
 			 */

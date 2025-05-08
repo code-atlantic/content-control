@@ -112,9 +112,9 @@ function allowed_user_roles() {
 		 *
 		 * @return array
 		 */
-		$roles = apply_filters( 'content_control/user_roles', wp_roles()->get_names() );
+		$roles = (array) apply_filters( 'content_control/user_roles', wp_roles()->get_names() );
 
-		if ( ! is_array( $roles ) || empty( $roles ) ) {
+		if ( empty( $roles ) ) {
 			$roles = [];
 		}
 	}

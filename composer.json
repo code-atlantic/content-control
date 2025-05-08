@@ -1,6 +1,5 @@
 {
 	"name": "code-atlantic/content-control",
-	"version": "2.6.2",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://contentcontrolplugin.com/",
@@ -9,21 +8,22 @@
 	},
 	"minimum-stability": "dev",
 	"require": {
-		"composer/installers": "2.3.0",
+		"php": ">=7.4",
+		"composer/installers": "^1.0 || ^2.0",
 		"pimple/pimple": "3.5.0",
 		"trustedlogin/client": "1.9.0"
 	},
 	"require-dev": {
 		"code-atlantic/coding-standards": "^1.1.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
-		"phpstan/phpstan": "^1.10.62",
-		"szepeviktor/phpstan-wordpress": "1.3.3",
-		"phpstan/extension-installer": "^1.3.1",
-		"phpunit/phpunit": "10.4.0",
-		"mockery/mockery": "^1.6.6",
-		"brain/monkey": "^2.6.1",
-		"php-stubs/woocommerce-stubs": "8.6.1",
-		"php-stubs/generator": "^0.8.4"
+		"phpstan/phpstan": "^2.1.13",
+		"szepeviktor/phpstan-wordpress": "v2.0.1",
+		"phpstan/extension-installer": "^1.4.3",
+		"phpunit/phpunit": "^12.1.3",
+		"mockery/mockery": "^1.6.12",
+		"brain/monkey": "^2.6.2",
+		"php-stubs/woocommerce-stubs": "^9.8.2",
+		"php-stubs/generator": "^0.8.5"
 	},
 	"autoload": {
 		"psr-4": {
@@ -42,7 +42,7 @@
 	"scripts": {
 		"format": "vendor/bin/phpcbf --standard=.phpcs.xml.dist --report-summary --report-source",
 		"lint": "vendor/bin/phpcs --standard=.phpcs.xml.dist",
-		"generate-stubs": "vendor/bin/generate-stubs --finder=./bin/generate-stubs.php --out=content-control.stub --stats --force --include-inaccessible-class-nodes",
+		"generate-stubs": "generate-stubs --out=./bin/stubs/content-control.stub  --include-inaccessible-class-nodes --force  ./classes/ ./inc/ ./content-control.php ./uninstall.php",
 		"install-strauss": [
 			"test -f strauss.phar || curl -o strauss.phar -L -C - https://github.com/BrianHenryIE/strauss/releases/download/0.16.0/strauss.phar"
 		],

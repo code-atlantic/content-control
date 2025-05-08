@@ -260,9 +260,6 @@ class ObjectSearch extends WP_REST_Controller {
 					break;
 			}
 
-			// Take out keys which were only used to deduplicate.
-			$results['items'] = array_values( $results['items'] );
-
 			return new WP_REST_Response( $results, 200 );
 		} catch ( \Exception $e ) {
 			return new WP_Error( '500', __( 'Something went wrong, the results could not be returned.', 'content-control' ), [ 'status' => 500 ] );

@@ -301,6 +301,8 @@ class Core {
 	 */
 	public function register_controllers( $controllers = [] ) {
 		foreach ( $controllers as $name => $controller ) {
+			// Sanity check to ensure controller implements Controller interface.
+			// @phpstan-ignore-next-line .
 			if ( $controller instanceof Controller ) {
 				if ( $controller->controller_enabled() ) {
 					$controller->init();

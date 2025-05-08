@@ -143,7 +143,8 @@ class Upgrader {
 
 		// 1. Check if the plugin exists already, if so upgrade it.
 
-		// Error check.
+		// Error check. Sanity check to ensure install method exists.
+		// @phpstan-ignore-next-line .
 		if ( ! method_exists( $installer, 'install' ) ) {
 			return new \WP_Error( 'content_control_upgrader', __( 'Upgrader missing install method.', 'content-control' ) );
 		}

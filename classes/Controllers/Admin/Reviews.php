@@ -44,7 +44,7 @@ class Reviews extends Controller {
 	 *
 	 * @var string
 	 */
-	public static $api_url;
+	public $api_url;
 
 	/**
 	 * Initialize review requests.
@@ -533,13 +533,9 @@ class Reviews extends Controller {
 
 		$code = $this->get_trigger_code();
 
-		$conditions = [
-			$this->already_did(),
-			$this->last_dismissed() && strtotime( $this->last_dismissed() . ' +2 weeks' ) > time(),
-			empty( $code ),
-		];
-
-		return in_array( true, $conditions, true );
+		return $this->already_did()
+			|| ( $this->last_dismissed() && strtotime( $this->last_dismissed() . ' +2 weeks' ) > time() )
+			|| empty( $code );
 	}
 
 	/**

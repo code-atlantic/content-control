@@ -2,8 +2,7 @@
 
 HEADER=$'/**\n * Generated stub declarations for Content Control.\n * @see https://contentcontrolplugin.com/\n * @see https://github.com/php-stubs/content-control-stubs\n */'
 
-FILE="./bin/stubs/content-control.php"
-# FILE="../content-control-pro/bin/stubs/content-control.stub"
+FILE="./bin/stubs/content-control.stub"
 
 set -e
 
@@ -18,7 +17,7 @@ echo "Generating stubs for Content Control..."
 "generate-stubs" \
     --include-inaccessible-class-nodes \
     --force \
-    # --finder=bin/generate-stubs.php \
+    --stats \
     --header="$HEADER" \
-    --out="$FILE"
+    --out="$FILE" \
     ./classes/ ./inc/ ./content-control.php ./uninstall.php
