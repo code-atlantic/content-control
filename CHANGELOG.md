@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.6.4 - 05/09/2025
+
+-   Fix: Revert change in previous update that broke rendering of some shortcodes within `[content_control]` shortcode inner contents.
+
 ## v2.6.3 - 05/08/2025
 
 -   Fix: Excerpt rendering when custom message wasn't set.
