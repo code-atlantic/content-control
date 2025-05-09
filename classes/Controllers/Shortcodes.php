@@ -97,7 +97,7 @@ class Shortcodes extends Controller {
 			$container,
 			esc_attr( $classes ),
 			// Sanitize the content output, allowing safe HTML and processed shortcodes.
-			wp_kses_post( do_shortcode( $content ) ),
+			do_shortcode( $content ),
 			// Sanitize the message output, allowing safe HTML and processed shortcodes.
 			wp_kses_post( do_shortcode( $atts['message'] ) )
 		);
