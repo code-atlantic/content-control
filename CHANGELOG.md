@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-  Developer: Passed the original filtered content to the restricted message filter.
+
 ## v2.6.4 - 05/09/2025
 
 -   Fix: Revert change in previous update that broke rendering of some shortcodes within `[content_control]` shortcode inner contents.

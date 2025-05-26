@@ -136,6 +136,7 @@ class PostContent extends Controller {
 		 *
 		 * @param string                             $message     Message to display.
 		 * @param \ContentControl\Models\Restriction $restriction The restriction.
+		 * @param string                             $content     The original filtered content.
 		 *
 		 * @return string
 		 */
@@ -143,7 +144,8 @@ class PostContent extends Controller {
 			$filter_name,
 			// If the default message is empty, show a generic message.
 			! empty( $message ) ? $message : __( 'This content is restricted.', 'content-control' ),
-			$restriction
+			$restriction,
+			$content
 		);
 	}
 
@@ -214,6 +216,7 @@ class PostContent extends Controller {
 		 *
 		 * @param string                             $message     Message to display.
 		 * @param \ContentControl\Models\Restriction $restriction The restriction.
+		 * @param string                             $post_excerpt The original filtered excerpt.
 		 *
 		 * @return string
 		 */
@@ -221,7 +224,8 @@ class PostContent extends Controller {
 			$filter_name,
 			// If the default message is empty, show a generic message.
 			! empty( $message ) ? $message : __( 'This content is restricted.', 'content-control' ),
-			$restriction
+			$restriction,
+			$post_excerpt
 		);
 	}
 }
