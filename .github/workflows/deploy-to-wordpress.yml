@@ -38,7 +38,7 @@ jobs:
             # Deploy to WordPress.org
             - name: WordPress Plugin Deploy
               id: deploy
-              uses: 10up/action-wordpress-plugin-deploy@2.2.2
+              uses: 10up/action-wordpress-plugin-deploy@2.3.0
               # with:
               #     generate-zip: true
               #     dry-run: true
