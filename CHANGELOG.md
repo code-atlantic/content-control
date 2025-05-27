@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.5 - 05/27/2025
+
 -  Developer: Passed the original filtered content to the restricted message filter.
 
 ## v2.6.4 - 05/09/2025
