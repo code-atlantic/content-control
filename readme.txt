@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 6.8.1
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 Requires PHP: 7.4
 License: GPLv3 (or later)
 
@@ -109,6 +109,10 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.6.5 - 05/27/2025 =
+
+* Tweak: Passed the original filtered content to the restricted message filter.
 
 = v2.6.4 - 05/09/2025 =
 
