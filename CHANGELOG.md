@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.6.6 - 08/13/2026
+
 -   Security: Restricted REST API access to global plugin settings to authorized administrators.
 
 ## v2.6.5 - 05/27/2025
