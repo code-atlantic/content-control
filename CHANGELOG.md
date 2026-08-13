@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+-   Security: Restricted REST API access to global plugin settings to authorized administrators.
+
 ## v2.6.5 - 05/27/2025
 
 -  Developer: Passed the original filtered content to the restricted message filter.
