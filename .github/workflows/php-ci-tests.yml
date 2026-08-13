@@ -46,7 +46,10 @@ jobs:
                   tools: composer:v2
 
             - name: Install dependencies
-              run: composer install --no-progress --no-suggest
+              run: |
+                  composer install --no-progress --no-suggest --no-scripts
+                  COMPOSER_AUTH='{}' composer run-script strauss
+                  composer dump-autoload
 
             - name: Run PHPStan
               run: composer run phpstan
