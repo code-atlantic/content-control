@@ -46,7 +46,7 @@ class Settings extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_settings' ],
-					'permission_callback' => '__return_true', // Read only, so anyone can view.
+					'permission_callback' => [ $this, 'update_settings_permissions' ],
 				],
 				[
 					'methods'             => WP_REST_Server::EDITABLE,
@@ -101,7 +101,7 @@ class Settings extends WP_REST_Controller {
 	}
 
 	/**
-	 * Check update settings permissions.
+	 * Check settings permissions.
 	 *
 	 * @return WP_Error|bool
 	 */
