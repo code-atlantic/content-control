@@ -1,10 +1,6 @@
 # Content Control Changelog
 
-## v2.7.0 - 08/03/2026
-
-- Security: Remove commercial package connection and installation implementation from public Core.
-- Improvement: Move Pro licensing and add-on distribution ownership to Content Control Pro 1.3.0.
-- Compatibility: Retain a version-gated, non-UI license and updater bridge for active Pro versions older than 1.3.0.
+## Unreleased
 
 ## v2.6.5 - 05/27/2025
 

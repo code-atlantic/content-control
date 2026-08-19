@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 7.0
-Stable tag: 2.7.0
+Stable tag: 2.6.5
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 
@@ -109,12 +109,6 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
-
-= v2.7.0 - 08/03/2026 =
-
-* Security: Remove commercial package connection and installation implementation from public Core.
-* Improvement: Move Pro licensing and add-on distribution ownership to Content Control Pro 1.3.0.
-* Compatibility: Retain a version-gated, license-only bridge for active Pro versions older than 1.3.0.
 
 = v2.6.5 - 05/27/2025 =
 
