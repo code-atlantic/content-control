@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
+
 /**
  * Uninstall Content Control
  *

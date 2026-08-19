@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Get all options
  *

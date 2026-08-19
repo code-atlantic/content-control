@@ -9,6 +9,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Get post excerpt or <!--more--> tag content for a post.
  *

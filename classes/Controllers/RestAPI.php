@@ -53,10 +53,12 @@ class RestAPI extends Controller {
 	/**
 	 * Remove the installer route registered by active Pro versions below 1.3.0.
 	 *
-	 * Core does not register or implement this endpoint. Released Pro registers
-	 * it, then its callback resolves the upgrader service removed from Core. The
-	 * compatibility filter prevents that old callback from fatally resolving a
-	 * service that no longer exists while the user installs current Pro manually.
+	 * Those versions resolve an upgrader service that is unavailable in Core
+	 * 2.7.0. Removing the endpoint prevents a fatal request while Pro is updated
+	 * manually. Core does not register or implement the endpoint.
+	 *
+	 * @since 2.7.0
+	 * @deprecated 2.7.0 Remove after Pro 1.3.0 is the minimum supported version.
 	 *
 	 * @param array<string,array<int,array<string,mixed>>> $endpoints Registered REST endpoints.
 	 *

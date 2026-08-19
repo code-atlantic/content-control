@@ -1,6 +1,6 @@
 <?php
 /**
- * Core fixture for compliance migration tests.
+ * Core fixture for mixed-version Pro tests.
  *
  * @package ContentControl\Tests
  */
@@ -12,7 +12,7 @@ use ContentControl\Plugin\Core;
 /**
  * Isolate the active-Pro decision from the filesystem and plugin bootstrap.
  */
-class ComplianceCoreFixture extends Core {
+class ProCompatibilityCoreFixture extends Core {
 
 	/**
 	 * Whether the Pro fixture is active.

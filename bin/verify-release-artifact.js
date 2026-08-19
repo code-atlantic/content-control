@@ -179,8 +179,8 @@ function verifyArchiveEntryTypes( entries, entryTypes ) {
 /**
  * Verify a release ZIP's structure and manifest.
  *
- * Plugin Check owns WordPress.org policy validation. This verifier only
- * protects the release archive boundary produced by this repository.
+ * This verifier protects the release archive boundary produced by this
+ * repository.
  *
  * @param {string} zipPath ZIP path.
  * @return {{entries:string[],failures:string[]}} Verification result.
