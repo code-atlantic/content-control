@@ -39,8 +39,10 @@ declare global {
 			[ key: string ]: boolean;
 		};
 		version: string;
-		isProInstalled?: '1' | '';
-		isProActivated?: '1' | '';
+		isProInstalled?: boolean;
+		isProActivated?: boolean;
+		legacyProLicense?: boolean;
+		licenseLevel?: number;
 	};
 }
 

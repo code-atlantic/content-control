@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 require_once 'functions/back-compat.php';
 require_once 'functions/compatibility.php';
 require_once 'functions/content.php';

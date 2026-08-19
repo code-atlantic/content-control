@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
+
 /**
  * Uninstall Content Control
  *
@@ -17,7 +19,6 @@ function remove_wp_options_data() {
 		'content_control_license',
 		'content_control_pro_activation_date',
 		'content_control_installed_on',
-		'content_control_connect_token',
 		'content_control_version',
 		'content_control_data_versioning',
 		'content_control_debug_log_token', // delete log first.

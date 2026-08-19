@@ -9,6 +9,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Check if post has restrictions.
  *

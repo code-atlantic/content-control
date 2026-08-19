@@ -7,8 +7,6 @@ import { upgrade } from '@content-control/icons';
 import { useEffect, useMemo } from '@wordpress/element';
 import { Icon, Popover, SlotFillProvider } from '@wordpress/components';
 
-import { useLicense } from '@content-control/core-data';
-
 import Header from './header';
 import RestrictionsView from './restrictions-view';
 import SettingsView from './settings-view';
@@ -23,9 +21,10 @@ const {
 	},
 } = contentControlSettingsPage;
 
-const App = () => {
-	const { isLicenseActive, isLicenseKeyValid, licenseLevel } = useLicense();
+const isProActive = !! contentControlSettingsPage.isProActivated;
+const licenseLevel = contentControlSettingsPage.licenseLevel;
 
+const App = () => {
 	const [ { view = 'restrictions' }, setParams ] = useQueryParams( {
 		tab: StringParam,
 		view: StringParam,
@@ -82,45 +81,56 @@ const App = () => {
 					title: (
 						<>
 							<Icon size={ 20 } icon={ upgrade } />
-							{ ! isLicenseActive
-								? __( 'Upgrade to Pro', 'content-control' )
-								: __( 'License Status', 'content-control' ) }
+							{ isProActive
+								? __( 'License & Updates', 'content-control' )
+								: __( 'Upgrade to Pro', 'content-control' ) }
 						</>
 					),
-					pageTitle: __(
-						'Content Control - Upgrade to Pro',
-						'content-control'
-					),
-					heading: __(
-						'Content Control - Upgrade to Pro',
-						'content-control'
-					),
-					href: ! isLicenseKeyValid
-						? 'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=main-menu-upgrade-button'
-						: undefined,
-					target: '_blank',
-					onClick: () => {
-						setParams( {
-							view: 'settings',
-							tab: 'license-and-updates',
-						} );
+					pageTitle: isProActive
+						? __(
+								'Content Control - License & Updates',
+								'content-control'
+						  )
+						: __(
+								'Content Control - Upgrade to Pro',
+								'content-control'
+						  ),
+					heading: isProActive
+						? __(
+								'Content Control - License & Updates',
+								'content-control'
+						  )
+						: __(
+								'Content Control - Upgrade to Pro',
+								'content-control'
+						  ),
+					href: isProActive
+						? undefined
+						: 'https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=main-menu-upgrade-button',
+					target: isProActive ? undefined : '_blank',
+					onClick: isProActive
+						? () => {
+								setParams( {
+									view: 'settings',
+									tab: 'license-and-updates',
+								} );
 
-						// Return false prevents tab component from rendering.
-						return false;
-					},
+								// Return false prevents tab component from rendering.
+								return false;
+						  }
+						: undefined,
 				},
 			],
 			{
 				view,
 				setParams,
-				isLicenseActive,
-				isLicenseKeyValid,
+				isProActive,
 				licenseLevel,
 			}
 		) as TabComponent[];
 
 		return _views;
-	}, [ isLicenseActive, isLicenseKeyValid, licenseLevel, setParams, view ] );
+	}, [ setParams, view ] );
 
 	// Assign the current view from the list of views.
 	const currentView = views.find( ( _view ) => _view.name === view );

@@ -44,11 +44,15 @@ const SettingsView = () => {
 				title: __( 'Block Controls', 'content-control' ),
 				comp: BlockControlsTab,
 			},
-			{
-				name: 'license-and-updates',
-				title: __( 'Licensing', 'content-control' ),
-				comp: UpgradeTab,
-			},
+			...( contentControlSettingsPage.isProActivated
+				? [
+						{
+							name: 'license-and-updates',
+							title: __( 'License & Updates', 'content-control' ),
+							comp: UpgradeTab,
+						},
+				  ]
+				: [] ),
 		]
 	) as TabComponent[];
 
