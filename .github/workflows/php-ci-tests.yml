@@ -48,5 +48,10 @@ jobs:
             - name: Install dependencies
               run: composer install --no-progress --no-scripts
 
+            - name: Build prefixed dependencies
+              env:
+                  COMPOSER_AUTH: '{}'
+              run: composer run strauss
+
             - name: Run PHPStan
               run: composer run phpstan
