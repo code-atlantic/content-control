@@ -33,10 +33,24 @@ jobs:
 
             # Build release assets using our release:build script
             - name: Build release assets
+              env:
+                  COMPOSER_AUTH: '{}'
+                  COMPOSER_HOME: ${{ runner.temp }}/composer-release
               run: npm run release:build
 
             - name: Verify assembled WordPress.org tree
-              run: node bin/verify-wporg-artifact.js --release-tree "${{ env.BUILD_DIR }}"
+              run: node bin/verify-release-artifact.js --release-tree "${{ env.BUILD_DIR }}"
+
+            - name: Run WordPress Plugin Check
+              uses: wordpress/plugin-check-action@v1
+              with:
+                  build-dir: ${{ env.BUILD_DIR }}
+                  slug: content-control
+                  exclude-checks: plugin_review_phpcs
+                  exclude-directories: |
+                      vendor
+                      vendor-prefixed
+                  ignore-warnings: true
 
             # Deploy to WordPress.org
             - name: WordPress Plugin Deploy
