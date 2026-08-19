@@ -51,6 +51,7 @@ jobs:
             - name: Build prefixed dependencies
               env:
                   COMPOSER_AUTH: '{}'
+                  COMPOSER_HOME: ${{ runner.temp }}/composer-strauss
               run: composer run strauss
 
             - name: Run PHPStan
