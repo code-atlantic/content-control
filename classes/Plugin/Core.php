@@ -191,25 +191,18 @@ class Core {
 					return new Options( $c->get( 'option_prefix' ) );
 				};
 
-			$this->container['connect'] =
+			if ( $this->is_legacy_pro_active() ) {
+				$this->container['license'] =
 				/**
-				 * Get plugin connect.
-				 *
-				 * @return Connect
-				 */
-				function ( $c ) {
-					return new \ContentControl\Plugin\Connect( $c );
-				};
-
-			$this->container['license'] =
-				/**
-				 * Get plugin license.
+				 * Get the temporary old-Pro license bridge.
 				 *
 				 * @return License
+				 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 				 */
-				function () {
-					return new \ContentControl\Plugin\License();
-				};
+					function () {
+						return new \ContentControl\Plugin\License();
+					};
+			}
 
 			$this->container['logging'] =
 				/**
@@ -219,16 +212,6 @@ class Core {
 				 */
 				function () {
 					return new \ContentControl\Plugin\Logging();
-				};
-
-			$this->container['upgrader'] =
-				/**
-				 * Get plugin upgrader.
-				 *
-				 * @return Upgrader
-				 */
-				function ( $c ) {
-					return new \ContentControl\Plugin\Upgrader( $c );
 				};
 
 			$this->container['rules'] =
@@ -474,11 +457,33 @@ class Core {
 	}
 
 	/**
+	 * Whether an active Pro release still depends on Core's license provider.
+	 *
+	 * This version gate is the only reason Core retains its deprecated license
+	 * bridge. Pro 1.3.0 and later register their own provider before use.
+	 *
+	 * @return boolean
+	 */
+	public function is_legacy_pro_active() {
+		if ( ! $this->is_pro_active() || ! function_exists( '\ContentControl\Pro\config' ) ) {
+			return false;
+		}
+
+		$version = \ContentControl\Pro\config( 'version' );
+
+		return is_string( $version ) && '' !== $version && version_compare( $version, '1.3.0', '<' );
+	}
+
+	/**
 	 * Check if license is active.
 	 *
 	 * @return boolean
 	 */
 	public function is_license_active() {
-		return $this->get( 'license' )->is_license_active();
+		$license = $this->get( 'license' );
+
+		return is_object( $license ) && method_exists( $license, 'is_license_active' )
+			? $license->is_license_active()
+			: false;
 	}
 }

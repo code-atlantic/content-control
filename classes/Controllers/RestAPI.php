@@ -25,6 +25,10 @@ class RestAPI extends Controller {
 	public function init() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 
+		if ( $this->container->is_legacy_pro_active() ) {
+			add_filter( 'rest_endpoints', [ $this, 'disable_legacy_pro_installer_route' ], PHP_INT_MAX );
+		}
+
 		// Handle CPT & Taxonomy that are not registered with the `show_in_rest` arg when searching from our settings pages.
 		add_filter( 'register_post_type_args', [ $this, 'modify_post_type_show_in_rest' ], 10 );
 		add_filter( 'register_taxonomy_args', [ $this, 'modify_taxonomy_show_in_rest' ], 10 );
@@ -37,9 +41,29 @@ class RestAPI extends Controller {
 	 */
 	public function register_routes() {
 		( new \ContentControl\RestAPI\BlockTypes() )->register_routes();
-		( new \ContentControl\RestAPI\License() )->register_routes();
+
+		if ( $this->container->is_legacy_pro_active() ) {
+			( new \ContentControl\RestAPI\License() )->register_routes();
+		}
+
 		( new \ContentControl\RestAPI\ObjectSearch() )->register_routes();
 		( new \ContentControl\RestAPI\Settings() )->register_routes();
+	}
+
+	/**
+	 * Remove old Pro's installer route after old Pro has registered it.
+	 *
+	 * The unavailable route is intentional: Core no longer retains an external
+	 * package installer merely to serve Pro versions older than 1.3.0.
+	 *
+	 * @param array<string,array<int,array<string,mixed>>> $endpoints Registered REST endpoints.
+	 *
+	 * @return array<string,array<int,array<string,mixed>>>
+	 */
+	public function disable_legacy_pro_installer_route( $endpoints ) {
+		unset( $endpoints['/content-control/v2/addons/install'] );
+
+		return $endpoints;
 	}
 
 	/**

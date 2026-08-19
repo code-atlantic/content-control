@@ -35,6 +35,9 @@ jobs:
             - name: Build release assets
               run: npm run release:build
 
+            - name: Verify assembled WordPress.org tree
+              run: node bin/verify-wporg-artifact.js --release-tree "${{ env.BUILD_DIR }}"
+
             # Deploy to WordPress.org
             - name: WordPress Plugin Deploy
               id: deploy

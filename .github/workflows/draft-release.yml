@@ -47,6 +47,9 @@ jobs:
                   mv $BUILD_DIR ${{ env.SLUG }}
                   zip -r ${{ env.SLUG }}_${{ github.ref_name }}.zip ${{ env.SLUG }}
 
+            - name: Verify release zip
+              run: node bin/verify-wporg-artifact.js "${{ env.SLUG }}_${{ github.ref_name }}.zip"
+
             # Create draft release
             - name: Create Draft Release
               id: create_release

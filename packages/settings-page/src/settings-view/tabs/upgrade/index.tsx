@@ -4,41 +4,38 @@ import { licenseKey } from '@content-control/icons';
 import { useLicense } from '@content-control/core-data';
 
 import Section from '../../section';
-
 import LicenseSection from './license';
 
 import type { IconProps } from '@wordpress/icons/build-types/icon';
 import type { TabComponent } from '../../../types';
 
-// const { pluginUrl } = contentControlSettingsPage;
+// Keep the license management field available only while an active pre-1.3.0
+// Pro release still depends on Core. Pro 1.3.0+ owns and registers its own UI.
+if ( contentControlSettingsPage.legacyProLicense ) {
+	addFilter(
+		'contentControl.settingsPage.upgradeSections',
+		'content-control/general-settings/license-options',
+		( sections: { [ key: string ]: any }[] ) => {
+			const { isLicenseActive } = useLicense();
 
-addFilter(
-	'contentControl.settingsPage.upgradeSections',
-	'content-control/general-settings/license-options',
-	( sections: { [ key: string ]: any }[] ) => {
-		const { isLicenseActive } = useLicense();
-
-		return [
-			...sections,
-			{
-				name: 'license',
-				title: __( 'Pro Licensing', 'content-control' ),
-				badge: (
-					<>
-						{ isLicenseActive && (
-							<span className="license-status-bubble">
-								{ __( 'Activated', 'content-control' ) }
-							</span>
-						) }
-					</>
-				),
-				icon: licenseKey,
-				comp: LicenseSection,
-			},
-		];
-	},
-	5
-);
+			return [
+				...sections,
+				{
+					name: 'license',
+					title: __( 'Pro Licensing', 'content-control' ),
+					badge: isLicenseActive ? (
+						<span className="license-status-bubble">
+							{ __( 'Activated', 'content-control' ) }
+						</span>
+					) : undefined,
+					icon: licenseKey,
+					comp: LicenseSection,
+				},
+			];
+		},
+		5
+	);
+}
 
 // Filtered & mappable list of TabComponent definitions.
 type SectionList = ( TabComponent & { icon: IconProps[ 'icon' ] } )[];

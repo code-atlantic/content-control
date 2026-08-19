@@ -15,7 +15,9 @@ use function ContentControl\plugin;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Rest API Licensing Controller Class.
+ * Temporary REST bridge for Pro releases older than 1.3.0.
+ *
+ * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
  */
 class License extends WP_REST_Controller {
 
@@ -37,6 +39,7 @@ class License extends WP_REST_Controller {
 	 * Register API endpoint routes.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function register_routes() {
 		register_rest_route(
@@ -107,7 +110,7 @@ class License extends WP_REST_Controller {
 			[
 				[
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_license_status' ],
+					'callback'            => [ $this, 'get_status' ],
 					'permission_callback' => [ $this, 'manage_license_permissions' ],
 				],
 				[
@@ -117,18 +120,6 @@ class License extends WP_REST_Controller {
 				],
 			]
 		);
-
-		register_rest_route(
-			$this->namespace,
-			'/' . $this->base . '/activate-pro',
-			[
-				[
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'activate_pro' ],
-					'permission_callback' => [ $this, 'manage_license_permissions' ],
-				],
-			],
-		);
 	}
 
 	/**
@@ -136,6 +127,7 @@ class License extends WP_REST_Controller {
 	 *
 	 * @param array{key:string,status:array<string,mixed>} $license_data License data.
 	 * @return array{key:string,status:array<string,mixed>}
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function clean_license_data( $license_data ) {
 		$license_data['status'] = $this->clean_license_status( $license_data['status'] );
@@ -152,6 +144,7 @@ class License extends WP_REST_Controller {
 	 *
 	 * @psalm-return array<'key'|'status', array<string, mixed>|string>
 	 * @phpstan-return array{key: string, status: array<string, mixed>|string}
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function clean_license_status( $license_status ) {
 		// Remove customer_email, customer_name, payment_id, ..., checksum keys from status array.
@@ -176,6 +169,7 @@ class License extends WP_REST_Controller {
 	 * Get plugin license.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function get_license() {
 		$license_data = plugin( 'license' )->get_license_data();
@@ -193,6 +187,7 @@ class License extends WP_REST_Controller {
 	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function update_license_key( $request ) {
 		$license_key = sanitize_text_field( $request->get_param( 'licenseKey' ) );
@@ -202,7 +197,7 @@ class License extends WP_REST_Controller {
 
 			if ( $old_key === $license_key ) {
 				$license_status = plugin( 'license' )->get_license_status();
-				return new WP_REST_Response( $this->clean_license_status( $license_status ), 200 );
+				return new WP_REST_Response( [ 'status' => $this->clean_license_status( $license_status ) ], 200 );
 			}
 
 			if ( plugin( 'license' )->is_license_active() ) {
@@ -213,15 +208,12 @@ class License extends WP_REST_Controller {
 
 			$license_status = plugin( 'license' )->activate_license( $license_key );
 
-			$response = [
-				'status' => $this->clean_license_status( $license_status ),
-			];
-
-			if ( ! plugin()->is_pro_installed() ) {
-				$response['connectInfo'] = plugin( 'connect' )->get_connect_info( $license_key );
-			}
-
-			return new WP_REST_Response( $response, 200 );
+			return new WP_REST_Response(
+				[
+					'status' => $this->clean_license_status( $license_status ),
+				],
+				200
+			);
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license key could not be saved.', 'content-control' );
 
@@ -237,6 +229,7 @@ class License extends WP_REST_Controller {
 	 * Remove plugin license key.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function remove_license() {
 		plugin( 'license' )->remove_license();
@@ -254,22 +247,22 @@ class License extends WP_REST_Controller {
 	 * @param WP_REST_Request<array<string,mixed>> $request Request object.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function activate_license( $request ) {
-		$license_key = sanitize_text_field( $request->get_param( 'licenseKey' ) );
+		$license_key = $request->has_param( 'licenseKey' )
+			? sanitize_text_field( $request->get_param( 'licenseKey' ) )
+			: null;
 
 		try {
 			$license_status = plugin( 'license' )->activate_license( $license_key );
 
-			$response = [
-				'status' => $this->clean_license_status( $license_status ),
-			];
-
-			if ( ! plugin()->is_pro_installed() ) {
-				$response['connectInfo'] = plugin( 'connect' )->get_connect_info( plugin( 'license' )->get_license_key() );
-			}
-
-			return new WP_REST_Response( $response, 200 );
+			return new WP_REST_Response(
+				[
+					'status' => $this->clean_license_status( $license_status ),
+				],
+				200
+			);
 		} catch ( \Exception $e ) {
 			$message = __( 'Something went wrong, the license could not be activated.', 'content-control' );
 
@@ -282,39 +275,10 @@ class License extends WP_REST_Controller {
 	}
 
 	/**
-	 * Activate pro plugin.
-	 *
-	 * @return \WP_Error|\WP_REST_Response
-	 */
-	public function activate_pro() {
-		// Check if its installed.
-		if ( ! plugin()->is_pro_installed() ) {
-			return new WP_Error( '404', __( 'Pro plugin is not installed.', 'content-control' ), [ 'status' => 404 ] );
-		}
-
-		// Check if its active.
-		if ( plugin()->is_pro_active() ) {
-			return new WP_Error( '404', __( 'Pro plugin is already active.', 'content-control' ), [ 'status' => 404 ] );
-		}
-
-		// // Activate pro plugin.
-		if ( ! function_exists( 'activate_plugin' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$activate = \activate_plugin( 'content-control-pro/content-control-pro.php', '', false, true );
-
-		if ( is_wp_error( $activate ) ) {
-			return new WP_Error( '404', __( 'Something went wrong, the pro plugin could not be activated.', 'content-control' ), [ 'status' => 404 ] );
-		}
-
-		return new WP_REST_Response( true, 200 );
-	}
-
-	/**
 	 * Deactivate plugin license.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function deactivate_license() {
 		try {
@@ -336,6 +300,7 @@ class License extends WP_REST_Controller {
 	 * Get plugin license status.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function get_status() {
 		$license_status = plugin( 'license' )->get_license_status();
@@ -351,6 +316,7 @@ class License extends WP_REST_Controller {
 	 * Refresh plugin license status.
 	 *
 	 * @return \WP_Error|\WP_REST_Response
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function refresh_license_status() {
 		$license_status = plugin( 'license' )->get_license_status( true );
@@ -366,8 +332,9 @@ class License extends WP_REST_Controller {
 	 * Check update settings permissions.
 	 *
 	 * @return bool
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
 	 */
 	public function manage_license_permissions() {
-		return current_user_can( 'manage_options' ) || current_user_can( 'activate_plugins' );
+		return current_user_can( plugin()->get_permission( 'manage_settings' ) );
 	}
 }
