@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Feature: Added child and ancestor conditions for hierarchical taxonomies.
+
 ## v2.6.5 - 05/27/2025
 
 -  Developer: Passed the original filtered content to the restricted message filter.

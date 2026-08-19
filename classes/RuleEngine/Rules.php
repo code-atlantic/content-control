@@ -628,6 +628,40 @@ class Rules {
 				],
 				'callback' => '\ContentControl\Rules\content_is_selected_term',
 			], $tax_defaults );
+
+			if ( $taxonomy->hierarchical ) {
+				$rules[ "content_is_child_of_tax_{$tax_name}" ] = wp_parse_args( [
+					'name'     => "content_is_child_of_tax_{$tax_name}",
+					/* translators: %s: Taxonomy plural name */
+					'label'    => sprintf( __( 'A Child of Selected %s', 'content-control' ), $taxonomy->labels->name ),
+					'fields'   => [
+						'selected' => [
+							/* translators: %s: Taxonomy plural name */
+							'placeholder' => sprintf( $strings['Select %s'], strtolower( $taxonomy->labels->name ) ),
+							'type'        => 'taxonomyselect',
+							'taxonomy'    => $tax_name,
+							'multiple'    => true,
+						],
+					],
+					'callback' => '\ContentControl\Rules\content_is_child_of_term',
+				], $tax_defaults );
+
+				$rules[ "content_is_ancestor_of_tax_{$tax_name}" ] = wp_parse_args( [
+					'name'     => "content_is_ancestor_of_tax_{$tax_name}",
+					/* translators: %s: Taxonomy plural name */
+					'label'    => sprintf( __( 'An Ancestor of Selected %s', 'content-control' ), $taxonomy->labels->name ),
+					'fields'   => [
+						'selected' => [
+							/* translators: %s: Taxonomy plural name */
+							'placeholder' => sprintf( $strings['Select %s'], strtolower( $taxonomy->labels->name ) ),
+							'type'        => 'taxonomyselect',
+							'taxonomy'    => $tax_name,
+							'multiple'    => true,
+						],
+					],
+					'callback' => '\ContentControl\Rules\content_is_ancestor_of_term',
+				], $tax_defaults );
+			}
 		}
 
 		return $rules;
