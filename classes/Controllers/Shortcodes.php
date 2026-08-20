@@ -48,6 +48,7 @@ class Shortcodes extends Controller {
 			'allowed_roles'  => null,
 			'excluded_roles' => null,
 			'class'          => '',
+			'inline'         => false,
 			'message'        => $this->container->get_option( 'defaultDenialMessage', '' ),
 		], $this->normalize_empty_atts( $atts ), 'content_control' );
 
@@ -79,27 +80,27 @@ class Shortcodes extends Controller {
 		// @deprecated 2.0.0
 		$classes[] = 'jp-cc';
 
+		$tag = wp_validate_boolean( $atts['inline'] ) ? 'span' : 'div';
+
 		if ( user_meets_requirements( $atts['status'], $user_roles, $match_type ) ) {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';
-			$container = '<div class="%1$s">%2$s</div>';
+			$output    = do_shortcode( $content );
 		} else {
 			$classes[] = 'content-control-not-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-not-accessible';
-			$container = '<div class="%1$s">%3$s</div>';
+			$output    = wp_kses_post( do_shortcode( $atts['message'] ) );
 		}
 
 		$classes = implode( ' ', $classes );
 
 		return sprintf(
-			$container,
+			'<%1$s class="%2$s">%3$s</%1$s>',
+			$tag,
 			esc_attr( $classes ),
-			// Sanitize the content output, allowing safe HTML and processed shortcodes.
-			do_shortcode( $content ),
-			// Sanitize the message output, allowing safe HTML and processed shortcodes.
-			wp_kses_post( do_shortcode( $atts['message'] ) )
+			$output
 		);
 	}
 
