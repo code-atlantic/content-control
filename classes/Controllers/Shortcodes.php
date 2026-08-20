@@ -31,6 +31,11 @@ class Shortcodes extends Controller {
 	/**
 	 * Process the [content_control] shortcode.
 	 *
+	 * When access is allowed, nested shortcode content is intentionally returned
+	 * as rendered HTML. Applying KSES after `do_shortcode()` would break forms,
+	 * embeds, SVG, and script-backed output produced by otherwise-authorized
+	 * nested shortcodes.
+	 *
 	 * @param array<string,string|int|null> $atts Array or shortcode attributes.
 	 * @param string                        $content Content inside shortcode.
 	 *
@@ -86,16 +91,19 @@ class Shortcodes extends Controller {
 			$classes[] = 'content-control-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-accessible';
-			$output    = do_shortcode( $content );
+			// Keep nested shortcode output intact; KSES here would strip functional rendered markup.
+			$output = do_shortcode( $content );
 		} else {
 			$classes[] = 'content-control-not-accessible';
 			// @deprecated 2.0.0
 			$classes[] = 'jp-cc-not-accessible';
-			$output    = wp_kses_post( do_shortcode( $atts['message'] ) );
+			// Denial messages are shortcode attributes and intentionally limited to post-safe HTML.
+			$output = wp_kses_post( do_shortcode( $atts['message'] ) );
 		}
 
 		$classes = implode( ' ', $classes );
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contains intentional rendered nested-shortcode HTML.
 		return sprintf(
 			'<%1$s class="%2$s">%3$s</%1$s>',
 			$tag,
