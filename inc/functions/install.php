@@ -7,6 +7,8 @@
 
 namespace ContentControl;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Returns an array of the default permissions.
  *

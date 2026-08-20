@@ -49,6 +49,8 @@ class Assets extends Controller {
 		$wp_version = preg_replace( '/\.\d+$/', '', $wp_version );
 
 		$is_pro_installed = \ContentControl\is_plugin_installed( 'content-control-pro/content-control-pro.php' );
+		$is_pro_active    = $is_pro_installed && is_plugin_active( 'content-control-pro/content-control-pro.php' );
+		$legacy_pro       = $this->container->is_legacy_pro_active();
 
 		$packages = [
 			'block-editor'  => [
@@ -86,7 +88,8 @@ class Assets extends Controller {
 				],
 				'varsName' => 'contentControlCoreData',
 				'vars'     => [
-					'currentSettings' => get_all_plugin_options(),
+					'currentSettings'  => get_all_plugin_options(),
+					'legacyProLicense' => $legacy_pro,
 				],
 			],
 			'data'          => [
@@ -112,17 +115,18 @@ class Assets extends Controller {
 				'handle'   => 'content-control-settings-page',
 				'varsName' => 'contentControlSettingsPage',
 				'vars'     => [
-					'pluginUrl'      => $this->container->get( 'url' ),
-					'wpVersion'      => $wp_version,
-					'adminUrl'       => admin_url(),
-					'restBase'       => 'content-control/v2',
-					'userRoles'      => allowed_user_roles(),
-					'logUrl'         => current_user_can( 'manage_options' ) ? $this->container->get( 'logging' )->get_file_url() : false,
-					'rolesAndCaps'   => wp_roles()->roles,
-					'version'        => $this->container->get( 'version' ),
-					'permissions'    => $permissions,
-					'isProInstalled' => $is_pro_installed,
-					'isProActivated' => $is_pro_installed && is_plugin_active( 'content-control-pro/content-control-pro.php' ),
+					'pluginUrl'        => $this->container->get( 'url' ),
+					'wpVersion'        => $wp_version,
+					'adminUrl'         => admin_url(),
+					'restBase'         => 'content-control/v2',
+					'userRoles'        => allowed_user_roles(),
+					'logUrl'           => current_user_can( 'manage_options' ) ? $this->container->get( 'logging' )->get_file_url() : false,
+					'rolesAndCaps'     => wp_roles()->roles,
+					'version'          => $this->container->get( 'version' ),
+					'permissions'      => $permissions,
+					'isProInstalled'   => $is_pro_installed,
+					'isProActivated'   => $is_pro_active,
+					'legacyProLicense' => $legacy_pro,
 				],
 				'styles'   => true,
 			],

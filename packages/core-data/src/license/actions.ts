@@ -19,7 +19,6 @@ import { resolveSelect } from '@wordpress/data';
 
 const {
 	ACTIVATE_LICENSE,
-	CONNECT_SITE,
 	DEACTIVATE_LICENSE,
 	UPDATE_LICENSE_KEY,
 	REMOVE_LICENSE,
@@ -75,19 +74,11 @@ export function* activateLicense( licenseKey?: LicenseKey ) {
 		);
 
 		if ( result ) {
-			const { status, connectInfo } = result;
+			const { status } = result;
 
 			// thing was successfully updated so return the action object that will
 			// update the saved thing in the state.
 			yield changeActionStatus( actionName, Status.Success );
-
-			if ( connectInfo !== undefined ) {
-				return {
-					type: CONNECT_SITE,
-					licenseStatus: status,
-					connectInfo,
-				};
-			}
 
 			return {
 				type: ACTIVATE_LICENSE,
@@ -302,51 +293,6 @@ export function* removeLicense() {
 			return {
 				type: REMOVE_LICENSE,
 			};
-		}
-
-		// if execution arrives here, then thing didn't update in the state so return
-		// action object that will add an error to the state about this.
-		// returning an action object that will save the update error to the state.
-		return changeActionStatus(
-			actionName,
-			Status.Error,
-			__(
-				'An error occurred, license were not saved.',
-				'content-control'
-			)
-		);
-	} catch ( error ) {
-		// returning an action object that will save the update error to the state.
-		return changeActionStatus(
-			actionName,
-			Status.Error,
-			getErrorMessage( error )
-		);
-	}
-}
-
-/**
- * Activate pro version if installed.
- *
- * @return {Generator} Action object.
- */
-export function* activatePro() {
-	const actionName = 'activatePro';
-
-	try {
-		yield changeActionStatus( actionName, Status.Resolving );
-
-		const result: boolean = yield fetch(
-			getResourcePath( 'activate-pro' ),
-			{
-				method: 'POST',
-			}
-		);
-
-		if ( result ) {
-			// thing was successfully updated so return the action object that will
-			// update the saved thing in the state.
-			return changeActionStatus( actionName, Status.Success );
 		}
 
 		// if execution arrives here, then thing didn't update in the state so return

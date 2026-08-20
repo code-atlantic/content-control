@@ -12,12 +12,10 @@ namespace ContentControl\Plugin;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * License management.
- *
- * NOTE: For wordpress.org admins: This is only used if:
- * - The user explicitly entered a license key.
+ * Temporary license provider for active Pro releases older than 1.3.0.
  *
  * @package ContentControl
+ * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
  */
 class License {
 
@@ -51,6 +49,8 @@ class License {
 
 	/**
 	 * Initialize license management.
+	 *
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function __construct() {
 		$this->register_hooks();
@@ -60,6 +60,7 @@ class License {
 	 * Register hooks.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function register_hooks() {
 		add_action( 'init', [ $this, 'autoregister' ] );
@@ -71,6 +72,7 @@ class License {
 	 * Autoregister license.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function autoregister() {
 		$key = defined( '\CONTENT_CONTROL_LICENSE_KEY' ) && '' !== \CONTENT_CONTROL_LICENSE_KEY ? \CONTENT_CONTROL_LICENSE_KEY : false;
@@ -89,6 +91,7 @@ class License {
 	 * Schedule cron jobs.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function schedule_crons() {
 		if ( ! wp_next_scheduled( 'content_control_license_status_check' ) ) {
@@ -100,6 +103,7 @@ class License {
 	 * Get license data.
 	 *
 	 * @return array{key:string|null,status:array<string,mixed>|null}
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_data() {
 		if ( ! isset( $this->license_data ) ) {
@@ -131,6 +135,7 @@ class License {
 	 * Get license key.
 	 *
 	 * @return string
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_key() {
 		$license_data = $this->get_license_data();
@@ -143,6 +148,7 @@ class License {
 	 * @param bool $refresh Whether to refresh license status.
 	 *
 	 * @return array<string,mixed> Array of license status data.
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_status( $refresh = false ) {
 		if ( $refresh ) {
@@ -162,6 +168,7 @@ class License {
 	 * Only used in pro version.
 	 *
 	 * @return int Integer representing license level.
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_level() {
 		$license_status = $this->get_license_status();
@@ -194,6 +201,7 @@ class License {
 	 * @param array{key:string|null,status:array<string,mixed>|null} $license_data License data.
 	 *
 	 * @return bool
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function udpate_license_data( $license_data ) {
 		if ( \update_option( self::OPTION_KEY, $license_data ) ) {
@@ -210,6 +218,7 @@ class License {
 	 * @param string $key License key.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function update_license_key( $key ) {
 		$license_data = $this->get_license_data();
@@ -235,6 +244,7 @@ class License {
 	 * @param array<string,mixed> $license_status License status data.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function update_license_status( $license_status ) {
 		$license_data = $this->get_license_data();
@@ -264,6 +274,7 @@ class License {
 	 * @param bool $as_datetime Whether to return as DateTime object.
 	 *
 	 * @return \DateTime|false|null
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_expiration( $as_datetime = false ) {
 		$status = $this->get_license_status();
@@ -280,6 +291,7 @@ class License {
 	 * This is a blocking request.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function refresh_license_status() {
 		$key = $this->get_license_key();
@@ -303,6 +315,7 @@ class License {
 	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	private function check_license() {
 		$api_params = [
@@ -318,9 +331,8 @@ class License {
 		$response = wp_remote_post(
 			self::API_URL,
 			[
-				'timeout'   => 15,
-				'sslverify' => false,
-				'body'      => $api_params,
+				'timeout' => 15,
+				'body'    => $api_params,
 			]
 		);
 
@@ -345,6 +357,7 @@ class License {
 	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function activate_license( $key = null ) {
 		if ( ! empty( $key ) ) {
@@ -365,9 +378,8 @@ class License {
 		$response = wp_remote_post(
 			self::API_URL,
 			[
-				'timeout'   => 15,
-				'sslverify' => false,
-				'body'      => $api_params,
+				'timeout' => 15,
+				'body'    => $api_params,
 			]
 		);
 
@@ -401,6 +413,7 @@ class License {
 	 * @return array<string,mixed> License status data.
 	 *
 	 * @throws \Exception If there is an error.
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function deactivate_license() {
 		$api_params = [
@@ -416,9 +429,8 @@ class License {
 		$response = wp_remote_post(
 			self::API_URL,
 			[
-				'timeout'   => 15,
-				'sslverify' => false,
-				'body'      => $api_params,
+				'timeout' => 15,
+				'body'    => $api_params,
 			]
 		);
 
@@ -446,6 +458,7 @@ class License {
 	 * @param array<string,mixed> $license_status License status data.
 	 *
 	 * @return string
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function get_license_error_message( $license_status ) {
 		switch ( $license_status['error'] ) {
@@ -495,8 +508,15 @@ class License {
 	 * Remove license.
 	 *
 	 * @return void
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function remove_license() {
+		if ( '' === $this->get_license_key() ) {
+			\delete_option( self::OPTION_KEY );
+			$this->license_data = null;
+			return;
+		}
+
 		try {
 			$deactivated = $this->deactivate_license();
 		} catch ( \Exception $e ) {
@@ -512,6 +532,7 @@ class License {
 	 * Check if license is active.
 	 *
 	 * @return bool
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	public function is_license_active() {
 		$license_status = $this->get_license_status();

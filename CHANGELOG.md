@@ -3,6 +3,7 @@
 ## Unreleased
 
 -   Security: Restricted REST API access to global plugin settings to authorized administrators.
+-   Feature: Added child and ancestor conditions for hierarchical taxonomies.
 
 ## v2.6.5 - 05/27/2025
 

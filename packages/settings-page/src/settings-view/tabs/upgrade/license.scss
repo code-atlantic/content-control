@@ -1,0 +1,47 @@
+.license-status-bubble {
+	background-color: #00a32a;
+	color: #fff;
+	border-radius: 100px;
+	line-height: 1.5;
+	margin-left: 12px;
+	padding: 0 8px;
+}
+
+.content-control-legacy-license {
+	.content-control-license-controls {
+		display: flex;
+		align-items: flex-end;
+		flex-wrap: wrap;
+		gap: 12px;
+		max-width: 960px;
+		margin: 18px 0 10px;
+
+		.components-base-control {
+			flex: 1 1 320px;
+			margin-bottom: 0;
+		}
+
+		.components-base-control__field {
+			margin-bottom: 0;
+		}
+
+		.components-text-control__input,
+		.components-button {
+			min-height: 40px;
+		}
+
+		.components-button-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.components-spinner {
+			margin: 8px 0;
+		}
+	}
+
+	.content-control-license-status {
+		margin-bottom: 0;
+	}
+}

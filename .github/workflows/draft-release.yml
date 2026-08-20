@@ -39,6 +39,9 @@ jobs:
 
             # Build release assets using our release:build script
             - name: Build release assets
+              env:
+                  COMPOSER_AUTH: '{}'
+                  COMPOSER_HOME: ${{ runner.temp }}/composer-release
               run: npm run release:build
 
             # zip the build folder into slug.zip
@@ -46,6 +49,9 @@ jobs:
               run: |
                   mv $BUILD_DIR ${{ env.SLUG }}
                   zip -r ${{ env.SLUG }}_${{ github.ref_name }}.zip ${{ env.SLUG }}
+
+            - name: Verify release zip
+              run: node bin/verify-release-artifact.js "${{ env.SLUG }}_${{ github.ref_name }}.zip"
 
             # Create draft release
             - name: Create Draft Release

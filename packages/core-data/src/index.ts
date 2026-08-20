@@ -9,6 +9,7 @@ declare global {
 
 	const contentControlCoreData: {
 		currentSettings: Settings;
+		legacyProLicense: boolean;
 	};
 }
 

@@ -1,36 +1,34 @@
-import './editor.scss';
+import './license.scss';
 
 import classNames from 'classnames';
-import { trash } from '@wordpress/icons';
+import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
-import { useEffect, useRef, useState } from '@wordpress/element';
 import {
 	Button,
 	ButtonGroup,
+	Notice,
 	TextControl,
-	Spinner,
-	Icon,
-	Popover,
 } from '@wordpress/components';
-import { useLicense } from '@content-control/core-data';
+import { useLicense, type LicenseKey } from '@content-control/core-data';
 
-import UpgradeFeatures from './upgrade-features';
-
-import type { LicenseKey } from '@content-control/core-data';
-
-const LicenseTab = () => {
+/**
+ * Temporary license controls for active Pro versions older than 1.3.0.
+ *
+ * This intentionally contains no installer, connection, webhook, or package
+ * delivery behavior. It only exposes the license operations those Pro releases
+ * still use for authenticated update checks.
+ */
+const LicenseSection = () => {
 	const {
-		connectInfo,
 		licenseKey,
 		licenseStatus,
 		isSaving,
+		error,
 		activateLicense,
 		deactivateLicense,
 		checkLicenseStatus,
+		updateLicenseKey,
 		removeLicense,
-		activatePro,
-		isActivatingPro,
-		proWasActivated,
 		getLicenseStatusName,
 		isLicenseKeyValid,
 		isLicenseActive,
@@ -39,443 +37,188 @@ const LicenseTab = () => {
 		isLicenseExpired,
 		isLicenseOverQuota,
 		isLicenseDisabled,
-		hasError,
 	} = useLicense();
 
-	const { expires, error_message: errorMessage } = licenseStatus;
 	const [ value, setValue ] = useState< LicenseKey >( licenseKey );
-	const [ isActivating, setIsActivating ] = useState( false );
-	const [ isInstalling, setIsInstalling ] = useState( false );
-
-	const connectPopup = useRef< Window | null >( null );
-	const [ showConnectNotice, setShowConnectNotice ] = useState( false );
-
-	const [ proStatus, setProStatus ] = useState< {
-		installed?: boolean;
-		activated?: boolean;
-	} >( {
-		installed: contentControlSettingsPage?.isProInstalled === '1',
-		activated:
-			contentControlSettingsPage?.isProInstalled === '1' &&
-			contentControlSettingsPage?.isProActivated === '1',
-	} );
-
 	const keyHasChanged = value !== licenseKey;
 
 	useEffect( () => {
-		if ( typeof connectInfo === 'undefined' ) {
-			connectPopup.current?.close();
-			connectPopup.current = null;
+		setValue( licenseKey );
+	}, [ licenseKey ] );
+
+	const activate = () => {
+		if ( keyHasChanged ) {
+			updateLicenseKey( value );
 			return;
 		}
 
-		setShowConnectNotice( true );
+		activateLicense();
+	};
 
-		// Open a new sized window to connect to the license store.
-		connectPopup.current = window.open(
-			connectInfo.url,
-			'content-control-license-connect',
-			'width=580,height=600'
-		);
-
-		// Listen for the popup to close and check the license status.
-		const interval = setInterval( () => {
-			if ( connectPopup.current?.closed ) {
-				clearInterval( interval );
-				checkLicenseStatus();
-				setShowConnectNotice( false );
-
-				// Wait a second for the license status to update and then reload the page.
-				setTimeout( () => {
-					window.location.reload();
-				}, 1000 );
-			}
-		}, 1000 );
-	}, [ connectInfo, checkLicenseStatus ] );
-
-	useEffect( () => {
-		if ( proWasActivated ) {
-			setTimeout( () => {
-				window.location.reload();
-			}, 1000 );
+	const formattedExpiry = () => {
+		if ( 'lifetime' === licenseStatus.expires ) {
+			return __( 'and never expires', 'content-control' );
 		}
-	}, [ proWasActivated ] );
 
-	// Listen for changes from the license store and update the local state.
-	useEffect( () => {
-		if ( keyHasChanged ) {
-			setValue( licenseKey );
-		}
-	}, [ licenseKey, keyHasChanged ] );
+		const expiry = new Date( licenseStatus.expires );
 
-	useEffect( () => {
-		if ( isActivating && ! isSaving ) {
-			setIsActivating( false );
-		}
-	}, [ isSaving, isActivating ] );
-
-	useEffect( () => {
-		if ( isInstalling && ! isSaving ) {
-			setIsInstalling( false );
-			setProStatus( {
-				...proStatus,
-				installed: true,
-			} );
-		}
-	}, [ isSaving, isInstalling, proStatus ] );
+		return Number.isNaN( expiry.getTime() )
+			? ''
+			: sprintf(
+					/* translators: %s: license expiration date. */
+					__( 'until %s', 'content-control' ),
+					expiry.toLocaleDateString()
+			  );
+	};
 
 	const statusMessage = () => {
 		if ( isLicenseMissing ) {
-			// No lincense key has been entered.
-			return sprintf(
-				// translators: 1: opening a tag, 2: closing a tag.
-				__(
-					'Enter your license key to activate. If you do not have a license key, you can %1$spurchase one here%2$s',
-					'content-control'
-				),
-				'<a href="https://contentcontrolplugin.com/pricing/?utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-field-upgrade-text" target="_blank">',
-				'</a>'
+			return __(
+				'Enter your license key to activate it.',
+				'content-control'
 			);
 		}
 
 		if ( isLicenseActive ) {
-			// The license key is active.
 			return sprintf(
-				// translators: 1: date
-				__(
-					'Your license key is active%1$s. Thank you for supporting Content Control!',
-					'content-control'
-				),
-				// format date as MM-DD-YYYY
-				expires !== 'lifetime'
-					? ' until ' + new Date( expires ).toLocaleDateString()
-					: ' and never expires'
+				/* translators: %s: human-readable license expiration. */
+				__( 'Your license is active %s.', 'content-control' ),
+				formattedExpiry()
 			);
 		}
 
 		if ( isLicenseExpired ) {
-			// The license key has expired.
-			return sprintf(
-				// translators: 1: date, 2: opening a tag, 3: closing a tag.
-				__(
-					'Your license key has expired on %1$s. Please %2$srenew your license$3$s to continue receiving updates and support.',
-					'content-control'
-				),
-				new Date( expires ).toLocaleDateString(),
-				'<a href="https://contentcontrolplugin.com/checkout/?edd_license_key=' +
-					licenseKey +
-					'&utm_campaign=renew-license&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-renew-link" target="_blank">',
-				'</a>'
+			return __(
+				'Your license has expired. Renew it to continue receiving updates and support.',
+				'content-control'
 			);
 		}
 
 		if ( isLicenseOverQuota ) {
-			// The license key has reached its site limit.
-			return sprintf(
-				// translators: 1: opening a tag, 2: closing a tag, 3: opening a tag, 4: closing a tag.
-				__(
-					'Your license key has reached its site limit. %1$sUpgrade your license%2$s to add more sites, or %3$slog in%4$s to manage current activations.',
-					'content-control'
-				),
-				'<a href="https://contentcontrolplugin.com/checkout/?edd_license_key=' +
-					licenseKey +
-					'&utm_campaign=upgrade-to-pro&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-upgrade-link" target="_blank">',
-				'</a>',
-				'<a href="https://contentcontrolplugin.com/your-account/?utm_campaign=manage-activations&utm_source=plugin-settings-page&utm_medium=plugin-ui&utm_content=license-tab-login-link" target="_blank">',
-				'</a>'
+			return __(
+				'Your license has reached its site activation limit.',
+				'content-control'
 			);
 		}
 
 		if ( isLicenseDeactivated ) {
-			// The license key is deactivated.
 			return __(
-				'Your license key is currently deactivated. Click the button above to activate now.',
+				'Your license is deactivated on this site.',
 				'content-control'
 			);
 		}
 
 		if ( isLicenseDisabled ) {
-			// The license key has been disabled.
 			return __(
-				'Your license key has been disabled. Please contact support.',
+				'Your license has been disabled. Please contact support.',
 				'content-control'
 			);
 		}
 
-		if ( hasError ) {
-			// The license key is not active.
-			return sprintf(
-				// translators: 1: error message.
-				__(
-					'Your license key failed to activate with the following error: %1$s',
-					'content-control'
-				),
-				errorMessage
-			);
-		}
-
-		return __(
-			'There was an error with your license key. Please check your key and try again.',
-			'content-control'
+		return (
+			licenseStatus.error_message ||
+			__( 'The license status could not be verified.', 'content-control' )
 		);
 	};
 
-	const buttonVariant = 'tertiary';
-
-	const showActivateButton = proStatus.installed && ! proStatus.activated;
+	const displayedValue = isLicenseKeyValid
+		? value.replace(
+				/^(.{3})(.*)(.{5})$/,
+				( _match, start, middle, end ) =>
+					start + middle.replace( /./g, '*' ) + end
+		  )
+		: value;
 
 	return (
-		<>
-			{ showConnectNotice && (
-				<Popover
-					className="content-control-license-connect-notice"
-					position="middle center"
-				>
-					<p>
-						{ __(
-							'Please wait while we connect to the license store…',
-							'content-control'
-						) }
-					</p>
-				</Popover>
+		<div className="content-control-legacy-license">
+			<p>
+				{ __(
+					'Manage the license used by your installed Content Control Pro version. Pro updates continue to use this key until Pro 1.3.0 or later takes over licensing.',
+					'content-control'
+				) }
+			</p>
+
+			{ error && (
+				<Notice status="error" isDismissible={ false }>
+					{ error }
+				</Notice>
 			) }
 
-			<div className="content-control__upgrade-notice">
-				<h3 className="upgrade-notice__title">
-					{ __(
-						'Enter your Content Control License Key',
+			<div
+				className={ classNames(
+					'content-control-license-controls',
+					`content-control-license-controls--${ getLicenseStatusName }`
+				) }
+			>
+				<TextControl
+					label={ __(
+						'Content Control Pro license key',
 						'content-control'
 					) }
-				</h3>
-
-				<p
-					className="upgrade-notice__description"
-					dangerouslySetInnerHTML={ {
-						__html: ! isLicenseActive
-							? __(
-									'You are currently using Content Control Lite — no license key required. Enjoy! <span>😄</span>',
-									'content-control'
-							  )
-							: __(
-									'You are currently using Content Control Pro. Thanks for supporting us! <span>😄</span>',
-									'content-control'
-							  ),
-					} }
+					placeholder={ __(
+						'Paste or enter your license key',
+						'content-control'
+					) }
+					value={ displayedValue }
+					onChange={ setValue }
+					readOnly={ isSaving || isLicenseKeyValid }
+					disabled={ isSaving }
 				/>
 
-				<p
-					dangerouslySetInnerHTML={ {
-						__html: sprintf(
-							// translators: 1: opening strong tag, 2: closing strong tag.
-							__(
-								'Enter your license key below to activate %1$sContent Control Pro%2$s!',
-								'content-control'
-							),
-							'<strong>',
-							'</strong>'
-						),
-					} }
-				/>
-				<div
-					className={ classNames( [
-						'content-control-license-controls',
-						'content-control-license-controls--' +
-							getLicenseStatusName,
-					] ) }
-				>
-					<TextControl
-						label={ __(
-							'Enter your license key.',
-							'content-control'
-						) }
-						hideLabelFromVision={ true }
-						placeholder={ __(
-							'Paste or enter your license key here.',
-							'content-control'
-						) }
-						value={
-							isLicenseKeyValid
-								? // first 3 and last 5 should be unmasked.
-								  value.replace(
-										/^(.{3})(.*)(.{5})$/,
-										( _match, p1, p2, p3 ) =>
-											p1 + p2.replace( /./g, '*' ) + p3
-								  )
-								: value
-						}
-						maxLength={ 32 }
-						width={ 500 }
-						onChange={ setValue }
-						readOnly={ isActivating || isLicenseKeyValid }
-						tabIndex={ isActivating || isLicenseKeyValid ? -1 : 0 }
-						onPaste={ ( event ) => {
-							event.preventDefault();
-							const pastedText =
-								event.clipboardData.getData( 'text' );
-							if ( ! isSaving ) {
-								setIsActivating( true );
-								activateLicense( pastedText );
-								setValue( pastedText );
-							}
-						} }
-					/>
-					<ButtonGroup>
-						{ isLicenseActive && (
-							<>
-								{ ! proStatus.installed && (
-									<Button
-										className="install-pro"
-										variant={ 'primary' }
-										onClick={ () => {
-											setIsInstalling( true );
-											activateLicense(
-												isLicenseMissing
-													? value
-													: undefined
-											);
-										} }
-										title={ __(
-											'Install Pro',
-											'content-control'
-										) }
-									>
-										{ ! isInstalling ? (
-											<span>
-												{ __(
-													'Install Pro',
-													'content-control'
-												) }
-											</span>
-										) : (
-											<>
-												<span>
-													{ __(
-														'Installing…',
-														'content-control'
-													) }
-												</span>
-												<Spinner />
-											</>
-										) }
-									</Button>
-								) }
-								{ showActivateButton && (
-									<Button
-										className="activate-pro"
-										variant={ 'primary' }
-										onClick={ () => {
-											activatePro();
-										} }
-										title={ __(
-											'Activate Pro',
-											'content-control'
-										) }
-									>
-										{ ! isActivatingPro &&
-										! proWasActivated ? (
-											<span>
-												{ __(
-													'Activate Pro',
-													'content-control'
-												) }
-											</span>
-										) : (
-											<>
-												<span>
-													{ __(
-														'Activating…',
-														'content-control'
-													) }
-												</span>
-												<Spinner />
-											</>
-										) }
-									</Button>
-								) }
-							</>
-						) }
+				<ButtonGroup>
+					{ ! isLicenseActive && ! isLicenseExpired && (
 						<Button
 							className="activate-license"
-							variant={ 'primary' }
-							onClick={ () => {
-								setIsActivating( true );
-								activateLicense(
-									isLicenseMissing ? value : undefined
-								);
-							} }
+							variant="primary"
+							onClick={ activate }
 							disabled={
-								( isSaving || ! keyHasChanged ) &&
-								! isLicenseDeactivated
+								isSaving ||
+								( ! keyHasChanged && ! isLicenseDeactivated ) ||
+								! value
 							}
-							title={ __( 'Activate', 'content-control' ) }
 						>
-							{ ! isActivating ? (
-								<span>
-									{ __( 'Activate', 'content-control' ) }
-								</span>
-							) : (
-								<>
-									<span>
-										{ __(
-											'Activating…',
-											'content-control'
-										) }
-									</span>
-									<Spinner />
-								</>
-							) }
+							{ __( 'Activate', 'content-control' ) }
 						</Button>
-						<Button
-							className="deactivate-license"
-							variant={ buttonVariant }
-							onClick={ () => deactivateLicense() }
-							disabled={ isSaving || ! isLicenseActive }
-							title={ __( 'Deactivate', 'content-control' ) }
-						>
-							{ /* <Icon icon={ linkOff } /> */ }
-							<span>
-								{ __( 'Deactivate', 'content-control' ) }
-							</span>
-						</Button>
-						{ /* <Button
-						className="check-license-status"
-						variant={ buttonVariant }
-						onClick={ () => checkLicenseStatus() }
-						disabled={ isSaving || ! isLicenseKeyValid }
-						title={ __( 'Check Status', 'content-control' ) }
-					>
-						<Icon icon={ update } />
-					</Button> */ }
-						<Button
-							className="remove-license"
-							variant="tertiary"
-							isDestructive={ true }
-							onClick={ () => removeLicense() }
-							disabled={ isSaving || ! isLicenseKeyValid }
-							title={ __( 'Delete', 'content-control' ) }
-						>
-							<Icon icon={ trash } />
-							<span>{ __( 'Delete', 'content-control' ) }</span>
-						</Button>
-					</ButtonGroup>
-				</div>
-				<div
-					className="content-control-license-status"
-					dangerouslySetInnerHTML={ { __html: statusMessage() } }
-				/>
+					) }
 
-				{ ! isLicenseKeyValid && (
-					<>
-						<br />
-						<hr />
-						<UpgradeFeatures />
-					</>
+					{ isLicenseActive && (
+						<Button
+							variant="secondary"
+							onClick={ deactivateLicense }
+							disabled={ isSaving }
+						>
+							{ __( 'Deactivate', 'content-control' ) }
+						</Button>
+					) }
+
+					<Button
+						variant="tertiary"
+						onClick={ checkLicenseStatus }
+						disabled={ isSaving || ! licenseKey }
+					>
+						{ __( 'Check status', 'content-control' ) }
+					</Button>
+
+					<Button
+						variant="tertiary"
+						isDestructive={ true }
+						onClick={ removeLicense }
+						disabled={ isSaving || ! licenseKey }
+					>
+						{ __( 'Delete', 'content-control' ) }
+					</Button>
+				</ButtonGroup>
+
+				{ isSaving && (
+					<span>{ __( 'Saving…', 'content-control' ) }</span>
 				) }
 			</div>
 
-			{ /* <pre>{ JSON.stringify( licenseStatus, null, 2 ) }</pre> */ }
-		</>
+			<p className="content-control-license-status">
+				{ statusMessage() }
+			</p>
+		</div>
 	);
 };
 
-export default LicenseTab;
+export default LicenseSection;

@@ -4,29 +4,28 @@ import { useDispatch, useSelect } from '@wordpress/data';
 
 const useLicense = () => {
 	// Fetch needed data from the @content-control/core-data & @wordpress/data stores.
-	const {
-		connectInfo,
-		licenseKey,
-		licenseStatus,
-		isSaving,
-		proWasActivated,
-		isActivatingPro,
-	} = useSelect( ( select ) => {
-		const storeSelect = select( licenseStore );
-		return {
-			connectInfo: storeSelect.getConnectInfo(),
-			licenseKey: storeSelect.getLicenseKey(),
-			licenseStatus: storeSelect.getLicenseStatus(),
-			isSaving:
-				storeSelect.isDispatching( 'activateLicense' ) ||
-				storeSelect.isDispatching( 'deactivateLicense' ) ||
-				storeSelect.isDispatching( 'checkLicenseStatus' ) ||
-				storeSelect.isDispatching( 'updateLicenseKey' ) ||
-				storeSelect.isDispatching( 'removeLicense' ),
-			isActivatingPro: storeSelect.isDispatching( 'activatePro' ),
-			proWasActivated: storeSelect.hasDispatched( 'activatePro' ),
-		};
-	}, [] );
+	const { licenseKey, licenseStatus, isSaving, error } = useSelect(
+		( select ) => {
+			const storeSelect = select( licenseStore );
+			return {
+				licenseKey: storeSelect.getLicenseKey(),
+				licenseStatus: storeSelect.getLicenseStatus(),
+				isSaving:
+					storeSelect.isDispatching( 'activateLicense' ) ||
+					storeSelect.isDispatching( 'deactivateLicense' ) ||
+					storeSelect.isDispatching( 'checkLicenseStatus' ) ||
+					storeSelect.isDispatching( 'updateLicenseKey' ) ||
+					storeSelect.isDispatching( 'removeLicense' ),
+				error:
+					storeSelect.getDispatchError( 'activateLicense' ) ||
+					storeSelect.getDispatchError( 'deactivateLicense' ) ||
+					storeSelect.getDispatchError( 'checkLicenseStatus' ) ||
+					storeSelect.getDispatchError( 'updateLicenseKey' ) ||
+					storeSelect.getDispatchError( 'removeLicense' ),
+			};
+		},
+		[]
+	);
 
 	// Grab needed action dispatchers.
 	const {
@@ -35,7 +34,6 @@ const useLicense = () => {
 		checkLicenseStatus,
 		updateLicenseKey,
 		removeLicense,
-		activatePro,
 	} = useDispatch( licenseStore );
 
 	// Create some helper variables.
@@ -154,7 +152,6 @@ const useLicense = () => {
 	}, [ licenseStatus?.price_id ] );
 
 	return {
-		connectInfo,
 		licenseKey,
 		licenseStatus,
 		licenseLevel,
@@ -163,11 +160,9 @@ const useLicense = () => {
 		checkLicenseStatus,
 		updateLicenseKey,
 		removeLicense,
-		activatePro,
 		getLicenseStatusName,
 		isSaving,
-		isActivatingPro,
-		proWasActivated,
+		error,
 		isLicenseKeyValid,
 		isLicenseActive,
 		isLicenseDeactivated,

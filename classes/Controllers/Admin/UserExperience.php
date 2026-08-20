@@ -48,7 +48,7 @@ class UserExperience extends Controller {
 				]
 			);
 
-			if ( $this->container->is_license_active() || $this->container->is_pro_active() ) {
+			if ( $this->container->is_pro_active() ) {
 				unset( $plugin_action_links['upgrade'] );
 			}
 

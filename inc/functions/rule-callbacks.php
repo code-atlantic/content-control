@@ -791,6 +791,119 @@ function content_is_selected_term() {
 }
 
 /**
+ * Get the current term when it belongs to the selected taxonomy.
+ *
+ * @param string $taxonomy Taxonomy slug.
+ * @return \WP_Term|false
+ *
+ * @since 2.7.0
+ */
+function get_current_taxonomy_term( $taxonomy ) {
+	$context = current_query_context();
+	$term    = false;
+
+	switch ( $context ) {
+		case 'main':
+		case 'main/blocks':
+			$main_query = get_main_wp_query();
+
+			if (
+				( 'category' === $taxonomy && ! $main_query->is_category() ) ||
+				( 'post_tag' === $taxonomy && ! $main_query->is_tag() ) ||
+				( ! in_array( $taxonomy, [ 'category', 'post_tag' ], true ) && ! $main_query->is_tax( $taxonomy ) )
+			) {
+				return false;
+			}
+
+			$term = $main_query->get_queried_object();
+			break;
+
+		case 'terms':
+			$term = get_global( 'term' );
+			break;
+
+		case 'restapi':
+		case 'restapi/terms':
+			$rest_intent = get_rest_api_intent();
+
+			if ( 'unknown' === $rest_intent['type'] || ! rest_intent_matches_taxonomy( $taxonomy, $rest_intent ) ) {
+				return false;
+			}
+
+			$term = $rest_intent['id'] > 0
+				? get_term( (int) $rest_intent['id'], $taxonomy )
+				: get_global( 'term' );
+			break;
+
+		case 'main/posts':
+		case 'posts':
+		case 'blocks':
+		case 'restapi/posts':
+		case 'unknown':
+		default:
+			return false;
+	}
+
+	if (
+		! $term ||
+		is_wp_error( $term ) ||
+		empty( $term->term_id ) ||
+		empty( $term->taxonomy ) ||
+		$taxonomy !== $term->taxonomy
+	) {
+		return false;
+	}
+
+	return $term;
+}
+
+/**
+ * Check if the current term is a child of a selected term.
+ *
+ * @return bool
+ *
+ * @since 2.7.0
+ */
+function content_is_child_of_term() {
+	$taxonomy = get_rule_extra( 'taxonomy', '' );
+	$selected = \wp_parse_id_list( get_rule_option( 'selected', [] ) );
+
+	if ( ! \is_taxonomy_hierarchical( $taxonomy ) ) {
+		return false;
+	}
+
+	$term = get_current_taxonomy_term( $taxonomy );
+
+	return $term && in_array( (int) $term->parent, $selected, true );
+}
+
+/**
+ * Check if the current term has a selected ancestor.
+ *
+ * @return bool
+ *
+ * @since 2.7.0
+ */
+function content_is_ancestor_of_term() {
+	$taxonomy = get_rule_extra( 'taxonomy', '' );
+	$selected = \wp_parse_id_list( get_rule_option( 'selected', [] ) );
+
+	if ( ! \is_taxonomy_hierarchical( $taxonomy ) ) {
+		return false;
+	}
+
+	$term = get_current_taxonomy_term( $taxonomy );
+
+	if ( ! $term ) {
+		return false;
+	}
+
+	$ancestors = array_map( 'intval', \get_ancestors( $term->term_id, $taxonomy, 'taxonomy' ) );
+
+	return (bool) array_intersect( $selected, $ancestors );
+}
+
+/**
  * Check if post type matches.
  *
  * @param string          $type Type to check (post type or taxonomy key).
