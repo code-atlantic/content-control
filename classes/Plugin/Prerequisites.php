@@ -311,6 +311,7 @@ class Prerequisites {
 		$message = __( 'This plugin requires <b>%1$s %2$s</b> or higher in order to run.', 'content-control' );
 		return sprintf(
 			$message,
+			// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Reuse the WordPress Core translation.
 			__( 'PHP', 'default' ),
 		$failed_check_args['version'] );
 	}
@@ -327,6 +328,7 @@ class Prerequisites {
 		$message = __( 'This plugin requires <b>%1$s %2$s</b> or higher in order to run.', 'content-control' );
 		return sprintf(
 			$message,
+			// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Reuse the WordPress Core translation.
 			__( 'WordPress', 'default' ),
 			$failed_check_args['version']
 		);
