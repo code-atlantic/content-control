@@ -60,7 +60,7 @@ class BetterDocs extends Controller {
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_REQUEST['post_type'] ) ) {
+		if ( isset( $_REQUEST['post_type'] ) && is_string( $_REQUEST['post_type'] ) ) {
 			$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
 			// Check if any ct_forced_* request aregs are set. If so we should use the post type intent.
@@ -69,7 +69,7 @@ class BetterDocs extends Controller {
 
 				$post_type = str_replace( 'ct_forced_', '', $post_type );
 
-				$intent['name'] = explode( ':', $post_type );
+				$intent['name'] = array_values( array_filter( array_map( 'sanitize_key', explode( ':', $post_type ) ) ) );
 			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
