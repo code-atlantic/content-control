@@ -101,10 +101,11 @@ class TrustedLogin extends Controller {
 	 * @return void
 	 */
 	public function admin_menu() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['page'] ) || 'grant-content-control-access' !== $_GET['page'] ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only routing check.
+		if ( ! isset( $_GET['page'] ) || ! is_string( $_GET['page'] ) || 'grant-content-control-access' !== sanitize_key( wp_unslash( $_GET['page'] ) ) ) {
 			return;
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		add_options_page(
 			__( 'Content Control Support Access', 'content-control' ),
