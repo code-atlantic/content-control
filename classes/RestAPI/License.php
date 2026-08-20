@@ -17,6 +17,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Temporary REST bridge for Pro releases older than 1.3.0.
  *
+ * Note for WordPress.org Plugin Review Team: these routes are registered only
+ * while Core's deprecated old-Pro license bridge is active. Every route also
+ * requires Content Control's manage-settings capability. Core-only sites and
+ * sites running Pro 1.3.0 or later do not register these routes.
+ *
+ * @see \ContentControl\Plugin\Core::is_legacy_pro_active()
+ * @see \ContentControl\Controllers\RestAPI::register_routes()
+ *
  * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns license REST routes.
  */
 class License extends WP_REST_Controller {

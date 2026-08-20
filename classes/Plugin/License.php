@@ -14,15 +14,24 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Temporary license provider for active Pro releases older than 1.3.0.
  *
+ * Note for WordPress.org Plugin Review Team: Core registers this deprecated
+ * bridge only when it detects an active Content Control Pro version below
+ * 1.3.0. It preserves licensing and update access while that already-installed
+ * add-on is upgraded. Core alone and Pro 1.3.0 or later never instantiate it,
+ * and this class cannot install plugins.
+ *
+ * @see \ContentControl\Plugin\Core::is_legacy_pro_active()
+ *
  * @package ContentControl
  * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
  */
 class License {
 
 	/**
-	 * EDD API URL.
+	 * Legacy EDD API URL used only for active Pro releases older than 1.3.0.
 	 *
 	 * @var string
+	 * @deprecated 2.7.0 Content Control Pro 1.3.0+ owns licensing.
 	 */
 	const API_URL = 'https://contentcontrolplugin.com/edd-sl-api/';
 
