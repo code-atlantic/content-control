@@ -205,7 +205,7 @@ class Blocks extends Controller {
 
 			foreach ( $hide_on as $device => $hidden ) {
 				if ( $hidden ) {
-					$classes[] = 'cc-hide-on-' . esc_attr( $device );
+					$classes[] = 'cc-hide-on-' . sanitize_html_class( $device );
 				}
 			}
 		}
@@ -220,6 +220,9 @@ class Blocks extends Controller {
 		 * @return string[]
 		 */
 		$classes = apply_filters( 'content_control/get_block_control_classes', $classes, $controls, $block );
+		$classes = array_filter( $classes, 'is_string' );
+		$classes = array_map( 'sanitize_html_class', $classes );
+		$classes = array_filter( $classes );
 
 		return array_unique( $classes );
 	}
@@ -258,7 +261,7 @@ class Blocks extends Controller {
 		// Enqueue the styles.
 		// wp_enqueue_style( 'content-control-block-styles' );.
 
-		$class_name = implode( ' ', $classes );
+		$class_name = esc_attr( implode( ' ', $classes ) );
 
 		/** Mimicing WP Cores usage in https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-includes/block-supports/elements.php#L32 */
 		$html_element_matches = [];
