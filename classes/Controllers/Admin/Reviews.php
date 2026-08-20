@@ -90,17 +90,16 @@ class Reviews extends Controller {
 	 * @return void
 	 */
 	public function ajax_handler() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_review_action' ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! is_string( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'content_control_review_action' ) ) {
 			wp_send_json_error();
 		}
 
-		$args = wp_parse_args( $_REQUEST, [
-			'group'  => $this->get_trigger_group(),
-			'code'   => $this->get_trigger_code(),
-			'pri'    => $this->get_current_trigger( 'pri' ),
-			'reason' => 'maybe_later',
-		] );
+		$args = [
+			'group'  => isset( $_REQUEST['group'] ) && is_string( $_REQUEST['group'] ) ? sanitize_key( wp_unslash( $_REQUEST['group'] ) ) : $this->get_trigger_group(),
+			'code'   => isset( $_REQUEST['code'] ) && is_string( $_REQUEST['code'] ) ? sanitize_key( wp_unslash( $_REQUEST['code'] ) ) : $this->get_trigger_code(),
+			'pri'    => isset( $_REQUEST['pri'] ) && is_numeric( $_REQUEST['pri'] ) ? absint( $_REQUEST['pri'] ) : $this->get_current_trigger( 'pri' ),
+			'reason' => isset( $_REQUEST['reason'] ) && is_string( $_REQUEST['reason'] ) ? sanitize_key( wp_unslash( $_REQUEST['reason'] ) ) : 'maybe_later',
+		];
 
 		try {
 			$user_id = get_current_user_id();

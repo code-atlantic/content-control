@@ -114,7 +114,7 @@ class ObjectSearch extends WP_REST_Controller {
 		$nonce  = $request->get_param( 'nonce' );
 		$params = $request->get_params();
 
-		if ( ! isset( $nonce ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $nonce ) ), 'content_control_object_search_nonce' ) ) {
+		if ( ! isset( $nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $nonce ) ), 'content_control_object_search_nonce' ) ) {
 			wp_send_json_error();
 		}
 
