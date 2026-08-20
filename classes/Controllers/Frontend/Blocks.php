@@ -296,81 +296,62 @@ class Blocks extends Controller {
 		$media_queries = $this->container->get_option( 'mediaQueries' );
 
 		if ( ! $media_queries ) {
-			?>
-			<style id="content-control-block-styles">
-				@media (max-width: 480px) {
-					.cc-hide-on-mobile {
-						display: none !important;
-					}
-				}
-				@media (min-width: 481px) and (max-width: 991px) {
-					.cc-hide-on-tablet {
-						display: none !important;
-					}
-				}
-				@media (min-width: 992px) {
-					.cc-hide-on-desktop {
-						display: none !important;
-					}
-				}
-			</style>
-			<?php
+			$styles  = "@media (max-width: 480px) {\n\t.cc-hide-on-mobile {\n\t\tdisplay: none !important;\n\t}\n}\n";
+			$styles .= "@media (min-width: 481px) and (max-width: 991px) {\n\t.cc-hide-on-tablet {\n\t\tdisplay: none !important;\n\t}\n}\n";
+			$styles .= "@media (min-width: 992px) {\n\t.cc-hide-on-desktop {\n\t\tdisplay: none !important;\n\t}\n}";
+			$this->enqueue_block_styles( $styles );
 			return;
 		}
 
-		$mobile_breakpoint  = isset( $media_queries['mobile'] ) ? $media_queries['mobile']['breakpoint'] : 640;
-		$tablet_breakpoint  = isset( $media_queries['tablet'] ) ? $media_queries['tablet']['breakpoint'] : 920;
-		$desktop_breakpoint = isset( $media_queries['desktop'] ) ? $media_queries['desktop']['breakpoint'] : 1440;
+		$mobile_breakpoint  = isset( $media_queries['mobile']['breakpoint'] ) ? absint( $media_queries['mobile']['breakpoint'] ) : 640;
+		$tablet_breakpoint  = isset( $media_queries['tablet']['breakpoint'] ) ? absint( $media_queries['tablet']['breakpoint'] ) : 920;
+		$desktop_breakpoint = isset( $media_queries['desktop']['breakpoint'] ) ? absint( $media_queries['desktop']['breakpoint'] ) : 1440;
 
 		$tablet_start  = $mobile_breakpoint + 1;
 		$desktop_start = $tablet_breakpoint + 1;
 
-		$styles[] = <<<CSS
-@media (max-width: {$mobile_breakpoint}px) {
-	.cc-hide-on-mobile {
-		display: none !important;
-	}
-}
-CSS;
-
-		$styles[] = <<<CSS
-@media (min-width: {$tablet_start}px) and (max-width: {$tablet_breakpoint}px) {
-	.cc-hide-on-tablet {
-		display: none !important;
-	}
-}
-CSS;
-
-		$styles[] = <<<CSS
-@media (min-width: {$desktop_start}px) and (max-width: {$desktop_breakpoint}px) {
-	.cc-hide-on-desktop {
-		display: none !important;
-	}
-}
-CSS;
+		$styles   = [];
+		$styles[] = sprintf( "@media (max-width: %dpx) {\n\t.cc-hide-on-mobile {\n\t\tdisplay: none !important;\n\t}\n}", $mobile_breakpoint );
+		$styles[] = sprintf( "@media (min-width: %dpx) and (max-width: %dpx) {\n\t.cc-hide-on-tablet {\n\t\tdisplay: none !important;\n\t}\n}", $tablet_start, $tablet_breakpoint );
+		$styles[] = sprintf( "@media (min-width: %dpx) and (max-width: %dpx) {\n\t.cc-hide-on-desktop {\n\t\tdisplay: none !important;\n\t}\n}", $desktop_start, $desktop_breakpoint );
 
 		unset( $media_queries['mobile'], $media_queries['tablet'], $media_queries['desktop'] );
 
 		foreach ( $media_queries as $media_query => $media_query_settings ) {
-			$breakpoint = $media_query_settings['breakpoint'];
+			if ( ! is_array( $media_query_settings ) || ! isset( $media_query_settings['breakpoint'] ) ) {
+				continue;
+			}
 
-			$style = <<<CSS
-@media (min-width: {$breakpoint}px) {
-	.cc-hide-on-{$media_query} {
-		display: none !important;
-	}
-}
-CSS;
+			$breakpoint        = absint( $media_query_settings['breakpoint'] );
+			$media_query_class = sanitize_html_class( $media_query );
+
+			if ( empty( $media_query_class ) ) {
+				continue;
+			}
+
+			$style = sprintf( "@media (min-width: %dpx) {\n\t.cc-hide-on-%s {\n\t\tdisplay: none !important;\n\t}\n}", $breakpoint, $media_query_class );
 
 			$styles[] = apply_filters( 'content_control/block_styles', $style, $media_query, $breakpoint );
 		}
 
 		$styles = implode( "\n", $styles );
 
-		?>
-		<style id="content-control-block-styles">
-			<?php echo $styles; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		</style>
-		<?php
+		$this->enqueue_block_styles( $styles );
+	}
+
+	/**
+	 * Enqueue generated block-control styles.
+	 *
+	 * @param string $styles CSS styles.
+	 *
+	 * @return void
+	 */
+	protected function enqueue_block_styles( $styles ) {
+		$handle = 'content-control-block-styles';
+
+		wp_register_style( $handle, false, [], $this->container->get( 'version' ) );
+		wp_enqueue_style( $handle );
+		// Preserve valid HTML-like CSS syntax; wp_add_inline_style() handles style-tag safety.
+		wp_add_inline_style( $handle, $styles );
 	}
 }
