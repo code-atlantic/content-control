@@ -2,9 +2,12 @@
 
 ## Unreleased
 
--   Security: Restricted REST API access to global plugin settings to authorized administrators.
 -   Feature: Added child and ancestor conditions for hierarchical taxonomies.
 -   Fix: Prevented a PHP warning on the Plugins screen when update metadata omits the plugin slug.
+
+## v2.6.6 - 08/13/2026
+
+-   Security: Restricted REST API access to global plugin settings to authorized administrators.
 
 ## v2.6.5 - 05/27/2025
 
