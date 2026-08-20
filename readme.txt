@@ -6,7 +6,7 @@ Donate link: https://code-atlantic.com/donate/?utm_campaign=donations&utm_source
 Tags: membership, access control, members only, content restriction, maintenance mode
 Requires at least: 6.2
 Tested up to: 7.1
-Stable tag: 2.6.6
+Stable tag: 2.7.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 
@@ -109,6 +109,12 @@ Bugs can be reported either in our support forum or we are happy to accept PRs o
 8. Restrict widgets as well.
 
 == Changelog ==
+
+= v2.7.0 - 08/20/2026 =
+
+* Feature: Added child and ancestor conditions for hierarchical taxonomies.
+* Feature: Added an inline option to the `[content_control]` shortcode.
+* Fix: Prevented a PHP warning on the Plugins screen when update metadata omits the plugin slug.
 
 = v2.6.6 - 08/13/2026 =
 

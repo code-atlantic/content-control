@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v2.7.0 - 08/20/2026
+
 -   Feature: Added child and ancestor conditions for hierarchical taxonomies.
 -   Feature: Added an inline option to the `[content_control]` shortcode.
 -   Fix: Prevented a PHP warning on the Plugins screen when update metadata omits the plugin slug.
