@@ -483,20 +483,20 @@ class Reviews extends Controller {
 		<div class="notice notice-success is-dismissible content-control-notice">
 
 			<div class="notice-logo">
-				<img class="logo" width="110" src="<?php echo esc_attr( plugin()->get_url( 'assets/images/illustration-check.svg' ) ); ?>" />
+				<img class="logo" width="110" src="<?php echo esc_url( plugin()->get_url( 'assets/images/illustration-check.svg' ) ); ?>" />
 			</div>
 
 			<div class="notice-content">
 				<p>
 					<?php
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo $trigger['message'];
+					// Review messages support post-safe inline markup such as emphasis and the star-rating span.
+					echo wp_kses_post( $trigger['message'] );
 					?>
 					~ <a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>
 				</p>
 				<ul class="review-actions">
 					<li>😁
-						<a class="content-control-dismiss" target="_blank" href="<?php echo esc_attr( $trigger['link'] ); ?>" data-reason="am_now">
+						<a class="content-control-dismiss" target="_blank" href="<?php echo esc_url( $trigger['link'] ); ?>" data-reason="am_now">
 							<strong><?php esc_html_e( 'Ok, you deserve it', 'content-control' ); ?></strong>
 						</a>
 					</li>

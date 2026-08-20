@@ -396,8 +396,8 @@ class Prerequisites {
 			$class   = 'notice notice-error';
 			$message = method_exists( $this, 'get_' . $failure['type'] . '_message' ) ? $this->{'get_' . $failure['type'] . '_message'}( $failure ) : false;
 
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message );
+			// Requirement messages contain only the post-safe links and emphasis generated above.
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), wp_kses_post( $message ) );
 		}
 	}
 }
