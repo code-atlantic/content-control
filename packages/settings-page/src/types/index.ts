@@ -7,4 +7,6 @@ export type TabComponent = {
 	heading: string;
 	comp?: () => JSX.Element;
 	onClick?: () => void | false;
+	href?: string;
+	target?: string;
 };

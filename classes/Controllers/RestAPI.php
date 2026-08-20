@@ -25,6 +25,10 @@ class RestAPI extends Controller {
 	public function init() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 
+		if ( $this->container->is_legacy_pro_active() ) {
+			add_filter( 'rest_endpoints', [ $this, 'disable_legacy_pro_installer_route' ], PHP_INT_MAX );
+		}
+
 		// Handle CPT & Taxonomy that are not registered with the `show_in_rest` arg when searching from our settings pages.
 		add_filter( 'register_post_type_args', [ $this, 'modify_post_type_show_in_rest' ], 10 );
 		add_filter( 'register_taxonomy_args', [ $this, 'modify_taxonomy_show_in_rest' ], 10 );
@@ -37,9 +41,33 @@ class RestAPI extends Controller {
 	 */
 	public function register_routes() {
 		( new \ContentControl\RestAPI\BlockTypes() )->register_routes();
-		( new \ContentControl\RestAPI\License() )->register_routes();
+
+		if ( $this->container->is_legacy_pro_active() ) {
+			( new \ContentControl\RestAPI\License() )->register_routes();
+		}
+
 		( new \ContentControl\RestAPI\ObjectSearch() )->register_routes();
 		( new \ContentControl\RestAPI\Settings() )->register_routes();
+	}
+
+	/**
+	 * Remove the installer route registered by active Pro versions below 1.3.0.
+	 *
+	 * Those versions resolve an upgrader service that is unavailable in Core
+	 * 2.7.0. Removing the endpoint prevents a fatal request while Pro is updated
+	 * manually. Core does not register or implement the endpoint.
+	 *
+	 * @since 2.7.0
+	 * @deprecated 2.7.0 Remove after Pro 1.3.0 is the minimum supported version.
+	 *
+	 * @param array<string,array<int,array<string,mixed>>> $endpoints Registered REST endpoints.
+	 *
+	 * @return array<string,array<int,array<string,mixed>>>
+	 */
+	public function disable_legacy_pro_installer_route( $endpoints ) {
+		unset( $endpoints['/content-control/v2/addons/install'] );
+
+		return $endpoints;
 	}
 
 	/**

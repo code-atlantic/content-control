@@ -8,6 +8,8 @@
 
 namespace ContentControl\Widgets;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Retrieve data for a widget from options table.
  *

@@ -23,11 +23,9 @@ namespace PHPSTORM_META;
   override( \ContentControl\Plugin\Core::get(0), map( [
     // Controllers.
     ''             => '@',
-    'connect'      => \ContentControl\Plugin\Connect::class,
     'license'      => \ContentControl\Plugin\License::class,
     'logging'      => \ContentControl\Plugin\Logging::class,
     'options'      => \ContentControl\Plugin\Options::class,
-    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
     'globals'      => \ContentControl\Services\Globals::class,
@@ -41,11 +39,9 @@ namespace PHPSTORM_META;
   override ( \ContentControl\plugin(0), map( [
     // Controllers.
     '' => '@',
-    'connect'      => \ContentControl\Plugin\Connect::class,
     'license'      => \ContentControl\Plugin\License::class,
     'logging'      => \ContentControl\Plugin\Logging::class,
     'options'      => \ContentControl\Plugin\Options::class,
-    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
     'globals'      => \ContentControl\Services\Globals::class,
@@ -59,11 +55,9 @@ namespace PHPSTORM_META;
   override ( \ContentControl\Base\Container::get(0), map( [
     // Controllers.
     '' => '@',
-    'connect'      => \ContentControl\Plugin\Connect::class,
     'license'      => \ContentControl\Plugin\License::class,
     'logging'      => \ContentControl\Plugin\Logging::class,
     'options'      => \ContentControl\Plugin\Options::class,
-    'upgrader'     => \ContentControl\Plugin\Upgrader::class,
     'rules'        => \ContentControl\RuleEngine\Rules::class,
     'restrictions' => \ContentControl\Services\Restrictions::class,
     'globals'      => \ContentControl\Services\Globals::class,
@@ -77,11 +71,9 @@ namespace PHPSTORM_META;
 override ( \ContentControl\Base\Container::offsetGet(0), map( [
   // Controllers.
   '' => '@',
-  'connect'      => \ContentControl\Plugin\Connect::class,
   'license'      => \ContentControl\Plugin\License::class,
   'logging'      => \ContentControl\Plugin\Logging::class,
   'options'      => \ContentControl\Plugin\Options::class,
-  'upgrader'     => \ContentControl\Plugin\Upgrader::class,
   'rules'        => \ContentControl\RuleEngine\Rules::class,
   'restrictions' => \ContentControl\Services\Restrictions::class,
   'globals'      => \ContentControl\Services\Globals::class,

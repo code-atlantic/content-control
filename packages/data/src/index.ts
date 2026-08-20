@@ -29,7 +29,9 @@ declare module '@wordpress/data' {
 const registry = createRegistry( {} );
 
 registry.register( coreStore );
-registry.register( licenseStore );
+if ( contentControlCoreData.legacyProLicense ) {
+	registry.register( licenseStore );
+}
 registry.register( settingsStore );
 registry.register( restrictionsStore );
 registry.register( urlSearchStore );
