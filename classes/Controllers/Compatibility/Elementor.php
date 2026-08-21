@@ -71,17 +71,16 @@ class Elementor extends Controller {
 	 */
 	public function elementor_builder_is_active() {
 		// Check if this is the admin theme builder app.
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended Simple & direct string comparison.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only routing check.
 		if (
 			is_admin() &&
-			// Disable notices as this is a generic string comparison to prevent doing a lot of work.
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			! empty( $_GET['page'] ) &&
-			'elementor-app' === $_GET['page']
-			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			is_string( $_GET['page'] ) &&
+			'elementor-app' === sanitize_key( wp_unslash( $_GET['page'] ) )
 		) {
 			return true;
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if ( ! class_exists( '\Elementor\Plugin' ) || ! isset( \Elementor\Plugin::$instance ) ) {
 			return false;

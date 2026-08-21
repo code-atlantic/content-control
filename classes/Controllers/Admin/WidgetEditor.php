@@ -104,7 +104,7 @@ class WidgetEditor extends Controller {
 	 * @return array<string,mixed>|bool
 	 */
 	public function save( $instance, $new_instance, $old_instance ) {
-		if ( isset( $_POST['content-control-widget-editor-nonce'] ) && wp_verify_nonce( wp_unslash( sanitize_key( $_POST['content-control-widget-editor-nonce'] ) ), 'content-control-widget-editor-nonce' ) ) {
+		if ( isset( $_POST['content-control-widget-editor-nonce'] ) && is_string( $_POST['content-control-widget-editor-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['content-control-widget-editor-nonce'] ) ), 'content-control-widget-editor-nonce' ) ) {
 			$new_instance            = parse_widget_options( $new_instance );
 			$instance['which_users'] = $new_instance['which_users'];
 			$instance['roles']       = $new_instance['roles'];

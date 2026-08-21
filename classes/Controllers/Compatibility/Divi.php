@@ -40,10 +40,11 @@ class Divi extends Controller {
 	 * @return boolean
 	 */
 	public function protection_is_disabled( $protection_is_disabled ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_GET['et_fb'] ) && ! empty( $_GET['et_fb'] ) ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only builder-state check.
+		if ( isset( $_GET['et_fb'] ) && is_string( $_GET['et_fb'] ) && '' !== sanitize_text_field( wp_unslash( $_GET['et_fb'] ) ) ) {
 			return true;
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return $protection_is_disabled;
 	}

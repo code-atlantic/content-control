@@ -388,16 +388,17 @@ function request_is_excluded() {
 
 	$is_excluded = false;
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only request classification.
 	if (
 		// Check if doing cron.
 		is_cron() ||
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		( is_ajax() && isset( $_REQUEST['action'] ) && 'heartbeat' === $_REQUEST['action'] ) ||
+		( is_ajax() && isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) && 'heartbeat' === sanitize_key( wp_unslash( $_REQUEST['action'] ) ) ) ||
 		// If this is rest request and not core wp namespace.
 		( is_rest() && request_is_excluded_rest_endpoint() )
 	) {
 		$is_excluded = true;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	return $is_excluded;
 }
