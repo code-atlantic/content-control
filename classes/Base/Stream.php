@@ -13,6 +13,13 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * HTTP Stream class.
+ *
+ * This class writes the `text/event-stream` wire format, not HTML. HTML
+ * escaping would corrupt SSE framing. Event names are reduced to the
+ * characters permitted by this implementation, non-string payloads are JSON
+ * encoded, and every payload line is emitted as a separate `data:` field.
+ * Content Control uses this only from capability- and nonce-protected
+ * administrative upgrade handlers.
  */
 class Stream {
 
@@ -36,7 +43,11 @@ class Stream {
 	 * @param string $stream_name Stream name.
 	 */
 	public function __construct( $stream_name = 'stream' ) {
-		$this->stream_name = $stream_name;
+		$this->stream_name = sanitize_key( $stream_name );
+
+		if ( empty( $this->stream_name ) ) {
+			$this->stream_name = 'stream';
+		}
 	}
 
 	/**
@@ -107,10 +118,8 @@ class Stream {
 	 * @return void
 	 */
 	public function send_data( $data ) {
-		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
-
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "data: {$data}" . PHP_EOL;
+		echo $this->format_data( $data );
 		echo PHP_EOL;
 
 		$this->flush_buffers();
@@ -125,15 +134,34 @@ class Stream {
 	 * @return void
 	 */
 	public function send_event( $event, $data = '' ) {
-		$data = is_string( $data ) ? $data : \wp_json_encode( $data );
+		$event = preg_replace( '/[^a-zA-Z0-9_.:-]/', '', (string) $event );
+		$event = empty( $event ) ? 'message' : $event;
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "event: {$event}" . PHP_EOL;
+		echo 'event: ' . $event . PHP_EOL;
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "data: {$data}" . PHP_EOL;
+		echo $this->format_data( $data );
 		echo PHP_EOL;
 
 		$this->flush_buffers();
+	}
+
+	/**
+	 * Format a value as one or more SSE data fields.
+	 *
+	 * @param mixed $data Data to format.
+	 *
+	 * @return string
+	 */
+	protected function format_data( $data ) {
+		$data  = is_string( $data ) ? $data : \wp_json_encode( $data );
+		$data  = is_string( $data ) ? $data : '';
+		$data  = str_replace( [ "\r\n", "\r" ], "\n", $data );
+		$lines = explode( "\n", $data );
+
+		return implode( PHP_EOL, array_map( static function ( $line ) {
+			return 'data: ' . $line;
+		}, $lines ) ) . PHP_EOL;
 	}
 
 	/**

@@ -48,7 +48,7 @@ class BlockTypes extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_block_types' ],
-					'permission_callback' => '__return_true', // Read only, so anyone can view.
+					'permission_callback' => [ $this, 'update_block_types_permissions' ],
 				],
 				[
 					'methods'             => WP_REST_Server::EDITABLE,

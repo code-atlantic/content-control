@@ -39,7 +39,8 @@ class Shortcodes extends TestCase {
 			return $value;
 		} );
 		Functions\when( 'wp_kses_post' )->alias( static function ( $value ) {
-			return $value;
+			unset( $value );
+			return '[sanitized]';
 		} );
 		Functions\when( 'esc_attr' )->alias( static function ( $value ) {
 			return $value;
@@ -71,5 +72,22 @@ class Shortcodes extends TestCase {
 		$this->assertStringStartsWith( '<span ', $controller->content_control( [ 'inline' ], 'Visible' ) );
 		$this->assertStringStartsWith( '<span ', $controller->content_control( [ 'inline' => 'true' ], 'Visible' ) );
 		$this->assertStringStartsWith( '<div ', $controller->content_control( [ 'inline' => 'false' ], 'Visible' ) );
+	}
+
+	/**
+	 * Allowed nested shortcode output is not passed through post KSES.
+	 */
+	public function test_allowed_nested_shortcode_html_is_preserved() {
+		$controller = new ShortcodesController(
+			new class() {
+				public function get_option( $key, $fallback = '' ) {
+					unset( $key );
+					return $fallback;
+				}
+			}
+		);
+		$content    = '<form><input type="text"><iframe></iframe><svg></svg><script>window.example = true;</script></form>';
+
+		$this->assertStringContainsString( $content, $controller->content_control( [], $content ) );
 	}
 }

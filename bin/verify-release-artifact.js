@@ -8,6 +8,7 @@ const { execFileSync } = require( 'child_process' );
 const pluginRoot = 'content-control';
 
 const requiredPaths = [
+	'composer.json',
 	'content-control.php',
 	'readme.txt',
 	'dist/settings-page.js',

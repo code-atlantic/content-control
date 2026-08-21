@@ -52,7 +52,7 @@ function is_rest() {
 	$is_rest = ( function () {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( ( defined( 'REST_REQUEST' ) && REST_REQUEST )// (#1)
-			|| ( isset( $_GET['rest_route'] ) // (#2)
+			|| ( isset( $_GET['rest_route'] ) && is_string( $_GET['rest_route'] ) // (#2)
 					&& strpos( sanitize_text_field( wp_unslash( $_GET['rest_route'] ) ), '/', 0 ) === 0 ) ) {
 				return true;
 		}
@@ -138,7 +138,7 @@ function is_frontend() {
 
 	$wp_query = $query instanceof \WP_Query ? $query : null;
 
-	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) && is_string( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 	if (
 		// Check if is CLI.

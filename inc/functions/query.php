@@ -266,7 +266,19 @@ function setup_post_globals( $post_id = null ) {
  * @since 2.4.0 - Added support for `terms` context.
  */
 function setup_term_globals( $term_id = null ) {
-	global $cc_term; // Backward compatibility.
+	/**
+	 * Legacy term context global retained for backward compatibility.
+	 *
+	 * `$cc_term` predates the managed term-context service. It remains
+	 * synchronized so existing integrations do not break, but Content Control
+	 * itself reads the managed `term` value and new integrations should do the
+	 * same.
+	 *
+	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
+	 * @var \WP_Term|\WP_Error|false|null $cc_term
+	 */
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
+	global $cc_term;
 
 	$current_term = get_global( 'term' ); // Used instead of global $cc_term.
 
@@ -354,7 +366,19 @@ function reset_term_globals() {
 		return;
 	}
 
-	global $cc_term; // Backward compatibility.
+	/**
+	 * Legacy term context global retained for backward compatibility.
+	 *
+	 * `$cc_term` predates the managed term-context service. It remains
+	 * synchronized so existing integrations do not break, but Content Control
+	 * itself reads the managed `term` value and new integrations should do the
+	 * same.
+	 *
+	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
+	 * @var \WP_Term|\WP_Error|false|null $cc_term
+	 */
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
+	global $cc_term;
 
 	$stored_term_id = pop_from_global( 'overloaded_terms' );
 	// Reset global post object.

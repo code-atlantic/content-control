@@ -98,15 +98,7 @@ class UpgradeStream extends \ContentControl\Base\Stream {
 			plugin( 'logging' )->log( $data['message'] );
 		}
 
-		$data = \wp_json_encode( $data );
-
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "event: {$event}" . PHP_EOL;
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo "data: {$data}" . PHP_EOL;
-		echo PHP_EOL;
-
-		$this->flush_buffers();
+		parent::send_event( $event, $data );
 	}
 
 	/**

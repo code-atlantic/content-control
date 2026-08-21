@@ -46,7 +46,6 @@ jobs:
               with:
                   build-dir: ${{ env.BUILD_DIR }}
                   slug: content-control
-                  exclude-checks: plugin_review_phpcs
                   exclude-directories: |
                       vendor
                       vendor-prefixed

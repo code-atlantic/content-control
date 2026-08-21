@@ -93,7 +93,9 @@ const UpgradeView = () => {
 		( { type, data } ) => {
 			const eventData = JSON.parse( data ) as SSEvent[ 'data' ];
 
-			const { message = '', status: eventStatus } = eventData;
+			const { status: eventStatus } = eventData;
+			const message =
+				typeof eventData.message === 'string' ? eventData.message : '';
 
 			const newState = {
 				...upgradeState,
@@ -345,6 +347,7 @@ const UpgradeView = () => {
 					{ showLogs && (
 						<div className="upgrade-progress__logs">
 							<div className="upgrade-progress__logs__content">
+								{ /* Keep SSE messages in React text nodes so markup is escaped. */ }
 								{ logs.map( ( log, index ) => (
 									<div key={ index }>{ log }</div>
 								) ) }

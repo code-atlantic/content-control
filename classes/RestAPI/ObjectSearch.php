@@ -10,6 +10,8 @@ namespace ContentControl\RestAPI;
 
 use WP_User_Query, WP_REST_Controller, WP_REST_Response, WP_REST_Server, WP_Error;
 
+use function ContentControl\plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -44,7 +46,7 @@ class ObjectSearch extends WP_REST_Controller {
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'object_search' ],
-					'permission_callback' => '__return_true', // Read only, so anyone can view.
+					'permission_callback' => [ $this, 'object_search_permissions' ],
 					'args'                => [
 						'nonce'      => [
 							'description' => __( 'Nonce', 'content-control' ),
@@ -93,6 +95,15 @@ class ObjectSearch extends WP_REST_Controller {
 	}
 
 	/**
+	 * Check whether the current user may search objects used by plugin settings.
+	 *
+	 * @return bool
+	 */
+	public function object_search_permissions() {
+		return current_user_can( plugin()->get_permission( 'manage_settings' ) );
+	}
+
+	/**
 	 * Get block type list.
 	 *
 	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
@@ -103,7 +114,7 @@ class ObjectSearch extends WP_REST_Controller {
 		$nonce  = $request->get_param( 'nonce' );
 		$params = $request->get_params();
 
-		if ( ! isset( $nonce ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $nonce ) ), 'content_control_object_search_nonce' ) ) {
+		if ( ! isset( $nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $nonce ) ), 'content_control_object_search_nonce' ) ) {
 			wp_send_json_error();
 		}
 

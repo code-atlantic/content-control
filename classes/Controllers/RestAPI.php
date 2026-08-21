@@ -145,7 +145,7 @@ class RestAPI extends Controller {
 		}
 
 		// Return false if referrer is not our settings page. /wp-admin/options-general.php?page=content-control-settings.
-		if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
+		if ( ! isset( $_SERVER['HTTP_REFERER'] ) || ! is_string( $_SERVER['HTTP_REFERER'] ) ) {
 			return false;
 		}
 

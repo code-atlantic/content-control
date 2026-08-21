@@ -220,8 +220,7 @@ class Upgrades extends Controller {
 	 * @return void
 	 */
 	public function ajax_handler() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! is_string( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'content_control_upgrades' ) ) {
 			wp_send_json_error( __( 'Invalid nonce.', 'content-control' ) );
 		}
 
@@ -322,8 +321,7 @@ class Upgrades extends Controller {
 	 * @return void
 	 */
 	public function ajax_handler_demo() {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( wp_unslash( $_REQUEST['nonce'] ), 'content_control_upgrades' ) ) {
+		if ( ! isset( $_REQUEST['nonce'] ) || ! is_string( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'content_control_upgrades' ) ) {
 			wp_send_json_error( __( 'Invalid nonce.', 'content-control' ) );
 		}
 
