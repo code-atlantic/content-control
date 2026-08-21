@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v2.7.1 - 08/20/2026
+
+-   Security: Hardened administrative REST endpoints and request validation.
+-   Fix: Corrected handling of encoded query parameters in restriction return URLs.
+-   Compatibility: Improved BetterDocs searches and filtered block-control styles.
+
 ## v2.7.0 - 08/20/2026
 
 -   Feature: Added child and ancestor conditions for hierarchical taxonomies.
