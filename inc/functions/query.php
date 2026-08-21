@@ -274,7 +274,7 @@ function setup_term_globals( $term_id = null ) {
 	 * itself reads the managed `term` value and new integrations should do the
 	 * same.
 	 *
-	 * @deprecated 2.7.0 Use get_global( 'term' ) instead.
+	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
 	 * @var \WP_Term|\WP_Error|false|null $cc_term
 	 */
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
@@ -374,7 +374,7 @@ function reset_term_globals() {
 	 * itself reads the managed `term` value and new integrations should do the
 	 * same.
 	 *
-	 * @deprecated 2.7.0 Use get_global( 'term' ) instead.
+	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
 	 * @var \WP_Term|\WP_Error|false|null $cc_term
 	 */
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
