@@ -32,7 +32,6 @@
 apigen.neon
 CHANGELOG.md
 babel.config.js
-composer.json
 composer.lock
 gulpfile.js
 labels.json

@@ -19,6 +19,13 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class for handling global restrictions of the post contents.
  *
+ * This controller participates in WordPress's content-filter pipeline and
+ * intentionally returns rendered HTML. Restricted messages run through the
+ * same block, embed, shortcode, and media filters as `the_content`. Applying
+ * KSES after those filters would remove functional forms, embeds, SVG, and
+ * script-backed shortcode output. Values returned by the documented filters
+ * are supplied by trusted plugin/theme code.
+ *
  * @package ContentControl
  */
 class PostContent extends Controller {
@@ -111,6 +118,7 @@ class PostContent extends Controller {
 		$pre_restrict_content = apply_filters( 'content_control/pre_restrict_content', null, $content, $restriction );
 
 		if ( null !== $pre_restrict_content ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Intentional rendered HTML returned to the_content.
 			return $pre_restrict_content;
 		}
 
@@ -140,6 +148,7 @@ class PostContent extends Controller {
 		 *
 		 * @return string
 		 */
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Intentional rendered HTML returned to the_content.
 		return apply_filters(
 			$filter_name,
 			// If the default message is empty, show a generic message.
@@ -191,6 +200,7 @@ class PostContent extends Controller {
 		$pre_restrict_excerpt = apply_filters( 'content_control/pre_restrict_excerpt', null, $post_excerpt, $restriction );
 
 		if ( null !== $pre_restrict_excerpt ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Intentional rendered HTML returned to the excerpt filter.
 			return $pre_restrict_excerpt;
 		}
 
@@ -220,6 +230,7 @@ class PostContent extends Controller {
 		 *
 		 * @return string
 		 */
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Intentional rendered HTML returned to the excerpt filter.
 		return apply_filters(
 			$filter_name,
 			// If the default message is empty, show a generic message.

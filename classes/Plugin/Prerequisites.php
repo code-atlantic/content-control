@@ -311,6 +311,7 @@ class Prerequisites {
 		$message = __( 'This plugin requires <b>%1$s %2$s</b> or higher in order to run.', 'content-control' );
 		return sprintf(
 			$message,
+			// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Reuse the WordPress Core translation.
 			__( 'PHP', 'default' ),
 		$failed_check_args['version'] );
 	}
@@ -327,6 +328,7 @@ class Prerequisites {
 		$message = __( 'This plugin requires <b>%1$s %2$s</b> or higher in order to run.', 'content-control' );
 		return sprintf(
 			$message,
+			// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch -- Reuse the WordPress Core translation.
 			__( 'WordPress', 'default' ),
 			$failed_check_args['version']
 		);
@@ -396,8 +398,8 @@ class Prerequisites {
 			$class   = 'notice notice-error';
 			$message = method_exists( $this, 'get_' . $failure['type'] . '_message' ) ? $this->{'get_' . $failure['type'] . '_message'}( $failure ) : false;
 
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $message );
+			// Requirement messages contain only the post-safe links and emphasis generated above.
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), wp_kses_post( $message ) );
 		}
 	}
 }

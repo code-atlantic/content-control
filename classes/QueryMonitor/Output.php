@@ -172,7 +172,7 @@ class Output extends QM_Output_Html {
 		// Main query restriction.
 		echo '<tr>';
 		echo '<td style="' . esc_attr( $font_style ) . '">Main Query Restriction</td>';
-		echo '<td style="' . esc_attr( $font_style ) . '">' . ( $main_query_restrictions ? '<a href="' . esc_url_raw( $main_query_restrictions->get_edit_link() ) . '" target="_blank">' . esc_html( $main_query_restrictions->title ) . '</a>' : 'None' ) . '</td>';
+		echo '<td style="' . esc_attr( $font_style ) . '">' . ( $main_query_restrictions ? '<a href="' . esc_url( $main_query_restrictions->get_edit_link() ) . '" target="_blank">' . esc_html( $main_query_restrictions->title ) . '</a>' : 'None' ) . '</td>';
 		echo '</tr>';
 
 		echo '</tbody>';
@@ -235,7 +235,7 @@ class Output extends QM_Output_Html {
 			$restrictions_html = [];
 
 			foreach ( $restrictions as $restriction ) {
-				$restrictions_html[] = '<a href="' . esc_url_raw( $restriction->get_edit_link() ) . '" target="_blank">' . esc_html( $restriction->title ) . '</a>';
+				$restrictions_html[] = '<a href="' . esc_url( $restriction->get_edit_link() ) . '" target="_blank">' . esc_html( $restriction->title ) . '</a>';
 			}
 
 			echo '<td>' . wp_kses( join( ', ', $restrictions_html ), [

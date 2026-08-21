@@ -119,8 +119,16 @@ function get_current_page_url() {
 	global $wp;
 
 	$current_page = trailingslashit( home_url( $wp->request ) );
+	$query_args   = [];
 
-	/* phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
-	return add_query_arg( $_SERVER['QUERY_STRING'], '', $current_page );
-	/* phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash */
+	if ( isset( $_SERVER['QUERY_STRING'] ) && is_string( $_SERVER['QUERY_STRING'] ) ) {
+		// Parse before sanitizing decoded values; sanitizing the raw string removes percent encoding.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$query_string = wp_unslash( $_SERVER['QUERY_STRING'] );
+		wp_parse_str( $query_string, $query_args );
+		$query_args = map_deep( $query_args, 'sanitize_text_field' );
+		$query_args = map_deep( $query_args, 'rawurlencode' );
+	}
+
+	return add_query_arg( $query_args, $current_page );
 }
