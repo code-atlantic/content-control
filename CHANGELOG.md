@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.7.2 - 08/26/2026
+
+-   Improvement: Refined request-scoped upgrade stream initialization for broader hosting compatibility.
+
 ## v2.7.1 - 08/20/2026
 
 -   Security: Hardened administrative REST endpoints and request validation.
