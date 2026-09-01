@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.7.3 - 09/01/2026
+
+-   Fix: Direct Content Control Pro customers to the appropriate product review form.
+
 ## v2.7.2 - 08/26/2026
 
 -   Improvement: Refined request-scoped upgrade stream initialization for broader hosting compatibility.

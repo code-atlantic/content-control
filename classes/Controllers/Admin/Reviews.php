@@ -271,7 +271,7 @@ class Reviews extends Controller {
 		static $triggers;
 
 		if ( ! isset( $triggers ) ) {
-			$link = 'https://wordpress.org/support/plugin/content-control/reviews/?rate=5#rate-response';
+			$link = $this->get_review_link();
 
 			// Translators: 1. emoji, 2. html tag, 3. html tag, 4. the number of days, 5. html tag, 6. html tag.
 			$time_message = __( 'Hi there! %1$s You\'ve been using the %2$sContent Control%3$s plugin on your site for %4$s now - We hope it\'s been helpful. If you\'re enjoying the plugin, would you mind rating it %5$s5-stars%6$s to help spread the word?', 'content-control' );
@@ -356,6 +356,23 @@ class Reviews extends Controller {
 		}
 
 		return $triggers;
+	}
+
+	/**
+	 * Get the review destination for the installed product.
+	 *
+	 * Free users go directly to WordPress.org's unselected review form. Sites
+	 * with Pro installed use the first-party landing page, which routes them to
+	 * the verified-purchaser review form for the commercial product.
+	 *
+	 * @since 2.7.3
+	 *
+	 * @return string
+	 */
+	public function get_review_link() {
+		return $this->container->is_pro_installed()
+			? 'https://contentcontrolplugin.com/leave-a-review/?product=pro'
+			: 'https://wordpress.org/support/plugin/content-control/reviews/#rate-response';
 	}
 
 	/**
