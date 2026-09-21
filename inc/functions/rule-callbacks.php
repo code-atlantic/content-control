@@ -744,7 +744,7 @@ function content_is_selected_term() {
 			}
 
 		case 'terms':
-			$term = get_global( 'term' ); // Used instead of global $cc_term.
+			$term = get_global( 'term' );
 
 			// Check if we have a term object from the term query.
 			if ( $term && $term->term_id > 0 ) {
@@ -756,7 +756,7 @@ function content_is_selected_term() {
 		case 'restapi':
 		case 'restapi/terms':
 			$rest_intent = get_rest_api_intent();
-			$term        = get_global( 'term' ); // Used instead of global $cc_term.
+			$term        = get_global( 'term' );
 
 			if ( 'unknown' === $rest_intent['type'] ) {
 				return false;
