@@ -21,7 +21,7 @@
 	https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
 	<config name="minimum_supported_wp_version" value="6.1" />
 
-	<config name="text_domain" value="content-control, default" />
+	<config name="text_domain" value="content-control" />
 
 	<!-- Force short syntax arrays. -->
 	<rule ref="CodeAtlantic" />

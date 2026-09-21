@@ -266,21 +266,7 @@ function setup_post_globals( $post_id = null ) {
  * @since 2.4.0 - Added support for `terms` context.
  */
 function setup_term_globals( $term_id = null ) {
-	/**
-	 * Legacy term context global retained for backward compatibility.
-	 *
-	 * `$cc_term` predates the managed term-context service. It remains
-	 * synchronized so existing integrations do not break, but Content Control
-	 * itself reads the managed `term` value and new integrations should do the
-	 * same.
-	 *
-	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
-	 * @var \WP_Term|\WP_Error|false|null $cc_term
-	 */
-	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
-	global $cc_term;
-
-	$current_term = get_global( 'term' ); // Used instead of global $cc_term.
+	$current_term = get_global( 'term' );
 
 	// Return early if we don't have a term ID.
 	if ( is_null( $term_id ) ) {
@@ -302,9 +288,7 @@ function setup_term_globals( $term_id = null ) {
 		push_to_global( 'overloaded_terms', $current_term_id );
 
 		// Overload the globals so conditionals work properly.
-		$cc_term = get_term( $term_id );
-		// Set the global term object (forward compatibility).
-		set_global( 'term', $cc_term );
+		set_global( 'term', get_term( $term_id ) );
 	}
 
 	return $overload_term;
@@ -366,24 +350,9 @@ function reset_term_globals() {
 		return;
 	}
 
-	/**
-	 * Legacy term context global retained for backward compatibility.
-	 *
-	 * `$cc_term` predates the managed term-context service. It remains
-	 * synchronized so existing integrations do not break, but Content Control
-	 * itself reads the managed `term` value and new integrations should do the
-	 * same.
-	 *
-	 * @deprecated 2.7.1 Use get_global( 'term' ) instead.
-	 * @var \WP_Term|\WP_Error|false|null $cc_term
-	 */
-	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Deprecated compatibility global.
-	global $cc_term;
-
 	$stored_term_id = pop_from_global( 'overloaded_terms' );
 	// Reset global post object.
-	$cc_term = get_term( $stored_term_id );
-	set_global( 'term', $cc_term );
+	set_global( 'term', get_term( $stored_term_id ) );
 }
 
 /**
@@ -397,7 +366,7 @@ function get_the_content_id() {
 	switch ( $context ) {
 		case 'terms':
 		case 'restapi/terms':
-			$term = get_global( 'term' ); // Used instead of global $cc_term.
+			$term = get_global( 'term' );
 			return $term->term_id ?? null;
 
 		default:
