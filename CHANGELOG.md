@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v2.7.4 - 09/20/2026
+
+-   Maintenance: Removed legacy APIs deprecated since version 2.0.
+
 ## v2.7.3 - 09/01/2026
 
 -   Fix: Direct Content Control Pro customers to the appropriate product review form.
