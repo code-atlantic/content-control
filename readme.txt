@@ -74,6 +74,20 @@ Dive into some of our renowned plugins:
 [popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
 [usermenus]: https://wordpress.org/plugins/user-menus/ "Show, Hide & Customize Menu Items For Different Users"
 
+== External services ==
+
+= Legacy Content Control Pro licensing =
+
+Content Control's free features do not require an external service. When an active Content Control Pro version older than 1.3.0 is installed, a temporary compatibility layer connects to Content Control's licensing service so the existing Pro license can be activated, deactivated, and checked while Pro is being upgraded.
+
+These requests send the license key, site URL, Content Control Pro product identifier, requested licensing action, and WordPress environment type. License-status checks also send the product name "Content Control Pro"; deactivation requests send "Content Control." Requests occur only for these legacy Pro installations during license actions and daily license-status checks.
+
+This service is provided by Code Atlantic LLC:
+
+- Service endpoint: https://contentcontrolplugin.com/edd-sl-api/
+- Terms: https://contentcontrolplugin.com/docs/policies/terms-conditions/
+- Privacy Policy: https://code-atlantic.com/privacy-policy/
+
 == Installation ==
 
 - Install Content Control either via the WordPress.org plugin repository or by uploading the files to your server.
