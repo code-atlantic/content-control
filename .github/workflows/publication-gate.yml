@@ -1,0 +1,136 @@
+name: Publication Gate
+
+on:
+    pull_request:
+        branches: [master]
+        types: [opened, synchronize, reopened, ready_for_review, edited]
+
+permissions:
+    contents: read
+
+concurrency:
+    group: publication-gate-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+jobs:
+    publication-gate:
+        name: Publication Gate
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout proposed merge
+              uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+              with:
+                  ref: refs/pull/${{ github.event.pull_request.number }}/merge
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Reject symlinked publication files
+              run: |
+                  if [ -L readme.txt ] ||
+                    [ -L .wordpress-org ] ||
+                    { [ -d .wordpress-org ] && find .wordpress-org -type l -print -quit | grep -q .; }; then
+                    echo 'Symlinks are not allowed in publication files.'
+                    exit 1
+                  fi
+
+            - name: Classify publication
+              id: publication
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+                  HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  CHANGED_FILES=$(git diff --name-only --no-renames "${BASE_SHA}" HEAD)
+                  if [[ "${HEAD_BRANCH}" =~ ^release/([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+                    [ "${HEAD_REPOSITORY}" = "${REPOSITORY}" ] || { echo 'Release branches must be same-repository.'; exit 1; }
+                    echo 'type=release' >> "${GITHUB_OUTPUT}"
+                    echo "version=${BASH_REMATCH[1]}" >> "${GITHUB_OUTPUT}"
+                  elif [[ "${HEAD_BRANCH}" =~ ^wordpress-org/[a-z0-9][a-z0-9._-]*$ ]]; then
+                    [ "${HEAD_REPOSITORY}" = "${REPOSITORY}" ] || { echo 'WordPress.org branches must be same-repository.'; exit 1; }
+                    [ -n "${CHANGED_FILES}" ] || { echo 'WordPress.org publication PR is empty.'; exit 1; }
+                    ! echo "${CHANGED_FILES}" | grep -Ev '^(readme\.txt|\.wordpress-org/)' >/dev/null || {
+                      echo 'WordPress.org branches may only change readme.txt and .wordpress-org assets.'
+                      exit 1
+                    }
+                    echo 'type=readme-assets' >> "${GITHUB_OUTPUT}"
+                  else
+                    echo 'type=none' >> "${GITHUB_OUTPUT}"
+                  fi
+
+            - name: Validate WordPress.org metadata
+              if: steps.publication.outputs.type == 'readme-assets'
+              run: |
+                  node <<'NODE'
+                  const fs = require('fs');
+                  const version = JSON.parse(fs.readFileSync('package.json', 'utf8')).version;
+                  const stableTag = fs.readFileSync('readme.txt', 'utf8')
+                    .match(/^Stable tag:\s*([^\s]+)\s*$/m)?.[1];
+                  if (stableTag !== version) throw new Error('Stable tag must match package.json.');
+                  NODE
+
+            - name: Set up PHP
+              if: steps.publication.outputs.type == 'release'
+              uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+              with:
+                  php-version: '8.0'
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Set up Node.js
+              if: steps.publication.outputs.type == 'release'
+              uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+              with:
+                  node-version: '16'
+                  cache: npm
+
+            - name: Install release dependencies
+              if: steps.publication.outputs.type == 'release'
+              run: npm ci
+
+            - name: Validate, build, and verify release candidate
+              if: steps.publication.outputs.type == 'release'
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  VERSION: ${{ steps.publication.outputs.version }}
+                  COMPOSER_AUTH: '{}'
+                  COMPOSER_HOME: ${{ runner.temp }}/composer-release
+              run: |
+                  PREVIOUS_VERSION=$(git show "${BASE_SHA}:package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+                  node bin/validate-release-version.js --version "${VERSION}" --previous-version "${PREVIOUS_VERSION}"
+                  npm run test:unit -- --runInBand tests/unit/bin/validate-release-version.test.js tests/unit/bin/verify-release-artifact.test.js
+                  npm run release:build
+                  mv build content-control
+                  zip -rq "content-control_v${VERSION}.zip" content-control
+                  mv content-control build
+                  node bin/verify-release-artifact.js "content-control_v${VERSION}.zip"
+
+            - name: Run WordPress Plugin Check
+              if: steps.publication.outputs.type == 'release'
+              uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
+              with:
+                  build-dir: ./build
+                  slug: content-control
+                  exclude-directories: |
+                      vendor
+                      vendor-prefixed
+                  ignore-warnings: true
+
+            - name: Upload release candidate
+              if: steps.publication.outputs.type == 'release'
+              uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              with:
+                  name: content-control-${{ steps.publication.outputs.version }}-pr-${{ github.event.pull_request.number }}
+                  path: content-control_v${{ steps.publication.outputs.version }}.zip
+                  retention-days: 30
+
+            - name: Explain publication path
+              env:
+                  TYPE: ${{ steps.publication.outputs.type }}
+                  VERSION: ${{ steps.publication.outputs.version }}
+              run: |
+                  case "${TYPE}" in
+                    release) echo "Merging this authorized release PR publishes Content Control ${VERSION}." >> "${GITHUB_STEP_SUMMARY}" ;;
+                    readme-assets) echo 'Merging this authorized wordpress-org/<topic> PR syncs only readme.txt and .wordpress-org assets.' >> "${GITHUB_STEP_SUMMARY}" ;;
+                    *) echo 'Merging this PR publishes nothing.' >> "${GITHUB_STEP_SUMMARY}" ;;
+                  esac

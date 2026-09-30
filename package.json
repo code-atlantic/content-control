@@ -96,6 +96,7 @@
 		"pretest:unit:php": "wp-env start",
 		"test:unit:php": "wp-env run phpunit /var/www/html/wp-content/plugins/content-control/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/content-control/phpunit.xml.dist --verbose",
 		"translate": "wp-pot --src './classes/**/*.php' --src '!./build/**/*.*' --src '!./vendor/**/*.*' --src '!./dist/**/*.*' --write=true --dest-file 'languages/content-control.pot' --package 'Content Control' --domain 'content-control' --last-translator 'Code Atlantic <support@code-atlantic.com>' --team 'Code Atlantic <support@code-atlantic.com>' --bug-report 'https://code-atlantic.com/contact/'",
+		"validate:release-version": "node bin/validate-release-version.js",
 		"verify:release-artifact": "node bin/verify-release-artifact.js",
 		"verify:release-tree": "node bin/verify-release-artifact.js --release-tree build",
 		"release:build": "composer install -o --no-dev --classmap-authoritative && npm run build:release && npm run copy-build && npm run verify:release-tree",
