@@ -67,8 +67,11 @@ jobs:
                         if (ref.object.type === 'tag') tagged = (await github.rest.git.getTag({ owner, repo, tag_sha: tagged })).data.object.sha;
                       } catch (error) { if (error.status !== 404) throw error; }
                       if (tagged && tagged !== pull.merge_commit_sha) return core.setFailed(`Tag ${tagName} points elsewhere.`);
+                      const { data: mergeCommit } = await github.rest.repos.getCommit({ owner, repo, ref: pull.merge_commit_sha });
+                      const baseSha = mergeCommit.parents?.[0]?.sha;
+                      if (!baseSha) return core.setFailed('Release merge has no parent commit.');
                       core.setOutput('merge_sha', pull.merge_commit_sha);
-                      core.setOutput('base_sha', pull.base.sha);
+                      core.setOutput('base_sha', baseSha);
                       core.setOutput('version', version);
                       core.setOutput('pr', String(number));
 
@@ -141,6 +144,8 @@ jobs:
                   name: Release v${{ needs.authorize.outputs.version }}
                   generate_release_notes: true
                   files: ${{ needs.build.outputs.zip }}
+                  overwrite_files: false
+                  fail_on_unmatched_files: true
                   draft: false
                   prerelease: false
 
@@ -148,14 +153,19 @@ jobs:
         name: Deploy canonical package to WordPress.org
         needs: [authorize, build, github-release]
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         steps:
             - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
               with:
                   ref: ${{ needs.authorize.outputs.merge_sha }}
                   persist-credentials: false
-            - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
-              with:
-                  name: content-control-${{ needs.authorize.outputs.version }}
+            - name: Download canonical package from GitHub release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAG: v${{ needs.authorize.outputs.version }}
+                  ZIP_NAME: ${{ needs.build.outputs.zip }}
+              run: gh release download "${TAG}" --repo "${GITHUB_REPOSITORY}" --pattern "${ZIP_NAME}" --dir .
             - name: Verify and extract canonical package
               env:
                   VERSION: ${{ needs.authorize.outputs.version }}
@@ -188,6 +198,11 @@ jobs:
               run: |
                   NUMBER=$(gh pr list --repo "${REPO}" --base develop --head master --state open --json number --jq '.[0].number // ""')
                   if [ -z "${NUMBER}" ]; then
+                    AHEAD=$(gh api "repos/${REPO}/compare/develop...master" --jq '.ahead_by')
+                    if [ "${AHEAD}" = "0" ]; then
+                      echo "develop already contains master." >> "${GITHUB_STEP_SUMMARY}"
+                      exit 0
+                    fi
                     URL=$(gh pr create --repo "${REPO}" --base develop --head master --title "Back-sync release ${VERSION}" --body "Carries the approved ${VERSION} release merge back to the development branch.")
                     NUMBER=${URL##*/}
                   fi

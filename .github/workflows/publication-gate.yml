@@ -49,7 +49,7 @@ jobs:
                   elif [[ "${HEAD_BRANCH}" =~ ^wordpress-org/[a-z0-9][a-z0-9._-]*$ ]]; then
                     [ "${HEAD_REPOSITORY}" = "${REPOSITORY}" ] || { echo 'WordPress.org branches must be same-repository.'; exit 1; }
                     [ -n "${CHANGED_FILES}" ] || { echo 'WordPress.org publication PR is empty.'; exit 1; }
-                    ! echo "${CHANGED_FILES}" | grep -Ev '^(readme\.txt|\.wordpress-org/)' >/dev/null || {
+                    ! echo "${CHANGED_FILES}" | grep -Ev '^(readme\.txt$|\.wordpress-org/)' >/dev/null || {
                       echo 'WordPress.org branches may only change readme.txt and .wordpress-org assets.'
                       exit 1
                     }
