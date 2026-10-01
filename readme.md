@@ -31,8 +31,13 @@ Task info coming soon....
 
 ## Deployment
 
-This is a WordPress plugin that is hosted on the WordPress.org SVN repo.
-There is not currently any automated deployment. Instead, once a release is published on GitHub, that release is manually uploaded to the SVN.
+This plugin publishes from a same-repository `release/X.Y.Z` pull request into
+`master`. The publication gate validates the proposed merge and builds a release
+candidate. After an authorized merge, one verified ZIP is published to GitHub
+and WordPress.org, then a back-sync pull request is opened against `develop`.
+
+Metadata-only updates use a `wordpress-org/<topic>` pull request into `master`
+and may only change `readme.txt` and `.wordpress-org/`.
 
 ## Contributing
 
@@ -52,7 +57,8 @@ Please Note: GitHub is not intended for support based questions. For those, plea
 
 -   Ensure you stick to the [WordPress Coding Standards](https://codex.wordpress.org/WordPress_Coding_Standards)
 -   When committing, reference your issue (if present) and include a note about the fix
--   Push the changes to your fork and submit a pull request to the 'master' branch of this repository
+-   Submit normal feature, fix, and maintenance pull requests to `develop`
+-   Reserve `master` for same-repository `release/X.Y.Z` and `wordpress-org/<topic>` publication pull requests
 -   We are trying to ensure that every function is documented well and follows the standards set by phpDoc going forward
 
 ## Versioning

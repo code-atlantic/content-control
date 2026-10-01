@@ -1,0 +1,209 @@
+name: Publish approved release PR
+
+on:
+    pull_request_target:
+        branches: [master]
+        types: [closed]
+    workflow_dispatch:
+        inputs:
+            pull_request_number:
+                description: Merged release PR number to retry
+                required: true
+                type: number
+
+permissions:
+    contents: read
+    pull-requests: read
+
+concurrency:
+    group: content-control-publication
+    cancel-in-progress: false
+
+jobs:
+    authorize:
+        name: Authorize approved release PR
+        if: >-
+            github.event_name == 'workflow_dispatch' ||
+            (github.event.pull_request.merged == true &&
+             startsWith(github.event.pull_request.head.ref, 'release/'))
+        runs-on: ubuntu-latest
+        outputs:
+            merge_sha: ${{ steps.auth.outputs.merge_sha }}
+            base_sha: ${{ steps.auth.outputs.base_sha }}
+            version: ${{ steps.auth.outputs.version }}
+            pr: ${{ steps.auth.outputs.pr }}
+        steps:
+            - name: Verify merged PR authorization and immutable identity
+              id: auth
+              uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+              with:
+                  script: |
+                      const owner = context.repo.owner;
+                      const repo = context.repo.repo;
+                      const number = context.eventName === 'workflow_dispatch'
+                        ? Number('${{ inputs.pull_request_number }}')
+                        : context.payload.pull_request.number;
+                      if (!Number.isSafeInteger(number) || number < 1) return core.setFailed('A valid merged PR is required.');
+                      const { data: pull } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+                      if (!pull.merged || pull.base.ref !== 'master') return core.setFailed('Release PR must be merged into master.');
+                      if (pull.head.repo?.full_name !== `${owner}/${repo}`) return core.setFailed('Release PR must be same-repository.');
+                      const branch = pull.head.ref.match(/^release\/(\d+\.\d+\.\d+)$/);
+                      if (!branch) return core.setFailed('Branch must be release/X.Y.Z.');
+                      const actor = pull.merged_by?.login;
+                      if (!actor) return core.setFailed('An identified maintainer must merge the PR.');
+                      const { data: permission } = await github.rest.repos.getCollaboratorPermissionLevel({ owner, repo, username: actor });
+                      if (!['admin', 'maintain', 'write'].includes(permission.permission)) return core.setFailed('Merger lacks release permission.');
+                      const { data: master } = await github.rest.repos.getBranch({ owner, repo, branch: 'master' });
+                      if (master.commit.sha !== pull.merge_commit_sha) return core.setFailed('Release is stale; master has advanced.');
+                      const version = branch[1];
+                      const { data: packageFile } = await github.rest.repos.getContent({ owner, repo, path: 'package.json', ref: 'master' });
+                      const declared = JSON.parse(Buffer.from(packageFile.content, 'base64').toString('utf8')).version;
+                      if (declared !== version) return core.setFailed(`master declares ${declared}; expected ${version}.`);
+                      const tagName = `v${version}`;
+                      let tagged = '';
+                      try {
+                        const { data: ref } = await github.rest.git.getRef({ owner, repo, ref: `tags/${tagName}` });
+                        tagged = ref.object.sha;
+                        if (ref.object.type === 'tag') tagged = (await github.rest.git.getTag({ owner, repo, tag_sha: tagged })).data.object.sha;
+                      } catch (error) { if (error.status !== 404) throw error; }
+                      if (tagged && tagged !== pull.merge_commit_sha) return core.setFailed(`Tag ${tagName} points elsewhere.`);
+                      const { data: mergeCommit } = await github.rest.repos.getCommit({ owner, repo, ref: pull.merge_commit_sha });
+                      const baseSha = mergeCommit.parents?.[0]?.sha;
+                      if (!baseSha) return core.setFailed('Release merge has no parent commit.');
+                      core.setOutput('merge_sha', pull.merge_commit_sha);
+                      core.setOutput('base_sha', baseSha);
+                      core.setOutput('version', version);
+                      core.setOutput('pr', String(number));
+
+    build:
+        name: Build canonical package
+        needs: authorize
+        runs-on: ubuntu-latest
+        outputs:
+            zip: ${{ steps.package.outputs.zip }}
+        steps:
+            - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+              with:
+                  ref: ${{ needs.authorize.outputs.merge_sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+            - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+              with:
+                  php-version: '8.0'
+                  tools: composer:v2
+                  coverage: none
+            - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+              with:
+                  node-version: '16'
+                  cache: npm
+            - run: npm ci
+            - name: Validate and package
+              id: package
+              env:
+                  VERSION: ${{ needs.authorize.outputs.version }}
+                  COMPOSER_AUTH: '{}'
+                  COMPOSER_HOME: ${{ runner.temp }}/composer-release
+              run: |
+                  PREVIOUS_VERSION=$(git show "${{ needs.authorize.outputs.base_sha }}:package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+                  node bin/validate-release-version.js --version "${VERSION}" --previous-version "${PREVIOUS_VERSION}"
+                  npm run test:unit -- --runInBand tests/unit/bin/validate-release-version.test.js tests/unit/bin/verify-release-artifact.test.js
+                  npm run release:build
+                  mv build content-control
+                  zip -rq "content-control_v${VERSION}.zip" content-control
+                  mv content-control build
+                  node bin/verify-release-artifact.js "content-control_v${VERSION}.zip"
+                  echo "zip=content-control_v${VERSION}.zip" >> "${GITHUB_OUTPUT}"
+            - uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
+              with:
+                  build-dir: ./build
+                  slug: content-control
+                  exclude-directories: |
+                      vendor
+                      vendor-prefixed
+                  ignore-warnings: true
+            - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+              with:
+                  name: content-control-${{ needs.authorize.outputs.version }}
+                  path: ${{ steps.package.outputs.zip }}
+                  retention-days: 30
+
+    github-release:
+        name: Create GitHub release
+        needs: [authorize, build]
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+              with:
+                  name: content-control-${{ needs.authorize.outputs.version }}
+            - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+              with:
+                  tag_name: v${{ needs.authorize.outputs.version }}
+                  target_commitish: ${{ needs.authorize.outputs.merge_sha }}
+                  name: Release v${{ needs.authorize.outputs.version }}
+                  generate_release_notes: true
+                  files: ${{ needs.build.outputs.zip }}
+                  overwrite_files: false
+                  fail_on_unmatched_files: true
+                  draft: false
+                  prerelease: false
+
+    wordpress-org:
+        name: Deploy canonical package to WordPress.org
+        needs: [authorize, build, github-release]
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+              with:
+                  ref: ${{ needs.authorize.outputs.merge_sha }}
+                  persist-credentials: false
+            - name: Download canonical package from GitHub release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAG: v${{ needs.authorize.outputs.version }}
+                  ZIP_NAME: ${{ needs.build.outputs.zip }}
+              run: gh release download "${TAG}" --repo "${GITHUB_REPOSITORY}" --pattern "${ZIP_NAME}" --dir .
+            - name: Verify and extract canonical package
+              env:
+                  VERSION: ${{ needs.authorize.outputs.version }}
+              run: |
+                  node bin/verify-release-artifact.js "${{ needs.build.outputs.zip }}"
+                  mkdir -p .wordpress-org-build
+                  unzip -q "${{ needs.build.outputs.zip }}" -d .wordpress-org-build
+            - name: Deploy to WordPress.org SVN
+              uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # stable
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  SLUG: content-control
+                  VERSION: ${{ needs.authorize.outputs.version }}
+                  BUILD_DIR: ${{ github.workspace }}/.wordpress-org-build/content-control
+
+    back-sync:
+        name: Open production back-sync PR
+        needs: [authorize, github-release, wordpress-org]
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        steps:
+            - name: Open or reuse master to develop PR
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  REPO: ${{ github.repository }}
+                  VERSION: ${{ needs.authorize.outputs.version }}
+              run: |
+                  NUMBER=$(gh pr list --repo "${REPO}" --base develop --head master --state open --json number --jq '.[0].number // ""')
+                  if [ -z "${NUMBER}" ]; then
+                    AHEAD=$(gh api "repos/${REPO}/compare/develop...master" --jq '.ahead_by')
+                    if [ "${AHEAD}" = "0" ]; then
+                      echo "develop already contains master." >> "${GITHUB_STEP_SUMMARY}"
+                      exit 0
+                    fi
+                    URL=$(gh pr create --repo "${REPO}" --base develop --head master --title "Back-sync release ${VERSION}" --body "Carries the approved ${VERSION} release merge back to the development branch.")
+                    NUMBER=${URL##*/}
+                  fi
+                  echo "Back-sync PR: https://github.com/${REPO}/pull/${NUMBER}" >> "${GITHUB_STEP_SUMMARY}"

@@ -1,0 +1,23 @@
+{
+  "productionBranch": "master",
+  "developmentBranch": "develop",
+  "pluginSlug": "content-control",
+  "pluginName": "Content Control",
+  "mainFile": "content-control.php",
+  "versionTagPrefix": "v",
+  "versionSources": ["package.json", "content-control.php", "readme.txt"],
+  "changelogFiles": ["CHANGELOG.md", "readme.txt"],
+  "artifact": {
+    "root": "content-control",
+    "requiredPaths": ["content-control.php", "vendor/autoload.php", "dist/settings-page.js"],
+    "forbiddenPrefixes": [".git/", ".github/", "bin/", "docs/", "node_modules/", "packages/", "tests/"]
+  },
+  "channels": {
+    "github": true,
+    "wordpressOrg": true,
+    "edd": false,
+    "googleDrive": false,
+    "changelogDraft": false,
+    "slack": false
+  }
+}

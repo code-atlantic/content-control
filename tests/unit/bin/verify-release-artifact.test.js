@@ -21,6 +21,7 @@ describe( 'release artifact verifier', () => {
 
 		try {
 			for ( const relativePath of [
+				'composer.json',
 				'content-control.php',
 				'readme.txt',
 				'dist/settings-page.js',
@@ -101,6 +102,7 @@ describe( 'release artifact verifier', () => {
 	test( 'allows only the runtime Composer records copied by the build', () => {
 		expect(
 			verifyReleaseManifest( [
+				'content-control/composer.json',
 				'content-control/content-control.php',
 				'content-control/readme.txt',
 				'content-control/dist/settings-page.js',
@@ -127,6 +129,7 @@ describe( 'release artifact verifier', () => {
 
 		try {
 			for ( const relativePath of [
+				'composer.json',
 				'content-control.php',
 				'readme.txt',
 				'dist/settings-page.js',
